@@ -1,0 +1,21 @@
+<% @page_title = "Users" %>
+
+<h2>All Users <em>(<%= @users.length %>)</em></h2>
+<table class="list users_list">
+	<tr>
+		<th>Username</th>
+		<th>Last active</th>
+		<th>Member since</th>
+		<th></th>
+	</tr>
+	<% @users.each do |user| %><tr>
+		<td class="username"><%= link_to user.username %></td>
+		<td class="last_active"><%= (user.online?) ? "<strong>Online now</strong>" : formatted_time(user.last_active) %></td>
+		<td class="member_since"><%= formatted_time user.created_at %></td>
+		<td class="status">
+			<% if user.banned? %>
+				<span class="banned">Banned!</span>
+			<% end %>
+		</td>
+	</tr><% end %>
+</table>
