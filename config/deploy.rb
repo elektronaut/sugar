@@ -3,6 +3,7 @@ require 'mongrel_cluster/recipes'
 set :application, "b3s"
 set :repository,  "http://svn.elektronaut.no/svn/b3s/trunk"
 set :runner,      "app"
+set :user,        "app"
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
@@ -31,19 +32,18 @@ set :mongrel_conf, "#{deploy_to}/#{current_dir}/config/mongrel_cluster.yml"
 
 desc "Create shared directories"
 task :create_shared_dirs, :roles => [:web,:app] do
-	run "mkdir -m 777 #{deploy_to}/#{shared_dir}/cache"
-	run "mkdir -m 777 #{deploy_to}/#{shared_dir}/public_cache"
-	run "mkdir -m 777 #{deploy_to}/#{shared_dir}/sockets"
-	run "mkdir -m 777 #{deploy_to}/#{shared_dir}/sessions"
-	run "mkdir -m 777 #{deploy_to}/#{shared_dir}/index"
+	run "mkdir #{deploy_to}/#{shared_dir}/cache"
+	run "mkdir #{deploy_to}/#{shared_dir}/public_cache"
+	run "mkdir #{deploy_to}/#{shared_dir}/sockets"
+	run "mkdir #{deploy_to}/#{shared_dir}/sessions"
+	run "mkdir #{deploy_to}/#{shared_dir}/index"
 end
 
 desc "Fix permissions"
 task :fix_permissions, :roles => [:web, :app] do
-	run "chmod a+rw   #{deploy_to}/#{current_dir}/public/plugin_assets"
-	run "chmod -R a+x #{deploy_to}/#{current_dir}/script/*"
-	run "chmod a+x    #{deploy_to}/#{current_dir}/public/dispatch.*"
-	run "chmod a+rwx  #{deploy_to}/#{current_dir}/public"
+	run "chmod -R u+x #{deploy_to}/#{current_dir}/script/*"
+	run "chmod u+x    #{deploy_to}/#{current_dir}/public/dispatch.*"
+	run "chmod u+rwx  #{deploy_to}/#{current_dir}/public"
 end
 
 desc "Create symlinks"
