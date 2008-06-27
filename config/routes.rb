@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
     
     map.resources(
         :users,
-        :collection => { :login => :any }
+        :collection => { :login => :any, :logout => :any, :forgot_password => :any }
     )
     map.resources(
         :categories

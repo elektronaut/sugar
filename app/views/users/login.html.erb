@@ -1,14 +1,39 @@
 
-<% form_tag(login_users_path) do %>
-	<p>
-		<label>Username</label>
-		<%= text_field_tag 'username' %>
-	</p>
-	<p>
-		<label>Password</label>
-		<%= password_field_tag 'password' %>
-	</p>
-	<p>
-		<%= submit_tag 'Login' %>
-	</p>
-<% end %>
+<div id="forgot-password-link">
+	<p><%= link_to_function "Err, I forgot my password&hellip;", "forgot_password();" %></p>
+</div>
+
+<div id="login">
+	<% form_tag(login_users_path, :class => 'form') do %>
+		<p>
+			<label>Username</label>
+			<%= text_field_tag 'username', '', :class => :text %>
+		</p>
+		<p>
+			<label>Password</label>
+			<%= password_field_tag 'password', '', :class => :text %>
+		</p>
+		<p>
+			<input type="image" name="submit" alt="Login" src="/images/login/login_button.jpg" id="login-button" />
+		</p>
+	<% end %>
+</div>
+
+<div id="password-reminder">
+	<% form_tag(forgot_password_users_path, :class => 'form') do %>
+		<p>
+			<label>Email</label>
+			<%= text_field_tag 'email', '', :class => :text %>
+			<input type="image" name="submit" alt="Send" src="/images/login/reminder_button.jpg" id="reminder-button" />
+		</p>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	Element.hide('password-reminder');
+	function forgot_password() {
+		Element.hide('forgot-password-link');
+		Element.hide('login');
+		Element.show('password-reminder');
+	}
+</script>

@@ -1,0 +1,3 @@
+* Proper post parser
+* Cache parsed posts on .body_html?
+* Password reminder

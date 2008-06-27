@@ -15,6 +15,7 @@ module ApplicationHelper
         link_to user.username, user_path(:id => user.username)
     end
     
+    # TODO: make a proper text formatter
     def text(string)
         string ||= ""
         string.gsub("\n","<br />\n")

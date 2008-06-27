@@ -1,0 +1,109 @@
+@import url(reset.css);
+
+body {
+	background: #f5b701 url(/images/login/background.jpg) top center repeat-x;
+	font-family: Calibri, Arial, Verdana;
+	color: #fff;
+}
+
+.content {
+	width: 788px;
+	margin: 0 auto;
+	background: transparent url(/images/login/graphics.jpg) no-repeat;
+	min-height: 350px;
+}
+
+#notice {
+	position: absolute;
+	left: 0; right: 0;
+	top: 35px;
+	text-align: center;
+	z-index: 5000;
+}
+#notice p {
+	font-weight: normal;
+	font-size: 14px;
+	display: inline;
+	background: #d54000 url(/images/login/notice_bg.gif) repeat-x;
+	border: 2px solid #bc4200;
+	padding: 5px 10px;
+	color: #ffc6b9;
+}
+#notice p strong {
+	color: #fff;
+	font-weight: bold;
+}
+
+#login {
+	width: 788px;
+	background: transparent url(/images/login/login.jpg) no-repeat;
+	min-height: 300px;
+}
+#login .form {
+	float: left;
+	margin: 176px 0 0 328px;
+}
+#login .form input.text {
+	background: transparent;
+	width: 202px;
+	padding: 2px 0; 
+	margin: 0 0 10px 0; 
+	border: 0;
+	font-weight: bold;
+	font-size: 15px;
+}
+#login-button {
+	opacity: 0;
+	margin-left: 151px;
+}
+
+#password-reminder {
+	width: 788px;
+	background: transparent url(/images/login/password.jpg) no-repeat;
+	min-height: 270px;
+}
+#password-reminder .form {
+	float: left;
+	margin: 205px 0 0 265px;
+}
+#password-reminder .form input.text {
+	background: transparent;
+	width: 250px;
+	padding: 2px 0; 
+	margin: 0 0 10px 0; 
+	border: 0;
+	font-weight: bold;
+	font-size: 15px;
+	float: left;
+}
+
+#reminder-button {
+	float: right;
+	margin: -7px 0 0 14px;
+	opacity: 0;
+}
+
+
+label {
+	display: none;
+}
+
+#forgot-password-link {
+	position: absolute;
+	left: 0; right: 0;
+	bottom: 30px;
+	text-align: center;
+}
+#forgot-password-link p {
+	display: inline;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#forgot-password-link a, #forgot-password-link a:visited {
+	color: #fff;
+	text-decoration: none;
+}
+#forgot-password-link a:hover {
+	text-decoration: underline;
+}

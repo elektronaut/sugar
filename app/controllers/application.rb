@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
     layout 'default'
 
+
     # Misc. variables for the layout
     def layout_data
         @site_name = 'BUTT3RSCOTCH'
@@ -24,8 +25,9 @@ class ApplicationController < ActionController::Base
     protected     :layout_data
     before_filter :layout_data
 
-    # Loads and authenticates @current_user from session. Will fail if password
-    # has been changed, this is a feature.
+
+    # Loads and authenticates @current_user from session. Will fail
+    # if the password has been changed. This is a feature.
     def authenticate_session
         if session[:user_id] && session[:hashed_password]
             user = User.find(session[:user_id]) rescue nil
@@ -38,18 +40,29 @@ class ApplicationController < ActionController::Base
     before_filter :authenticate_session
     
 
+    # Deauthenticate @current_user
+    def deauthenticate!
+        @current_user = nil
+        store_session_authentication
+    end
+    protected :deauthenticate!
+    
+
     # Stores authentication credentials in the session.
     def store_session_authentication
         if @current_user
-            session[:user_id]        = @current_user.id
+            session[:user_id]         = @current_user.id
             session[:hashed_password] = @current_user.hashed_password
+            session[:ips] ||= []
+            session[:ips] << request.env['REMOTE_ADDR'] unless session[:ips].include?(request.env['REMOTE_ADDR'])
             # No need to update this on every request
             if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
                 @current_user.update_attribute(:last_active, Time.now)
             end
         else
-            session[:user_id]        = nil
+            session[:user_id]         = nil
             session[:hashed_password] = nil
+            session[:ips]             = nil
         end
     end
     protected    :store_session_authentication
@@ -61,9 +74,9 @@ class ApplicationController < ActionController::Base
 		append_before_filter(args){ |controller| controller.require_authenticated }
     end
 
-    # Redirect to login page unless @current_user is active.
+    # Redirect to login page unless @current_user is active. The IP is verified to avoid session hijacking.
     def require_authenticated
-        unless @current_user
+        unless @current_user && session[:ips] && session[:ips].include?(request.env['REMOTE_ADDR'])
             flash[:notice] = 'You must be logged in to to that.'
             redirect_to login_users_url and return
         end

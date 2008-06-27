@@ -1,4 +1,4 @@
-@import url(reset.css);
+@import url(../reset.css);
 
 html, body {
 	height: 100%;
@@ -79,7 +79,7 @@ label .description {
 
 
 #header {
-	background: #e1aa00 url(/images/header_bg.gif) center repeat-x;
+	background: #e1aa00 url(/images/themes/default/header_bg.gif) center repeat-x;
 	height: 96px;
 	color: #fff;
 	position: absolute;

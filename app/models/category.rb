@@ -6,6 +6,7 @@ class Category < ActiveRecord::Base
     
     acts_as_list
     
+    # Humanized ID for URLs
     def to_param
         "#{self.id}-" + self.name.downcase.gsub(/[^\w\d]+/,'_')
     end

@@ -48,7 +48,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_betterscotch_session',
+    :session_key => '_butt3rscotch_session',
     :secret      => 'f8021fa31c7053e1aeceaf7559d51ff2d08c7ffec8f4fcf97c078a0b55d6b3a005b663f598c37f01b4ee1d68c656a7a710f07f1dca96b66b2fb8fbe162e7831f'
   }
 

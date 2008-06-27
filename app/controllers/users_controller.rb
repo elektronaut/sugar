@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-    requires_authentication :except => [:login]
+    requires_authentication :except => [:login, :logout, :forgot_password]
     
     def load_user
         @user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -18,10 +18,10 @@ class UsersController < ApplicationController
     end
     
     def show
-        # Not much to do here
     end
     
     def edit
+        # TODO: refactor to .editable_by?
         require_admin_or_user(@user, :redirect => user_url(@user))
     end
     
@@ -32,6 +32,7 @@ class UsersController < ApplicationController
         if @user.valid?
             flash[:notice] = "Your changes were saved!"
             if @user == @current_user
+                # Make sure the session data is updated
                 store_session_authentication
             end
             redirect_to user_url(:id => @user.username)
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
     end
     
     def login
+        redirect_to discussions_url and return if @current_user
         if request.post?
             if params[:username] && params[:password]
                 user = User.find_by_username(params[:username])
@@ -50,9 +52,19 @@ class UsersController < ApplicationController
                     redirect_to discussions_url and return
                 end
             end
-            flash.now[:notice] = "Invalid username and/or password" unless @current_user
+            flash.now[:notice] = "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
         end
         render :layout => 'login'
+    end
+    
+    def forgot_password
+        flash[:notice] = "<strong>Not implemented yet!</strong> But thanks for trying."
+        redirect_to login_users_url
+    end
+    
+    def logout
+        deauthenticate!
+        redirect_to login_users_url
     end
 
 end

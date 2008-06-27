@@ -6,7 +6,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
 	<%= javascript_include_tag :defaults %>
-	<%= stylesheet_link_tag 'screen' %>
+	<% if @current_user.stylesheet_url? %>
+		<%= stylesheet_link_tag @current_user.stylesheet_url %>
+	<% else %>
+		<%= stylesheet_link_tag 'default/screen' %>
+	<% end %>
 </head>
 <body>
 	<div id="header">
