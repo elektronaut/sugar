@@ -37,6 +37,7 @@ task :create_shared_dirs, :roles => [:web,:app] do
 	run "mkdir #{deploy_to}/#{shared_dir}/sockets"
 	run "mkdir #{deploy_to}/#{shared_dir}/sessions"
 	run "mkdir #{deploy_to}/#{shared_dir}/index"
+	run "touch #{deploy_to}/#{shared_dir}/database.yml"
 end
 
 desc "Fix permissions"
@@ -53,6 +54,7 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
 	run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
 	run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
+	run "ln -s #{deploy_to}/#{shared_dir}/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
 end
 
 after "deploy:setup", :create_shared_dirs
