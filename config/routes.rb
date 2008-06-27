@@ -40,9 +40,15 @@ ActionController::Routing::Routes.draw do |map|
         :collection => { :login => :any }
     )
     map.resources(
+        :categories
+    )
+    map.connect '/categories/:id/:page', :controller => 'categories', :action => 'show'
+
+    map.resources(
         :discussions,
         :collection => { :participated => :any, :bookmarked => :any }
     )
+    map.connect '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
 
     # Install the default routes as the lowest priority.
     map.connect ':controller/:action/:id'

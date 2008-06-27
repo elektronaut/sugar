@@ -1,11 +1,12 @@
 class CreateUsers < ActiveRecord::Migration
     def self.up
         create_table :users do |t|
-            t.string     :username, :realname, :email, :hashed_password
+            t.string     :username, :realname, :email, :hashed_password, :location
             t.text       :description
             t.boolean    :banned, :activated, :admin, :null => false, :default => '0'
             t.datetime   :last_active
-            t.integer    :posts_count, :discussions_count, :default => 0
+            t.date       :birthday
+            t.integer    :posts_count, :discussions_count, :default => 0, :null => false
             t.belongs_to :inviter
             t.timestamps
         end

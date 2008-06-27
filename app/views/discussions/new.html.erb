@@ -1,0 +1,8 @@
+<% @page_title = "New discussion" %>
+
+<h2 class="section"><%= link_to "Discussions", discussions_path %> &raquo; <%= link_to "New", new_discussion_path %></h2>
+
+<% form_for(@discussion) do |f| %>
+	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
+	<p><%= submit_tag "Create discussion" %></p>
+<% end %>

@@ -1,20 +1,39 @@
 <% @page_title = "Users" %>
 
-<h2>All Users <em>(<%= @users.length %>)</em></h2>
+<h2 class="section"><%= link_to "Users", users_path %></h2>
+<% if @online_users && @online_users.length > 0 %>
+	<p>
+		<% if @online_users.length == 1 %>
+			<strong>1</strong> user is online right now:
+		<% else %>
+			<strong><%= @online_users.length %></strong> user are online right now:
+		<% end %>
+		<%= @online_users.map{|u| profile_link(u)}.to_sentence %>.
+	</p>
+<% else %>
+	<p>No users are online!</p>
+<% end %>
+
 <table class="list users_list">
 	<tr>
 		<th>Username</th>
+		<th>Location</th>
 		<th>Last active</th>
 		<th>Member since</th>
+		<th>Discussions/Posts</th>
 		<th></th>
 	</tr>
 	<% @users.each do |user| %><tr>
-		<td class="username"><%= link_to user.username %></td>
+		<td class="username"><%= profile_link(user) %></td>
+		<td class="location"><%= h user.location %></td>
 		<td class="last_active"><%= (user.online?) ? "<strong>Online now</strong>" : formatted_time(user.last_active) %></td>
 		<td class="member_since"><%= formatted_time user.created_at %></td>
+		<td class="post_count"><%= user.discussions_count %>/<%= user.posts_count %></td>
 		<td class="status">
 			<% if user.banned? %>
 				<span class="banned">Banned!</span>
+			<% elsif user.admin? %>
+				<span class="admin">Admin</span>
 			<% end %>
 		</td>
 	</tr><% end %>

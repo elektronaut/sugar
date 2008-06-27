@@ -1,0 +1,56 @@
+<% @page_title = "#{@user.username}" %>
+
+<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
+
+<p><%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username %></p>
+
+<% if @user == @current_user %>
+	<p>This is your profile, you can <%= link_to "edit it", edit_user_path(:id => @user.username) %>.</p>
+<% elsif @current_user.admin? %>
+	<p>You are an admin, and you can <%= link_to "edit #{@user.username}s profile", edit_user_path(:id => @user.username) %>.</p>
+<% end %>
+
+<% if @user.banned? %>
+	<p class="banned"><%= @user.username %> is banned!</p>
+<% end %>
+
+<table class="userinfo">
+	<% if @user.realname? %><tr>
+		<th>Real name</th>
+		<td><%= h @user.realname %></td>
+	</tr><% end %>
+	<% if @user.location? %><tr>
+		<th>Location</th>
+		<td><%= h @user.location %></td>
+	</tr><% end %>
+	<% if @user.birthday? %><tr>
+		<th>Birthday</th>
+		<td><%= @user.birthday.strftime("%b %d") %></td>
+	</tr><% end %>
+	<% if @user.inviter %><tr>
+		<th>Invited by</th>
+		<td><%= profile_link(@user.inviter) %></td>
+	</tr><% end %>
+	<tr>
+		<th>Member since</th>
+		<td><%= formatted_time(@user.created_at) %></td>
+	</tr>
+	<tr>
+		<th>Last active</th>
+		<td><%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %></td>
+	</tr>
+	<tr>
+		<th>Discussions created</th>
+		<td><%= @user.discussions_count %></td>
+	</tr>
+	<tr>
+		<th>Post count</th>
+		<td><%= @user.posts_count %></td>
+	</tr>
+	<tr>
+		<th>Users invited</th>
+		<td><%= @user.invitees.count %></td>
+	</tr>
+</table>
+
+<%= text @user.description if @user.description? %>

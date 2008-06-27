@@ -8,6 +8,7 @@ body {
 	background: #fff;
 	font-family: Calibri, Arial, Verdana;
 	color: #000000;
+	line-height: 1.3;
 }
 
 /* Set 1em == 10px */
@@ -22,14 +23,33 @@ h2 {
 	font-size: 1.5em;
 	font-weight: bold;
 }
+h3 {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-bottom: 0em;
+}
 h2 em {
 	font-weight: normal;
 	font-style: normal;
 	color: #555;
 }
 
+h2.section {
+	padding-bottom: 7px;
+	border-bottom: 1px solid #E2DCBF;
+}
+
+.functions {
+	font-size: 1.5em;
+	float: right;
+	font-weight: bold;
+}
+
 strong {
 	font-weight: bold;
+}
+em {
+	font-style: italic;
 }
 
 a, a:visited {
@@ -38,6 +58,23 @@ a, a:visited {
 }
 a:hover {
 	color: #460000;
+}
+a.create, a.create:visited {
+	color: #080;
+}
+a.create:hover {
+	color: #050;
+}
+
+label {
+	display: block;
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-bottom: 0.2em;
+}
+label .description {
+	font-weight: normal;
+	color: #555;
 }
 
 
@@ -61,7 +98,7 @@ a:hover {
 #navigation {
 	margin: 0;
 	position: absolute;
-	bottom: 3px;
+	bottom: 2px;
 	left: 20px;
 	font-size: 1.1em;
 }
@@ -74,7 +111,7 @@ a:hover {
 #navigation li a, #navigation li a:visited {
 	margin: 0;
 	text-decoration: none;
-	padding: 2px 8px 1px 8px;
+	padding: 2px 8px 2px 8px;
 	background: #955812;
 	color: #fed;
 }
@@ -95,6 +132,7 @@ a:hover {
 	font-weight: normal;
 }
 #navigation li.new a em {
+	font-style: normal;
 	font-weight: bold;
 	color: #d70000;
 }
@@ -107,11 +145,28 @@ a:hover {
 
 #content {
 	position: absolute;
-	top: 126px;
+	top: 116px;
 	left: 30px;
 	right: 30px;
-	font-size: 1.1em;
+	font-size: 1.2em;
+	padding-bottom: 30px;
 }
+
+#content td, #content th {
+	padding-right: 20px;
+}
+
+.notice {
+	background: #fdd;
+	border-top: 1px solid #d88;
+	border-bottom: 1px solid #d88;
+	color: #800;
+	margin: -20px -30px 20px -30px;
+	padding: 10px 30px;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
 
 th {
 	font-weight: bold;
@@ -123,16 +178,14 @@ table.list td, table.list th {
 
 table.discussions {
 	border-collapse: collapse;
-	border-top: 1px solid #ecdb7a;
 	border-top: 1px solid #E2DCBF;
 	width: 100%;
+	margin-bottom: 20px;
 }
 
+
 table.discussions td {
-	padding: 5px 20px 10px 0;
-	background: #fffae0;
-	background: #fff;
-	border-bottom: 1px solid #ecdb7a;
+	padding: 3px 20px 7px 0;
 	border-bottom: 1px solid #E2DCBF;
 	white-space: nowrap;
 	color: #6f5a43;
@@ -141,9 +194,68 @@ table.discussions td.name {
 	font-size: 1.3em;
 	font-weight: bold;
 	padding-bottom: 0;
-	padding-top: 10px;
+	padding-top: 7px;
 	border-bottom: 0;
 }
-table.discussions td.last_active {
+table.discussions td.last {
 	width: 100%;
+}
+
+.userinfo {
+	margin-bottom: 1em;
+}
+
+.list {
+	border-collapse: collapse;
+	border-top: 1px solid #E2DCBF;
+	width: 100%;
+}
+
+.list td, .list th {
+	padding: 7px 20px 7px 0;
+	border-bottom: 1px solid #E2DCBF;
+	white-space: nowrap;
+}
+.list th {
+	color: #321;
+	background: #F5F1E0;
+}
+.list td {
+	color: #6f5a43;
+}
+.users_list .username {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+.users_list .status {
+}
+
+.banned {
+	color: #d00;
+	font-weight: bold;
+}
+.admin {
+	color: #062;
+}
+
+
+#categories .name .count {
+	color: #aaa;
+}
+
+
+.new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
+	width: 100%;
+}
+
+
+.pagination {
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #888;
+	margin-top: -1em;
+	margin-bottom: 5px;
+}
+.pagination .links {
+	float: right;
 }

@@ -1,18 +1,21 @@
-require "digest/sha1"
+require 'digest/sha1'
+require 'MD5'
 
 class User < ActiveRecord::Base
+
+    REJECT_PARAMS = :id, :username, :hashed_password, :admin, :activated, :banned, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id
 
 	attr_accessor :password, :confirm_password
 	attr_accessor :password_changed
 
-    has_many :discussions do
+    has_many :discussions, :foreign_key => 'poster_id' do
         def participated
             # Return participated discussions
         end
     end
     has_many :posts
     belongs_to :inviter, :class_name => 'User'
-    has_many :invitees, :class_name => 'User'
+    has_many :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
 
     validate do |user|
 		# Has the password been changed?
@@ -33,6 +36,7 @@ class User < ActiveRecord::Base
 	
 	validates_presence_of :hashed_password, :username, :email
 	validates_uniqueness_of :username
+	validates_format_of :username, :with => /^[\w\d\-\s_#!]+$/
 
 	class << self
 	    
@@ -44,6 +48,15 @@ class User < ActiveRecord::Base
 		def hash_string( string )
 			Digest::SHA1.hexdigest( string )
 		end
+		
+		def safe_attributes(params)
+		    safe_params = params.dup
+		    REJECT_PARAMS.each do |r|
+		        safe_params.delete(r)
+	        end
+            return safe_params
+	    end
+		
 	end
 	
 	def valid_password?( pass )
@@ -51,7 +64,13 @@ class User < ActiveRecord::Base
 	end
 	
 	def online?
-	    (self.last_active > 15.minutes.ago) ? true : false
+	    (self.last_active && self.last_active > 15.minutes.ago) ? true : false
+    end
+    
+    def gravatar_url(options={})
+        options[:size] ||= 24
+        gravatar_hash = MD5::md5(self.email)
+        "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
     end
 	
 end

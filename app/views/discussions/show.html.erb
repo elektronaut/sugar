@@ -1,0 +1,13 @@
+<% @page_title = @discussion.title %>
+
+<% if @discussion.editable_by?(@current_user) %>
+	<div class="functions">
+		<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
+	</div>
+<% end %>
+
+<h2 class="section">
+	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo; 
+	<%= link_to @discussion.title, discussion_path(@discussion) %>
+</h2>
+

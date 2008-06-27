@@ -12,6 +12,14 @@ class ApplicationController < ActionController::Base
     # Misc. variables for the layout
     def layout_data
         @site_name = 'BUTT3RSCOTCH'
+        case self.class.to_s
+        when 'UsersController'
+            @section = :users
+        when 'CategoriesController'
+            @section = :categories
+        else
+            @section = :discussions
+        end
     end
     protected     :layout_data
     before_filter :layout_data
@@ -36,7 +44,7 @@ class ApplicationController < ActionController::Base
             session[:user_id]        = @current_user.id
             session[:hashed_password] = @current_user.hashed_password
             # No need to update this on every request
-            if @current_user.last_active < 10.minutes.ago
+            if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
                 @current_user.update_attribute(:last_active, Time.now)
             end
         else

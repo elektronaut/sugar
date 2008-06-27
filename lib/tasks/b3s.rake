@@ -7,7 +7,8 @@ namespace :b3s do
             :realname => 'Inge Jørgensen', 
             :password => 'elektronaut', 
             :confirm_password => 'elektronaut', 
-            :email => 'inge@elektronaut.no'
+            :email => 'inge@elektronaut.no',
+            :activated => true
         )
     end
 

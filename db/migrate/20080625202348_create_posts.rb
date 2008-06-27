@@ -2,7 +2,6 @@ class CreatePosts < ActiveRecord::Migration
     def self.up
         create_table :posts do |t|
             t.text :body
-            t.datetime   :edited_at
             t.belongs_to :user, :discussion
             t.timestamps
         end

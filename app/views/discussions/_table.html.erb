@@ -1,0 +1,43 @@
+<% if discussions && discussions.length > 0 %>
+	<div class="pagination">
+		<div class="links">
+			<%= link_to_if discussions.previous_page, "&lt;", { :page => discussions.previous_page } %>
+			1
+			<%= link_to "2" %>
+			<%= link_to "3" %>
+			<%= link_to_if discussions.next_page,     "&gt;", { :page => discussions.next_page } %>
+		</div>
+		<%= discussions.offset + 1 %> to <%= discussions.offset + discussions.length %> of <%= discussions.total_count %></h3>
+	</div>
+	<table class="discussions">
+		<% discussions.each do |d| %>
+			<tr>
+				<td class="name" colspan="5">
+					<% if d.labels? %>
+						[<%= d.labels.join(',') %>]
+					<% end %>
+					<%= link_to d.title, discussion_path(d) %>
+				</td>
+			</tr>
+			<tr>
+				<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
+				<td class="started_by">Started by <%= profile_link(d.poster) %></td>
+				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
+				<td class="last_active">Last active <strong><%= formatted_time d.last_post_at %></strong></td>
+				<td class="posts last"><strong><%= d.posts_count %></strong> <%= d.posts_count > 1 ? 'posts' : 'post' %></td>
+			</tr>
+		<% end %>
+	</table>
+	<div class="pagination">
+		<div class="links">
+			<%= link_to_if discussions.previous_page, "&lt;", { :page => discussions.previous_page } %>
+			1
+			<%= link_to "2" %>
+			<%= link_to "3" %>
+			<%= link_to_if discussions.next_page,     "&gt;", { :page => discussions.next_page } %>
+		</div>
+		<%= discussions.offset + 1 %> to <%= discussions.offset + discussions.length %> of <%= discussions.total_count %></h3>
+	</div>
+<% else %>
+	<p>No discussions here yet. <%= link_to "Create the first!", new_discussion_path %></p>
+<% end %>
