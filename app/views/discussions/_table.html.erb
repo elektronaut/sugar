@@ -7,7 +7,7 @@
 					<% if d.labels? %>
 						[<%= d.labels.join(',') %>]
 					<% end %>
-					<%= link_to d.title, discussion_path(d) %>
+					<%= link_to d.title, {:id => d, :page => d.last_page, :controller => 'discussions', :action => 'show'} %>
 				</td>
 			</tr>
 			<tr>
