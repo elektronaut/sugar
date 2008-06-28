@@ -59,6 +59,38 @@ class User < ActiveRecord::Base
 	    end
 	end
 	
+    def participated_count
+        Post.count_by_sql("SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE posts.user_id = #{self.id}")
+    end
+
+	def paginated_discussions(options)
+	    discussions_count = self.participated_count
+
+        limit = options[:limit] || 30
+        num_pages = (discussions_count.to_f/limit).ceil
+        page  = (options[:page] || 1).to_i
+        page = 1 if page < 1
+        page = num_pages if page > num_pages
+        offset = limit * (page - 1)
+
+        discussions = Discussion.find(
+            :all,
+            :joins      => "INNER JOIN posts ON discussions.id = posts.discussion_id",
+            :group      => "discussions.id",
+            :conditions => ['posts.user_id = ?', self.id],
+            :limit      => limit, 
+            :offset     => offset,
+            :order      => 'sticky DESC, last_post_at DESC',
+            :include    => [:poster, :last_poster, :category]
+        )
+
+        # Inject the pagination methods on the collection
+        class << discussions; include Paginates; end
+        discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+        
+        return discussions
+    end
+	
     # Is the password valid?
 	def valid_password?(pass)
 		(self.class.hash_string(pass) == self.hashed_password) ? true : false

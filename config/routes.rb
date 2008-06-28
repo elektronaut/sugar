@@ -37,8 +37,11 @@ ActionController::Routing::Routes.draw do |map|
     
     map.resources(
         :users,
+        :member => {:participated => :any},
         :collection => { :login => :any, :logout => :any, :forgot_password => :any }
     )
+    map.connect '/users/:id/participated/:page', :controller => 'users', :action => 'participated'
+
     map.resources(
         :categories
     )

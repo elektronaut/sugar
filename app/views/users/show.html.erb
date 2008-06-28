@@ -45,7 +45,7 @@
 	</tr>
 	<tr>
 		<th>Post count</th>
-		<td><%= @user.posts_count %></td>
+		<td><%= link_to @user.posts_count, participated_user_path(:id => @user.username) %></td>
 	</tr>
 	<tr>
 		<th>Users invited</th>

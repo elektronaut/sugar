@@ -60,7 +60,7 @@ class Discussion < ActiveRecord::Base
             
             return discussions
         end
-
+        
         # Deletes attributes which normal users shouldn't be able to touch from a param hash
     	def safe_attributes(params)
     	    safe_params = params.dup

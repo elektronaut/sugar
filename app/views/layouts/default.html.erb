@@ -17,8 +17,8 @@
 		<h1>BUTT<em>3</em>RSCOTCH</h1>
 		<ul id="navigation">
 			<li<%= ' class="current"' if @section == :discussions %>><%= link_to "Discussions", discussions_path %></li>
+			<li<%= ' class="current"' if @section == :participated %>><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>
 			<!--
-			<li><%= link_to "Participated", participated_discussions_path %></li>
 			<li><%= link_to "Bookmarked", bookmarked_discussions_path %></li>
 			-->
 			<li<%= ' class="current"' if @section == :categories %>><%= link_to "Categories", categories_path %></li>

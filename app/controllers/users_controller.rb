@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         end
     end
     protected     :load_user
-    before_filter :load_user, :only => [:show, :edit, :update, :destroy]
+    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated]
     
     def index
         @online_users = User.find_online
@@ -20,6 +20,12 @@ class UsersController < ApplicationController
     def show
     end
     
+    def participated
+        @section = :participated if @user == @current_user
+        @discussions = @user.paginated_discussions(:page => params[:page])
+    end
+    
+
     def edit
         # TODO: refactor to .editable_by?
         require_admin_or_user(@user, :redirect => user_url(@user))
