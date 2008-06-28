@@ -1,0 +1,21 @@
+<div class="pagination">
+	<div class="links">
+		<%= link_to_if p.previous_page, "&lt;", {:page => p.previous_page} %>
+
+		<% nearest_pages = p.nearest_pages(9) %>
+		<% if nearest_pages.first > 1 %>
+			<%= link_to_unless (p.page == 1), "1", {:page => 1} %>
+		<% end %>
+		<% if nearest_pages.first > 2 %>&hellip;<% end %>
+		<% nearest_pages.each do |np| %>
+			<%= link_to_unless (p.page == np), np, {:page => np} %>
+		<% end %>
+		<% if nearest_pages.last < (p.last_page - 1) %>&hellip;<% end %>
+		<% if nearest_pages.last < p.last_page %>
+			<%= link_to_unless (p.page == p.last_page), "#{p.last_page}", {:page => p.last_page} %>
+		<% end %>
+
+		<%= link_to_if p.next_page,     "&gt;", { :page => p.next_page } %>
+	</div>
+	<%= p.offset + 1 %> to <%= p.offset + p.length %> of <%= p.total_count %></h3>
+</div>

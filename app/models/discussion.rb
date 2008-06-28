@@ -32,12 +32,12 @@ class Discussion < ActiveRecord::Base
         #     :page     - Page number, starting on 1 (default: first page)
         #     :limit    - Number of posts per page (default: 20)
         #     :category - Only get discussions in category
-        def find_paginated(options)
+        def find_paginated(options={})
             discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count
             conditions        = (options[:category]) ? ['category_id = ?', options[:category].id] : nil
 
             # Math is awesome
-            limit = options[:limit] || 20
+            limit = options[:limit] || 30
             num_pages = (discussions_count.to_f/limit).ceil
             page  = (options[:page] || 1).to_i
             page = 1 if page < 1
@@ -56,8 +56,8 @@ class Discussion < ActiveRecord::Base
 
             # Inject the pagination methods on the collection
             class << discussions; include Paginates; end
-            discussions.setup_pagination(num_pages, page, discussions_count, offset)
-
+            discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+            
             return discussions
         end
 
@@ -70,6 +70,10 @@ class Discussion < ActiveRecord::Base
             return safe_params
         end
 
+    end
+    
+    def last_page(per_page=50)
+        (self.posts_count.to_f/per_page).ceil
     end
     
     # Creates the first post. This should probably be called from an after_create filter,

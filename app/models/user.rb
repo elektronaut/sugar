@@ -1,5 +1,5 @@
 require 'digest/sha1'
-require 'MD5'
+require 'md5'
 
 class User < ActiveRecord::Base
 
@@ -71,9 +71,12 @@ class User < ActiveRecord::Base
     
     # Generates a Gravatar URL
     def gravatar_url(options={})
-        options[:size] ||= 24
-        gravatar_hash = MD5::md5(self.email)
-        "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
+        unless @gravatar_url
+            options[:size] ||= 24
+            gravatar_hash = MD5::md5(self.email)
+            @gravatar_url = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
+        end
+        @gravatar_url
     end
 	
 end

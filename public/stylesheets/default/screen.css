@@ -259,3 +259,144 @@ table.discussions td.last {
 .pagination .links {
 	float: right;
 }
+
+
+
+
+
+/* POSTS */
+
+/*
+.posts {
+	border-top: 1px solid #E2DCBF;
+	margin-bottom: 20px;
+}
+
+.post {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #E2DCBF;
+}
+
+.post .body {
+	clear: both;
+	font-size: 1.1em;
+	max-width: 800px;
+}
+
+.post .post_info {
+	line-height: 1;
+	margin-bottom: 1em;
+	color: #888;
+}
+
+.post .avatar {
+	width: 32px;
+	height: 32px;
+	margin-right: 10px;
+}
+.post .avatar img {
+	vertical-align: middle;
+}
+.post .username {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-right: 5px;
+}
+*/
+
+/*
+.posts .post {
+	clear: both;
+}
+
+.posts .post:after {
+    content: ".";
+    display: block;
+    height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.posts .post {display: inline-block;}
+
+
+.posts .post .post_info {
+	width: 150px;
+	color: #888;
+	float: left;
+	margin-top: -1px;
+}
+
+.post .avatar {
+	width: 32px;
+	height: 32px;
+	margin-right: 10px;
+	float: left;
+	margin-top: 1px;
+}
+.post .avatar img {
+	vertical-align: top;
+}
+.post .username {
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.post .post_info .date {
+	display: block;
+}
+
+.posts .post .body {
+	margin-left: 165px;
+	font-size: 1.1em;
+	max-width: 800px;
+}
+*/
+
+
+.posts {
+	border-top: 1px solid #E2DCBF;
+	margin-bottom: 20px;
+}
+
+.post {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #E2DCBF;
+}
+
+.post .body {
+	clear: both;
+	font-size: 1.1em;
+	max-width: 600px;
+	margin-left: 45px;
+}
+
+.post .post_info {
+	line-height: 1;
+	color: #888;
+	margin-bottom: -8px;
+}
+
+.post .avatar {
+	width: 32px;
+	height: 32px;
+	margin-right: 10px;
+}
+.post .avatar img {
+	vertical-align: top;
+}
+.post .username {
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+
+.compose {
+	border-top: 1px solid #E2DCBF;
+	padding-top: 15px;
+}

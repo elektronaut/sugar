@@ -12,6 +12,7 @@ class CreateDiscussions < ActiveRecord::Migration
         add_index :discussions, :category_id, :name => 'category_id_index'
         add_index :discussions, :created_at, :name => 'created_at_index'
         add_index :discussions, :created_at, :name => 'last_post_at_index'
+        add_index :discussions, :sticky, :name => 'sticky_index'
     end
 
     def self.down

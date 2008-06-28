@@ -7,7 +7,35 @@
 <% end %>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo; 
+	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
 	<%= link_to @discussion.title, discussion_path(@discussion) %>
 </h2>
 
+<%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
+
+<div class="posts">
+	<% @posts.each do |post| %><div class="post">
+		<div class="post_info">
+			<a name="post-<%= post.id %>"></a>
+			<span class="avatar"><%= image_tag post.user.gravatar_url(:size => 32), :alt => post.user.username %></span>
+			<span class="username"><%= profile_link(post.user) %></span>
+			<span class="date"><%= formatted_time post.created_at %></span>
+		</div>
+		<div class="body"><%= post.body_html %></div>
+	</div><% end %>
+</div>
+
+<%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
+
+<% if @posts.last_page? %>
+	<div class="compose">
+		<h3>Reply</h3>
+		<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+			<p>
+				<%= f.text_area(:body, :rows => 10, :cols => 80) %>
+			</p>
+			<p><%= submit_tag "Save" %></p>
+		<% end %>
+	</div>
+<% end %>
