@@ -2,15 +2,15 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
 	<table class="discussions">
 		<% discussions.each do |d| %>
-			<tr>
+			<tr class="<%= d.labels.map(&:downcase).join(' ') %>">
 				<td class="name" colspan="5">
 					<% if d.labels? %>
 						[<%= d.labels.join(',') %>]
 					<% end %>
-					<%= link_to d.title, {:id => d, :page => d.last_page, :controller => 'discussions', :action => 'show'} %>
+					<%= link_to d.title, paged_discussion_path(:id => d, :page => d.last_page) %>
 				</td>
 			</tr>
-			<tr>
+			<tr class="<%= d.labels.map(&:downcase).join(' ') %>">
 				<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
 				<td class="started_by">Started by <%= profile_link(d.poster) %></td>
 				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>

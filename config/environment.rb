@@ -10,6 +10,17 @@ RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+
+# Create a random session key if the file doesn't exist
+unless File.exist?(File.join(File.dirname(__FILE__), 'session_key'))
+    session_key = ''
+    seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
+    128.times{ session_key += seed[rand(seed.length)] }
+    File.open(File.join(File.dirname(__FILE__), 'session_key'), "w"){ |fh| fh.write(session_key)}
+end
+
+SESSION_KEY = File.read(File.join(File.dirname(__FILE__), 'session_key'))
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -49,7 +60,7 @@ Rails::Initializer.run do |config|
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
     :session_key => '_butt3rscotch_session',
-    :secret      => 'f8021fa31c7053e1aeceaf7559d51ff2d08c7ffec8f4fcf97c078a0b55d6b3a005b663f598c37f01b4ee1d68c656a7a710f07f1dca96b66b2fb8fbe162e7831f'
+    :secret      => SESSION_KEY
   }
 
   # Use the database for sessions instead of the cookie-based default,

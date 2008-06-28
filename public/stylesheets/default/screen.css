@@ -52,6 +52,29 @@ em {
 	font-style: italic;
 }
 
+small {
+	font-size: 0.8em;
+	color: #444;
+}
+
+blockquote {
+	background: red;
+	margin: 0;
+	padding: 10px 10px;
+	background: #F3F1E9;
+	color: #3C392C;
+	border: 1px solid #DEDCD4;
+	border-left: 5px solid #CCC9BC;
+}
+blockquote cite {
+	display: block;
+	color: #7E7B70;
+	border-bottom: 1px solid #CCC9BC;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+	margin-top: -5px;
+}
+
 a, a:visited {
 	text-decoration: none;
 	color: #9f0000;
@@ -199,6 +222,16 @@ table.discussions td.name {
 }
 table.discussions td.last {
 	width: 100%;
+}
+
+table.discussions tr.nsfw {
+	background: #ffeeee;
+}
+table.discussions tr.closed td.name a, table.discussions tr.closed td.name a:visited {
+	color: #666;
+}
+table.discussions tr.closed td.name a:hover {
+	color: #333;
 }
 
 .userinfo {
@@ -362,6 +395,13 @@ table.discussions td.last {
 	margin-bottom: 20px;
 }
 
+.posts .post_distance {
+	border-bottom: 1px solid #E2DCBF;
+	padding: 2px 0 2px 45px;
+	background: #f8f7f1;
+	color: #84806d;
+}
+
 .post {
 	padding-top: 15px;
 	padding-bottom: 15px;
@@ -373,6 +413,31 @@ table.discussions td.last {
 	font-size: 1.1em;
 	max-width: 600px;
 	margin-left: 45px;
+}
+.post .body .edited {
+	color: #888;
+	font-size: 0.9em;
+	margin-top: 1em;
+}
+.post .body p {
+	margin-bottom: 0.8em;
+}
+
+.post .body a {
+	color: #005794;
+	text-decoration: underline;
+}
+.post .body a:visited {
+	color: #3900a2;
+}
+.post .body a:hover {
+	color: #001d32;
+}
+
+.post .post_functions {
+	line-height: 1;
+	color: #888;
+	float: right;
 }
 
 .post .post_info {
@@ -394,7 +459,12 @@ table.discussions td.last {
 	font-weight: bold;
 	margin-right: 5px;
 }
-
+.post .permalink a, .post .permalink a:visited {
+	color: #888;
+}
+.post .permalink a:hover {
+	color: #333;
+}
 
 .compose {
 	border-top: 1px solid #E2DCBF;

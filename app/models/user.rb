@@ -59,14 +59,16 @@ class User < ActiveRecord::Base
 	    end
 	end
 	
+    # Number of participated discussions
     def participated_count
         Post.count_by_sql("SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE posts.user_id = #{self.id}")
     end
 
+    # Find and paginate participated discussions
 	def paginated_discussions(options)
 	    discussions_count = self.participated_count
 
-        limit = options[:limit] || 30
+        limit = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
         num_pages = (discussions_count.to_f/limit).ceil
         page  = (options[:page] || 1).to_i
         page = 1 if page < 1
@@ -103,12 +105,13 @@ class User < ActiveRecord::Base
     
     # Generates a Gravatar URL
     def gravatar_url(options={})
-        unless @gravatar_url
-            options[:size] ||= 24
+        options[:size] ||= 24
+        @gravatar_url ||= {}
+        unless @gravatar_url[options[:size]]
             gravatar_hash = MD5::md5(self.email)
-            @gravatar_url = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
+            @gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
         end
-        @gravatar_url
+        @gravatar_url[options[:size]]
     end
 	
 end

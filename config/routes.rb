@@ -54,7 +54,7 @@ ActionController::Routing::Routes.draw do |map|
         discussions.resources(:posts)
     end
     map.connect '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
-    map.connect '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
+    map.paged_discussion '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
 
     # Install the default routes as the lowest priority.
     map.connect ':controller/:action/:id'

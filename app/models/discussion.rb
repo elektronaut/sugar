@@ -3,6 +3,7 @@ require 'paginates'
 class Discussion < ActiveRecord::Base
 
     UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at
+    DISCUSSIONS_PER_PAGE = 30
 
     belongs_to :poster, :class_name => 'User', :counter_cache => true
     belongs_to :last_poster, :class_name => 'User'
@@ -37,7 +38,7 @@ class Discussion < ActiveRecord::Base
             conditions        = (options[:category]) ? ['category_id = ?', options[:category].id] : nil
 
             # Math is awesome
-            limit = options[:limit] || 30
+            limit = options[:limit] || DISCUSSIONS_PER_PAGE
             num_pages = (discussions_count.to_f/limit).ceil
             page  = (options[:page] || 1).to_i
             page = 1 if page < 1
@@ -99,6 +100,11 @@ class Discussion < ActiveRecord::Base
     # Is this discussion editable by the given user?
     def editable_by?(user)
         (user && (user.admin? || user == self.poster)) ? true : false
+    end
+    
+    # Can the given user post in this thread?
+    def postable_by?(user)
+        (user && (user.admin? || !self.closed?)) ? true : false
     end
 
     # Humanized ID for URLs

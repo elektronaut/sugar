@@ -1,10 +1,13 @@
-<% @page_title = @discussion.title %>
+<% 
+	@page_title = @discussion.title 
+	previous_post = nil
+-%>
 
-<% if @discussion.editable_by?(@current_user) %>
+<% if @discussion.editable_by?(@current_user) -%>
 	<div class="functions">
 		<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
 	</div>
-<% end %>
+<% end -%>
 
 <h2 class="section">
 	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
@@ -15,20 +18,43 @@
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
 
 <div class="posts">
-	<% @posts.each do |post| %><div class="post">
+	<% @posts.each do |post| %>
+	<% if previous_post && (post.created_at - previous_post.created_at) >= 12.hours %>
+		<div class="post_distance">
+			<%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;
+		</div>
+	<% end %>
+	<div class="post" id="post-<%= post.id %>">
+		<div class="post_functions">
+			<% if post.editable_by?(@current_user) %>
+				<%= link_to "Edit", edit_discussion_post_path(post.discussion, post) %>
+			<% end %>
+		</div>
 		<div class="post_info">
 			<a name="post-<%= post.id %>"></a>
 			<span class="avatar"><%= image_tag post.user.gravatar_url(:size => 32), :alt => post.user.username %></span>
 			<span class="username"><%= profile_link(post.user) %></span>
 			<span class="date"><%= formatted_time post.created_at %></span>
+			<span class="permalink">
+				<%= link_to "#", paged_discussion_path(:id => post.discussion, :page => @posts.page, :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+			</span>
 		</div>
-		<div class="body"><%= post.body_html %></div>
-	</div><% end %>
+		<div class="body">
+			<%= post.body_html %>
+			<% if post.edited? %><div class="edited">
+				Edited <%= formatted_time post.updated_at %>
+			</div><% end %>
+		</div>
+	</div>
+	<% previous_post = post -%>
+	<% end %>
 </div>
 
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
 
-<% if @posts.last_page? %>
+<a name="bottom"></a>
+
+<% if @posts.last_page? && @discussion.postable_by?(@current_user) %>
 	<div class="compose">
 		<h3>Reply</h3>
 		<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>

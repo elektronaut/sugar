@@ -12,7 +12,7 @@ module ApplicationHelper
     
     # Generates a link to the users profile
     def profile_link(user)
-        link_to user.username, user_path(:id => user.username)
+        link_to user.username, user_path(:id => user.username), :title => "#{user.username}'s profile"
     end
     
     # TODO: make a proper text formatter

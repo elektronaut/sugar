@@ -9,11 +9,55 @@ class PostsController < ApplicationController
     end
     protected     :load_discussion
     before_filter :load_discussion
+
+    def load_post
+        @post = Post.find(params[:id]) rescue nil
+        unless @post
+            flash[:notice] = "Can't find that post"
+            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
+        end
+    end
+    protected     :load_post
+    before_filter :load_post, :only => [:show, :edit, :update, :destroy]
     
+    def verify_editable
+        unless @post.editable_by?(@current_user)
+            flash[:notice] = "You don't have permission to edit that post!"
+            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
+        end
+    end
+    protected     :verify_editable
+    before_filter :verify_editable, :only => [:edit, :update, :destroy]
+
+
+
     def create
-        @post = @discussion.posts.create(params[:post].merge({:user => @current_user}))
-        flash[:notice] = "Your reply was saved"
-        redirect_to url_for(:controller => 'discussions', :action => 'show', :id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+        if @discussion.postable_by?(@current_user)
+            @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
+            @discussion.reload
+            flash[:notice] = "Your reply was saved"
+            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+        else
+            flash[:notice] = "This discussion is closed, you don't have permission to post here"
+            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
+        end
+    end
+    
+    def edit
+    end
+    
+    def update
+        if params[:post] && params[:post][:body]
+            # No reason to update anything else, should be more secure
+            @post.update_attribute(:body, params[:post][:body])
+        end
+        if @post.valid?
+            flash[:notice] = "Your changes were saved"
+            redirect_to paged_discussion_url(:id => @discussion, :page => @post.page, :anchor => "post-#{@post.id}")
+        else
+            flash.now[:notice] = "Couldn't save your post. Did you fill in a body?"
+            render :action => :edit
+        end
     end
 
 end
