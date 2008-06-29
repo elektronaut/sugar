@@ -75,6 +75,19 @@ blockquote cite {
 	margin-top: -5px;
 }
 
+
+.post .body code, .post .body pre {
+	font-family: Monaco, Consolas, monospace;
+	font-size: 0.9em;
+}
+
+.post .body code {
+	display: block;
+	white-space: pre;
+}
+
+
+
 a, a:visited {
 	text-decoration: none;
 	color: #9f0000;

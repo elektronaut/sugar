@@ -53,8 +53,16 @@ ActionController::Routing::Routes.draw do |map|
     ) do |discussions|
         discussions.resources(:posts)
     end
-    map.connect '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
-    map.paged_discussion '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
+    map.paged_discussions '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
+    map.paged_discussion  '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
+
+    # Vanilla redirects
+    map.with_options :controller => 'vanilla' do |vanilla|
+        vanilla.connect '/vanilla', :action => 'discussions'
+        vanilla.connect '/vanilla/index.php', :action => 'discussions'
+        vanilla.connect '/vanilla/comments.php', :action => 'discussion'
+        vanilla.connect '/vanilla/account.php', :action => 'user'
+    end
 
     # Install the default routes as the lowest priority.
     map.connect ':controller/:action/:id'

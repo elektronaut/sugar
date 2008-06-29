@@ -1,3 +1,5 @@
+require 'post_parser'
+
 class Post < ActiveRecord::Base
     
     POSTS_PER_PAGE = 50
@@ -10,6 +12,10 @@ class Post < ActiveRecord::Base
     # Automatically update the discussion with last poster info
     after_create do |post|
         post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
+    end
+    
+    before_save do |post|
+        post.body_html = PostParser.parse(post.body)
     end
     
     class << self
@@ -55,32 +61,10 @@ class Post < ActiveRecord::Base
     end
 
     def body_html
-        simple_html_tags = [
-            'tt', 'b', 'i', 'big', 'small', 'em', 'strong', 'dfn', 'code', 
-            'samp', 'kbd', 'var', 'cite', 'abbr', 'acronym', 'a', 'img', 'br',
-            'br', 'map', 'q', 'sub', 'sup', 'span', 'bdo'
-        ]
-        self.body.gsub!("\r",'')
-        blocks = self.body.strip.split(/\n{2,}(?! )/m).map do |blk|
-            # Skip blocks that are complex HTML
-            if blk =~ /^<\/?(\w+).*>/ and not simple_html_tags.include? $1
-                blk
-            else
-                # Ignore whitespace junk
-                blk.strip!
-                if blk.empty?
-                    blk
-                else
-                    #raise blk.inspect
-                    blk.gsub!(/\b(ftp|https?):\/\/[^\s]+\b/){ |link| "<a href=\"link\">#{link}</a>" }
-                    blk.gsub!("\n", "<br />\n")
-                    "<p>#{blk}</p>"
-                end
-            end
+        unless body_html?
+            self.update_attribute(:body_html, PostParser.parse(self.body.dup))
         end
-        return blocks.join("\n\n")
-        #string.gsub!(/\b(ftp|https?):\/\/[^\s]+\b/){ |link| "<a href=\"link\">#{link}</a>" }
-        #string.strip.gsub("\n", "<br />\n")
+        self[:body_html]
     end
 
     def edited?

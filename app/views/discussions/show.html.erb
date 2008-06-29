@@ -27,7 +27,7 @@
 	<div class="post" id="post-<%= post.id %>">
 		<div class="post_functions">
 			<% if post.editable_by?(@current_user) %>
-				<%= link_to "Edit", edit_discussion_post_path(post.discussion, post) %>
+				<%= link_to "Edit", edit_discussion_post_path(@discussion, post) %>
 			<% end %>
 		</div>
 		<div class="post_info">
@@ -36,11 +36,11 @@
 			<span class="username"><%= profile_link(post.user) %></span>
 			<span class="date"><%= formatted_time post.created_at %></span>
 			<span class="permalink">
-				<%= link_to "#", paged_discussion_path(:id => post.discussion, :page => @posts.page, :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+				<%= link_to "#", paged_discussion_path(:id => @discussion, :page => @posts.page, :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
 			</span>
 		</div>
 		<div class="body">
-			<%= post.body_html %>
+			<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
 			<% if post.edited? %><div class="edited">
 				Edited <%= formatted_time post.updated_at %>
 			</div><% end %>

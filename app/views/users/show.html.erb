@@ -27,6 +27,10 @@
 		<th>Birthday</th>
 		<td><%= @user.birthday.strftime("%b %d") %></td>
 	</tr><% end %>
+	<% if @user.gamertag? %><tr>
+		<th>Xbox Live</th>
+		<td><%= h @user.gamertag %></td>
+	</tr><% end %>
 	<% if @user.inviter %><tr>
 		<th>Invited by</th>
 		<td><%= profile_link(@user.inviter) %></td>

@@ -26,6 +26,15 @@ class Discussion < ActiveRecord::Base
     
     # Class methods
     class << self
+        
+        # Enable work safe URLs
+        def work_safe_urls=(state)
+            @@work_safe_urls = state
+        end
+        
+        def work_safe_urls
+            @@work_safe_urls ||= false
+        end
 
         # Finds paginated discussions, sorted by activity, with the sticky ones on top.
         # The collection is extended with the Paginates module, which provides pagination info.
@@ -108,7 +117,7 @@ class Discussion < ActiveRecord::Base
     end
 
     # Humanized ID for URLs
-    def to_param
-        "#{self.id}-" + self.title.downcase.gsub(/[^\w\d]+/,'_')
+    def to_param    
+        (Discussion.work_safe_urls) ? self.id : "#{self.id}-" + self.title.downcase.gsub(/[^\w\d]+/,'_')
     end
 end

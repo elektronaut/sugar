@@ -33,6 +33,8 @@ class ApplicationController < ActionController::Base
             user = User.find(session[:user_id]) rescue nil
             if user && session[:hashed_password] == user.hashed_password && !user.banned? && user.activated?
                 @current_user = user
+                Discussion.work_safe_urls = user.work_safe_urls?
+                Category.work_safe_urls   = user.work_safe_urls?
             end
         end
     end

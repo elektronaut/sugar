@@ -64,7 +64,15 @@ class UsersController < ApplicationController
     end
     
     def forgot_password
-        flash[:notice] = "<strong>Not implemented yet!</strong> But thanks for trying."
+        @user = User.find_by_email(params[:email])
+        if @user
+            @user.generate_password!
+            Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
+            @user.save
+            flash[:notice] = "A new password has been mailed to you"
+        else
+            flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
+        end
         redirect_to login_users_url
     end
     

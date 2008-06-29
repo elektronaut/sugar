@@ -92,7 +92,18 @@ class User < ActiveRecord::Base
         
         return discussions
     end
+    
+    def generate_password!
+        new_password = ''
+        seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
+        (5+rand(3)).times{ new_password += seed[rand(seed.length)] }
+        self.password = self.confirm_password = new_password
+    end
 	
+    def full_email
+        self.realname? ? "#{self.realname} <#{self.email}>" : self.email
+    end
+
     # Is the password valid?
 	def valid_password?(pass)
 		(self.class.hash_string(pass) == self.hashed_password) ? true : false
