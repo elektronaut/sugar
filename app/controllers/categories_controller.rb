@@ -17,16 +17,20 @@ class CategoriesController < ApplicationController
             flash[:notice] = "That's not a valid category!"
             redirect_to categories_path and return
         end
+        unless @category.viewable_by?(@current_user)
+            flash[:notice] = "You don't have permission to view that category"
+            redirect_to categories_path and return
+        end
     end
     protected     :load_category
     before_filter :load_category, :only => [:show, :edit, :update, :destroy]
 
     def index
-        @categories = Category.find(:all, :order => :position)
+        @categories = Category.find(:all, :order => :position).reject{ |c| !c.viewable_by?(@current_user) }
     end
 
     def show
-        @discussions = Discussion.find_paginated(:page => params[:page], :category => @category)
+        @discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => @current_user.trusted?)
     end
     
     def new

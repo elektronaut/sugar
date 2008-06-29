@@ -3,7 +3,7 @@ require 'md5'
 
 class User < ActiveRecord::Base
 
-    UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id
+    UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id
 
     # Virtual attributes for clear text passwords
 	attr_accessor :password, :confirm_password
@@ -38,6 +38,11 @@ class User < ActiveRecord::Base
     # Class methods
 	class << self
 	    
+	    # Find active users
+	    def find_active
+	        self.find(:all, :conditions => 'activated = 1 AND banned = 0')
+        end
+	    
         # Finds users with activity within some_time. The last_active column is only 
         # updated every 10 minutes, smaller values won't work.
 	    def find_online(some_time=15.minutes)
@@ -60,26 +65,36 @@ class User < ActiveRecord::Base
 	end
 	
     # Number of participated discussions
-    def participated_count
-        Post.count_by_sql("SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE posts.user_id = #{self.id}")
+    def participated_count(options={})
+        if options[:trusted]
+            Post.count_by_sql("SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE posts.user_id = #{self.id}")
+        else
+            Post.count_by_sql("SELECT COUNT(DISTINCT p.discussion_id) FROM posts p, discussions d WHERE p.user_id = #{self.id} AND p.discussion_id = d.id AND d.trusted = 0")
+        end
     end
 
     # Find and paginate participated discussions
 	def paginated_discussions(options)
-	    discussions_count = self.participated_count
+	    num_discussions = self.participated_count(:trusted => options[:trusted])
 
         limit = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
-        num_pages = (discussions_count.to_f/limit).ceil
+        num_pages = (num_discussions.to_f/limit).ceil
         page  = (options[:page] || 1).to_i
         page = 1 if page < 1
         page = num_pages if page > num_pages
         offset = limit * (page - 1)
+        
+        if options[:trusted]
+            conditions = ['posts.user_id = ?', self.id]
+        else
+            conditions = ['posts.user_id = ? AND discussions.trusted = 0', self.id]
+        end
 
         discussions = Discussion.find(
             :all,
             :joins      => "INNER JOIN posts ON discussions.id = posts.discussion_id",
             :group      => "discussions.id",
-            :conditions => ['posts.user_id = ?', self.id],
+            :conditions => conditions,
             :limit      => limit, 
             :offset     => offset,
             :order      => 'sticky DESC, last_post_at DESC',
@@ -88,7 +103,7 @@ class User < ActiveRecord::Base
 
         # Inject the pagination methods on the collection
         class << discussions; include Paginates; end
-        discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+        discussions.setup_pagination(:total_count => num_discussions, :page => page, :per_page => limit)
         
         return discussions
     end
@@ -114,6 +129,10 @@ class User < ActiveRecord::Base
 	    (self.last_active && self.last_active > 15.minutes.ago) ? true : false
     end
     
+    def trusted?
+        (self[:trusted] || admin?)
+    end
+
     # Generates a Gravatar URL
     def gravatar_url(options={})
         options[:size] ||= 24

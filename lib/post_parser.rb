@@ -3,11 +3,13 @@ module PostParser
         string = string.strip
 
         # Autolink URLs
-        string.gsub!(/(^|\s)(ftp|https?):\/\/[^\s]+\b/){ |link| "<a href=\"#{link}\">#{link}</a>" }
+        string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
         
         # Replace line breaks
         string.gsub!(/\r?\n/,'<br />')
 
         return string
+
+
     end
 end

@@ -2,7 +2,7 @@ class CreateDiscussions < ActiveRecord::Migration
     def self.up
         create_table :discussions do |t|
             t.string :title
-            t.boolean :sticky, :closed, :nsfw, :null => false, :default => '0'
+            t.boolean :sticky, :closed, :nsfw, :trusted, :null => false, :default => '0'
             t.belongs_to :poster, :last_poster, :category
             t.integer :posts_count, :default => 0, :null => false
             t.timestamps

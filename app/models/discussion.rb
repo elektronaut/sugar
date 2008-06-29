@@ -2,7 +2,7 @@ require 'paginates'
 
 class Discussion < ActiveRecord::Base
 
-    UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at
+    UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
     DISCUSSIONS_PER_PAGE = 30
 
     belongs_to :poster, :class_name => 'User', :counter_cache => true
@@ -16,6 +16,10 @@ class Discussion < ActiveRecord::Base
     # Virtual attribute for the body of the first post. 
     # Makes forms a bit easier, no nested models.
     attr_accessor :body
+
+    validate do |discussion|
+        discussion.trusted = discussion.category.trusted if discussion.category
+    end
     
     # Update the first post if @body has been changed
     after_update do |discussion|
@@ -43,8 +47,13 @@ class Discussion < ActiveRecord::Base
         #     :limit    - Number of posts per page (default: 20)
         #     :category - Only get discussions in category
         def find_paginated(options={})
-            discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count
-            conditions        = (options[:category]) ? ['category_id = ?', options[:category].id] : nil
+            if options[:trusted]
+                discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count
+                conditions        = (options[:category]) ? ['category_id = ?', options[:category].id] : nil
+            else
+                discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count(:conditions => 'trusted = 0')
+                conditions        = (options[:category]) ? ['category_id = ? AND trusted = 0', options[:category].id] : 'trusted = 0'
+            end
 
             # Math is awesome
             limit = options[:limit] || DISCUSSIONS_PER_PAGE
@@ -94,12 +103,13 @@ class Discussion < ActiveRecord::Base
     
     # Does this discussion have any labels?
     def labels?
-        (self.closed? || self.sticky? || self.nsfw?) ? true : false
+        (self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
     end
     
     # Returns an array of labels (for use in the thread title)
     def labels
         labels = []
+        labels << "Trusted" if self.trusted?
         labels << "Sticky" if self.sticky?
         labels << "Closed" if self.closed?
         labels << "NSFW" if self.nsfw?
@@ -114,6 +124,10 @@ class Discussion < ActiveRecord::Base
     # Can the given user post in this thread?
     def postable_by?(user)
         (user && (user.admin? || !self.closed?)) ? true : false
+    end
+
+    def viewable_by?(user)
+        (user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
     end
 
     # Humanized ID for URLs

@@ -8,6 +8,10 @@ class DiscussionsController < ApplicationController
             flash[:notice] = "Could not find that discussion!"
             redirect_to discussions_path and return
         end
+        unless @discussion.viewable_by?(@current_user)
+            flash[:notice] = "You don't have permission to view that discussion!"
+            redirect_to discussions_path and return
+        end
     end
     protected     :load_discussion
     before_filter :load_discussion, :only => [:show, :edit, :update, :destroy]
@@ -20,9 +24,14 @@ class DiscussionsController < ApplicationController
     end
     protected     :verify_editable
     before_filter :verify_editable, :only => [:edit, :update, :destroy]
+    
+    def load_categories
+        @categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user.trusted? || @current_user.admin?) }
+    end
+    before_filter :load_categories, :only => [:new, :edit]
 
     def index
-        @discussions = Discussion.find_paginated(:page => params[:page])
+        @discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
     end
     
     def new

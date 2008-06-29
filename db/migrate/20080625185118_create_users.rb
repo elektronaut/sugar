@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration
             t.string     :username, :realname, :email, :hashed_password, :location
             t.string     :stylesheet_url
             t.text       :description
-            t.boolean    :banned, :activated, :admin, :null => false, :default => '0'
+            t.boolean    :banned, :activated, :admin, :trusted, :user_admin, :moderator, :null => false, :default => '0'
             t.datetime   :last_active
             t.date       :birthday
             t.integer    :posts_count, :discussions_count, :default => 0, :null => false

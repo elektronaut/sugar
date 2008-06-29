@@ -155,12 +155,25 @@ h2.section {
 #header h1 {
 	display:         none;
 }
+#account {
+	position:        absolute;
+	bottom:          2px;
+	right:           20px;
+	font-size:       1.2em;
+	color:           #9f0000;
+}
+#account a, #account a:visited {
+	font-weight:     bold;
+	text-decoration: underline;
+}
 #navigation {
 	margin:          0;
 	position:        absolute;
-	bottom:          2px;
+	bottom:          3px;
 	left:            20px;
 	font-size:       1.2em;
+	line-height:     1;
+	padding-bottom:  0.7px; /* Yeah, that's right.. Fixes inconsistencies between FF/Safari */
 }
 #navigation li {
 	display:         inline;

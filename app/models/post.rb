@@ -61,17 +61,6 @@ class Post < ActiveRecord::Base
     end
 
     def body_html
-        string = self.body
-        string = string.strip
-
-        # Autolink URLs
-        string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
-        
-        # Replace line breaks
-        string.gsub!(/\r?\n/,'<br />')
-
-        return string
-
         unless body_html?
             self.update_attribute(:body_html, PostParser.parse(self.body.dup))
         end
@@ -86,4 +75,7 @@ class Post < ActiveRecord::Base
         (user && (user.admin? || user == self.user)) ? true : false
     end
     
+    def viewable_by?(user)
+        (user && !(self.discussion.trusted? && !(user.trusted? || user.admin?))) ? true : false
+    end
 end

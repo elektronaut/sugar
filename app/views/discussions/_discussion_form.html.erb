@@ -4,7 +4,7 @@
 </p>
 <p>
 	<label>Choose a category</label>
-	<%= f.select(:category_id, Category.find(:all).map{|c| [c.name, c.id] } )%>
+	<%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
 </p>
 <p>
 	<label>Enter your first post</label>

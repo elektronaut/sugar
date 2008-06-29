@@ -22,5 +22,12 @@ class Notifications < ActionMailer::Base
 		@body       = { :user => user, :login_url => login_url }
 		@recipients = user.full_email
 	end
+	
+	def welcome(user)
+	    default_options
+		@subject    = "Welcome to B3S 2.0!"
+		@body       = { :user => user }
+		@recipients = user.full_email
+    end
 
 end

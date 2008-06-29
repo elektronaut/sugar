@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     
     def participated
         @section = :participated if @user == @current_user
-        @discussions = @user.paginated_discussions(:page => params[:page])
+        @discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
     end
     
 
@@ -39,6 +39,7 @@ class UsersController < ApplicationController
             flash[:notice] = "Your changes were saved!"
             if @user == @current_user
                 # Make sure the session data is updated
+                @current_user.reload
                 store_session_authentication
             end
             redirect_to user_url(:id => @user.username)
@@ -66,10 +67,14 @@ class UsersController < ApplicationController
     def forgot_password
         @user = User.find_by_email(params[:email])
         if @user
-            @user.generate_password!
-            Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
-            @user.save
-            flash[:notice] = "A new password has been mailed to you"
+            if @user.activated? && !@user.banned?
+                @user.generate_password!
+                Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
+                @user.save
+                flash[:notice] = "A new password has been mailed to you"
+            else
+                flash[:notice] = "Your account isn't active, you can't do that yet"
+            end
         else
             flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
         end

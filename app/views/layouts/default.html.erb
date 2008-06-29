@@ -15,6 +15,9 @@
 <body>
 	<div id="header">
 		<h1>BUTT<em>3</em>RSCOTCH</h1>
+		<div id="account">
+			Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
+		</div>
 		<ul id="navigation">
 			<li<%= ' class="current"' if @section == :discussions %>><%= link_to "Discussions", discussions_path %></li>
 			<li<%= ' class="current"' if @section == :participated %>><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>

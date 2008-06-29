@@ -15,10 +15,8 @@ module ApplicationHelper
         link_to user.username, user_path(:id => user.username), :title => "#{user.username}'s profile"
     end
     
-    # TODO: make a proper text formatter
-    def text(string)
-        string ||= ""
-        string.gsub("\n","<br />\n")
+    def format_post(string)
+        PostParser.parse(string)
     end
     
 end
