@@ -8,10 +8,10 @@ class CreateDiscussions < ActiveRecord::Migration
             t.timestamps
             t.datetime :last_post_at
         end
-        add_index :discussions, :poster_id, :name => 'discussion_id_index'
+        add_index :discussions, :poster_id, :name => 'poster_id_index'
         add_index :discussions, :category_id, :name => 'category_id_index'
         add_index :discussions, :created_at, :name => 'created_at_index'
-        add_index :discussions, :created_at, :name => 'last_post_at_index'
+        add_index :discussions, :last_post_at, :name => 'last_post_at_index'
         add_index :discussions, :sticky, :name => 'sticky_index'
     end
 

@@ -1,484 +1,400 @@
 @import url(../reset.css);
 
 html, body {
-	height: 100%;
+	height:          100%;
 }
-
 body {
-	background: #fff url(/images/themes/default/header_bg.jpg) top center repeat-x;
-	font-family: Calibri, Arial, Verdana;
-	color: #000000;
-	line-height: 1.3;
+	background:      #fff url(/images/themes/default/header_bg.jpg) top center repeat-x;
+	font-family:     Calibri, Trebuchet, Arial, Verdana, sans-serif;
+	color:           #000000;
+	line-height:     1.3;
 }
 
 /* Set 1em == 10px */
 body{ font-size: 10px; } * html{ font-size: 125%; } * html body{ font-size: 50%; } 
 
 
+
+
+/* -----------------------------------------------------------------------
+   GENERAL
+   ----------------------------------------------------------------------- */
+
 h2, h3, h4, h5, h6, p, ul, ol, pre {
-	margin-bottom: 1em;
+	margin-bottom:   1em;
 }
 
 h2 {
-	font-size: 1.5em;
-	font-weight: bold;
+	font-size:       1.5em;
+	font-weight:     bold;
 }
 h3 {
-	font-size: 1.3em;
-	font-weight: bold;
-	margin-bottom: 0em;
+	font-size:       1.3em;
+	font-weight:     bold;
+	margin-bottom:   0em;
 }
 h2 em {
-	font-weight: normal;
-	font-style: normal;
-	color: #555;
-}
-
-h2.section {
-	padding-bottom: 7px;
-	border-bottom: 1px solid #E2DCBF;
-}
-
-.functions {
-	font-size: 1.5em;
-	float: right;
-	font-weight: bold;
+	font-weight:     normal;
+	font-style:      normal;
+	color:           #555;
 }
 
 strong {
-	font-weight: bold;
+	font-weight:     bold;
 }
 em {
-	font-style: italic;
+	font-style:      italic;
 }
-
 small {
-	font-size: 0.8em;
-	color: #444;
+	font-size:       0.8em;
+	color:           #444;
 }
 
 blockquote {
-	background: red;
-	margin: 0;
-	padding: 10px 10px;
-	background: #F3F1E9;
-	color: #3C392C;
-	border: 1px solid #DEDCD4;
-	border-left: 5px solid #CCC9BC;
+	margin:          0;
+	padding:         10px 10px;
+	background:      #F3F1E9;
+	color:           #3C392C;
+	border:          1px solid #DEDCD4;
+	border-left:     5px solid #CCC9BC;
 }
+/* Posted by.. inside blockquotes */
 blockquote cite {
-	display: block;
-	color: #7E7B70;
-	border-bottom: 1px solid #CCC9BC;
-	padding-bottom: 5px;
-	margin-bottom: 10px;
-	margin-top: -5px;
+	display:         block;
+	color:           #7E7B70;
+	border-bottom:   1px solid #CCC9BC;
+	padding-bottom:  5px;
+	margin-bottom:   10px;
+	margin-top:      -5px;
 }
 
-
-.post .body code, .post .body pre {
-	font-family: Monaco, Consolas, Courier, monospace;
-	font-size: 0.9em;
+code, pre {
+	font-family:     Monaco, Consolas, Courier, monospace;
+	font-size:       0.9em;
 }
-
-.post .body code {
-	display: block;
-	white-space: pre;
-}
-
-
-
-a, a:visited {
-	text-decoration: none;
-	color: #9f0000;
-}
-a:hover {
-	color: #460000;
-}
-a.create, a.create:visited {
-	color: #007b36;
-}
-a.create:hover {
-	color: #004820;
+code {
+	display:         block;
+	white-space:     pre;
 }
 
 label {
-	display: block;
-	font-size: 1.1em;
-	font-weight: bold;
-	margin-bottom: 0.2em;
+	display:         block;
+	font-size:       1.1em;
+	font-weight:     bold;
+	margin-bottom:   0.2em;
 }
 label .description {
-	font-weight: normal;
-	color: #555;
+	font-weight:     normal;
+	color:           #555;
+}
+
+a, a:visited {
+	text-decoration: none;
+	color:           #9f0000;
+}
+a:hover {
+	color:           #460000;
+}
+a.create, a.create:visited {
+	color:           #007b36;
+}
+a.create:hover {
+	color:           #004820;
+}
+
+/* Tables */
+th {
+	font-weight:     bold;
+}
+table.list {
+	border-collapse: collapse;
+	border-top:      1px solid #E2DCBF;
+	width:           100%;
+}
+table.list td, table.list th {
+	padding:         7px 20px 7px 0;
+	border-bottom:   1px solid #E2DCBF;
+	white-space:     nowrap;
+}
+table.list th {
+	color:           #321;
+	background:      #F5F1E0;
+}
+table.list td {
+	color:           #6f5a43;
+}
+
+.functions {
+	font-size:       1.5em;
+	float:           right;
+	font-weight:     bold;
 }
 
 
+
+
+/* -----------------------------------------------------------------------
+   LAYOUT
+   ----------------------------------------------------------------------- */
+
+/* Top heading/breadcrumbs with line */
+h2.section {
+	padding-bottom:  7px;
+	border-bottom:   1px solid #E2DCBF;
+}
+
+/* Header block (the background is set on the body) */
 #header {
-	height: 96px;
-	color: #fff;
-	position: absolute;
-	top: 0;
-	left: 0; right: 0;
+	height:          96px;
+	color:           #fff;
+	position:        absolute;
+	top:             0;
+	left:            0;
+	right:           0;
 }
 #header h1 {
-	display: none;
+	display:         none;
 }
-#header h1 em {
-	font-style: normal;
-	color: #ffd185;
-}
-
-
 #navigation {
-	margin: 0;
-	position: absolute;
-	bottom: 2px;
-	left: 20px;
-	font-size: 1.2em;
+	margin:          0;
+	position:        absolute;
+	bottom:          2px;
+	left:            20px;
+	font-size:       1.2em;
 }
-
 #navigation li {
-	display: inline;
-	margin: 0 3px 0 0;
-	float: left;
+	display:         inline;
+	margin:          0 3px 0 0;
+	float:           left;
 }
 #navigation li a, #navigation li a:visited {
-	margin: 0;
+	margin:          0;
 	text-decoration: none;
-	padding: 1px 10px 1px 10px;
-	background: #9d5178 url(/images/themes/default/tab_bg.gif) repeat-x;
-	border: 1px solid #854155;
-	border-bottom: 1px solid #c67b6a;
-	color: #fff;
+	padding:         1px 10px 1px 10px;
+	background:      #9d5178 url(/images/themes/default/tab_bg.gif) repeat-x;
+	border:          1px solid #854155;
+	border-bottom:   1px solid #c67b6a;
+	color:           #fff;
 }
 #navigation li a:hover {
-	background: #9d5178 url(/images/themes/default/tab_hover_bg.gif) repeat-x;
-	color: #fff;
+	background:      #9d5178 url(/images/themes/default/tab_hover_bg.gif) repeat-x;
+	color:           #fff;
 }
 #navigation li.current a, #navigation li.current a:visited {
-	background: #f9f9f9 url(/images/themes/default/tab_current_bg.gif) repeat-x;
-	padding-top: 2px;
-	color: #000;
-	border: 1px solid #c67b6a;
-	border-bottom: 1px solid #f9f9f9;
-	font-weight: bold;
+	background:      #f9f9f9 url(/images/themes/default/tab_current_bg.gif) repeat-x;
+	padding-top:     2px;
+	color:           #000;
+	border:          1px solid #c67b6a;
+	border-bottom:   1px solid #f9f9f9;
+	font-weight:     bold;
 }
 #navigation li.current a:hover {
 }
 #navigation li.new_messages a, #navigation li.new_messages a:visited {
-	background: #d14b40 url(/images/themes/default/tab_new_messages_bg.gif) repeat-x;
-	color: #fff;
-	border: 1px solid #c24236;
-	border-bottom: 1px solid #c98175;
-	padding-left: 22px;
+	background:      #d14b40 url(/images/themes/default/tab_new_messages_bg.gif) repeat-x;
+	color:           #fff;
+	border:          1px solid #c24236;
+	border-bottom:   1px solid #c98175;
+	padding-left:    22px;
 }
 #navigation li.new_messages a:hover {
-	background: #d14b40 url(/images/themes/default/tab_new_messages_hover_bg.gif) repeat-x;
+	background:      #d14b40 url(/images/themes/default/tab_new_messages_hover_bg.gif) repeat-x;
 }
 
+/* Errors and other notices */
+.notice {
+	background:      #fdd;
+	border-top:      1px solid #d88;
+	border-bottom:   1px solid #d88;
+	color:           #800;
+	margin:          -20px -30px 20px -30px;
+	padding:         10px 30px;
+	font-size:       1.2em;
+	font-weight:     bold;
+}
 
 #content {
-	position: absolute;
-	top: 116px;
-	left: 30px;
-	right: 30px;
-	font-size: 1.2em;
-	padding-bottom: 30px;
+	position:        absolute;
+	top:             116px;
+	left:            30px;
+	right:           30px;
+	font-size:       1.2em;
+	padding-bottom:  30px;
 }
-
 #content td, #content th {
-	padding-right: 20px;
-}
-
-.notice {
-	background: #fdd;
-	border-top: 1px solid #d88;
-	border-bottom: 1px solid #d88;
-	color: #800;
-	margin: -20px -30px 20px -30px;
-	padding: 10px 30px;
-	font-size: 1.2em;
-	font-weight: bold;
+	padding-right:   20px;
 }
 
 
-th {
-	font-weight: bold;
-}
-table.list td, table.list th {
-	padding: 2px 10px 2px 0;
-}
 
+/* -----------------------------------------------------------------------
+   THREADS LIST
+   ----------------------------------------------------------------------- */
 
 table.discussions {
 	border-collapse: collapse;
-	border-top: 1px solid #E2DCBF;
-	width: 100%;
-	margin-bottom: 20px;
+	border-top:      1px solid #E2DCBF;
+	width:           100%;
+	margin-bottom:   20px;
 }
-
-
 table.discussions td {
-	padding: 3px 20px 7px 0;
-	border-bottom: 1px solid #E2DCBF;
-	white-space: nowrap;
-	color: #6f5a43;
+	padding:         3px 20px 7px 0;
+	border-bottom:   1px solid #E2DCBF;
+	white-space:     nowrap;
+	color:           #6f5a43;
 }
 table.discussions td.name {
-	font-size: 1.3em;
-	font-weight: bold;
-	padding-bottom: 0;
-	padding-top: 7px;
-	border-bottom: 0;
+	font-size:       1.3em;
+	font-weight:     bold;
+	padding-bottom:  0;
+	padding-top:     7px;
+	border-bottom:   0;
 }
 table.discussions td.last {
-	width: 100%;
+	width:           100%;
 }
 
 table.discussions tr.nsfw {
-	background: #ffeeee;
+	background:      #ffeeee;
 }
 table.discussions tr.closed td.name a, table.discussions tr.closed td.name a:visited {
-	color: #666;
+	color:           #666;
 }
 table.discussions tr.closed td.name a:hover {
-	color: #333;
+	color:           #333;
 }
 
 .userinfo {
-	margin-bottom: 1em;
+	margin-bottom:   1em;
 }
 
-.list {
-	border-collapse: collapse;
-	border-top: 1px solid #E2DCBF;
-	width: 100%;
+
+
+#categories .name .count {
+	color:           #aaa;
 }
 
-.list td, .list th {
-	padding: 7px 20px 7px 0;
-	border-bottom: 1px solid #E2DCBF;
-	white-space: nowrap;
+
+.new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
+	width:           100%;
 }
-.list th {
-	color: #321;
-	background: #F5F1E0;
+
+
+.pagination {
+	font-size:       1.3em;
+	font-weight:     bold;
+	color:           #888;
+	margin-top:      -1em;
+	margin-bottom:   5px;
 }
-.list td {
-	color: #6f5a43;
+.pagination .links {
+	float:           right;
 }
+
+
+
+/* -----------------------------------------------------------------------
+   DISCUSSION VIEW
+   ----------------------------------------------------------------------- */
+
+.posts {
+	border-top:      1px solid #E2DCBF;
+	margin-bottom:   20px;
+}
+/* Small block between posts that say "2 days later..." */
+.posts .post_distance {
+	border-bottom:   1px solid #E2DCBF;
+	padding:         2px 0 2px 45px;
+	background:      #f8f7f1;
+	color:           #84806d;
+}
+
+.post {
+	padding-top:     15px;
+	padding-bottom:  15px;
+	border-bottom:   1px solid #E2DCBF;
+}
+.post .post_functions {
+	line-height:     1;
+	color:           #888;
+	float:           right;
+}
+
+.post .post_info {
+	line-height:     1;
+	color:           #888;
+	margin-bottom:   -8px;
+}
+.post .post_info .avatar {
+	width:           32px;
+	height:          32px;
+	margin-right:    10px;
+}
+.post .post_info .avatar img {
+	vertical-align:  top;
+}
+.post .post_info .username {
+	font-size:       1.3em;
+	font-weight:     bold;
+	margin-right:    5px;
+}
+.post .post_info .permalink a, .post .post_info .permalink a:visited {
+	color:           #888;
+}
+.post .post_info .permalink a:hover {
+	color:           #333;
+}
+
+.post .body {
+	clear:           both;
+	font-size:       1.1em;
+	max-width:       600px;
+	margin-left:     45px;
+}
+.post .body .edited {
+	color:           #888;
+	font-size:       0.9em;
+	margin-top:      1em;
+}
+.post .body p {
+	margin-bottom:   0.8em;
+}
+
+.post .body a {
+	color:           #005794;
+	text-decoration: underline;
+}
+.post .body a:visited {
+	color:           #3900a2;
+}
+.post .body a:hover {
+	color:           #001d32;
+}
+
+.compose {
+	border-top:      1px solid #E2DCBF;
+	padding-top:     15px;
+}
+
+
+
+
+/* -----------------------------------------------------------------------
+   USERS
+   ----------------------------------------------------------------------- */
+
 .users_list .username {
-	font-weight: bold;
-	font-size: 1.2em;
+	font-weight:     bold;
+	font-size:       1.2em;
 }
 .users_list .status {
 }
 
 .banned {
-	color: #d00;
-	font-weight: bold;
+	color:           #d00;
+	font-weight:     bold;
 }
 .admin {
-	color: #062;
+	color:           #062;
 }
 
-
-#categories .name .count {
-	color: #aaa;
-}
-
-
-.new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
-	width: 100%;
-}
-
-
-.pagination {
-	font-size: 1.3em;
-	font-weight: bold;
-	color: #888;
-	margin-top: -1em;
-	margin-bottom: 5px;
-}
-.pagination .links {
-	float: right;
-}
-
-
-
-
-
-/* POSTS */
-
-/*
-.posts {
-	border-top: 1px solid #E2DCBF;
-	margin-bottom: 20px;
-}
-
-.post {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border-bottom: 1px solid #E2DCBF;
-}
-
-.post .body {
-	clear: both;
-	font-size: 1.1em;
-	max-width: 800px;
-}
-
-.post .post_info {
-	line-height: 1;
-	margin-bottom: 1em;
-	color: #888;
-}
-
-.post .avatar {
-	width: 32px;
-	height: 32px;
-	margin-right: 10px;
-}
-.post .avatar img {
-	vertical-align: middle;
-}
-.post .username {
-	font-size: 1.3em;
-	font-weight: bold;
-	margin-right: 5px;
-}
-*/
-
-/*
-.posts .post {
-	clear: both;
-}
-
-.posts .post:after {
-    content: ".";
-    display: block;
-    height: 0;
-    font-size: 0;
-    clear: both;
-    visibility: hidden;
-}
-
-.posts .post {display: inline-block;}
-
-
-.posts .post .post_info {
-	width: 150px;
-	color: #888;
-	float: left;
-	margin-top: -1px;
-}
-
-.post .avatar {
-	width: 32px;
-	height: 32px;
-	margin-right: 10px;
-	float: left;
-	margin-top: 1px;
-}
-.post .avatar img {
-	vertical-align: top;
-}
-.post .username {
-	font-size: 1.2em;
-	font-weight: bold;
-	margin-right: 5px;
-}
-
-.post .post_info .date {
-	display: block;
-}
-
-.posts .post .body {
-	margin-left: 165px;
-	font-size: 1.1em;
-	max-width: 800px;
-}
-*/
-
-
-.posts {
-	border-top: 1px solid #E2DCBF;
-	margin-bottom: 20px;
-}
-
-.posts .post_distance {
-	border-bottom: 1px solid #E2DCBF;
-	padding: 2px 0 2px 45px;
-	background: #f8f7f1;
-	color: #84806d;
-}
-
-.post {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border-bottom: 1px solid #E2DCBF;
-}
-
-.post .body {
-	clear: both;
-	font-size: 1.1em;
-	max-width: 600px;
-	margin-left: 45px;
-}
-.post .body .edited {
-	color: #888;
-	font-size: 0.9em;
-	margin-top: 1em;
-}
-.post .body p {
-	margin-bottom: 0.8em;
-}
-
-.post .body a {
-	color: #005794;
-	text-decoration: underline;
-}
-.post .body a:visited {
-	color: #3900a2;
-}
-.post .body a:hover {
-	color: #001d32;
-}
-
-.post .post_functions {
-	line-height: 1;
-	color: #888;
-	float: right;
-}
-
-.post .post_info {
-	line-height: 1;
-	color: #888;
-	margin-bottom: -8px;
-}
-
-.post .avatar {
-	width: 32px;
-	height: 32px;
-	margin-right: 10px;
-}
-.post .avatar img {
-	vertical-align: top;
-}
-.post .username {
-	font-size: 1.3em;
-	font-weight: bold;
-	margin-right: 5px;
-}
-.post .permalink a, .post .permalink a:visited {
-	color: #888;
-}
-.post .permalink a:hover {
-	color: #333;
-}
-
-.compose {
-	border-top: 1px solid #E2DCBF;
-	padding-top: 15px;
-}
