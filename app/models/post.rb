@@ -70,7 +70,7 @@ class Post < ActiveRecord::Base
     def edited?
         return false
         return false unless edited_at?
-        (((self.edited_at || self.created_at), - self.created_at) > 5.seconds ) ? true : false
+        (((self.edited_at || self.created_at) - self.created_at) > 5.seconds ) ? true : false
     end
     
     def editable_by?(user)
