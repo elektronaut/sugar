@@ -34,9 +34,13 @@ class PostsController < ApplicationController
     def create
         if @discussion.postable_by?(@current_user)
             @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
-            @discussion.reload
-            flash[:notice] = "Your reply was saved"
-            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+            if @post.valid?
+                @discussion.reload
+                flash[:notice] = "Your reply was saved"
+                redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+            else
+                render :action => :new
+            end
         else
             flash[:notice] = "This discussion is closed, you don't have permission to post here"
             redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)

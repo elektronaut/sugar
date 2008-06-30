@@ -8,6 +8,11 @@ class Post < ActiveRecord::Base
     belongs_to :discussion, :counter_cache => true
     
     validates_presence_of :body
+
+    validate do |post|
+        post.errors.add(:body, "script tags aren't allowed") if post.body =~ /<script/
+        post.edited_at ||= Time.now
+    end
     
     # Automatically update the discussion with last poster info
     after_create do |post|
@@ -68,7 +73,6 @@ class Post < ActiveRecord::Base
     end
 
     def edited?
-        return false
         return false unless edited_at?
         (((self.edited_at || self.created_at) - self.created_at) > 5.seconds ) ? true : false
     end
