@@ -155,6 +155,11 @@ h2.section {
 #header h1 {
 	display:         none;
 }
+#search {
+	position:        absolute;
+	top:             33px;
+	right:           20px;
+}
 #account {
 	position:        absolute;
 	bottom:          2px;

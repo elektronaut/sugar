@@ -39,6 +39,41 @@ class Discussion < ActiveRecord::Base
         def work_safe_urls
             @@work_safe_urls ||= false
         end
+        
+        def search_paginated(options={})
+            if options[:trusted]
+                conditions = ["match(title) AGAINST (?)", options[:query]]
+            else
+                conditions = ["match(title) AGAINST (?) AND trusted = 0", options[:query]]
+            end
+            
+            discussions_count = Discussion.count(:conditions => conditions)
+
+            # Math is awesome
+            limit = options[:limit] || DISCUSSIONS_PER_PAGE
+            num_pages = (discussions_count.to_f/limit).ceil
+            page  = (options[:page] || 1).to_i
+            page = 1 if page < 1
+            page = num_pages if page > num_pages
+            offset = limit * (page - 1)
+
+            # Grab the discussions
+            discussions = self.find(
+                :all, 
+                :conditions => conditions, 
+                :limit      => limit, 
+                :offset     => offset, 
+                :order      => 'sticky DESC, last_post_at DESC',
+                :include    => [:poster, :last_poster, :category]
+            )
+
+            # Inject the pagination methods on the collection
+            class << discussions; include Paginates; end
+            discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+            
+            return discussions
+        end
+        
 
         # Finds paginated discussions, sorted by activity, with the sticky ones on top.
         # The collection is extended with the Paginates module, which provides pagination info.
@@ -54,7 +89,7 @@ class Discussion < ActiveRecord::Base
                 discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count(:conditions => 'trusted = 0')
                 conditions        = (options[:category]) ? ['category_id = ? AND trusted = 0', options[:category].id] : 'trusted = 0'
             end
-
+            
             # Math is awesome
             limit = options[:limit] || DISCUSSIONS_PER_PAGE
             num_pages = (discussions_count.to_f/limit).ceil

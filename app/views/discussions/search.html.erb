@@ -1,0 +1,10 @@
+<% @page_title = "Search" %>
+
+<h2 class="section">Search for <em><%= @search_query %></em></h2>
+
+<% if @discussions %>
+	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+<% else %>
+	<p>No discussions were found.</p>
+<% end %>
+

@@ -35,6 +35,9 @@ ActionController::Routing::Routes.draw do |map|
 
     # See how all your routes lay out with "rake routes"
     
+    map.connect '/search/:query', :controller => 'discussions', :action => 'search'
+    map.search '/search', :controller => 'discussions', :action => 'search'
+
     map.resources(
         :users,
         :member => {:participated => :any},
@@ -49,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :discussions,
-        :collection => { :participated => :any, :bookmarked => :any }
+        :collection => { :participated => :any, :bookmarked => :any, :search => :any }
     ) do |discussions|
         discussions.resources(:posts)
     end

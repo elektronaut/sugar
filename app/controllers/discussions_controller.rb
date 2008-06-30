@@ -34,6 +34,17 @@ class DiscussionsController < ApplicationController
         @discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
     end
     
+    def search
+        if params[:q]
+            redirect_to( { :action => :search, :query => params[:q] } ) and return
+        end
+        unless @search_query = params[:query]
+            flash[:notice] = "No query specified!"
+            redirect_to discussions_path and return
+        end
+        @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query) rescue nil
+    end
+    
     def new
         @discussion = Discussion.new
     end

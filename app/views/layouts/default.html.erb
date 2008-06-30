@@ -16,6 +16,12 @@
 <body>
 	<div id="header">
 		<h1>BUTT<em>3</em>RSCOTCH</h1>
+		<div id="search">
+			<% form_tag search_path, :method => 'get' do %>
+				<%= text_field_tag 'q', @search_query, :class => :query %>
+				<%= submit_tag "Search", :name => nil %>
+			<% end %>
+		</div>
 		<div id="account">
 			Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
 		</div>
