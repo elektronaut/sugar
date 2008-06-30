@@ -42,7 +42,7 @@
 		<div class="body">
 			<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
 			<% if post.edited? %><div class="edited">
-				Edited <%= formatted_time post.updated_at %>
+				Edited <%= formatted_time post.edited_at %>
 			</div><% end %>
 		</div>
 	</div>

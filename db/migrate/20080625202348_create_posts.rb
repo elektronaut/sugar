@@ -3,6 +3,7 @@ class CreatePosts < ActiveRecord::Migration
         create_table :posts do |t|
             t.text :body
             t.belongs_to :user, :discussion
+            t.datetime :edited_at
             t.timestamps
         end
         add_index :posts, :user_id, :name => 'user_id_index'

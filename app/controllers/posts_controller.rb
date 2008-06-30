@@ -50,6 +50,7 @@ class PostsController < ApplicationController
         if params[:post] && params[:post][:body]
             # No reason to update anything else, should be more secure
             @post.update_attribute(:body, params[:post][:body])
+            @post.update_attribute(:edited_at, Time.now)
         end
         if @post.valid?
             flash[:notice] = "Your changes were saved"

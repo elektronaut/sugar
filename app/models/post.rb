@@ -68,7 +68,7 @@ class Post < ActiveRecord::Base
     end
 
     def edited?
-        ((self.updated_at - self.created_at) > 5.seconds ) ? true : false
+        ((self.edited_at - self.created_at) > 5.seconds ) ? true : false
     end
     
     def editable_by?(user)
