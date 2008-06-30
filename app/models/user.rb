@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
         @gravatar_url ||= {}
         unless @gravatar_url[options[:size]]
             gravatar_hash = MD5::md5(self.email)
-            @gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=x"
+            @gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=any"
         end
         @gravatar_url[options[:size]]
     end
