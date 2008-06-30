@@ -18,7 +18,7 @@ class PostsController < ApplicationController
         end
     end
     protected     :load_post
-    before_filter :load_post, :only => [:show, :edit, :update, :destroy]
+    before_filter :load_post, :only => [:show, :edit, :update, :destroy, :quote]
     
     def verify_editable
         unless @post.editable_by?(@current_user)
@@ -48,6 +48,10 @@ class PostsController < ApplicationController
     end
     
     def edit
+    end
+    
+    def quote
+        render :layout => false
     end
     
     def update

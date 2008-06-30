@@ -29,8 +29,13 @@
 	<div class="post" id="post-<%= post.id %>">
 		<div class="post_functions">
 			<% if post.editable_by?(@current_user) %>
-				<%= link_to "Edit", edit_discussion_post_path(@discussion, post) %>
+				<%= link_to "Edit", edit_discussion_post_path(@discussion, post) %> |
 			<% end %>
+			<%# link_to_function "Quote", "quotePost(#{post.id})" %>
+			<%= link_to_remote "Quote", 
+					:url => quote_discussion_post_url(@discussion, post),
+					:complete => "addToReply(request.responseText)"
+			%>
 		</div>
 		<div class="post_info">
 			<a name="post-<%= post.id %>"></a>
@@ -71,9 +76,19 @@
 		<h3>Reply</h3>
 		<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
 			<p>
-				<%= f.text_area(:body, :rows => 10, :cols => 80) %>
+				<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'reply-body') %>
 			</p>
 			<p><%= submit_tag "Save", :tabindex => 2 %></p>
 		<% end %>
 	</div>
 <% end %>
+
+<script type="text/javascript">
+
+	function addToReply(string) {
+		if( $('reply-body') ) {
+			$('reply-body').value += string;
+		}
+	}
+	
+</script>

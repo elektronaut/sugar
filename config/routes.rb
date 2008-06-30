@@ -54,7 +54,10 @@ ActionController::Routing::Routes.draw do |map|
         :discussions,
         :collection => { :participated => :any, :bookmarked => :any, :search => :any }
     ) do |discussions|
-        discussions.resources(:posts)
+        discussions.resources(
+            :posts,
+            :member => { :quote => :any }
+        )
     end
     map.paged_discussions '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
     map.paged_discussion  '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
