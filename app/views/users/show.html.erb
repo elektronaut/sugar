@@ -2,7 +2,13 @@
 
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
 
-<p><%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username %></p>
+<p>
+	<% if @user.avatar_url? %>
+		<%= image_tag @user.avatar_url, :alt => @user.username, :size => '32x32' %>
+	<% else %>
+		<%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username, :size => '80x80' %>
+	<% end %>
+</p>
 
 <% if @user == @current_user %>
 	<p>This is your profile, you can <%= link_to "edit it", edit_user_path(:id => @user.username) %>.</p>
@@ -27,6 +33,36 @@
 		<th>Birthday</th>
 		<td><%= @user.birthday.strftime("%b %d") %></td>
 	</tr><% end %>
+	<% if @user.website? %><tr>
+		<th>Web site</th>
+		<td><%= link_to @user.website, @user.website %></td>
+	</tr><% end %>
+
+	<% if @user.msn? %><tr>
+		<th>MSN Messenger</th>
+		<td><%= h @user.msn %></td>
+	</tr><% end %>
+	<% if @user.gtalk? %><tr>
+		<th>Google Talk</th>
+		<td><%= h @user.gtalk %></td>
+	</tr><% end %>
+	<% if @user.aim? %><tr>
+		<th>AIM</th>
+		<td><%= h @user.aim %></td>
+	</tr><% end %>
+	<% if @user.twitter? %><tr>
+		<th>Twitter</th>
+		<td><%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %></td>
+	</tr><% end %>
+	<% if @user.flickr? %><tr>
+		<th>Flickr</th>
+		<td><%= link_to @user.flickr, "http://www.flickr.com/photos/#{@user.flickr}/" %></td>
+	</tr><% end %>
+	<% if @user.last_fm? %><tr>
+		<th>Last.fm</th>
+		<td><%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></td>
+	</tr><% end %>
+
 	<% if @user.gamertag? %><tr>
 		<th>Xbox Live</th>
 		<td><%= h @user.gamertag %></td>

@@ -389,6 +389,13 @@ table.discussions tr.closed td.name a:hover {
 	color:           #001d32;
 }
 
+.bottomlinks {
+	font-size:       1.3em;
+	font-weight:     bold;
+	border-top:      1px solid #E2DCBF;
+	padding:         5px 0;
+}
+
 .compose {
 	border-top:      1px solid #E2DCBF;
 	padding-top:     15px;

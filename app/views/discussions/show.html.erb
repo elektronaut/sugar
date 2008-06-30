@@ -3,6 +3,8 @@
 	previous_post = nil
 -%>
 
+<a name="top"></a>
+
 <% if @discussion.editable_by?(@current_user) -%>
 	<div class="functions">
 		<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
@@ -36,7 +38,7 @@
 				<% if post.user.avatar_url? %>
 					<%= image_tag post.user.avatar_url, :alt => post.user.username, :size => '32x32' %>
 				<% else %>
-					<%= image_tag post.user.gravatar_url(:size => 32), :alt => post.user.username %>
+					<%= image_tag post.user.gravatar_url(:size => 32), :alt => post.user.username, :size => '32x32' %>
 				<% end %>
 			</span>
 			<span class="username"><%= profile_link(post.user) %></span>
@@ -59,6 +61,10 @@
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
 
 <a name="bottom"></a>
+<div class="bottomlinks">
+	<%= link_to "Back to discussions", discussions_path %>,
+	<%= link_to "Top of page", "#top" %>
+</div>
 
 <% if @posts.last_page? && @discussion.postable_by?(@current_user) %>
 	<div class="compose">
@@ -67,7 +73,7 @@
 			<p>
 				<%= f.text_area(:body, :rows => 10, :cols => 80) %>
 			</p>
-			<p><%= submit_tag "Save" %></p>
+			<p><%= submit_tag "Save", :tabindex => 2 %></p>
 		<% end %>
 	</div>
 <% end %>

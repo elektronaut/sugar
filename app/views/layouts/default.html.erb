@@ -26,11 +26,12 @@
 			Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
 		</div>
 		<ul id="navigation">
-			<li<%= ' class="current"' if @section == :discussions %>><%= link_to "Discussions", discussions_path %></li>
-			<li<%= ' class="current"' if @section == :participated %>><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>
-			<li<%= ' class="current"' if @section == :categories %>><%= link_to "Categories", categories_path %></li>
-			<li<%= ' class="current"' if @section == :users %>><%= link_to "Users", users_path %></li>
-			<!--<li class="new_messages"><%= link_to "2 New messages!" %></li>-->
+			<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
+			<li class="participated<%= ' current' if @section == :participated %>"><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>
+			<!--<li class="bookmarks"><%= link_to "Bookmarks" %></li>-->
+			<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
+			<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", users_path %></li>
+			<!--<li class="messages new_messages"><%= link_to "2 New messages!" %></li>-->
 		</ul>
 	</div>
 	<div id="content">
