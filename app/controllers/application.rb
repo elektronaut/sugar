@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
 
     helper :all # include all helpers, all the time
 
+    session :session_expires => 3.years.from_now
+
     # See ActionController::RequestForgeryProtection for details
     # Uncomment the :secret if you're not using the cookie session store
     protect_from_forgery # :secret => '21e3d7f3d3c39ae82439f2f9108fc36b'
