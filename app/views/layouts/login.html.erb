@@ -11,6 +11,8 @@
 <body>
 	<% if flash[:notice] %>
 		<div id="notice"><p><%= flash[:notice] %></p></div>
+	<% else %>
+		<div id="notice"><p>Login issues? Email inge at elektronaut.no with your username and password, and we'll sort it out.</p></div>
 	<% end %>
 	<div class="content">
 		<%= yield %>
