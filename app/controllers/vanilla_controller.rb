@@ -7,7 +7,7 @@ class VanillaController < ApplicationController
         if params[:CategoryID]
             redirect_to category_url(params[:CategoryID])
         else
-            redirect_to paged_discussions_path(:page => params[:page])
+            redirect_to paged_discussions_path(:page => (params[:page] || 1))
         end
     end
 
