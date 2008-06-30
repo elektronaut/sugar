@@ -1,7 +1,7 @@
 class Notifications < ActionMailer::Base
   
 	def self.default_sender
-		"no-reply@butt3rscotch.org"
+		"Butt3rscotch <no-reply@butt3rscotch.org>"
 	end
 
 	def default_options

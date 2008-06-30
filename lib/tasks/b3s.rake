@@ -12,5 +12,10 @@ namespace :b3s do
             end
         end
     end
+    
+    desc "Pack default theme"
+    task :pack_default_theme do
+        `zip -r public/b3s_default_theme.zip public/stylesheets/default/* public/images/themes/default/*`
+    end
 
 end

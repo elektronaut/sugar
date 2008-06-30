@@ -41,6 +41,13 @@
 		<%= f.check_box(:work_safe_urls) %>
 	</p>
 	<p>
+		<label>Stylesheet URL <span class="description">&mdash; Enter a URL here to override the stylesheet</span></label>
+		<%= f.text_field(:stylesheet_url) %>
+	</p>
+	<p>
+		You can download the newest version of the default theme here: <%= link_to "b3s_default_theme.zip", "/b3s_default_theme.zip" %>
+	</p>
+	<p>
 		<label>Profile text</label>
 		<%= f.text_area(:description, :rows => 8, :cols => 80) %>
 	</p>
@@ -54,6 +61,11 @@
 			<%= f.check_box(:html_disabled) %> Disable HTML posting<br />
 			<%= f.check_box(:trusted) %> Trusted<br />
 			<%= f.check_box(:admin) %> Administrator<br />
+		</p>
+		<p>These don't do anything yet, but at least they are configurable:</p>
+		<p>
+			<%= f.check_box(:moderator) %> Moderator<br />
+			<%= f.check_box(:user_admin) %> User administator<br />
 		</p>
 	<% end %>
 	
