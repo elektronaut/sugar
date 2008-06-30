@@ -8,8 +8,10 @@
 		<%= f.text_field(:username, :disabled => !@current_user.admin?) %>
 	</p>
 	<p>
-		<label>Image/Avatar</label>
-		Upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> using your registered email to get an avatar.
+		<label>Avatar URL <span class="description">&mdash; Enter a link to a 32x32px image</span></label>
+		<%= f.text_field(:avatar_url) %><br />
+		Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> 
+		using your registered email to get an avatar.
 	</p>
 	<p>
 		<label>Real name</label>
