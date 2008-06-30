@@ -68,6 +68,7 @@ class Post < ActiveRecord::Base
     end
 
     def edited?
+        return false unless edited_at?
         ((self.edited_at - self.created_at) > 5.seconds ) ? true : false
     end
     
