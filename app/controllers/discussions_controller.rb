@@ -55,7 +55,7 @@ class DiscussionsController < ApplicationController
         @posts = Post.find_paginated(:page => params[:page], :discussion => @discussion)
         last_index = @posts.offset + @posts.length
         if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
-            discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id)
+            discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id) if discussion_view.post_index < last_index
         else
             DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => @posts.last.id)
         end
