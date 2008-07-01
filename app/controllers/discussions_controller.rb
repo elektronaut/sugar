@@ -44,6 +44,7 @@ class DiscussionsController < ApplicationController
             redirect_to discussions_path and return
         end
         @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query) rescue nil
+        find_discussion_views
     end
     
     def new

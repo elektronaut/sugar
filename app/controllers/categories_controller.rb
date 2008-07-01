@@ -31,6 +31,7 @@ class CategoriesController < ApplicationController
 
     def show
         @discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => @current_user.trusted?)
+        find_discussion_views
     end
     
     def new

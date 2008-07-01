@@ -23,6 +23,7 @@ class UsersController < ApplicationController
     def participated
         @section = :participated if @user == @current_user
         @discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+        find_discussion_views
     end
     
 

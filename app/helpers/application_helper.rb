@@ -29,6 +29,7 @@ module ApplicationHelper
     end
     
     def discussion_view(discussion, user)
+        return nil unless @discussion_views
         dv = @discussion_views.select{ |d| d.discussion_id == discussion.id && d.user_id == user.id }
         if dv.length == 0
             @discussion_views << (dv = DiscussionView.new(:user_id => user.id, :discussion_id => discussion.id, :post_index => 0))
@@ -54,7 +55,7 @@ module ApplicationHelper
     end
     
     def last_discussion_page_path(d)
-        if last_post_id = discussion_view(d, @current_user).post_id
+        if @discussion_views && last_post_id = discussion_view(d, @current_user).post_id
             paged_discussion_path(:id => d, :page => last_discussion_page(d), :anchor => "post-#{last_post_id}")
         else
             paged_discussion_path(:id => d, :page => last_discussion_page(d))
