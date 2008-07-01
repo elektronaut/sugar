@@ -5,7 +5,7 @@
 			<tr class="<%= discussion_classes(discussions, d) %>">
 				<td class="name" colspan="6">
 					<% if d.labels? %>
-						[<%= d.labels.join(',') %>]
+						<span class="labels">[<%= d.labels.join(',') %>]</span>
 					<% end %>
 					<%= link_to d.title, last_discussion_page_path(d) %>
 				</td>
