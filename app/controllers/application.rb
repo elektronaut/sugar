@@ -28,6 +28,16 @@ class ApplicationController < ActionController::Base
     before_filter :layout_data
 
 
+    # Finds DiscussionViews for @discussion
+    def find_discussion_views
+        if @current_user && @discussions && @discussions.length > 0
+            @discussion_views = DiscussionView.find(
+                :all,
+                :conditions => {:user_id => @current_user.id, :discussion_id => @discussions.map(&:id).uniq}
+            )
+        end
+    end
+
     # Loads and authenticates @current_user from session. Will fail
     # if the password has been changed. This is a feature.
     def authenticate_session

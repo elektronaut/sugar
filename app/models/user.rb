@@ -9,10 +9,11 @@ class User < ActiveRecord::Base
 	attr_accessor :password, :confirm_password
 	attr_accessor :password_changed
 
-    has_many :discussions, :foreign_key => 'poster_id'
-    has_many :posts
+    has_many   :discussions, :foreign_key => 'poster_id'
+    has_many   :posts
     belongs_to :inviter, :class_name => 'User'
-    has_many :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
+    has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
+    has_many   :discussion_views, :dependent => :destroy
 
     validate do |user|
 		# Has the password been changed?

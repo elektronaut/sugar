@@ -6,6 +6,7 @@ class Post < ActiveRecord::Base
 
     belongs_to :user, :counter_cache => true
     belongs_to :discussion, :counter_cache => true
+    has_many   :discussion_views
     
     validates_presence_of :body
 

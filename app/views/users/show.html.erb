@@ -48,7 +48,7 @@
 	</tr><% end %>
 	<% if @user.aim? %><tr>
 		<th>AIM</th>
-		<td><%= h @user.aim %></td>
+		<td><%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}&message=Hello%20from%20B3S" %></td>
 	</tr><% end %>
 	<% if @user.twitter? %><tr>
 		<th>Twitter</th>

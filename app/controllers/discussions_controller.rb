@@ -32,6 +32,7 @@ class DiscussionsController < ApplicationController
 
     def index
         @discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
+        find_discussion_views
     end
     
     def search
@@ -51,6 +52,12 @@ class DiscussionsController < ApplicationController
     
     def show
         @posts = Post.find_paginated(:page => params[:page], :discussion => @discussion)
+        last_index = @posts.offset + @posts.length
+        if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
+            discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id)
+        else
+            DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => @posts.last.id)
+        end
     end
     
     def edit

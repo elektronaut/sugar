@@ -9,6 +9,7 @@ class Discussion < ActiveRecord::Base
     belongs_to :last_poster, :class_name => 'User'
     belongs_to :category
     has_many   :posts, :order => ['created_at ASC']
+    has_many   :discussion_views, :dependent => :destroy
 
     validates_presence_of :category_id, :title
     validates_presence_of :body, :on => :create
@@ -25,6 +26,7 @@ class Discussion < ActiveRecord::Base
     after_update do |discussion|
         if discussion.body && !discussion.body.empty?
             discussion.posts.first.update_attribute(:body, discussion.body)
+            discussion.posts.first.update_attribute(:edited_at, Time.now)
         end
     end
     
