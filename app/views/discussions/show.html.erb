@@ -73,7 +73,7 @@
 
 <% if @discussion.postable_by?(@current_user) %>
 
-	<div id="composeToggle"><%= link_to_function('Reply', 'showCompose();') %></div>
+	<div id="compose-toggle"><%= link_to_function('Reply', 'showCompose();') %></div>
 
 	<div class="compose" id="compose">
 
@@ -81,6 +81,12 @@
 			<li class="tab"><a href="#replyText">Write</a></li>  
 			<li class="tab"><a href="#replyImage">Draw</a></li>  
 		</ul>
+		
+		<% if @posts.last_page? && @posts.length == Post::POSTS_PER_PAGE %>
+			<div class="newpage_warning">
+				<strong>Warning:</strong> You're about to get newpage'd.
+			</div>
+		<% end %>
 		
 		<div id="replyText">
 			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
@@ -131,7 +137,7 @@
 	new Control.Tabs('reply-tabs');  
 
 	function showCompose() {
-		Element.hide('composeToggle');
+		Element.hide('compose-toggle');
 		Element.show('compose');
 	}
 
