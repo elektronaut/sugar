@@ -90,6 +90,7 @@
 				swfobject.registerObject("napkin", "9.0.31");
 			
 				function uploadDrawing() {
+					$('napkin-submit').innerHTML = "Posting, please wait&hellip;";
 					swfobject.getObjectById("napkin").uploadDrawing();
 				}
 			
@@ -115,7 +116,7 @@
 				<!--<![endif]-->
 			</object>
 			</div>
-			<p><input name="commit" type="submit" value="Post" onClick="uploadDrawing()" /></p>
+			<p id="napkin-submit"><input name="commit" type="submit" value="Post" onClick="uploadDrawing()" /></p>
 		</div>
 	</div>
 <% end %>
