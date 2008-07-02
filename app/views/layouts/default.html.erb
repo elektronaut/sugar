@@ -6,6 +6,20 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
 	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag 'swfobject' %>
+
+	<%= javascript_include_tag 'livepipe/livepipe' %>
+	<%= javascript_include_tag 'livepipe/cookie' %>
+	<%# javascript_include_tag 'livepipe/contextmenu' %>
+	<%= javascript_include_tag 'livepipe/event_behavior' %>
+	<%= javascript_include_tag 'livepipe/hotkey' %>
+
+	<%= javascript_include_tag 'livepipe/selection' %>
+	<%= javascript_include_tag 'livepipe/selectmultiple' %>
+	<%= javascript_include_tag 'livepipe/tabs' %>
+	<%= javascript_include_tag 'livepipe/textarea' %>
+	<%= javascript_include_tag 'livepipe/window' %>
+
 	<% if @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else %>

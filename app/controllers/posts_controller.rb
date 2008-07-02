@@ -1,4 +1,9 @@
+require 'digest/sha1'
+
 class PostsController < ApplicationController
+
+    requires_authentication
+    protect_from_forgery :except => [:doodle]
 
     def load_discussion
         @discussion = Discussion.find(params[:discussion_id]) rescue nil
@@ -44,6 +49,19 @@ class PostsController < ApplicationController
         else
             flash[:notice] = "This discussion is closed, you don't have permission to post here"
             redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
+        end
+    end
+    
+    def doodle
+        if @discussion.postable_by?(@current_user)
+            doodle_hash = Digest::SHA1.hexdigest(Time.now.to_s + @current_user.username)
+            doodle_data = Base64.decode64(params[:drawing])
+            doodle_file = File.join(File.dirname(__FILE__), '../../public/doodles/'+doodle_hash+'.jpg')
+            File.open(doodle_file, 'wb'){ |fh| fh.write doodle_data }
+            @post = @discussion.posts.create(:user => @current_user, :body => '<div class="drawing"><img src="/doodles/'+doodle_hash+'.jpg" alt="doodle" /></div>')
+            render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}"), :layout => false
+        else
+            render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page), :layout => false
         end
     end
     

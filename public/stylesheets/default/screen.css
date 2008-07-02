@@ -1,4 +1,5 @@
 @import url(../reset.css);
+@import url(textarea.css);
 
 html, body {
 	height:          100%;
@@ -301,6 +302,7 @@ table.discussions tr.closed td.name a:hover {
 
 .new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
 	width:           100%;
+	max-width:       600px;
 }
 
 
@@ -375,6 +377,9 @@ table.discussions tr.closed td.name a:hover {
 	max-width:       600px;
 	margin-left:     45px;
 }
+.post .body .drawing {
+}
+
 .post .body .edited {
 	color:           #888;
 	font-size:       0.9em;
@@ -406,6 +411,31 @@ table.discussions tr.closed td.name a:hover {
 	border-top:      1px solid #E2DCBF;
 	padding-top:     15px;
 }
+
+.compose .napkin {
+	width: 600px;
+	height: 300px;
+	border: 1px solid #ccc;
+	margin-bottom: 1em;
+}
+
+#reply-tabs {
+	font-weight:     bold;
+	font-size:       1.3em;
+	max-width:       600px;
+}
+#reply-tabs li {
+	display:         inline;
+}
+
+#reply-tabs li a {
+	padding:         2px 5px;
+}
+#reply-tabs li a.active {
+	background:      #9f0000;
+	color:           #fff;
+}
+
 
 
 

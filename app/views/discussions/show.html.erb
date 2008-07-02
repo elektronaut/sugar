@@ -73,17 +73,56 @@
 
 <% if @posts.last_page? && @discussion.postable_by?(@current_user) %>
 	<div class="compose">
-		<h3>Reply</h3>
-		<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
-			<p>
-				<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'reply-body') %>
-			</p>
-			<p><%= submit_tag "Save", :tabindex => 2 %></p>
-		<% end %>
+
+		<ul id="reply-tabs" class="tabs">  
+			<li class="tab"><a href="#replyText">Write</a></li>  
+			<li class="tab"><a href="#replyImage">Draw</a></li>  
+		</ul>
+		
+		<div id="replyText">
+			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body') %></p>
+				<p><button type="submit">Post</button></p>
+			<% end %>
+		</div>
+		<div id="replyImage">
+			<script type="text/javascript">
+				swfobject.registerObject("napkin", "9.0.31");
+			
+				function uploadDrawing() {
+					swfobject.getObjectById("napkin").uploadDrawing();
+				}
+			
+				function onDrawingUploaded(url) {
+					window.location.reload();
+				}
+			</script>
+
+			<div class="napkin">
+			<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="600" height="300" id="napkin">
+				<% napkin_vars = "service=" + doodle_discussion_posts_path(@discussion) -%>
+				<param name="movie" value="/flash/napkin.swf" />
+				<param name="flashvars" value="<%= napkin_vars %>" />
+				<param name="allowScriptAccess" value="always" />
+				<!--[if !IE]>-->
+				<object type="application/x-shockwave-flash" data="/flash/napkin.swf?<%= napkin_vars %>" width="600" height="300">
+				<!--<![endif]-->
+					<a href="http://www.adobe.com/go/getflashplayer">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+					</a>
+				<!--[if !IE]>-->
+				</object>
+				<!--<![endif]-->
+			</object>
+			</div>
+			<p><input name="commit" type="submit" value="Post" onClick="uploadDrawing()" /></p>
+		</div>
 	</div>
 <% end %>
 
 <script type="text/javascript">
+
+	new Control.Tabs('reply-tabs');  
 
 	function addToReply(string) {
 		if( $('reply-body') ) {

@@ -56,6 +56,7 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
 	run "ln -s #{deploy_to}/#{shared_dir}/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
 	run "ln -s #{deploy_to}/#{shared_dir}/session_key #{deploy_to}/#{current_dir}/config/session_key"
+	run "ln -s #{deploy_to}/#{shared_dir}/doodles #{deploy_to}/#{current_dir}/public/doodles"
 end
 
 after "deploy:setup", :create_shared_dirs
