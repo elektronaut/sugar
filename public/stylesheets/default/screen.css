@@ -407,6 +407,13 @@ table.discussions tr.closed td.name a:hover {
 	padding:         5px 0;
 }
 
+#composeToggle {
+	border-top:      1px solid #E2DCBF;
+	padding-top:     15px;
+	font-size:       1.3em;
+	font-weight:     bold;
+}
+
 .compose {
 	border-top:      1px solid #E2DCBF;
 	padding-top:     15px;

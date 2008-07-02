@@ -71,8 +71,11 @@
 	<%= link_to "Top of page", "#top" %>
 </div>
 
-<% if @posts.last_page? && @discussion.postable_by?(@current_user) %>
-	<div class="compose">
+<% if @discussion.postable_by?(@current_user) %>
+
+	<div id="composeToggle"><%= link_to_function('Reply', 'showCompose();') %></div>
+
+	<div class="compose" id="compose">
 
 		<ul id="reply-tabs" class="tabs">  
 			<li class="tab"><a href="#replyText">Write</a></li>  
@@ -123,12 +126,24 @@
 
 <script type="text/javascript">
 
+	Element.hide('compose');
+	
 	new Control.Tabs('reply-tabs');  
+
+	function showCompose() {
+		Element.hide('composeToggle');
+		Element.show('compose');
+	}
 
 	function addToReply(string) {
 		if( $('compose-body') ) {
+			showCompose();
 			$('compose-body').value += string;
 		}
 	}
+
+	<% if @posts.last_page? -%>
+		showCompose();
+	<% end -%>
 	
 </script>
