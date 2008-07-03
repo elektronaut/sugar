@@ -1,9 +1,10 @@
 <% 
-	@page_title = @discussion.title 
+	add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
+	@page_title = @discussion.title
 	previous_post = nil
 -%>
 
-<a name="top"></a>
+<a name="top" class="anchor"></a>
 
 <% if @discussion.editable_by?(@current_user) -%>
 	<div class="functions">
@@ -26,19 +27,18 @@
 			<%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;
 		</div>
 	<% end %>
-	<div class="post" id="post-<%= post.id %>">
+	<div class="post post_by_user<%= post.user.id %>" id="post-<%= post.id %>">
 		<div class="post_functions">
 			<% if post.editable_by?(@current_user) %>
 				<%= link_to "Edit", edit_discussion_post_path(@discussion, post) %> |
 			<% end %>
-			<%# link_to_function "Quote", "quotePost(#{post.id})" %>
 			<%= link_to_remote "Quote", 
 					:url => quote_discussion_post_url(@discussion, post),
 					:complete => "addToReply(request.responseText)"
 			%>
 		</div>
 		<div class="post_info">
-			<a name="post-<%= post.id %>"></a>
+			<a name="post-<%= post.id %>" class="anchor"></a>
 			<span class="avatar">
 				<% if post.user.avatar_url? %>
 					<%= image_tag post.user.avatar_url, :alt => post.user.username, :size => '32x32' %>

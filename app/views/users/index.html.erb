@@ -1,4 +1,7 @@
-<% @page_title = "Users" %>
+<% 
+	add_body_class "users"
+	@page_title = "Users" 
+%>
 
 <h2 class="section"><%= link_to "Users", users_path %></h2>
 <% if @online_users && @online_users.length > 0 %>

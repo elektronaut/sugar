@@ -1,4 +1,7 @@
-<% @page_title = "Edit #{@category.name}" %>
+<% 
+	add_body_class "edit_category"
+	@page_title = "Edit #{@category.name}" 
+%>
 
 <h2 class="section">
 	<%= link_to "Categories", categories_path %> &raquo; 

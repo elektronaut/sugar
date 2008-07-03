@@ -1,4 +1,7 @@
-<% @page_title = @category.name %>
+<% 
+	add_body_class "category", "discussions", "category#{@category.id}"
+	@page_title = @category.name 
+%>
 
 <div class="functions">
 	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>

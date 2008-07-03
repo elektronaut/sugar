@@ -1,4 +1,7 @@
-<% @page_title = "#{@user.username}'s discussions" %>
+<% 
+	add_body_class "participated discussions"
+	@page_title = "#{@user.username}'s discussions" 
+%>
 
 <div class="functions">
 	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>

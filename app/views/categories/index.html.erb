@@ -1,4 +1,7 @@
-<% @page_name = "Categories" %>
+<% 
+	add_body_class "categories"
+	@page_name = "Categories" 
+%>
 
 <% if @current_user.admin? %>
 	<div class="functions">

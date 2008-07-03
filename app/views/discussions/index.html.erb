@@ -1,4 +1,7 @@
-<% @page_title = "All Discussions" %>
+<% 
+	add_body_class "discussions all_discussions"
+	@page_title = "All Discussions" 
+%>
 
 <div class="functions">
 	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>

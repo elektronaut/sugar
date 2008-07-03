@@ -1,4 +1,7 @@
-<% @page_title = "New discussion" %>
+<% 
+	add_body_class "new_discussion discussion_form"
+	@page_title = "New discussion" 
+%>
 
 <h2 class="section"><%= link_to "Discussions", discussions_path %> &raquo; <%= link_to "New", new_discussion_path %></h2>
 

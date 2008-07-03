@@ -5,3 +5,73 @@ http://butt3rscotch.org/discussions/archive/7
 Pagination as list
 
 <object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/MA_etl_IVL0&hl=en&color1=0x234900&color2=0x4e9e00"></param><embed src="http://www.youtube.com/v/MA_etl_IVL0&hl=en&color1=0x234900&color2=0x4e9e00" type="application/x-shockwave-flash" width="425" height="344"></embed></object>
+
+
+
+
+
+
+<img src=".." alt="/>" onload=".." />
+
+# this one scrubs inbound content
+ 
+require 'tidy'
+require 'rexml/document'
+require 'rexml/xpath'
+ 
+module BlogHelper
+    def self.scrub_xhtml_input (input)
+        # XXX: make this log input?
+        xmlstr = Tidy.open(:show_warnings => true) do |tidy|
+            tidy.options.output_xhtml = true
+            tidy.clean(input)
+        end
+        doc = REXML::Document.new xmlstr
+        # remove everything outside of the body
+        body = REXML::XPath.first(doc, '//body')
+        # delete script, style, frameset, frame and iframe
+        # XXX: what about object/embed?
+        doc.elements.each(
+                '//script|//style|//frameset|//frame|//iframe') do |e|
+            e.parent.delete_element e
+        end
+        newdoc = REXML::Document.new
+        body.name = 'div'
+        newdoc.add body
+        newdoc
+    end
+end
+ 
+ 
+# this one scrubs outbound stored content; these could probably be merged
+ 
+ 
+    def content= (content)
+        logger.debug content
+        # clean xml input
+        xml = Tidy.open do |t|
+            t.options.output_xhtml = true
+            t.clean content
+        end
+        logger.debug xml
+        doc = REXML::Document.new xml
+ 
+        # remove all naughty tags
+        # XXX: this might not wash with prefixed xhtml so watch out
+        # XXX: moreover, this will not protect from dojo DoS and the like
+        doc.elements.each('//script|//style|//iframe|//frameset|' <<
+                '//frame|//comment()//processing-instruction()') do |naughty|
+            naughty.parent.delete naughty
+        end
+ 
+        newdoc = REXML::Document.new
+        root = REXML::Element.new 'div'
+        root.attributes['xmlns'] = 'http://www.w3.org/1999/xhtml'
+ 
+        REXML::XPath.each(doc, '//body[1]/node()') do |n|
+            root.add(n.respond_to?('deep_clone') ? n.deep_clone : n.clone) 
+        end
+        newdoc.add root
+ 
+        self['content'] = newdoc.to_s
+    end

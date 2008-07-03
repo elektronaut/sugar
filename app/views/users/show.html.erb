@@ -1,4 +1,7 @@
-<% @page_title = "#{@user.username}" %>
+<% 
+	add_body_class "user_profile"
+	@page_title = "#{@user.username}" 
+%>
 
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
 
@@ -13,7 +16,7 @@
 <% if @user == @current_user %>
 	<p>This is your profile, you can <%= link_to "edit it", edit_user_path(:id => @user.username) %>.</p>
 <% elsif @current_user.admin? %>
-	<p>You are an admin, and you can <%= link_to "edit #{@user.username}s profile", edit_user_path(:id => @user.username) %>.</p>
+	<p>You are an admin, and you can <%= link_to "edit #{possessive(@user.username)} profile", edit_user_path(:id => @user.username) %>.</p>
 <% end %>
 
 <% if @user.banned? %>

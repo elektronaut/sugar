@@ -1,4 +1,7 @@
-<% @page_title = @discussion.title %>
+<% 
+	add_body_class "edit_discussion discussion_form"
+	@page_title = @discussion.title 
+%>
 
 <h2 class="section">
 	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo; 

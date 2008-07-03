@@ -1,4 +1,7 @@
-<% @page_title = "New category" %>
+<% 
+	add_body_class "new_category"
+	@page_title = "New category" 
+%>
 
 <h2 class="section"><%= link_to "Categories", categories_path %> &raquo; <%= link_to "New", new_category_path %></h2>
 

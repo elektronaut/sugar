@@ -10,14 +10,28 @@ module ApplicationHelper
         end
     end
     
+    def add_body_class(*class_names)
+        @body_classes ||= []
+        @body_classes += [class_names].flatten # Should also work with arrays
+    end
+    
+    def body_classes
+        @body_classes ||= []
+        @body_classes.uniq.join(' ')
+    end
+    
+    def possessive(noun)
+        (noun =~ /s$/) ? "#{noun}'" : "#{noun}'s"
+    end
+    
     # Generates a link to the users profile
     def profile_link(user)
-        link_to user.username, user_path(:id => user.username), :title => "#{user.username}'s profile"
+        link_to user.username, user_path(:id => user.username), :title => "#{possessive(user.username)} profile"
     end
     
     # Class names for discussion
     def discussion_classes(discussions, discussion)
-        [discussion.labels.map(&:downcase), %w{odd even}[discussions.index(discussion)%2], (new_posts?(discussion) ? 'new_posts' : nil)].flatten.compact.join(' ')
+        [discussion.labels.map(&:downcase), %w{odd even}[discussions.index(discussion)%2], (new_posts?(discussion) ? 'new_posts' : nil), "in_category#{discussion.category_id}", "by_user#{discussion.poster_id}"].flatten.compact.join(' ')
     end
     
     def format_post(string)
