@@ -28,7 +28,7 @@ a {
 }
 #header {
 	/*background-color:#0068ff;
-	background-image:url(/images/themes/default/toolBarOverlay.png);*/
+	background-image:url(/images/themes/iphone/toolBarOverlay.png);*/
 	height:0px;
 	top:0px;
 	width:100%;
@@ -50,7 +50,7 @@ a {
 	width:100%;
 	height:30px;
 	padding:5px;
-	background-image:url(/images/themes/default/graygrade.jpg);
+	background-image:url(/images/themes/iphone/graygrade.jpg);
 }
 #search input[type=submit] {
 	margin: 3px auto;
@@ -61,7 +61,7 @@ a {
 	padding-top:3px;
 	height:25px;
 	width:90px;
-	-webkit-border-image: url(/images/themes/default/whiteButton.png) 0 14 0 14;
+	-webkit-border-image: url(/images/themes/iphone/whiteButton.png) 0 14 0 14;
 }
 #search input[type=text] {
 	width:150px;
@@ -82,7 +82,7 @@ a {
 	left:0px;
 	height:28px;
 	background-color:#7c90ad;
-	background-image:url(/images/themes/default/bluegrade-30.jpg);
+	background-image:url(/images/themes/iphone/bluegrade-30.jpg);
 	padding:0;
 	margin:0;
 	float:left;
@@ -106,7 +106,7 @@ ul#navigation li.discussions a{
 	top:1px;
 	text-shadow: #000 0px 1px 1px;	 
 	border-width: 0px 5px 0px 12px;
-	-webkit-border-image: url(/images/themes/default/leftButton.png) 0 5 0 12;
+	-webkit-border-image: url(/images/themes/iphone/leftButton.png) 0 5 0 12;
 }
 ul#navigation li.categories {
 	display:none;
@@ -125,7 +125,7 @@ ul#navigation li.participated a{
 	border-width: 0px 12px 0px 5px;
 	color: #fff;
 	text-shadow: #000 0px 1px 1px;
-	-webkit-border-image: url(/images/themes/default/rightButton.png) 0 12 0 5;
+	-webkit-border-image: url(/images/themes/iphone/rightButton.png) 0 12 0 5;
 }
 #content {
 	position:absolute;
@@ -144,7 +144,7 @@ ul#navigation li.participated a{
 	color: #000;
 	position:absolute;
 	text-shadow: #fff 0px 1px 1px;
-	-webkit-border-image: url(/images/themes/default/whiteButton.png) 0 14 0 14;
+	-webkit-border-image: url(/images/themes/iphone/whiteButton.png) 0 14 0 14;
 	text-decoration:none;
 	overflow:hidden;
 	padding-top:2px;
@@ -172,7 +172,6 @@ ul#navigation li.participated a{
 	padding:3px;
 	padding-top:5px;
 	line-height:20px;
-	background-image:url(/images/themes/default/com.apple.MoviePlayerUI.QTAudioOnlyBackground.png);
 }
 .pagination a {
 	color:#333333;
@@ -337,7 +336,7 @@ cite {
 	width:100%;
 	height:22px;
 	background-color:#7c90ad;
-	background-image:url(/images/themes/default/bluegrade-30.jpg);
+	background-image:url(/images/themes/iphone/bluegrade-30.jpg);
 	text-align:center;
 	font-size:14px;
 	font-weight:bold;
