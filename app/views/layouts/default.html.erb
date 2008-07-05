@@ -20,13 +20,16 @@
 	<%= javascript_include_tag 'livepipe/textarea' %>
 	<%= javascript_include_tag 'livepipe/window' %>
 
-	<meta name="viewport" content="width = 320" />
-	<meta name="viewport" content="initial-scale=1" />
-	
-	<% if @current_user.stylesheet_url? %>
-		<%= stylesheet_link_tag @current_user.stylesheet_url %>
+	<% if @iphone %>
+		<meta name="viewport" content="width = 320" />
+		<meta name="viewport" content="initial-scale=1" />
+		<%= stylesheet_link_tag 'iphone/screen' %>
 	<% else %>
-		<%= stylesheet_link_tag 'default/screen' %>
+		<% if @current_user.stylesheet_url? %>
+			<%= stylesheet_link_tag @current_user.stylesheet_url %>
+		<% else %>
+			<%= stylesheet_link_tag 'default/screen' %>
+		<% end %>
 	<% end %>
 	<link rel="icon" type="image/gif" href="/images/favicon.gif">
 </head>
@@ -57,5 +60,10 @@
 		<% end %>
 		<%= yield %>
 	</div>
+	<% if @iphone %>
+		<script type="text/javascript">
+			setTimeout(function(){ window.scrollTo(0, 1); }, 100);
+		</script>
+	<% end %>
 </body>
 </html>

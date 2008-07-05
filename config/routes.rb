@@ -51,6 +51,11 @@ ActionController::Routing::Routes.draw do |map|
     map.connect '/categories/:id/:page', :controller => 'categories', :action => 'show'
 
     map.resources(
+        :messages,
+        :collection => { :sent => :any }
+    )
+
+    map.resources(
         :discussions,
         :collection => { :participated => :any, :bookmarked => :any, :search => :any }
     ) do |discussions|

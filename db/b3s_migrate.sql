@@ -23,7 +23,7 @@ RENAME TABLE LUM_Comment TO posts;
 -- Delete whispers
 DELETE FROM posts WHERE Deleted = '1';
 DELETE FROM posts WHERE DiscussionID IN (SELECT DiscussionID FROM LUM_Discussion WHERE WhisperUserID IS NULL OR WhisperUserID > 0);
-DELETE FROM posts WHERE WhisperUserID IS NULL OR WhisperUserID > 0;
+DELETE FROM posts WHERE WhisperUserID IS NOT NULL AND WhisperUserID > 0;
 ALTER TABLE posts 
 	CHANGE CommentID id INTEGER(11) NOT NULL auto_increment,
 	CHANGE DiscussionID discussion_id INTEGER(11),

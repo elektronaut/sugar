@@ -14,6 +14,9 @@ class User < ActiveRecord::Base
     belongs_to :inviter, :class_name => 'User'
     has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
     has_many   :discussion_views, :dependent => :destroy
+    has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0']
+    has_many   :unread_messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND read = 0']
+    has_many   :sent_messages, :foreign_key => 'sender_id', :conditions => ['deleted_by_sender = 0']
 
     validate do |user|
 		# Has the password been changed?

@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
         else
             @section = :discussions
         end
+        @iphone = (request.host =~ /^(iphone|m)\./) ? true : false
     end
     protected     :layout_data
     before_filter :layout_data
