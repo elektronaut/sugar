@@ -561,6 +561,13 @@ div.messages .message .body a:visited {
 div.messages .message .body a:hover {
 	color:           #001d32;
 }
+div.messages .message a.reply, div.messages .message a.reply:visited {
+	margin-left:     5px;
+	color:           #9f0000;
+	background:      #ffd;
+	text-decoration: none;
+	padding:         0 3px;
+}
 
 
 .compose_new_message {

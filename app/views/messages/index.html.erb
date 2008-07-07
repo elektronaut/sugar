@@ -24,7 +24,12 @@
 				<% if message.subject? %>
 					<h3 class="subject"><%= link_to message.subject, paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}") %></h3>
 				<% end %>
-				<div class="body"><%= message.body_html %></div>
+				<div class="body">
+					<%= message.body_html %>
+					<% unless message.subject? %>
+						<%= link_to "Reply", paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}"), :class => :reply %>
+					<% end %>
+				</div>
 			</div>
 		</div>
 		<% end -%>
