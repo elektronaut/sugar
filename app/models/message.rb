@@ -14,7 +14,8 @@ class Message < ActiveRecord::Base
         #    self.update_attribute(:body_html, PostParser.parse(self.body.dup))
         #end
         #self[:body_html]
-        PostParser.parse(self.body.dup)
+        body = self.body || ""
+        PostParser.parse(body.dup)
     end
     
     def page(options={})
