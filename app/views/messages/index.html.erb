@@ -3,9 +3,10 @@
 	@page_title = "Messages" 
 %>
 
+<%= render :partial => 'navigation', :locals => { :section => 'inbox' } %>
+
 <h2 class="section">
-	<%= link_to "Messages", messages_path %> &raquo;
-	<%= link_to "Inbox", messages_path %>
+	<%= link_to "Messages", messages_path %>
 </h2>
 
 <% if @messages && @messages.length > 0 %>
@@ -15,7 +16,8 @@
 		<div class="message <%= "new_message" unless message.read? %>">
 			<div class="user">
 				<div class="avatar"><%= avatar_image_tag message.sender %></div>
-				<div class="username"><%= profile_link message.sender %></div>
+				<div class="username"><%= link_to message.sender.username, paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}") %></div>
+				<div class="profile_link"><%= profile_link message.sender, 'Profile' %></div>
 				<div class="date"><%= formatted_time message.created_at %></div>
 			</div>
 			<div class="info">

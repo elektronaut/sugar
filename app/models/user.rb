@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
     has_many   :discussion_views, :dependent => :destroy
     has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
-    has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND read = 0'], :order => ['created_at DESC']
+    has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND `read` = 0'], :order => ['created_at DESC']
     has_many   :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id', :conditions => ['deleted_by_sender = 0'], :order => ['created_at DESC']
 
     validate do |user|
@@ -207,6 +207,14 @@ class User < ActiveRecord::Base
         self.password = self.confirm_password = new_password
     end
 	
+    def unread_messages_count
+        @unread_messages_count ||= self.unread_messages.count
+    end
+    
+    def unread_messages?
+        (unread_messages_count > 0) ? true : false
+    end
+
     def full_email
         self.realname? ? "#{self.realname} <#{self.email}>" : self.email
     end

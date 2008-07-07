@@ -243,6 +243,24 @@ h2.section {
 #content td, #content th {
 	padding-right:   20px;
 }
+.tabbed_navigation {
+	float: right;
+	font-weight:     bold;
+	font-size:       1.3em;
+	max-width:       600px;
+	/*margin-bottom:   30px;*/
+}
+.tabbed_navigation li {
+	display:         inline;
+}
+
+.tabbed_navigation li a {
+	padding:         2px 5px;
+}
+.tabbed_navigation li a.active {
+	background:      #9f0000;
+	color:           #fff;
+}
 
 
 
@@ -532,6 +550,16 @@ div.messages .message .subject {
 div.messages .message .body {
 	font-size:       1.1em;
 	max-width:       600px;
+}
+div.messages .message .body a {
+	color:           #005794;
+	text-decoration: underline;
+}
+div.messages .message .body a:visited {
+	color:           #3900a2;
+}
+div.messages .message .body a:hover {
+	color:           #001d32;
 }
 
 

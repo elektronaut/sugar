@@ -4,6 +4,8 @@
 	last_subject = nil
 %>
 
+<%= render :partial => 'navigation', :locals => { :section => 'conversation' } %>
+
 <h2 class="section">
 	<%= link_to "Messages", messages_path %> &raquo;
 	<%= link_to "Conversation with #{@user.username}", user_conversation_path(:username => @user.username) %>
@@ -32,7 +34,7 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
 <% end %>
 
-<% form_for(Message.new(:recipient => @user), :html => { :class => 'compose_new_message' }) do |f| %>
+<% form_for(@new_message, :html => { :class => 'compose_new_message' }) do |f| %>
 	<a name="new" class="anchor" /></a>
 	<h3>New message</h3>
 	<%= f.hidden_field(:recipient_id) %>

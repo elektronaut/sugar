@@ -19,6 +19,10 @@
 	<p>You are an admin, and you can <%= link_to "edit #{possessive(@user.username)} profile", edit_user_path(:id => @user.username) %>.</p>
 <% end %>
 
+<% unless @user == @current_user %>
+	<p><%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>.</p>
+<% end %>
+
 <% if @user.banned? %>
 	<p class="banned"><%= @user.username %> is banned!</p>
 <% end %>

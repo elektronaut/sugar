@@ -34,8 +34,9 @@ module ApplicationHelper
     end
     
     # Generates a link to the users profile
-    def profile_link(user)
-        link_to user.username, user_path(:id => user.username), :title => "#{possessive(user.username)} profile"
+    def profile_link(user, link_text=nil)
+        link_text ||= user.username
+        link_to link_text, user_path(:id => user.username), :title => "#{possessive(user.username)} profile"
     end
     
     # Class names for discussion

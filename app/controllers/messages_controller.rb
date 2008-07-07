@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
         end
     end
     protected    :update_read_status
-    #after_filter :update_read_status, :only => [:index, :conversation]
+    after_filter :update_read_status, :only => [:index, :conversations]
 
     def index
         @messages = @current_user.paginated_messages(:page => params[:page])
@@ -25,6 +25,7 @@ class MessagesController < ApplicationController
             redirect_to messages_url and return
         end
         @messages = @current_user.paginated_conversation(:page => params[:page], :user => @user)
+        @new_message = @user.messages.new(:subject => params[:subject])
     end
     
     def create
