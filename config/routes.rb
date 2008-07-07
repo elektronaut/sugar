@@ -52,8 +52,13 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :messages,
-        :collection => { :sent => :any }
+        :collection => { :outbox => :any, :conversations => :any }
     )
+    map.paged_messages '/messages/inbox/:page', :controller => 'messages', :action => 'index'
+    map.paged_sent_messages '/messages/outbox/:page', :controller => 'messages', :action => 'outbox'
+    map.user_conversation '/messages/conversations/:username', :controller => 'messages', :action => 'conversations'
+    map.paged_user_conversation '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
+    map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
 
     map.resources(
         :discussions,

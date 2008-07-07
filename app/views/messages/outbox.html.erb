@@ -1,0 +1,36 @@
+<% 
+	add_body_class "messages"
+	@page_title = "Sent messages" 
+%>
+
+<h2 class="section">
+	<%= link_to "Messages", messages_path %> &raquo;
+	<%= link_to "Outbox", outbox_messages_path %>
+</h2>
+
+<% if @messages && @messages.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+	<div class="messages">
+		<% @messages.each do |message| -%>
+		<div class="message <%= "new_message" unless message.read? %>">
+			<div class="functions">
+				<%= check_box_tag "message-checkbox-#{message.id}", false %>
+			</div>
+			<div class="user">
+				<div class="avatar"><%= avatar_image_tag message.recipient %></div>
+				<div class="username"><%= profile_link message.recipient %></div>
+				<div class="date"><%= formatted_time message.created_at %></div>
+			</div>
+			<div class="info">
+				<% if message.subject? %>
+					<h3 class="subject"><%= link_to message.subject, message_path(message) %></h3>
+				<% end %>
+				<div class="body"><%= message.body_html %></div>
+			</div>
+		</div>
+		<% end -%>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+<% else %>
+	<p>No messages.</p>
+<% end %>

@@ -14,9 +14,9 @@ class User < ActiveRecord::Base
     belongs_to :inviter, :class_name => 'User'
     has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
     has_many   :discussion_views, :dependent => :destroy
-    has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0']
-    has_many   :unread_messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND read = 0']
-    has_many   :sent_messages, :foreign_key => 'sender_id', :conditions => ['deleted_by_sender = 0']
+    has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
+    has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND read = 0'], :order => ['created_at DESC']
+    has_many   :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id', :conditions => ['deleted_by_sender = 0'], :order => ['created_at DESC']
 
     validate do |user|
 		# Has the password been changed?
@@ -112,6 +112,94 @@ class User < ActiveRecord::Base
         return discussions
     end
     
+    # Find and paginate messages
+    def paginated_messages(options={})
+        num_messages = self.messages.count
+
+        limit = options[:limit] || Message::MESSAGES_PER_PAGE
+        num_pages = (num_messages.to_f/limit).ceil
+        page  = (options[:page] || 1).to_i
+        page = 1 if page < 1
+        page = num_pages if page > num_pages
+        offset = limit * (page - 1)
+        
+        messages = Message.find(
+            :all,
+            :conditions => ['recipient_id = ? AND deleted = 0', self.id],
+            :order      => ['created_at DESC'],
+            :limit      => limit, 
+            :offset     => offset,
+            :include    => [:sender]
+        )
+
+        # Inject the pagination methods on the collection
+        class << messages; include Paginates; end
+        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
+        
+        return messages
+    end
+
+    # Find and paginate sent messages
+    def paginated_sent_messages(options={})
+        num_messages = self.sent_messages.count
+
+        limit = options[:limit] || Message::MESSAGES_PER_PAGE
+        num_pages = (num_messages.to_f/limit).ceil
+        page  = (options[:page] || 1).to_i
+        page = 1 if page < 1
+        page = num_pages if page > num_pages
+        offset = limit * (page - 1)
+        
+        messages = Message.find(
+            :all,
+            :conditions => ['sender_id = ? AND deleted_by_sender = 0', self.id],
+            :order      => ['created_at DESC'],
+            :limit      => limit, 
+            :offset     => offset,
+            :include    => [:recipient]
+        )
+
+        # Inject the pagination methods on the collection
+        class << messages; include Paginates; end
+        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
+        
+        return messages
+    end
+
+    # Find and paginate sent messages
+    def paginated_conversation(options={})
+        user = options[:user]
+        conditions = ['(sender_id = ? AND recipient_id = ? AND deleted_by_sender = 0) OR (recipient_id = ? AND sender_id = ? AND deleted = 0)', self.id, user.id, self.id, user.id]
+        num_messages = Message.count(:all, :conditions => conditions)
+
+        limit = options[:limit] || Message::MESSAGES_PER_PAGE
+        num_pages = (num_messages.to_f/limit).ceil
+        if options[:page] && options[:page].to_s == "last"
+            page = num_pages
+        else
+            page  = (options[:page] || 1).to_i
+            page = 1 if page < 1
+            page = num_pages if page > num_pages
+        end
+        offset = limit * (page - 1)
+        offset = 0 if offset < 0
+        
+        messages = Message.find(
+            :all,
+            :conditions => conditions,
+            :order      => ['created_at ASC'],
+            :limit      => limit, 
+            :offset     => offset,
+            :include    => [:recipient,:sender]
+        )
+
+        # Inject the pagination methods on the collection
+        class << messages; include Paginates; end
+        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
+        
+        return messages
+    end
+
     def generate_password!
         new_password = ''
         seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)

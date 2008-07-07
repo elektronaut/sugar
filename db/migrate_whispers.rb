@@ -28,7 +28,7 @@ begin
     while post = posts_res.fetch_row do
         sender_id, recipient_id, body, deleted, created_at, subject = post
         dbh.query("INSERT INTO messages (recipient_id, sender_id, subject, body, `read`, deleted, created_at, updated_at) 
-            VALUES (#{sender_id}, #{recipient_id}, '"+dbh.escape_string(subject)+"', '"+dbh.escape_string(body)+"', 1, #{deleted}, '#{created_at}', '#{created_at}')")
+            VALUES (#{recipient_id}, #{sender_id}, '"+dbh.escape_string(subject)+"', '"+dbh.escape_string(body)+"', 1, #{deleted}, '#{created_at}', '#{created_at}')")
     end
     
 

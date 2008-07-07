@@ -1,0 +1,48 @@
+<% 
+	add_body_class "messages"
+	@page_title = "Conversation with #{@user.username}"
+	last_subject = nil
+%>
+
+<h2 class="section">
+	<%= link_to "Messages", messages_path %> &raquo;
+	<%= link_to "Conversation with #{@user.username}", user_conversation_path(:username => @user.username) %>
+</h2>
+
+<% if @messages && @messages.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+	<div class="messages">
+		<% @messages.each do |message| -%>
+		<a class="anchor" name="message-<%= message.id %>"></a>
+		<div class="message <%= "new_message" if message.recipient == @current_user && !message.read? %>">
+			<div class="user">
+				<div class="avatar"><%= avatar_image_tag message.sender %></div>
+				<div class="username"><%= profile_link message.sender %></div>
+				<div class="date"><%= formatted_time message.created_at %></div>
+			</div>
+			<div class="info">
+				<% if message.subject? && last_subject != message.subject %>
+					<h3 class="subject"><%= (last_subject = message.subject) %></h3>
+				<% end %>
+				<div class="body"><%= message.body_html %></div>
+			</div>
+		</div>
+		<% end -%>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+<% end %>
+
+<% form_for(Message.new(:recipient => @user), :html => { :class => 'compose_new_message' }) do |f| %>
+	<a name="new" class="anchor" /></a>
+	<h3>New message</h3>
+	<%= f.hidden_field(:recipient_id) %>
+	<p>
+		<label>Subject <span class="description">&mdash; Optional</span></label>
+		<%= f.text_field(:subject, :size => 80) %>
+	</p>
+	<p>
+		<label>Message</label>
+		<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body') %>
+	</p>
+	<p><button type="submit">Send</button></p>
+<% end %>

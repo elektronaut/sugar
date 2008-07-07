@@ -312,6 +312,7 @@ table.discussions tr.closed td.name a:hover {
 	color:           #888;
 	margin-top:      -1em;
 	margin-bottom:   5px;
+	clear:           both;
 }
 .pagination .links {
 	float:           right;
@@ -477,3 +478,66 @@ table.discussions tr.closed td.name a:hover {
 	color:           #062;
 }
 
+
+
+
+/* -----------------------------------------------------------------------
+   MESSAGES
+   ----------------------------------------------------------------------- */
+
+div.messages {
+	border-bottom:   1px solid #E2DCBF;
+	padding-bottom:  15px;
+	margin-bottom:   20px;
+}
+
+div.messages .message {
+	padding-top:     15px;
+	padding-bottom:  15px;
+	border-top:      1px solid #E2DCBF;
+	overflow:        auto;
+}
+div.messages .new_message {
+	background:      #fffff0;
+}
+
+div.messages .message .functions {
+	float:           left;
+}
+div.messages .message .user {
+	width:           150px;
+	float:           left;
+}
+div.messages .message .user .avatar {
+	float:           left;
+	margin:          0 10px 10px 0;
+}
+div.messages .message .user .username {
+	font-weight:     bold;
+	font-size:       1.3em;
+	margin-left:     42px;
+}
+div.messages .message .user .date {
+	color:           #888;
+	margin-left:     42px;
+}
+
+div.messages .message .info {
+	margin-left:     190px;
+}
+
+div.messages .message .subject {
+	font-size:       1.3em;
+}
+div.messages .message .body {
+	font-size:       1.1em;
+	max-width:       600px;
+}
+
+
+.compose_new_message {
+	margin-top: 10px;
+}
+.compose_new_message h3 {
+	margin-bottom: 10px;
+}

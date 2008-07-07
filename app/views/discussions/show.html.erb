@@ -40,11 +40,7 @@
 		<div class="post_info">
 			<a name="post-<%= post.id %>" class="anchor"></a>
 			<span class="avatar">
-				<% if post.user.avatar_url? %>
-					<%= image_tag post.user.avatar_url, :alt => post.user.username, :size => '32x32' %>
-				<% else %>
-					<%= image_tag post.user.gravatar_url(:size => 32), :alt => post.user.username, :size => '32x32' %>
-				<% end %>
+				<%= avatar_image_tag(post.user) %>
 			</span>
 			<span class="username"><%= profile_link(post.user) %></span>
 			<span class="date"><%= formatted_time post.created_at %></span>

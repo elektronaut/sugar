@@ -20,6 +20,8 @@ class ApplicationController < ActionController::Base
             @section = :users
         when 'CategoriesController'
             @section = :categories
+        when 'MessagesController'
+            @section = :messages
         else
             @section = :discussions
         end

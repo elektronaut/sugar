@@ -10,6 +10,15 @@ module ApplicationHelper
         end
     end
     
+    # Generates avatar image tag for a user
+    def avatar_image_tag(user, size='32x32')
+        if user.avatar_url?
+            image_tag user.avatar_url, :alt => user.username, :size => '32x32'
+	    else
+            image_tag user.gravatar_url(:size => 32), :alt => user.username, :size => '32x32'
+		end
+    end
+
     def add_body_class(*class_names)
         @body_classes ||= []
         @body_classes += [class_names].flatten # Should also work with arrays
