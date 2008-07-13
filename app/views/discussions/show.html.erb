@@ -77,8 +77,8 @@
 	<div class="compose" id="compose">
 
 		<ul id="reply-tabs" class="tabs">  
-			<li class="tab"><a href="#replyText">Write</a></li>  
-			<li class="tab"><a href="#replyImage">Draw</a></li>  
+			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
+			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>  
 		</ul>
 		
 		<% if @posts.last_page? && @posts.length == Post::POSTS_PER_PAGE %>
@@ -108,7 +108,7 @@
 			</script>
 
 			<div class="napkin">
-			<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="300" id="napkin">
+			<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="400" id="napkin">
 				<% napkin_vars = "service=" + doodle_discussion_posts_path(@discussion) -%>
 				<param name="movie" value="/flash/napkin.swf" />
 				<param name="flashvars" value="<%= napkin_vars %>" />
@@ -133,7 +133,7 @@
 
 	Element.hide('compose');
 	
-	new Control.Tabs('reply-tabs');  
+	new Control.Tabs('reply-tabs');
 
 	function showCompose() {
 		Element.hide('compose-toggle');
@@ -146,6 +146,15 @@
 			$('compose-body').value += string;
 		}
 	}
+
+	// Make previous napkins clickable
+	$$('.drawing img').each(function(image) {
+		Event.observe(image, 'click', function(evnt) {
+			if(swfobject.getObjectById("napkin")) {
+				swfobject.getObjectById("napkin").setBackground(Event.element(evnt).src);
+			}
+		});
+	});
 
 	<% if @posts.last_page? -%>
 		showCompose();
