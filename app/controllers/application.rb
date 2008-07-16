@@ -25,7 +25,13 @@ class ApplicationController < ActionController::Base
         else
             @section = :discussions
         end
-        @iphone = (request.host =~ /^(iphone|m)\./) ? true : false
+
+        if request.host =~ /^(iphone|m)\./
+            @iphone = true
+        elsif request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/]
+            #@iphone = true
+            #request.format = :iphone
+        end
     end
     protected     :layout_data
     before_filter :layout_data

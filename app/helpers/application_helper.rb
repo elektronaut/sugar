@@ -11,11 +11,11 @@ module ApplicationHelper
     end
     
     # Generates avatar image tag for a user
-    def avatar_image_tag(user, size='32x32')
+    def avatar_image_tag(user, size='32')
         if user.avatar_url?
-            image_tag user.avatar_url, :alt => user.username, :size => '32x32'
+            image_tag user.avatar_url, :alt => user.username, :size => "#{size}x#{size}"
 	    else
-            image_tag user.gravatar_url(:size => 32), :alt => user.username, :size => '32x32'
+            image_tag user.gravatar_url(:size => size), :alt => user.username, :size => "#{size}x#{size}"
 		end
     end
 
@@ -75,7 +75,9 @@ module ApplicationHelper
     
     def last_discussion_page(discussion)
         return discussion.last_page unless @discussion_views && new_posts?(discussion)
-        (discussion_view(discussion, @current_user).post_index.to_f / Post::POSTS_PER_PAGE).ceil + 1
+        page = (discussion_view(discussion, @current_user).post_index.to_f / Post::POSTS_PER_PAGE).ceil
+        page = 1 if page < 1
+        page
     end
     
     def last_discussion_page_path(d)

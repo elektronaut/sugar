@@ -88,9 +88,9 @@
 		<% end %>
 		
 		<div id="replyText">
-			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => { :onsubmit => "$('button-container').innerHTML='concaf double clicks the internets.';" }) do |f| %>
 				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body') %></p>
-				<p><button type="submit">Post</button></p>
+				<p id="button-container"><button type="submit">Post</button></p>
 			<% end %>
 		</div>
 		<div id="replyImage">

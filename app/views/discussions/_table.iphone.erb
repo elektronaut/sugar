@@ -1,0 +1,23 @@
+<% if discussions && discussions.length > 0 %>
+	<div class="discussions">
+		<% @discussions.each do |d| %><div class="discussion <%= discussion_classes(discussions, d) %>">
+			<% if new_posts?(d) %>
+				<div class="new_posts_count"><%= new_posts_count(d) %></div>
+			<% end %>
+			<h2>
+				<% if d.labels? %>
+					<span class="labels">[<%= d.labels.join(',') %>]</span>
+				<% end %>
+				<%= link_to d.title, last_discussion_page_path(d) %>
+			</h2>
+			<p>
+				By <%= profile_link(d.poster) %>,
+				<%= d.posts_count %> posts.
+				Last: <%= profile_link(d.last_poster) %> <%= formatted_time d.last_post_at %>
+			</p>
+		</div><% end %>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
+<% else %>
+	<p>No discussions here yet. <%= link_to "Create the first!", new_discussion_path %></p>
+<% end %>

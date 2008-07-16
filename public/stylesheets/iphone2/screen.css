@@ -1,0 +1,261 @@
+@import url(../reset.css);
+
+body {
+    margin: 0;
+    font-family: Helvetica;
+    background: #FFFFFF;
+    color: #000000;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    -webkit-text-size-adjust: none;
+	font-size: 15px;
+    min-height: 415px;
+	line-height: 1.4;
+}
+
+body[orient="landscape"] {
+    min-height: 268px;
+}
+
+#header {
+	background: #111 url(/images/themes/iphone2/header.gif);
+	height: 45px;
+}
+#header h1.logo {
+	width: 167px;
+	height: 45px;
+	background: transparent url(/images/themes/iphone2/logo.gif);
+	text-indent: -9000px;
+	margin: 0 auto;
+}
+#header h1.page_title {
+    overflow: hidden;
+	padding-top: 11px;
+    padding-left: 15px;
+    width: 300px;
+    font-size: 17px;
+    font-weight: bold;
+    text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #FFFFFF;
+}
+body[orient="landscape"] #header h1.page_title {
+    width: 460px;
+}
+#header h1.page_title .site_name {
+	color: #dd8;
+}
+
+#notice {
+	padding: 10px 15px;
+	background: #fdd;
+	border-bottom: 1px solid #daa;
+	font-size: 13px;
+	color: #800;
+}
+
+#footer {
+	padding: 0 10px;
+	color: #555;
+	font-size: 11px;
+	margin-top: 10px;
+}
+#footer .separator {
+	color: #aaa;
+}
+
+.login_box {
+	width: 280px;
+	float: left;
+	margin: 0 20px 20px 20px;
+}
+.login_box p {
+	floaat: left;
+	margin-right: 15px;
+}
+.login_box input.text {
+	width: 100%;
+	margin-bottom: 5px;
+}
+.login_box label {
+	font-weight: normal;
+	font-size: 18px;
+	color: #555 ;
+}
+#login-functions {
+	margin: 0 20px;
+	font-size: 15px;
+	color: #aaa;
+	text-align: center;
+}
+body[orient="landscape"] #login-functions {
+	text-align: left;
+}
+body[orient="landscape"] #login-functions .separator {
+	display: none;
+}
+
+input, textarea {
+	font-size: 15px;
+}
+
+
+label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.content p {
+	margin-bottom: 0.5em;
+}
+
+.content {
+	background: #fff url(/images/themes/iphone2/contentbg.gif) repeat-x;
+	padding: 25px 0;
+	min-height: 285px;
+}
+
+a, a:visited {
+	text-decoration: none;
+	color:           #365c7c;
+}
+a:hover {
+	color:           #025;
+}
+
+.pagination {
+	padding: 5px 15px;
+	color: #888;
+	border-bottom: 1px solid #ddd;
+	background: #f8f8f8;
+}
+.pagination .links {
+	float: right;
+	font-weight: bold;
+	word-spacing: 5px;
+}
+
+
+.discussions {
+	margin-top: -20px;
+}
+.discussions .discussion {
+	padding: 5px 15px;
+	border-bottom: 1px solid #ddd;
+	color: #555;
+}
+.discussions .discussion .new_posts_count {
+	float: right;
+	color:           #c76700;
+	font-size: 11px;
+	letter-spacing: -0.05em;
+	padding-top: 4px;
+}
+.discussions .discussion h2 {
+	font-weight: bold;
+	font-size: 16px;
+    overflow: hidden;
+    width: 255px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+body[orient="landscape"] .discussions .discussion h2 {
+    width: 415px;
+}
+.discussions .discussion h2 .labels {
+	color: #888;
+	font-size: 11px;
+	letter-spacing: -0.05em;
+}
+.discussions .discussion p {
+	font-size: 10px;
+    overflow: hidden;
+    width: 290px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	margin: 0;
+}
+body[orient="landscape"] .discussions .discussion p {
+    width: 450px;
+}
+
+.discussions .new_posts {
+	background:      #ffffe8;
+}
+
+
+.posts {
+	margin-top: -20px;
+}
+
+
+.posts .post {
+	padding: 5px 15px;
+	border-bottom: 1px solid #ddd;
+}
+
+.posts .post_distance {
+	padding: 2px 15px;
+	border-bottom: 1px solid #ddd;
+	font-size: 11px;
+	background:      #f8f7f1;
+	color:           #84806d;
+}
+
+.posts .post .post_info {
+	color: #555;
+}
+.posts .post .post_info .username {
+	font-weight: bold;
+}
+.posts .post .post_info .date {
+	font-size: 11px;
+}
+
+.posts .post .body {
+	max-width: 290px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+body[orient="landscape"] .posts .post .body {
+	max-width: 450px;
+}
+.posts .post .body img {
+	max-width: 290px;
+}
+body[orient="landscape"] .posts .post .body img {
+	max-width: 450px;
+}
+
+.reply {
+	padding: 5px 15px;
+}
+.reply textarea {
+	width: 275px;
+	height: 80px;
+}
+body[orient="landscape"] .reply textarea {
+	width: 435px;
+}
+
+
+blockquote {
+	margin:          0;
+	padding:         5px 10px;
+	background:      #F3F1E9;
+	color:           #3C392C;
+	border:          1px solid #DEDCD4;
+	border-left:     2px solid #CCC9BC;
+	font-size:       13px;
+	font-style:      italic;
+}
+/* Posted by.. inside blockquotes */
+blockquote cite {
+	display:         block;
+	color:           #7E7B70;
+	border-bottom:   1px solid #CCC9BC;
+	margin-bottom:   5px;
+}
