@@ -17,6 +17,10 @@
 	<p>No users are online!</p>
 <% end %>
 
+<% if @current_user.user_admin? %>
+	<p>You are a user administrator, you can <%= link_to "invite a new person", new_user_path %>.</p>
+<% end %>
+
 <table class="list users_list">
 	<tr>
 		<th>Username</th>
