@@ -43,7 +43,7 @@ class DiscussionsController < ApplicationController
             flash[:notice] = "No query specified!"
             redirect_to discussions_path and return
         end
-        @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query) rescue nil
+        @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
         find_discussion_views
     end
     

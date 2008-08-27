@@ -1,6 +1,6 @@
 <% 
 	add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
-	@page_title = @discussion.title
+	@page_title = h(@discussion.title)
 	previous_post = nil
 -%>
 
@@ -15,7 +15,7 @@
 <h2 class="section">
 	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-	<%= link_to @discussion.title, discussion_path(@discussion) %>
+	<%= link_to h(@discussion.title), discussion_path(@discussion) %>
 </h2>
 
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>

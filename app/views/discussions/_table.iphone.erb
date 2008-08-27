@@ -8,7 +8,7 @@
 				<% if d.labels? %>
 					<span class="labels">[<%= d.labels.join(',') %>]</span>
 				<% end %>
-				<%= link_to d.title, last_discussion_page_path(d) %>
+				<%= link_to h(d.title), last_discussion_page_path(d) %>
 			</h2>
 			<p>
 				By <%= profile_link(d.poster) %>,

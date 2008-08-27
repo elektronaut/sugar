@@ -50,6 +50,7 @@ class Discussion < ActiveRecord::Base
             end
             
             discussions_count = Discussion.count(:conditions => conditions)
+            return nil if discussions_count == 0
 
             # Math is awesome
             limit = options[:limit] || DISCUSSIONS_PER_PAGE
