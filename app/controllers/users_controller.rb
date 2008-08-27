@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     
     def index
         @online_users = User.find_online
+        @new_users = User.find_new
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1')
     end
     

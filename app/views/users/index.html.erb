@@ -9,12 +9,19 @@
 		<% if @online_users.length == 1 %>
 			<strong>1</strong> user is online right now:
 		<% else %>
-			<strong><%= @online_users.length %></strong> user are online right now:
+			<strong><%= @online_users.length %></strong> users are online right now:
 		<% end %>
 		<%= @online_users.map{|u| profile_link(u)}.to_sentence %>.
 	</p>
 <% else %>
 	<p>No users are online!</p>
+<% end %>
+
+<% if @new_users && @new_users.length > 0 %>
+	<p>
+		Recently invited:
+		<%= @new_users.map{|u| profile_link(u)}.to_sentence %>.
+	</p>
 <% end %>
 
 <% if @current_user.user_admin? %>

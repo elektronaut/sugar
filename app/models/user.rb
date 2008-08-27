@@ -66,6 +66,10 @@ class User < ActiveRecord::Base
 	        end
             return safe_params
 	    end
+	    
+	    def find_new(since=14.days.ago)
+	        self.find(:all, :conditions => ['activated = 1 AND banned = 0 AND created_at > ?', since], :order => 'username ASC')
+        end
 	end
 	
     # Number of participated discussions
