@@ -2,8 +2,9 @@ require 'paginates'
 
 class Discussion < ActiveRecord::Base
 
-    UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
+    UNSAFE_ATTRIBUTES    = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
     DISCUSSIONS_PER_PAGE = 30
+    FULLTEXT_SEARCH      = false
 
     belongs_to :poster, :class_name => 'User', :counter_cache => true
     belongs_to :last_poster, :class_name => 'User'
@@ -43,10 +44,19 @@ class Discussion < ActiveRecord::Base
         end
         
         def search_paginated(options={})
-            if options[:trusted]
-                conditions = ["match(title) AGAINST (?)", options[:query]]
+            if FULLTEXT_SEARCH
+                if options[:trusted]
+                    conditions = ["match(title) AGAINST (?)", options[:query]]
+                else
+                    conditions = ["match(title) AGAINST (?) AND trusted = 0", options[:query]]
+                end
             else
-                conditions = ["match(title) AGAINST (?) AND trusted = 0", options[:query]]
+                words = options[:query].split(/\s+/)
+                if options[:trusted]
+                    conditions = [ words.map{"title LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
+                else
+                    conditions = [ "trusted = 0 AND " + words.map{"title LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
+                end
             end
             
             discussions_count = Discussion.count(:conditions => conditions)
