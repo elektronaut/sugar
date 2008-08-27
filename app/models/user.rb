@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
 	    
 	    # Find active users
 	    def find_active
-	        self.find(:all, :conditions => 'activated = 1 AND banned = 0')
+	        self.find(:all, :conditions => 'activated = 1 AND banned = 0', :order => 'username ASC')
         end
 	    
         # Finds users with activity within some_time. The last_active column is only 
@@ -231,6 +231,10 @@ class User < ActiveRecord::Base
     
     def trusted?
         (self[:trusted] || admin?)
+    end
+    
+    def user_admin?
+        (self[:user_admin] || admin?)
     end
 
     # Generates a Gravatar URL

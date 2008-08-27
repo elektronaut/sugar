@@ -23,6 +23,13 @@ class Notifications < ActionMailer::Base
 		@recipients = user.full_email
 	end
 	
+    def new_user(user, login_url, message="")
+        default_options
+		@subject    = "Welcome to Butt3rscotch!"
+		@body       = { :user => user, :login_url => login_url, :message => message }
+		@recipients = user.full_email
+    end
+    
 	def welcome(user)
 	    default_options
 		@subject    = "Welcome to B3S 2.0!"

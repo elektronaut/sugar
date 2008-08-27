@@ -25,7 +25,33 @@ class UsersController < ApplicationController
         @discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
         find_discussion_views
     end
-    
+
+    def new
+        unless @current_user.user_admin?
+            flash[:notice] = "You don't have permission to do that!"
+            redirect_to users_url and return
+        end
+        @user = @current_user.invitees.new
+        @user.activated = true
+        @user.generate_password!
+    end
+
+    def create
+        unless @current_user.user_admin?
+            flash[:notice] = "You don't have permission to do that!"
+            redirect_to users_url and return
+        end
+        params[:user][:confirm_password] = params[:user][:password]
+        @user = User.create(params[:user])
+        if @user.valid?
+            Notifications.deliver_new_user(@user, login_users_path(:only_path => false), params[:message])
+            flash[:notice] = "#{@user.username} has been invited by email"
+            redirect_to users_url and return
+        else
+            flash.now[:notice] = "Invalid user, please fill in all required fields."
+            render :action => :new
+        end
+    end
 
     def edit
         # TODO: refactor to .editable_by?

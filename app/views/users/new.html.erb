@@ -1,0 +1,33 @@
+<% @page_title = "New user" %>
+
+<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= link_to "New user", new_user_path %></h2>
+<% form_for @user do |f| %>
+	<%= f.hidden_field :activated %>
+	<p>
+		<label>Username</label>
+		<%= f.text_field(:username) %>
+	</p>
+	<p>
+		<label>Real name <span class="description">&mdash; Optional</span></label>
+		<%= f.text_field(:realname) %>
+	</p>
+	<p>
+		<label>Email address</label>
+		<%= f.text_field(:email) %>
+	</p>
+	<p>
+		<label>Password</label>
+		<%= f.text_field(:password) %>
+	</p>
+	<p>
+		<label>Invited by</label>
+		<%= f.select(:inviter_id, User.find_active.map{|u| [u.username, u.id]}) %>
+	</p>
+	<p>
+		<label>Message <span class="description">&mdash; Optional, will appear in the welcoming email</span></label>
+		<%= text_area_tag(:message, '', :size => '60x8') %>
+	</p>
+	<p>
+		<%= submit_tag "Create user" %>
+	</p>
+<% end %>

@@ -1,0 +1,19 @@
+<%= @user.inviter.username %> has invited you to Butt3rscotch!
+
+<% if @message && !@message.blank? -%>
+---------------------------------------------------------------------
+<%= @message %>
+---------------------------------------------------------------------
+<% end -%>
+
+Here are your login details:
+
+Username: <%= @user.username %>
+Password: <%= @user.password %>
+
+URL: <%= @login_url %>
+
+You can change your password once you've logged in.
+
+If you experience any trouble logging in, 
+please send an email to inge@elektronaut.no.
