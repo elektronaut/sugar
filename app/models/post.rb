@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
     validates_presence_of :body
 
     validate do |post|
+        post.trusted = post.discussion.trusted if post.discussion
         post.errors.add(:body, "script tags aren't allowed") if post.body =~ /<script/
         post.edited_at ||= Time.now
     end

@@ -31,6 +31,11 @@ class Discussion < ActiveRecord::Base
         end
     end
     
+    # Set trusted status on all posts on save
+    after_save do |discussion|
+        Post.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
+    end
+
     # Class methods
     class << self
         
