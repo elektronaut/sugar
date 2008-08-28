@@ -13,7 +13,7 @@ class PostsController < ApplicationController
         end
     end
     protected     :load_discussion
-    before_filter :load_discussion
+    before_filter :load_discussion, :except => [:search]
 
     def load_post
         @post = Post.find(params[:id]) rescue nil
@@ -35,6 +35,20 @@ class PostsController < ApplicationController
     before_filter :verify_editable, :only => [:edit, :update, :destroy]
 
 
+    def search
+        if params[:q]
+            redirect_to( { :action => :search, :query => params[:q] } ) and return
+        end
+        unless @search_query = params[:query]
+            flash[:notice] = "No query specified!"
+            redirect_to discussions_path and return
+        end
+        start_time = Time.now
+        @posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
+        @search_time = Time.now - start_time
+        raise @search_time.inspect
+        #find_discussion_views
+    end
 
     def create
         if @discussion.postable_by?(@current_user)

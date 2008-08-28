@@ -2,7 +2,8 @@ require 'post_parser'
 
 class Post < ActiveRecord::Base
     
-    POSTS_PER_PAGE = 50
+    POSTS_PER_PAGE  = 50
+    FULLTEXT_SEARCH = false
 
     belongs_to :user, :counter_cache => true
     belongs_to :discussion, :counter_cache => true
@@ -51,6 +52,51 @@ class Post < ActiveRecord::Base
             class << posts; include Paginates; end
             posts.setup_pagination(:total_count => posts_count, :page => page, :per_page => limit)
 
+            return posts
+        end
+        
+        def search_paginated(options={})
+            #options[:trusted] = false
+            if FULLTEXT_SEARCH
+                if options[:trusted]
+                    conditions = ["match(body) AGAINST (?)", options[:query]]
+                else
+                    conditions = ["match(body) AGAINST (?) AND `discussions`.trusted = 0", options[:query]]
+                end
+            else
+                words = options[:query].split(/\s+/)
+                if options[:trusted]
+                    conditions = [ words.map{"body LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
+                else
+                    conditions = [ "`discussions`.trusted = 0 AND " + words.map{"body LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
+                end
+            end
+            
+            posts_count = Post.count(:conditions => conditions)
+            return nil if posts_count == 0
+
+            # Math is awesome
+            limit = options[:limit] || POSTS_PER_PAGE
+            num_pages = (posts_count.to_f/limit).ceil
+            page  = (options[:page] || 1).to_i
+            page = 1 if page < 1
+            page = num_pages if page > num_pages
+            offset = limit * (page - 1)
+
+            # Grab the discussions
+            posts = self.find(
+                :all, 
+                :conditions => conditions, 
+                :limit      => limit, 
+                :offset     => offset, 
+                :order      => '`posts`.created_at DESC',
+                :include    => [:user, :discussion]
+            )
+
+            # Inject the pagination methods on the collection
+            class << posts; include Paginates; end
+            posts.setup_pagination(:total_count => posts_count, :page => page, :per_page => limit)
+            
             return posts
         end
 

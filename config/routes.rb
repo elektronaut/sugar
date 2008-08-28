@@ -35,8 +35,13 @@ ActionController::Routing::Routes.draw do |map|
 
     # See how all your routes lay out with "rake routes"
     
+    # Discussions search
     map.connect '/search/:query', :controller => 'discussions', :action => 'search'
     map.search '/search', :controller => 'discussions', :action => 'search'
+
+    # Posts search
+    map.connect '/posts/search/:query', :controller => 'posts', :action => 'search'
+    map.search_posts '/posts/search', :controller => 'posts', :action => 'search'
 
     map.resources(
         :users,
@@ -75,10 +80,10 @@ ActionController::Routing::Routes.draw do |map|
 
     # Vanilla redirects
     map.with_options :controller => 'vanilla' do |vanilla|
-        vanilla.connect '/vanilla', :action => 'discussions'
-        vanilla.connect '/vanilla/index.php', :action => 'discussions'
+        vanilla.connect '/vanilla',              :action => 'discussions'
+        vanilla.connect '/vanilla/index.php',    :action => 'discussions'
         vanilla.connect '/vanilla/comments.php', :action => 'discussion'
-        vanilla.connect '/vanilla/account.php', :action => 'user'
+        vanilla.connect '/vanilla/account.php',  :action => 'user'
     end
 
     # Install the default routes as the lowest priority.

@@ -49,6 +49,7 @@ end
 
 desc "Create symlinks"
 task :create_symlinks, :roles => [:web,:app] do
+	run "ln -s #{deploy_to}/#{shared_dir}/system #{deploy_to}/#{current_dir}/public/system"
 	run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
 	run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
 	run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
@@ -57,6 +58,26 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
 	run "ln -s #{deploy_to}/#{shared_dir}/session_key #{deploy_to}/#{current_dir}/config/session_key"
 	run "ln -s #{deploy_to}/#{shared_dir}/doodles #{deploy_to}/#{current_dir}/public/doodles"
+end
+
+namespace :deploy do
+    namespace :web do
+
+        desc "Present a maintenance page to visitors. Message is customizable with the REASON enviroment variable."
+        task :disable, :roles => [:web, :app] do
+            if reason = ENV['REASON']
+                run("cd #{deploy_to}/current; /usr/bin/rake b3s:disable_web REASON=\"#{reason}\"")
+            else
+                run("cd #{deploy_to}/current; /usr/bin/rake b3s:disable_web")
+            end
+        end
+        
+        desc "Makes the application web-accessible again."
+        task :enable, :roles => [:web, :app] do
+            run("cd #{deploy_to}/current; /usr/bin/rake b3s:enable_web")
+        end
+
+    end
 end
 
 after "deploy:setup", :create_shared_dirs
