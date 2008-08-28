@@ -46,8 +46,6 @@ class PostsController < ApplicationController
         start_time = Time.now
         @posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
         @search_time = Time.now - start_time
-        raise @search_time.inspect
-        #find_discussion_views
     end
 
     def create

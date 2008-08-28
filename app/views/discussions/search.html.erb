@@ -1,6 +1,6 @@
-<% @page_title = "Search" %>
+<% @page_title = "Title Search" %>
 
-<h2 class="section">Search for <em><%= @search_query %></em></h2>
+<h2 class="section">Searching titles for <em><%= @search_query %></em></h2>
 
 <% if @discussions %>
 	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
@@ -8,3 +8,4 @@
 	<p>No discussions were found.</p>
 <% end %>
 
+<!-- Search performed in <%= @search_time %> seconds -->

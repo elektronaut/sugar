@@ -359,6 +359,15 @@ table.discussions tr.closed td.name a:hover {
 	padding-bottom:  15px;
 	border-bottom:   1px solid #E2DCBF;
 }
+.post .title {
+	background:      #ffffe8;
+	background:      #f8f7f1;
+	font-size:       1.3em;
+	font-weight:     bold;
+	padding:         7px 0 7px 45px;
+	margin:          -15px 0 15px 0;
+	border-bottom:   1px solid #E2DCBF;
+}
 .post .post_functions {
 	line-height:     1;
 	color:           #888;

@@ -1,0 +1,67 @@
+<%
+	# Options
+	discussion    ||= false
+	functions     ||= false
+	permalink     ||= false
+	post_distance ||= false
+	title         ||= false
+
+	previous_post = nil
+-%>
+<%= render :partial => 'components/pagination', :locals => { :p => posts } %>
+<div class="posts">
+<% posts.each do |post| %>
+	<% if post_distance && previous_post %>
+		<% if (post.created_at - previous_post.created_at) >= 12.hours %>
+			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
+		<% elsif (previous_post.created_at - post.created_at) >= 12.hours %>
+			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> earlier&hellip;</div>
+		<% end %>
+	<% end %>
+	<div class="post post_by_user<%= post.user.id %>" id="post-<%= post.id %>">
+		<% if title %>
+			<div class="title">
+				<% if post.discussion.labels? %>
+					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
+				<% end %>
+				<%= link_to h(post.discussion.title), paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
+			</div>
+		<% end %>
+		<% if functions %>
+		<div class="post_functions">
+			<% unless post.user == @current_user %>
+				<%= link_to "PM", last_user_conversation_page_path(:username => post.user.username, :anchor => 'new', :subject => "Re: #{(discussion||post.discussion).title}") %> |
+			<% end %>
+			<% if post.editable_by?(@current_user) %>
+				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %> |
+			<% end %>
+			<%= link_to_remote "Quote", 
+					:url => quote_discussion_post_url((discussion||post.discussion), post),
+					:complete => "addToReply(request.responseText)"
+			%>
+		</div>
+		<% end %>
+		<div class="post_info">
+			<a name="post-<%= post.id %>" class="anchor"></a>
+			<span class="avatar">
+				<%= avatar_image_tag(post.user) %>
+			</span>
+			<span class="username"><%= profile_link(post.user) %></span>
+			<span class="date"><%= formatted_time post.created_at %></span>
+			<% if permalink %>
+			<span class="permalink">
+				<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => posts.page, :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+			</span>
+			<% end %>
+		</div>
+		<div class="body">
+			<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
+			<% if post.edited? %><div class="edited">
+				Edited <%= formatted_time post.edited_at %>
+			</div><% end %>
+		</div>
+	</div>
+	<% previous_post = post %>
+<% end %>
+</div>
+<%= render :partial => 'components/pagination', :locals => { :p => posts } %>

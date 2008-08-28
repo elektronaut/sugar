@@ -43,8 +43,10 @@ class DiscussionsController < ApplicationController
             flash[:notice] = "No query specified!"
             redirect_to discussions_path and return
         end
+        start_time = Time.now
         @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
         find_discussion_views
+        @search_time = Time.now - start_time
     end
     
     def new

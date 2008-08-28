@@ -57,19 +57,18 @@ class Post < ActiveRecord::Base
         end
         
         def search_paginated(options={})
-            #options[:trusted] = false
             if FULLTEXT_SEARCH
                 if options[:trusted]
                     conditions = ["match(body) AGAINST (?)", options[:query]]
                 else
-                    conditions = ["match(body) AGAINST (?) AND `discussions`.trusted = 0", options[:query]]
+                    conditions = ["match(body) AGAINST (?) AND trusted = 0", options[:query]]
                 end
             else
                 words = options[:query].split(/\s+/)
                 if options[:trusted]
                     conditions = [ words.map{"body LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
                 else
-                    conditions = [ "`discussions`.trusted = 0 AND " + words.map{"body LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
+                    conditions = [ "trusted = 0 AND " + words.map{"body LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
                 end
             end
             
@@ -90,7 +89,7 @@ class Post < ActiveRecord::Base
                 :conditions => conditions, 
                 :limit      => limit, 
                 :offset     => offset, 
-                :order      => '`posts`.created_at DESC',
+                :order      => 'created_at DESC',
                 :include    => [:user, :discussion]
             )
 

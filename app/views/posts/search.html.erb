@@ -1,0 +1,11 @@
+<% @page_title = "Posts Search" %>
+
+<h2 class="section">Searching posts for <em><%= @search_query %></em></h2>
+
+<% if @posts %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
+<% else %>
+	<p>No posts were found.</p>
+<% end %>
+
+<!-- Search performed in <%= @search_time %> seconds -->

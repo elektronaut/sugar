@@ -1,5 +1,10 @@
 Event.observe(window, 'load', function() { 
 
+	// Make the search mode selection box work
+	Event.observe($('search_mode'), 'change', function(e) {
+		Event.element(e).parentNode.action = Event.element(e).value;
+	});
+
 	// Apply magic to compose textarea
 	if( $('compose-body') ) {
 		var textarea = new Control.TextArea('compose-body');  
