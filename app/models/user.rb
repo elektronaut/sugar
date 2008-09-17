@@ -81,8 +81,37 @@ class User < ActiveRecord::Base
         end
     end
 
+    # Find and paginate discussions
+    def paginated_discussions(options)
+        num_discussions = options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => ['trusted = 0'])
+
+        # Math is awesome
+        limit = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
+        num_pages = (num_discussions.to_f/limit).ceil
+        page  = (options[:page] || 1).to_i
+        page = 1 if page < 1
+        page = num_pages if page > num_pages
+        offset = limit * (page - 1)
+
+        # Grab the discussions
+        discussions = Discussion.find(
+            :all, 
+            :conditions => ['poster_id = ?', self.id], 
+            :limit      => limit, 
+            :offset     => offset, 
+            :order      => 'sticky DESC, last_post_at DESC',
+            :include    => [:poster, :last_poster, :category]
+        )
+
+        # Inject the pagination methods on the collection
+        class << discussions; include Paginates; end
+        discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+        
+        return discussions
+    end
+
     # Find and paginate participated discussions
-	def paginated_discussions(options)
+	def paginated_participated_discussions(options)
 	    num_discussions = self.participated_count(:trusted => options[:trusted])
 
         limit = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE

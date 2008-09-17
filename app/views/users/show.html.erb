@@ -88,7 +88,7 @@
 	</tr>
 	<tr>
 		<th>Discussions created</th>
-		<td><%= @user.discussions_count %></td>
+		<td><%= link_to @user.discussions_count, discussions_user_path(:id => @user.username) %></td>
 	</tr>
 	<tr>
 		<th>Post count</th>

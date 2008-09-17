@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         end
     end
     protected     :load_user
-    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated]
+    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions]
     
     def index
         @online_users = User.find_online
@@ -21,9 +21,14 @@ class UsersController < ApplicationController
     def show
     end
     
+    def discussions
+        @discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+        find_discussion_views
+    end
+    
     def participated
         @section = :participated if @user == @current_user
-        @discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+        @discussions = @user.paginated_participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
         find_discussion_views
     end
 
