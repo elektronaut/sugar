@@ -156,6 +156,7 @@ class Discussion < ActiveRecord::Base
     
     def fix_counter_cache!
         if posts_count != posts.count
+            logger.warn "counter_cache error detected on Discussion ##{self.id}"
             Discussion.update_counters(self.id, :posts_count => (posts.count - posts_count) )
         end
     end
