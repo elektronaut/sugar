@@ -102,6 +102,10 @@ class Post < ActiveRecord::Base
 
     end
     
+    def me_post?
+        @me_post ||= (body =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
+    end
+    
     # Get this posts sequence number
     def post_number
         @post_number ||= ( Post.count_by_sql("SELECT COUNT(*) FROM posts WHERE discussion_id = #{self.discussion.id} AND created_at < '#{self.created_at.to_formatted_s(:db)}'") + 1)
