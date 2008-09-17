@@ -49,7 +49,7 @@ end
 
 desc "Create symlinks"
 task :create_symlinks, :roles => [:web,:app] do
-	run "ln -s #{deploy_to}/#{shared_dir}/system #{deploy_to}/#{current_dir}/public/system"
+	#run "ln -s #{deploy_to}/#{shared_dir}/system #{deploy_to}/#{current_dir}/public/system"
 	run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
 	run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
 	run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"

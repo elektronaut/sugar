@@ -20,7 +20,7 @@ class Post < ActiveRecord::Base
     # Automatically update the discussion with last poster info
     after_create do |post|
         post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
-        post.discussion.update_attribute(:posts_count, post.discussion.posts.count)
+        post.discussion.fix_counter_cache!
     end
     
     before_save do |post|

@@ -154,6 +154,12 @@ class Discussion < ActiveRecord::Base
         self.posts.create(:user => self.poster, :body => self.body)
     end
     
+    def fix_counter_cache!
+        if posts_count != posts.count
+            Discussion.update_counters(self.id, :posts_count => (posts.count - posts_count) )
+        end
+    end
+    
     # Does this discussion have any labels?
     def labels?
         (self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
