@@ -191,7 +191,11 @@ class Discussion < ActiveRecord::Base
     end
 
     # Humanized ID for URLs
-    def to_param    
-        (Discussion.work_safe_urls) ? self.id : "#{self.id};" + self.title.gsub(/[^\w\d]+/,'-')
+    def to_param
+        slug = self.title
+        slug = slug.gsub(/[\[\{]/,'(')
+        slug = slug.gsub(/[\]\}]/,')')
+        slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-')
+        (Discussion.work_safe_urls) ? self.id : "#{self.id};" + slug
     end
 end
