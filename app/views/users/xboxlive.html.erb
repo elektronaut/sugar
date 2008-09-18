@@ -31,7 +31,7 @@
 		</td>
 		<td class="xbox_info<%= " xbox_online" if user.xbox_info.online? %>">
 			<% if user.xbox_info.online? %>
-				<%= [user.xbox_info..info, user.xbox_info.info2].reject{|i| !i || i.empty?}.join(" &ndash; ") %>
+				<%= [user.xbox_info.info, user.xbox_info.info2].reject{|i| !i || i.empty?}.join(" &ndash; ") %>
 			<% elsif user.xbox_info.info.to_s =~ /Last seen/ %>
 				<%= user.xbox_info.info %>
 			<% end %>
