@@ -103,7 +103,7 @@ class Post < ActiveRecord::Base
     end
     
     def me_post?
-        @me_post ||= (body =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
+        @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
     end
     
     # Get this posts sequence number
