@@ -24,7 +24,7 @@ class XboxInfo < ActiveRecord::Base
         # Find all valid users
         def valid_users
             User.find(:all, :include => [:xbox_info], :conditions => ['activated = 1 AND `xbox_infos`.valid_xml = 1']).sort do |a,b| 
-                ((3 - a.xbox_info.status).to_s + a.username) <=> ((3 - b.xbox_info.status).to_s + b.username)
+                ((3 - a.xbox_info.status).to_s + a.username.downcase) <=> ((3 - b.xbox_info.status).to_s + b.username.downcase)
             end
         end
     end
