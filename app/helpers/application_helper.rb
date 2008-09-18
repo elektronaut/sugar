@@ -14,6 +14,41 @@ module ApplicationHelper
         string.gsub(/(^|[^\<])\/me/){ $1 + link_to(user.username, user_path(user), :class => :poster) }
     end
     
+	# Generate HTML for a field, with label and optionally description and errors.
+	#
+	# The options are:
+	# * <tt>:description</tt>: Description of the field
+	# * <tt>:errors</tt>:      Error messages for the attribute
+	#
+	# An example:
+	#   <% form_for 'user', @user do |f| %>
+	#     <%= labelled_field f.text_field( :username ), "Username", 
+	#                        :description => "Choose your username, minimum 4 characters", 
+	#                        :errors => @user.errors[:username] %>
+	#     <%= submit_tag "Save" %>
+	#   <% end %>
+	#
+	def labelled_field(field, label=nil, options={}, &block)
+		if options[:errors]
+			output  = '<p class="field field_with_errors">'
+		else
+			output  = '<p class="field">'
+		end
+		output += "<label>#{label}" if label
+		if options[:errors]
+			error = options[:errors]
+			error = error.last if error.kind_of? Array
+			output += ' <span class="error">' + error.to_s + '</span>'
+		end
+		output += "<span class=\"description\"> &mdash; #{options[:description]}</span>" if options[:description]
+		output += "</label>" if label
+		output += field
+		output += "<br />"+capture(&block) if block_given?
+		output += "</p>"
+		concat(output, block.binding) if block_given?
+		return output
+	end
+
     # Generates avatar image tag for a user
     def avatar_image_tag(user, size='32')
         if user.avatar_url?

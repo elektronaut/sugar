@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
 				end
 			else
 				user.errors.add( :password,         "must be confirmed" )
-				user.errors.add( :confirm_password, "must be confirmed" )
 			end
 		end
 	end

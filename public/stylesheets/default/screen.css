@@ -131,6 +131,35 @@ table.list td {
 	font-weight:     bold;
 }
 
+div.errors {
+	color:           #100;
+	border:          1px solid #d88;
+	background:      #fdd;
+	padding:         10px 15px 1px 15px;
+	margin:          0 -16px 1em -16px;
+}
+div.errors ul {
+	margin:          none;
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+.field_with_errors {
+	display:         block;
+}
+.field_with_errors label {
+	margin-top:      12px;
+	color:           #100;
+	background:      #fdd;
+	padding:         2px 8px;
+	margin-left:     -8px;
+}
+.field_with_errors label span.description {
+	color:           #633;
+}
+div.fieldWithErrors {
+	display:         inline;
+}
 
 
 

@@ -77,6 +77,7 @@ class UsersController < ApplicationController
             end
             redirect_to user_url(:id => @user.username)
         else
+            flash.now[:notice] = "There was an error saving your changes"
             render :action => :edit
         end
     end

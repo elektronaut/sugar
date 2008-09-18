@@ -2,86 +2,50 @@
 
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(:id => @user.username) %> </h2>
 
+<% unless @user.errors.empty? %>
+	<div class="errors">
+		<h3>There were errors saving the following fields:</h3>
+		<%= error_messages_for :user, :header_message => nil, :message => nil %>
+	</div>
+<% end %>
+
 <% form_for(@user) do |f| %>
-	<p>
-		<label>Username</label>
-		<%= f.text_field(:username, :disabled => !@current_user.admin?) %>
-	</p>
-	<p>
-		<label>Avatar URL <span class="description">&mdash; Enter a link to a 32x32px image</span></label>
-		<%= f.text_field(:avatar_url) %><br />
+
+	<%= labelled_field f.text_field(:username, :disabled => !@current_user.admin?), "Username", :errors => @user.errors[:username] %>
+
+	<% labelled_field f.text_field(:avatar_url), "Avatar URL", :description => "Enter a link to a 32x32px image", :errors => @user.errors[:avatar_url] do %>
 		Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> 
 		using your registered email to get an avatar.
-	</p>
-	<p>
-		<label>Real name</label>
-		<%= f.text_field(:realname) %>
-	</p>
-	<p>
-		<label>Location</label>
-		<%= f.text_field(:location) %>
-	</p>
-	<p>
-		<label>Web site</label>
-		<%= f.text_field(:website) %>
-	</p>
-	<p>
-		<label>MSN Messenger</label>
-		<%= f.text_field(:msn) %>
-	</p>
-	<p>
-		<label>Google Talk</label>
-		<%= f.text_field(:gtalk) %>
-	</p>
-	<p>
-		<label>AIM</label>
-		<%= f.text_field(:aim) %>
-	</p>
-	<p>
-		<label>Xbox Live Gamertag</label>
-		<%= f.text_field(:gamertag) %>
-	</p>
-	<p>
-		<label>Twitter username</label>
-		<%= f.text_field(:twitter) %>
-	</p>
-	<p>
-		<label>Flickr username</label>
-		<%= f.text_field(:flickr) %>
-	</p>
-	<p>
-		<label>Last.fm username</label>
-		<%= f.text_field(:last_fm) %>
-	</p>
-	<p>
-		<label>Birthday <span class="description">&mdash; Your age won't be shown, but your birthday will</label>
-		<%= f.date_select(:birthday, :start_year => 1900) %>
-	</p>
-	<p>
-		<label>Email address <span class="description">&mdash; Required</span></label>
-		<%= f.text_field(:email) %>
-	</p>
-	<p>
-		<label>Password <span class="description">&mdash; Enter twice to change</span></label>
-		<%= f.password_field(:password) %><br />
+	<% end %>
+
+	<%= labelled_field f.text_field(:realname), "Real name", :errors => @user.errors[:realname] %>
+	<%= labelled_field f.text_field(:location), "Location", :errors => @user.errors[:location] %>
+	<%= labelled_field f.text_field(:website), "Web site", :errors => @user.errors[:website] %>
+	<%= labelled_field f.text_field(:msn), "MSN Messenger", :errors => @user.errors[:msn] %>
+	<%= labelled_field f.text_field(:gtalk), "Google Talk", :errors => @user.errors[:gtalk] %>
+	<%= labelled_field f.text_field(:aim), "AIM", :errors => @user.errors[:aim] %>
+	<%= labelled_field f.text_field(:gamertag), "Xbox Live Gamertag", :errors => @user.errors[:gamertag] %>
+	<%= labelled_field f.text_field(:twitter), "Twitter username", :errors => @user.errors[:twitter] %>
+	<%= labelled_field f.text_field(:flickr), "Flickr username", :errors => @user.errors[:flickr] %>
+	<%= labelled_field f.text_field(:last_fm), "Last.fm username", :errors => @user.errors[:last_fm] %>
+
+	<%= labelled_field f.date_select(:birthday, :start_year => 1900), "Birthday", :description => "Your age won't be shown, but your birthday will", :errors => @user.errors[:birthday] %>
+
+	<%= labelled_field f.text_field(:email), "Email address", :description => 'Required', :errors => @user.errors[:email] %>
+	<% labelled_field f.password_field(:password), "Password", :description => "Enter twice to change", :errors => @user.errors[:password] do %>
 		<%= f.password_field(:confirm_password) %>
-	</p>
-	<p>
-		<label>I'm at work <span class="description">&mdash; Disables thread titles in URLs</span></label>
-		<%= f.check_box(:work_safe_urls) %>
-	</p>
-	<p>
-		<label>Stylesheet URL <span class="description">&mdash; Enter a URL here to override the stylesheet</span></label>
-		<%= f.text_field(:stylesheet_url) %>
-	</p>
+	<% end %>
+
+	<%= labelled_field f.check_box(:work_safe_urls), "I'm at work", :description => "Disables thread titles in URLs", :errors => @user.errors[:work_safe_urls] %>
+
+	<%= labelled_field f.text_field(:stylesheet_url), "Stylesheet URL", :description => "Enter a URL here to override the stylesheet", :errors => @user.errors[:stylesheet_url] %>
+
 	<p>
 		You can download the newest version of the default theme here: <%= link_to "b3s_default_theme.zip", "/b3s_default_theme.zip" %>
 	</p>
-	<p>
-		<label>Profile text</label>
-		<%= f.text_area(:description, :rows => 8, :cols => 80) %>
-	</p>
-	
+
+	<%= labelled_field f.text_area(:description, :rows => 8, :cols => 80), "Profile text", :errors => @user.errors[:description] %>
+
 	<% if @current_user.admin? %>
 		<h3>Admin options</h3>
 		<p>You are an admin, and can change the following options:</p>
