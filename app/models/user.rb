@@ -72,9 +72,9 @@ class User < ActiveRecord::Base
 	        self.find(:all, :conditions => ['activated = 1 AND banned = 0 AND created_at > ?', since], :order => 'username ASC')
         end
         
-        def refresh_xbox!
+        def refresh_xbox!(force=false)
             self.find(:all, :conditions => ['activated = 1']).select{|u| u.gamertag?}.each do |u|
-                u.refresh_xbox! unless u.xbox_refreshed?
+                u.refresh_xbox! if force || !u.xbox_refreshed?
             end
         end
 	end
@@ -303,7 +303,7 @@ class User < ActiveRecord::Base
 
     def xbox_refreshed?
         return false unless xbox_xml?
-        ((Time.now - 5.seconds) < self.xbox_refreshed_at) ? true : false
+        ((Time.now - 30.minutes) < self.xbox_refreshed_at) ? true : false
     end
 
     def refresh_xbox!

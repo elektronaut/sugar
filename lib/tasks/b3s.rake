@@ -35,5 +35,10 @@ namespace :b3s do
         maintenance_file = File.join(File.dirname(__FILE__), '../../public/system/maintenance.html')
         File.unlink(maintenance_file) if File.exist?(maintenance_file)
     end
+    
+    desc "Refresh Xbox Live"
+    task :refresh_xbox => :environment do
+        User.refresh_xbox!(true)
+    end
 
 end
