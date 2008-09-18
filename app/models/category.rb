@@ -29,7 +29,11 @@ class Category < ActiveRecord::Base
     
     # Humanized ID for URLs
     def to_param
-        (Discussion.work_safe_urls) ? self.id : "#{self.id}-" + self.name.downcase.gsub(/[^\w\d]+/,'_')
+        slug = self.name
+        slug = slug.gsub(/[\[\{]/,'(')
+        slug = slug.gsub(/[\]\}]/,')')
+        slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-')
+        (Discussion.work_safe_urls) ? self.id : "#{self.id};" + slug
     end
     
 end
