@@ -11,7 +11,7 @@ module ApplicationHelper
     end
     
     def meify(string, user)
-        string.gsub(/(^|[^\<])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
+        string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
     end
     
 	# Generate HTML for a field, with label and optionally description and errors.
