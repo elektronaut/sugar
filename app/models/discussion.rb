@@ -192,6 +192,6 @@ class Discussion < ActiveRecord::Base
 
     # Humanized ID for URLs
     def to_param    
-        (Discussion.work_safe_urls) ? self.id : "#{self.id}-" + self.title.downcase.gsub(/[^\w\d]+/,'_')
+        (Discussion.work_safe_urls) ? self.id : "#{self.id}-" + self.title.downcase.gsub(/[^\w\d]+/,'-')
     end
 end
