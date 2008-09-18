@@ -35,12 +35,10 @@
 			<% if post.editable_by?(@current_user) %>
 				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %>
 			<% end %>
-			<% unless post.me_post? %>
 			| <%= link_to_remote "Quote", 
 					:url => quote_discussion_post_url((discussion||post.discussion), post),
 					:complete => "addToReply(request.responseText)"
 			%>
-			<% end %>
 		</div>
 		<% end %>
 		<% if post.me_post? %>
@@ -48,7 +46,6 @@
 				<%= avatar_image_tag(post.user) %>
 			</div>
 			<div class="body">
-				<%# post.body.gsub(/^\/me(.*)/){ link_to(post.user.username, user_path(post.user), :class => :poster) + h($1) } %>
 				<%= meify h(post.body), post.user %>
 				<span class="date">&ndash; <%= formatted_time post.created_at %></span>
 			</div>

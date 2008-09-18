@@ -401,6 +401,7 @@ table.discussions tr.closed td.name a:hover {
 	line-height:     1;
 	color:           #888;
 	float:           right;
+	margin-right:    10px;
 }
 
 .post .post_info {
@@ -442,9 +443,6 @@ table.discussions tr.closed td.name a:hover {
 .me_post {
 	background:      #f8f7f1;
 	color:           #484030;
-}
-.me_post .post_functions {
-	margin-right:    10px;
 }
 .me_post .avatar {
 	float:           left;

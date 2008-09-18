@@ -27,6 +27,12 @@ class XboxInfo < ActiveRecord::Base
                 ((3 - a.xbox_info.status).to_s + a.username.downcase) <=> ((3 - b.xbox_info.status).to_s + b.username.downcase)
             end
         end
+        
+        # Last updated timestamp
+        def last_updated
+            self.find(:first, :conditions => ['valid_xml = 1'], :order => 'updated_at ASC').updated_at
+        end
+        
     end
     
     def gamertag
