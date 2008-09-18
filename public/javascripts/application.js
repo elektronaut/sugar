@@ -92,7 +92,7 @@ Event.observe(window, 'load', function() {
 
 		toolbar.addButton('Escape HTML',function(event){
 		    var selection = this.getSelection();
-		    this.replaceSelection(selection.replace('<','&lt;').replace('>','&gt;'));
+		    this.replaceSelection(selection.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
 		},{  
 		    id: 'compose_escape_button'  
 		});  
