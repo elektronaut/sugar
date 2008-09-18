@@ -434,6 +434,10 @@ table.discussions tr.closed td.name a:hover {
 	max-width:       600px;
 	margin-left:     45px;
 }
+.post .body ul {
+	list-style-type: disc;
+	list-style-position: inside;
+}
 
 .me_post {
 	background:      #f8f7f1;
@@ -618,6 +622,10 @@ div.messages .message .subject {
 div.messages .message .body {
 	font-size:       1.1em;
 	max-width:       600px;
+}
+div.messages .message .body ul {
+	list-style-type: disc;
+	list-style-position: inside;
 }
 div.messages .message .body a {
 	color:           #005794;
