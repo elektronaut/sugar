@@ -11,7 +11,7 @@ module ApplicationHelper
     end
     
     def meify(string, user)
-        string.gsub(/(^|[^\<])\/me/){ $1 + link_to(user.username, user_path(user), :class => :poster) }
+        string.gsub(/(^|[^\<])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
     end
     
 	# Generate HTML for a field, with label and optionally description and errors.
@@ -73,10 +73,10 @@ module ApplicationHelper
     end
     
     # Generates a link to the users profile
-    def profile_link(user, link_text=nil)
+    def profile_link(user, link_text=nil, options={})
         if user
             link_text ||= user.username
-            link_to link_text, user_path(:id => user.username), :title => "#{possessive(user.username)} profile"
+            link_to link_text, user_path(:id => user.username), {:title => "#{possessive(user.username)} profile"}.merge(options)
         else
             "Unknown"
         end
