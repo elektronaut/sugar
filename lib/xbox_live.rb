@@ -44,7 +44,7 @@ class XboxLive
     end
 
     def online?
-        (status_text == 'Online' || status_text == 'Away') ? false : true
+        (status_text == 'Online' || status_text == 'Away') ? true : false
     end
 
     def away?
