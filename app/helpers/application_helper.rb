@@ -87,15 +87,15 @@ module ApplicationHelper
     def last_discussion_page_path(d)
         if ((last_page = last_discussion_page(d)) > 1)
             if @discussion_views && last_post_id = discussion_view(d, @current_user).post_id
-                paged_discussion_path(:id => d.to_i, :page => last_page, :anchor => "post-#{last_post_id}")
+                paged_discussion_path(:id => d.id.to_i, :page => last_page, :anchor => "post-#{last_post_id}")
             else
-                paged_discussion_path(:id => d.to_i, :page => last_page)
+                paged_discussion_path(:id => d.id.to_i, :page => last_page)
             end
         else
             if @discussion_views && last_post_id = discussion_view(d, @current_user).post_id
-                discussion_path(:id => d.to_i, :anchor => "post-#{last_post_id}")
+                discussion_path(:id => d.id.to_i, :anchor => "post-#{last_post_id}")
             else
-                discussion_path(:id => d.to_i)
+                discussion_path(:id => d.id.to_i)
             end
         end
     end
