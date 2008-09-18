@@ -60,7 +60,6 @@ class XboxLive
     end
 
     def info2
-        return "" unless online?
         @info2 ||= (xml_doc/"info2").first.inner_html rescue ""
     end
 

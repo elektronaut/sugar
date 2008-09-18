@@ -1,7 +1,5 @@
 require 'digest/sha1'
 require 'md5'
-require 'open-uri'
-require 'xbox_live'
 
 class User < ActiveRecord::Base
 
@@ -19,6 +17,7 @@ class User < ActiveRecord::Base
     has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
     has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND `read` = 0'], :order => ['created_at DESC']
     has_many   :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id', :conditions => ['deleted_by_sender = 0'], :order => ['created_at DESC']
+    has_one    :xbox_info, :dependent => :destroy
 
     validate do |user|
 		# Has the password been changed?
@@ -288,42 +287,4 @@ class User < ActiveRecord::Base
         @gravatar_url[options[:size]]
     end
     
-    def xbox
-        return nil unless gamertag?
-        unless @xbox_info
-            refresh_xbox! unless xbox_refreshed?
-            @xbox_info = XboxLive.new(gamertag, xbox_xml)
-        end
-        return @xbox_info
-    end
-    
-    def xbox_online?
-        (xbox_status && xbox_status == 2) ? true : false
-    end
-
-    def xbox_refreshed?
-        return false unless xbox_xml?
-        ((Time.now - 30.minutes) < self.xbox_refreshed_at) ? true : false
-    end
-
-    def refresh_xbox!
-        logger.info "Refreshing Xbox Live info for #{gamertag} #{xbox_refreshed_at.inspect}"
-        self.update_attributes(:xbox_xml => open(XboxLive.api_url(gamertag)).read, :xbox_refreshed_at => Time.now)
-        reload
-        if xbox.valid?
-            self.xbox_info = xbox.info
-            if xbox.away?
-                self.xbox_status = 1
-            elsif xbox.online?
-                self.xbox_status = 2
-            else
-                self.xbox_status = 0
-            end
-            self.xbox_valid = true
-        else
-            self.xbox_valid = false
-        end
-        save
-    end
-	
 end

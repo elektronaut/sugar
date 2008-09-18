@@ -38,7 +38,8 @@ namespace :b3s do
     
     desc "Refresh Xbox Live"
     task :refresh_xbox => :environment do
-        User.refresh_xbox!(true)
+        #User.refresh_xbox!(true)
+        XboxInfo.refresh!(true)
     end
 
 end
