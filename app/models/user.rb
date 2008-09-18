@@ -310,13 +310,18 @@ class User < ActiveRecord::Base
         logger.info "Refreshing Xbox Live info for #{gamertag} #{xbox_refreshed_at.inspect}"
         self.update_attributes(:xbox_xml => open(XboxLive.api_url(gamertag)).read, :xbox_refreshed_at => Time.now)
         reload
-        self.xbox_info = xbox.info
-        if xbox.away?
-            self.xbox_status = 1
-        elsif xbox.online?
-            self.xbox_status = 2
+        if xbox.valid?
+            self.xbox_info = xbox.info
+            if xbox.away?
+                self.xbox_status = 1
+            elsif xbox.online?
+                self.xbox_status = 2
+            else
+                self.xbox_status = 0
+            end
+            self.xbox_valid = true
         else
-            self.xbox_status = 0
+            self.xbox_valid = false
         end
         save
     end

@@ -23,6 +23,10 @@ class XboxLive
         @xml_doc ||= Hpricot(@xml_data)
     end
 
+    def valid?
+        ((@valid ||= (xml_doc/"valid").first.inner_html rescue "false") == "true") ? true : false
+    end
+
     def gamerscore
         @gamerscore ||= (xml_doc/"gamerscore").first.inner_html.to_i rescue nil
     end
