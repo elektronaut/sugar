@@ -36,7 +36,7 @@ class XboxLive
     end
     
     def status_text
-        @status_text ||= (xml_doc/"statustext").first.inner_html rescue nil
+        @status_text ||= (xml_doc/"statustext").first.inner_html rescue ""
     end
     
     def zone
@@ -44,7 +44,7 @@ class XboxLive
     end
 
     def online?
-        (status_text == 'Offline') ? false : true
+        (status_text == 'Online' || status_text == 'Away') ? false : true
     end
 
     def away?
@@ -56,12 +56,12 @@ class XboxLive
     end
     
     def info
-        @info ||= (xml_doc/"info").first.inner_html rescue nil
+        @info ||= (xml_doc/"info").first.inner_html rescue ""
     end
 
     def info2
         return "" unless online?
-        @info2 ||= (xml_doc/"info2").first.inner_html rescue nil
+        @info2 ||= (xml_doc/"info2").first.inner_html rescue ""
     end
 
     def tile_url

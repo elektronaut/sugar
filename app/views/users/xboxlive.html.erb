@@ -25,10 +25,14 @@
 		<td class="xbox_gamerscore"><%= user.xbox.gamerscore %></td>
 		<td class="xbox_gamerscore"><%= user.xbox.reputation.to_i %>%</td>
 		<td class="xbox_zone"><%= user.xbox.zone %></td>
-		<td class="xbox_status<%= " xbox_online" if user.xbox_online? %>"><%= user.xbox.status_text %>
+		<td class="xbox_status<%= " xbox_online" if user.xbox_online? %>"><%= ["Offline", "Away", "Online"][user.xbox_status] %>
 		</td>
 		<td class="xbox_info<%= " xbox_online" if user.xbox_online? %>">
-			<%= [user.xbox.info, user.xbox.info2].reject{|i| !i || i.empty?}.join(" &ndash; ") %>
+			<% if user.xbox_online? %>
+				<%= [user.xbox.info, user.xbox.info2].reject{|i| !i || i.empty?}.join(" &ndash; ") %>
+			<% elsif user.xbox.info.to_s =~ /Last seen/ %>
+				<%= user.xbox.info %>
+			<% end %>
 		</td>
 	</tr><% end %>
 </table>
