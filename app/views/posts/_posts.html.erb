@@ -48,7 +48,8 @@
 				<%= avatar_image_tag(post.user) %>
 			</div>
 			<div class="body">
-				<%= post.body.gsub(/^\/me(.*)/){ link_to(post.user.username, user_path(post.user), :class => :poster) + h($1) } %>
+				<%# post.body.gsub(/^\/me(.*)/){ link_to(post.user.username, user_path(post.user), :class => :poster) + h($1) } %>
+				<%= meify h(post.body), post.user %>
 				<span class="date">&ndash; <%= formatted_time post.created_at %></span>
 			</div>
 		<% else %>
@@ -66,7 +67,7 @@
 				<% end %>
 			</div>
 			<div class="body">
-				<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
+				<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : meify(post.body_html, post.user) %>
 				<% if post.edited? %><div class="edited">
 					Edited <%= formatted_time post.edited_at %>
 				</div><% end %>

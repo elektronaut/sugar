@@ -10,6 +10,10 @@ module ApplicationHelper
         end
     end
     
+    def meify(string, user)
+        string.gsub(/(^|[\s])\/me/){ " " + link_to(user.username, user_path(user), :class => :poster) }
+    end
+    
     # Generates avatar image tag for a user
     def avatar_image_tag(user, size='32')
         if user.avatar_url?
