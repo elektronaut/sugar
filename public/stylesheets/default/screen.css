@@ -571,7 +571,7 @@ table.discussions tr.closed td.name a:hover {
 	font-weight:     bold;
 }
 .users_list .xbox_tile {
-	padding:         0 !important;
+	padding:         0 10px 0 0 !important;
 }
 .users_list .xbox_tile img {
 	margin-bottom:   -7px;
