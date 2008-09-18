@@ -1,5 +1,7 @@
 require 'digest/sha1'
 require 'md5'
+require 'open-uri'
+require 'xbox_live'
 
 class User < ActiveRecord::Base
 
@@ -68,6 +70,12 @@ class User < ActiveRecord::Base
 	    
 	    def find_new(since=14.days.ago)
 	        self.find(:all, :conditions => ['activated = 1 AND banned = 0 AND created_at > ?', since], :order => 'username ASC')
+        end
+        
+        def refresh_xbox!
+            self.find(:all, :conditions => ['activated = 1']).select{|u| u.gamertag?}.each do |u|
+                u.refresh_xbox! unless u.xbox_refreshed?
+            end
         end
 	end
 	
@@ -278,6 +286,39 @@ class User < ActiveRecord::Base
             @gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=any"
         end
         @gravatar_url[options[:size]]
+    end
+    
+    def xbox
+        return nil unless gamertag?
+        unless @xbox_info
+            refresh_xbox! unless xbox_refreshed?
+            @xbox_info = XboxLive.new(gamertag, xbox_xml)
+        end
+        return @xbox_info
+    end
+    
+    def xbox_online?
+        (xbox_status && xbox_status == 2) ? true : false
+    end
+
+    def xbox_refreshed?
+        return false unless xbox_xml?
+        ((Time.now - 5.seconds) < self.xbox_refreshed_at) ? true : false
+    end
+
+    def refresh_xbox!
+        logger.info "Refreshing Xbox Live info for #{gamertag} #{xbox_refreshed_at.inspect}"
+        self.update_attributes(:xbox_xml => open(XboxLive.api_url(gamertag)).read, :xbox_refreshed_at => Time.now)
+        reload
+        self.xbox_info = xbox.info
+        if xbox.away?
+            self.xbox_status = 1
+        elsif xbox.online?
+            self.xbox_status = 2
+        else
+            self.xbox_status = 0
+        end
+        save
     end
 	
 end

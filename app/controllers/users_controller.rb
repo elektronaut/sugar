@@ -18,6 +18,10 @@ class UsersController < ApplicationController
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1')
     end
     
+    def xboxlive
+        @users = User.find(:all, :order => 'xbox_status DESC, username ASC', :conditions => 'activated = 1').select{|u| u.gamertag?}
+    end
+    
     def show
     end
     

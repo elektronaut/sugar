@@ -567,8 +567,15 @@ table.discussions tr.closed td.name a:hover {
 .admin {
 	color:           #062;
 }
-
-
+.users_list .xbox_online {
+	font-weight:     bold;
+}
+.users_list .xbox_tile {
+	padding:         0 !important;
+}
+.users_list .xbox_tile img {
+	margin-bottom:   -7px;
+}
 
 
 /* -----------------------------------------------------------------------
