@@ -32,7 +32,7 @@ class Category < ActiveRecord::Base
         slug = self.name
         slug = slug.gsub(/[\[\{]/,'(')
         slug = slug.gsub(/[\]\}]/,')')
-        slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-')
+        slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
         (Discussion.work_safe_urls) ? self.id : "#{self.id};" + slug
     end
     
