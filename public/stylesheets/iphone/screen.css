@@ -1,4 +1,5 @@
 body {
+/* hi */
     margin: 0;
     font-family: Helvetica, Verdana, sans;
     background: #FFF;
@@ -117,6 +118,19 @@ ul#navigation li.users {
 ul#navigation li.participated a{
 	position:absolute;
 	right:5px;
+	color:#FFF;
+	text-decoration:none;
+	margin: 3px auto;
+	font-weight:bold;
+	top:1px;
+	border-width: 0px 12px 0px 5px;
+	color: #fff;
+	text-shadow: #000 0px 1px 1px;
+	-webkit-border-image: url(/images/themes/iphone/rightButton.png) 0 12 0 5;
+}
+ul#navigation li.messages a{
+	position:absolute;
+	right:105px;
 	color:#FFF;
 	text-decoration:none;
 	margin: 3px auto;
