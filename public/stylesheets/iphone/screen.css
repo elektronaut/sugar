@@ -52,11 +52,12 @@ a {
 
 #search input[type=submit] {
 	position:absolute;
-	right:-12px;
+	right:2px;
 	height:32px;
-	width:15px;
+	width:0px;
 	background-image:url(/images/themes/iphone/searcharrow.png);
 	background-repeat:no-repeat;
+	background-position-x:15px;
 	background-color:transparent;
 	border:0px;
 	color:transparent;
