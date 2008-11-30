@@ -1,5 +1,4 @@
 body {
-/* hi part 2*/
     margin: 0;
     font-family: Helvetica, Verdana, sans;
     background: #FFF;
@@ -28,49 +27,48 @@ a {
 	display:none;
 }
 #header {
-	/*background-color:#0068ff;
-	background-image:url(/images/themes/iphone/toolBarOverlay.png);*/
-	height:0px;
-	top:0px;
-	width:100%;
-	background-repeat:repeat-x;
-	text-align:center;
-	font-weight:normal;
 	position:absolute;
+	height:32px;
+	top:0px;
+	width:120px;
+	background-repeat:repeat-x;
+	text-align:center;	
+	background-image:url(/images/themes/iphone/newheader.jpg);
 }
 #header h1{	
 	display:none;
 }
 #search {
-	text-align:right;
+	text-align:left;
 	font-size:20px;
-	background-color:#7c90ad;
+	left:120px;
+	width:200px;
 	position:absolute;
-	right:0px;
+	height:32px;
 	top:0px;
-	width:100%;
-	height:30px;
-	padding:5px;
-	background-image:url(/images/themes/iphone/graygrade.jpg);
+	background-image:url(/images/themes/iphone/newheader.jpg);
+	background-position-x:-120px;
 }
+
 #search input[type=submit] {
-	margin: 3px auto;
-	border-width: 0px 14px 0px 14px;
-	color: #000;
-	background:none;
-	text-shadow: #fff 0px 1px 1px;	
-	padding-top:3px;
-	height:25px;
-	width:90px;
-	-webkit-border-image: url(/images/themes/iphone/whiteButton.png) 0 14 0 14;
+	position:absolute;
+	right:-12px;
+	height:32px;
+	width:15px;
+	background-image:url(/images/themes/iphone/searcharrow.png);
+	background-repeat:no-repeat;
+	background-color:transparent;
+	border:0px;
+	color:transparent;
 }
-#search input[type=text] {
-	width:150px;
+#search input[type=text] {	
+	width:173px;
 	height:15px;
 	position:absolute;
-	top:9px;
-	left:70px;
+	top:5px;
+	left:3px;
 }
+
 #account {
 	display:none;
 }
@@ -79,11 +77,10 @@ a {
 	text-align:right;
 	position:absolute;
 	list-style:none;
-	top:40px;
+	top:0px;
 	left:0px;
 	height:28px;
-	background-color:#7c90ad;
-	background-image:url(/images/themes/iphone/bluegrade-30.jpg);
+	background-color:transparent;
 	padding:0;
 	margin:0;
 	float:left;
@@ -99,15 +96,45 @@ a {
 }
 ul#navigation li.discussions a{
 	position:absolute;
-	left:5px;
+	left:8px;
 	margin: 3px auto;
 	color: #fff;
 	text-decoration:none;
 	font-weight:bold;
-	top:1px;
-	text-shadow: #000 0px 1px 1px;	 
-	border-width: 0px 5px 0px 12px;
-	-webkit-border-image: url(/images/themes/iphone/leftButton.png) 0 5 0 12;
+	top:5px;
+	width:21px;
+	height:15px;
+	background-image:url(/images/themes/iphone/discussionicon.png);
+	background-repeat:no-repeat;
+	color:transparent;
+}
+ul#navigation li.messages a{
+	position:absolute;
+	left:83px;
+	margin: 3px auto;
+	color: #fff;
+	text-decoration:none;
+	font-weight:bold;
+	top:3px;
+	width:24px;
+	height:17px;
+	background-image:url(/images/themes/iphone/messageicon.png);
+	background-repeat:no-repeat;
+	color:transparent;
+}
+ul#navigation li.new_messages a{
+	position:absolute;
+	left:83px;
+	margin: 3px auto;
+	color: #fff;
+	text-decoration:none;
+	font-weight:bold;
+	top:3px;
+	width:24px;
+	height:17px;
+	background-image:url(/images/themes/iphone/messageicon.png);
+	background-repeat:no-repeat;
+	color:transparent;
 }
 ul#navigation li.categories {
 	display:none;
@@ -117,34 +144,29 @@ ul#navigation li.users {
 }
 ul#navigation li.participated a{
 	position:absolute;
-	right:5px;
-	color:#FFF;
-	text-decoration:none;
-	margin: 3px auto;
-	font-weight:bold;
-	top:1px;
-	border-width: 0px 12px 0px 5px;
-	color: #fff;
-	text-shadow: #000 0px 1px 1px;
-	-webkit-border-image: url(/images/themes/iphone/rightButton.png) 0 12 0 5;
-}
-ul#navigation li.messages a{
-	position:absolute;
-	right:105px;
-	color:#FFF;
-	text-decoration:none;
-	margin: 3px auto;
-	font-weight:bold;
-	top:1px;
-	border-width: 0px 12px 0px 5px;
-	color: #fff;
-	text-shadow: #000 0px 1px 1px;
-	-webkit-border-image: url(/images/themes/iphone/rightButton.png) 0 12 0 5;
+	left:0px;
+	color:#000;
+	top:32px;
+	font-size:12px;
+	text-align:left;
+	background-color:#dadada;
+	height:12px;
+	padding:3px;
+	padding-left:8px;
+	overflow:ellipses;
+	width:20px;
 }
 #content {
-	position:absolute;
+	position:relative;
 	width:100%;
-	top:65px;
+	top:32px;
+}
+.notice {
+	background-color:#FC9;
+	font-size:10px;
+	text-align:center;
+	padding-top:5px;
+	padding-bottom:5px;
 }
 .functions {
 	position:absolute;
@@ -152,49 +174,60 @@ ul#navigation li.messages a{
 	color:#FFF;
 	top:10px;
 }
+.edit {
+		display:none;
+}
 .create {
-	margin: 3px auto;
-	border-width: 0px 14px 0px 14px;
 	color: #000;
 	position:absolute;
-	text-shadow: #fff 0px 1px 1px;
-	-webkit-border-image: url(/images/themes/iphone/whiteButton.png) 0 14 0 14;
 	text-decoration:none;
 	overflow:hidden;
 	padding-top:2px;
-	height:22px;
-	width:25px;
-	top:-68px;
-	left:5px;
+	height:16px;
+	width:15px;
+	top:-36px;
+	left:48px;
 	line-height:20px;
+	background-image:url(/images/themes/iphone/addthread.png);
+	background-repeat:no-repeat;
+	color:transparent;
+}
+#edit {
+	position:absolute;
+	left:0px;
+	color:#000;
+	top:32px;
+	font-size:12px;
+	text-align:left;
+	background-color:#dadada;
+	height:12px;
+	padding:3px;
+	padding-left:8px;
+	overflow:ellipses;
+	width:20px;
+
 }
 .section a{
 	display:none;
 }
 
 .pagination {
-	font-size:12px;
-	width:314px;
-	text-align:center;
-	position:absolute;
-	left:0px;
-	top:2px;
-	overflow:hidden;
-	height:20px;
-	background-color:#dadada;
-	border-bottom:#666666 1px solid;
+	font-size:14px;
 	padding:3px;
-	padding-top:5px;
-	line-height:20px;
+	width:314px;
+	height:35px;
+	text-align:center;
+	left:31px;
+	background-color:#dadada;
+	display:block;	
 }
 .pagination a {
 	color:#333333;
-	padding-right:3px;
-	padding-left:3px;
+	text-decoration:none;
 }
 table.discussions {
 	position:inherit;
-	top:28px;
+	top:0px;
 	width:100%;
 	font-size:12px;
 	padding:0px;
@@ -251,7 +284,12 @@ table.discussions td {
 div.posts {
 	background-color:#FFFFFF;
 	border-top:1px solid #666;
+	width:320px;
 }
+div.posts a{
+	text-decoration:none;
+}
+
 h2.section{
 	display:none;
 }
@@ -306,6 +344,7 @@ cite {
 	list-style:none;
 	padding:0;
 	margin:0;
+	
 	}
 #compose-toolbar li {
 	display:inline;
@@ -315,11 +354,14 @@ cite {
 	font-size:12px;
 	color:#333333;
 	float:left;
+	text-decoration:none;
 }
 #compose-body {
 	width:100%;
 }
-
+#search_mode {
+	display:none;
+}
 #reply-tabs {
 	list-style:none;
 	padding:0;
@@ -337,7 +379,7 @@ cite {
 	float:left;
 }
 #replyText {
-	width:90%;
+	width:300px;
 	padding:10px;
 }
 .post_distance {
@@ -347,7 +389,7 @@ cite {
 	font-style:italic;
 }
 .bottomlinks {
-	width:100%;
+	width:320px;
 	height:22px;
 	background-color:#7c90ad;
 	background-image:url(/images/themes/iphone/bluegrade-30.jpg);
