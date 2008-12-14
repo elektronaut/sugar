@@ -36,6 +36,13 @@ class MessagesController < ApplicationController
         end
         @message = @current_user.sent_messages.create(params[:message])
         @message.reload
+		if @message.recipient.notify_on_message?
+			begin
+				Notifications.deliver_new_message(@message, last_user_conversation_page_url(:username => @message.sender.username, :anchor => "message-#{@message.id}"))
+			rescue
+				logger.error "Message to #{@message.recipient.full_email} could not be sent."
+			end
+		end
         flash[:notice] = "Your message was sent"
         redirect_to last_user_conversation_page_url(:username => @message.recipient.username, :anchor => "message-#{@message.id}")
     end

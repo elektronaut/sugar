@@ -37,4 +37,15 @@ class Notifications < ActionMailer::Base
 		@recipients = user.full_email
     end
 
+	def new_message(message, url)
+		default_options
+		if message.subject?
+			@subject = "Message from #{message.sender.username}: #{message.subject}"
+		else
+			@subject = "Message from #{message.sender.username}"
+		end
+		@body       = {:message => message, :url => url}
+		@recipients = message.recipient.full_email
+	end
+
 end
