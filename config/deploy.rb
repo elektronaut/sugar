@@ -1,4 +1,4 @@
-require 'mongrel_cluster/recipes'
+#require 'mongrel_cluster/recipes'
 
 set :application, "b3s"
 set :repository,  "http://svn.elektronaut.no/svn/b3s/trunk"
@@ -27,7 +27,7 @@ set :deploy_to, "/var/www/#{application}"
 # your SCM below:
 # set :scm, :subversion
 
-set :mongrel_conf, "#{deploy_to}/#{current_dir}/config/mongrel_cluster.yml"
+#set :mongrel_conf, "#{deploy_to}/#{current_dir}/config/mongrel_cluster.yml"
 #set :flush_cache, true
 
 desc "Create shared directories"
@@ -78,6 +78,11 @@ namespace :deploy do
         end
 
     end
+
+	desc "Restart Application"
+	task :restart, :roles => :app do
+		run "touch #{current_path}/tmp/restart.txt"
+	end
 end
 
 after "deploy:setup", :create_shared_dirs
