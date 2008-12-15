@@ -20,16 +20,10 @@
 	<%= javascript_include_tag 'livepipe/textarea' %>
 	<%= javascript_include_tag 'livepipe/window' %>
 
-	<% if @iphone %>
-		<meta name="viewport" content="width = 320" />
-		<meta name="viewport" content="initial-scale=1" />
-		<%= stylesheet_link_tag 'iphone/screen' %>
+	<% if @current_user.stylesheet_url? %>
+		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else %>
-		<% if @current_user.stylesheet_url? %>
-			<%= stylesheet_link_tag @current_user.stylesheet_url %>
-		<% else %>
-			<%= stylesheet_link_tag 'default/screen' %>
-		<% end %>
+		<%= stylesheet_link_tag 'default/screen' %>
 	<% end %>
 	<link rel="icon" type="image/gif" href="/images/favicon.gif" />
 </head>
@@ -64,6 +58,9 @@
 			<div class="notice"><%= flash[:notice] %></div>
 		<% end %>
 		<%= yield %>
+		<% if @iphone_user_agent %><div class="iphone_link">
+			<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
+		</div><% end %>
 	</div>
 </body>
 </html>

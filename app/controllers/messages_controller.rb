@@ -4,14 +4,17 @@ class MessagesController < ApplicationController
 
     def update_read_status
         if @messages && @messages.length > 0
-            @messages.each{ |m| m.update_attribute(:read, true) if !m.read? && m.recipient == @current_user }
+			@messages.each{ |m| m.update_attribute(:read, true) if !m.read? && m.recipient == @current_user }
         end
     end
     protected    :update_read_status
     after_filter :update_read_status, :only => [:index, :conversations]
 
     def index
-        @messages = @current_user.paginated_messages(:page => params[:page])
+		respond_to do |format|
+			format.html   { @messages = @current_user.paginated_messages(:page => params[:page]) }
+			format.iphone { @users = @current_user.conversation_partners }
+		end
     end
     
     def outbox

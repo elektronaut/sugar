@@ -650,6 +650,11 @@ div.messages .message a.reply, div.messages .message a.reply:visited {
 	padding:         0 3px;
 }
 
+.iphone_link {
+	font-size: 15px;
+	margin-top: 15px;
+	font-weight: bold;
+}
 
 .compose_new_message {
 	margin-top: 10px;
@@ -657,3 +662,4 @@ div.messages .message a.reply, div.messages .message a.reply:visited {
 .compose_new_message h3 {
 	margin-bottom: 10px;
 }
+

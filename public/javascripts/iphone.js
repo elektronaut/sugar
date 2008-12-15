@@ -5,6 +5,13 @@ Event.observe(window, 'load', function() {
 		setTimeout(scrollTo, 100, 0, 1);
 	}
 	
+	// Make the search mode selection box work
+	Event.observe($('search_mode_posts'), 'change', function(e) {
+		Event.element(e).parentNode.action = Event.element(e).value;
+	});
+	Event.observe($('search_mode_titles'), 'change', function(e) {
+		Event.element(e).parentNode.action = Event.element(e).value;
+	});
 
 });
 
@@ -19,3 +26,7 @@ function checkWindowOrientation() {
 setTimeout(checkWindowOrientation, 0);
 checkTimer = setInterval(checkWindowOrientation, 300);
 
+function toggleNavigation() {
+	Effect.toggle('navigation', 'slide', { duration: 0.2, scaleContent: false });
+	//Effect.SlideDown('navigation', { duration: 1.0, scaleContent: false });
+}

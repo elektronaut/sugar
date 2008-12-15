@@ -1,0 +1,40 @@
+<%
+	# Options
+	discussion    ||= false
+	functions     ||= false
+	permalink     ||= false
+	post_distance ||= false
+	title         ||= false
+
+	previous_post = nil
+-%>
+<div class="posts">
+	<% posts.each do |post| %>
+		<% if title %>
+		<div class="discussion">
+			<h2>
+				<% if post.discussion.labels? %>
+					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
+				<% end %>
+				<%= link_to h(post.discussion.title), last_discussion_page_path(post.discussion) %>
+			</h2>
+		</div>
+		<% end %>
+		<% if post_distance && previous_post && (post.created_at - previous_post.created_at) >= 12.hours %>
+			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
+		<% end %>
+		<div class="post" id="post-<%= post.id %>">
+			<div class="post_info">
+				<a name="post-<%= post.id %>" class="anchor"></a>
+				<span class="username"><%= profile_link(post.user) %></span>
+				<span class="date">
+					<%= formatted_time post.created_at %><% if post.edited? %>, edited <%= formatted_time post.edited_at %><% end %>
+				</span>
+			</div>
+			<div class="body">
+				<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
+			</div>
+		</div>
+		<% previous_post = post -%>
+	<% end %>
+</div>

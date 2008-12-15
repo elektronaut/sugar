@@ -26,15 +26,17 @@ class ApplicationController < ActionController::Base
             @section = :discussions
         end
 
-        if request.host =~ /^(iphone|m)\./
-            @iphone = true
-        elsif request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/]
-            #@iphone = true
-            #request.format = :iphone
-        end
-    end
-    protected     :layout_data
-    before_filter :layout_data
+		# Detect iphone
+		@iphone_user_agent = (request.host =~ /^(iphone|m)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/])) ? true : false
+		
+		if @iphone_user_agent
+			session[:iphone_format] ||= 'iphone'
+			session[:iphone_format] = params[:iphone_format] if params[:iphone_format]
+			request.format = :iphone if session[:iphone_format] == 'iphone'
+		end
+	end
+	protected     :layout_data
+	before_filter :layout_data
 
 
     # Finds DiscussionViews for @discussion

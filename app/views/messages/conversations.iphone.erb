@@ -1,0 +1,38 @@
+<% 
+	add_body_class "messages"
+	@page_title = "Conversation: #{@user.username}"
+	last_subject = nil
+%>
+
+<% if @messages && @messages.length > 0 %>
+	<div class="messages">
+		<% @messages.each do |message| -%>
+		<a class="anchor" name="message-<%= message.id %>"></a>
+		<div class="message_date"><%= formatted_time message.created_at %></div>
+		<div class="message <%= "new_message" if message.recipient == @current_user && !message.read? %> <%= (@current_user == message.sender) ? "message_out" : "message_in" %>">
+			<div class="t"></div>
+			<div class="body">
+				<% if message.subject? && message.subject != last_subject %>
+					<h3><%= message.subject %></h3>
+					<% last_subject = message.subject -%>
+				<% end %>
+				<%= message.body_html %>
+			</div>
+			<div class="b"><div></div></div>
+		</div>
+		<% end -%>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+<% end %>
+
+<% form_for(@new_message, :html => { :class => 'compose_new_message' }) do |f| %>
+	<a name="new" class="anchor" /></a>
+	<%= f.hidden_field(:recipient_id) %>
+	<div class="reply">
+		<p>
+			<label>Reply</label>
+			<%= f.text_area(:body, :id => 'compose-body') %>
+		</p>
+		<p><%= submit_tag "Send" %></p>
+	</div>
+<% end %>

@@ -1,5 +1,9 @@
 @import url(../reset.css);
 
+strong {
+	font-weight: bold;
+}
+
 body {
     margin: 0;
     font-family: Helvetica;
@@ -21,6 +25,18 @@ body[orient="landscape"] {
 	background: #111 url(/images/themes/iphone2/header.gif);
 	height: 45px;
 }
+#header #navigationToggle {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+#header #navigationToggle a, #header #navigationToggle a a:visited {
+	display: block;
+	height: 45px;
+	width: 40px;
+	background: transparent url(/images/themes/iphone2/header_navigation.gif);
+}
+
 #header h1.logo {
 	width: 167px;
 	height: 45px;
@@ -32,7 +48,7 @@ body[orient="landscape"] {
     overflow: hidden;
 	padding-top: 11px;
     padding-left: 15px;
-    width: 300px;
+    width: 260px;
     font-size: 17px;
     font-weight: bold;
     text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
@@ -41,10 +57,31 @@ body[orient="landscape"] {
     color: #FFFFFF;
 }
 body[orient="landscape"] #header h1.page_title {
-    width: 460px;
+    width: 420px;
 }
 #header h1.page_title .site_name {
 	color: #dd8;
+}
+
+#navigation {
+	border-top: 1px solid #aaa;
+	background: #ddd;
+	padding-top: 5px;
+}
+#navigation .search .query {
+	width: 211px;
+}
+body[orient="landscape"] #navigation .search .query {
+	width: 300px;
+}
+
+#navigation li {
+	padding: 3px 15px;
+	border-bottom: 1px solid #ccc;
+	font-size: 17px;
+}
+#navigation li a {
+	color: #531;
 }
 
 #notice {
@@ -56,10 +93,9 @@ body[orient="landscape"] #header h1.page_title {
 }
 
 #footer {
-	padding: 0 10px;
+	padding: 0 15px 10px 15px;
 	color: #555;
-	font-size: 11px;
-	margin-top: 10px;
+	font-size: 13px;
 }
 #footer .separator {
 	color: #aaa;
@@ -71,7 +107,7 @@ body[orient="landscape"] #header h1.page_title {
 	margin: 0 20px 20px 20px;
 }
 .login_box p {
-	floaat: left;
+	float: left;
 	margin-right: 15px;
 }
 .login_box input.text {
@@ -114,8 +150,12 @@ label {
 
 .content {
 	background: #fff url(/images/themes/iphone2/contentbg.gif) repeat-x;
-	padding: 25px 0;
+	padding: 25px 0 10px 0;
 	min-height: 285px;
+}
+
+.page_content {
+	padding: 0 15px;
 }
 
 a, a:visited {
@@ -139,22 +179,22 @@ a:hover {
 }
 
 
-.discussions {
+.discussions, .conversations, .categories {
 	margin-top: -20px;
 }
-.discussions .discussion {
+.discussion, .conversation, .category {
 	padding: 5px 15px;
 	border-bottom: 1px solid #ddd;
 	color: #555;
 }
-.discussions .discussion .new_posts_count {
+.discussion .new_posts_count {
 	float: right;
 	color:           #c76700;
 	font-size: 11px;
 	letter-spacing: -0.05em;
 	padding-top: 4px;
 }
-.discussions .discussion h2 {
+.discussion h2, .conversation h2, .category h2 {
 	font-weight: bold;
 	font-size: 16px;
     overflow: hidden;
@@ -162,15 +202,21 @@ a:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-body[orient="landscape"] .discussions .discussion h2 {
+.conversation h2 {
+    width: 200px;
+}
+body[orient="landscape"] .discussion h2, body[orient="landscape"] .category h2 {
     width: 415px;
 }
-.discussions .discussion h2 .labels {
+body[orient="landscape"] .conversation h2 {
+	width: 360px;
+}
+.discussion h2 .labels {
 	color: #888;
 	font-size: 11px;
 	letter-spacing: -0.05em;
 }
-.discussions .discussion p {
+.discussion p, .conversation p, .category p {
 	font-size: 10px;
     overflow: hidden;
     width: 290px;
@@ -178,17 +224,29 @@ body[orient="landscape"] .discussions .discussion h2 {
     white-space: nowrap;
 	margin: 0;
 }
-body[orient="landscape"] .discussions .discussion p {
+.conversation p {
+	font-size: 12px;
+}
+body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p {
     width: 450px;
 }
 
-.discussions .new_posts {
+.discussions .new_posts, .conversations .new_posts {
 	background:      #ffffe8;
 }
 
+.conversation .last_message_date {
+	float: right;
+	color: #888;
+	font-size: 10px;
+}
 
 .posts {
 	margin-top: -20px;
+}
+
+.posts .discussion {
+	background: #eee;
 }
 
 
@@ -239,6 +297,137 @@ body[orient="landscape"] .posts .post .body img {
 }
 body[orient="landscape"] .reply textarea {
 	width: 435px;
+}
+
+
+.messages {
+	position:relative;
+	background: #dbe2ed;
+	margin-top: -25px;
+	padding: 10px 0 5px 0;
+}
+.message_date {
+	color: #96979a;
+	text-align: center;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+.message {
+	position:relative;
+	margin: 0 0 8px 0;
+	font-size: 15px;
+	line-height: 1.2;
+	width: auto;
+}
+.message .body {
+	padding: 8px 20px 0 0;
+}
+.message .body h3 {
+	font-weight: bold;
+	margin-bottom: 6px;
+	color: #444;
+}
+.message .body a {
+	text-decoration: underline;
+}
+.message_in {
+	padding: 0px 0 0 16px;
+	margin-right: 30px;
+	margin-left: 5px;
+}
+.message_out {
+	padding: 0px 0 0 8px;
+	margin-right: 2px;
+	margin-left: 30px;
+}
+
+.message_in, .message_in .t, .message_in .b, .message_in .b div {
+	background: transparent url(/images/themes/iphone2/message_in_bg.png) no-repeat top right;
+}
+.message_out, .message_out .t, .message_out .b, .message_out .b div {
+	background: transparent url(/images/themes/iphone2/message_out_bg.png) no-repeat top right;
+}
+.message .b {
+	position: relative;
+	width: 100%;
+	background-position: bottom right;
+}
+.message .b, .message .b div {
+	height:15px;
+	font-size:1px;
+}
+.message .b div {
+	position: relative;
+	width: 22px; /* bottom corner width */
+	margin-left: -22px;
+	background-position:bottom left;
+}
+.message_out .b div {
+	margin-left: -14px;
+}
+
+.message .t {
+ /* top+left vertical slice */
+	position: absolute;
+	left: 0px; top: 0px;
+	width: 22px;
+	margin-left:-6px;
+	height: 100%;
+	background-position: top left;
+}
+.message_out .t {
+	width: 13px;
+}
+
+.user_profile {
+	margin-top: -10px;
+}
+
+table.userinfo {
+	clear: both;
+	margin-top: 20px;
+	border-top: 1px solid #ddd;
+	width: 100%;
+}
+table.userinfo th, table.userinfo td {
+	border-bottom: 1px solid #ddd;
+	padding: 3px 0;
+}
+table.userinfo th {
+	padding-right: 15px;
+}
+
+.avatar {
+	margin-left: 60px;
+	margin-bottom: 10px;
+}
+.avatar h2 {
+	font-size: 18px;
+	font-weight: bold;
+}
+.avatar img {
+	float: left;
+	margin-left: -60px;
+}
+
+.users_list {
+	margin-top: -20px;
+	width: 100%;
+}
+.users_list th {
+	font-size: 13px;
+	font-weight: bold;
+	color: #888;
+}
+.users_list th, .users_list td {
+	border-bottom: 1px solid #ddd;
+	padding: 3px 0px 3px 15px;
+}
+.users_list .last_active {
+	color: #888;
+	font-size: 11px;
+	padding-right: 15px;
 }
 
 

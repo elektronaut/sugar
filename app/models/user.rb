@@ -205,6 +205,31 @@ class User < ActiveRecord::Base
         return messages
     end
 
+	# Find conversation partners
+	def conversation_partners
+		User.find_by_sql("SELECT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC").uniq
+	end
+	
+	# Find last message with user
+	def last_message_with(user)
+		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at DESC')
+	end
+	
+	# Number of messages exchanged with user
+	def message_count_with(user)
+		Message.count(:all, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id])
+	end
+	
+	# Number of unread messages from user
+	def unread_message_count_from(user)
+		Message.count(:all, :conditions => ['sender_id = ? AND recipient_id = ? AND `read` = 0', user.id, self.id])
+	end
+	
+	# Do we have unread message from user?
+	def unread_messages_from?(user)
+		(unread_message_count_from(user) > 0) ? true : false
+	end
+
     # Find and paginate sent messages
     def paginated_conversation(options={})
         user = options[:user]
