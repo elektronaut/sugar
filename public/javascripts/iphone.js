@@ -27,6 +27,6 @@ setTimeout(checkWindowOrientation, 0);
 checkTimer = setInterval(checkWindowOrientation, 300);
 
 function toggleNavigation() {
-	Effect.toggle('navigation', 'slide', { duration: 0.2, scaleContent: false });
-	//Effect.SlideDown('navigation', { duration: 1.0, scaleContent: false });
+	//Effect.toggle('navigation', 'slide', { duration: 0.2, scaleContent: false });
+	Element.toggle('navigation');
 }

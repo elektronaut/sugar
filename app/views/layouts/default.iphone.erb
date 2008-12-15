@@ -5,10 +5,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
-	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag 'prototype' %>
+	<%= javascript_include_tag 'effects' %>
 	<%= javascript_include_tag 'iphone' %>
-	<%# stylesheet_link_tag '/javascripts/iui/iui' %>
-	<%= stylesheet_link_tag 'iphone2/screen' %>
+	<%= stylesheet_link_tag    'iphone2/screen' %>
 	<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 </head>
 <body>
@@ -16,7 +16,13 @@
 		<div id="navigationToggle">
 			<%= link_to_function "", "toggleNavigation();" %>
 		</div>
-        <h1 id="pageTitle" class="page_title"><%= @page_title ? "<span class=\"site_name\">B3S:</span> #{@page_title}" : "<span class=\"site_name\">B3S</span>" %></h1>
+        <h1 id="pageTitle" class="page_title">
+			<% if @page_title %>
+				<span class="site_name"><%= link_to "B3S:", discussions_path %></span> <%= @page_title %>
+			<% else %>
+				<span class="site_name"><%= link_to "B3S", discussions_path %></span>
+			<% end %>
+		</h1>
     </div>
 	<div id="navigation"><ul>
 		<li><%= link_to "Discussions", discussions_path %></li>

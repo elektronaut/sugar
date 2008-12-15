@@ -23,17 +23,24 @@
 		<% if post_distance && previous_post && (post.created_at - previous_post.created_at) >= 12.hours %>
 			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
 		<% end %>
-		<div class="post" id="post-<%= post.id %>">
-			<div class="post_info">
-				<a name="post-<%= post.id %>" class="anchor"></a>
-				<span class="username"><%= profile_link(post.user) %></span>
-				<span class="date">
-					<%= formatted_time post.created_at %><% if post.edited? %>, edited <%= formatted_time post.edited_at %><% end %>
-				</span>
-			</div>
-			<div class="body">
-				<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
-			</div>
+		<div class="post<%= " me_post" if post.me_post? %>" id="post-<%= post.id %>">
+			<% if post.me_post? %>
+				<div class="body">
+					<%= meify h(post.body), post.user %>
+					<span class="date">&ndash; <%= formatted_time post.created_at %></span>
+				</div>
+			<% else %>
+				<div class="post_info">
+					<a name="post-<%= post.id %>" class="anchor"></a>
+					<span class="username"><%= profile_link(post.user) %></span>
+					<span class="date">
+						<%= formatted_time post.created_at %><% if post.edited? %>, edited <%= formatted_time post.edited_at %><% end %>
+					</span>
+				</div>
+				<div class="body">
+					<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
+				</div>
+			<% end %>
 		</div>
 		<% previous_post = post -%>
 	<% end %>

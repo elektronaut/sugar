@@ -59,7 +59,7 @@ body[orient="landscape"] {
 body[orient="landscape"] #header h1.page_title {
     width: 420px;
 }
-#header h1.page_title .site_name {
+#header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
 	color: #dd8;
 }
 
@@ -82,6 +82,7 @@ body[orient="landscape"] #navigation .search .query {
 }
 #navigation li a {
 	color: #531;
+	display: block;
 }
 
 #notice {
@@ -262,7 +263,17 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 	background:      #f8f7f1;
 	color:           #84806d;
 }
-
+.posts .me_post {
+	background:      #f8f7f1;
+	color:           #220;
+}
+.posts .me_post .poster {
+	font-weight: bold;
+}
+.posts .me_post .date {
+	color:           #84806d;
+	font-size: 11px;
+}
 .posts .post .post_info {
 	color: #555;
 }
