@@ -32,7 +32,7 @@ body[orient="landscape"] {
 }
 #header #navigationToggle a, #header #navigationToggle a a:visited {
 	display: block;
-	height: 45px;
+	height: 40px;
 	width: 40px;
 	background: transparent url(/images/themes/iphone2/header_navigation.gif);
 }
@@ -158,6 +158,14 @@ label {
 .page_content {
 	padding: 0 15px;
 }
+.page_content textarea {
+	width: 275px;
+	height: 80px;
+}
+body[orient="landscape"] .page_content textarea {
+	width: 435px;
+}
+
 
 a, a:visited {
 	text-decoration: none;
@@ -282,6 +290,15 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 .posts .post .post_info .date {
 	font-size: 11px;
+}
+
+.post .functions { 
+	float: right;
+	font-size: 11px;
+	padding-top: 3px;
+}
+.post .functions a, .post .functions a:visited {
+	color: #aaa;
 }
 
 .posts .post .body {

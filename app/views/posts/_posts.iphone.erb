@@ -37,6 +37,11 @@
 						<%= formatted_time post.created_at %><% if post.edited? %>, edited <%= formatted_time post.edited_at %><% end %>
 					</span>
 				</div>
+				<% if post.editable_by?(@current_user) %>
+					<div class="functions">
+						<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %>
+					</div>
+				<% end %>
 				<div class="body">
 					<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
 				</div>
