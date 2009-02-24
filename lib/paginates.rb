@@ -2,6 +2,11 @@ module Paginates
 
     attr_reader :pages, :page, :total_count, :offset, :per_page
 
+	def self.apply(targets, options)
+        class << targets; include Paginates; end
+		targets.setup_pagination(options)
+	end
+
     def setup_pagination(options={})
         @total_count = options[:total_count]
         @page        = options[:page]
