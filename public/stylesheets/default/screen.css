@@ -129,6 +129,7 @@ table.list td {
 	font-size:       1.5em;
 	float:           right;
 	font-weight:     bold;
+	color:           #888;
 }
 
 div.errors {
@@ -541,6 +542,10 @@ table.discussions tr.closed td.name a:hover {
 #reply-tabs li a.active {
 	background:      #9f0000;
 	color:           #fff;
+}
+
+#replyImage {
+	display: none;
 }
 
 

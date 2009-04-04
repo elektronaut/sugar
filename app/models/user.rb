@@ -273,6 +273,16 @@ class User < ActiveRecord::Base
         (self[:user_admin] || admin?)
     end
 
+	def following?(discussion)
+		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+		(relationship && relationship.following?) ? true : false
+	end
+
+	def favorite?(discussion)
+		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+		(relationship && relationship.favorite?) ? true : false
+	end
+
     # Generates a Gravatar URL
     def gravatar_url(options={})
         options[:size] ||= 24

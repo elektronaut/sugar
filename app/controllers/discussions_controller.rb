@@ -106,21 +106,21 @@ class DiscussionsController < ApplicationController
 
 	def follow
 		DiscussionRelationship.define(@current_user, @discussion, :following => true)
-		# TODO: fix
+		redirect_to discussion_url(@discussion, :page => params[:page])
 	end
     
 	def unfollow
 		DiscussionRelationship.define(@current_user, @discussion, :following => false)
-		# TODO: fix
+		redirect_to discussion_url(@discussion, :page => params[:page])
 	end
 
 	def favorite
 		DiscussionRelationship.define(@current_user, @discussion, :favorite => true)
-		# TODO: fix
+		redirect_to discussion_url(@discussion, :page => params[:page])
 	end
     
-	def unfollow
+	def unfavorite
 		DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
-		# TODO: fix
+		redirect_to discussion_url(@discussion, :page => params[:page])
 	end
 end

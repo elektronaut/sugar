@@ -5,20 +5,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
-	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "jquery" %>
+	<script type="text/javascript">jQuery.noConflict();</script>
+	<%= javascript_include_tag "jquery.libraries" %>
 	<%= javascript_include_tag 'swfobject' %>
-
-	<%= javascript_include_tag 'livepipe/livepipe' %>
-	<%= javascript_include_tag 'livepipe/cookie' %>
-	<%# javascript_include_tag 'livepipe/contextmenu' %>
-	<%= javascript_include_tag 'livepipe/event_behavior' %>
-	<%= javascript_include_tag 'livepipe/hotkey' %>
-
-	<%= javascript_include_tag 'livepipe/selection' %>
-	<%= javascript_include_tag 'livepipe/selectmultiple' %>
-	<%= javascript_include_tag 'livepipe/tabs' %>
-	<%= javascript_include_tag 'livepipe/textarea' %>
-	<%= javascript_include_tag 'livepipe/window' %>
+	<%= javascript_include_tag 'application' %>
 
 	<% if @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
@@ -42,8 +33,8 @@
 		</div>
 		<ul id="navigation">
 			<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
-			<li class="participated<%= ' current' if @section == :participated %>"><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>
-			<!--<li class="bookmarks"><%= link_to "Bookmarks" %></li>-->
+			<li class="participated<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
+			<li class="participated<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>
 			<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
 			<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", users_path %></li>
 			<% if @section != :messages && @current_user.unread_messages? -%>

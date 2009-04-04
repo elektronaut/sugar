@@ -3,7 +3,7 @@
 	max-width: 600px;
 } 
  
-#compose-toolbar {  
+.richTextToolbar {  
     position:relative;  
     list-style:none;  
     border:1px solid #d7d7d7;  
@@ -15,14 +15,14 @@
 	max-width: 600px;
 } 
  
-#compose-toolbar li {  
+.richTextToolbar li {  
     list-style:none;  
     margin:0;  
     padding:0;  
     float:left;  
 } 
  
-#compose-toolbar li a {  
+.richTextToolbar li a {  
     width:24px;  
     height:16px;  
     float:left;  
@@ -32,35 +32,22 @@
     border-right-color:#d7d7d7;  
 } 
  
-#compose-toolbar li a:hover {  
+.richTextToolbar li a:hover {  
     border-color:#900;  
 } 
  
-#compose-toolbar li span {  
+.richTextToolbar li span {  
     display:none;  
 } 
  
-#compose-toolbar li a#compose_help_button {  
-    position:absolute;  
-    top:0;  
-    right:0;  
-    border-left-color:#d7d7d7;  
-    border-right-color:#fff;  
-} 
- 
-#compose-toolbar li a#compose_help_button:hover {  
-    border-left-color:#900;  
-    border-right-color:#900;  
-} 
- 
-#compose_italics_button { background-position: 0 -119px; } 
-#compose_bold_button { background-position: 0 -102px; } 
-#compose_link_button { background-position: 0 0; } 
-#compose_image_button { background-position: 0 -170px; } 
-#compose_unordered_list_button { background-position: 0 -34px; } 
-#compose_ordered_list_button { background-position: 0 -51px; } 
-#compose_quote_button { background-position: 0 -68px; } 
-#compose_code_button { background-position: 0 -136px; } 
-#compose_help_button { background-position: 0 -153px; } 
-#compose_heading_button { background-position: 0 -85px; }
-#compose_escape_button { background-position: 0 -306px; }
+.richTextToolbar .BoldButton { background-position: 0 -102px; } 
+.richTextToolbar .ItalicsButton { background-position: 0 -119px; } 
+.richTextToolbar .LinkButton { background-position: 0 0; } 
+.richTextToolbar .ImageButton { background-position: 0 -170px; } 
+.richTextToolbar .UnorderedListButton { background-position: 0 -34px; } 
+.richTextToolbar .OrderedListButton { background-position: 0 -51px; } 
+.richTextToolbar .BlockQuoteButton { background-position: 0 -68px; } 
+.richTextToolbar .CodeButton { background-position: 0 -136px; } 
+.richTextToolbar .HelpButton { background-position: 0 -153px; } 
+.richTextToolbar .HeadingButton { background-position: 0 -85px; }
+.richTextToolbar .EscapeHTMLButton { background-position: 0 -306px; }
