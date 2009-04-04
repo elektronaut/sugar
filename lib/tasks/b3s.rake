@@ -17,6 +17,14 @@ namespace :b3s do
 	task :pack_default_theme do
 		`zip -r public/b3s_default_theme.zip public/stylesheets/default/* public/images/themes/default/*`
 	end
+	
+	desc "Pack"
+	task :pack => [:pack_default_theme] do
+		puts "Packing javascript files..."
+		`juicer merge --force public/javascripts/application.js`
+		js_files = ['jquery', 'swfobject', 'application.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
+		`cat #{js_files} > public/javascripts/all.js`
+	end
 
 	desc "Disable web"
 	task :disable_web do

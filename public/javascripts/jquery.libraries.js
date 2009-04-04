@@ -40,8 +40,8 @@ jQuery.extend({
 				(document.selection && function() {
 					e.focus();
 					var r = document.selection.createRange();
-					if (r == null) {
-						return { start: 0, end: e.value.length, length: 0 }
+					if (r === null) {
+						return { start: 0, end: e.value.length, length: 0 };
 					}
 					var re = e.createTextRange();
 					var rc = re.duplicate();

@@ -1,23 +1,27 @@
+/**
+ * @depends jquery.libraries.js
+ */
+
 /* Dead simple tabs */
 function B3STabs(controls, options) {
-	controls.tabs = new Array();
+	controls.tabs = [];
 	
 	settings = jQuery.extend({
 		showFirstTab: true
 	}, options);
 
-	controls.hideAllTabs = function() {
+	controls.hideAllTabs = function(){
 		jQuery(this.tabs).each(function(){
 			jQuery(this.tabId).hide();
 			jQuery(this).removeClass('active');
 		});
-	}
+	};
 
 	controls.showTab = function(tab) {
 		this.hideAllTabs();
 		jQuery(tab.tabId).show();
 		jQuery(tab).addClass('active');
-	}
+	};
 
 	// Set up the links
 	jQuery(controls).find('a').each(function(){
@@ -53,7 +57,7 @@ function jRichTextArea(textArea, options) {
 		settings : settings,
 		textArea : textArea,
 		listElement : false,
-		buttons : new Array(),
+		buttons : [],
 		addButton : function(name, callback, options) {
 			// Default options
 			settings = jQuery.extend({
@@ -77,19 +81,19 @@ function jRichTextArea(textArea, options) {
 				jQuery(this.listElement).insertBefore(this.textArea);
 			}
 		}
-	}
+	};
 	
 	this.textArea.selectedText = function() {
 		return jQuery(this).getSelection().text;
-	}
+	};
 	this.textArea.replaceSelection = function(replacement) {
 		return jQuery(this).replaceSelection(replacement);
-	}
+	};
 	this.textArea.wrapSelection = function() {
 		var prepend = arguments[0];
-		var append = (arguments.length > 1) ? arguments[1] : prepend
+		var append = (arguments.length > 1) ? arguments[1] : prepend;
 		return this.replaceSelection(prepend + this.selectedText() + append);
-	}
+	};
 
 	// Delegates
 	this.textArea.toolbar = this.toolbar;
@@ -120,17 +124,15 @@ var B3S = {
 				    var selection = this.textArea.selectedText();
 				    var response = prompt('Enter link URL','');  
 				    this.textArea.replaceSelection(
-						'<a href="' + (response == '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://') + '">' + 
-						(selection == '' ? "Link text" : selection) + '</a>'
-					);
+						'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://') + '">' + 
+						((selection==='') ? "Link text" : selection) + '</a>');
 				})
 				// Image tag
 				.addButton("Image", function(){
 				    var selection = this.textArea.selectedText();
-					if( selection == '') {
+					if( selection === '') {
 					    var response = prompt('Enter image URL',''); 
-					    if(response == null)  
-					        return;  
+					    if(response === null) { return; }
 						this.textArea.replaceSelection('<img src="'+response+'" alt="" />');
 					} else {
 						this.textArea.replaceSelection('<img src="'+selection+'" alt="" />');
@@ -142,8 +144,7 @@ var B3S = {
 				.addButton("Escape HTML", function(){
 				    var selection = this.textArea.selectedText();
 				    this.textArea.replaceSelection(selection.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-				})
-			;
+				});
 		});
 	},
 	init : function() {
@@ -160,7 +161,7 @@ var B3S = {
 			window.addToReply = function(string) {
 				window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 				jQuery('#compose-body').val(jQuery('#compose-body').val() + string);
-			}
+			};
 		}
 
 		// Post quoting
@@ -176,7 +177,7 @@ var B3S = {
 				var quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
 				addToReply(quotedPost);
 			}
-		}
+		};
 
 
 		// Detect Napkin
@@ -186,13 +187,13 @@ var B3S = {
 			window.uploadDrawing = function() {
 				jQuery('#napkin-submit').text("Posting, please wait...");
 				swfobject.getObjectById("napkin").uploadDrawing();
-			}
+			};
 			window.onDrawingUploaded = function(url) {
 				window.location.reload();
-			}
+			};
 
 			// Make napkins clickable
-			jQuery('.drawing img').each(function() {
+			jQuery('.drawing img').each(function(){
 				jQuery(this).click(function() {
 					if(swfobject.getObjectById("napkin")) {
 						swfobject.getObjectById("napkin").setBackground(this.src);
@@ -202,8 +203,8 @@ var B3S = {
 		}
 
 	}
-}
+};
 
 jQuery(document).ready(function() {
-	B3S.init() 
+	B3S.init();
 });
