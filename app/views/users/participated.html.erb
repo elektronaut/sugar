@@ -14,5 +14,8 @@
 </h2>
 
 
-<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+<%= render :partial => 'discussions/table', :locals => {
+	:discussions    => @discussions,
+	:no_discussions => "You haven't participated in any discussions yet!"
+} %>
 

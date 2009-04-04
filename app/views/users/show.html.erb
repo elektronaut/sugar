@@ -91,8 +91,12 @@
 		<td><%= link_to @user.discussions_count, discussions_user_path(:id => @user.username) %></td>
 	</tr>
 	<tr>
+		<th>Participated discussions</th>
+		<td><%= link_to @user.participated_count, participated_user_path(:id => @user.username) %></td>
+	</tr>
+	<tr>
 		<th>Post count</th>
-		<td><%= link_to @user.posts_count, participated_user_path(:id => @user.username) %></td>
+		<td><%= @user.posts_count %></td>
 	</tr>
 	<tr>
 		<th>Users invited</th>

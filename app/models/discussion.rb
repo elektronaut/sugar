@@ -11,6 +11,7 @@ class Discussion < ActiveRecord::Base
     belongs_to :category
     has_many   :posts, :order => ['created_at ASC']
     has_many   :discussion_views, :dependent => :destroy
+    has_many   :discussion_relationships, :dependent => :destroy
 
     validates_presence_of :category_id, :title
     validates_presence_of :body, :on => :create
@@ -31,9 +32,11 @@ class Discussion < ActiveRecord::Base
         end
     end
     
-    # Set trusted status on all posts on save
-    after_save do |discussion|
-        Post.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
+    # Set trusted status on all posts and relationships on save
+	after_save do |discussion|
+		[Post, DiscussionRelationship].each do |c|
+			c.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
+		end
     end
 
     # Class methods
@@ -109,12 +112,12 @@ class Discussion < ActiveRecord::Base
             end
             
             # Math is awesome
-            limit = options[:limit] || DISCUSSIONS_PER_PAGE
+            limit     = options[:limit] || DISCUSSIONS_PER_PAGE
             num_pages = (discussions_count.to_f/limit).ceil
-            page  = (options[:page] || 1).to_i
-            page = 1 if page < 1
-            page = num_pages if page > num_pages
-            offset = limit * (page - 1)
+            page      = (options[:page] || 1).to_i
+            page      = 1 if page < 1
+            page      = num_pages if page > num_pages
+            offset    = limit * (page - 1)
 
             # Grab the discussions
             discussions = self.find(

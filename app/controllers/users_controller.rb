@@ -30,11 +30,12 @@ class UsersController < ApplicationController
         find_discussion_views
     end
     
-    def participated
-        @section = :participated if @user == @current_user
-        @discussions = @user.paginated_participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
-        find_discussion_views
-    end
+	def participated
+		@section = :participated if @user == @current_user
+		#@discussions = @user.paginated_participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+		@discussions = @user.participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+		find_discussion_views
+	end
 
     def new
         unless @current_user.user_admin?

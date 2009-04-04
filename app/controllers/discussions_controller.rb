@@ -14,7 +14,7 @@ class DiscussionsController < ApplicationController
         end
     end
     protected     :load_discussion
-    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy]
+    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite]
 
     def verify_editable
         unless @discussion.editable_by?(@current_user)
@@ -91,5 +91,36 @@ class DiscussionsController < ApplicationController
             render :action => :edit
         end
     end
+
+	def favorites
+		@section = :favorites
+		@discussions = @current_user.favorite_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+		find_discussion_views
+	end
+	
+	def following
+		@section = :following
+		@discussions = @current_user.following_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+		find_discussion_views
+	end
+
+	def follow
+		DiscussionRelationship.define(@current_user, @discussion, :following => true)
+		# TODO: fix
+	end
     
+	def unfollow
+		DiscussionRelationship.define(@current_user, @discussion, :following => false)
+		# TODO: fix
+	end
+
+	def favorite
+		DiscussionRelationship.define(@current_user, @discussion, :favorite => true)
+		# TODO: fix
+	end
+    
+	def unfollow
+		DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
+		# TODO: fix
+	end
 end

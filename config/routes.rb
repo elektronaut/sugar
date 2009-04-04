@@ -69,7 +69,8 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :discussions,
-        :collection => { :participated => :any, :bookmarked => :any, :search => :any }
+        :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any},
+		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any}
     ) do |discussions|
         discussions.resources(
             :posts,

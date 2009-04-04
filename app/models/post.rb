@@ -20,6 +20,7 @@ class Post < ActiveRecord::Base
     # Automatically update the discussion with last poster info
     after_create do |post|
         post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
+		DiscussionRelationship.define(post.user, post.discussion, :participated => true)
     end
     
     before_save do |post|
