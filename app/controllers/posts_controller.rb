@@ -45,6 +45,7 @@ class PostsController < ApplicationController
         end
         start_time = Time.now
         @posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
+		@posts_search_mode = true
         @search_time = Time.now - start_time
     end
 

@@ -36,13 +36,13 @@ ActionController::Routing::Routes.draw do |map|
     # See how all your routes lay out with "rake routes"
     
     # Discussions search
-    map.connect '/search/:query/:page', :controller => 'discussions', :action => 'search'
-    map.connect '/search/:query', :controller => 'discussions', :action => 'search'
-    map.search '/search', :controller => 'discussions', :action => 'search'
+	#map.connect '/search/:query/:page', :controller => 'discussions', :action => 'search'
+	map.connect '/search/*query', :controller => 'discussions', :action => 'search'
+	map.search  '/search', :controller => 'discussions', :action => 'search'
 
     # Posts search
-    map.connect '/posts/search/:query/:page', :controller => 'posts', :action => 'search'
-    map.connect '/posts/search/:query', :controller => 'posts', :action => 'search'
+	map.connect '/posts/search/:query/:page', :controller => 'posts', :action => 'search'
+    map.connect '/posts/search/*query', :controller => 'posts', :action => 'search'
     map.search_posts '/posts/search', :controller => 'posts', :action => 'search'
 
     map.resources(

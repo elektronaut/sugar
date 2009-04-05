@@ -4,7 +4,6 @@ class Discussion < ActiveRecord::Base
 
 	UNSAFE_ATTRIBUTES    = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
 	DISCUSSIONS_PER_PAGE = 30
-	FULLTEXT_SEARCH      = false
 
 	belongs_to :poster, :class_name => 'User', :counter_cache => true
 	belongs_to :last_poster, :class_name => 'User'
@@ -39,6 +38,16 @@ class Discussion < ActiveRecord::Base
 		end
 	end
 
+	define_index do
+		indexes title
+		has     poster_id, last_poster_id, category_id
+		has     trusted
+		has     closed
+		has     sticky
+		has     created_at, updated_at, last_post_at
+		set_property :delta => true
+	end
+
 	# Class methods
 	class << self
 
@@ -52,50 +61,26 @@ class Discussion < ActiveRecord::Base
 		end
 
 		def search_paginated(options={})
-			if FULLTEXT_SEARCH
-				if options[:trusted]
-					conditions = ["match(title) AGAINST (?)", options[:query]]
-				else
-					conditions = ["match(title) AGAINST (?) AND trusted = 0", options[:query]]
-				end
-			else
-				words = options[:query].split(/\s+/)
-				if options[:trusted]
-					conditions = [ words.map{"title LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
-				else
-					conditions = [ "trusted = 0 AND " + words.map{"title LIKE ?"}.join(' AND '), words.map{|w| "%#{w}%"} ].flatten
-				end
-			end
-
-			discussions_count = Discussion.count(:conditions => conditions)
-			return nil if discussions_count == 0
-
-			# Math is awesome
-			limit = options[:limit] || DISCUSSIONS_PER_PAGE
-			num_pages = (discussions_count.to_f/limit).ceil
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
-			page = num_pages if page > num_pages
-			offset = limit * (page - 1)
-			offset = 0 if offset < 0
+			search_options = {
+				:order     => :last_post_at, 
+				:sort_mode => :desc, 
+				:per_page  => DISCUSSIONS_PER_PAGE,
+				:page      => page,
+				:include   => [:poster, :last_poster, :category]
+			}
+			unless options[:trusted]
+				search_options[:conditions] = {:trusted => false}
+			end
 
-			# Grab the discussions
-			discussions = self.find(
-				:all, 
-				:conditions => conditions, 
-				:limit      => limit, 
-				:offset     => offset, 
-				:order      => 'sticky DESC, last_post_at DESC',
-				:include    => [:poster, :last_poster, :category]
-			)
+			discussions = Discussion.search(options[:query], search_options)
 
-			# Inject the pagination methods on the collection
 			class << discussions; include Paginates; end
-			discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
+			discussions.setup_pagination(:total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE)
 
 			return discussions
 		end
-
 
 		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
 		# The collection is extended with the Paginates module, which provides pagination info.

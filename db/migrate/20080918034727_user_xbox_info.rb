@@ -1,4 +1,4 @@
-class XboxInfo < ActiveRecord::Migration
+class UserXboxInfo < ActiveRecord::Migration
     def self.up
         add_column :users, :xbox_xml,          :text
         add_column :users, :xbox_info,         :string

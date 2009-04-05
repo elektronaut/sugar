@@ -26,7 +26,10 @@
 		<div id="search">
 			<% form_tag search_path, :method => 'get' do %>
 				<%= text_field_tag 'q', @search_query, :class => :query %>
-				<%= select_tag 'search_mode', options_for_select([['in titles', search_path],['in posts', search_posts_path]]) %>
+				<%= select_tag 'search_mode', options_for_select(
+					[['in titles', search_path],['in posts', search_posts_path]],
+					(@posts_search_mode) ? search_posts_path : search_path
+				) %>
 				<%= submit_tag "Search", :name => nil %>
 			<% end %>
 		</div>

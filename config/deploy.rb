@@ -37,6 +37,7 @@ task :create_shared_dirs, :roles => [:web,:app] do
 	run "mkdir #{deploy_to}/#{shared_dir}/sockets"
 	run "mkdir #{deploy_to}/#{shared_dir}/sessions"
 	run "mkdir #{deploy_to}/#{shared_dir}/index"
+	run "mkdir #{deploy_to}/#{shared_dir}/sphinx"
 	run "touch #{deploy_to}/#{shared_dir}/database.yml"
 end
 
@@ -58,6 +59,7 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
 	run "ln -s #{deploy_to}/#{shared_dir}/session_key #{deploy_to}/#{current_dir}/config/session_key"
 	run "ln -s #{deploy_to}/#{shared_dir}/doodles #{deploy_to}/#{current_dir}/public/doodles"
+	run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
 end
 
 namespace :deploy do
