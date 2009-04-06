@@ -26,8 +26,8 @@
     </div>
 	<div id="navigation"><ul>
 		<li><%= link_to "Discussions", discussions_path %></li>
-		<li><%= link_to "Participated", participated_user_path(:id => @current_user.username) %></li>
-		<!--<li class="bookmarks"><%= link_to "Bookmarks" %></li>-->
+		<li><%= link_to "Following", following_discussions_path %></li>
+		<li><%= link_to "Favorites", favorites_discussions_path %></li>
 		<li><%= link_to "Categories", categories_path %></li>
 		<li><%= link_to "Users", users_path %></li>
 		<% if @current_user.unread_messages? -%>
