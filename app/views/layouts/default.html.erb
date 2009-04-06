@@ -5,6 +5,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
+	<% if @current_user.stylesheet_url? -%>
+		<%= stylesheet_link_tag @current_user.stylesheet_url %>
+	<% else -%>
+		<%= stylesheet_link_tag 'default/screen' %>
+	<% end -%>
 	<% if RAILS_ENV == 'production' -%>
 		<%= javascript_include_tag "all" %>
 	<% else -%>
@@ -12,11 +17,6 @@
 		<%= javascript_include_tag "jquery.libraries" %>
 		<%= javascript_include_tag 'swfobject' %>
 		<%= javascript_include_tag 'application' %>
-	<% end -%>
-	<% if @current_user.stylesheet_url? -%>
-		<%= stylesheet_link_tag @current_user.stylesheet_url %>
-	<% else -%>
-		<%= stylesheet_link_tag 'default/screen' %>
 	<% end -%>
 	<link rel="icon" type="image/gif" href="/images/favicon.gif" />
 </head>
