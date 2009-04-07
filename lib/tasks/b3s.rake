@@ -61,5 +61,15 @@ namespace :b3s do
 			end
 		end
 	end
+	
+	desc "Remove empty discussions"
+	task :remove_empty_discussions => :environment do
+		empty_discussions = Discussion.find(:all, :conditions => ['posts_count = 0']
+		puts "#{empty_discussions.length} empty discussions found"
+		users = empty_discussions.map{|d| d.poster}.compact.uniq
+		puts "#{users.length} unique posters"
+		empty_discussions.each do |d|
+		end
+	end
 
 end
