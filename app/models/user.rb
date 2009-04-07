@@ -294,4 +294,14 @@ class User < ActiveRecord::Base
         @gravatar_url[options[:size]]
     end
     
+	def fix_counter_cache!
+		if posts_count != posts.count
+			logger.warn "counter_cache error detected on User ##{self.id} (posts)"
+			User.update_counters(self.id, :posts_count => (posts.count - posts_count) )
+		end
+		if discussions_count != discussions.count
+			logger.warn "counter_cache error detected on User ##{self.id} (discussions)"
+			User.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
+		end
+	end
 end

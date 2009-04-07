@@ -36,4 +36,10 @@ class Category < ActiveRecord::Base
         (Discussion.work_safe_urls) ? self.id : "#{self.id};" + slug
     end
     
+	def fix_counter_cache!
+		if discussions_count != discussions.count
+			logger.warn "counter_cache error detected on Category ##{self.id} (discussions)"
+			Category.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
+		end
+	end
 end

@@ -5,12 +5,12 @@ class Discussion < ActiveRecord::Base
 	UNSAFE_ATTRIBUTES    = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
 	DISCUSSIONS_PER_PAGE = 30
 
-	belongs_to :poster, :class_name => 'User', :counter_cache => true
+	belongs_to :poster,      :class_name => 'User', :counter_cache => true
 	belongs_to :last_poster, :class_name => 'User'
 	belongs_to :category
-	has_many   :posts, :order => ['created_at ASC']
-	has_many   :discussion_views, :dependent => :destroy
-	has_many   :discussion_relationships, :dependent => :destroy
+	has_many   :posts, :order => ['created_at ASC'], :dependent => :destroy
+	has_many   :discussion_views,                    :dependent => :destroy
+	has_many   :discussion_relationships,            :dependent => :destroy
 
 	validates_presence_of :category_id, :title
 	validates_presence_of :body, :on => :create
