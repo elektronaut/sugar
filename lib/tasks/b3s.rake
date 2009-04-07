@@ -68,6 +68,8 @@ namespace :b3s do
 		puts "#{empty_discussions.length} empty discussions found"
 		users = empty_discussions.map{|d| d.poster}.compact.uniq
 		puts "#{users.length} unique posters"
+		categories = empty_discussions.map{|d| d.category}.compact.uniq
+		puts "#{categories.length} unique categories"
 		empty_discussions.each do |d|
 		end
 	end
