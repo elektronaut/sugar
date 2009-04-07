@@ -18,6 +18,9 @@ class Discussion < ActiveRecord::Base
 	# Virtual attribute for the body of the first post. 
 	# Makes forms a bit easier, no nested models.
 	attr_accessor :body
+	
+	# Flag for trusted status, which will update after save if it has been changed.
+	attr_accessor :update_trusted
 
 	validate do |discussion|
 		discussion.trusted = discussion.category.trusted if discussion.category
@@ -31,10 +34,16 @@ class Discussion < ActiveRecord::Base
 		end
 	end
 
+	before_save do |discussion|
+		discussion.update_trusted = true if discussion.trusted_changed?
+	end
+
 	# Set trusted status on all posts and relationships on save
 	after_save do |discussion|
-		[Post, DiscussionRelationship].each do |c|
-			c.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
+		if discussion.update_trusted
+			[Post, DiscussionRelationship].each do |c|
+				c.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
+			end
 		end
 	end
 
