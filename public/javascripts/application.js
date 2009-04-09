@@ -101,6 +101,31 @@ function jRichTextArea(textArea, options) {
 }
 
 var B3S = {
+	loadNewPosts : function(){
+		var newPosts    = $('#newPosts').get()[0];
+		var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
+
+		$(newPosts).html('Loading&hellip;');
+
+		$.get(newPostsURL, function(data){
+			if($('.posts #ajaxPosts').length < 1) {
+				$('.posts').append('<div id="ajaxPosts"></div>');
+			}
+
+			$('.posts #ajaxPosts').append(data);
+			$('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
+
+			$('.shown_items_count').text(newPosts.serverPostsCount);
+		});
+		
+		// Reset the notifier
+		document.title = newPosts.documentTitle;
+		newPosts.postsCount = newPosts.serverPostsCount;
+		newPosts.shown = false;
+		$(newPosts).fadeOut();
+
+		return false;
+	},
 	applyTabs : function(){
 		jQuery('#reply-tabs').each(function(){
 			window.replyTabs = new B3STabs(this, {showFirstTab: false});
@@ -201,7 +226,41 @@ var B3S = {
 				});
 			});
 		}
-
+		
+		// Refresh posts count
+		if( $('.total_items_count').length > 0 && $('#newPosts').length > 0){
+			var newPosts = $('#newPosts').get()[0];
+			newPosts.postsCount = $('.total_items_count').eq(0).text();
+			newPosts.postsCountUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js";
+			newPosts.documentTitle = document.title;
+			newPosts.refreshInterval = setInterval(function(){
+				$.getJSON(newPosts.postsCountUrl, function(json) {
+					if(json.posts_count > newPosts.postsCount){
+						var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
+						$('.total_items_count').text(json.posts_count);
+						if(newPostsSinceRefresh > 50) {
+							$(newPosts).html('<p>New posts have been made since this page was loaded, reload the page to see them.</p>');
+							document.title = "[New posts] "+newPosts.documentTitle;
+							clearInterval(newPosts.refreshInterval);
+						} else {
+							var newPostsString = "A new post has";
+							if(newPostsSinceRefresh == 1) {
+								document.title = "["+newPostsSinceRefresh+" new post] "+newPosts.documentTitle;
+							} else {
+								newPostsString = newPostsSinceRefresh+" new posts have";
+								document.title = "["+newPostsSinceRefresh+" new posts] "+newPosts.documentTitle;
+							}
+							$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="B3S.loadNewPosts(); return false;">click here to load</a>.</p>');
+							newPosts.serverPostsCount = json.posts_count;
+						}
+						if(!newPosts.shown) {
+							$(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
+							newPosts.shown = true;
+						}
+					}
+				});
+			}, 5000);
+		}
 	}
 };
 

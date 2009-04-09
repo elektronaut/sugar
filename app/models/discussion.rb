@@ -141,6 +141,16 @@ class Discussion < ActiveRecord::Base
 		end
 
 	end
+	
+	def posts_since_index(offset)
+		Post.find(:all, 
+			:conditions => ['discussion_id = ?', self.id], 
+			:order      => 'id ASC',
+			:limit      => 200,
+			:offset     => offset,
+			:include    => [:user]
+		)
+	end
 
 	def last_page(per_page=50)
 		(self.posts_count.to_f/per_page).ceil

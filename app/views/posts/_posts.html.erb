@@ -1,15 +1,18 @@
 <%
 	# Options
-	discussion    ||= false
-	functions     ||= false
-	permalink     ||= false
-	post_distance ||= false
-	title         ||= false
+	discussion         ||= false
+	functions          ||= false
+	permalink          ||= false
+	post_distance      ||= false
+	title              ||= false
+	new_posts_notifier ||= false
+	no_pagination      ||= false
+	no_container       ||= false
 
 	previous_post = nil
 -%>
-<%= render :partial => 'components/pagination', :locals => { :p => posts } %>
-<div class="posts">
+<%= render(:partial => 'components/pagination', :locals => { :p => posts }) unless no_pagination %>
+<% unless no_container %><div class="posts"><% end %>
 <% posts.each do |post| %>
 	<% if post_distance && previous_post %>
 		<% if (post.created_at - previous_post.created_at) >= 12.hours %>
@@ -70,5 +73,6 @@
 	</div>
 	<% previous_post = post %>
 <% end %>
-</div>
-<%= render :partial => 'components/pagination', :locals => { :p => posts } %>
+<% unless no_container %></div><% end %>
+<% if new_posts_notifier %><div id="newPosts"></div><% end %>	
+<%= render(:partial => 'components/pagination', :locals => { :p => posts }) unless no_pagination %>

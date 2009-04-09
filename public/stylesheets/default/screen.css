@@ -376,6 +376,9 @@ table.discussions tr.closed td.name a:hover {
 	border-top:      1px solid #E2DCBF;
 	margin-bottom:   20px;
 }
+#ajaxPosts {
+	border-top:      3px solid #E2DCBF;
+}
 /* Small block between posts that say "2 days later..." */
 .posts .post_distance {
 	border-bottom:   1px solid #E2DCBF;
@@ -488,6 +491,19 @@ table.discussions tr.closed td.name a:hover {
 }
 .post .body a:hover {
 	color:           #001d32;
+}
+
+.new_posts_since_refresh {
+	font-size:       1.3em;
+	border-bottom:   1px solid #E2DCBF;
+	padding:         5px 0 5px 45px;
+	background:      #f8f7f1;
+	color:           #484030;
+	margin-top:      -1.3em;
+	margin-bottom:   1.3em;
+}
+.new_posts_since_refresh p {
+	margin: 0;
 }
 
 .bottomlinks {

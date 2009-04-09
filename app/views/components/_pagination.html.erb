@@ -17,5 +17,5 @@
 
 		<%= link_to_if p.next_page,     "Next &gt;", { :page => p.next_page } %>
 	</div><% end %>
-	<%= p.offset + 1 %> to <%= p.offset + p.length %> of <%= p.total_count %>
+	<%= p.offset + 1 %> to <span class="shown_items_count"><%= p.offset + p.length %></span> of <span class="total_items_count"><%= p.total_count %></span>
 </div>

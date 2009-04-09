@@ -26,10 +26,10 @@
 <h2 class="section">
 	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-	<%= link_to h(@discussion.title), discussion_path(@discussion) %>
+	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 </h2>
 
-<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true} %>
+<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true, :new_posts_notifier => true} %>
 
 <a name="bottom"></a>
 <div class="bottomlinks">

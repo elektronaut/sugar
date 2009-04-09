@@ -2,8 +2,15 @@ require 'digest/sha1'
 
 class PostsController < ApplicationController
 
-    requires_authentication
-    protect_from_forgery :except => [:doodle]
+    requires_authentication :except => [:count]
+    protect_from_forgery    :except => [:doodle]
+
+	# Disable sessions and filters for the posts count action, and cache it
+	session       :disabled => true,             :only   => [:count]
+	before_filter :authenticate_session,         :except => [:count]
+	before_filter :layout_data,                  :except => [:count]
+	after_filter  :store_session_authentication, :except => [:count]
+	caches_page   :count
 
     def load_discussion
         @discussion = Discussion.find(params[:discussion_id]) rescue nil
@@ -34,6 +41,25 @@ class PostsController < ApplicationController
     protected     :verify_editable
     before_filter :verify_editable, :only => [:edit, :update, :destroy]
 
+
+	def count
+		@count = @discussion.posts_count
+		respond_to do |format|
+			format.js do 
+				render :text => {:posts_count => @count}.to_json
+			end
+		end
+	end
+	
+	def since
+        unless @discussion.viewable_by?(@current_user)
+			render :text => '', :status => 403 and return
+        end
+		@posts = @discussion.posts_since_index(params[:index])
+		if request.xhr?
+			render :layout => false
+		end
+	end
 
     def search
         if params[:q]
