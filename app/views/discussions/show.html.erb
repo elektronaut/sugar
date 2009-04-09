@@ -35,8 +35,8 @@
 <div class="bottomlinks">
 	<%= link_to "Back to discussions", discussions_path %>,
 	<% if @current_user.following?(@discussion) -%>
-		<%= link_to "Back to followed", following_discussions_path %>
-	<% else -%>
+		<%= link_to "Back to followed", following_discussions_path %>,
+	<% end %>
 	<%= link_to "Top of page", "#top" %>
 </div>
 
