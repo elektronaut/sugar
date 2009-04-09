@@ -56,6 +56,12 @@ class PostsController < ApplicationController
 			render :text => '', :status => 403 and return
         end
 		@posts = @discussion.posts_since_index(params[:index])
+        last_index = (params[:index].to_i + @posts.length)
+        if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
+            discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id) if discussion_view.post_index < last_index
+        else
+            DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => @posts.last.id)
+        end
 		if request.xhr?
 			render :layout => false
 		end
