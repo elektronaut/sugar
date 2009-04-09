@@ -250,7 +250,11 @@ var B3S = {
 								newPostsString = newPostsSinceRefresh+" new posts have";
 								document.title = "["+newPostsSinceRefresh+" new posts] "+newPosts.documentTitle;
 							}
-							$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="B3S.loadNewPosts(); return false;">click here to load</a>.</p>');
+							if($('body.last_page').length > 0){
+								$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="B3S.loadNewPosts(); return false;">click here to load</a>.</p>');
+							} else {
+								$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, move on to the last page to see them.</p>');
+							}
 							newPosts.serverPostsCount = json.posts_count;
 						}
 						if(!newPosts.shown) {
