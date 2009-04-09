@@ -111,7 +111,8 @@ class DiscussionsController < ApplicationController
     
 	def unfollow
 		DiscussionRelationship.define(@current_user, @discussion, :following => false)
-		redirect_to discussion_url(@discussion, :page => params[:page])
+		#redirect_to discussion_url(@discussion, :page => params[:page])
+		redirect_to discussions_url
 	end
 
 	def favorite
