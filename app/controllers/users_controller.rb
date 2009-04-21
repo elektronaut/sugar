@@ -21,6 +21,10 @@ class UsersController < ApplicationController
     def xboxlive
         @users = XboxInfo.valid_users
     end
+
+	def twitter
+		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND twitter IS NOT NULL AND twitter != ""')
+	end
     
     def show
     end

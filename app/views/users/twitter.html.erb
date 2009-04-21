@@ -1,0 +1,21 @@
+<% 
+	add_body_class "users"
+	@page_title = "Twitter Users" 
+%>
+
+<h2 class="section">
+	<%= link_to "Users", users_path %> &raquo; <%= link_to "Twitter Users", twitter_users_path %>
+</h2>
+
+<table class="list users_list">
+	<tr>
+		<th>Username</th>
+		<th>Twitter Account</th>
+		<th>Location</th>
+	</tr>
+	<% @users.each do |user| %><tr>
+		<td class="username"><%= profile_link(user) %></td>
+		<td class="twitter_username"><%= link_to "@#{user.twitter}", "http://twitter.com/#{user.twitter}" %></td>
+		<td class="location"><%= h user.location %></td>
+	</tr><% end %>
+</table>

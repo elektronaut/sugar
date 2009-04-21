@@ -48,7 +48,7 @@ ActionController::Routing::Routes.draw do |map|
     map.resources(
         :users,
         :member => {:participated => :get, :discussions => :get},
-        :collection => { :login => :any, :logout => :any, :forgot_password => :any, :xboxlive => :get }
+        :collection => { :login => :any, :logout => :any, :forgot_password => :any, :xboxlive => :get, :twitter => :get }
     )
     map.connect '/users/:id/participated/:page', :controller => 'users', :action => 'participated'
 
