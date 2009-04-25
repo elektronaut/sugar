@@ -30,7 +30,7 @@ class XboxInfo < ActiveRecord::Base
         
         # Last updated timestamp
         def last_updated
-            self.find(:first, :conditions => ['valid_xml = 1'], :order => 'updated_at ASC').updated_at
+            self.find(:first, :conditions => ['valid_xml = 1'], :order => 'updated_at ASC').updated_at rescue nil
         end
         
     end

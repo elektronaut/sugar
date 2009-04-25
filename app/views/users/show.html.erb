@@ -25,7 +25,13 @@
 		<% end %>
 		<%= profile_link(@user, @user.username, :class => 'username') %>
 		<% if @user.realname? || @user.location? %>
-			<br /><%= [@user.realname, @user.location].join(" <small>from</small> ") %>
+			<br />
+			<% if @user.realname? %>
+				<%= h @user.realname %>
+			<% end %>
+			<% if @user.location? %>
+				<small>from</small> <%= h @user.location %>
+			<% end %>
 		<% end %>
 		<% if @user.website? %>
 			<br /><%= pretty_link(@user.website) %>
@@ -39,9 +45,15 @@
 	<% end %>
 
 	<p class="posts_and_discussions">
-		<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
-		<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
-		<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% if @user.discussions_count > 0 %>
+			<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
+		<% end %>
+		<% if @user.participated_count > 0 %>
+			<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
+		<% end %>
+		<% if @user.posts_count > 0 %>
+			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% end %>
 		<% unless @user == @current_user %>
 			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
 		<% end %>
@@ -95,6 +107,13 @@
 	<% if @user.last_fm? %><div class="social lastfm">
 		<h3>Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></h3>
 		<a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1"><img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" /></a>
+	</div><% end %>
+
+	<% if @user.invitees.count > 0 %><div class="invitees">
+		<h3><%= @user.username %> has invited <%= @user.invitees.count %> users:</h3>
+		<ul><% @user.invitees.each do |invitee| %>
+			<li><%= profile_link(invitee) %> (joined <%= formatted_time invitee.created_at %>)</li>
+		<% end %></ul>
 	</div><% end %>
 
 </div>

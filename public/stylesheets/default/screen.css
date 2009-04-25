@@ -685,16 +685,16 @@ table.discussions tr.closed td.name a:hover {
 .user_profile .posts_and_discussions a {
 	font-weight:         bold;
 }
-.user_profile .social {
+.user_profile .social, .user_profile .invitees {
 	border-top:          1px solid #E2DCBF;
 	padding-top:         1em;
 	margin-bottom:       1em;
 }
-.user_profile .social h3 {
+.user_profile .social h3, .user_profile .invitees h3 {
 	font-weight:         normal;
 	margin-bottom:       4px;
 }
-.user_profile .social h3 a {
+.user_profile .social h3 a, .user_profile .invitees h3 a {
 	font-weight:         bold;
 }
 .user_profile .twitter li {
@@ -710,6 +710,10 @@ table.discussions tr.closed td.name a:hover {
 .user_profile .xboxlive p .avatar {
 	float:               left;
 	margin-left:         -76px;
+}
+.user_profile .invitees li a {
+	font-weight:         bold;
+	font-size:           1.3em;
 }
 
 .user_profile #userPosts {

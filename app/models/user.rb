@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 	has_many   :discussions, :foreign_key => 'poster_id'
     has_many   :posts
     belongs_to :inviter, :class_name => 'User'
-    has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id'
+    has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'
     has_many   :discussion_views, :dependent => :destroy
     has_many   :discussion_relationships, :dependent => :destroy
     has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
@@ -105,6 +105,7 @@ class User < ActiveRecord::Base
         page = 1 if page < 1
         page = num_pages if page > num_pages
         offset = limit * (page - 1)
+		offset = 0 if offset < 0
 
         # Grab the discussions
         discussions = Discussion.find(
@@ -132,6 +133,7 @@ class User < ActiveRecord::Base
         page = 1 if page < 1
         page = num_pages if page > num_pages
         offset = limit * (page - 1)
+		offset = 0 if offset < 0
 
 		posts = Post.find(
             :all, 
@@ -261,6 +263,13 @@ class User < ActiveRecord::Base
         
         return messages
     end
+
+	def posts_per_day(prec=2)
+		ppd = posts_count.to_f / ((Time.now - self.created_at).to_f / 60 / 60 / 24)
+		number = ppd.to_s.split(".")[0]
+	    scale = ppd.to_s.split(".")[1][0..(prec-1)]
+	    "#{number}.#{scale}".to_f
+	end
 
     def generate_password!
         new_password = ''

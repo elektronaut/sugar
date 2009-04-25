@@ -35,6 +35,8 @@
 				user.discussions_count.to_s + "/" + user.posts_count.to_s
 			when :posts_count
 				user.posts_count
+			when :posts_per_day
+				user.posts_per_day
 			when :status
 				if user.banned?
 					'<span class="banned">Banned!</span>'
