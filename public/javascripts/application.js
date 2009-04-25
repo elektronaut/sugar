@@ -35,7 +35,20 @@ function B3STabs(controls, options) {
 	});
 
 	controls.hideAllTabs();
-	if(settings.showFirstTab){
+	
+	var anchorTab = false;
+	var tabShown  = false;
+	if(document.location.toString().match(/(#[\w\d\-_]+)$/)){
+		anchorTab = document.location.toString().match(/(#[\w\d\-_]+)$/)[1];
+		for(a = 0; a < controls.tabs.length; a++){
+			if(controls.tabs[a].tabId == anchorTab){
+				controls.showTab(controls.tabs[a]);
+				tabShown = true;
+			}
+		}
+	}
+	
+	if(!tabShown && settings.showFirstTab){
 		controls.showTab(controls.tabs[0]);
 	}
 
@@ -132,6 +145,9 @@ var B3S = {
 			if(jQuery('body.last_page').length > 0) {
 				window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 			}
+		});
+		jQuery('#profile-tabs').each(function(){
+			window.profileTabs = new B3STabs(this, {showFirstTab: true});
 		});
 	},
 	applyRichText : function() {
@@ -265,6 +281,24 @@ var B3S = {
 				});
 			}, 5000);
 		}
+		
+		// Load Flickr photos
+		$('#flickrProfileURL').each(function(){
+			var flickrUserID = this.href.split("/");
+			flickrUserID = flickrUserID[flickrUserID.length - 1]
+			jQuery(function(){   
+				$('#flickrPhotos').hide();
+			  	jQuery("#flickrPhotos").flickr({
+			    	api_key: "016918184821edf95505d9acd61e64c4",
+					type: 'search',
+					user_id: flickrUserID,
+					per_page: 15,
+					callback: function(list){
+						$('#flickrPhotos').show();
+					}
+				}); 
+			});	
+		});
 	}
 };
 

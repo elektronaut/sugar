@@ -3,105 +3,103 @@
 	@page_title = "#{@user.username}" 
 %>
 
+<div class="functions">
+	<% if @user == @current_user %>
+		<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
+	<% elsif @current_user.admin? %>
+		<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
+	<% end %>
+	<% unless @user == @current_user %>
+		<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
+	<% end %>
+</div>
+
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
 
-<p>
-	<% if @user.avatar_url? %>
-		<%= image_tag @user.avatar_url, :alt => @user.username, :size => '32x32' %>
-	<% else %>
-		<%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username, :size => '80x80' %>
+<div id="userinfo">
+	<p class="avatar_and_name clearfix">
+		<% if @user.avatar_url? %>
+			<%= image_tag @user.avatar_url, :alt => @user.username, :size => '32x32', :class => :avatar %>
+		<% else %>
+			<%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username, :size => '32x32', :class => :avatar %>
+		<% end %>
+		<%= profile_link(@user, @user.username, :class => 'username') %>
+		<% if @user.realname? || @user.location? %>
+			<br /><%= [@user.realname, @user.location].join(" <small>from</small> ") %>
+		<% end %>
+		<% if @user.website? %>
+			<br /><%= pretty_link(@user.website) %>
+		<% end %>
+	</p>
+
+	<% if @user.description? %>
+	<div class="description">
+		<%= format_post @user.description %>
+	</div>
 	<% end %>
-</p>
 
-<% if @user == @current_user %>
-	<p>This is your profile, you can <%= link_to "edit it", edit_user_path(:id => @user.username) %>.</p>
-<% elsif @current_user.admin? %>
-	<p>You are an admin, and you can <%= link_to "edit #{possessive(@user.username)} profile", edit_user_path(:id => @user.username) %>.</p>
-<% end %>
+	<p class="posts_and_discussions">
+		<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
+		<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
+		<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% unless @user == @current_user %>
+			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
+		<% end %>
+	</p>
+	
+	<p>
+		<% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
+		<strong>Member since</strong>: <%= formatted_time(@user.created_at) %><br />
+		<% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
+		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %><br />
+		<% if @user.banned? %>
+			<%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
+		<% elsif @user.admin? %>
+			<%= @user.username %> is an <span class="admin"><strong>admin</strong></span>.<br />
+		<% end %>
+	</p>
 
-<% unless @user == @current_user %>
-	<p><%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>.</p>
-<% end %>
+	<p>
+		<% if @user.gtalk? %><strong>Google Talk</strong>: <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br /><% end %>
+		<% if @user.msn? %><strong>MSN Messenger</strong>: <%= @user.msn %><br /><% end %>
+		<% if @user.aim? %><strong>AIM</strong>: <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br /><% end %>
+	</p>
 
-<% if @user.banned? %>
-	<p class="banned"><%= @user.username %> is banned!</p>
-<% end %>
+	<% if @user.twitter? %><div class="social twitter">
+		<h3>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", :class => 'username' %></h3>
+		<div id="profileTweets">
+			<ul id="twitter_update_list"></ul>
+		</div>
+		<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+		<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/<%= @user.twitter %>.json?callback=twitterCallback2&amp;count=5"></script>
+	</div><% end %>
 
-<table class="userinfo">
-	<% if @user.realname? %><tr>
-		<th>Real name</th>
-		<td><%= h @user.realname %></td>
-	</tr><% end %>
-	<% if @user.location? %><tr>
-		<th>Location</th>
-		<td><%= h @user.location %></td>
-	</tr><% end %>
-	<% if @user.birthday? %><tr>
-		<th>Birthday</th>
-		<td><%= @user.birthday.strftime("%b %d") %></td>
-	</tr><% end %>
-	<% if @user.website? %><tr>
-		<th>Web site</th>
-		<td><%= link_to @user.website, @user.website %></td>
-	</tr><% end %>
+	<% if @user.gamertag? %><div class="social xboxlive">
+		<h3>Xbox Live: <%= link_to "#{@user.gamertag}", "http://live.xbox.com/member/#{@user.gamertag}" %></h3>
+		<% if @user.xbox_info && @user.xbox_info.valid_xml? %>
+			<p class="clearfix">
+				<%= image_tag @user.xbox_info.tile_url, :class => 'avatar', :size => '64x64' %>
+				<strong>Gamerscore</strong>: <%= @user.xbox_info.gamerscore %><br />
+				<strong>Zone</strong>: <%= @user.xbox_info.zone %><br />
+				<strong>Reputation</strong>: <%= @user.xbox_info.reputation.to_i %><br />
+				<%= @user.xbox_info.info %>
+			</p>
+		<% end %>
+	</div><% end %>
 
-	<% if @user.msn? %><tr>
-		<th>MSN Messenger</th>
-		<td><%= h @user.msn %></td>
-	</tr><% end %>
-	<% if @user.gtalk? %><tr>
-		<th>Google Talk</th>
-		<td><%= h @user.gtalk %></td>
-	</tr><% end %>
-	<% if @user.aim? %><tr>
-		<th>AIM</th>
-		<td><%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}&message=Hello%20from%20B3S" %></td>
-	</tr><% end %>
-	<% if @user.twitter? %><tr>
-		<th>Twitter</th>
-		<td><%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %></td>
-	</tr><% end %>
-	<% if @user.flickr? %><tr>
-		<th>Flickr</th>
-		<td><%= link_to @user.flickr, "http://www.flickr.com/photos/#{@user.flickr}/" %></td>
-	</tr><% end %>
-	<% if @user.last_fm? %><tr>
-		<th>Last.fm</th>
-		<td><%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></td>
-	</tr><% end %>
+	<% if @user.flickr? %><div class="social flickr clearfix">
+		<h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", :id => 'flickrProfileURL' %></h3>
+		<div id="flickrPhotos"></div>
+	</div><% end %>
 
-	<% if @user.gamertag? %><tr>
-		<th>Xbox Live</th>
-		<td><%= h @user.gamertag %></td>
-	</tr><% end %>
-	<% if @user.inviter %><tr>
-		<th>Invited by</th>
-		<td><%= profile_link(@user.inviter) %></td>
-	</tr><% end %>
-	<tr>
-		<th>Member since</th>
-		<td><%= formatted_time(@user.created_at) %></td>
-	</tr>
-	<tr>
-		<th>Last active</th>
-		<td><%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %></td>
-	</tr>
-	<tr>
-		<th>Discussions created</th>
-		<td><%= link_to @user.discussions_count, discussions_user_path(:id => @user.username) %></td>
-	</tr>
-	<tr>
-		<th>Participated discussions</th>
-		<td><%= link_to @user.participated_count, participated_user_path(:id => @user.username) %></td>
-	</tr>
-	<tr>
-		<th>Post count</th>
-		<td><%= @user.posts_count %></td>
-	</tr>
-	<tr>
-		<th>Users invited</th>
-		<td><%= @user.invitees.count %></td>
-	</tr>
-</table>
+	<% if @user.last_fm? %><div class="social lastfm">
+		<h3>Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></h3>
+		<a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1"><img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" /></a>
+	</div><% end %>
 
-<%= format_post @user.description if @user.description? %>
+</div>
+<div id="userPosts">
+	<% if @posts %>
+		<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+	<% end %>
+</div>

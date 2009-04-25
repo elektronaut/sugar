@@ -14,6 +14,12 @@ module ApplicationHelper
         string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
     end
     
+	def pretty_link(url)
+		url = "http://"+url unless url =~ /^(f|ht)tps?:\/\//
+		url = url.gsub(/\/$/, '') if url =~ /^(f|ht)tps?:\/\/[\w\d\-\.]*\/$/
+		link_to url.gsub(/^(f|ht)tps?:\/\//, ''), url
+	end
+
 	# Generate HTML for a field, with label and optionally description and errors.
 	#
 	# The options are:
@@ -76,7 +82,7 @@ module ApplicationHelper
     def profile_link(user, link_text=nil, options={})
         if user
             link_text ||= user.username
-            link_to link_text, user_path(:id => user.username), {:title => "#{possessive(user.username)} profile"}.merge(options)
+            link_to link_text, user_profile_path(:id => user.username), {:title => "#{possessive(user.username)} profile"}.merge(options)
         else
             "Unknown"
         end
@@ -138,5 +144,6 @@ module ApplicationHelper
             end
         end
     end
+
     
 end

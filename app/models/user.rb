@@ -68,8 +68,8 @@ class User < ActiveRecord::Base
             return safe_params
 	    end
 	    
-	    def find_new(since=14.days.ago)
-	        self.find(:all, :conditions => ['activated = 1 AND banned = 0 AND created_at > ?', since], :order => 'username ASC')
+	    def find_new(limit=25)
+	        self.find(:all, :conditions => ['activated = 1 AND banned = 0'], :order => 'created_at DESC', :limit => limit)
         end
         
         def refresh_xbox!(force=false)
@@ -122,6 +122,32 @@ class User < ActiveRecord::Base
         
         return discussions
     end
+
+	def paginated_posts(options)
+		num_posts = options[:trusted] ? self.posts.count(:all) : self.posts.count(:all, :conditions => ['trusted = 0'])
+
+        limit = options[:limit] || Post::POSTS_PER_PAGE
+        num_pages = (num_posts.to_f/limit).ceil
+        page  = (options[:page] || 1).to_i
+        page = 1 if page < 1
+        page = num_pages if page > num_pages
+        offset = limit * (page - 1)
+
+		posts = Post.find(
+            :all, 
+            :conditions => ['user_id = ?', self.id], 
+            :limit      => limit, 
+            :offset     => offset, 
+            :order      => 'id DESC',
+			:include    => [:user, :discussion]
+        )
+
+        # Inject the pagination methods on the collection
+        class << posts; include Paginates; end
+        posts.setup_pagination(:total_count => num_posts, :page => page, :per_page => limit)
+        
+        return posts
+	end
 
     # Find and paginate messages
     def paginated_messages(options={})

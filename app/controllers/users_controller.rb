@@ -10,13 +10,27 @@ class UsersController < ApplicationController
         end
     end
     protected     :load_user
-    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions]
+    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts]
     
     def index
-        @online_users = User.find_online
-        @new_users = User.find_new
-        @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1')
+        @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
     end
+
+    def banned
+        @users  = User.find(:all, :order => 'username ASC', :conditions => 'banned = 1')
+    end
+
+	def recently_joined
+		@users = User.find_new
+	end
+
+	def online
+		@users = User.find_online
+	end
+	
+	def admins
+        @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND (admin = 1 OR user_admin = 1 OR moderator = 1)')
+	end
     
     def xboxlive
         @users = XboxInfo.valid_users
@@ -25,8 +39,17 @@ class UsersController < ApplicationController
 	def twitter
 		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND twitter IS NOT NULL AND twitter != ""')
 	end
+	
+	def top_posters
+        @users  = User.find(:all, :order => 'posts_count DESC', :conditions => 'activated = 1 AND banned = 0', :limit => 50)
+	end
     
     def show
+		respond_to do |format|
+			format.html do
+				@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?, :limit => 15)
+			end
+		end
     end
     
     def discussions
@@ -39,6 +62,10 @@ class UsersController < ApplicationController
 		#@discussions = @user.paginated_participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
 		@discussions = @user.participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
 		find_discussion_views
+	end
+	
+	def posts
+		@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?)
 	end
 
     def new

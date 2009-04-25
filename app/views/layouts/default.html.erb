@@ -38,10 +38,10 @@
 		</div>
 		<ul id="navigation">
 			<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
-			<li class="participated<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
-			<li class="participated<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>
+			<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
+			<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>
 			<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
-			<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", users_path %></li>
+			<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path %></li>
 			<% if @section != :messages && @current_user.unread_messages? -%>
 				<li class="messages new_messages"><%= link_to (@current_user.unread_messages_count > 1) ? "#{@current_user.unread_messages_count} New messages!" : "1 New message!", messages_path %></li>
 			<% else -%>

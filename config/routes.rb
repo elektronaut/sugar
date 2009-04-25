@@ -47,10 +47,28 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :users,
-        :member => {:participated => :get, :discussions => :get},
-        :collection => { :login => :any, :logout => :any, :forgot_password => :any, :xboxlive => :get, :twitter => :get }
+        :member => {:participated => :get, :discussions => :get, :posts => :get},
+        :collection => { 
+			:login => :any, 
+			:logout => :any, 
+			:forgot_password => :any, 
+			:xboxlive => :get, 
+			:twitter => :get, 
+			:online => :get, 
+			:recently_joined => :get,
+			:admins => :get,
+			:top_posters => :get,
+			:banned => :any
+		}
     )
-    map.connect '/users/:id/participated/:page', :controller => 'users', :action => 'participated'
+	map.edit_user         '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
+	map.user_profile      '/users/profile/:id',                    :controller => 'users', :action => 'show'
+    map.discussions_user  '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
+    map.connect           '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
+    map.participated_user '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
+    map.connect           '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
+    map.posts_user        '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
+    map.paged_user_posts  '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
 
     map.resources(
         :categories
@@ -61,10 +79,10 @@ ActionController::Routing::Routes.draw do |map|
         :messages,
         :collection => { :outbox => :any, :conversations => :any }
     )
-    map.paged_messages '/messages/inbox/:page', :controller => 'messages', :action => 'index'
-    map.paged_sent_messages '/messages/outbox/:page', :controller => 'messages', :action => 'outbox'
-    map.user_conversation '/messages/conversations/:username', :controller => 'messages', :action => 'conversations'
-    map.paged_user_conversation '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
+    map.paged_messages              '/messages/inbox/:page', :controller => 'messages', :action => 'index'
+    map.paged_sent_messages         '/messages/outbox/:page', :controller => 'messages', :action => 'outbox'
+    map.user_conversation           '/messages/conversations/:username', :controller => 'messages', :action => 'conversations'
+    map.paged_user_conversation     '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
     map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
 
     map.resources(
@@ -78,7 +96,7 @@ ActionController::Routing::Routes.draw do |map|
             :collection => { :doodle => :post, :count => :any, :since => :any }
         )
     end
-	map.connect '/discussions/:discussion_id/posts/since/:index', :controller => 'posts', :action => 'since'
+	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts', :action => 'since'
     map.paged_discussions '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
     map.paged_discussion  '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
 

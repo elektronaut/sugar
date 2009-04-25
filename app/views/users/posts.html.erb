@@ -1,0 +1,16 @@
+<% 
+	add_body_class "posts"
+	@page_title = "#{@user.username}'s Posts" 
+%>
+
+<h2 class="section">
+	<%= link_to "Users", users_path %> &raquo; 
+	<%= profile_link(@user) %> &raquo;
+	<%= link_to "Posts", posts_user_path(:id => @user.username) %>
+</h2>
+
+<% if @posts %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
+<% else %>
+	<p>No posts were found.</p>
+<% end %>
