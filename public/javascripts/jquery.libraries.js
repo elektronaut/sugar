@@ -119,57 +119,59 @@ var s = {
     
     // SIZE NOTES: photos must allow viewing original size for size 'o' to function, if not, default size is shown
   };
-  if(o) $.extend(s, o);
+  if(o){$.extend(s, o);}
   return this.each(function(){
     // create unordered list to contain flickr images
 		var list = $('<ul>').appendTo(this);
     var url = $.flickr.format(s);
 		$.getJSON(url, function(r){
-      if (r.stat != "ok"){
-        for (i in r){
-	        $('<li>').text(i+': '+ r[i]).appendTo(list);
-        };
+      if(r.stat != "ok"){
+        for (i in r) {
+			if(r[i]) {
+	        	$('<li>').text(i+': '+ r[i]).appendTo(list);
+			}
+        }
       } else {
-        if (s.type == 'photoset') r.photos = r.photoset;
+        if (s.type == 'photoset') {r.photos = r.photoset;}
         // add hooks to access paging data
         list.append('<input type="hidden" value="'+r.photos.page+'" />');
         list.append('<input type="hidden" value="'+r.photos.pages+'" />');
         list.append('<input type="hidden" value="'+r.photos.perpage+'" />');
         list.append('<input type="hidden" value="'+r.photos.total+'" />');
-        for (var i=0; i<r.photos.photo.length; i++){
-          var photo = r.photos.photo[i];
+        for (var p = 0; p<r.photos.photo.length; p++){
+          var photo = r.photos.photo[p];
           // format thumbnail url
-          var t = 'http://farm'+photo['farm']+'.static.flickr.com/'+photo['server']+'/'+photo['id']+'_'+photo['secret']+'_'+s.thumb_size+'.jpg';
+          var t = 'http://farm'+photo.farm+'.static.flickr.com/'+photo.server+'/'+photo.id+'_'+photo.secret+'_'+s.thumb_size+'.jpg';
           //format image url
-          var h = 'http://farm'+photo['farm']+'.static.flickr.com/'+photo['server']+'/'+photo['id']+'_';
+          var h = 'http://farm'+photo.farm+'.static.flickr.com/'+photo.server+'/'+photo.id+'_';
           switch (s.size){
             case 'm':
-              h += photo['secret'] + '_m.jpg';
+              h += photo.secret + '_m.jpg';
               break;
             case 'b':
-              h += photo['secret'] + '_b.jpg';
+              h += photo.secret + '_b.jpg';
               break;
             case 'o':
-              if (photo['originalsecret'] && photo['originalformat']) {
-                h += photo['originalsecret'] + '_o.' + photo['originalformat'];
+              if (photo.originalsecret && photo.originalformat) {
+                h += photo.originalsecret + '_o.' + photo.originalformat;
               } else {
-                h += photo['secret'] + '_b.jpg';
-              };
+                h += photo.secret + '_b.jpg';
+              }
               break;
             default:
-              h += photo['secret'] + '.jpg';
-          };
-          list.append('<li><a href="'+h+'" '+s.attr+' title="'+photo['title']+'"><img src="'+t+'" alt="'+photo['title']+'" /></a></li>');
-        };
-        if (s.callback) s.callback(list);
-      };
+              h += photo.secret + '.jpg';
+          }
+          list.append('<li><a href="'+h+'" '+s.attr+' title="'+photo.title+'"><img src="'+t+'" alt="'+photo.title+'" /></a></li>');
+        }
+        if (s.callback){ s.callback(list); }
+      }
 		});
   });
 };
 // static function to format the flickr API url according to the plug-in settings 
 $.flickr = {
     format: function(s){
-        if (s.url) return s.url;
+        if (s.url) {return s.url;}
         var url = 'http://api.flickr.com/services/rest/?format=json&jsoncallback='+s.api_callback+'&api_key='+s.api_key;
         switch (s.type){
             case 'photoset':
@@ -177,16 +179,16 @@ $.flickr = {
                 break;
             case 'search':
                 url += '&method=flickr.photos.search&sort=' + s.sort;
-                if (s.user_id) url += '&user_id=' + s.user_id;
-                if (s.group_id) url += '&group_id=' + s.group_id;
-                if (s.tags) url += '&tags=' + s.tags;
-                if (s.tag_mode) url += '&tag_mode=' + s.tag_mode;
-                if (s.text) url += '&text=' + s.text;
+                if (s.user_id) { url += '&user_id=' + s.user_id; }
+                if (s.group_id) { url += '&group_id=' + s.group_id; }
+                if (s.tags) { url += '&tags=' + s.tags; }
+                if (s.tag_mode) { url += '&tag_mode=' + s.tag_mode; }
+                if (s.text) { url += '&text=' + s.text; }
                 break;
             default:
                 url += '&method=flickr.photos.getRecent';
-        };
-        if (s.size == 'o') url += '&extras=original_format';
+        }
+        if (s.size == 'o') { url += '&extras=original_format'; }
         url += '&per_page=' + s.per_page + '&page=' + s.page + s.params;
         return url;
     }

@@ -284,14 +284,14 @@ var B3S = {
 		
 		// Load Flickr photos
 		$('#flickrProfileURL').each(function(){
-			var flickrUserID = this.href.split("/");
-			flickrUserID = flickrUserID[flickrUserID.length - 1]
+			var fuid = this.href.split("/");
+			fuid = fuid[(fuid.length-1)];
 			jQuery(function(){   
 				$('#flickrPhotos').hide();
 			  	jQuery("#flickrPhotos").flickr({
 			    	api_key: "016918184821edf95505d9acd61e64c4",
 					type: 'search',
-					user_id: flickrUserID,
+					user_id: fuid,
 					per_page: 15,
 					callback: function(list){
 						$('#flickrPhotos').show();

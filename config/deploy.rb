@@ -68,15 +68,15 @@ namespace :deploy do
         desc "Present a maintenance page to visitors. Message is customizable with the REASON enviroment variable."
         task :disable, :roles => [:web, :app] do
             if reason = ENV['REASON']
-                run("cd #{deploy_to}/current; /usr/bin/rake b3s:disable_web REASON=\"#{reason}\"")
+                run("cd #{deploy_to}/current; /usr/bin/rake sugar:disable_web REASON=\"#{reason}\"")
             else
-                run("cd #{deploy_to}/current; /usr/bin/rake b3s:disable_web")
+                run("cd #{deploy_to}/current; /usr/bin/rake sugar:disable_web")
             end
         end
         
         desc "Makes the application web-accessible again."
         task :enable, :roles => [:web, :app] do
-            run("cd #{deploy_to}/current; /usr/bin/rake b3s:enable_web")
+            run("cd #{deploy_to}/current; /usr/bin/rake sugar:enable_web")
         end
 
     end
