@@ -44,7 +44,7 @@
 	</p>
 	<p>
 		<label>Message</label>
-		<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body') %>
+		<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => :rich) %>
 	</p>
 	<p><button type="submit">Send</button></p>
 <% end %>
