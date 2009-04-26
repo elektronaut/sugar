@@ -53,7 +53,7 @@ class Post < ActiveRecord::Base
 				:conditions => ['discussion_id = ?', discussion.id],
 				:limit      => limit,
 				:offset     => offset,
-				:order      => 'id ASC',
+				:order      => 'created_at ASC',
 				:include    => [:user]
 			)
 
