@@ -145,7 +145,7 @@ class Discussion < ActiveRecord::Base
 	def posts_since_index(offset)
 		Post.find(:all, 
 			:conditions => ['discussion_id = ?', self.id], 
-			:order      => 'id ASC',
+			:order      => 'created_at ASC',
 			:limit      => 200,
 			:offset     => offset,
 			:include    => [:user]
