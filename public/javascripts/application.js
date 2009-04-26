@@ -137,6 +137,8 @@ var B3S = {
 		newPosts.shown = false;
 		$(newPosts).fadeOut();
 
+		this.applyPostQuoting();
+
 		return false;
 	},
 	applyTabs : function(){
@@ -188,6 +190,12 @@ var B3S = {
 				});
 		});
 	},
+	applyPostQuoting: function() {
+		$('.quote_post').click(function(){
+			var postId = this.id.match(/-([\d]+)$/)[1];
+			window.quotePost(postId);
+		});
+	},
 	init : function() {
 		this.applyTabs();
 		this.applyRichText();
@@ -219,8 +227,9 @@ var B3S = {
 				addToReply(quotedPost);
 			}
 		};
-
-
+		
+		this.applyPostQuoting();
+		
 		// Detect Napkin
 		if(jQuery('#napkin').length > 0) {
 
