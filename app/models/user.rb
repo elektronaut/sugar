@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
             :conditions => ['user_id = ?', self.id], 
             :limit      => limit, 
             :offset     => offset, 
-            :order      => 'id DESC',
+            :order      => 'created_at DESC',
 			:include    => [:user, :discussion]
         )
 
