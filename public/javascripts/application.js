@@ -137,7 +137,7 @@ var B3S = {
 		newPosts.shown = false;
 		$(newPosts).fadeOut();
 
-		this.applyPostQuoting();
+		this.applyPostFunctions();
 
 		return false;
 	},
@@ -154,46 +154,57 @@ var B3S = {
 	},
 	applyRichText : function() {
 		jQuery('textarea.rich').each(function(){
-			var ta = new jRichTextArea(this);
+			if(!this.toolbar){
+				var ta = new jRichTextArea(this);
 
-			// Setup the buttons
-			ta.toolbar
-				// Bold
-				.addButton("Bold", function(){ this.textArea.wrapSelection('<strong>','</strong>'); })
-				// Italic
-				.addButton("Italics", function(){ this.textArea.wrapSelection('<em>','</em>'); })
-				// Link
-				.addButton("Link", function(){
-				    var selection = this.textArea.selectedText();
-				    var response = prompt('Enter link URL','');  
-				    this.textArea.replaceSelection(
-						'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://') + '">' + 
-						((selection==='') ? "Link text" : selection) + '</a>');
-				})
-				// Image tag
-				.addButton("Image", function(){
-				    var selection = this.textArea.selectedText();
-					if( selection === '') {
-					    var response = prompt('Enter image URL',''); 
-					    if(response === null) { return; }
-						this.textArea.replaceSelection('<img src="'+response+'" alt="" />');
-					} else {
-						this.textArea.replaceSelection('<img src="'+selection+'" alt="" />');
-					}
-				})
-				// Block Quote
-				.addButton("Block Quote", function(){ this.textArea.wrapSelection('<blockquote>','</blockquote>'); })
-				// Escape HTML
-				.addButton("Escape HTML", function(){
-				    var selection = this.textArea.selectedText();
-				    this.textArea.replaceSelection(selection.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-				});
+				// Setup the buttons
+				ta.toolbar
+					// Bold
+					.addButton("Bold", function(){ this.textArea.wrapSelection('<strong>','</strong>'); })
+					// Italic
+					.addButton("Italics", function(){ this.textArea.wrapSelection('<em>','</em>'); })
+					// Link
+					.addButton("Link", function(){
+					    var selection = this.textArea.selectedText();
+					    var response = prompt('Enter link URL','');  
+					    this.textArea.replaceSelection(
+							'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://') + '">' + 
+							((selection==='') ? "Link text" : selection) + '</a>');
+					})
+					// Image tag
+					.addButton("Image", function(){
+					    var selection = this.textArea.selectedText();
+						if( selection === '') {
+						    var response = prompt('Enter image URL',''); 
+						    if(response === null) { return; }
+							this.textArea.replaceSelection('<img src="'+response+'" alt="" />');
+						} else {
+							this.textArea.replaceSelection('<img src="'+selection+'" alt="" />');
+						}
+					})
+					// Block Quote
+					.addButton("Block Quote", function(){ this.textArea.wrapSelection('<blockquote>','</blockquote>'); })
+					// Escape HTML
+					.addButton("Escape HTML", function(){
+					    var selection = this.textArea.selectedText();
+					    this.textArea.replaceSelection(selection.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+					});
+			}
 		});
 	},
-	applyPostQuoting: function() {
+	applyPostFunctions: function() {
 		$('.quote_post').click(function(){
 			var postId = this.id.match(/-([\d]+)$/)[1];
 			window.quotePost(postId);
+		});
+		$('.edit_post').click(function(){
+			var postID = this.id.match(/-([\d]+)$/)[1];
+			var editURL = this.href;
+			$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
+			$("#postBody-"+postID).load(editURL, false, function(){
+				B3S.applyRichText();
+			});
+			return false;
 		});
 	},
 	init : function() {
@@ -228,7 +239,7 @@ var B3S = {
 			}
 		};
 		
-		this.applyPostQuoting();
+		this.applyPostFunctions();
 		
 		// Detect Napkin
 		if(jQuery('#napkin').length > 0) {

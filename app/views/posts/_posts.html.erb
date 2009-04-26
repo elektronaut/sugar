@@ -41,7 +41,7 @@
 				<%= link_to "PM", last_user_conversation_page_path(:username => post.user.username, :anchor => 'new', :subject => "Re: #{(discussion||post.discussion).title}") %> |
 			<% end %>
 			<% if post.editable_by?(@current_user) %>
-				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %>
+				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %>
 			<% end %>			
 			| <%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
 		</div>
@@ -50,7 +50,7 @@
 			<div class="avatar">
 				<%= avatar_image_tag(post.user) %>
 			</div>
-			<div class="body">
+			<div class="body" id="postBody-<%= post.id %>">
 				<%= meify h(post.body), post.user %>
 				<span class="date">&ndash; <%= formatted_time post.created_at %></span>
 			</div>
@@ -68,7 +68,7 @@
 				</span>
 				<% end %>
 			</div>
-			<div class="body">
+			<div class="body" id="postBody-<%= post.id %>">
 				<div class="content"><%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : meify(post.body_html, post.user) %></div>
 				<% if post.edited? %><div class="edited">
 					Edited <%= formatted_time post.edited_at %>

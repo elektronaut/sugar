@@ -111,8 +111,11 @@ class PostsController < ApplicationController
         end
     end
     
-    def edit
-    end
+	def edit
+		if request.xhr?
+			render :layout => false
+		end
+	end
     
     def quote
         render :layout => false
