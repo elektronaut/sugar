@@ -1,9 +1,13 @@
 module Sugar
-	def self.config(key, value=nil)
-		key = key.to_s
-		@@config ||= {}
-		@@config[key] = value if value != nil
-		@@config[key]
+	def self.config(key=nil, value=nil)
+		if key
+			key = key.to_s
+			@@config ||= {}
+			@@config[key] = value if value != nil
+			@@config[key]
+		else
+			@@config
+		end
 	end
 	
 	def self.configure(options={})

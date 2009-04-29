@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
 
     # Misc. variables for the layout
     def layout_data
-        @site_name = 'BUTT3RSCOTCH'
         case self.class.to_s
         when 'UsersController'
             @section = :users

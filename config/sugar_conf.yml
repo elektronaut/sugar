@@ -1,1 +1,10 @@
+# Name of forum
+forum_name: BUTT3RSCOTCH
+# HTML formatted version of forum_name
+forum_title: BUTT<em>3</em>RSCOTCH
+
+# Enter your API key to enable Flickr integration:
 flickr_api: 016918184821edf95505d9acd61e64c4
+
+# Enable Xbox Live integration
+xbox_live_enabled: true

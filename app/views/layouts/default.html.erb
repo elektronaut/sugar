@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title><%= [@site_name,@page_title].compact.join(' - ') %></title>
+	<title><%= [Sugar.config(:forum_name),@page_title].compact.join(' - ') %></title>
 	<% if @current_user.stylesheet_url? -%>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else -%>
@@ -22,7 +22,7 @@
 </head>
 <body class="<%= body_classes %>">
 	<div id="header">
-		<h1>BUTT<em>3</em>RSCOTCH</h1>
+		<h1><%= Sugar.config(:forum_title) %></h1>
 		<div id="search">
 			<% form_tag search_path, :method => 'get' do %>
 				<%= text_field_tag 'q', @search_query, :class => :query %>
