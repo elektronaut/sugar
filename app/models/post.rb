@@ -31,7 +31,7 @@ class Post < ActiveRecord::Base
 		has     user_id, discussion_id
 		has     created_at, updated_at
 		has     trusted
-		set_property :delta => true
+		set_property :delta => :delayed
 	end
 
 	class << self
