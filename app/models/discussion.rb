@@ -54,7 +54,7 @@ class Discussion < ActiveRecord::Base
 		has     closed
 		has     sticky
 		has     created_at, updated_at, last_post_at
-		set_property :delta => true
+		set_property :delta => :delayed
 	end
 
 	# Class methods
