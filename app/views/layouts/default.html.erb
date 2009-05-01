@@ -8,7 +8,7 @@
 	<% if @current_user.stylesheet_url? -%>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else -%>
-		<%= stylesheet_link_tag 'default/screen' %>
+		<%= stylesheet_link_tag '/themes/b3s/screen' %>
 	<% end -%>
 	<% if RAILS_ENV == 'production' -%>
 		<%= javascript_include_tag "all" %>
@@ -18,7 +18,7 @@
 		<%= javascript_include_tag 'swfobject' %>
 		<%= javascript_include_tag 'application' %>
 	<% end -%>
-	<link rel="icon" type="image/gif" href="/images/favicon.gif" />
+	<link rel="icon" type="image/gif" href="/themes/b3s/images/favicon.gif" />
 </head>
 <body class="<%= body_classes %>">
 	<div id="header">

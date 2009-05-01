@@ -1,10 +1,10 @@
-@import url(../reset.css);
+@import url(reset.css);
 
 html, body {
 	height:              100%;
 }
 body {
-	background:          #fff url(/images/themes/default/header_bg_danz.jpg) top center repeat-x;
+	background:          #fff url(images/header_bg_danz.jpg) top center repeat-x;
 	font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
 	color:               #000000;
 	line-height:         1.3;
@@ -220,7 +220,7 @@ div.fieldWithErrors {
 	height:              16px;
 	float:               left;
 	display:             block;
-	background-image:    url("/images/themes/default/textarea_controls.gif");
+	background-image:    url("images/textarea_controls.gif");
 	border:              1px solid #fff;
 	border-right-color:  #d7d7d7;
 } 
@@ -300,17 +300,17 @@ h2.section {
 	margin:              0;
 	text-decoration:     none;
 	padding:             1px 10px 1px 10px;
-	background:          #9d5178 url(/images/themes/default/tab_bg.gif) repeat-x;
+	background:          #9d5178 url(images/tab_bg.gif) repeat-x;
 	border:              1px solid #854155;
 	border-bottom:       1px solid #c67b6a;
 	color:               #fff;
 }
 #navigation li a:hover {
-	background:          #9d5178 url(/images/themes/default/tab_hover_bg.gif) repeat-x;
+	background:          #9d5178 url(images/tab_hover_bg.gif) repeat-x;
 	color:               #fff;
 }
 #navigation li.current a, #navigation li.current a:visited {
-	background:          #f9f9f9 url(/images/themes/default/tab_current_bg.gif) repeat-x;
+	background:          #f9f9f9 url(images/tab_current_bg.gif) repeat-x;
 	padding-top:         2px;
 	color:               #000;
 	border:              1px solid #c67b6a;
@@ -320,14 +320,14 @@ h2.section {
 #navigation li.current a:hover {
 }
 #navigation li.new_messages a, #navigation li.new_messages a:visited {
-	background:          #d14b40 url(/images/themes/default/tab_new_messages_bg.gif) repeat-x;
+	background:          #d14b40 url(images/tab_new_messages_bg.gif) repeat-x;
 	color:               #fff;
 	border:              1px solid #c24236;
 	border-bottom:       1px solid #c98175;
 	padding-left:        22px;
 }
 #navigation li.new_messages a:hover {
-	background:          #d14b40 url(/images/themes/default/tab_new_messages_hover_bg.gif) repeat-x;
+	background:          #d14b40 url(images/tab_new_messages_hover_bg.gif) repeat-x;
 }
 
 /* Errors and other notices */
@@ -480,7 +480,7 @@ table.discussions tr.closed td.name a:hover {
 	border-bottom:       1px solid #E2DCBF;
 }
 .post .title {
-	background:          transparent url(/images/themes/default/discussion_title_bg.png) 0px 14px no-repeat;
+	background:          transparent url(images/discussion_title_bg.png) 0px 14px no-repeat;
 	font-size:           1.3em;
 	font-weight:         bold;
 	padding:             7px 0 7px 19px;

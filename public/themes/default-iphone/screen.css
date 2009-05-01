@@ -22,7 +22,7 @@ body[orient="landscape"] {
 }
 
 #header {
-	background: #111 url(/images/themes/iphone2/header.gif);
+	background: #111 url(images/header.gif);
 	height: 45px;
 }
 #header #navigationToggle {
@@ -34,13 +34,13 @@ body[orient="landscape"] {
 	display: block;
 	height: 40px;
 	width: 40px;
-	background: transparent url(/images/themes/iphone2/header_navigation.gif);
+	background: transparent url(images/header_navigation.gif);
 }
 
 #header h1.logo {
 	width: 167px;
 	height: 45px;
-	background: transparent url(/images/themes/iphone2/logo.gif);
+	background: transparent url(images/logo.gif);
 	text-indent: -9000px;
 	margin: 0 auto;
 }
@@ -150,7 +150,7 @@ label {
 }
 
 .content {
-	background: #fff url(/images/themes/iphone2/contentbg.gif) repeat-x;
+	background: #fff url(images/contentbg.gif) repeat-x;
 	padding: 25px 0 10px 0;
 	min-height: 285px;
 }
@@ -371,10 +371,10 @@ body[orient="landscape"] .reply textarea {
 }
 
 .message_in, .message_in .t, .message_in .b, .message_in .b div {
-	background: transparent url(/images/themes/iphone2/message_in_bg.png) no-repeat top right;
+	background: transparent url(images/message_in_bg.png) no-repeat top right;
 }
 .message_out, .message_out .t, .message_out .b, .message_out .b div {
-	background: transparent url(/images/themes/iphone2/message_out_bg.png) no-repeat top right;
+	background: transparent url(images/message_out_bg.png) no-repeat top right;
 }
 .message .b {
 	position: relative;

@@ -13,13 +13,16 @@ namespace :sugar do
 		end
 	end
 
-	desc "Pack default theme"
-	task :pack_default_theme do
-		`zip -r public/b3s_default_theme.zip public/stylesheets/default/* public/images/themes/default/*`
+	desc "Pack themes"
+	task :pack_themes do
+		themes_dir = File.join(File.dirname(__FILE__), '../../public/themes')
+		Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
+			`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
+		end
 	end
 	
 	desc "Pack"
-	task :pack => [:pack_default_theme] do
+	task :pack => [:pack_themes] do
 		puts "Packing javascript files..."
 		`juicer merge --force public/javascripts/application.js`
 		js_files = ['jquery', 'swfobject', 'application.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
@@ -46,7 +49,6 @@ namespace :sugar do
 
 	desc "Refresh Xbox Live"
 	task :refresh_xbox => :environment do
-		#User.refresh_xbox!(true)
 		XboxInfo.refresh!(true)
 	end
 
