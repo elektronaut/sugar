@@ -9,3 +9,6 @@ config/*.sphinx.conf
 config/database.yml
 db/schema.rb
 db/sphinx
+public/cache
+public/system
+public/doodles
