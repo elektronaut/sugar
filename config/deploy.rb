@@ -1,33 +1,26 @@
 #require 'mongrel_cluster/recipes'
 
+default_run_options[:pty] = true
+
 set :application, "b3s"
-set :repository,  "http://svn.elektronaut.no/svn/b3s/trunk"
 set :runner,      "app"
 set :user,        "app"
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-# set :deploy_to, "/var/www/#{application}"
+set :scm,                   "git"
+set :repository,            "git@github.com:elektronaut/sugar.git"
+set :branch,                "b3s"
+set :deploy_via,            :remote_cache
+set :git_enable_submodules, 1
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
-
-role :app, "b3s.elektronaut.no"
-role :web, "b3s.elektronaut.no"
-role :db,  "b3s.elektronaut.no", :primary => true
+role :app, "butt3rscotch.org"
+role :web, "butt3rscotch.org"
+role :db,  "butt3rscotch.org", :primary => true
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
 # via the :deploy_to variable:
 set :deploy_to, "/var/www/#{application}"
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
-
-#set :mongrel_conf, "#{deploy_to}/#{current_dir}/config/mongrel_cluster.yml"
 #set :flush_cache, true
 
 desc "Create shared directories"
