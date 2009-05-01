@@ -10,9 +10,8 @@ RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
-
 # Create a random session key if the file doesn't exist
-unless File.exist?(File.join(File.dirname(__FILE__), 'session_key'))
+if !File.exist?(File.join(File.dirname(__FILE__), 'session_key')) && ENV['RAILS_ENV'] != "production"
     session_key = ''
     seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
     128.times{ session_key += seed[rand(seed.length)] }
