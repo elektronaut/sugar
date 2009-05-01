@@ -1,5 +1,3 @@
-#require 'mongrel_cluster/recipes'
-
 default_run_options[:pty] = true
 
 set :application, "b3s"
@@ -43,7 +41,6 @@ end
 
 desc "Create symlinks"
 task :create_symlinks, :roles => [:web,:app] do
-	#run "ln -s #{deploy_to}/#{shared_dir}/system #{deploy_to}/#{current_dir}/public/system"
 	run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
 	run "ln -s #{deploy_to}/#{shared_dir}/sockets #{deploy_to}/#{current_dir}/tmp/sockets"
 	run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
@@ -57,7 +54,6 @@ end
 
 namespace :deploy do
     namespace :web do
-
         desc "Present a maintenance page to visitors. Message is customizable with the REASON enviroment variable."
         task :disable, :roles => [:web, :app] do
             if reason = ENV['REASON']
@@ -71,7 +67,6 @@ namespace :deploy do
         task :enable, :roles => [:web, :app] do
             run("cd #{deploy_to}/current; /usr/bin/rake sugar:enable_web")
         end
-
     end
 
 	desc "Restart Application"
