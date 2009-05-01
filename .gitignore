@@ -1,0 +1,11 @@
+log/*.log
+log/*.pid
+tmp/**/*
+doc/api
+doc/plugins
+doc/app
+config/session_key
+config/*.sphinx.conf
+config/database.yml
+db/schema.rb
+db/sphinx
