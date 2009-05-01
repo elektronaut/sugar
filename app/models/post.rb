@@ -38,26 +38,20 @@ class Post < ActiveRecord::Base
 
 		def find_paginated(options={})
 			discussion = options[:discussion]
-			posts_count = discussion.posts_count
-
-			# Math is still awesome
-			limit = options[:limit] || POSTS_PER_PAGE
-			num_pages = (posts_count.to_f/limit).ceil
-			page  = (options[:page] || 1).to_i
-			page = 1 if page < 1
-			page = num_pages if page > num_pages
-			offset = limit * (page - 1)
-
-			posts = self.find(
-				:all,
-				:conditions => ['discussion_id = ?', discussion.id],
-				:limit      => limit,
-				:offset     => offset,
-				:order      => 'created_at ASC',
-				:include    => [:user]
-			)
-
-			Pagination.apply(posts, :total_count => posts_count, :page => page, :per_page => limit)
+			Pagination.paginate(
+				:total_count => discussion.posts_count,
+				:per_page    => options[:limit] || POSTS_PER_PAGE,
+				:page        => options[:page] || 1
+			) do |pagination|
+				Post.find(
+					:all,
+					:conditions => ['discussion_id = ?', discussion.id],
+					:limit      => pagination.limit,
+					:offset     => pagination.offset,
+					:order      => 'created_at ASC',
+					:include    => [:user]
+				)
+			end
 		end
 
 		def search_paginated(options={})
@@ -70,12 +64,9 @@ class Post < ActiveRecord::Base
 				:page      => page,
 				:include   => [:user, :discussion]
 			}
-			unless options[:trusted]
-				search_options[:conditions] = {:trusted => false}
-			end
-
+			search_options[:conditions] = {:trusted => false} unless options[:trusted]
 			posts = Post.search(options[:query], search_options)
-			Pagination.apply(posts, :total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE)
+			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
 		end
 	end
 

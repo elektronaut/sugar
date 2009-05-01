@@ -96,97 +96,74 @@ class User < ActiveRecord::Base
 
     # Find and paginate discussions
     def paginated_discussions(options)
-        num_discussions = options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => ['trusted = 0'])
-
-        # Math is awesome
-        limit = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
-        num_pages = (num_discussions.to_f/limit).ceil
-        page  = (options[:page] || 1).to_i
-        page = 1 if page < 1
-        page = num_pages if page > num_pages
-        offset = limit * (page - 1)
-		offset = 0 if offset < 0
-
-        # Grab the discussions
-        discussions = Discussion.find(
-            :all, 
-            :conditions => ['poster_id = ?', self.id], 
-            :limit      => limit, 
-            :offset     => offset, 
-            :order      => 'sticky DESC, last_post_at DESC',
-            :include    => [:poster, :last_poster, :category]
-        )
-
-		Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit)
+		Pagination.paginate(
+			:total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => ['trusted = 0']),
+			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			discussions = Discussion.find(
+				:all, 
+				:conditions => ['poster_id = ?', self.id], 
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset, 
+				:order      => 'sticky DESC, last_post_at DESC',
+				:include    => [:poster, :last_poster, :category]
+			)
+		end
     end
 
+    # Find and paginate posts
 	def paginated_posts(options)
-		num_posts = options[:trusted] ? self.posts.count(:all) : self.posts.count(:all, :conditions => ['trusted = 0'])
-
-        limit = options[:limit] || Post::POSTS_PER_PAGE
-        num_pages = (num_posts.to_f/limit).ceil
-        page  = (options[:page] || 1).to_i
-        page = 1 if page < 1
-        page = num_pages if page > num_pages
-        offset = limit * (page - 1)
-		offset = 0 if offset < 0
-
-		posts = Post.find(
-            :all, 
-            :conditions => ['user_id = ?', self.id], 
-            :limit      => limit, 
-            :offset     => offset, 
-            :order      => 'created_at DESC',
-			:include    => [:user, :discussion]
-        )
-
-		Pagination.apply(posts, :total_count => num_posts, :page => page, :per_page => limit)
+		Pagination.paginate(
+			:total_count => options[:trusted] ? self.posts.count(:all) : self.posts.count(:all, :conditions => ['trusted = 0']),
+			:per_page    => options[:limit] || Post::POSTS_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			Post.find(
+				:all, 
+				:conditions => ['user_id = ?', self.id], 
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset, 
+				:order      => 'created_at DESC',
+				:include    => [:user, :discussion]
+	        )
+		end
 	end
 
     # Find and paginate messages
     def paginated_messages(options={})
-        num_messages = self.messages.count
-
-        limit = options[:limit] || Message::MESSAGES_PER_PAGE
-        num_pages = (num_messages.to_f/limit).ceil
-        page  = (options[:page] || 1).to_i
-        page = 1 if page < 1
-        page = num_pages if page > num_pages
-        offset = limit * (page - 1)
-        
-        messages = Message.find(
-            :all,
-            :conditions => ['recipient_id = ? AND deleted = 0', self.id],
-            :order      => ['created_at DESC'],
-            :limit      => limit, 
-            :offset     => offset,
-            :include    => [:sender]
-        )
-
-		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
+		Pagination.paginate(
+			:total_count => self.messages.count,
+			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			Message.find(
+				:all,
+				:conditions => ['recipient_id = ? AND deleted = 0', self.id],
+				:order      => ['created_at DESC'],
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset,
+				:include    => [:sender]
+	        )
+		end
     end
 
     # Find and paginate sent messages
     def paginated_sent_messages(options={})
-        num_messages = self.sent_messages.count
-
-        limit = options[:limit] || Message::MESSAGES_PER_PAGE
-        num_pages = (num_messages.to_f/limit).ceil
-        page  = (options[:page] || 1).to_i
-        page = 1 if page < 1
-        page = num_pages if page > num_pages
-        offset = limit * (page - 1)
-        
-        messages = Message.find(
-            :all,
-            :conditions => ['sender_id = ? AND deleted_by_sender = 0', self.id],
-            :order      => ['created_at DESC'],
-            :limit      => limit, 
-            :offset     => offset,
-            :include    => [:recipient]
-        )
-
-		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
+		Pagination.paginate(
+			:total_count => self.sent_messages.count,
+			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			Message.find(
+				:all,
+				:conditions => ['sender_id = ? AND deleted_by_sender = 0', self.id],
+				:order      => ['created_at DESC'],
+				:limit      => limit, 
+				:offset     => offset,
+				:include    => [:recipient]
+			)
+		end
     end
 
 	# Find conversation partners
@@ -214,34 +191,25 @@ class User < ActiveRecord::Base
 		(unread_message_count_from(user) > 0) ? true : false
 	end
 
-    # Find and paginate sent messages
-    def paginated_conversation(options={})
+    # Find and paginate conversations
+	def paginated_conversation(options={})
         user = options[:user]
         conditions = ['(sender_id = ? AND recipient_id = ? AND deleted_by_sender = 0) OR (recipient_id = ? AND sender_id = ? AND deleted = 0)', self.id, user.id, self.id, user.id]
-        num_messages = Message.count(:all, :conditions => conditions)
 
-        limit = options[:limit] || Message::MESSAGES_PER_PAGE
-        num_pages = (num_messages.to_f/limit).ceil
-        if options[:page] && options[:page].to_s == "last"
-            page = num_pages
-        else
-            page  = (options[:page] || 1).to_i
-            page = 1 if page < 1
-            page = num_pages if page > num_pages
-        end
-        offset = limit * (page - 1)
-        offset = 0 if offset < 0
-        
-        messages = Message.find(
-            :all,
-            :conditions => conditions,
-            :order      => ['created_at ASC'],
-            :limit      => limit, 
-            :offset     => offset,
-            :include    => [:recipient,:sender]
-        )
-
-		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
+		Pagination.paginate(
+			:total_count => Message.count(:all, :conditions => conditions),
+			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			Message.find(
+				:all,
+				:conditions => conditions,
+				:order      => ['created_at ASC'],
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset,
+				:include    => [:recipient,:sender]
+			)
+		end
     end
 
 	def posts_per_day(prec=2)

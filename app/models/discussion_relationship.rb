@@ -35,7 +35,6 @@ class DiscussionRelationship < ActiveRecord::Base
 			end.merge({:user_id => user.id})
 			
 			find_conditions[:trusted] = false unless options[:trusted]
-
 			find_options = {}
 
 			if paginate
@@ -66,8 +65,10 @@ class DiscussionRelationship < ActiveRecord::Base
 			}.merge(find_options)
 
 			discussions = Discussion.find(:all, find_options)
-
-			Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit) if paginate
+			if paginate
+				Pagination.apply(discussions, Pagination::Paginater.new(:total_count => discussions_count, :page => page, :per_page => limit))
+			end
+			discussions
 		end
 	end
 end

@@ -79,12 +79,9 @@ class Discussion < ActiveRecord::Base
 				:page      => page,
 				:include   => [:poster, :last_poster, :category]
 			}
-			unless options[:trusted]
-				search_options[:conditions] = {:trusted => false}
-			end
-
+			search_options[:conditions] = {:trusted => false} unless options[:trusted]
 			discussions = Discussion.search(options[:query], search_options)
-			Pagination.apply(discussions, :total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE)
+			Pagination.apply(discussions, Pagination::Paginater.new(:total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE))
 		end
 
 		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
@@ -102,25 +99,20 @@ class Discussion < ActiveRecord::Base
 				conditions        = (options[:category]) ? ['category_id = ? AND trusted = 0', options[:category].id] : 'trusted = 0'
 			end
 
-			# Math is awesome
-			limit     = options[:limit] || DISCUSSIONS_PER_PAGE
-			num_pages = (discussions_count.to_f/limit).ceil
-			page      = (options[:page] || 1).to_i
-			page      = 1 if page < 1
-			page      = num_pages if page > num_pages
-			offset    = limit * (page - 1)
-
-			# Grab the discussions
-			discussions = self.find(
-				:all, 
-				:conditions => conditions, 
-				:limit      => limit, 
-				:offset     => offset, 
-				:order      => 'sticky DESC, last_post_at DESC',
-				:include    => [:poster, :last_poster, :category]
-			)
-
-			Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit)
+			Pagination.paginate(
+				:total_count => discussions_count,
+				:per_page    => options[:limit] || DISCUSSIONS_PER_PAGE,
+				:page        => options[:page] || 1
+			) do |pagination|
+				Discussion.find(
+					:all, 
+					:conditions => conditions, 
+					:limit      => pagination.limit, 
+					:offset     => pagination.offset, 
+					:order      => 'sticky DESC, last_post_at DESC',
+					:include    => [:poster, :last_poster, :category]
+				)
+			end
 		end
 
 		# Deletes attributes which normal users shouldn't be able to touch from a param hash
