@@ -9,14 +9,6 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
---
--- Database: 'b3s'
---
-
-DROP DATABASE IF EXISTS b3s;
-CREATE DATABASE b3s DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE b3s;
-
 -- --------------------------------------------------------
 
 --

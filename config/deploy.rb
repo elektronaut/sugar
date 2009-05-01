@@ -29,7 +29,10 @@ task :create_shared_dirs, :roles => [:web,:app] do
 	run "mkdir #{deploy_to}/#{shared_dir}/sessions"
 	run "mkdir #{deploy_to}/#{shared_dir}/index"
 	run "mkdir #{deploy_to}/#{shared_dir}/sphinx"
-	run "touch #{deploy_to}/#{shared_dir}/database.yml"
+	run "mkdir #{deploy_to}/#{shared_dir}/config"
+	run "mkdir #{deploy_to}/#{shared_dir}/config/initializers"
+	run "touch #{deploy_to}/#{shared_dir}/config/database.yml"
+	run "touch #{deploy_to}/#{shared_dir}/config/initializers/mailer.rb"
 end
 
 desc "Fix permissions"
@@ -46,10 +49,12 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/sessions #{deploy_to}/#{current_dir}/tmp/sessions"
 	run "ln -s #{deploy_to}/#{shared_dir}/index #{deploy_to}/#{current_dir}/index"
 	run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
-	run "ln -s #{deploy_to}/#{shared_dir}/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
-	run "ln -s #{deploy_to}/#{shared_dir}/session_key #{deploy_to}/#{current_dir}/config/session_key"
 	run "ln -s #{deploy_to}/#{shared_dir}/doodles #{deploy_to}/#{current_dir}/public/doodles"
 	run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
+
+	run "ln -s #{deploy_to}/#{shared_dir}/config/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
+	run "ln -s #{deploy_to}/#{shared_dir}/config/session_key #{deploy_to}/#{current_dir}/config/session_key"
+	run "ln -s #{deploy_to}/#{shared_dir}/config/initializers/mailer.rb #{deploy_to}/#{current_dir}/config/initializers/mailer.rb"
 end
 
 namespace :deploy do
