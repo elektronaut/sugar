@@ -1,9 +1,14 @@
 # Name of forum
 forum_name: BUTT3RSCOTCH
+# Short version of forum name (for use on iPhone etc)
+forum_short_name: B3S
 # HTML formatted version of forum_name
 forum_title: BUTT<em>3</em>RSCOTCH
 
 default_domain: butt3rscotch.org
+mail_sender: Butt3rscotch <noreply@butt3rscotch.org>
+
+session_key: _butt3rscotch_session
 
 # Themes
 default_theme: b3s

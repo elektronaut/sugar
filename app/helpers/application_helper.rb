@@ -145,5 +145,9 @@ module ApplicationHelper
         end
     end
 
+	def theme_path(theme_name=nil)
+		theme_name ||= (request.format == :iphone) ? Sugar.config(:default_iphone_theme) : Sugar.config(:default_theme)
+		"/themes/#{theme_name}"
+	end
     
 end

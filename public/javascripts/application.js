@@ -3,7 +3,7 @@
  */
 
 /* Dead simple tabs */
-function B3STabs(controls, options) {
+function SugarTabs(controls, options) {
 	controls.tabs = [];
 	
 	settings = jQuery.extend({
@@ -113,7 +113,7 @@ function jRichTextArea(textArea, options) {
 	this.toolbar.create();
 }
 
-var B3S = {
+var Sugar = {
 	loadNewPosts : function(){
 		var newPosts    = $('#newPosts').get()[0];
 		var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
@@ -143,13 +143,13 @@ var B3S = {
 	},
 	applyTabs : function(){
 		jQuery('#reply-tabs').each(function(){
-			window.replyTabs = new B3STabs(this, {showFirstTab: false});
+			window.replyTabs = new SugarTabs(this, {showFirstTab: false});
 			if(jQuery('body.last_page').length > 0) {
 				window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 			}
 		});
 		jQuery('#profile-tabs').each(function(){
-			window.profileTabs = new B3STabs(this, {showFirstTab: true});
+			window.profileTabs = new SugarTabs(this, {showFirstTab: true});
 		});
 	},
 	applyRichText : function() {
@@ -202,7 +202,7 @@ var B3S = {
 			var editURL = this.href;
 			$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
 			$("#postBody-"+postID).load(editURL, false, function(){
-				B3S.applyRichText();
+				Sugar.applyRichText();
 			});
 			return false;
 		});
@@ -287,7 +287,7 @@ var B3S = {
 								document.title = "["+newPostsSinceRefresh+" new posts] "+newPosts.documentTitle;
 							}
 							if($('body.last_page').length > 0){
-								$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="B3S.loadNewPosts(); return false;">click here to load</a>.</p>');
+								$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="Sugar.loadNewPosts(); return false;">click here to load</a>.</p>');
 							} else {
 								$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, move on to the last page to see them.</p>');
 							}
@@ -323,5 +323,5 @@ var B3S = {
 };
 
 jQuery(document).ready(function() {
-	B3S.init();
+	Sugar.init();
 });

@@ -1,7 +1,7 @@
 class Notifications < ActionMailer::Base
   
 	def self.default_sender
-		"Butt3rscotch <noreply@butt3rscotch.org>"
+		Sugar.config(:mail_sender)
 	end
 
 	def default_options
@@ -18,21 +18,21 @@ class Notifications < ActionMailer::Base
 
     def password_reminder(user, login_url)
         default_options
-		@subject    = "Your login details at B3S"
+		@subject    = "Your login details at #{Sugar.config(:forum_name)}"
 		@body       = { :user => user, :login_url => login_url }
 		@recipients = user.full_email
 	end
 	
     def new_user(user, login_url, message="")
         default_options
-		@subject    = "Welcome to Butt3rscotch!"
+		@subject    = "Welcome to #{Sugar.config(:forum_name)}!"
 		@body       = { :user => user, :login_url => login_url, :message => message }
 		@recipients = user.full_email
     end
     
 	def welcome(user)
 	    default_options
-		@subject    = "Welcome to B3S 2.0!"
+		@subject    = "Welcome to #{Sugar.config(:forum_name)}!"
 		@body       = { :user => user }
 		@recipients = user.full_email
     end

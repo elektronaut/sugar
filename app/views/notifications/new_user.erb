@@ -1,4 +1,4 @@
-<%= @user.inviter.username %> has invited you to Butt3rscotch!
+<%= @user.inviter.username %> has invited you to <%= Sugar.config(:forum_name) %>!
 
 <% if @message && !@message.blank? -%>
 ---------------------------------------------------------------------
@@ -14,6 +14,3 @@ Password: <%= @user.password %>
 URL: <%= @login_url %>
 
 You can change your password once you've logged in.
-
-If you experience any trouble logging in, 
-please send an email to inge@elektronaut.no.
