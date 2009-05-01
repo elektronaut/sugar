@@ -117,11 +117,7 @@ class User < ActiveRecord::Base
             :include    => [:poster, :last_poster, :category]
         )
 
-        # Inject the pagination methods on the collection
-        class << discussions; include Paginates; end
-        discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
-        
-        return discussions
+		Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit)
     end
 
 	def paginated_posts(options)
@@ -144,11 +140,7 @@ class User < ActiveRecord::Base
 			:include    => [:user, :discussion]
         )
 
-        # Inject the pagination methods on the collection
-        class << posts; include Paginates; end
-        posts.setup_pagination(:total_count => num_posts, :page => page, :per_page => limit)
-        
-        return posts
+		Pagination.apply(posts, :total_count => num_posts, :page => page, :per_page => limit)
 	end
 
     # Find and paginate messages
@@ -171,11 +163,7 @@ class User < ActiveRecord::Base
             :include    => [:sender]
         )
 
-        # Inject the pagination methods on the collection
-        class << messages; include Paginates; end
-        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
-        
-        return messages
+		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
     end
 
     # Find and paginate sent messages
@@ -198,11 +186,7 @@ class User < ActiveRecord::Base
             :include    => [:recipient]
         )
 
-        # Inject the pagination methods on the collection
-        class << messages; include Paginates; end
-        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
-        
-        return messages
+		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
     end
 
 	# Find conversation partners
@@ -257,11 +241,7 @@ class User < ActiveRecord::Base
             :include    => [:recipient,:sender]
         )
 
-        # Inject the pagination methods on the collection
-        class << messages; include Paginates; end
-        messages.setup_pagination(:total_count => num_messages, :page => page, :per_page => limit)
-        
-        return messages
+		Pagination.apply(messages, :total_count => num_messages, :page => page, :per_page => limit)
     end
 
 	def posts_per_day(prec=2)

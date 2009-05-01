@@ -67,12 +67,7 @@ class DiscussionRelationship < ActiveRecord::Base
 
 			discussions = Discussion.find(:all, find_options)
 
-			if paginate
-				class << discussions; include Paginates; end
-				discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
-			end
-
-			discussions
+			Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit) if paginate
 		end
 	end
 end

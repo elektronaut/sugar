@@ -57,11 +57,7 @@ class Post < ActiveRecord::Base
 				:include    => [:user]
 			)
 
-			# Inject the pagination methods on the collection
-			class << posts; include Paginates; end
-			posts.setup_pagination(:total_count => posts_count, :page => page, :per_page => limit)
-
-			return posts
+			Pagination.apply(posts, :total_count => posts_count, :page => page, :per_page => limit)
 		end
 
 		def search_paginated(options={})
@@ -79,11 +75,7 @@ class Post < ActiveRecord::Base
 			end
 
 			posts = Post.search(options[:query], search_options)
-
-			class << posts; include Paginates; end
-			posts.setup_pagination(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE)
-
-			return posts
+			Pagination.apply(posts, :total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE)
 		end
 	end
 

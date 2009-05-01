@@ -1,10 +1,14 @@
-module Paginates
+module Pagination
 
     attr_reader :pages, :page, :total_count, :offset, :per_page
 
-	def self.apply(targets, options)
-        class << targets; include Paginates; end
-		targets.setup_pagination(options)
+	class << self
+		# Applies pagination to the collection
+		def apply(targets, options)
+        	class << targets; include Pagination; end
+			targets.setup_pagination(options)
+			targets
+		end
 	end
 
     def setup_pagination(options={})

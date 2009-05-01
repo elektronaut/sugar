@@ -1,4 +1,4 @@
-require 'paginates'
+require 'pagination'
 
 class Discussion < ActiveRecord::Base
 
@@ -84,15 +84,11 @@ class Discussion < ActiveRecord::Base
 			end
 
 			discussions = Discussion.search(options[:query], search_options)
-
-			class << discussions; include Paginates; end
-			discussions.setup_pagination(:total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE)
-
-			return discussions
+			Pagination.apply(discussions, :total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE)
 		end
 
 		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
-		# The collection is extended with the Paginates module, which provides pagination info.
+		# The collection is extended with the Pagination module, which provides pagination info.
 		# Takes the following options: 
 		#     :page     - Page number, starting on 1 (default: first page)
 		#     :limit    - Number of posts per page (default: 20)
@@ -116,19 +112,15 @@ class Discussion < ActiveRecord::Base
 
 			# Grab the discussions
 			discussions = self.find(
-			:all, 
-			:conditions => conditions, 
-			:limit      => limit, 
-			:offset     => offset, 
-			:order      => 'sticky DESC, last_post_at DESC',
-			:include    => [:poster, :last_poster, :category]
+				:all, 
+				:conditions => conditions, 
+				:limit      => limit, 
+				:offset     => offset, 
+				:order      => 'sticky DESC, last_post_at DESC',
+				:include    => [:poster, :last_poster, :category]
 			)
 
-			# Inject the pagination methods on the collection
-			class << discussions; include Paginates; end
-			discussions.setup_pagination(:total_count => discussions_count, :page => page, :per_page => limit)
-
-			return discussions
+			Pagination.apply(discussions, :total_count => discussions_count, :page => page, :per_page => limit)
 		end
 
 		# Deletes attributes which normal users shouldn't be able to touch from a param hash
