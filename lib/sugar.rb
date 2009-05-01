@@ -1,8 +1,9 @@
+require 'yaml'
 module Sugar
 	def self.config(key=nil, value=nil)
+		@@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../config/sugar_conf.yml'))
 		if key
 			key = key.to_s
-			@@config ||= {}
 			@@config[key] = value if value != nil
 			@@config[key]
 		else
@@ -16,5 +17,5 @@ module Sugar
 		end
 	end
 	
-	config :flickr_api,          false
+	config :flickr_api, false
 end
