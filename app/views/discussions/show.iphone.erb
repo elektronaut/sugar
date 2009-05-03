@@ -24,7 +24,7 @@
 	// Hide images in posts by default
 	$$('.post .body img').each(function(image){
 		image.originalSrc = image.src;
-		image.src = '/images/themes/iphone2/imageloader.gif';
+		image.src = '<%= theme_path %>/images/imageloader.gif';
 		image.removeAttribute("height");
 		Element.observe(image, 'click', function(evt){
 			var element = Event.element(evt);
