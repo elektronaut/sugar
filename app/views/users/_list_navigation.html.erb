@@ -1,10 +1,10 @@
 <ul class="topTabs">  
-	<li class="tab"><%= link_to "All Users", users_path, :class => (params[:action] == 'index') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Online", online_users_path, :class => (params[:action] == 'online') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Recently Joined", recently_joined_users_path, :class => (params[:action] == 'recently_joined') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Top Posters", top_posters_users_path, :class => (params[:action] == 'top_posters') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Admins", admins_users_path, :class => (params[:action] == 'admins') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Banned", banned_users_path, :class => (params[:action] == 'banned') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Twitter", twitter_users_path, :class => (params[:action] == 'twitter') ? 'active' : '' %></li>
-	<li class="tab"><%= link_to "Xbox Live", xboxlive_users_path, :class => (params[:action] == 'xboxlive') ? 'active' : '' %></li>
+	<li class="tab" class="AllUsersTab"><%= link_to "All Users", users_path, :class => (params[:action] == 'index') ? 'active' : '' %></li>
+	<li class="tab" class="OnlineUsersTab"><%= link_to "Online", online_users_path, :class => (params[:action] == 'online') ? 'active' : '' %></li>
+	<li class="tab" class="RecentlyJoinedTab"><%= link_to "Recently Joined", recently_joined_users_path, :class => (params[:action] == 'recently_joined') ? 'active' : '' %></li>
+	<li class="tab" class="TopPostersTab"><%= link_to "Top Posters", top_posters_users_path, :class => (params[:action] == 'top_posters') ? 'active' : '' %></li>
+	<li class="tab" class="AdminsTab"><%= link_to "Admins", admins_users_path, :class => (params[:action] == 'admins') ? 'active' : '' %></li>
+	<li class="tab" class="BannedUsersTab"><%= link_to "Banned", banned_users_path, :class => (params[:action] == 'banned') ? 'active' : '' %></li>
+	<li class="tab" class="TwitterUsersTab"><%= link_to "Twitter", twitter_users_path, :class => (params[:action] == 'twitter') ? 'active' : '' %></li>
+	<li class="tab" class="XboxLiveUsersTab"><%= link_to "Xbox Live", xboxlive_users_path, :class => (params[:action] == 'xboxlive') ? 'active' : '' %></li>
 </ul>
