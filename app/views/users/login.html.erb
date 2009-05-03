@@ -14,7 +14,7 @@
 			<%= password_field_tag 'password', '', :class => :text %>
 		</p>
 		<p>
-			<input type="image" name="submit" alt="Login" src="/images/login/login_button.jpg" id="login-button" />
+			<input type="image" name="submit" alt="Login" src="<%= theme_path %>/images/login_button.jpg" id="login-button" />
 		</p>
 	<% end %>
 </div>
@@ -24,16 +24,16 @@
 		<p>
 			<label>Email</label>
 			<%= text_field_tag 'email', '', :class => :text %>
-			<input type="image" name="submit" alt="Send" src="/images/login/reminder_button.jpg" id="reminder-button" />
+			<input type="image" name="submit" alt="Send" src="<%= theme_path %>/images/login_reminder_button.jpg" id="reminder-button" />
 		</p>
 	<% end %>
 </div>
 
 <script type="text/javascript">
-	Element.hide('password-reminder');
+	$('#password-reminder').hide();
 	function forgot_password() {
-		Element.hide('forgot-password-link');
-		Element.hide('login');
-		Element.show('password-reminder');
+		$('#forgot-password-link').hide();
+		$('#login').hide();
+		$('#password-reminder').show();
 	}
 </script>

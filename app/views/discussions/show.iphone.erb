@@ -19,21 +19,3 @@
 <% end %>
 
 
-<script type="text/javascript">
-
-	// Hide images in posts by default
-	$$('.post .body img').each(function(image){
-		image.originalSrc = image.src;
-		image.src = '<%= theme_path %>/images/imageloader.gif';
-		image.removeAttribute("height");
-		Element.observe(image, 'click', function(evt){
-			var element = Event.element(evt);
-			if( element.src != element.originalSrc ) {
-				element.src = element.originalSrc;
-			} else {
-				window.location = element.src;
-			}
-		});
-	});
-	
-</script>

@@ -5,8 +5,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= Sugar.config(:forum_name) %> - Login</title>
-	<%= javascript_include_tag :defaults %>
-	<%= javascript_include_tag 'iphone' %>
+	<% if RAILS_ENV == 'production' -%>
+		<%= javascript_include_tag "all.iphone" %>
+	<% else -%>
+		<%= javascript_include_tag 'jquery' %>
+		<%= javascript_include_tag 'iphone' %>
+	<% end -%>
 	<%= stylesheet_link_tag "#{theme_path}/screen" %>
 	<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 	<link rel="apple-touch-icon" href="<%= theme_path %>/apple-touch-icon.png" />

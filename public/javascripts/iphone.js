@@ -1,19 +1,6 @@
-Event.observe(window, 'load', function() { 
-
-	// Scroll to top w/o location bar unless targeting an anchor
-	if ( !document.location.toString().match(/\#/) ) {
-		setTimeout(scrollTo, 100, 0, 1);
-	}
-	
-	// Make the search mode selection box work
-	Event.observe($('search_mode_posts'), 'change', function(e) {
-		Event.element(e).parentNode.action = Event.element(e).value;
-	});
-	Event.observe($('search_mode_titles'), 'change', function(e) {
-		Event.element(e).parentNode.action = Event.element(e).value;
-	});
-
-});
+function toggleNavigation() {
+	$('#navigation').slideToggle();
+}
 
 var currentWidth = 0;
 function checkWindowOrientation() {
@@ -26,7 +13,43 @@ function checkWindowOrientation() {
 setTimeout(checkWindowOrientation, 0);
 checkTimer = setInterval(checkWindowOrientation, 300);
 
-function toggleNavigation() {
-	//Effect.toggle('navigation', 'slide', { duration: 0.2, scaleContent: false });
-	Element.toggle('navigation');
-}
+$(document).ready(function(){
+
+	// Scroll to top w/o location bar unless targeting an anchor
+	if ( !document.location.toString().match(/\#/) ) {
+		setTimeout(scrollTo, 100, 0, 1);
+	}
+	
+	jQuery('#search_mode_posts').change(function(){
+		this.parentNode.action = this.value;
+	});
+	jQuery('#search_mode_titles').change(function(){
+		this.parentNode.action = this.value;
+	});
+
+	// Hide the navigation
+	$('#navigation').hide();
+
+	// Hide images in posts by default
+	$('.post .body img').each(function(){
+		this.originalSrc = this.src;
+		this.linkTarget  = this.src;
+		this.src         = '/themes/default-iphone/images/imageloader.gif';
+		this.removeAttribute("height");
+		
+		if(this.parentNode.tagName == "A") {
+			this.linkTarget = this.parentNode.href;
+			$(this.parentNode).replaceWith(this);
+		}
+		
+		$(this).click(function(){
+			if(this.src != this.originalSrc){
+				this.src = this.originalSrc;
+			} else {
+				window.location = this.linkTarget;
+			}
+		});
+	});
+	
+
+});

@@ -21,12 +21,26 @@ namespace :sugar do
 		end
 	end
 	
-	desc "Pack"
-	task :pack => [:pack_themes] do
-		puts "Packing javascript files..."
-		`juicer merge --force public/javascripts/application.js`
+	desc "Pack javascripts"
+	task :pack_scripts do
+		puts "Minifying javascript files..."
+		puts `juicer merge --force public/javascripts/application.js`
 		js_files = ['jquery', 'swfobject', 'application.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
 		`cat #{js_files} > public/javascripts/all.js`
+
+		puts "Minifying javascript files for the iPhone..."
+		puts `juicer merge --force public/javascripts/iphone.js`
+		js_files = ['jquery', 'iphone.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
+		`cat #{js_files} > public/javascripts/all.iphone.js`
+		
+		`rm public/javascripts/application.min.js`
+		`rm public/javascripts/iphone.min.js`
+		
+		puts "All done!"
+	end
+	
+	desc "Pack themes and javascripts"
+	task :pack => [:pack_themes, :pack_javascripts] do
 	end
 
 	desc "Disable web"

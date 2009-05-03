@@ -36,11 +36,10 @@
 	</p>
 </div>
 
-
 <script type="text/javascript">
-	Element.hide('password-reminder');
+	$('#password-reminder').hide();
 	function forgot_password() {
-		Element.toggle('login');
-		Element.toggle('password-reminder');
+		$('#login').toggle();
+		$('#password-reminder').toggle();
 	}
 </script>

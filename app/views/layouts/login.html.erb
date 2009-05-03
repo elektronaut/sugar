@@ -5,8 +5,15 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= Sugar.config(:forum_name) %> - Login</title>
-	<%= javascript_include_tag :defaults %>
 	<%= stylesheet_link_tag "#{theme_path}/login" %>
+	<% if RAILS_ENV == 'production' -%>
+		<%= javascript_include_tag "all" %>
+	<% else -%>
+		<%= javascript_include_tag "jquery" %>
+		<%= javascript_include_tag "jquery.libraries" %>
+		<%= javascript_include_tag 'swfobject' %>
+		<%= javascript_include_tag 'application' %>
+	<% end -%>
 	<link rel="icon" type="image/gif" href="<%= theme_path %>/images/favicon.gif" />
 </head>
 <body>
