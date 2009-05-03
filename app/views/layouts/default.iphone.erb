@@ -18,9 +18,9 @@
 		</div>
         <h1 id="pageTitle" class="page_title">
 			<% if @page_title %>
-				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name}:", discussions_path %></span> <%= @page_title %>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}:", discussions_path %></span> <%= @page_title %>
 			<% else %>
-				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name}", discussions_path %></span>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}", discussions_path %></span>
 			<% end %>
 		</h1>
     </div>
