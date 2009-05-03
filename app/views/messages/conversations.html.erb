@@ -33,6 +33,11 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
 <% end %>
 
+<div class="bottomlinks">
+	<%= link_to "Back to conversations", messages_path %>,
+	<%= link_to "Top of page", "#top" %>
+</div>
+
 <div class="compose" id="compose">
 	<a name="new" class="anchor" /></a>
 	<ul id="reply-tabs" class="tabs">  
