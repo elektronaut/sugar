@@ -1,5 +1,6 @@
 <% 
 	add_body_class "conversations"
+	add_body_class 'last_page' if @messages.last_page?
 	@page_title = "Conversation with #{@user.username}"
 	last_subject = nil
 %>
@@ -32,17 +33,24 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
 <% end %>
 
-<% form_for(@new_message, :html => { :class => 'compose_new_message' }) do |f| %>
+<div class="compose" id="compose">
 	<a name="new" class="anchor" /></a>
-	<h3>New message</h3>
-	<%= f.hidden_field(:recipient_id) %>
-	<p>
-		<label>Subject <span class="description">&mdash; Optional</span></label>
-		<%= f.text_field(:subject, :size => 80) %>
-	</p>
-	<p>
-		<label>Message</label>
-		<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => :rich) %>
-	</p>
-	<p><button type="submit">Send</button></p>
-<% end %>
+	<ul id="reply-tabs" class="tabs">  
+		<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
+	</ul>
+
+	<div id="replyText">
+		<% form_for(@new_message, :html => { :class => 'compose_new_message' }) do |f| %>
+			<%= f.hidden_field(:recipient_id) %>
+			<p>
+				<label>Subject <span class="description">&mdash; Optional</span></label>
+				<%= f.text_field(:subject, :size => 80) %>
+			</p>
+			<p>
+				<label>Message</label>
+				<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => :rich) %>
+			</p>
+			<p id="button-container"><button type="submit">Send</button></p>
+		<% end %>
+	</div>
+</div>
