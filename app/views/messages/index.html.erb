@@ -1,40 +1,33 @@
 <% 
-	add_body_class "messages"
-	@page_title = "Messages" 
+	add_body_class "conversation"
+	@page_title = "Conversations" 
 %>
 
-<%= render :partial => 'navigation', :locals => { :section => 'inbox' } %>
-
 <h2 class="section">
-	<%= link_to "Messages", messages_path %>
+	<%= link_to "Conversations", messages_path %>
 </h2>
 
-<% if @messages && @messages.length > 0 %>
-	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
-	<div class="messages">
-		<% @messages.each do |message| -%>
-		<div class="message <%= "new_message" unless message.read? %>">
-			<div class="user">
-				<div class="avatar"><%= avatar_image_tag message.sender %></div>
-				<div class="username"><%= link_to message.sender.username, paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}") %></div>
-				<div class="profile_link"><%= profile_link message.sender, 'Profile' %></div>
-				<div class="date"><%= formatted_time message.created_at %></div>
-			</div>
-			<div class="info">
-				<% if message.subject? %>
-					<h3 class="subject"><%= link_to message.subject, paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}") %></h3>
+<% if @users.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => @users } %>
+	<table class="discussions conversations"><% @users.each do |user| %>
+		<tr class="<%= conversation_classes(@users, user) %>">
+			<td class="name" colspan="5">
+				<%= link_to h(user.username), last_user_conversation_page_path(:username => user.username, :anchor => 'new') %>
+			</td>
+		</tr>
+		<tr class="<%= conversation_classes(@users, user) %>">
+			<td class="started_by">Started by <%= profile_link(@current_user.first_message_with(user).sender) %></td>
+			<td class="last_post">Last post by <%= profile_link(@current_user.last_message_with(user).sender) %></td>
+			<td class="last_active">Last active <strong><%= formatted_time @current_user.last_message_with(user).created_at %></strong></td>
+			<td class="post_count"><strong><%= @current_user.message_count_with(user) %></strong> <%= @current_user.message_count_with(user) > 1 ? 'posts' : 'post' %></td>
+			<td class="new_posts last">
+				<% if @current_user.unread_messages_from?(user) %>
+					New: <strong><%= @current_user.unread_message_count_with(user) %></strong>
 				<% end %>
-				<div class="body">
-					<%= message.body_html %>
-					<% unless message.subject? %>
-						<%= link_to "Reply", paged_user_conversation_path(:username => message.sender.username, :page => message.page, :anchor => "message-#{message.id}"), :class => :reply %>
-					<% end %>
-				</div>
-			</div>
-		</div>
-		<% end -%>
-	</div>
-	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+			</td>
+		</tr>
+	<% end %></table>
+	<%= render :partial => 'components/pagination', :locals => { :p => @users } %>
 <% else %>
-	<p>No messages.</p>
+	<p>You haven't sent or received any messages.</p>
 <% end %>

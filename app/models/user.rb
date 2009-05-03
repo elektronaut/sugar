@@ -166,9 +166,24 @@ class User < ActiveRecord::Base
 		end
     end
 
+	def paginated_conversation_partners(options={})
+		Pagination.paginate(
+			:total_count => self.conversation_partners.length,
+			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			User.find_by_sql("SELECT DISTINCT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC LIMIT #{pagination.offset}, #{pagination.limit}")
+		end
+	end
+
 	# Find conversation partners
 	def conversation_partners
-		User.find_by_sql("SELECT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC").uniq
+		User.find_by_sql("SELECT DISTINCT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC")
+	end
+	
+	# Find first message with user
+	def first_message_with(user)
+		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at ASC')
 	end
 	
 	# Find last message with user

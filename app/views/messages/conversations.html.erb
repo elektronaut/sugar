@@ -1,32 +1,30 @@
 <% 
-	add_body_class "messages"
+	add_body_class "conversations"
 	@page_title = "Conversation with #{@user.username}"
 	last_subject = nil
 %>
 
-<%= render :partial => 'navigation', :locals => { :section => 'conversation' } %>
-
 <h2 class="section">
-	<%= link_to "Messages", messages_path %> &raquo;
-	<%= link_to "Conversation with #{@user.username}", user_conversation_path(:username => @user.username) %>
+	<%= link_to "Conversations", messages_path %> &raquo;
+	<%= link_to "#{@user.username}", user_conversation_path(:username => @user.username) %>
 </h2>
 
 <% if @messages && @messages.length > 0 %>
 	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
-	<div class="messages">
+	<div class="posts">
 		<% @messages.each do |message| -%>
-		<a class="anchor" name="message-<%= message.id %>"></a>
-		<div class="message <%= "new_message" if message.recipient == @current_user && !message.read? %>">
-			<div class="user">
-				<div class="avatar"><%= avatar_image_tag message.sender %></div>
-				<div class="username"><%= profile_link message.sender %></div>
-				<div class="date"><%= formatted_time message.created_at %></div>
+		<div class="post message <%= "new_message" if message.recipient == @current_user && !message.read? %>">
+			<% if message.subject? && last_subject != message.subject %>
+				<div class="title"><%= h(last_subject = message.subject) %></div>
+			<% end %>
+			<div class="post_info">
+				<a class="anchor" name="message-<%= message.id %>"></a>
+				<span class="avatar"><%= avatar_image_tag(message.sender) %></span>
+				<span class="username"><%= profile_link(message.sender) %></span>
+				<span class="date"><%= formatted_time message.created_at %></span>
 			</div>
-			<div class="info">
-				<% if message.subject? && last_subject != message.subject %>
-					<h3 class="subject"><%= (last_subject = message.subject) %></h3>
-				<% end %>
-				<div class="body"><%= message.body_html %></div>
+			<div class="body">
+				<div class="content"><%= message.sender.html_disabled? ? h(message.body).gsub(/\n/,'<br />') : meify(message.body_html, message.sender) %></div>
 			</div>
 		</div>
 		<% end -%>

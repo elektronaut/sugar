@@ -92,6 +92,11 @@ module ApplicationHelper
     def discussion_classes(discussions, discussion)
         [discussion.labels.map(&:downcase), %w{odd even}[discussions.index(discussion)%2], (new_posts?(discussion) ? 'new_posts' : nil), "in_category#{discussion.category_id}", "by_user#{discussion.poster_id}"].flatten.compact.join(' ')
     end
+
+	# Class names for conversation
+	def conversation_classes(users, user)
+        [%w{odd even}[users.index(user)%2], (@current_user.unread_messages_from?(user) ? 'new_posts' : nil), "by_user#{user.id}"].flatten.compact.join(' ')
+	end
     
     def format_post(string)
         PostParser.parse(string)

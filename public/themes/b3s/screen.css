@@ -455,7 +455,7 @@ table.discussions tr.closed td.name a:hover {
 
 
 /* -----------------------------------------------------------------------
-   DISCUSSION VIEW
+   POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
 
 .posts {
@@ -770,77 +770,3 @@ table.discussions tr.closed td.name a:hover {
 	background-position: 0 7px;
 }
 
-
-/* -----------------------------------------------------------------------
-   MESSAGES
-   ----------------------------------------------------------------------- */
-
-div.messages {
-	border-bottom:       1px solid #E2DCBF;
-	padding-bottom:      15px;
-	margin-bottom:       20px;
-}
-
-div.messages .message {
-	padding-top:         15px;
-	padding-bottom:      15px;
-	border-top:          1px solid #E2DCBF;
-	overflow:            auto;
-}
-div.messages .new_message {
-	background:          #fffff0;
-}
-
-div.messages .message .functions {
-	float:               left;
-}
-div.messages .message .user {
-	width:               150px;
-	float:               left;
-}
-div.messages .message .user .avatar {
-	float:               left;
-	margin:              0 10px 10px 0;
-}
-div.messages .message .user .username {
-	font-weight:         bold;
-	font-size:           1.3em;
-	margin-left:         42px;
-}
-div.messages .message .user .date {
-	color:               #888;
-	margin-left:         42px;
-}
-
-div.messages .message .info {
-	margin-left:         190px;
-}
-
-div.messages .message .subject {
-	font-size:           1.3em;
-}
-div.messages .message .body {
-	font-size:           1.1em;
-	max-width:           600px;
-}
-div.messages .message .body ul {
-	list-style-type:     disc;
-	list-style-position: inside;
-}
-div.messages .message .body a {
-	color:               #005794;
-	text-decoration:     underline;
-}
-div.messages .message .body a:visited {
-	color:               #3900a2;
-}
-div.messages .message .body a:hover {
-	color:               #001d32;
-}
-div.messages .message a.reply, div.messages .message a.reply:visited {
-	margin-left:         5px;
-	color:               #9f0000;
-	background:          #ffd;
-	text-decoration:     none;
-	padding:             0 3px;
-}

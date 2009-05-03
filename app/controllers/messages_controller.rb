@@ -12,13 +12,9 @@ class MessagesController < ApplicationController
 
     def index
 		respond_to do |format|
-			format.html   { @messages = @current_user.paginated_messages(:page => params[:page]) }
+			format.html   { @users = @current_user.paginated_conversation_partners(:page => params[:page]) }
 			format.iphone { @users = @current_user.conversation_partners }
 		end
-    end
-    
-    def outbox
-        @messages = @current_user.paginated_sent_messages(:page => params[:page])
     end
     
     def conversations
