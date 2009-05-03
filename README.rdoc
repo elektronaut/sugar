@@ -1,4 +1,34 @@
 = Sugar
 
-TODO: Add a readme
+Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. The name? It's what Butterscotch is made of, and it's totally sweet.
+
+== Requirements, and how to install them
+
+Sugar is currently targetting version 2.3.2 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
+  
+  sudo gem install rails -v 2.3.2
+
+You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work.
+
+If you plan on enabling the Xbox Live API functionality, make sure you've got the Hpricot gem installed:
+
+  sudo gem install hpricot
+
+Searching relies on Sphinx 0.9.8 or newer, to install it see http://www.sphinxsearch.com/ for downloads and instructions.
+
+== Credits
+
+Napkin was written by Branden Hall of Automata Studios. Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned.
+
+== License
+
+Copyright © 2008-2009 Inge Jørgensen
+
+The MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
