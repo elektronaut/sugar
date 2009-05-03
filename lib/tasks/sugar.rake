@@ -40,7 +40,7 @@ namespace :sugar do
 	end
 	
 	desc "Pack themes and javascripts"
-	task :pack => [:pack_themes, :pack_javascripts] do
+	task :pack => [:pack_themes, :pack_scripts] do
 	end
 
 	desc "Disable web"
