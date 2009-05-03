@@ -18,7 +18,7 @@ Searching relies on Sphinx 0.9.8 or newer, to install it see http://www.sphinxse
 
 == Credits
 
-Napkin was written by Branden Hall of Automata Studios. Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned.
+Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com). Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned.
 
 == License
 
