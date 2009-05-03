@@ -57,6 +57,11 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/config/initializers/mailer.rb #{deploy_to}/#{current_dir}/config/initializers/mailer.rb"
 end
 
+desc "Packs themes"
+task :pack_themes, :roles => [:web] do
+    run("cd #{deploy_to}/current; /usr/bin/rake sugar:pack_themes RAILS_ENV=production")
+end
+
 namespace :deploy do
     namespace :web do
         desc "Present a maintenance page to visitors. Message is customizable with the REASON enviroment variable."
@@ -83,5 +88,6 @@ end
 after "deploy:setup", :create_shared_dirs
 after "deploy:symlink", :fix_permissions
 after "deploy:symlink", :create_symlinks
+after "deploy:symlink", :pack_themes
 
 

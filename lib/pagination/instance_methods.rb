@@ -1,44 +1,76 @@
 module Pagination
+
+	# The InstanceMethods are mixed into the collection by 
+	# Pagination.apply, which means they can be used in your views. 
+	#
+	# See the Pagination module documentation for more info and examples.
+
 	module InstanceMethods
+		# The paginater info object
 		attr_accessor :paginater
-		delegate :pages, :page, :total_count, :offset, :per_page, :to => :paginater
 
-		# Previous page number
-		def previous_page
-			(page > 1) ? (page - 1) : nil
+		# Total number of pages.
+		def pages
+			paginater.pages
+		end
+		
+		# Current page.
+		def page
+			paginater.page
+		end
+		
+		# Total number of items.
+		def total_count
+			paginater.total_count
+		end
+		
+		# Number of items per page.
+		def per_page
+			paginater.per_page
+		end
+		alias :limit :per_page
+		
+		# The start offset (number of items skipped).
+		def offset
+			paginater.offset
 		end
 
-		# Next page number
-		def next_page
-			(pages > page) ? (page + 1) : nil
-		end
-
-		# Is there a previous page?
-		def previous_page?
-			(previous_page) ? true : false
-		end
-
-		# Is there a next page?
-		def next_page?
-			(next_page) ? true : false
-		end
-
-		# First page number
+		# Number of the first page (which for obious reasons is always 1).
 		def first_page
 			1
 		end
 
-		# Last page number
+		# Number of the last page.
 		def last_page
 			pages
 		end
 
-		# Is the collection on the first page?
+		# Number of the previous page, or nil if there isn't one.
+		def previous_page
+			(page > 1) ? (page - 1) : nil
+		end
+
+		# Number of the next page, or nil if there isn't one.
+		def next_page
+			(pages > page) ? (page + 1) : nil
+		end
+
+		# Returns true or false, depending if there's a previous page.
+		def previous_page?
+			(previous_page) ? true : false
+		end
+
+		# Returns true or false, depending if there's a next page.
+		def next_page?
+			(next_page) ? true : false
+		end
+
+		# Returns true if the collection is on the first page.
 		def first_page?
 			(page == first_page) ? true : false
 		end
 
-		# Is the collection on the last page?
+		# Returns true if the collection is on the last page.
 		def last_page?
 			(page == last_page) ? true : false
 		end

@@ -1,20 +1,35 @@
 module Pagination
+	# The Paginater stores pagination info and handles the math. 
+	# See the Pagination module documentation for usage examples.
 	class Paginater
-	    attr_reader :pages, :page, :total_count, :offset, :per_page
+
+		# Total number of items
+		attr_reader :total_count
+		# Items per page
+		attr_reader :per_page
+		# Total number of pages
+		attr_reader :pages
+		# Current page
+		attr_reader :page
+
 		alias :limit :per_page
 
+		# The following parameters are required:
+		# * <tt>:total_count</tt> - Total count of items.
+		# * <tt>:per_page</tt>    - Items per page.
+		# * <tt>:page</tt>        - Current page.
 		def initialize(options)
 			@total_count = options[:total_count]
 			@per_page    = options[:per_page]
 			@page        = options[:page]
 		end
 
-		# Total number of pages
+		# Returns total number of pages.
 		def pages
 			(total_count.to_f/per_page).ceil
 		end
 		
-		# Current page
+		# Returns the current page.
 		def page
 			if @page.to_s == "last"
 				@page = pages
@@ -26,7 +41,7 @@ module Pagination
 			@page
 		end
 		
-		# Offset (number of rows from start)
+		# Returns the start offset.
 		def offset
 			o = per_page * (page - 1)
 			o = 0 if o < 0

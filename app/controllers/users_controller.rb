@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 	end
 	
 	def admins
-        @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND (admin = 1 OR user_admin = 1 OR moderator = 1)')
+        @users  = User.find_admins
 	end
     
     def xboxlive
@@ -37,11 +37,11 @@ class UsersController < ApplicationController
     end
 
 	def twitter
-		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND twitter IS NOT NULL AND twitter != ""')
+		@users = User.find_twitter_users
 	end
 	
 	def top_posters
-        @users  = User.find(:all, :order => 'posts_count DESC', :conditions => 'activated = 1 AND banned = 0', :limit => 50)
+		@users = User.find_top_posters(:limit => 50)
 	end
     
     def show
@@ -59,7 +59,6 @@ class UsersController < ApplicationController
     
 	def participated
 		@section = :participated if @user == @current_user
-		#@discussions = @user.paginated_participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
 		@discussions = @user.participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
 		find_discussion_views
 	end
