@@ -13,14 +13,14 @@ function SugarTabs(controls, options) {
 	controls.hideAllTabs = function(){
 		jQuery(this.tabs).each(function(){
 			jQuery(this.tabId).hide();
-			jQuery(this).removeClass('active');
+			jQuery(this.parentNode).removeClass('active');
 		});
 	};
 
 	controls.showTab = function(tab) {
 		this.hideAllTabs();
 		jQuery(tab.tabId).show();
-		jQuery(tab).addClass('active');
+		jQuery(tab.parentNode).addClass('active');
 	};
 
 	// Set up the links

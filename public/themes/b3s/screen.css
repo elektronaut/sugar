@@ -366,7 +366,7 @@ h2.section {
 .tabbed_navigation li a {
 	padding:             2px 5px;
 }
-.tabbed_navigation li a.active {
+.tabbed_navigation li.active a {
 	background:          #9f0000;
 	color:               #fff;
 }
@@ -390,7 +390,7 @@ h2.section {
 .topTabs li a:hover {
 	color:               #460000;
 }
-.topTabs li a.active {
+.topTabs li.active a {
 	background:          #9f0000;
 	border:              1px solid #9f0000;
 	color:               #fff;
@@ -641,7 +641,7 @@ table.discussions tr.closed td.name a:hover {
 #reply-tabs li a {
 	padding:             2px 5px;
 }
-#reply-tabs li a.active {
+#reply-tabs li.active a {
 	background:          #9f0000;
 	color:               #fff;
 }

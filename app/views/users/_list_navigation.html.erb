@@ -1,10 +1,10 @@
-<ul class="topTabs">  
-	<li class="tab AllUsersTab"><%= link_to "All Users", users_path, :class => (params[:action] == 'index') ? 'active' : nil %></li>
-	<li class="tab OnlineUsersTab"><%= link_to "Online", online_users_path, :class => (params[:action] == 'online') ? 'active' : nil %></li>
-	<li class="tab RecentlyJoinedTab"><%= link_to "Recently Joined", recently_joined_users_path, :class => (params[:action] == 'recently_joined') ? 'active' : nil %></li>
-	<li class="tab TopPostersTab"><%= link_to "Top Posters", top_posters_users_path, :class => (params[:action] == 'top_posters') ? 'active' : nil %></li>
-	<li class="tab AdminsTab"><%= link_to "Admins", admins_users_path, :class => (params[:action] == 'admins') ? 'active' : nil %></li>
-	<li class="tab BannedUsersTab"><%= link_to "Banned", banned_users_path, :class => (params[:action] == 'banned') ? 'active' : nil %></li>
-	<li class="tab TwitterUsersTab"><%= link_to "Twitter", twitter_users_path, :class => (params[:action] == 'twitter') ? 'active' : nil %></li>
-	<li class="tab XboxLiveUsersTab"><%= link_to "Xbox Live", xboxlive_users_path, :class => (params[:action] == 'xboxlive') ? 'active' : nil %></li>
+<ul class="topTabs">
+	<%= users_tab "All Users", users_path, :action => 'index', :class => 'AllUsersTab' %>
+	<%= users_tab "Online", online_users_path, :action => 'online', :class => 'OnlineUsersTab' %>
+	<%= users_tab "Recently Joined", recently_joined_users_path, :action => 'recently_joined', :class => 'RecentlyJoinedTab' %>
+	<%= users_tab "Top Posters", top_posters_users_path, :action => 'top_posters', :class => 'TopPostersTab' %>
+	<%= users_tab "Admins", admins_users_path, :action => 'admins', :class => 'AdminsTab' %>
+	<%= users_tab "Banned", banned_users_path, :action => 'banned', :class => 'BannedUsersTab' %>
+	<%= users_tab "Twitter", twitter_users_path, :action => 'twitter', :class => 'TwitterUsersTab' %>
+	<%= users_tab "Xbox Live", xboxlive_users_path, :action => 'xboxlive', :class => 'XboxLiveUsersTab' %>
 </ul>
