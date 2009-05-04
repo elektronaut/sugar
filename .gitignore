@@ -13,3 +13,4 @@ db/sphinx
 public/cache
 public/system
 public/doodles
+public/themes/*.zip
