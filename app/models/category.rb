@@ -41,7 +41,7 @@ class Category < ActiveRecord::Base
         slug = slug.gsub(/[\[\{]/,'(')
         slug = slug.gsub(/[\]\}]/,')')
         slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-        (Discussion.work_safe_urls) ? self.id : "#{self.id};" + slug
+        (Discussion.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
     end
     
 	# Fixes any inconsistencies in the counter_cache columns.
