@@ -13,7 +13,7 @@
 
 <% if @categories && @categories.length > 0 %><div id="categories">
 	<% @categories.each do |category| %>
-		<div class="category <%= "trusted_category" if category.trusted? %>">
+		<div class="category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
 			<h3 class="name">
 				<% if category.trusted? %>[Trusted]<% end %>
 				<%= link_to category.name, category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
