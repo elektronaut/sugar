@@ -10,7 +10,7 @@ module Pagination
 		# Total number of pages
 		attr_reader :pages
 		# Current page
-		attr_reader :page
+		attr_accessor :page
 
 		alias :limit :per_page
 
