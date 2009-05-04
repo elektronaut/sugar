@@ -29,12 +29,11 @@ class Discussion < ActiveRecord::Base
 	# Update the first post if @body has been changed
 	after_update do |discussion|
 		if discussion.body && !discussion.body.empty?
-			discussion.posts.first.update_attribute(:body, discussion.body)
-			discussion.posts.first.update_attribute(:edited_at, Time.now)
+			discussion.posts.first.update_attributes(:body => discussion.body, :edited_at => Time.now)
 		end
 	end
 
-	before_save do |discussion|
+	before_update do |discussion|
 		discussion.update_trusted = true if discussion.trusted_changed?
 	end
 
@@ -155,7 +154,9 @@ class Discussion < ActiveRecord::Base
 	# Creates the first post. This should probably be called from an after_create filter,
 	# right now it's run manually from the controller.
 	def create_first_post!
-		self.posts.create(:user => self.poster, :body => self.body)
+		if self.body && !self.body.empty?
+			self.posts.create(:user => self.poster, :body => self.body)
+		end
 	end
 
 	def fix_counter_cache!

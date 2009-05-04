@@ -15,9 +15,18 @@ class Category < ActiveRecord::Base
     validates_presence_of :name
     acts_as_list
     
-    after_save do |category|
-        Discussion.update_all("trusted = " + (category.trusted? ? '1' : '0'), "category_id = #{category.id}")
-    end
+	# Flag for trusted status, which will update after save if it has been changed.
+	attr_accessor :update_trusted
+
+	before_update do |category|
+		category.update_trusted = true if category.trusted_changed?
+	end
+
+	after_save do |category|
+		if category.update_trusted
+			Discussion.update_all("trusted = " + (category.trusted? ? '1' : '0'), "category_id = #{category.id}")
+		end
+	end
     
     class << self
         # Enable work safe URLs

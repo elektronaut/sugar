@@ -12,7 +12,7 @@ class DiscussionTest < ActiveSupport::TestCase
 
 	context "A discussion" do
 		setup do
-			@discussion = Discussion.make(:title => 'This is my Discussion')
+			@discussion = Discussion.make(:title => 'This is my Discussion', :body => 'It has content')
 		end
 		should "slug urls" do
 			Discussion.work_safe_urls = false
@@ -22,6 +22,7 @@ class DiscussionTest < ActiveSupport::TestCase
 		end
 		should "have a first post" do
 			assert_equal 1, @discussion.posts.count
+			assert_equal 'It has content', @discussion.posts.first.body
 		end
 		should "update the first post when body changes" do
 			assert_equal @discussion.posts.first.body, @discussion.body
@@ -56,7 +57,8 @@ class DiscussionTest < ActiveSupport::TestCase
 		end
 		context "with posts" do
 			setup do
-				54.times { @discussion.posts.make }
+				@user = User.make
+				54.times { @discussion.posts.make(:user => @user) }
 			end
 			should "have posts" do
 				assert_equal 55, @discussion.posts.count
@@ -101,10 +103,11 @@ class DiscussionTest < ActiveSupport::TestCase
 	
 	context "A mixed sets of discussions" do
 		setup do
+			@user = User.make
 			@regular_category = Category.make
 			@trusted_category = Category.make(:trusted)
-			35.times { @regular_category.discussions.make }
-			35.times { @trusted_category.discussions.make }
+			35.times { @regular_category.discussions.make(:poster => @user) }
+			35.times { @trusted_category.discussions.make(:poster => @user) }
 		end
 		should "be created" do
 			assert_equal 35, Discussion.count(:all, :conditions => {:trusted => false})

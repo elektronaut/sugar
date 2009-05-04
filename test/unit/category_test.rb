@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class CategoryTest < ActiveSupport::TestCase
 	should_have_many :discussions
@@ -56,7 +56,8 @@ class CategoryTest < ActiveSupport::TestCase
 		context "with 10 discussions" do
 			setup do
 				@category = Category.make(:trusted => true)
-				10.times { @category.discussions.make }
+				@user = User.make
+				10.times { @category.discussions.make(:poster => @user) }
 			end
 			should "report proper count" do
 				assert_equal 10, @category.discussions.count

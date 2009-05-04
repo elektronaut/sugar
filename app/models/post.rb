@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
 	belongs_to :discussion, :counter_cache => true
 	has_many   :discussion_views
 
-	validates_presence_of :body
+	validates_presence_of :body, :user_id, :discussion_id
 
 	validate do |post|
 		post.trusted = post.discussion.trusted if post.discussion
