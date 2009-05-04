@@ -22,7 +22,7 @@
 			<td class="post_count"><strong><%= @current_user.message_count_with(user) %></strong> <%= @current_user.message_count_with(user) > 1 ? 'posts' : 'post' %></td>
 			<td class="new_posts last">
 				<% if @current_user.unread_messages_from?(user) %>
-					New: <strong><%= @current_user.unread_message_count_with(user) %></strong>
+					New: <strong><%= @current_user.unread_message_count_from(user) %></strong>
 				<% end %>
 			</td>
 		</tr>
