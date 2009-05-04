@@ -1,34 +1,39 @@
 require 'test_helper'
 
 class DiscussionTest < ActiveSupport::TestCase
+
 	should_belong_to :category
 	should_belong_to :poster
 	should_belong_to :last_poster
+
 	should_have_many :posts
 	should_have_many :discussion_views
 	should_have_many :discussion_relationships
+
 	should_validate_presence_of :category_id
 	should_validate_presence_of :body
 
 	context "A discussion" do
-		setup do
-			@discussion = Discussion.make(:title => 'This is my Discussion', :body => 'It has content')
-		end
+		setup { @discussion = Discussion.make(:title => 'This is my Discussion', :body => 'It has content') }
+
 		should "slug urls" do
 			Discussion.work_safe_urls = false
 			assert @discussion.to_param =~ /^[\d]+;This\-is\-my\-Discussion$/
 			Discussion.work_safe_urls = true
 			assert @discussion.to_param =~ /^[\d]+$/
 		end
+
 		should "have a first post" do
 			assert_equal 1, @discussion.posts.count
 			assert_equal 'It has content', @discussion.posts.first.body
 		end
+
 		should "update the first post when body changes" do
 			assert_equal @discussion.posts.first.body, @discussion.body
 			assert @discussion.update_attribute(:body, "New body")
 			assert_equal "New body", @discussion.posts.first.body
 		end
+
 		should "report labels" do
 			assert !@discussion.labels?
 			assert_equal [], @discussion.labels
@@ -36,6 +41,7 @@ class DiscussionTest < ActiveSupport::TestCase
 			assert @discussion.labels?
 			assert_same_elements ['NSFW', 'Closed', 'Sticky'], @discussion.labels
 		end
+
 		should "be editable only by poster or users with privileges" do
 			assert @discussion.editable_by?(@discussion.poster)
 			assert @discussion.editable_by?(User.make(:admin))
@@ -43,10 +49,12 @@ class DiscussionTest < ActiveSupport::TestCase
 			assert !@discussion.editable_by?(User.make)
 			assert !@discussion.editable_by?(User.make(:user_admin))
 		end
+
 		should "be postable by anyone if open" do
 			assert @discussion.postable_by?(@discussion.poster)
 			assert @discussion.postable_by?(User.make)
 		end
+
 		should "only be postable by admins if closed" do
 			@discussion.update_attribute(:closed, true)
 			assert @discussion.closed?
@@ -55,14 +63,18 @@ class DiscussionTest < ActiveSupport::TestCase
 			assert @discussion.postable_by?(User.make(:admin))
 			assert @discussion.postable_by?(User.make(:moderator))
 		end
+
+		# Discussion with posts
 		context "with posts" do
 			setup do
 				@user = User.make
 				54.times { @discussion.posts.make(:user => @user) }
 			end
+
 			should "have posts" do
 				assert_equal 55, @discussion.posts.count
 			end
+
 			should "paginate posts" do
 				assert_equal 2, @discussion.last_page
 				posts = @discussion.paginated_posts(:page => 1)
@@ -73,6 +85,7 @@ class DiscussionTest < ActiveSupport::TestCase
 				posts = @discussion.paginated_posts(:page => 2)
 				assert_equal 5, posts.length
 			end
+
 			should "load new posts by index" do
 				new_posts = @discussion.posts_since_index(20)
 				assert_equal 35, new_posts.length
@@ -85,16 +98,20 @@ class DiscussionTest < ActiveSupport::TestCase
 			@category = Category.make(:trusted)
 			@discussion = @category.discussions.make(:title => 'This is my Discussion')
 		end
+
 		should "be trusted" do
 			assert @discussion.trusted?
 		end
+
 		should "have the trusted label" do
 			assert @discussion.labels?
 			assert_same_elements ['Trusted'], @discussion.labels
 		end
+
 		should "not be viewable by a regular user" do
 			assert !@discussion.viewable_by?(User.make)
 		end
+
 		should "should be viewable by a trusted user or admin" do
 			assert @discussion.viewable_by?(User.make(:trusted))
 			assert @discussion.viewable_by?(User.make(:admin))
@@ -109,10 +126,12 @@ class DiscussionTest < ActiveSupport::TestCase
 			35.times { @regular_category.discussions.make(:poster => @user) }
 			35.times { @trusted_category.discussions.make(:poster => @user) }
 		end
+
 		should "be created" do
 			assert_equal 35, Discussion.count(:all, :conditions => {:trusted => false})
 			assert_equal 70, Discussion.count(:all)
 		end
+
 		should "paginate" do
 			discussions = Discussion.find_paginated
 			assert_equal Discussion::DISCUSSIONS_PER_PAGE, discussions.length
