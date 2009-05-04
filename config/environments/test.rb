@@ -23,5 +23,5 @@ config.action_mailer.delivery_method = :test
 
 # Required gems for testing
 config.gem 'thoughtbot-shoulda', :lib => 'shoulda'
-#config.gem 'notahat-machinist', :lib => 'machinist'
-#config.gem 'faker'
+config.gem 'notahat-machinist', :lib => 'machinist'
+config.gem 'faker'
