@@ -59,7 +59,7 @@ end
 
 desc "Packs themes"
 task :pack_themes, :roles => [:web] do
-    run("cd #{deploy_to}/current; /usr/bin/rake sugar:pack_themes RAILS_ENV=production")
+    #run("cd #{deploy_to}/current; /usr/bin/rake sugar:pack_themes RAILS_ENV=production")
 end
 
 namespace :deploy do

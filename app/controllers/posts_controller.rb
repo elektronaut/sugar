@@ -8,7 +8,6 @@ class PostsController < ApplicationController
 	# Disable sessions and filters for the posts count action, and cache it
 	session       :disabled => true,             :only   => [:count]
 	before_filter :authenticate_session,         :except => [:count]
-	before_filter :layout_data,                  :except => [:count]
 	after_filter  :store_session_authentication, :except => [:count]
 	caches_page   :count
 
