@@ -17,6 +17,9 @@ Category.blueprint do
 	description { Sham.body }
 	trusted false
 end
+Category.blueprint(:trusted) do
+	trusted true
+end
 
 Discussion.blueprint do
 	title
@@ -25,6 +28,19 @@ Discussion.blueprint do
 	last_poster
 	category
 	trusted { category.trusted }
+end
+
+Post.blueprint do
+	discussion
+	user
+	body
+end
+
+Message.blueprint do
+	recipient
+	sender
+	subject { Sham.title }
+	body
 end
 
 User.blueprint do
@@ -54,6 +70,12 @@ end
 
 User.blueprint(:admin) do
 	admin true
+end
+User.blueprint(:moderator) do
+	moderator true
+end
+User.blueprint(:user_admin) do
+	user_admin true
 end
 User.blueprint(:trusted) do
 	trusted true

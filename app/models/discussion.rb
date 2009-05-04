@@ -46,6 +46,11 @@ class Discussion < ActiveRecord::Base
 			end
 		end
 	end
+	
+	# Automatically create the first post
+	after_create do |discussion|
+		discussion.create_first_post!
+	end
 
 	define_index do
 		indexes title
@@ -83,7 +88,7 @@ class Discussion < ActiveRecord::Base
 			discussions = Discussion.search(options[:query], search_options)
 			Pagination.apply(discussions, Pagination::Paginater.new(:total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE))
 		end
-
+		
 		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
 		# The collection is extended with the Pagination module, which provides pagination info.
 		# Takes the following options: 
@@ -126,6 +131,12 @@ class Discussion < ActiveRecord::Base
 
 	end
 	
+	# Finds paginated posts. See <tt>Post.find_paginated</tt> for more info.
+	def paginated_posts(options={})
+		Post.find_paginated({:discussion => self}.merge(options))
+	end
+
+	# Finds posts created since offset.
 	def posts_since_index(offset)
 		Post.find(:all, 
 			:conditions => ['discussion_id = ?', self.id], 
@@ -136,7 +147,8 @@ class Discussion < ActiveRecord::Base
 		)
 	end
 
-	def last_page(per_page=50)
+	# Finds the number of the last page.
+	def last_page(per_page=Post::POSTS_PER_PAGE)
 		(self.posts_count.to_f/per_page).ceil
 	end
 
@@ -170,12 +182,12 @@ class Discussion < ActiveRecord::Base
 
 	# Is this discussion editable by the given user?
 	def editable_by?(user)
-		(user && (user.admin? || user == self.poster)) ? true : false
+		(user && (user.admin? || user.moderator? || user == self.poster)) ? true : false
 	end
 
 	# Can the given user post in this thread?
 	def postable_by?(user)
-		(user && (user.admin? || !self.closed?)) ? true : false
+		(user && (user.admin? || user.moderator? || !self.closed?)) ? true : false
 	end
 
 	def viewable_by?(user)
@@ -190,4 +202,11 @@ class Discussion < ActiveRecord::Base
 		slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
 		(Discussion.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
 	end
+	
+	if ENV['RAILS_ENV'] == 'test'
+		def posts_count
+			self.posts.count
+		end 
+	end
+	
 end

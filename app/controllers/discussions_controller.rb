@@ -69,10 +69,8 @@ class DiscussionsController < ApplicationController
     
     def create
         attributes = @current_user.admin? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
-        @discussion = @current_user.discussions.new(attributes)
+        @discussion = @current_user.discussions.create(attributes)
         if @discussion.valid?
-            @discussion.save
-            @discussion.create_first_post!
             redirect_to discussion_path(@discussion) and return
         else
             flash.now[:notice] = "Could not save your discussion, did you fill in all required fields?"

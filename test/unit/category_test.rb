@@ -53,27 +53,27 @@ class CategoryTest < ActiveSupport::TestCase
 		should "should be viewable by an admin" do
 			assert @category.viewable_by?(User.make(:admin))
 		end
-		context "with 45 discussions" do
+		context "with 10 discussions" do
 			setup do
 				@category = Category.make(:trusted => true)
-				45.times { @category.discussions.make }
+				10.times { @category.discussions.make }
 			end
 			should "report proper count" do
-				assert_equal 45, @category.discussions.count
+				assert_equal 10, @category.discussions.count
 			end
 			should "have only trusted discussions" do
 				assert_equal 0,  Discussion.count(:all, :conditions => ['trusted = 0'])
-				assert_equal 45, Discussion.count(:all, :conditions => ['trusted = 1'])
+				assert_equal 10, Discussion.count(:all, :conditions => ['trusted = 1'])
 			end
 			should "update trusted flag on discussions" do
 				@category.update_attribute(:trusted, false)
 				assert !@category.trusted?
-				assert_equal 45, Discussion.count(:all, :conditions => ['trusted = 0'])
+				assert_equal 10, Discussion.count(:all, :conditions => ['trusted = 0'])
 				assert_equal 0,  Discussion.count(:all, :conditions => ['trusted = 1'])
 				@category.update_attribute(:trusted, true)
 				assert @category.trusted?
 				assert_equal 0,  Discussion.count(:all, :conditions => ['trusted = 0'])
-				assert_equal 45, Discussion.count(:all, :conditions => ['trusted = 1'])
+				assert_equal 10, Discussion.count(:all, :conditions => ['trusted = 1'])
 			end
 		end
 	end
