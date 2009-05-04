@@ -20,9 +20,6 @@ if !File.exist?(File.join(File.dirname(__FILE__), 'session_key')) && ENV['RAILS_
     File.open(File.join(File.dirname(__FILE__), 'session_key'), "w"){ |fh| fh.write(session_key)}
 end
 
-SESSION_KEY_NAME = YAML.load_file(File.join(File.dirname(__FILE__), 'sugar_conf.yml'))['session_key']
-SESSION_KEY      = File.read(File.join(File.dirname(__FILE__), 'session_key'))
-
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -55,15 +52,6 @@ Rails::Initializer.run do |config|
   # in the database in UTC, and return them converted to the specified local zone.
   # Run "rake -D time" for a list of tasks for finding time zone names. Uncomment to use default local time.
   config.time_zone = 'UTC'
-
-  # Your secret key for verifying cookie session data integrity.
-  # If you change this key, all old sessions will become invalid!
-  # Make sure the secret is at least 30 characters and all random, 
-  # no regular words or you'll be exposed to dictionary attacks.
-  config.action_controller.session = {
-    :session_key => SESSION_KEY_NAME,
-    :secret      => SESSION_KEY
-  }
 
   # Use the database for sessions instead of the cookie-based default,
   # which shouldn't be used to store highly confidential information

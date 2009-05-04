@@ -6,7 +6,6 @@ class PostsController < ApplicationController
     protect_from_forgery    :except => [:doodle]
 
 	# Disable sessions and filters for the posts count action, and cache it
-	session       :disabled => true,             :only   => [:count]
 	before_filter :authenticate_session,         :except => [:count]
 	before_filter :detect_iphone,                :except => [:count]
 	before_filter :set_section,                  :except => [:count]

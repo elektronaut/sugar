@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
 
 	layout 'default'
 	helper :all
-	session :session_expires => 3.years.from_now
 	filter_parameter_logging :password, :drawing
 
 	# See ActionController::RequestForgeryProtection for details
