@@ -39,6 +39,18 @@ class Category < ActiveRecord::Base
         end
     end
 
+	# Returns true if this category has any labels
+	def labels?
+		(self.trusted?) ? true : false
+	end
+
+	# Returns an array of labels (for use in the thread title)
+	def labels
+		labels = []
+		labels << "Trusted" if self.trusted?
+		return labels
+	end
+
 	# Returns true if this category is viewable by the given <tt>user</tt>.
     def viewable_by?(user)
         (user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false

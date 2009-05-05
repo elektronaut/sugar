@@ -15,7 +15,7 @@
 	<% @categories.each do |category| %>
 		<div class="category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
 			<h3 class="name">
-				<% if category.trusted? %>[Trusted]<% end %>
+				<% if category.labels? %><span class="labels">[<%= category.labels.join(', ') %>]</span><% end %>
 				<%= link_to category.name, category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
 			</h3>
 			<p class="description">

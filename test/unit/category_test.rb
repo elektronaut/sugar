@@ -15,6 +15,10 @@ class CategoryTest < ActiveSupport::TestCase
 			assert @category.to_param =~ /^[\d]+$/
 		end
 
+		should "not have any labels" do
+			assert !@category.labels?
+			assert_same_elements [], @category.labels
+		end
 	end
 	
 	context "A trusted category" do
@@ -39,6 +43,11 @@ class CategoryTest < ActiveSupport::TestCase
 
 		should "should be viewable by an admin" do
 			assert @category.viewable_by?(User.make(:admin))
+		end
+		
+		should "not have the trusted label" do
+			assert @category.labels?
+			assert_same_elements ["Trusted"], @category.labels
 		end
 
 		# Category with discussions

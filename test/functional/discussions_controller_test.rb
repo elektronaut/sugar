@@ -19,10 +19,7 @@ class DiscussionsControllerTest < ActionController::TestCase
 
 	context "When logged in" do 
 		setup do
-			@current_user = User.make
-			session[:user_id] = @current_user.id
-			session[:hashed_password] = @current_user.hashed_password
-			session[:ips] = ['0.0.0.0']
+			login_session
 		end
 		should "a GET on index retrieve a list of discussions" do
 			get :index

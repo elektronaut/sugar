@@ -15,5 +15,12 @@ class ActiveSupport::TestCase
 		all_categories = regular_categories + trusted_categories
 	end
 
+	def login_session(user=User.make)
+		@current_user = user
+		session[:user_id] = @current_user.id
+		session[:hashed_password] = @current_user.hashed_password
+		session[:ips] = ['0.0.0.0']
+	end
+	
 	setup { Sham.reset }
 end
