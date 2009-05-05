@@ -23,8 +23,8 @@ class ApplicationController < ActionController::Base
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
 	# The IP is verified to avoid session hijacking.
 	def require_authenticated
-		unless @current_user && session[:ips] && session[:ips].include?(request.env['REMOTE_ADDR'])
-			flash[:notice] = 'You must be logged in to to that.'
+		unless @current_user #&& session[:ips] && session[:ips].include?(request.env['REMOTE_ADDR'])
+			#flash[:notice] = 'You must be logged in to to that.'
 			redirect_to login_users_url and return
 		end
 	end
