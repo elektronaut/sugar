@@ -30,7 +30,7 @@ function SugarTabs(controls, options) {
 		controls.tabs.push(this);
 		jQuery(this).click(function(){
 			this.container.showTab(this);
-			return true;
+			return false;
 		});
 	});
 
