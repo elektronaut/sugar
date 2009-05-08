@@ -229,13 +229,13 @@ class User < ActiveRecord::Base
 			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
 			:page        => options[:page] || 1
 		) do |pagination|
-			User.find_by_sql("SELECT DISTINCT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC LIMIT #{pagination.offset}, #{pagination.limit}")
+			User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC LIMIT #{pagination.offset}, #{pagination.limit}")
 		end
 	end
 
 	# Find this users conversation partners.
 	def conversation_partners
-		User.find_by_sql("SELECT DISTINCT u.* FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) ORDER BY m.created_at DESC")
+		User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC")
 	end
 
 	# Finds first message exchanged with <tt>user</tt>.
