@@ -47,12 +47,12 @@
 		</div>
 		<% end %>
 		<% if post.me_post? %>
-			<div class="avatar">
-				<%= avatar_image_tag(post.user) %>
-			</div>
-			<div class="body" id="postBody-<%= post.id %>">
-				<%= meify h(post.body), post.user %>
-				<span class="date">&ndash; <%= formatted_time post.created_at %></span>
+			<div class="me_post_content">
+				<div class="avatar"><%= avatar_image_tag(post.user) %></div>
+				<div class="body" id="postBody-<%= post.id %>">
+					<%= meify h(post.body), post.user %>
+					<span class="date">&ndash; <%= formatted_time post.created_at %></span>
+				</div>
 			</div>
 		<% else %>
 			<div class="post_info">
