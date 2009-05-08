@@ -49,6 +49,7 @@ class UsersController < ApplicationController
 			format.html do
 				@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?, :limit => 15)
 			end
+			format.iphone {}
 		end
     end
     
