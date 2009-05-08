@@ -7,7 +7,6 @@ forum_title: BUTT<em>3</em>RSCOTCH
 
 default_domain: butt3rscotch.org
 mail_sender: Butt3rscotch <noreply@butt3rscotch.org>
-
 session_key: _butt3rscotch_session
 
 # Themes
@@ -19,4 +18,3 @@ flickr_api: 016918184821edf95505d9acd61e64c4
 
 # Enable Xbox Live integration
 xbox_live_enabled: true
-
