@@ -127,9 +127,14 @@ class UsersController < ApplicationController
 
 		case response
 		when OpenID::Consumer::SetupNeededResponse
-			setup_response = openid_consumer.begin(response.identity_url) rescue nil
-			if setup_response
-				redirect_to setup_response.redirect_url(root_url, complete_openid_login_users_url) and return
+			setup_url = response.instance_eval{ @setup_url } rescue nil
+			if setup_url
+				redirect_to setup_url and return
+			else
+				setup_response = openid_consumer.begin(response.identity_url) rescue nil
+				if setup_response
+					redirect_to setup_response.redirect_url(root_url, complete_openid_login_users_url) and return
+				end
 			end
 		when OpenID::Consumer::SuccessResponse
 			user = User.first(:conditions => {:openid_url => response.identity_url})
@@ -145,7 +150,7 @@ class UsersController < ApplicationController
 				flash[:notice] = 'There are no users registered with that identity URL.'
 			end
 		when OpenID::Consumer::FailureResponse
-			# Do nothing
+			raise "fail"
 		end
 		
 		flash[:notice] ||= 'OpenID login failed.'
