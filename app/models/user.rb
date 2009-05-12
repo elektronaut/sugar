@@ -15,7 +15,7 @@ require 'md5'
 class User < ActiveRecord::Base
 
 	# The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt> for regular users.
-	UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id
+	UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id, :invites
 
 	# Virtual attributes for clear text passwords
 	attr_accessor :password, :confirm_password
@@ -354,6 +354,34 @@ class User < ActiveRecord::Base
 	def favorite?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
 		(relationship && relationship.favorite?) ? true : false
+	end
+	
+	# Returns true if this user can invite someone.
+	def invites?
+		(self.user_admin? || self.invites > 0)
+	end
+	
+	# Number of remaining invites. User admins always have at least one invite.
+	def invites
+		number = self[:invites]
+		(self.user_admin?) ? 1 : (number ||= 0)
+	end
+
+	# Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.
+	def revoke_invite!(number=1)
+		return self.invites if self.user_admin?
+		number = self.invites if number == :all
+		new_invites = self.invites - number
+		new_invites = 0 if new_invites < 0
+		self.update_attribute(:invites, new_invites)
+		self.invites
+	end
+	
+	# Grants a number of invites to a user.
+	def grant_invite!(number=1)
+		return self.invites if self.user_admin?
+		self.update_attribute(:invites, (self.invites + number))
+		self.invites
 	end
 
 	# Generates a Gravatar URL
