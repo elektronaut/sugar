@@ -128,7 +128,6 @@ class UsersController < ApplicationController
 			# Do nothing
 		end
 		
-		raise response.inspect
 		flash[:notice] ||= 'OpenID verification failed!'
 		redirect_to edit_user_url(:id => @user.username)
 	end
@@ -161,10 +160,9 @@ class UsersController < ApplicationController
 				flash[:notice] = "Your changes were saved!"
 				redirect_to user_url(:id => @user.username)
 			end
-		else
-			flash.now[:notice] = "There was an error saving your changes"
-			render :action => :edit
 		end
+		flash.now[:notice] ||= "There were errors saving your changes"
+		render :action => :edit
 	end
 
 	def complete_openid_login
