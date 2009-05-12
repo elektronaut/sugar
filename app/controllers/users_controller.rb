@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         end
     end
     protected     :load_user
-    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts]
+    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid]
     
     def index
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
@@ -99,25 +99,73 @@ class UsersController < ApplicationController
         # TODO: refactor to .editable_by?
         require_admin_or_user(@user, :redirect => user_url(@user))
     end
-    
-    def update
-        require_admin_or_user(@user, :redirect => user_url(@user))
-        attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
 
-        @user.update_attributes(attributes)
-        if @user.valid?
-            if @user == @current_user
-                # Make sure the session data is updated
-                @current_user.reload
-                store_session_authentication
-            end
-            flash[:notice] = "Your changes were saved!"
-            redirect_to user_url(:id => @user.username)
-        else
-            flash.now[:notice] = "There was an error saving your changes"
-            render :action => :edit
-        end
-    end
+	def update_openid
+        require_admin_or_user(@user, :redirect => user_url(@user))
+		response_params = params
+		response_params.delete(:controller)
+		response_params.delete(:action)
+		response_params.delete(:id)
+		response = openid_consumer.complete(response_params, update_openid_user_url(:id => @user.username))
+
+		case response
+		when OpenID::Consumer::SetupNeededResponse
+			setup_url = response.instance_eval{ @setup_url } rescue nil
+			if setup_url
+				redirect_to setup_url and return
+			else
+				setup_response = openid_consumer.begin(response.identity_url) rescue nil
+				if setup_response
+					redirect_to setup_response.redirect_url(root_url, update_openid_user_url(:id => @user.username)) and return
+				end
+			end
+		when OpenID::Consumer::SuccessResponse
+			if @user.update_attribute(:openid_url, OpenID.normalize_url(response.identity_url))
+				flash[:notice] = "Your changes were saved!"
+				redirect_to user_url(:id => @user.username) and return
+			end
+		when OpenID::Consumer::FailureResponse
+			# Do nothing
+		end
+		
+		raise response.inspect
+		flash[:notice] ||= 'OpenID verification failed!'
+		redirect_to edit_user_url(:id => @user.username)
+	end
+    
+	def update
+		require_admin_or_user(@user, :redirect => user_url(@user))
+		attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
+
+		if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
+			new_openid_url = attributes[:openid_url]
+			attributes.delete(:openid_url)
+		end
+
+		@user.update_attributes(attributes)
+		if @user.valid?
+			if @user == @current_user
+				# Make sure the session data is updated
+				@current_user.reload
+				store_session_authentication
+			end
+			# Verify the changed OpenID URL
+			if new_openid_url
+				response = openid_consumer.begin(new_openid_url) rescue nil
+				if response
+					redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), true) and return
+				else
+					flash.now[:notice] = "That's not a valid OpenID URL!"
+				end
+			else
+				flash[:notice] = "Your changes were saved!"
+				redirect_to user_url(:id => @user.username)
+			end
+		else
+			flash.now[:notice] = "There was an error saving your changes"
+			render :action => :edit
+		end
+	end
 
 	def complete_openid_login
 		response_params = params
@@ -150,7 +198,7 @@ class UsersController < ApplicationController
 				flash[:notice] = 'There are no users registered with that identity URL.'
 			end
 		when OpenID::Consumer::FailureResponse
-			raise "fail"
+			# Do nothing
 		end
 		
 		flash[:notice] ||= 'OpenID login failed.'
@@ -173,7 +221,7 @@ class UsersController < ApplicationController
 				if response
 					redirect_to response.redirect_url(root_url, complete_openid_login_users_url, true) and return
 				else
-					flash.now[:notice] = "Couldn't find an OpenID for that URL."
+					flash.now[:notice] = "That's not a valid OpenID URL!"
 				end
 			end
             flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user

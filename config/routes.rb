@@ -47,7 +47,7 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :users,
-        :member => {:participated => :get, :discussions => :get, :posts => :get},
+        :member => {:participated => :get, :discussions => :get, :posts => :get, :update_openid => :any},
         :collection => { 
 			:login => :any,
 			:complete_openid_login => :any,
@@ -62,14 +62,15 @@ ActionController::Routing::Routes.draw do |map|
 			:banned => :any
 		}
     )
-	map.edit_user         '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
-	map.user_profile      '/users/profile/:id',                    :controller => 'users', :action => 'show'
-    map.discussions_user  '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
-    map.connect           '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
-    map.participated_user '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
-    map.connect           '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
-    map.posts_user        '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
-    map.paged_user_posts  '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
+	map.update_openid_user '/users/profile/:id/update_openid',      :controller => 'users', :action => 'update_openid'
+	map.edit_user          '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
+	map.user_profile       '/users/profile/:id',                    :controller => 'users', :action => 'show'
+    map.discussions_user   '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
+    map.connect            '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
+    map.participated_user  '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
+    map.connect            '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
+    map.posts_user         '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
+    map.paged_user_posts   '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
 
     map.resources(
         :categories
