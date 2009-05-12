@@ -43,14 +43,20 @@ class User < ActiveRecord::Base
 					user.password_changed = true
 				end
 			else
-				user.errors.add( :password,         "must be confirmed" )
+				user.errors.add(:password, "must be confirmed")
 			end
+		end
+		# Normalize OpenID URL
+		if user.openid_url && !user.openid_url.blank?
+			user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
+			user.openid_url = OpenID.normalize_url(user.openid_url)
 		end
 	end
 
 	validates_presence_of   :hashed_password, :username, :email
 	validates_uniqueness_of :username
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
+	validates_uniqueness_of :openid_url, :allow_nil => true, :message => 'is already registered.'
 
 	class << self
 		# Finds active users.

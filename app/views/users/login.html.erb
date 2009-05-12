@@ -13,8 +13,15 @@
 			<label>Password</label>
 			<%= password_field_tag 'password', '', :class => :text %>
 		</p>
+		<p class="openid_description">
+			or log in using OpenID (<%= link_to "What's this?", "http://openid.net/what/" %>):
+		</p>
 		<p>
-			<input type="image" name="submit" alt="Login" src="<%= theme_path %>/images/login_button.jpg" id="login-button" />
+			<label>OpenID URL</label>
+			<%= text_field_tag 'openid_url', '', :class => :text %>
+		</p>
+		<p>
+			<%= submit_tag "Login" %>
 		</p>
 	<% end %>
 </div>
@@ -24,7 +31,7 @@
 		<p>
 			<label>Email</label>
 			<%= text_field_tag 'email', '', :class => :text %>
-			<input type="image" name="submit" alt="Send" src="<%= theme_path %>/images/login_reminder_button.jpg" id="reminder-button" />
+			<%= submit_tag "Send" %>
 		</p>
 	<% end %>
 </div>

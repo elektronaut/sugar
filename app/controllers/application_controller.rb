@@ -76,6 +76,13 @@ class ApplicationController < ActionController::Base
 			end
 		end
 
+		# Gets the OpenID consumer, creates it if necessary.
+		def openid_consumer
+			require 'openid/store/filesystem'
+			@openid_consumer ||= OpenID::Consumer.new(session,      
+				OpenID::Store::Filesystem.new("#{RAILS_ROOT}/tmp/openid"))
+	    end
+	
 		# Loads and authenticates @current_user from session. Will fail
 		# if the password has been changed. This is a feature.
 		def authenticate_session

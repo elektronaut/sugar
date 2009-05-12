@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-    requires_authentication :except => [:login, :logout, :forgot_password]
+    requires_authentication :except => [:login, :complete_openid_login, :logout, :forgot_password]
     
     def load_user
         @user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -103,33 +103,75 @@ class UsersController < ApplicationController
     def update
         require_admin_or_user(@user, :redirect => user_url(@user))
         attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
+
         @user.update_attributes(attributes)
         if @user.valid?
-            flash[:notice] = "Your changes were saved!"
             if @user == @current_user
                 # Make sure the session data is updated
                 @current_user.reload
                 store_session_authentication
             end
+            flash[:notice] = "Your changes were saved!"
             redirect_to user_url(:id => @user.username)
         else
             flash.now[:notice] = "There was an error saving your changes"
             render :action => :edit
         end
     end
+
+	def complete_openid_login
+		response_params = params
+		response_params.delete(:controller)
+		response_params.delete(:action)
+		response = openid_consumer.complete(response_params, complete_openid_login_users_url)
+
+		case response
+		when OpenID::Consumer::SetupNeededResponse
+			setup_response = openid_consumer.begin(response.identity_url) rescue nil
+			if setup_response
+				redirect_to setup_response.redirect_url(root_url, complete_openid_login_users_url) and return
+			end
+		when OpenID::Consumer::SuccessResponse
+			user = User.first(:conditions => {:openid_url => response.identity_url})
+			if user
+				if user.activated? && !user.banned?
+                    @current_user = user
+                    store_session_authentication
+					redirect_to discussions_url and return
+				else
+					flash[:notice] = "You're not allowed to log in!"
+				end
+			else
+				flash[:notice] = 'There are no users registered with that identity URL.'
+			end
+		when OpenID::Consumer::FailureResponse
+			# Do nothing
+		end
+		
+		flash[:notice] ||= 'OpenID login failed.'
+		redirect_to login_users_url
+	end
     
     def login
         redirect_to discussions_url and return if @current_user
         if request.post?
-            if params[:username] && params[:password]
+			if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?
                 user = User.find_by_username(params[:username])
                 if user && user.valid_password?(params[:password])
                     @current_user = user
                     store_session_authentication
                     redirect_to discussions_url and return
                 end
-            end
-            flash.now[:notice] = "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
+			elsif params[:openid_url] && !params[:openid_url].blank?
+				openid_url = params[:openid_url]
+				response = openid_consumer.begin(openid_url) rescue nil
+				if response
+					redirect_to response.redirect_url(root_url, complete_openid_login_users_url, true) and return
+				else
+					flash.now[:notice] = "Couldn't find an OpenID for that URL."
+				end
+			end
+            flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
         end
         render :layout => 'login'
     end

@@ -49,7 +49,8 @@ ActionController::Routing::Routes.draw do |map|
         :users,
         :member => {:participated => :get, :discussions => :get, :posts => :get},
         :collection => { 
-			:login => :any, 
+			:login => :any,
+			:complete_openid_login => :any,
 			:logout => :any, 
 			:forgot_password => :any, 
 			:xboxlive => :get, 

@@ -45,7 +45,8 @@
 		<%= labelled_field f.text_field(:last_fm), "Last.fm username", :errors => @user.errors[:last_fm] %>
 	</div>
 	<div id="profileSettings">
-		<%= labelled_field f.text_field(:email), "Email address", :description => 'Required', :errors => @user.errors[:email] %>
+		<%= labelled_field f.text_field(:openid_url, :size => 50), "OpenID Identity URL", :errors => @user.errors[:openid_url] %>
+		<%= labelled_field f.text_field(:email, :size => 50), "Email address", :description => 'Required', :errors => @user.errors[:email] %>
 
 		<% labelled_field f.password_field(:password), "Password", :description => "Enter twice to change", :errors => @user.errors[:password] do %>
 			<%= f.password_field(:confirm_password) %>

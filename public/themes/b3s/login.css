@@ -36,46 +36,44 @@ body {
 
 #login {
 	width: 788px;
-	background: transparent url(images/login.jpg) no-repeat;
+	/*background: transparent url(images/login.jpg) no-repeat;*/
 	min-height: 300px;
 }
-#login .form {
+.form {
 	float: left;
-	margin: 176px 0 0 328px;
+	margin: 176px 0 0 250px;
 }
-#login .form input.text {
-	background: transparent;
+.form input.text {
+	background: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #ddd;
 	width: 202px;
-	padding: 2px 0; 
+	padding: 2px 4px; 
 	margin: 0 0 10px 0; 
-	border: 0;
 	font-weight: bold;
 	font-size: 15px;
 }
+#login .form #openid_url {
+	background: #fff url(images/login_openid.gif) 3px 3px no-repeat;
+	padding-left: 24px;
+	width: 182px;
+}
+.openid_description {
+	margin-bottom: 1em;
+}
+
+#login a, #login a:visited {
+	text-decoration: underline;
+	color: #852400;
+}
+
+/*
 #login-button {
 	opacity: 0;
 	margin-left: 151px;
-}
+}*/
 
-#password-reminder {
-	width: 788px;
-	background: transparent url(images/login_password.jpg) no-repeat;
-	min-height: 270px;
-}
-#password-reminder .form {
-	float: left;
-	margin: 205px 0 0 265px;
-}
-#password-reminder .form input.text {
-	background: transparent;
-	width: 250px;
-	padding: 2px 0; 
-	margin: 0 0 10px 0; 
-	border: 0;
-	font-weight: bold;
-	font-size: 15px;
-	float: left;
-}
 
 #reminder-button {
 	float: right;
@@ -83,10 +81,18 @@ body {
 	opacity: 0;
 }
 
+label {
+	width: 100px;
+	display: block;
+	float: left;
+	padding-top: 3px;
+}
 
+/*
 label {
 	display: none;
 }
+*/
 
 #forgot-password-link {
 	position: absolute;
