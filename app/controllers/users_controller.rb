@@ -137,7 +137,7 @@ class UsersController < ApplicationController
 				end
 			end
 		when OpenID::Consumer::SuccessResponse
-			user = User.first(:conditions => {:openid_url => response.identity_url})
+			user = User.first(:conditions => {:openid_url => OpenID.normalize_url(response.identity_url)})
 			if user
 				if user.activated? && !user.banned?
                     @current_user = user
