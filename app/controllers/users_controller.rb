@@ -111,6 +111,7 @@ class UsersController < ApplicationController
 		case response
 		when OpenID::Consumer::SetupNeededResponse
 			setup_url = response.instance_eval{ @setup_url } rescue nil
+			raise setup_url.inspect
 			if setup_url
 				redirect_to setup_url and return
 			else
@@ -152,7 +153,7 @@ class UsersController < ApplicationController
 			if new_openid_url
 				response = openid_consumer.begin(new_openid_url) rescue nil
 				if response
-					redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), true) and return
+					redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), false) and return
 				else
 					flash.now[:notice] = "That's not a valid OpenID URL!"
 				end
@@ -217,7 +218,7 @@ class UsersController < ApplicationController
 				openid_url = params[:openid_url]
 				response = openid_consumer.begin(openid_url) rescue nil
 				if response
-					redirect_to response.redirect_url(root_url, complete_openid_login_users_url, true) and return
+					redirect_to response.redirect_url(root_url, complete_openid_login_users_url, false) and return
 				else
 					flash.now[:notice] = "That's not a valid OpenID URL!"
 				end
