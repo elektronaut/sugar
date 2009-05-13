@@ -51,10 +51,13 @@ task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
 	run "ln -s #{deploy_to}/#{shared_dir}/doodles #{deploy_to}/#{current_dir}/public/doodles"
 	run "ln -s #{deploy_to}/#{shared_dir}/sphinx #{deploy_to}/#{current_dir}/db/sphinx"
+end
 
-	run "ln -s #{deploy_to}/#{shared_dir}/config/database.yml #{deploy_to}/#{current_dir}/config/database.yml"
-	run "ln -s #{deploy_to}/#{shared_dir}/config/session_key #{deploy_to}/#{current_dir}/config/session_key"
-	run "ln -s #{deploy_to}/#{shared_dir}/config/initializers/mailer.rb #{deploy_to}/#{current_dir}/config/initializers/mailer.rb"
+desc "Symlink configs"
+task :symlink_configs, :roles => [:web, :app] do
+	run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+	run "ln -nsf #{shared_path}/config/session_key #{release_path}/config/session_key"
+	run "ln -nsf #{shared_path}/config/initializers/mailer.rb #{release_path}/config/initializers/mailer.rb"
 end
 
 desc "Packs themes"
@@ -85,7 +88,8 @@ namespace :deploy do
 	end
 end
 
-after "deploy:setup", :create_shared_dirs
+after "deploy:finalize_update", :symlink_configs
+after "deploy:setup",   :create_shared_dirs
 after "deploy:symlink", :fix_permissions
 after "deploy:symlink", :create_symlinks
 after "deploy:symlink", :pack_themes
