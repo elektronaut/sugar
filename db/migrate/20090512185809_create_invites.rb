@@ -7,11 +7,11 @@ class CreateInvites < ActiveRecord::Migration
 			t.datetime   :expires_at
 			t.timestamps
 		end
-		add_column :users, :invites, :integer, :null => false, :default => 0
+		add_column :users, :available_invites, :integer, :null => false, :default => 0
 	end
 
 	def self.down
 		drop_table :invites
-		remove_column :users, :invites
+		remove_column :users, :available_invites
 	end
 end
