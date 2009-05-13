@@ -226,15 +226,29 @@ var Sugar = {
 
 		// Post quoting
 		window.quotePost = function(postId){
+			
 			var postDiv = '#post-'+postId;
 			if(jQuery(postDiv).length > 0) {
-				var permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
-				var username  = jQuery(postDiv+' .post_info .username a').text();
-				var content   = jQuery(postDiv+' .body .content').html()
-					.replace(/^[\s]*/, '')
-					.replace(/[\s]*$/, '')
-					.replace(/<br[\s\/]*>/g, "\n");
-				var quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+				var permalink  = '';
+				var username   = '';
+				var content    = '';
+				var quotedPost = '';
+				if(jQuery(postDiv).hasClass('me_post')) {
+					username  = jQuery(postDiv+' .body .poster').text();
+					content   = jQuery(postDiv+' .body .content').html()
+						.replace(/^[\s]*/, '')
+						.replace(/[\s]*$/, '')
+						.replace(/<br[\s\/]*>/g, "\n");
+					quotedPost = '<blockquote><cite>Posted by '+username+':</cite>'+content+'</blockquote>';
+				} else {
+					permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
+					username  = jQuery(postDiv+' .post_info .username a').text();
+					content   = jQuery(postDiv+' .body .content').html()
+						.replace(/^[\s]*/, '')
+						.replace(/[\s]*$/, '')
+						.replace(/<br[\s\/]*>/g, "\n");
+					quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+				}
 				addToReply(quotedPost);
 			}
 		};

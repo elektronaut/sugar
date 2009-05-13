@@ -1,10 +1,13 @@
+Done:
+
+* BUG: Xbox Live API updating is horribly broken
+* BUG: Quoting /me posts doesn't work.
+
 Bugs:
 
-* BUG: Quoting /me posts doesn't work.
 * BUG: Regular users shouldn't be able to re-open a thread closed by a moderator.
 * BUG: Flash notices sometimes shows up on the request after posting ("Your reply has been saved").
 * BUG: Twitter API asks for authentication if user has protected updates.
-* BUG: Xbox Live API updating is horribly broken
 
 iPhone:
 
