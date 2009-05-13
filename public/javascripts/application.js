@@ -2,6 +2,7 @@
  * @depends jquery.libraries.js
  */
 
+
 window.relativeTime = function(timeString) {
 	var parsedDate = Date.parse(timeString);
 	var delta = (Date.parse(Date()) - parsedDate) / 1000;
@@ -277,6 +278,76 @@ var Sugar = {
 		
 		this.applyPostFunctions();
 		
+		$("#replyText form").submit(function(){
+			var submitForm = this;
+			var statusField = $('#button-container');
+			var oldPostButton = statusField.html();
+			statusField.addClass('posting');
+
+			statusField.html('Validating post..');
+
+			var postBody = $('#compose-body').val();
+
+			if($('#hiddenPostVerifier').length < 1) {
+				$(document.body).append('<div id="hiddenPostVerifier"></div>');
+			}
+			var postNotifier = $('#hiddenPostVerifier');
+			postNotifier.show();
+			postNotifier.html(postBody);
+			postNotifier.hide();
+			
+			var postImages = postNotifier.find('img');
+			var loadedImages = Array();
+			if(postImages.length > 0) {
+
+				// Async loading event
+				postImages.each(function(){
+					$(this).load(function(){
+						loadedImages.push(this);
+					});
+				});
+
+				// Check loading of images
+				postNotifier.cycles = 0;
+				postNotifier.loadInterval = setInterval(function(){
+					postNotifier.cycles += 1;
+					statusField.html('Loading image '+loadedImages.length+' of '+postImages.length+'..');
+
+					// Load failed
+					if(postNotifier.cycles >= 80) {
+						clearInterval(postNotifier.loadInterval);
+						if(confirm("One or more of your images timed out. Post anyway?")) {
+							$(loadedImages).each(function(){
+								$(this).attr('height', this.height);
+								$(this).attr('width', this.width);
+							});
+							$('#compose-body').val(postNotifier.html());
+							statusField.html('Saving post...');
+							submitForm.submit();
+						} else {
+							statusField.html(oldPostButton);
+							statusField.removeClass('posting');
+						}
+					}
+					
+					// All images loaded
+					if(loadedImages.length == postImages.length) {
+						postImages.each(function(){
+							$(this).attr('height', this.height);
+							$(this).attr('width', this.width);
+						});
+						$('#compose-body').val(postNotifier.html());
+						clearInterval(postNotifier.loadInterval);
+						statusField.html('Saving post...');
+						submitForm.submit();
+					}
+				}, 100);
+				return false;
+			} else {
+				return true;
+			}
+		});
+
 		// Detect Napkin
 		if(jQuery('#napkin').length > 0) {
 

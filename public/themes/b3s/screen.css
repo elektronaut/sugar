@@ -198,6 +198,11 @@ div.fieldWithErrors {
    RICH TEXT EDITOR
    ----------------------------------------------------------------------- */
 
+#button-container.posting {
+	background: transparent url("images/ajax_spinner_small.gif") 0 2px no-repeat;
+	padding: 2px 24px;
+}
+
 #compose-body {
 	width:               100%;
 	max-width:           600px;

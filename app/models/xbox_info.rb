@@ -35,7 +35,6 @@ class XboxInfo < ActiveRecord::Base
 									xml_docs[gamertag] = :invalid
 								end
 							rescue Exception => e
-								puts "An error occured loading #{gamertag}: " + e
 								xml_docs[gamertag] = :error
 							end
 						end

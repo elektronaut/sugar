@@ -57,7 +57,7 @@
 		
 		<%# Text reply %>
 		<div id="replyText">
-			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => { :onsubmit => "jQuery('#button-container').text('Posting...');" }) do |f| %>
+			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
 				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
 				<p id="button-container"><button type="submit">Post</button></p>
 			<% end %>

@@ -27,7 +27,6 @@ B3S (Pre-Stylus):
 * Xbox Live should be completely disabled if configured so.
 * Work out some kind of magic to ensure that the search indexing daemon is running.
 * Set up deployment as app user, not root.
-* Set image dimensions on posting
 
 Stylus:
 
