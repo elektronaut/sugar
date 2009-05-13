@@ -55,7 +55,7 @@
 				<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
 				<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path %></li>
 				<% if @current_user %>
-					<% if @current_user.invites || @current_user.available_invites? -%>
+					<% if @current_user.invites? || @current_user.available_invites? -%>
 						<% invites_link_name = (!@current_user.user_admin? && @current_user.available_invites?) ? "Invites (#{@current_user.available_invites})" : "Invites" %>
 						<li class="invites<%= ' current' if @section == :invites %>"><%= link_to invites_link_name, invites_path %></li>
 					<% end %>
