@@ -2,6 +2,28 @@
  * @depends jquery.libraries.js
  */
 
+window.relativeTime = function(timeString) {
+	var parsedDate = Date.parse(timeString);
+	var delta = (Date.parse(Date()) - parsedDate) / 1000;
+	var r = '';
+	if (delta < 60) {
+		r = 'a moment ago';
+	} else if(delta < 120) {
+		r = 'a couple of minutes ago';
+	} else if(delta < (45*60)) {
+		r = (parseInt(delta / 60, 10)).toString() + ' minutes ago';
+	} else if(delta < (90*60)) {
+		r = 'an hour ago';
+	} else if(delta < (24*60*60)) {
+		r = '' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
+	} else if(delta < (48*60*60)) {
+		r = 'a day ago';
+	} else {
+		r = (parseInt(delta / 86400, 10)).toString() + ' days ago';
+	}
+	return r;
+};
+
 /* Dead simple tabs */
 function SugarTabs(controls, options) {
 	controls.tabs = [];
@@ -315,6 +337,28 @@ var Sugar = {
 				});
 			}, 5000);
 		}
+
+		// Load tweets
+		$('#profileTweets').each(function(){
+			var tweetsDiv = this;
+			var username = $(this.parentNode).find('.username').get()[0].innerHTML.replace(/^@/, '');
+			var user_info_url = "http://twitter.com/users/show/"+username+".json?callback=?";
+			var updates_url = "http://twitter.com/statuses/user_timeline/"+username+".json?count=5&callback=?";
+			$.getJSON(user_info_url, function(user_json) {
+				var protectedMode = 'protected';
+				if(user_json[protectedMode]) {
+					$(tweetsDiv).html("<p>Updates are protected</p>");
+				} else {
+					$.getJSON(updates_url, function(json) {
+						$(json).each(function(){
+							var linkified_text = this.text.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+/, function(m) { return m.link(m); });
+							linkified_text = linkified_text.replace(/@[A-Za-z0-9_]+/, function(u){return u.link('http://twitter.com/'+u.replace(/^@/,''));});
+							$(tweetsDiv).append('<div class="tweet tweet-'+this.id+'">' + '<p class="text">' + linkified_text + ' <a href="http://twitter.com/'+username+'/statuses/'+this.id+'" class="time">'+relativeTime(this.created_at)+'</a>' + '</p>' + '</div>');
+						});
+					});
+				}
+			});
+		});
 		
 		// Load Flickr photos
 		$('#flickrProfileURL').each(function(){

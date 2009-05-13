@@ -1,13 +1,7 @@
-Done:
-
-* BUG: Xbox Live API updating is horribly broken
-* BUG: Quoting /me posts doesn't work.
-
 Bugs:
 
 * BUG: Regular users shouldn't be able to re-open a thread closed by a moderator.
 * BUG: Flash notices sometimes shows up on the request after posting ("Your reply has been saved").
-* BUG: Twitter API asks for authentication if user has protected updates.
 
 iPhone:
 
@@ -22,7 +16,6 @@ B3S (Pre-Stylus):
 
 * Wrap invites block on users profile in it's own div to make it work with me3s.
 * Only check for new posts on the last page
-* Twitter feeds on user profiles should load asyncronous.
 * Admins should be able to see all pending invites.
 * List of trusted users (only available for trusted users).
 * Admins list should differentiate between admins, user admins and moderators.

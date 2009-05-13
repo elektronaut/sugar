@@ -734,8 +734,11 @@ table.discussions tr.closed td.name a:hover {
 .user_profile .social h3 a, .user_profile .invitees h3 a {
 	font-weight:         bold;
 }
-.user_profile .twitter li {
+.user_profile .twitter .tweet p {
 	margin-bottom:       4px;
+}
+.user_profile .twitter .tweet .time {
+	font-size:           0.85em;
 }
 .user_profile .flickr li {
 	display:             inline;
