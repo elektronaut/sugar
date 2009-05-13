@@ -64,7 +64,10 @@ namespace :sugar do
 
 	desc "Refresh Xbox Live"
 	task :refresh_xbox => :environment do
-		XboxInfo.refresh!(true)
+		puts "Refreshing against Xbox API"
+		start_time = Time.now
+		XboxInfo.refresh!
+		puts "Refresh finished in " + (Time.now - start_time).to_s + " seconds"
 	end
 
 	desc "Delete and reclaim expired invites"
