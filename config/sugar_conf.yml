@@ -18,3 +18,14 @@ flickr_api: 016918184821edf95505d9acd61e64c4
 
 # Enable Xbox Live integration
 xbox_live_enabled: true
+
+# == PERMISSIONS ==
+
+# Enable public browsing
+public_browsing: false
+
+# Enable signups. The invites system will be enabled if this is set to false.
+signups_allowed: false
+
+# Signups must be approved by a user admin
+signup_approval_required: false

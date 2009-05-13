@@ -25,6 +25,11 @@ class User < ActiveRecord::Base
 	has_many   :posts
 	belongs_to :inviter, :class_name => 'User'
 	has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'
+	has_many   :invites, :dependent => :destroy, :order => 'created_at DESC' do
+		def active
+			self.select{|i| !i.expired?}
+		end
+	end
 	has_many   :discussion_views, :dependent => :destroy
 	has_many   :discussion_relationships, :dependent => :destroy
 	has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
@@ -32,6 +37,13 @@ class User < ActiveRecord::Base
 	has_many   :sent_messages,   :class_name => 'Message', :foreign_key => 'sender_id',    :conditions => ['deleted_by_sender = 0'],      :order => ['created_at DESC']
 	has_one    :xbox_info, :dependent => :destroy
 
+	# Automatically generate a password for OpenID users
+	before_validation_on_create do |user|
+		if user.openid_url? && !user.hashed_password? && (!user.password || user.password.blank?)
+			user.generate_password!
+		end
+	end
+	
 	validate do |user|
 		# Has the password been changed?
 		if user.password && !user.password.blank?
@@ -53,11 +65,13 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	validates_presence_of   :hashed_password, :username, :email
-	validates_uniqueness_of :username
+	validates_presence_of   :hashed_password, :unless => :openid_url?
+	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.'
+	validates_presence_of   :username, :email
+	validates_uniqueness_of :username, :message => 'is already registered.'
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
-	validates_uniqueness_of :openid_url, :allow_nil => true, :message => 'is already registered.'
-
+	validates_presence_of   :realname, :application, :if => Proc.new { |u| Sugar.config(:signup_approval_required) }
+	
 	class << self
 		# Finds active users.
 		def find_active
@@ -305,7 +319,7 @@ class User < ActiveRecord::Base
 	def generate_password!
 		new_password = ''
 		seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
-		(5+rand(3)).times{ new_password += seed[rand(seed.length)] }
+		(7+rand(3)).times{ new_password += seed[rand(seed.length)] }
 		self.password = self.confirm_password = new_password
 	end
 
@@ -322,6 +336,11 @@ class User < ActiveRecord::Base
 	# Returns the full email address with real name.
 	def full_email
 		self.realname? ? "#{self.realname} <#{self.email}>" : self.email
+	end
+	
+	# Returns realname or username
+	def realname_or_username
+		self.realname? ? self.realname : self.username
 	end
 
 	# Is the password valid?
@@ -356,31 +375,47 @@ class User < ActiveRecord::Base
 		(relationship && relationship.favorite?) ? true : false
 	end
 	
-	# Returns true if this user can invite someone.
+	# Returns true if this user has invited someone.
 	def invites?
-		(self.user_admin? || self.invites > 0)
+		(self.invites.count > 0) ? true : false
+	end
+
+	# Returns true if this user has invitees.
+	def invitees?
+		(self.invitees.count > 0) ? true : false
+	end
+	
+	# Returns true if this user has invited someone or has invitees.
+	def invites_or_invitees?
+		(self.invites? || self.invitees?) ? true : false
+	end
+
+	# Returns true if this user can invite someone.
+	def available_invites?
+		(self.user_admin? || self.available_invites > 0)
 	end
 	
 	# Number of remaining invites. User admins always have at least one invite.
-	def invites
-		number = self[:invites]
-		(self.user_admin?) ? 1 : (number ||= 0)
+	def available_invites
+	 	number = self[:available_invites]
+	 	(self.user_admin?) ? 1 : self[:available_invites]
 	end
 
 	# Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.
 	def revoke_invite!(number=1)
-		return self.invites if self.user_admin?
-		number = self.invites if number == :all
-		new_invites = self.invites - number
+		return self.available_invites if self.user_admin?
+		number = self.available_invites if number == :all
+		new_invites = self.available_invites - number
 		new_invites = 0 if new_invites < 0
-		self.update_attribute(:invites, new_invites)
-		self.invites
+		self.update_attribute(:available_invites, new_invites)
+		self.available_invites
 	end
 	
 	# Grants a number of invites to a user.
 	def grant_invite!(number=1)
-		return self.invites if self.user_admin?
-		self.update_attribute(:invites, (self.invites + number))
+		return self.available_invites if self.user_admin?
+		new_number = (self.available_invites + number)
+		self.update_attribute(:available_invites, new_number)
 		self.invites
 	end
 

@@ -47,7 +47,14 @@ ActionController::Routing::Routes.draw do |map|
 
     map.resources(
         :users,
-        :member => {:participated => :get, :discussions => :get, :posts => :get, :update_openid => :any},
+        :member => {
+			:participated => :get, 
+			:discussions => :get, 
+			:posts => :get, 
+			:update_openid => :any,
+			:grant_invite => :any,
+			:revoke_invites => :any
+		},
         :collection => { 
 			:login => :any,
 			:complete_openid_login => :any,
@@ -62,15 +69,18 @@ ActionController::Routing::Routes.draw do |map|
 			:banned => :any
 		}
     )
-	map.update_openid_user '/users/profile/:id/update_openid',      :controller => 'users', :action => 'update_openid'
-	map.edit_user          '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
-	map.user_profile       '/users/profile/:id',                    :controller => 'users', :action => 'show'
-    map.discussions_user   '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
-    map.connect            '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
-    map.participated_user  '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
-    map.connect            '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
-    map.posts_user         '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
-    map.paged_user_posts   '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
+	map.grant_invite_user   '/users/profile/:id/grant_invite',       :controller => 'users', :action => 'grant_invite'
+	map.revoke_invites_user '/users/profile/:id/revoke_invites',     :controller => 'users', :action => 'revoke_invites'
+	map.update_openid_user  '/users/profile/:id/update_openid',      :controller => 'users', :action => 'update_openid'
+	map.edit_user           '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
+	map.user_profile        '/users/profile/:id',                    :controller => 'users', :action => 'show'
+    map.discussions_user    '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
+    map.connect             '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
+    map.participated_user   '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
+    map.connect             '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
+    map.posts_user          '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
+    map.paged_user_posts    '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
+	map.new_user_by_token   '/users/new/:token',                     :controller => 'users', :action => 'new'
 
     map.resources(
         :categories
@@ -101,6 +111,11 @@ ActionController::Routing::Routes.draw do |map|
 	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts', :action => 'since'
     map.paged_discussions '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
     map.paged_discussion  '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
+
+	map.resources(
+		:invites,
+		:member => {:accept => :any}
+	)
 
     # Vanilla redirects
     map.with_options :controller => 'vanilla' do |vanilla|

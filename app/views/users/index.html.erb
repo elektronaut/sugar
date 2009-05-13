@@ -4,10 +4,9 @@
 %>
 
 <div class="functions">
-	<% if @current_user.user_admin? %>
-		<%= link_to "Invite +", new_user_path, :class => :create %>
-	<% end %>
+	<%= render :partial => 'users_functions' %>
 </div>
+
 
 <h2 class="section"><%= link_to "Users", users_path %></h2>
 

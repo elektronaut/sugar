@@ -1,33 +1,37 @@
-<% @page_title = "New user" %>
+<% @page_title = "Signup" %>
 
-<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= link_to "New user", new_user_path %></h2>
+<h2 class="section">
+	<% if @current_user || Sugar.config(:public_browsing) -%>
+		<%= link_to "Users", users_path %> &raquo; 
+	<% end -%>
+	<%= link_to @page_title, new_user_path %>
+</h2>
+
 <% form_for @user do |f| %>
-	<%= f.hidden_field :activated %>
+	<% if @invite %>
+		<%= hidden_field_tag 'token', @invite.token %>
+	<% end %>
+	<%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
+	<%= labelled_field f.text_field(:email, :size => 50), "Email address", :errors => @user.errors[:email] %>
+	<%= labelled_field f.text_field(:openid_url, :size => 47), "OpenID Identity URL", :errors => @user.errors[:openid_url], :description => "#{link_to("What's this?", "http://openid.net/what/")}" %>
+	<% labelled_field f.password_field(:password), "Password", :errors => @user.errors[:password], :description => "Enter twice to confirm. You can safely leave these blank if you've supplied an OpenID URL." do %>
+		<%= f.password_field(:confirm_password) %>
+	<% end %>
+
+	<% if Sugar.config(:signup_approval_required) %>
+		<p>Your account will have to be approved. Please provide some information about your application:</p>
+	<% else %>
+		<p>The following fields are optional, but it's always nice to provide a bit more information:</p>
+	<% end %>
+
+	<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
+	<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
+
+	<% if Sugar.config(:signup_approval_required) %>
+		<%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
+	<% end %>
+
 	<p>
-		<label>Username</label>
-		<%= f.text_field(:username) %>
-	</p>
-	<p>
-		<label>Real name <span class="description">&mdash; Optional</span></label>
-		<%= f.text_field(:realname) %>
-	</p>
-	<p>
-		<label>Email address</label>
-		<%= f.text_field(:email) %>
-	</p>
-	<p>
-		<label>Password</label>
-		<%= f.text_field(:password) %>
-	</p>
-	<p>
-		<label>Invited by</label>
-		<%= f.select(:inviter_id, User.find_active.map{|u| [u.username, u.id]}) %>
-	</p>
-	<p>
-		<label>Message <span class="description">&mdash; Optional, will appear in the welcoming email</span></label>
-		<%= text_area_tag(:message, '', :size => '60x8') %>
-	</p>
-	<p>
-		<%= submit_tag "Create user" %>
+		<%= submit_tag "Signup" %>
 	</p>
 <% end %>

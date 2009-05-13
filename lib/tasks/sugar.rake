@@ -67,6 +67,16 @@ namespace :sugar do
 		XboxInfo.refresh!(true)
 	end
 
+	desc "Delete and reclaim expired invites"
+	task :expire_invites => :environment do
+		puts "Deleting expired invites"
+		Invite.destroy_expired!
+	end
+	
+	desc "Routine maintenance"
+	task :routine => [:expire_invites] do
+	end
+
 	desc "Regenerate participated discussions"
 	task :generate_participated_discussions => :environment do
 		User.find(:all, :order => 'username ASC').each do |user|

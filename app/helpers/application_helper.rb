@@ -1,14 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
     
-    def formatted_time(time, options={})
-        return "Never" unless time
-        if time > 14.days.ago
-            time_ago_in_words(time)+" ago"
-        else
-            time.strftime("%b %d, %Y")
-        end
-    end
+	def formatted_time(time, options={})
+		return "Never" unless time
+		if time > 14.days.ago
+			time_ago_in_words(time)+" ago"
+		else
+			time.strftime("%b %d, %Y")
+		end
+	end
     
     def meify(string, user)
         string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }

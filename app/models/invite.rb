@@ -4,14 +4,14 @@ class Invite < ActiveRecord::Base
 	belongs_to :user
 	validates_presence_of :email, :user_id
 	
-	DEFAULT_EXPIRATION = 7.days
+	DEFAULT_EXPIRATION = 14.days
 
 	validate do |invite|
 		invite.token ||= Invite.unique_token
 		if User.exists?(:email => invite.email)
 			invite.errors.add(:email, 'is already registered!')
 		end
-		if Invite.find_valid.map{|i| i.email}.include?(invite.email)
+		if Invite.find_valid.select{|i| i != invite && i.email == invite.email }.length > 0
 			invite.errors.add(:email, 'has already been invited!')
 		end
 	end
@@ -41,8 +41,20 @@ class Invite < ActiveRecord::Base
 		end
 		
 		# Finds valid invites
-		def find_valid
-			self.find(:all, :conditions => ['expires_at > ?', Time.now], :order => 'created_at DESC')
+		def find_active
+			self.find(:all, :conditions => ['expires_at >= ?', Time.now], :order => 'created_at DESC')
+		end
+		
+		# Finds expired invites
+		def find_expired
+			self.find(:all, :conditions => ['expires_at < ?', Time.now], :order => 'created_at DESC')
+		end
+		
+		# Deletes expired invites
+		def destroy_expired!
+			self.find_expired.each do |invite|
+				invite.destroy
+			end
 		end
 	end
 	

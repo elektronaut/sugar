@@ -1,0 +1,22 @@
+Hi,
+
+<%= @invite.user.realname_or_username %> has invited you to <%= Sugar.config(:forum_name) %>!
+
+<% if @invite.message? -%>
+---------------------------------------------------------------------
+<%= @invite.message %>
+---------------------------------------------------------------------
+
+<% end -%>
+Click this link to register:
+<%= @login_url %>
+
+Please note:
+If the link won't work, please copy the entire URL (on one line) 
+and paste it into your browser address bar.
+
+This invitation is meant for you personally, and will expire 
+after 14 days. If you do not wish to join 
+<%= Sugar.config(:forum_name) %>, simply ignore this email.
+
+Have fun!

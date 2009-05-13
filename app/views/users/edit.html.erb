@@ -61,8 +61,11 @@
 			You can download the newest version of the <%= link_to "default theme here", theme_path(Sugar.config(:default_theme))+".zip" %>.
 		</p>
 	</div>
-	<% if @current_user.admin? %>
+	<% if @current_user.user_admin? %>
 	<div id="profileAdmin">
+		<% if !Sugar.config(:signups_allowed) %>
+			<%= labelled_field f.text_field(:available_invites, :size => 4), "Invites", :errors => @user.errors[:available_invites] %>
+		<% end %>
 		<p>
 			<label>Flags</label>
 			<%= f.check_box(:activated) %> Activated<br />
@@ -72,7 +75,9 @@
 		</p>
 		<p>
 			<label>User levels</label>
-			<%= f.check_box(:admin) %> Administrator<br />
+			<% if @current_user.admin? %>
+				<%= f.check_box(:admin) %> Administrator<br />
+			<% end %>
 			<%= f.check_box(:moderator) %> Moderator<br />
 			<%= f.check_box(:user_admin) %> User administator<br />
 		</p>

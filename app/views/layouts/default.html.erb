@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><%= [Sugar.config(:forum_name),@page_title].compact.join(' - ') %></title>
-	<% if @current_user.stylesheet_url? -%>
+	<% if @current_user && @current_user.stylesheet_url? -%>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else -%>
 		<%= stylesheet_link_tag "#{theme_path}/screen" %>
@@ -23,31 +23,50 @@
 <body class="<%= body_classes %>">
 	<div id="header">
 		<h1><%= Sugar.config(:forum_title) %></h1>
-		<div id="search">
-			<% form_tag search_path, :method => 'get' do %>
-				<%= text_field_tag 'q', @search_query, :class => :query %>
-				<%= select_tag 'search_mode', options_for_select(
-					[['in titles', search_path],['in posts', search_posts_path]],
-					(@posts_search_mode) ? search_posts_path : search_path
-				) %>
-				<%= submit_tag "Search", :name => nil %>
+		<% if @current_user || Sugar.config(:public_browsing) %>
+			<div id="search">
+				<% form_tag search_path, :method => 'get' do %>
+					<%= text_field_tag 'q', @search_query, :class => :query %>
+					<%= select_tag 'search_mode', options_for_select(
+						[['in titles', search_path],['in posts', search_posts_path]],
+						(@posts_search_mode) ? search_posts_path : search_path
+					) %>
+					<%= submit_tag "Search", :name => nil %>
+				<% end %>
+			</div>
+		<% end -%>
+		<div id="account">
+			<% if @current_user %>
+				Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
+			<% else %>
+				<%= link_to "Login", login_users_path %>
+				<% if Sugar.config(:signups_allowed) %>
+					or <%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %>
+				<% end %>
 			<% end %>
 		</div>
-		<div id="account">
-			Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
-		</div>
-		<ul id="navigation">
-			<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
-			<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
-			<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>
-			<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
-			<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path %></li>
-			<% if @section != :messages && @current_user.unread_messages? -%>
-				<li class="messages new_messages"><%= link_to (@current_user.unread_messages_count > 1) ? "#{@current_user.unread_messages_count} New messages!" : "1 New message!", messages_path %></li>
-			<% else -%>
-				<li class="messages<%= ' current' if @section == :messages %>"><%= link_to "Messages", messages_path %></li>
-			<% end -%>
-		</ul>
+		<% if @current_user || Sugar.config(:public_browsing) %>
+			<ul id="navigation">
+				<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
+				<% if @current_user %>
+					<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
+					<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>
+				<% end %>
+				<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path %></li>
+				<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path %></li>
+				<% if @current_user %>
+					<% if @current_user.invites || @current_user.available_invites? -%>
+						<% invites_link_name = (!@current_user.user_admin? && @current_user.available_invites?) ? "Invites (#{@current_user.available_invites})" : "Invites" %>
+						<li class="invites<%= ' current' if @section == :invites %>"><%= link_to invites_link_name, invites_path %></li>
+					<% end %>
+					<% if @section != :messages && @current_user.unread_messages? -%>
+						<li class="messages new_messages"><%= link_to (@current_user.unread_messages_count > 1) ? "#{@current_user.unread_messages_count} New messages!" : "1 New message!", messages_path %></li>
+					<% else -%>
+						<li class="messages<%= ' current' if @section == :messages %>"><%= link_to "Messages", messages_path %></li>
+					<% end -%>
+				<% end -%>
+			</ul>
+		<% end -%>
 	</div>
 	<div id="content">
 		<% if flash[:notice] %>

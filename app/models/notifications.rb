@@ -23,10 +23,17 @@ class Notifications < ActionMailer::Base
 		@recipients = user.full_email
 	end
 	
-    def new_user(user, login_url, message="")
+	def invite(invite, login_url)
+		default_options
+		@subject    = "#{invite.user.realname_or_username} has invited you to #{Sugar.config(:forum_name)}!"
+		@body       = {:invite => invite, :login_url => login_url}
+		@recipients = invite.email
+	end
+
+    def new_user(user, login_url)
         default_options
 		@subject    = "Welcome to #{Sugar.config(:forum_name)}!"
-		@body       = { :user => user, :login_url => login_url, :message => message }
+		@body       = { :user => user, :login_url => login_url}
 		@recipients = user.full_email
     end
     

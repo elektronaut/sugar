@@ -40,6 +40,17 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
+	# unless <tt>@current_user</tt> is <tt>user</tt> or a user admin.
+	def require_user_admin_or_user(user, options={})
+		options[:redirect] ||= discussions_path
+		options[:notice] ||= "You don't have permission to do that!"
+		unless @current_user == user || @current_user.user_admin?
+			flash[:notice] = options[:notice]
+			redirect_to options[:redirect] and return
+		end
+	end
+
 	protected
 
 		# Detects the iPhone user agent string and sets <tt>request.format = :iphone</tt>.
@@ -61,6 +72,8 @@ class ApplicationController < ActionController::Base
 				@section = :categories
 			when 'MessagesController'
 				@section = :messages
+			when 'InvitesController'
+				@section = :invites
 			else
 				@section = :discussions
 			end

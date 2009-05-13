@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-    requires_authentication :except => [:login, :complete_openid_login, :logout, :forgot_password]
+    requires_authentication :except => [:login, :complete_openid_login, :logout, :forgot_password, :new, :create]
     
     def load_user
         @user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         end
     end
     protected     :load_user
-    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid]
+    before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites]
     
     def index
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
@@ -69,39 +69,75 @@ class UsersController < ApplicationController
 	end
 
     def new
-        unless @current_user.user_admin?
-            flash[:notice] = "You don't have permission to do that!"
-            redirect_to users_url and return
-        end
-        @user = @current_user.invitees.new
-        @user.activated = true
-        @user.generate_password!
+		# New by invitation
+		if params[:token]
+			@invite = Invite.first(:conditions => {:token => params[:token]})
+			if @invite && !@invite.expired?
+				@user = @invite.user.invitees.new
+				@user.email = @invite.email
+			else
+				flash[:notice] = "That's not a valid invite!"
+				redirect_to login_users_url and return
+			end
+		# Signups allowed
+		elsif Sugar.config(:signups_allowed)
+			@user = User.new
+		else
+			flash[:notice] = "Signups are not allowed!"
+			redirect_to login_users_url and return
+		end
     end
 
     def create
-        unless @current_user.user_admin?
-            flash[:notice] = "You don't have permission to do that!"
-            redirect_to users_url and return
-        end
-        params[:user][:confirm_password] = params[:user][:password]
-        @user = User.create(params[:user])
-        if @user.valid?
-            Notifications.deliver_new_user(@user, login_users_path(:only_path => false), params[:message])
-            flash[:notice] = "#{@user.username} has been invited by email"
-            redirect_to users_url and return
-        else
-            flash.now[:notice] = "Invalid user, please fill in all required fields."
-            render :action => :new
-        end
+		if params[:token]
+			@invite = Invite.first(:conditions => {:token => params[:token]})
+			@invite = nil if @invite.expired?
+		end
+		
+		unless Sugar.config(:signups_allowed) || @invite
+			flash[:notice] = "Signups are not allowed!"
+			redirect_to login_users_url and return
+		end
+
+		# Secure and parse attributes
+		attributes = User.safe_attributes(params[:user])
+		if attributes[:openid_url] && !attributes[:openid_url].blank?
+			new_openid_url = attributes[:openid_url]
+		end
+		attributes[:username]   = params[:user][:username]
+		attributes[:inviter_id] = @invite.user_id if @invite
+		attributes[:activated]  = Sugar.config(:signup_approval_required) ? false : true
+
+		@user = User.create(attributes)
+		if @user.valid?
+			@invite.destroy if @invite
+			Notifications.deliver_new_user(@user, login_users_path(:only_path => false))
+			@current_user = @user
+			store_session_authentication
+			
+			# Verify the changed OpenID URL
+			if new_openid_url
+				response = openid_consumer.begin(new_openid_url) rescue nil
+				if response
+					redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), false) and return
+				else
+					flash[:notice] = "WARNING: Your OpenID URL is invalid!"
+				end
+			end
+			redirect_to user_url(:id => @user.username) and return
+		else
+			flash.now[:notice] = "Could not create your account, please fill in all required fields."
+			render :action => :new
+		end
     end
 
     def edit
         # TODO: refactor to .editable_by?
-        require_admin_or_user(@user, :redirect => user_url(@user))
+        require_user_admin_or_user(@user, :redirect => user_url(@user))
     end
 
 	def update_openid
-        require_admin_or_user(@user, :redirect => user_url(@user))
+        require_user_admin_or_user(@user, :redirect => user_url(@user))
 		response_params = params
 		response_params.delete(:controller)
 		response_params.delete(:action)
@@ -122,7 +158,7 @@ class UsersController < ApplicationController
 			end
 		when OpenID::Consumer::SuccessResponse
 			if @user.update_attribute(:openid_url, OpenID.normalize_url(response.identity_url))
-				flash[:notice] = "Your changes were saved!"
+				flash[:notice] = "Your OpenID URL was updated!"
 				redirect_to user_url(:id => @user.username) and return
 			end
 		when OpenID::Consumer::FailureResponse
@@ -134,7 +170,7 @@ class UsersController < ApplicationController
 	end
     
 	def update
-		require_admin_or_user(@user, :redirect => user_url(@user))
+        require_user_admin_or_user(@user, :redirect => user_url(@user))
 		attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
 
 		if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
@@ -159,7 +195,7 @@ class UsersController < ApplicationController
 				end
 			else
 				flash[:notice] = "Your changes were saved!"
-				redirect_to user_url(:id => @user.username)
+				redirect_to user_url(:id => @user.username) and return
 			end
 		end
 		flash.now[:notice] ||= "There were errors saving your changes"
@@ -250,4 +286,23 @@ class UsersController < ApplicationController
         redirect_to login_users_url
     end
 
+	def grant_invite
+		unless @current_user.user_admin?
+			flash[:notice] = "You don't have permission to do that!"
+			redirect_to user_url(:id => @user.username) and return
+		end
+		@user.grant_invite!
+		flash[:notice] = "#{@user.username} has been granted one invite."
+		redirect_to user_url(:id => @user.username) and return
+	end
+
+	def revoke_invites
+		unless @current_user.user_admin?
+			flash[:notice] = "You don't have permission to do that!"
+			redirect_to user_url(:id => @user.username) and return
+		end
+		@user.revoke_invite!(:all)
+		flash[:notice] = "#{@user.username} has been revoked of all invites."
+		redirect_to user_url(:id => @user.username) and return
+	end
 end

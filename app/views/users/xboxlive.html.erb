@@ -3,6 +3,10 @@
 	@page_title = "Xbox Live Users" 
 %>
 
+<div class="functions">
+	<%= render :partial => 'users_functions' %>
+</div>
+
 <h2 class="section">
 	<%= link_to "Users", users_path %> &raquo; <%= link_to "Xbox Live", xboxlive_users_path %>
 </h2>

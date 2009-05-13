@@ -45,6 +45,12 @@
 	<% end %>
 
 	<p class="posts_and_discussions">
+		<% if !Sugar.config(:signups_allowed) && @current_user.user_admin? && !@user.user_admin? %>
+			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
+			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
+			or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), :confirm => 'Are you sure you want to revoke all invites?' %>
+			<br />
+		<% end %>
 		<% if @user.discussions_count > 0 %>
 			<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
 		<% end %>
@@ -118,7 +124,18 @@
 
 </div>
 <div id="userPosts">
-	<% if @posts %>
+	<% if @posts && @posts.length > 0 %>
 		<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+	<% elsif @user == @current_user %>
+		<div class="welcome">
+			<h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
+			<p>
+				This is your user profile. Normally your posts will show up in this space, but you haven't posted anything yet.
+			</p>
+			<p>
+				Why don't you go <%= link_to "check out some discussions", discussions_path %>, and maybe introduce yourself?<br />
+				Or maybe <%= link_to "edit your profile", edit_user_path(:id => @user.username) %> and add some more info about yourself?
+			</p>
+		</div>
 	<% end %>
 </div>
