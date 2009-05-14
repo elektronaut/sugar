@@ -11,7 +11,7 @@ class Invite < ActiveRecord::Base
 		if User.exists?(:email => invite.email)
 			invite.errors.add(:email, 'is already registered!')
 		end
-		if Invite.find_valid.select{|i| i != invite && i.email == invite.email }.length > 0
+		if Invite.find_active.select{|i| i != invite && i.email == invite.email }.length > 0
 			invite.errors.add(:email, 'has already been invited!')
 		end
 	end
