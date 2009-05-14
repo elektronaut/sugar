@@ -39,9 +39,9 @@
 				user.posts_per_day
 			when :status
 				if user.banned?
-					'<span class="banned">Banned!</span>'
-				elsif user.admin?
-					'<span class="admin">Admin!</span>'
+					'<span class="banned">Banned</span>'
+				elsif user.admin? || user.user_admin? || user.moderator?
+					'<span class="admin">'+user.admin_labels.join(', ')+'</span>'
 				end
 			when :twitter
 				link_to "@#{user.twitter}", "http://twitter.com/#{user.twitter}"

@@ -435,6 +435,18 @@ class User < ActiveRecord::Base
 		end
 		@gravatar_url[options[:size]]
 	end
+	
+	# Returns admin flags as strings
+	def admin_labels
+		labels = []
+		if self.admin?
+			labels << "Admin"
+		else
+			labels << "User admin" if self.user_admin?
+			labels << "Moderator" if self.moderator?
+		end
+		labels
+	end
 
 	# Fixes any inconsistencies in the counter_cache columns.
 	def fix_counter_cache!
