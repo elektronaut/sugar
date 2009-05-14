@@ -1,6 +1,7 @@
 <% 
 	add_body_class "edit_user_profile"
-	@page_title = "Edit profile" 
+	@page_title = "Edit profile"
+	@google_maps_api = true
 %>
 
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(:id => @user.username) %> </h2>
@@ -15,6 +16,7 @@
 <ul id="profile-tabs" class="topTabs">  
 	<li class="tab" id="info-tab"><a href="#profileInfo">Personal Info</a></li>  
 	<li class="tab" id="links-tab"><a href="#profileLinks">Links and Services</a></li>  
+	<li class="tab" id="location-tab"><a href="#profileLocation">Location</a></li>  
 	<li class="tab" id="settings-tab"><a href="#profileSettings">Settings</a></li>  
 	<% if @current_user.admin? %>
 		<li class="tab" id="admin-tab"><a href="#profileAdmin">Admin</a></li>
@@ -26,7 +28,6 @@
 	<div id="profileInfo">
 		<%= labelled_field f.text_field(:username, :disabled => !@current_user.admin?), "Username", :errors => @user.errors[:username] %>
 		<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
-		<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
 		<%= labelled_field f.date_select(:birthday, :start_year => 1900), "Birthday", :description => "Your age won't be shown, but your birthday will", :errors => @user.errors[:birthday] %>
 		<% labelled_field f.text_field(:avatar_url, :size => 80), "Avatar URL", :description => "Enter a link to a 32x32px image", :errors => @user.errors[:avatar_url] do %>
 			Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> 
@@ -43,6 +44,14 @@
 		<%= labelled_field f.text_field(:twitter), "Twitter username", :errors => @user.errors[:twitter] %>
 		<%= labelled_field f.text_field(:flickr), "Flickr user ID", :errors => @user.errors[:flickr], :description => "Note: This is not your username" %>
 		<%= labelled_field f.text_field(:last_fm), "Last.fm username", :errors => @user.errors[:last_fm] %>
+	</div>
+	<div id="profileLocation">
+		<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
+
+		<% if Sugar.config(:google_api) %>
+			<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
+			<%= labelled_field '<div id="editProfileMap"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
+		<% end %>
 	</div>
 	<div id="profileSettings">
 		<%= labelled_field f.text_field(:openid_url, :size => 50), "OpenID Identity URL", :errors => @user.errors[:openid_url] %>

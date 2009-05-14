@@ -67,6 +67,7 @@ ActionController::Routing::Routes.draw do |map|
 			:admins => :get,
 			:top_posters => :get,
 			:trusted => :get,
+			:map => :get,
 			:banned => :any
 		}
     )

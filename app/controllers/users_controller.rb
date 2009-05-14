@@ -14,6 +14,12 @@ class UsersController < ApplicationController
     
     def index
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
+		respond_to do |format|
+			format.html {}
+			format.json {
+				render :layout => false, :text => @users.to_json(:only => [:id, :username, :realname, :latitude, :longitude, :last_active, :created_at, :description, :admin, :moderator, :user_admin, :posts_count, :discussions_count, :location, :gamertag, :avatar_url, :twitter, :flickr, :website])
+			}
+		end
     end
 
     def banned
@@ -42,6 +48,9 @@ class UsersController < ApplicationController
 	
 	def top_posters
 		@users = User.find_top_posters(:limit => 50)
+	end
+	
+	def map
 	end
     
 	def trusted

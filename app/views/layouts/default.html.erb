@@ -18,6 +18,12 @@
 		<%= javascript_include_tag 'swfobject' %>
 		<%= javascript_include_tag 'application' %>
 	<% end -%>
+	<% if Sugar.config(:google_api) && @google_maps_api %>
+		<script type="text/javascript" src="http://www.google.com/jsapi?key=<%= Sugar.config(:google_api) %>"></script>
+		<script type="text/javascript" charset="utf-8">
+		    google.load("maps", "2.x");
+		</script>
+	<% end %>
 	<link rel="icon" type="image/gif" href="<%= theme_path %>/images/favicon.gif" />
 </head>
 <body class="<%= body_classes %>">

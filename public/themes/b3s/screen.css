@@ -801,6 +801,11 @@ table.discussions tr.closed td.name a:hover {
 	background-position: 0 7px;
 }
 
+#editProfileMap {
+	width: 600px;
+	height: 450px;
+}
+
 
 /* -----------------------------------------------------------------------
    INVITES SECTION
