@@ -109,11 +109,16 @@ class User < ActiveRecord::Base
 			@users  = User.find(:all, :order => 'posts_count DESC', :conditions => 'activated = 1 AND banned = 0', :limit => options[:limit])
 		end
 
+		# Find trusted users
+		def find_trusted
+			User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND (trusted = 1 OR admin = 1 OR user_admin = 1 OR moderator = 1)')
+		end
+
 		# Hash a string for password usage.
 		def hash_string( string )
 			Digest::SHA1.hexdigest( string )
 		end
-
+		
 		# Deletes attributes which normal users shouldn't be able to touch from a param hash.
 		def safe_attributes(params)
 			safe_params = params.dup
@@ -356,7 +361,7 @@ class User < ActiveRecord::Base
 
 	# Returns true if this user is trusted or an admin.
 	def trusted?
-		(self[:trusted] || admin?)
+		(self[:trusted] || admin? || user_admin? || moderator?)
 	end
 
 	# Returns true if this user is a user admin.

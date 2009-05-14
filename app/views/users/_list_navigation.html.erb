@@ -4,6 +4,9 @@
 	<%= users_tab "Recently Joined", recently_joined_users_path, :action => 'recently_joined', :class => 'RecentlyJoinedTab' %>
 	<%= users_tab "Top Posters", top_posters_users_path, :action => 'top_posters', :class => 'TopPostersTab' %>
 	<%= users_tab "Admins", admins_users_path, :action => 'admins', :class => 'AdminsTab' %>
+	<% if @current_user && @current_user.trusted? %>
+		<%= users_tab "Trusted", trusted_users_path, :action => 'trusted', :class => 'TrustedUsersTab' %>
+	<% end %>
 	<%= users_tab "Banned", banned_users_path, :action => 'banned', :class => 'BannedUsersTab' %>
 	<%= users_tab "Twitter", twitter_users_path, :action => 'twitter', :class => 'TwitterUsersTab' %>
 	<% if Sugar.config(:xbox_live_enabled) %>

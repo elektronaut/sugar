@@ -44,6 +44,13 @@ class UsersController < ApplicationController
 		@users = User.find_top_posters(:limit => 50)
 	end
     
+	def trusted
+		unless @current_user && @current_user.trusted?
+			flash[:notice] = "You need to be trusted to view this page!"
+		end
+		@users = User.find_trusted
+	end
+
     def show
 		respond_to do |format|
 			format.html do
