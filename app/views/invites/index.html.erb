@@ -13,7 +13,7 @@
 	<% if @current_user.available_invites? %>
 		<% if @current_user.user_admin? %>
 			You are a user admin, and can <%= link_to "invite as many people as you like", new_invite_path %>.
-			You can also grant other users invites from their profile pages.
+			You can also grant other users invites from their profile pages. <%= link_to "Click here to view everyone's invites", all_invites_path %>.
 			</p><p>
 		<% elsif @current_user.available_invites? %>
 			You have

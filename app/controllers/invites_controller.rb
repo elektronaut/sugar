@@ -35,9 +35,9 @@ class InvitesController < ApplicationController
 		@invites = @current_user.invites.active
 	end
 	
-	def show
-		require_admin_or_user(@invite.user, :redirect => invites_url)
-		render :action => :edit
+	def all
+		require_user_admin_or_user(nil, :redirect => invites_url)
+		@invites = Invite.find_active
 	end
 	
 	def new
@@ -60,6 +60,11 @@ class InvitesController < ApplicationController
 		end
 	end
 	
+	# def show
+	# 	require_user_admin_or_user(@invite.user, :redirect => invites_url)
+	# 	render :action => :edit
+	# end
+	#
 	# def edit
 	# 	require_admin_or_user(@invite.user, :redirect => invites_url)
 	# end
@@ -75,7 +80,7 @@ class InvitesController < ApplicationController
 	# end
 
 	def destroy
-		require_admin_or_user(@invite.user, :redirect => invites_url)
+		require_user_admin_or_user(@invite.user, :redirect => invites_url)
 		@invite.destroy
 		flash[:notice] = "Your invite has been cancelled."
 		redirect_to invites_url and return

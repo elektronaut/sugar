@@ -42,7 +42,7 @@ class Invite < ActiveRecord::Base
 		
 		# Finds valid invites
 		def find_active
-			self.find(:all, :conditions => ['expires_at >= ?', Time.now], :order => 'created_at DESC')
+			self.find(:all, :conditions => ['expires_at >= ?', Time.now], :order => 'created_at DESC', :include => [:user])
 		end
 		
 		# Finds expired invites

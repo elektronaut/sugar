@@ -114,7 +114,8 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources(
 		:invites,
-		:member => {:accept => :any}
+		:collection => {:all => :get},
+		:member => {:accept => :get}
 	)
 
     # Vanilla redirects

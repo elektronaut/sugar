@@ -1,0 +1,32 @@
+<% 
+	add_body_class "invites"
+	@page_title = "Invites" 
+%>
+
+<h2 class="section">
+	<%= link_to "Invites", invites_path %> &raquo;
+	<%= link_to "All", all_invites_path %>
+</h2>
+
+<% if @invites && @invites.length > 0 %>
+	<table class="list invites_list">
+		<tr>
+			<th>Email</th>
+			<th>Invited by</th>
+			<th>Sent</th>
+			<th>Expires</th>
+			<th></th>
+		</tr>
+		<% @invites.each do |invite| %><tr>
+			<td class="email"><%= invite.email %></td>
+			<td class="user"><%= profile_link(invite.user) %></td>
+			<td class="created_at"><%= formatted_time invite.created_at %></td>
+			<td class="expires_at"><%= invite.expires_at.strftime("%b %d, %Y") %></td>
+			<td class="actions">
+				<%= link_to "Cancel", invite_path(invite), :class => :delete, :method => :delete, :confirm => 'Are you sure that you want to cancel this invite?' %>
+			</td>
+		</tr><% end %>
+	</table>
+<% else %>
+	<p>There are no invites.</p>
+<% end %>
