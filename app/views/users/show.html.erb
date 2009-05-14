@@ -44,13 +44,16 @@
 	</div>
 	<% end %>
 
-	<p class="posts_and_discussions">
-		<% if !Sugar.config(:signups_allowed) && @current_user.user_admin? && !@user.user_admin? %>
+	<% if !Sugar.config(:signups_allowed) && @current_user.user_admin? && !@user.user_admin? %>
+		<p class="grant_invites">
 			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
 			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
 			or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), :confirm => 'Are you sure you want to revoke all invites?' %>
 			<br />
-		<% end %>
+		</p>
+	<% end %>
+
+	<p class="posts_and_discussions">
 		<% if @user.discussions_count > 0 %>
 			<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
 		<% end %>

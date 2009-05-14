@@ -1,7 +1,3 @@
-Bugs:
-
-* BUG: Flash notices sometimes shows up on the request after posting ("Your reply has been saved").
-
 iPhone:
 
 * OpenID login
@@ -13,14 +9,12 @@ iPhone:
 
 B3S (Pre-Stylus):
 
-* Wrap invites block on users profile in it's own div to make it work with me3s.
 * Admins should be able to see all pending invites.
 * List of trusted users (only available for trusted users).
 * Admins list should differentiate between admins, user admins and moderators.
 * Clean up and centralize the OpenID verification actions.
 * Inline editing should just save the edited post by AJAX.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
-* User profiles are slllowww, check queries
 * Use the Flickr API key from the config, drop loading if not configured.
 * Xbox Live should be completely disabled if configured so.
 * Work out some kind of magic to ensure that the search indexing daemon is running.

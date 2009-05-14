@@ -724,6 +724,10 @@ table.discussions tr.closed td.name a:hover {
 .user_profile .posts_and_discussions {
 	font-size:           1.2em;
 }
+.user_profile .grant_invites {
+	font-size:           1.2em;
+	margin-bottom:       0;
+}
 .user_profile .posts_and_discussions a {
 	font-weight:         bold;
 }
