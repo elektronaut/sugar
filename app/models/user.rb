@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
 	attr_accessor :password_changed
 
 	has_many   :discussions, :foreign_key => 'poster_id'
+	has_many   :closed_discussions, :foreign_key => 'closer_id'
 	has_many   :posts
 	belongs_to :inviter, :class_name => 'User'
 	has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'

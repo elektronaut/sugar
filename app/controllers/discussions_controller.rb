@@ -28,7 +28,7 @@ class DiscussionsController < ApplicationController
     def load_categories
         @categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user.trusted? || @current_user.admin?) }
     end
-    before_filter :load_categories, :only => [:new, :edit]
+    before_filter :load_categories, :only => [:new, :create, :edit, :update]
 
     def index
         @discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
@@ -50,7 +50,7 @@ class DiscussionsController < ApplicationController
     end
     
     def new
-        @discussion = Discussion.new
+        @discussion = @current_user.discussions.new
     end
     
     def show
@@ -68,8 +68,9 @@ class DiscussionsController < ApplicationController
     end
     
     def create
-        attributes = @current_user.admin? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
+        attributes = @current_user.moderator? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
         @discussion = @current_user.discussions.create(attributes)
+        @discussion.update_attributes(attributes.merge(:new_closer => @current_user))
         if @discussion.valid?
             redirect_to discussion_path(@discussion) and return
         else
@@ -79,8 +80,8 @@ class DiscussionsController < ApplicationController
     end
     
     def update
-        attributes = @current_user.admin? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
-        @discussion.update_attributes(attributes)
+        attributes = @current_user.moderator? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
+        @discussion.update_attributes(attributes.merge(:new_closer => @current_user))
         if @discussion.valid?
             flash[:notice] = "Your changes were saved."
             redirect_to discussion_path(@discussion) and return

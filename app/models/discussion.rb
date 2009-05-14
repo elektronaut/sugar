@@ -6,6 +6,7 @@ class Discussion < ActiveRecord::Base
 	DISCUSSIONS_PER_PAGE = 30
 
 	belongs_to :poster,      :class_name => 'User', :counter_cache => true
+	belongs_to :closer,      :class_name => 'User'
 	belongs_to :last_poster, :class_name => 'User'
 	belongs_to :category
 	has_many   :posts, :order => ['created_at ASC'], :dependent => :destroy
@@ -20,10 +21,19 @@ class Discussion < ActiveRecord::Base
 	attr_accessor :body
 	
 	# Flag for trusted status, which will update after save if it has been changed.
-	attr_accessor :update_trusted
+	attr_accessor :update_trusted, :new_closer
 
 	validate do |discussion|
 		discussion.trusted = discussion.category.trusted if discussion.category
+		if discussion.closed_changed?
+			if !discussion.closed? && (!discussion.new_closer || !discussion.closeable_by?(discussion.new_closer))
+				discussion.errors.add(:closed, "can't be changed!") 
+			elsif discussion.closed?
+				discussion.closer = discussion.new_closer
+			else
+				discussion.closer = nil
+			end
+		end
 	end
 
 	# Update the first post if @body has been changed
@@ -193,6 +203,12 @@ class Discussion < ActiveRecord::Base
 
 	def viewable_by?(user)
 		(user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
+	end
+	
+	# Can the given user close this thread?
+	def closeable_by?(user)
+		return false unless user
+		(user.moderator? || (!self.closer && self.poster == user) || self.closer == user) ? true : false
 	end
 
 	# Humanized ID for URLs
