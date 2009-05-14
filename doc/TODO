@@ -1,6 +1,5 @@
 Bugs:
 
-* BUG: Regular users shouldn't be able to re-open a thread closed by a moderator.
 * BUG: Flash notices sometimes shows up on the request after posting ("Your reply has been saved").
 
 iPhone:
