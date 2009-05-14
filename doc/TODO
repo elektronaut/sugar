@@ -15,7 +15,6 @@ iPhone:
 B3S (Pre-Stylus):
 
 * Wrap invites block on users profile in it's own div to make it work with me3s.
-* Only check for new posts on the last page
 * Admins should be able to see all pending invites.
 * List of trusted users (only available for trusted users).
 * Admins list should differentiate between admins, user admins and moderators.

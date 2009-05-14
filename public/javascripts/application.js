@@ -371,7 +371,7 @@ var Sugar = {
 		}
 		
 		// Refresh posts count
-		if( $('.total_items_count').length > 0 && $('#newPosts').length > 0){
+		if( $('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0){
 			var newPosts = $('#newPosts').get()[0];
 			newPosts.postsCount = $('.total_items_count').eq(0).text();
 			newPosts.postsCountUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js";
