@@ -32,6 +32,7 @@ B3S specific:
 
 After Stylus:
 
+* Select from available installed themes in a drop-down
 * If there aren't any users registered: One should be able to sign up and be set as admin
 * Finish up the optional approval of signups functionality
 * Finish up public browsing (if configured)
