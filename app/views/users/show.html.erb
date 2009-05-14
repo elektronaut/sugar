@@ -93,7 +93,7 @@
 		</div>
 	</div><% end %>
 
-	<% @user.gamertag? %><div class="social xboxlive">
+	<% if @user.gamertag? %><div class="social xboxlive">
 		<h3>Xbox Live: <%= link_to "#{@user.gamertag}", "http://live.xbox.com/member/#{@user.gamertag}" %></h3>
 		<% if Sugar.config(:xbox_live_enabled) && @user.xbox_info && @user.xbox_info.valid_xml? %>
 			<p class="clearfix">
