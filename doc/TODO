@@ -7,7 +7,7 @@ iPhone:
 * Custom iPhone theme URL
 * Check up on missing features
 
-B3S (Pre-Stylus):
+Pre-Stylus:
 
 * Admins should be able to see all pending invites.
 * List of trusted users (only available for trusted users).
@@ -16,8 +16,6 @@ B3S (Pre-Stylus):
 * Inline editing should just save the edited post by AJAX.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
 * Use the Flickr API key from the config, drop loading if not configured.
-* Work out some kind of magic to ensure that the search indexing daemon is running.
-* Set up deployment as app user, not root.
 
 Stylus:
 
@@ -26,6 +24,11 @@ Stylus:
 * Bring the Vanilla conversion scripts up to speed
 * Set up a Slicehost account (and take notes for the setup guide)
 * Move everything over
+
+B3S specific:
+
+* Work out some kind of magic to ensure that the search indexing daemon is running.
+* Set up deployment as app user, not root.
 
 After Stylus:
 
