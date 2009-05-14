@@ -16,7 +16,6 @@ B3S (Pre-Stylus):
 * Inline editing should just save the edited post by AJAX.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
 * Use the Flickr API key from the config, drop loading if not configured.
-* Xbox Live should be completely disabled if configured so.
 * Work out some kind of magic to ensure that the search indexing daemon is running.
 * Set up deployment as app user, not root.
 

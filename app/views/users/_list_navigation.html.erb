@@ -6,5 +6,7 @@
 	<%= users_tab "Admins", admins_users_path, :action => 'admins', :class => 'AdminsTab' %>
 	<%= users_tab "Banned", banned_users_path, :action => 'banned', :class => 'BannedUsersTab' %>
 	<%= users_tab "Twitter", twitter_users_path, :action => 'twitter', :class => 'TwitterUsersTab' %>
-	<%= users_tab "Xbox Live", xboxlive_users_path, :action => 'xboxlive', :class => 'XboxLiveUsersTab' %>
+	<% if Sugar.config(:xbox_live_enabled) %>
+		<%= users_tab "Xbox Live", xboxlive_users_path, :action => 'xboxlive', :class => 'XboxLiveUsersTab' %>
+	<% end %>
 </ul>
