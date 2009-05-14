@@ -95,7 +95,7 @@
 
 	<% @user.gamertag? %><div class="social xboxlive">
 		<h3>Xbox Live: <%= link_to "#{@user.gamertag}", "http://live.xbox.com/member/#{@user.gamertag}" %></h3>
-		<% if if Sugar.config(:xbox_live_enabled) && @user.xbox_info && @user.xbox_info.valid_xml? %>
+		<% if Sugar.config(:xbox_live_enabled) && @user.xbox_info && @user.xbox_info.valid_xml? %>
 			<p class="clearfix">
 				<%= image_tag @user.xbox_info.tile_url, :class => 'avatar', :size => '64x64' %>
 				<strong>Gamerscore</strong>: <%= @user.xbox_info.gamerscore %><br />
