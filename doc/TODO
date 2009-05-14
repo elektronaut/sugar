@@ -9,7 +9,6 @@ iPhone:
 
 Pre-Stylus:
 
-* Admins list should differentiate between admins, user admins and moderators.
 * Clean up and centralize the OpenID verification actions.
 * Inline editing should just save the edited post by AJAX.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
