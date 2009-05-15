@@ -50,7 +50,7 @@
 
 		<% if Sugar.config(:google_api) %>
 			<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
-			<%= labelled_field '<div id="editProfileMap"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
+			<%= labelled_field '<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
 		<% end %>
 	</div>
 	<div id="profileSettings">

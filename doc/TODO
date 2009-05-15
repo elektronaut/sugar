@@ -45,6 +45,5 @@ Someday/maybe:
 * Quoting by selection
 * More secure posts parsing (proper HTML, scrub for malicious content)
 * Group messages in proper conversations rather than per user
-* Google maps integration
 * User controllable themes
 
