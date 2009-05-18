@@ -18,6 +18,7 @@ flickr_api: 016918184821edf95505d9acd61e64c4
 
 # Google API key
 google_api: ABQIAAAAnWSYmGpYjyofU-RkR7khnxQaLv7OURE2GkMujmXaX4v89Xp-jxTAPesjyBvKHuLc29BxnjWmJa7n9w
+google_analytics: UA-8897656-1
 
 # Enable Xbox Live integration
 xbox_live_enabled: true
