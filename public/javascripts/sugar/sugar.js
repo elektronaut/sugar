@@ -1,4 +1,5 @@
 var Sugar = {
+	Configuration: {},
 	Initializers: {
 
 		usersMap : function() {
@@ -201,22 +202,24 @@ var Sugar = {
 		},
 		
 		profileFlickr: function(){
-			$('#flickrProfileURL').each(function(){
-				var fuid = this.href.split("/");
-				fuid = fuid[(fuid.length-1)];
-				jQuery(function(){   
-					$('#flickrPhotos').hide();
-				  	jQuery("#flickrPhotos").flickr({
-				    	api_key: "016918184821edf95505d9acd61e64c4",
-						type: 'search',
-						user_id: fuid,
-						per_page: 15,
-						callback: function(list){
-							$('#flickrPhotos').show();
-						}
-					}); 
-				});	
-			});
+			if(Sugar.Configuration.FlickrAPI){
+				$('#flickrProfileURL').each(function(){
+					var fuid = this.href.split("/");
+					fuid = fuid[(fuid.length-1)];
+					jQuery(function(){   
+						$('#flickrPhotos').hide();
+					  	jQuery("#flickrPhotos").flickr({
+					    	api_key: Sugar.Configuration.FlickrAPI,
+							type: 'search',
+							user_id: fuid,
+							per_page: 15,
+							callback: function(list){
+								$('#flickrPhotos').show();
+							}
+						}); 
+					});	
+				});
+			}
 		},
 		
 		parsePosts: function(){

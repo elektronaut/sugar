@@ -16,6 +16,4 @@ module Sugar
 			self.config(key, value)
 		end
 	end
-	
-	config :flickr_api, false
 end
