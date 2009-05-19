@@ -369,6 +369,11 @@ class User < ActiveRecord::Base
 		(self[:user_admin] || admin?)
 	end
 
+	# Returns true if this user is a moderator.
+	def moderator?
+		(self[:moderator] || admin?)
+	end
+
 	# Returns true if this user is following the given discussion.
 	def following?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
