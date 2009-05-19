@@ -38,7 +38,7 @@ class Discussion < ActiveRecord::Base
 
 	# Update the first post if @body has been changed
 	after_update do |discussion|
-		if discussion.body && !discussion.body.empty? && discussion.body != discussions.posts.first.body
+		if discussion.body && !discussion.body.empty? && discussion.body != discussion.posts.first.body
 			discussion.posts.first.update_attributes(:body => discussion.body, :edited_at => Time.now)
 		end
 	end

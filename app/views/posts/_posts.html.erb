@@ -43,7 +43,9 @@
 			<% if post.editable_by?(@current_user) %>
 				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %> |
 			<% end %>			
-			<%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+			<% if @current_user %>
+				<%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+			<% end %>
 		</div>
 		<% end %>
 		<% if post.me_post? %>
