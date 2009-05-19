@@ -150,7 +150,7 @@ var Sugar = {
 				var editURL = this.href;
 				$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
 				$("#postBody-"+postID).load(editURL, false, function(){
-					Sugar.applyRichText();
+					Sugar.Initializers.richText();
 				});
 				return false;
 			});
@@ -357,8 +357,6 @@ var Sugar = {
 		newPosts.postsCount = newPosts.serverPostsCount;
 		newPosts.shown = false;
 		$(newPosts).fadeOut();
-
-		this.applyPostFunctions();
 
 		return false;
 	},
