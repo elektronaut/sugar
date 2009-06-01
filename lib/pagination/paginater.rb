@@ -47,7 +47,7 @@ module Pagination
 		end
 		
 		def context?
-			(@context > 0 && page > 0) ? true : false
+			(@context > 0 && page > 1) ? true : false
 		end
 		
 		# Returns the start offset.
