@@ -49,12 +49,6 @@
 			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>  
 		</ul>
 		
-		<% if @posts.last_page? && @posts.length == Post::POSTS_PER_PAGE %>
-			<div class="newpage_warning">
-				<strong>Warning:</strong> You're about to get newpage'd.
-			</div>
-		<% end %>
-		
 		<%# Text reply %>
 		<div id="replyText">
 			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>

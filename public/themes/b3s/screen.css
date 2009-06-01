@@ -471,6 +471,9 @@ table.discussions tr.closed td.name a:hover {
 	border-top:          1px solid #E2DCBF;
 	margin-bottom:       20px;
 }
+.posts .context {
+	border-bottom:       3px solid #E2DCBF;
+}
 /* Container for posts loaded via AJAX */
 #ajaxPosts {
 	border-top:          3px solid #E2DCBF;

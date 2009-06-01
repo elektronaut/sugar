@@ -11,9 +11,10 @@
 
 	previous_post = nil
 -%>
-<%= render(:partial => 'components/pagination', :locals => { :p => posts }) unless no_pagination %>
+<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start }) unless no_pagination %>
 <% unless no_container %><div class="posts"><% end %>
 <% posts.each do |post| %>
+<% if posts.context? && posts.index(post) == 0 %><div class="context"><% end %>
 	<% if post_distance && previous_post %>
 		<% if (post.created_at - previous_post.created_at) >= 12.hours %>
 			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
@@ -79,7 +80,8 @@
 		<% end %>
 	</div>
 	<% previous_post = post %>
+<% if posts.context? && posts.index(post) == (posts.context-1) %></div><a name="start"></a><% end %>
 <% end %>
 <% unless no_container %></div><% end %>
 <% if new_posts_notifier %><div id="newPosts"></div><% end %>	
-<%= render(:partial => 'components/pagination', :locals => { :p => posts }) unless no_pagination %>
+<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start }) unless no_pagination %>

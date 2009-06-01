@@ -75,6 +75,16 @@ module Pagination
 			(page == last_page) ? true : false
 		end
 
+		# Number of items presented in context
+		def context
+			paginater.context
+		end
+
+		# Returns true if the collection has items in context.
+		def context?
+			paginater.context?
+		end
+
 		# Get an array of nearby pages. 
 		def nearest_pages(number=5)
 			first = page - (number/2)

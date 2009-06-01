@@ -41,7 +41,8 @@ class Post < ActiveRecord::Base
 			Pagination.paginate(
 				:total_count => discussion.posts_count,
 				:per_page    => options[:limit] || POSTS_PER_PAGE,
-				:page        => options[:page] || 1
+				:page        => options[:page] || 1,
+				:context     => options[:context] || 0
 			) do |pagination|
 				Post.find(
 					:all,
