@@ -80,7 +80,7 @@
 		<% end %>
 	</div>
 	<% previous_post = post %>
-<% if posts.respond_to?(:context) && posts.context? && posts.index(post) == (posts.context-1) %></div><a name="start"></a><% end %>
+<% if posts.respond_to?(:context) && posts.context? && posts.index(post) == (posts.context-1) %></div><a name="start" id="startAnchor"></a><% end %>
 <% end %>
 <% unless no_container %></div><% end %>
 <% if new_posts_notifier %><div id="newPosts"></div><% end %>	
