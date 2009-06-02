@@ -54,7 +54,15 @@ class DiscussionsController < ApplicationController
     end
     
     def show
-        @posts = Post.find_paginated(:page => params[:page], :discussion => @discussion, :context => 5)
+		context = 0
+		respond_to do |format|
+			format.html do
+				context = 3
+			end
+			format.iphone do
+			end
+		end
+        @posts = Post.find_paginated(:page => params[:page], :discussion => @discussion, :context => context)
         last_index = @posts.offset + @posts.length
         if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
             discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id) if discussion_view.post_index < last_index

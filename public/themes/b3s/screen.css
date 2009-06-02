@@ -474,6 +474,15 @@ table.discussions tr.closed td.name a:hover {
 .posts .context {
 	border-bottom:       3px solid #E2DCBF;
 }
+.posts .context .post, .posts .context .post blockquote, .posts .context .post a, .posts .context .post a:visited {
+	color:               #777;
+}
+.posts .context .post a:hover {
+	color:               #555;
+}
+.posts .context .post .avatar {
+	opacity:             0.7;
+}
 /* Container for posts loaded via AJAX */
 #ajaxPosts {
 	border-top:          3px solid #E2DCBF;
