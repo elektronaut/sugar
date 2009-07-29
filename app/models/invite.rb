@@ -4,6 +4,8 @@ class Invite < ActiveRecord::Base
 	belongs_to :user
 	validates_presence_of :email, :user_id
 	
+	attr_accessor :used
+
 	DEFAULT_EXPIRATION = 14.days
 
 	validate do |invite|
@@ -24,7 +26,7 @@ class Invite < ActiveRecord::Base
 	end
 	
 	before_destroy do |invite|
-		invite.user.grant_invite!
+		invite.user.grant_invite! unless invite.used
 	end
 	
 	class << self
@@ -61,5 +63,11 @@ class Invite < ActiveRecord::Base
 	# Has this invite expired?
 	def expired?
 		(Time.now <= self.expires_at) ? false : true
+	end
+	
+	# Expire this invite
+	def expire!
+		self.used = true
+		self.destroy
 	end
 end

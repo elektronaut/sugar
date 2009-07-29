@@ -126,7 +126,7 @@ class UsersController < ApplicationController
 
 		@user = User.create(attributes)
 		if @user.valid?
-			@invite.destroy if @invite
+			@invite.expire! if @invite
 			Notifications.deliver_new_user(@user, login_users_path(:only_path => false))
 			@current_user = @user
 			store_session_authentication
