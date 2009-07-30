@@ -141,18 +141,28 @@ var Sugar = {
 		},
 
 		postFunctions: function() {
-			$('.quote_post').click(function(){
-				var postId = this.id.match(/-([\d]+)$/)[1];
-				window.quotePost(postId);
+			$('.quote_post').each(function(){
+				if(!this.functionalityApplied) {
+					$(this).click(function(){
+						var postId = this.id.match(/-([\d]+)$/)[1];
+						window.quotePost(postId);
+					});
+					this.functionalityApplied = true;
+				}
 			});
-			$('.edit_post').click(function(){
-				var postID = this.id.match(/-([\d]+)$/)[1];
-				var editURL = this.href;
-				$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
-				$("#postBody-"+postID).load(editURL, false, function(){
-					Sugar.Initializers.richText();
-				});
-				return false;
+			$('.edit_post').each(function(){
+				if(!this.functionalityApplied) {
+					$(this).click(function(){
+						var postID = this.id.match(/-([\d]+)$/)[1];
+						var editURL = this.href;
+						$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
+						$("#postBody-"+postID).load(editURL, false, function(){
+							Sugar.Initializers.richText();
+						});
+						return false;
+					});
+					this.functionalityApplied = true;
+				}
 			});
 		},
 		
@@ -342,12 +352,16 @@ var Sugar = {
 		$(newPosts).html('Loading&hellip;');
 
 		$.get(newPostsURL, function(data){
+			$(newPosts).hide();
+
 			if($('.posts #ajaxPosts').length < 1) {
 				$('.posts').append('<div id="ajaxPosts"></div>');
 			}
 
 			$('.posts #ajaxPosts').append(data);
 			$('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
+			
+			Sugar.Initializers.postFunctions();
 
 			$('.shown_items_count').text(newPosts.serverPostsCount);
 		});
@@ -356,7 +370,6 @@ var Sugar = {
 		document.title = newPosts.documentTitle;
 		newPosts.postsCount = newPosts.serverPostsCount;
 		newPosts.shown = false;
-		$(newPosts).fadeOut();
 
 		return false;
 	},

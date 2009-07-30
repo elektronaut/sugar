@@ -160,5 +160,14 @@ module ApplicationHelper
 		options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion
 		options
 	end
+	
+	def post_page(post)
+		if params[:controller] == 'discussions' && params[:action] == 'show' && @posts
+			# Speed tweak
+			@posts.page
+		else
+			post.page
+		end
+	end
     
 end

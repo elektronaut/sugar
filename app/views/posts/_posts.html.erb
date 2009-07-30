@@ -67,7 +67,7 @@
 				<span class="date"><%= formatted_time post.created_at %></span>
 				<% if permalink %>
 				<span class="permalink">
-					<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => posts.page, :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+					<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
 				</span>
 				<% end %>
 			</div>
