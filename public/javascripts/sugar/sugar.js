@@ -364,6 +364,7 @@ var Sugar = {
 		var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
 
 		$(newPosts).html('Loading&hellip;');
+		$(newPosts).addClass('new_posts_since_refresh');
 
 		clearInterval(newPosts.refreshInterval);
 
