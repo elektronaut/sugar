@@ -236,9 +236,14 @@ var Sugar = {
 			$("#replyText form").submit(function(){
 				var submitForm = this;
 				var statusField = $('#button-container');
+				$('#button-container').each(function(){
+					if(!this.originalButton){
+						this.originalButton = $(this).html();
+					}
+				});
 				var oldPostButton = statusField.html();
-				statusField.addClass('posting');
 
+				statusField.addClass('posting');
 				statusField.html('Validating post..');
 
 				var postBody = $('#compose-body').val();
@@ -278,7 +283,7 @@ var Sugar = {
 								});
 								$('#compose-body').val(postNotifier.html());
 								statusField.html('Saving post...');
-								submitForm.submit();
+								Sugar.submitPost();
 							} else {
 								statusField.html(oldPostButton);
 								statusField.removeClass('posting');
@@ -294,62 +299,73 @@ var Sugar = {
 							$('#compose-body').val(postNotifier.html());
 							clearInterval(postNotifier.loadInterval);
 							statusField.html('Saving post...');
-							submitForm.submit();
+							Sugar.submitPost();
 						}
 					}, 100);
 					return false;
 				} else {
-					return true;
+					Sugar.submitPost();
+					return false;
 				}
 			});
 		},
 
 		newPostsCount: function(){
-			if( $('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0){
-				var newPosts = $('#newPosts').get()[0];
-				newPosts.postsCount = $('.total_items_count').eq(0).text();
-				newPosts.postsCountUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js";
-				newPosts.documentTitle = document.title;
-				newPosts.refreshInterval = setInterval(function(){
-					$.getJSON(newPosts.postsCountUrl, function(json) {
-						if(json.posts_count > newPosts.postsCount){
-							var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
-							$('.total_items_count').text(json.posts_count);
-							if(newPostsSinceRefresh > 50) {
-								$(newPosts).html('<p>New posts have been made since this page was loaded, reload the page to see them.</p>');
-								document.title = "[New posts] "+newPosts.documentTitle;
-								clearInterval(newPosts.refreshInterval);
-							} else {
-								var newPostsString = "A new post has";
-								if(newPostsSinceRefresh == 1) {
-									document.title = "["+newPostsSinceRefresh+" new post] "+newPosts.documentTitle;
-								} else {
-									newPostsString = newPostsSinceRefresh+" new posts have";
-									document.title = "["+newPostsSinceRefresh+" new posts] "+newPosts.documentTitle;
-								}
-								if($('body.last_page').length > 0){
-									$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="Sugar.loadNewPosts(); return false;">click here to load</a>.</p>');
-								} else {
-									$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, move on to the last page to see them.</p>');
-								}
-								newPosts.serverPostsCount = json.posts_count;
-							}
-							if(!newPosts.shown) {
-								$(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
-								newPosts.shown = true;
-							}
-						}
-					});
-				}, 5000);
+			if($('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0){
+				Sugar.updateNewPostsCounter();
 			}
 		}
 	},
+	
+	updateNewPostsCounter : function(){
+		var newPosts = $('#newPosts').get()[0];
+		newPosts.postsCount = parseInt($('.total_items_count').eq(0).text(), 10);
+		if(!newPosts.originalCount) {
+			newPosts.originalCount = newPosts.postsCount;
+		}
+		newPosts.postsCountUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js";
+		newPosts.documentTitle = document.title;
 
+		newPosts.refreshInterval = setInterval(function(){
+			$.getJSON(newPosts.postsCountUrl, function(json) {
+				if(json.posts_count > newPosts.postsCount){
+					var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
+					$('.total_items_count').text(json.posts_count);
+					if(newPostsSinceRefresh > 50) {
+						$(newPosts).html('<p>New posts have been made since this page was loaded, reload the page to see them.</p>');
+						document.title = "[New posts] "+newPosts.documentTitle;
+						clearInterval(newPosts.refreshInterval);
+					} else {
+						var newPostsString = "A new post has";
+						if(newPostsSinceRefresh == 1) {
+							document.title = "["+newPostsSinceRefresh+" new post] "+newPosts.documentTitle;
+						} else {
+							newPostsString = newPostsSinceRefresh+" new posts have";
+							document.title = "["+newPostsSinceRefresh+" new posts] "+newPosts.documentTitle;
+						}
+						if($('body.last_page').length > 0){
+							$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, <a href="'+$('#discussionLink').get()[0].href+'" onclick="Sugar.loadNewPosts(); return false;">click here to load</a>.</p>');
+						} else {
+							$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, move on to the last page to see them.</p>');
+						}
+						newPosts.serverPostsCount = json.posts_count;
+					}
+					if(!newPosts.shown) {
+						$(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
+						newPosts.shown = true;
+					}
+				}
+			});
+		}, 5000);
+	},
+	
 	loadNewPosts : function(){
 		var newPosts    = $('#newPosts').get()[0];
 		var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
 
 		$(newPosts).html('Loading&hellip;');
+
+		clearInterval(newPosts.refreshInterval);
 
 		$.get(newPostsURL, function(data){
 			$(newPosts).hide();
@@ -361,17 +377,60 @@ var Sugar = {
 			$('.posts #ajaxPosts').append(data);
 			$('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
 			
-			Sugar.Initializers.postFunctions();
+			// Reset the notifier
+			document.title = newPosts.documentTitle;
+			newPosts.serverPostsCount = newPosts.originalCount + $('.posts #ajaxPosts').children('.post').size();
+			newPosts.postsCount = newPosts.serverPostsCount;
+			newPosts.shown = false;
 
-			$('.shown_items_count').text(newPosts.serverPostsCount);
+			$('.shown_items_count').text(newPosts.postsCount);
+			$('.total_items_count').text(newPosts.postsCount);
+
+			Sugar.Initializers.postFunctions();
+			Sugar.updateNewPostsCounter();
 		});
 		
-		// Reset the notifier
-		document.title = newPosts.documentTitle;
-		newPosts.postsCount = newPosts.serverPostsCount;
-		newPosts.shown = false;
-
 		return false;
+	},
+
+	// Submit post via AJAX
+	submitPost : function(){
+		$("#replyText form").each(function(){
+			var submitForm = this;
+			var statusField = $('#button-container');
+			statusField.addClass('posting');
+			statusField.html('Posting, please wait..');
+			var postBody = $('#compose-body').val();
+			$.ajax({
+				url:  this.action,
+				type: 'POST',
+				data: {
+					'post[body]': postBody,
+					authenticity_token: $(this).find("input[name='authenticity_token']").val()
+				},
+				success: function(){
+					$('#compose-body').val('');
+					Sugar.loadNewPosts();
+				},
+				error: function(xhr, textStatus, errorThrown){
+					if(postBody === ""){
+						alert("Your post is empty!");
+					} else {
+						if(textStatus == 'timeout'){
+							alert('Error: The request timed out.');
+						} else {
+							alert('There was a problem validating your post.');
+						}
+					}
+				},
+				complete: function(){
+					statusField.each(function(){
+						$(this).removeClass('posting');
+						$(this).html(this.originalButton);
+					});
+				}
+			});
+		});
 	},
 
 	init : function() {

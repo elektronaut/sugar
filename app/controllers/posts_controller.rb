@@ -86,9 +86,17 @@ class PostsController < ApplicationController
                 @discussion.reload
                 @discussion.fix_counter_cache!
                 flash[:notice] = "Your reply was saved"
-                redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+				if request.xhr?
+					render :status => 201, :text => 'Created'
+				else
+                	redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+				end
             else
-                render :action => :new
+				if request.xhr?
+					render :status => 400, :text => 'Invalid post'
+				else
+                	render :action => :new
+				end
             end
         else
             flash[:notice] = "This discussion is closed, you don't have permission to post here"
