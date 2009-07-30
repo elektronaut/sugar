@@ -1,8 +1,11 @@
-<% @page_title = "Title Search" %>
+<% 
+	@page_title = "Title Search" 
+	add_body_class "search", "search_discussions"
+%>
 
 <h2 class="section">Searching titles for <em><%= @search_query %></em></h2>
 
-<% if @discussions %>
+<% if @discussions && @discussions.length > 0 %>
 	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
 <% else %>
 	<p>No discussions were found.</p>

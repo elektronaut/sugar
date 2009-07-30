@@ -1,4 +1,8 @@
-<% @page_title = "Posts Search" %>
+<% 
+	@page_title = "Posts Search" 
+	@page_title = h(@discussion.title) + " - Search: " + h(@search_query)
+	add_body_class "search", "search_posts_in_discussion"
+%>
 
 <h2 class="section">
 	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
@@ -8,7 +12,7 @@
 	Search: <em><%= @search_query %></em>
 </h2>
 
-<% if @posts %>
+<% if @posts && @posts.length > 0 %>
 	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :permalink => true} %>
 <% else %>
 	<p>No posts were found.</p>

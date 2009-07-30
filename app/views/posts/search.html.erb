@@ -1,8 +1,11 @@
-<% @page_title = "Posts Search" %>
+<% 
+	@page_title = "Posts Search" 
+	add_body_class "search", "search_posts"
+%>
 
 <h2 class="section">Searching posts for <em><%= @search_query %></em></h2>
 
-<% if @posts %>
+<% if @posts && @posts.length > 0 %>
 	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
 <% else %>
 	<p>No posts were found.</p>
