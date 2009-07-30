@@ -1,7 +1,6 @@
 iPhone:
 
 * Fix crashing bug
-* OpenID login
 * Clean up default theme
 * Load image button in pure CSS
 * Resize YouTube embeds to fit viewport

@@ -222,6 +222,7 @@ class UsersController < ApplicationController
 		response_params = params
 		response_params.delete(:controller)
 		response_params.delete(:action)
+		response_params.delete(:format)
 		response = openid_consumer.complete(response_params, complete_openid_login_users_url)
 
 		case response
