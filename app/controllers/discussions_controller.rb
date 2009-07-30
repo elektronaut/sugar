@@ -14,7 +14,7 @@ class DiscussionsController < ApplicationController
         end
     end
     protected     :load_discussion
-    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite]
+    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts]
 
     def verify_editable
         unless @discussion.editable_by?(@current_user)
@@ -35,19 +35,31 @@ class DiscussionsController < ApplicationController
         find_discussion_views
     end
     
-    def search
-        if params[:q]
-            redirect_to( { :action => :search, :query => params[:q] } ) and return
-        end
+	def search
+		if params[:q]
+			redirect_to( { :action => :search, :query => params[:q] } ) and return
+		end
         unless @search_query = params[:query]
             flash[:notice] = "No query specified!"
             redirect_to discussions_path and return
         end
-        start_time = Time.now
         @discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
         find_discussion_views
-        @search_time = Time.now - start_time
+		@search_path = search_path
     end
+
+	def search_posts
+		#params[:query] = params[:q] if params[:q] && !params[:query]
+		if params[:q]
+    		redirect_to( { :action => :search_posts, :query => params[:q], :id => @discussion } ) and return
+		end
+		unless @search_query = params[:query]
+			flash[:notice] = "No query specified!"
+			redirect_to discussions_path and return
+		end
+		@posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query, :discussion_id => @discussion.id)
+		@search_path = search_posts_discussion_path(@discussion)
+	end
     
     def new
         @discussion = @current_user.discussions.new

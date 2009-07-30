@@ -154,5 +154,11 @@ module ApplicationHelper
 		theme_name ||= (request.format == :iphone) ? Sugar.config(:default_iphone_theme) : Sugar.config(:default_theme)
 		"/themes/#{theme_name}"
 	end
+	
+	def search_mode_options
+		options = [['in titles', search_path], ['in posts', search_posts_path]]
+		options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion
+		options
+	end
     
 end

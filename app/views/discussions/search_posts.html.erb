@@ -1,0 +1,15 @@
+<% @page_title = "Posts Search" %>
+
+<h2 class="section">
+	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
+	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
+	&raquo;
+	Search: <em><%= @search_query %></em>
+</h2>
+
+<% if @posts %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :permalink => true} %>
+<% else %>
+	<p>No posts were found.</p>
+<% end %>

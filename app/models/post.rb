@@ -65,7 +65,9 @@ class Post < ActiveRecord::Base
 				:page      => page,
 				:include   => [:user, :discussion]
 			}
-			search_options[:conditions] = {:trusted => false} unless options[:trusted]
+			search_options[:conditions] = {}
+			search_options[:conditions][:trusted] = false unless options[:trusted]
+			search_options[:conditions][:discussion_id] = options[:discussion_id] if options[:discussion_id]
 			posts = Post.search(options[:query], search_options)
 			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
 		end

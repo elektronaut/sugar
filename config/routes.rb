@@ -45,6 +45,8 @@ ActionController::Routing::Routes.draw do |map|
     map.connect '/posts/search/*query', :controller => 'posts', :action => 'search'
     map.search_posts '/posts/search', :controller => 'posts', :action => 'search'
 
+	map.connect '/discussions/:id/search_posts/*query', :controller => 'discussions', :action => 'search_posts'
+
     map.resources(
         :users,
         :member => {
@@ -102,7 +104,7 @@ ActionController::Routing::Routes.draw do |map|
     map.resources(
         :discussions,
         :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any},
-		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any}
+		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any, :search_posts => :any}
     ) do |discussions|
         discussions.resources(
             :posts,

@@ -75,10 +75,8 @@ class PostsController < ApplicationController
             flash[:notice] = "No query specified!"
             redirect_to discussions_path and return
         end
-        start_time = Time.now
         @posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
-		@posts_search_mode = true
-        @search_time = Time.now - start_time
+		@search_path = search_posts_path
     end
 
     def create
