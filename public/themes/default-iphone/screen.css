@@ -103,23 +103,31 @@ body[orient="landscape"] #navigation .search .query {
 }
 
 .login_box {
-	width: 280px;
-	float: left;
 	margin: 0 20px 20px 20px;
 }
 .login_box p {
-	float: left;
 	margin-right: 15px;
 }
 .login_box input.text {
-	width: 100%;
+	width: 265px;
 	margin-bottom: 5px;
 }
+input#openid_url, input#user_openid_url {
+	background: #fff url(images/login_openid.gif) no-repeat 3px 4px;
+	padding-left: 20px;
+	width: 252px;
+}
+
+.login_box input#openid_url {
+	
+}
+
 .login_box label {
 	font-weight: normal;
 	font-size: 18px;
 	color: #555 ;
 }
+
 #login-functions {
 	margin: 0 20px;
 	font-size: 15px;
