@@ -85,10 +85,10 @@ class PostsController < ApplicationController
             if @post.valid?
                 @discussion.reload
                 @discussion.fix_counter_cache!
-                flash[:notice] = "Your reply was saved"
 				if request.xhr?
 					render :status => 201, :text => 'Created'
 				else
+	                flash[:notice] = "Your reply was saved"
                 	redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
 				end
             else
