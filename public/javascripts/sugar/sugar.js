@@ -401,36 +401,40 @@ var Sugar = {
 			var statusField = $('#button-container');
 			statusField.addClass('posting');
 			statusField.html('Posting, please wait..');
-			var postBody = $('#compose-body').val();
-			$.ajax({
-				url:  this.action,
-				type: 'POST',
-				data: {
-					'post[body]': postBody,
-					authenticity_token: $(this).find("input[name='authenticity_token']").val()
-				},
-				success: function(){
-					$('#compose-body').val('');
-					Sugar.loadNewPosts();
-				},
-				error: function(xhr, textStatus, errorThrown){
-					if(postBody === ""){
-						alert("Your post is empty!");
-					} else {
-						if(textStatus == 'timeout'){
-							alert('Error: The request timed out.');
+			if($(submitForm).hasClass('livePost')){
+				var postBody = $('#compose-body').val();
+				$.ajax({
+					url:  this.action,
+					type: 'POST',
+					data: {
+						'post[body]': postBody,
+						authenticity_token: $(this).find("input[name='authenticity_token']").val()
+					},
+					success: function(){
+						$('#compose-body').val('');
+						Sugar.loadNewPosts();
+					},
+					error: function(xhr, textStatus, errorThrown){
+						if(postBody === ""){
+							alert("Your post is empty!");
 						} else {
-							alert('There was a problem validating your post.');
+							if(textStatus == 'timeout'){
+								alert('Error: The request timed out.');
+							} else {
+								alert('There was a problem validating your post.');
+							}
 						}
+					},
+					complete: function(){
+						statusField.each(function(){
+							$(this).removeClass('posting');
+							$(this).html(this.originalButton);
+						});
 					}
-				},
-				complete: function(){
-					statusField.each(function(){
-						$(this).removeClass('posting');
-						$(this).html(this.originalButton);
-					});
-				}
-			});
+				});
+			} else {
+				submitForm.submit();
+			}
 		});
 	},
 
