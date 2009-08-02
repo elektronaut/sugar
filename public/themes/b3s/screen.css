@@ -832,3 +832,23 @@ table.discussions tr.closed td.name a:hover {
 .invites_list .actions {
 	width: 50%;
 }
+
+/* -----------------------------------------------------------------------
+   MP3 PLAYER
+   ----------------------------------------------------------------------- */
+
+a.mp3player, a.mp3player:visited {
+	display: inline-block;
+	background: #eee;
+	margin: 2px;
+	padding: 2px 6px 2px 25px;
+	text-decoration: none;
+	color:               #9f0000 !important;
+	color: #000 !important;
+	font-size: 1.3em;
+	-webkit-border-radius: 4px;
+}
+
+a.mp3player:hover {
+	background: #ddd;
+}

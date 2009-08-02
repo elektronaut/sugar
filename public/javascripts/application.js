@@ -1,6 +1,9 @@
 /**
  * @depends jquery.libraries.js
  * @depends sugar/sugar.js
+ * @depends sugar/maps.js
+ * @depends sugar/mp3player.js
+ * @depends sugar/posts.js
  */
 
 

@@ -2,84 +2,6 @@ var Sugar = {
 	Configuration: {},
 	Initializers: {
 
-		usersMap : function() {
-			$('#usersMap').each(function(){
-				var map = new GMap2(this);
-				var defaultLocation = new GLatLng(46.073231,-32.343750);
-				map.addControl(new GLargeMapControl());
-				map.addControl(new GMapTypeControl());
-				map.setCenter(defaultLocation, 3);
-
-				var usersAPIurl = '/users.json';
-					$.getJSON(usersAPIurl, function(json) {
-						$(json).each(function(){
-							var user = this.user;
-							if(user.latitude && user.longitude) {
-								var position = new GLatLng(user.latitude, user.longitude);
-								var marker = new GMarker(position);
-								GEvent.addListener(marker, "click", function() {
-									marker.openInfoWindowHtml(
-										"<strong>"+user.username+"</strong><br />" +
-										((user.realname) ? user.realname+"<br />" : "") +
-										"<a href=\"/users/profile/"+user.username+"\">View profile</a>");
-								});
-								map.addOverlay(marker);
-							}
-						});
-					});
-				});
-		},
-
-		editProfileMap : function() {
-			$('#editProfileMap').each(function(){
-
-				var map = new GMap2(this);
-				var defaultLocation = new GLatLng(46.073231,-32.343750);
-				map.addControl(new GLargeMapControl());
-				map.addControl(new GMapTypeControl());
-
-				var updatePosition = function(latlng){
-					$('#user_latitude').val(latlng.lat());
-					$('#user_longitude').val(latlng.lng());
-				};
-
-				var userMarker = false;
-				var createUserMarker = function(latlng){
-					userMarker = new GMarker(latlng, {draggable:true});
-					map.addOverlay(userMarker);
-					GEvent.addListener(userMarker, "click", function() {
-						map.setCenter(userMarker.getLatLng());
-					});
-					GEvent.addListener(userMarker, "dragend", function() {
-						updatePosition(userMarker.getLatLng());
-					});
-				};
-
-				window.clearLocation = function(){
-					$('#user_latitude').val('');
-					$('#user_longitude').val('');
-					map.removeOverlay(userMarker);
-					userMarker = false;
-				};
-
-
-				if(!$('#user_latitude').val() || !$('#user_latitude').val()) {
-					map.setCenter(defaultLocation, 2);
-				} else {
-					var location = new GLatLng($('#user_latitude').val(), $('#user_longitude').val());
-					map.setCenter(location, 10);
-					createUserMarker(location);
-				}
-
-				GEvent.addListener(map, "click", function(overlay, latlng) {
-					if(!userMarker) {
-						updatePosition(latlng);
-						createUserMarker(latlng);
-					}
-				});
-			});
-		},
-
 		richText : function() {
 			jQuery('textarea.rich').each(function(){
 				if(!this.toolbar){
@@ -232,89 +154,12 @@ var Sugar = {
 			}
 		},
 		
-		parsePosts: function(){
-			$("#replyText form").submit(function(){
-				var submitForm = this;
-				var statusField = $('#button-container');
-				$('#button-container').each(function(){
-					if(!this.originalButton){
-						this.originalButton = $(this).html();
-					}
-				});
-				var oldPostButton = statusField.html();
-
-				statusField.addClass('posting');
-				statusField.html('Validating post..');
-
-				var postBody = $('#compose-body').val();
-
-				if($('#hiddenPostVerifier').length < 1) {
-					$(document.body).append('<div id="hiddenPostVerifier"></div>');
-				}
-				var postNotifier = $('#hiddenPostVerifier');
-				postNotifier.show();
-				postNotifier.html(postBody);
-				postNotifier.hide();
-
-				var postImages = postNotifier.find('img');
-				var loadedImages = Array();
-				if(postImages.length > 0) {
-
-					// Async loading event
-					postImages.each(function(){
-						$(this).load(function(){
-							loadedImages.push(this);
-						});
-					});
-
-					// Check loading of images
-					postNotifier.cycles = 0;
-					postNotifier.loadInterval = setInterval(function(){
-						postNotifier.cycles += 1;
-						statusField.html('Loading image '+loadedImages.length+' of '+postImages.length+'..');
-
-						// Load failed
-						if(postNotifier.cycles >= 80) {
-							clearInterval(postNotifier.loadInterval);
-							if(confirm("One or more of your images timed out. Post anyway?")) {
-								$(loadedImages).each(function(){
-									$(this).attr('height', this.height);
-									$(this).attr('width', this.width);
-								});
-								$('#compose-body').val(postNotifier.html());
-								statusField.html('Saving post...');
-								Sugar.submitPost();
-							} else {
-								statusField.html(oldPostButton);
-								statusField.removeClass('posting');
-							}
-						}
-
-						// All images loaded
-						if(loadedImages.length == postImages.length) {
-							postImages.each(function(){
-								$(this).attr('height', this.height);
-								$(this).attr('width', this.width);
-							});
-							$('#compose-body').val(postNotifier.html());
-							clearInterval(postNotifier.loadInterval);
-							statusField.html('Saving post...');
-							Sugar.submitPost();
-						}
-					}, 100);
-					return false;
-				} else {
-					Sugar.submitPost();
-					return false;
-				}
-			});
-		},
-
 		newPostsCount: function(){
 			if($('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0){
 				Sugar.updateNewPostsCounter();
 			}
 		}
+		
 	},
 	
 	updateNewPostsCounter : function(){
@@ -394,57 +239,13 @@ var Sugar = {
 		return false;
 	},
 
-	// Submit post via AJAX
-	submitPost : function(){
-		$("#replyText form").each(function(){
-			var submitForm = this;
-			var statusField = $('#button-container');
-			statusField.addClass('posting');
-			statusField.html('Posting, please wait..');
-			if($(submitForm).hasClass('livePost')){
-				var postBody = $('#compose-body').val();
-				$.ajax({
-					url:  this.action,
-					type: 'POST',
-					data: {
-						'post[body]': postBody,
-						authenticity_token: $(this).find("input[name='authenticity_token']").val()
-					},
-					success: function(){
-						$('#compose-body').val('');
-						Sugar.loadNewPosts();
-					},
-					error: function(xhr, textStatus, errorThrown){
-						if(postBody === ""){
-							alert("Your post is empty!");
-						} else {
-							if(textStatus == 'timeout'){
-								alert('Error: The request timed out.');
-							} else {
-								alert('There was a problem validating your post.');
-							}
-						}
-					},
-					complete: function(){
-						statusField.each(function(){
-							$(this).removeClass('posting');
-							$(this).html(this.originalButton);
-						});
-					}
-				});
-			} else {
-				submitForm.submit();
-			}
-		});
-	},
-
 	init : function() {
 		for(var initializer in this.Initializers) {
 			if(this.Initializers.hasOwnProperty(initializer)){
 				this.Initializers[initializer]();
 			}
 		}
-
+		
 		// Detect discussion view
 		if(jQuery('body.discussion').length > 0) {
 			window.addToReply = function(string) {
