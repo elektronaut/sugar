@@ -1,6 +1,10 @@
 $.extend(Sugar.Initializers, {
 	loadSoundManager: function(){
 		if($('a.mp3player').size() > 0){
+			Sugar.MP3Player.initialize();
+		}
+		/*
+		if($('a.mp3player').size() > 0){
 			$.getScript('/javascripts/soundmanager2.min.js', function(){
 				soundManager.debugMode = false;
 				soundManager.url = '/flash/soundmanager2';
@@ -9,21 +13,47 @@ $.extend(Sugar.Initializers, {
 				};
 			});
 		}
+		*/
 	}
 });
 
-
+$.extend(Sugar.onLoadedPosts, {
+	detectSongs: function(){
+		if(!Sugar.MP3Player.libraryLoaded){
+			Sugar.MP3Player.initialize();
+		} else {
+			Sugar.MP3Player.detectSongs();
+		}
+	}
+});
+	
+	
 Sugar.MP3Player = {
 	songs: [],
 	playingSong: false,
+	libraryLoaded: false,
+
 	initialize: function(){
+		if(!Sugar.MP3Player.libraryLoaded){
+			$.getScript('/javascripts/soundmanager2.min.js', function(){
+				soundManager.debugMode = false;
+				soundManager.url = '/flash/soundmanager2';
+				soundManager.onload = function() {
+					Sugar.MP3Player.detectSongs();
+				};
+			});
+			Sugar.MP3Player.libraryLoaded = true;
+		}
+	},
+
+	detectSongs: function(){
 		$('a.mp3player').each(function(){
 			Sugar.MP3Player.applyToLink(this);
 		});
 	},
 
 	applyToLink: function(link){
-		if(!link.song){
+		if(!link.songID){
 			link.songID = 'song-'+(Sugar.MP3Player.songs.length + 1);
 			link.originalTitle = $(link).html();
 			$(link).addClass('mp3player_stopped');
@@ -32,7 +62,6 @@ Sugar.MP3Player = {
 				return false;
 			});
 			Sugar.MP3Player.songs.push(link);
-			link.song = true;
 		}
 	},
 

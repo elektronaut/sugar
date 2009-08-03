@@ -1,5 +1,6 @@
 var Sugar = {
 	Configuration: {},
+	onLoadedPosts: {},
 	Initializers: {
 
 		richText : function() {
@@ -245,6 +246,12 @@ var Sugar = {
 
 			Sugar.Initializers.postFunctions();
 			Sugar.updateNewPostsCounter();
+
+			for(var f in Sugar.onLoadedPosts) {
+				if(Sugar.onLoadedPosts.hasOwnProperty(f)){
+					Sugar.onLoadedPosts[f]();
+				}
+			}
 		});
 		
 		return false;
