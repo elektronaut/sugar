@@ -16,6 +16,9 @@ class UsersController < ApplicationController
         @users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
 		respond_to do |format|
 			format.html {}
+			format.iphone {
+				@online_users = @users.select{|u| u.online?}
+			}
 			format.json {
 				render :layout => false, :text => @users.to_json(:only => [:id, :username, :realname, :latitude, :longitude, :last_active, :created_at, :description, :admin, :moderator, :user_admin, :posts_count, :discussions_count, :location, :gamertag, :avatar_url, :twitter, :flickr, :website])
 			}

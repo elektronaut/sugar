@@ -67,6 +67,9 @@
 		<%= link_to "Back to discussions", discussions_path %> | 
 		<%= link_to "Regular site", :iphone_format => 'html' %>
 	</div>
+	<script type="text/javascript">
+		hideImagesInPosts();
+	</script>
 	<% if Sugar.config(:google_analytics) -%>
 	<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

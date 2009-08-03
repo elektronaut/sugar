@@ -3,6 +3,7 @@
 a, a:visited {
 	text-decoration: none;
 	color:           #364077;
+	color:           #763047;
 }
 a:hover {
 	color:           #025;
@@ -126,9 +127,12 @@ body[orient="landscape"] #navigation .search .query {
 }
 
 #footer {
-	padding: 0 15px 10px 15px;
-	color: #555;
+	padding: 5px 10px;
+	border-top: 1px solid #ddd;
+	background: #f8f8f8;
+	color: #888;
 	font-size: 13px;
+	background: #eee;
 }
 #footer .separator {
 	color: #aaa;
@@ -208,7 +212,7 @@ body[orient="landscape"] .page_content textarea {
 
 
 .pagination {
-	padding: 5px 15px;
+	padding: 5px 10px;
 	color: #888;
 	border-bottom: 1px solid #ddd;
 	background: #f8f8f8;
@@ -301,12 +305,12 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 
 
 .posts .post {
-	padding: 5px 15px;
+	padding: 5px 10px;
 	border-bottom: 1px solid #ddd;
 }
 
 .posts .post_distance {
-	padding: 2px 15px;
+	padding: 2px 10px;
 	border-bottom: 1px solid #ddd;
 	font-size: 11px;
 	background:      #f8f7f1;
@@ -355,6 +359,11 @@ body[orient="landscape"] .posts .post .body {
 }
 body[orient="landscape"] .posts .post .body img {
 	max-width: 450px;
+}
+
+.posts .post .body a, .posts .post .body a:visited {
+	color:           #364077;
+	text-decoration: underline;
 }
 
 .reply {
@@ -516,4 +525,15 @@ blockquote cite {
 	color:           #7E7B70;
 	border-bottom:   1px solid #CCC9BC;
 	margin-bottom:   5px;
+}
+
+
+
+.imageloader {
+	max-width: 290px;
+	height: 36px;
+	background: transparent url(images/imageloader.gif) no-repeat;
+}
+.imageloader img {
+	display: none;
 }

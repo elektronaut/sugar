@@ -17,7 +17,13 @@
 </head>
 <body>
     <div id="header">
-        <h1 id="pageTitle" class="logo"><%= Sugar.config(:forum_name) %></h1>
+        <h1 id="pageTitle" class="page_title">
+			<% if @page_title %>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}:", discussions_path %></span> <%= @page_title %>
+			<% else %>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}", discussions_path %></span>
+			<% end %>
+		</h1>
     </div>
 	<% if flash[:notice] %>
 		<div id="notice"><p><%= flash[:notice] %></p></div>
