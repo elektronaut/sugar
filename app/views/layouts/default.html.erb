@@ -13,9 +13,12 @@
 	<% if RAILS_ENV == 'production' -%>
 		<%= javascript_include_tag "all" %>
 	<% else -%>
+		<!-- Libraries -->
 		<%= javascript_include_tag "jquery" %>
 		<%= javascript_include_tag "jquery.libraries" %>
 		<%= javascript_include_tag 'swfobject' %>
+		<%= javascript_include_tag 'soundmanager2.min' %>
+		<!-- Sugar specific -->
 		<%= javascript_include_tag 'sugar/sugar' %>
 		<%= javascript_include_tag 'sugar/maps' %>
 		<%= javascript_include_tag 'sugar/mp3player' %>

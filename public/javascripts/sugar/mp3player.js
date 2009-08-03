@@ -1,29 +1,16 @@
+// Configure SoundManager2
+soundManager.debugMode = false;
+soundManager.url = '/flash/soundmanager2';
+
 $.extend(Sugar.Initializers, {
-	loadSoundManager: function(){
-		if($('a.mp3player').size() > 0){
-			Sugar.MP3Player.initialize();
-		}
-		/*
-		if($('a.mp3player').size() > 0){
-			$.getScript('/javascripts/soundmanager2.min.js', function(){
-				soundManager.debugMode = false;
-				soundManager.url = '/flash/soundmanager2';
-				soundManager.onload = function() {
-					Sugar.MP3Player.initialize();
-				};
-			});
-		}
-		*/
+	detectSongs: function(){
+		Sugar.MP3Player.detectSongs();
 	}
 });
 
 $.extend(Sugar.onLoadedPosts, {
 	detectSongs: function(){
-		if(!Sugar.MP3Player.libraryLoaded){
-			Sugar.MP3Player.initialize();
-		} else {
-			Sugar.MP3Player.detectSongs();
-		}
+		Sugar.MP3Player.detectSongs();
 	}
 });
 	
@@ -31,20 +18,6 @@ $.extend(Sugar.onLoadedPosts, {
 Sugar.MP3Player = {
 	songs: [],
 	playingSong: false,
-	libraryLoaded: false,
-
-	initialize: function(){
-		if(!Sugar.MP3Player.libraryLoaded){
-			$.getScript('/javascripts/soundmanager2.min.js', function(){
-				soundManager.debugMode = false;
-				soundManager.url = '/flash/soundmanager2';
-				soundManager.onload = function() {
-					Sugar.MP3Player.detectSongs();
-				};
-			});
-			Sugar.MP3Player.libraryLoaded = true;
-		}
-	},
 
 	detectSongs: function(){
 		$('a.mp3player').each(function(){
