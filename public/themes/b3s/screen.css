@@ -250,6 +250,7 @@ div.fieldWithErrors {
 .richTextToolbar .HelpButton          { background-position: 0 -153px; } 
 .richTextToolbar .HeadingButton       { background-position: 0 -85px; }
 .richTextToolbar .EscapeHTMLButton    { background-position: 0 -306px; }
+.richTextToolbar .MP3Button           { background-position: 0 -323px; }
 
 
 
@@ -814,8 +815,8 @@ table.discussions tr.closed td.name a:hover {
 }
 
 #editProfileMap {
-	width: 600px;
-	height: 450px;
+	width:               600px;
+	height:              450px;
 }
 
 
@@ -824,13 +825,13 @@ table.discussions tr.closed td.name a:hover {
    ----------------------------------------------------------------------- */
 
 .invites p {
-	font-size: 1.2em;
+	font-size:           1.2em;
 }
 .invites_list .email {
-	font-weight: bold;
+	font-weight:         bold;
 }
 .invites_list .actions {
-	width: 50%;
+	width:               50%;
 }
 
 /* -----------------------------------------------------------------------
@@ -838,17 +839,28 @@ table.discussions tr.closed td.name a:hover {
    ----------------------------------------------------------------------- */
 
 a.mp3player, a.mp3player:visited {
-	display: inline-block;
-	background: #eee;
-	margin: 2px;
-	padding: 2px 6px 2px 25px;
-	text-decoration: none;
-	color:               #9f0000 !important;
-	color: #000 !important;
-	font-size: 1.3em;
-	-webkit-border-radius: 4px;
+	display:             inline-block;
+	margin:              2px;
+	padding:             2px 10px 2px 22px;
+	text-decoration:     none !important;
+	font-size:           1.1em;
+	color:               #000 !important;
 }
 
 a.mp3player:hover {
-	background: #ddd;
+	text-decoration:     underline;
+}
+
+a.mp3player_stopped, a.mp3player_stopped:visited {
+	background:          #f8f8f4 url(images/mp3player.png) repeat-x 0 -1px;
+	border:              1px solid #e5e7d8;
+}
+a.mp3player_playing, a.mp3player_playing:visited {
+	background:          #ecf6ec url(images/mp3player_playing.png) repeat-x 0 -1px;;
+	border:              1px solid #c3dfc3;
+}
+a.mp3player_playing .position {
+	color:               #454;
+	font-size:           0.7em;
+	padding-left:        2px;
 }

@@ -32,6 +32,17 @@ var Sugar = {
 								this.textArea.replaceSelection('<img src="'+selection+'" alt="" />');
 							}
 						})
+						// MP3 Player
+						.addButton("MP3", function(){
+							var selection = this.textArea.selectedText();
+						    var response = prompt('Enter MP3 URL','');  
+							if(selection===''){
+								selection = prompt('Enter track title', '');
+							}
+						    this.textArea.replaceSelection(
+								'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/,'http://') + '" class="mp3player">' + 
+								((selection==='') ? "Link text" : selection) + '</a>');
+						})
 						// Block Quote
 						.addButton("Block Quote", function(){ this.textArea.wrapSelection('<blockquote>','</blockquote>'); })
 						// Escape HTML

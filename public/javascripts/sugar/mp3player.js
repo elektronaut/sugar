@@ -2,7 +2,7 @@ $.extend(Sugar.Initializers, {
 	loadSoundManager: function(){
 		if($('a.mp3player').size() > 0){
 			$.getScript('/javascripts/soundmanager2.min.js', function(){
-				soundManager.debugMode = true;
+				soundManager.debugMode = false;
 				soundManager.url = '/flash/soundmanager2';
 				soundManager.onload = function() {
 					Sugar.MP3Player.initialize();
@@ -14,15 +14,97 @@ $.extend(Sugar.Initializers, {
 
 
 Sugar.MP3Player = {
+	songs: [],
+	playingSong: false,
 	initialize: function(){
 		$('a.mp3player').each(function(){
-			$(this).addClass('mp3player_stopped');
-			this.playing = false;
-			$(this).click(function(){
+			Sugar.MP3Player.applyToLink(this);
+		});
+	},
+
+	applyToLink: function(link){
+		if(!link.song){
+			link.songID = 'song-'+(Sugar.MP3Player.songs.length + 1);
+			link.originalTitle = $(link).html();
+			$(link).addClass('mp3player_stopped');
+			$(link).click(function(){
+				Sugar.MP3Player.toggleSong(this);
 				return false;
 			});
+			Sugar.MP3Player.songs.push(link);
+			link.song = true;
+		}
+	},
+
+	msToMinsAndSeconds: function(ms){
+		var minutes = Math.floor(ms / 60000);
+		var seconds = Math.floor((ms - (minutes * 60000)) / 1000);
+		if(seconds < 10) {
+			seconds = '0'+seconds;
+		}
+		return minutes + ":" + seconds;
+	},
+
+	stopAllSongs: function(){
+		$(Sugar.MP3Player.songs).each(function(){
+			Sugar.MP3Player.stopSong(this);
 		});
-		//soundManager.createSound('helloWorld','http://cos.microhertz.net/demo/mp3/02%20Last%20Night%20I%20Killed%20a%20Porcupine.mp3');
-		//soundManager.play('helloWorld');
+	},
+	
+	playNextSong: function() {
+		var index = false;
+		for(var a = 0; a < Sugar.MP3Player.songs.length; a++){
+			if(Sugar.MP3Player.songs[a] == Sugar.MP3Player.playingSong) {
+				index = a;
+			}
+		}
+		index += 1;
+		if(index >= Sugar.MP3Player.songs.length){
+			index = 0;
+		}
+		Sugar.MP3Player.playSong(Sugar.MP3Player.songs[index]);
+	},
+	
+	playSong: function(song) {
+		Sugar.MP3Player.stopAllSongs();
+		$(song).addClass('mp3player_playing').removeClass('mp3player_stopped');
+		Sugar.MP3Player.playingSong = song;
+		song.playing = true;
+		song.songObject = soundManager.createSound({id: song.songID, url: song.href});
+		soundManager.play(song.songID, {onfinish: function(){
+			Sugar.MP3Player.playNextSong();
+		}});
+		$(song).html(song.originalTitle + ' <span class="position">Loading</a>');
+		song.progressInterval = setInterval(function(){
+			songObj = song.songObject;
+			if(songObj.position){
+				var position = Sugar.MP3Player.msToMinsAndSeconds(songObj.position) + ' / ';
+				if(songObj.loaded){
+					position += Sugar.MP3Player.msToMinsAndSeconds(songObj.duration);
+				} else {
+					position += Sugar.MP3Player.msToMinsAndSeconds(songObj.durationEstimate);
+				}
+				$(song).children('.position').html(position);
+			}
+		}, 1000);
+	},
+
+	stopSong: function(song) {
+		if(song.playing){
+			$(song).addClass('mp3player_stopped').removeClass('mp3player_playing');
+			Sugar.MP3Player.playingSong = false;
+			song.playing = false;
+			clearInterval(song.progressInterval);
+			$(song).html(song.originalTitle);
+			soundManager.stop(song.songID);
+		}
+	},
+	
+	toggleSong: function(song) {
+		if(Sugar.MP3Player.playingSong && Sugar.MP3Player.playingSong == song){
+			Sugar.MP3Player.stopSong(song);
+		} else {
+			Sugar.MP3Player.playSong(song);
+		}
 	}
 };
