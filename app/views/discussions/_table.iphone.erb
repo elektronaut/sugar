@@ -14,9 +14,9 @@
 				<%= link_to h(d.title), last_discussion_page_path(d) %>
 			</h2>
 			<p>
-				By <%= profile_link(d.poster) %>,
+				By <%= d.poster.username %>,
 				<%= d.posts_count %> posts.
-				Last: <%= profile_link(d.last_poster) %> <%= formatted_time d.last_post_at %>
+				Last: <%= d.last_poster.username %> <%= formatted_time d.last_post_at %>
 			</p>
 		</div><% end %>
 	</div>

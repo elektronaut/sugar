@@ -1,5 +1,5 @@
 function toggleNavigation() {
-	$('#navigation').slideToggle();
+	$('#navigation').toggle();
 }
 
 var currentWidth = 0;
@@ -15,6 +15,14 @@ checkTimer = setInterval(checkWindowOrientation, 300);
 
 $(document).ready(function(){
 
+	// Larger click targets on discussion overview
+	$('.discussions .discussion h2 a').each(function(){
+		var url = this.href;
+		$(this.parentNode.parentNode).click(function(){
+			document.location = url;
+		});
+	});
+
 	// Scroll to top w/o location bar unless targeting an anchor
 	if ( !document.location.toString().match(/\#/) ) {
 		setTimeout(scrollTo, 100, 0, 1);
@@ -26,9 +34,6 @@ $(document).ready(function(){
 	jQuery('#search_mode_titles').change(function(){
 		this.parentNode.action = this.value;
 	});
-
-	// Hide the navigation
-	$('#navigation').hide();
 
 	// Hide images in posts by default
 	$('.post .body img').each(function(){

@@ -1,5 +1,13 @@
 @import url(reset.css);
 
+a, a:visited {
+	text-decoration: none;
+	color:           #364077;
+}
+a:hover {
+	color:           #025;
+}
+
 strong {
 	font-weight: bold;
 }
@@ -22,19 +30,19 @@ body[orient="landscape"] {
 }
 
 #header {
-	background: #111 url(images/header.gif);
+	background: #111 url(images/header.png);
 	height: 45px;
 }
 #header #navigationToggle {
 	position: absolute;
-	top: 0;
+	top: 1px;
 	right: 0;
 }
 #header #navigationToggle a, #header #navigationToggle a a:visited {
 	display: block;
-	height: 40px;
-	width: 40px;
-	background: transparent url(images/header_navigation.gif);
+	height: 44px;
+	width: 67px;
+	background: transparent url(images/header_navigation.png);
 }
 
 #header h1.logo {
@@ -47,12 +55,11 @@ body[orient="landscape"] {
 #header h1.page_title {
     overflow: hidden;
 	padding-top: 11px;
-    padding-left: 15px;
+    padding-left: 55px;
     width: 260px;
     font-size: 17px;
-    font-weight: bold;
+    font-weight: normal;
     text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
-    text-overflow: ellipsis;
     white-space: nowrap;
     color: #FFFFFF;
 }
@@ -60,13 +67,27 @@ body[orient="landscape"] #header h1.page_title {
     width: 420px;
 }
 #header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
-	color: #dd8;
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	background: transparent url(images/b3slogo.png);
+	height: 45px;
+	width: 49px;
+	text-indent: -9000px;
 }
 
 #navigation {
-	border-top: 1px solid #aaa;
+	position: absolute;
+	top: 45px;
+	/*border-top: 1px solid #aaa;*/
 	background: #ddd;
-	padding-top: 5px;
+	background: #f2f2f2 url(images/navigation_bg.gif) no-repeat;
+	padding-top: 2px;
+	border-bottom: 1px solid #ddd;
+	/*-webkit-box-shadow: #888 0px 4px 4px;*/
+
+	padding: 5px;
 }
 #navigation .search .query {
 	width: 211px;
@@ -76,13 +97,24 @@ body[orient="landscape"] #navigation .search .query {
 }
 
 #navigation li {
-	padding: 3px 15px;
+	/*padding: 4px 10px;*/
+	/*
 	border-bottom: 1px solid #ccc;
-	font-size: 17px;
+	border-bottom: 1px solid #d9b6d7;
+	*/
+	font-size: 16px;
+	float: left;
+	padding: 4px 4px;
 }
 #navigation li a {
-	color: #531;
+	width: 125px;
+	color: #6c1619;
+	border: 1px solid #D0BBBB;
+	background: #fff;
 	display: block;
+
+	padding: 5px 8px;
+	-webkit-border-radius: 5px;
 }
 
 #notice {
@@ -175,14 +207,6 @@ body[orient="landscape"] .page_content textarea {
 }
 
 
-a, a:visited {
-	text-decoration: none;
-	color:           #365c7c;
-}
-a:hover {
-	color:           #025;
-}
-
 .pagination {
 	padding: 5px 15px;
 	color: #888;
@@ -197,28 +221,35 @@ a:hover {
 
 
 .discussions, .conversations, .categories {
-	margin-top: -20px;
+	margin-top: -25px;
 }
 .discussion, .conversation, .category {
-	padding: 5px 15px;
+	padding: 8px 10px 5px 10px;
 	border-bottom: 1px solid #ddd;
 	color: #555;
 }
+.discussions .discussion {
+	background: #fff url(images/contentbg_light.gif) bottom left repeat-x;
+}
+
 .discussion .new_posts_count {
 	float: right;
 	color:           #c76700;
 	font-size: 11px;
 	letter-spacing: -0.05em;
-	padding-top: 4px;
+	padding-top: 3px;
 }
 .discussion h2, .conversation h2, .category h2 {
-	font-weight: bold;
+	font-weight: normal;
 	font-size: 16px;
-    overflow: hidden;
     width: 255px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+	line-height: 1.2;
+	margin-bottom: 1px;
 }
+.discussion h2 a, .conversation h2 a, .category h2 a {
+	color: #000;
+}
+
 .conversation h2 {
     width: 200px;
 }
@@ -249,7 +280,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 
 .discussions .new_posts, .conversations .new_posts {
-	background:      #ffffe8;
+	background:      #fffde8;
+	background: #fffde8 url(images/contentbg_light_new_posts.gif) bottom left repeat-x;
+	border-bottom: 1px solid #E4DDB5;
 }
 
 .conversation .last_message_date {
