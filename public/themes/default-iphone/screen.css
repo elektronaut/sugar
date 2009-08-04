@@ -2,7 +2,6 @@
 
 a, a:visited {
 	text-decoration: none;
-	color:           #364077;
 	color:           #763047;
 }
 a:hover {
@@ -320,7 +319,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 	background:      #f8f7f1;
 	color:           #220;
 }
-.posts .me_post .poster {
+.posts .me_post .body .poster {
+	color:           #763047;
+	text-decoration: none;
 	font-weight: bold;
 }
 .posts .me_post .date {
@@ -381,7 +382,7 @@ body[orient="landscape"] .posts .post .body img {
 }
 .reply textarea {
 	width: 275px;
-	height: 80px;
+	height: 180px;
 }
 body[orient="landscape"] .reply textarea {
 	width: 435px;
