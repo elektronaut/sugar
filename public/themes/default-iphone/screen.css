@@ -327,8 +327,16 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 	color:           #84806d;
 	font-size: 11px;
 }
+.posts .post .post_edited {
+	color:           #84806d;
+	font-size: 11px;
+}
 .posts .post .post_info {
+	float: left;
 	color: #555;
+}
+.posts .post .post_info .permalink {
+	display: none;
 }
 .posts .post .post_info .username {
 	font-weight: bold;
@@ -340,7 +348,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .functions { 
 	float: right;
 	font-size: 11px;
-	padding-top: 3px;
+	padding-top: 5px;
+	color: #ddd;
 }
 .post .functions a, .post .functions a:visited {
 	color: #aaa;
@@ -350,6 +359,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 	max-width: 290px;
     overflow: hidden;
     text-overflow: ellipsis;
+	clear: both;
 }
 body[orient="landscape"] .posts .post .body {
 	max-width: 450px;

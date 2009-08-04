@@ -33,6 +33,22 @@ function resizeYoutube(){
 	});
 }
 
+window.addToReply = function(string) {
+	jQuery('#reply-body').val(jQuery('#reply-body').val() + string);
+};
+
+// Post quoting
+window.quotePost = function(postId){
+	var postDiv = '#post-'+postId;
+	if($(postDiv).length > 0) {
+		var permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
+		var username  = jQuery(postDiv+' .post_info .username a').text();
+		var content   = jQuery(postDiv+' .body').html().replace(/^[\s]*/, '').replace(/[\s]*$/, '').replace(/<br[\s\/]*>/g, "\n");
+		var quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+		window.addToReply(quotedPost);
+	}
+};
+
 var currentWidth = 0;
 function checkWindowOrientation() {
 	if (window.innerWidth != currentWidth) {   
@@ -92,6 +108,13 @@ $(document).ready(function(){
 	});
 	jQuery('#search_mode_titles').change(function(){
 		this.parentNode.action = this.value;
+	});
+	
+	// Post quoting
+	$('.post .functions a.quote_post').click(function(){
+		var postId = this.id.match(/-([\d]+)$/)[1];
+		window.quotePost(postId);
+		return false;
 	});
 
 	resizeYoutube();

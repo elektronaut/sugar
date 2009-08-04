@@ -8,7 +8,7 @@
 	<% if RAILS_ENV == 'production' -%>
 		<%= javascript_include_tag "bundled/iphone.js" %>
 	<% else -%>
-		<%= javascript_include_tag 'jquery' %>
+		<%= javascript_include_tag 'vendor/jquery' %>
 		<%= javascript_include_tag 'iphone' %>
 	<% end -%>
 	<%= stylesheet_link_tag "#{theme_path}/screen" %>
