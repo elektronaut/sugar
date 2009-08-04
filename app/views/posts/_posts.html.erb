@@ -72,7 +72,9 @@
 				<% end %>
 			</div>
 			<div class="body" id="postBody-<%= post.id %>">
-				<div class="content"><%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : meify(post.body_html, post.user) %></div>
+				<div class="content">
+					<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : meify(post.body_html, post.user) %>
+				</div>
 				<% if post.edited? %><div class="edited">
 					Edited <%= formatted_time post.edited_at %>
 				</div><% end %>

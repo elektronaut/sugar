@@ -29,6 +29,7 @@ Rails::Initializer.run do |config|
 
 	config.gem 'ruby-openid', :lib => 'openid', :version => '2.1.6'
 	config.gem 'hpricot'
+	config.gem 'ultraviolet', :lib => 'uv'
 
 	# Only load the plugins named here, in the order given. By default, all plugins 
 	# in vendor/plugins are loaded in alphabetical order.

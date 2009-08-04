@@ -78,6 +78,14 @@ code {
 	display:             block;
 	white-space:         pre;
 }
+pre.twilight {
+	padding: 15px 15px 15px 5px;
+	-webkit-border-radius: 4px;
+	max-height: 600px;
+	width: 1000px;
+	max-width: 800px;
+	overflow: scroll;
+}
 
 label {
 	display:             block;
