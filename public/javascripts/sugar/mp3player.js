@@ -76,7 +76,7 @@ Sugar.MP3Player = {
 		soundManager.play(song.songID, {onfinish: function(){
 			Sugar.MP3Player.playNextSong();
 		}});
-		$(song).html(song.originalTitle + ' <span class="position">Loading</a>');
+		$(song).html(''+song.originalTitle + ' <span class="position">Loading</span>');
 		song.progressInterval = setInterval(function(){
 			songObj = song.songObject;
 			if(songObj.position){

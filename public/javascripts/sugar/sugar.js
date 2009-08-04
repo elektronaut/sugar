@@ -90,7 +90,7 @@ var Sugar = {
 						var postID = this.id.match(/-([\d]+)$/)[1];
 						var editURL = this.href;
 						$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
-						$("#postBody-"+postID).load(editURL, false, function(){
+						$("#postBody-"+postID).load(editURL, null, function(){
 							Sugar.Initializers.richText();
 						});
 						return false;

@@ -30,7 +30,7 @@ namespace :sugar do
 
 		puts "Minifying javascript files for the iPhone..."
 		puts `juicer merge --force public/javascripts/iphone.js`
-		js_files = ['jquery', 'iphone.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
+		js_files = ['vendor/jquery', 'iphone.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
 		`cat #{js_files} > public/javascripts/bundled/iphone.js`
 		
 		`rm public/javascripts/application.min.js`
