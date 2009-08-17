@@ -461,7 +461,25 @@ table.discussions tr.closed td.name a:hover {
 	width:               100%;
 	max-width:           600px;
 }
+.targetted_discussion td.name {
+	/*
+	color:               #9f0000;
+	background: #9f0000 !important;
+	*/
+}
 
+table.discussions .targetted_discussion td {
+	background: #3B89C7;
+	color: #fff;
+}
+table.discussions .targetted_discussion td:first-child {
+	padding-left: 10px;
+}
+table.discussions .targetted_discussion td a, table.discussions .targetted_discussion td a:visited{
+	color: #fff !important;
+}
+table.discussions .targetted_discussion td.name {
+}
 
 
 /* -----------------------------------------------------------------------

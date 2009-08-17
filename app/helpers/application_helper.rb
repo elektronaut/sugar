@@ -90,7 +90,7 @@ module ApplicationHelper
     
     # Class names for discussion
     def discussion_classes(discussions, discussion)
-        [discussion.labels.map(&:downcase), %w{odd even}[discussions.index(discussion)%2], (new_posts?(discussion) ? 'new_posts' : nil), "in_category#{discussion.category_id}", "by_user#{discussion.poster_id}"].flatten.compact.join(' ')
+        [discussion.labels.map(&:downcase), %w{odd even}[discussions.index(discussion)%2], (new_posts?(discussion) ? 'new_posts' : nil), "in_category#{discussion.category_id}", "by_user#{discussion.poster_id}", "discussion", "discussion#{discussion.id}"].flatten.compact.join(' ')
     end
 
 	# Class names for conversation
