@@ -1,16 +1,11 @@
 iPhone:
 
-* Fix crashing bug
 * Clean up default theme
-* Load image button in pure CSS
-* Resize YouTube embeds to fit viewport
 * Custom iPhone theme URL
-* Check up on missing features
 
 Pre-Stylus:
 
 * Clean up and centralize the OpenID verification actions.
-* Inline editing should just save the edited post by AJAX.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
 * Rebase migrations
 
@@ -43,9 +38,31 @@ Before Sugar launch:
 Someday/fun:
 
 * Better map page - show avatars, online status etc.
-* MP3 player
 * Quoting by selection
 * More secure posts parsing (proper HTML, scrub for malicious content)
 * Group messages in proper conversations rather than per user
 * User themes
 
+Keyboard shortcuts:
+
+	Global:
+	g then d - All discussions
+	g then f - Followed discussions
+	g then F - Favourite discussions
+	g then c - Categories
+	g then m - Conversations (messages)
+	Shift+j/k or n/p - Next/previous page
+
+	In discussion list:
+	j/k and n/p - Next/previous item
+	o/enter - Open discussion (Hold shift to open in new tab)
+	m - Mark as read
+	r - Refresh list
+	c - New discussion
+	
+	Viewing posts:
+	j/k and n/p - Next/previous post
+	q - Quote post
+	c - Go to compose reply
+	r - Load new posts
+	u - Back to discussions
