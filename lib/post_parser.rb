@@ -1,5 +1,5 @@
 require 'hpricot'
-#require 'uv'
+require 'uv'
 
 module PostParser
     def PostParser.parse(string)
@@ -13,6 +13,17 @@ module PostParser
 		# Delete <script> tags
 		(doc/"script").remove
 		
+		# Parse <code> blocks
+		doc.search('code') do |codeblock|
+			if codeblock.attributes && codeblock.attributes['language']
+				code_language = codeblock.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
+				code_language = 'plain_text' unless Uv.syntaxes.include?(code_language)
+			else
+				code_language = 'plain_text'
+			end
+			codeblock.swap('<div class="codeblock language_'+code_language+'">'+Uv.parse(codeblock.inner_html, "xhtml", code_language, true, 'twilight')+'</div>')
+		end
+
 		# Filter malicious attributes on all elements
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
 			if elem.raw_attributes
@@ -54,11 +65,6 @@ module PostParser
 				elem.inner_html += '<param name="allowScriptAccess" value="sameDomain" />'
 			end
 		end
-
-		# Parse <code> blocks
-		# doc.search('code') do |codeblock|
-		# 	codeblock.swap( Uv.parse(codeblock.inner_html, "xhtml", 'javascript', true, 'twilight') )
-		# end
 
 		# ..and convert back to HTML again
 		string = doc.to_html
