@@ -10,6 +10,8 @@ Sugar is currently targetting version 2.3.2 of Ruby on Rails, to install it on a
 
 You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Remember to install the appropriate gems for your DBM of choice.
 
+You'll need to have the Oniguruma library installed.
+
 To install all required gems, do: 
 
   sudo rake gems:install

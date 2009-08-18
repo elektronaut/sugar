@@ -88,9 +88,6 @@ class Post < ActiveRecord::Base
 	end
 
 	def body_html
-		if RAILS_ENV == 'development'
-			return PostParser.parse(self.body.dup)
-		end
 		unless body_html?
 			self.update_attribute(:body_html, PostParser.parse(self.body.dup))
 		end
