@@ -62,8 +62,10 @@ module PostParser
 		
 		# Make sure there's a <param name="allowScriptAccess" value="sameDomain"> in object tags
 		doc.search("object").each do |elem|
-			param_attributes = elem.search('>param').map do |subelem| 
-				subelem.attributes ? subelem.attributes.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
+			param_attributes = elem.search('>param').map do |subelem|
+				if subelem.kind_of?(Hpricot::Elem)
+					subelem.attributes ? subelem.attributes.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
+				end
 			end
 			unless param_attributes.flatten.include?('allowscriptaccess')
 				elem.inner_html += '<param name="allowScriptAccess" value="sameDomain" />'
