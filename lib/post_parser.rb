@@ -7,6 +7,7 @@ module PostParser
 
 		# Autolink URLs
 		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
+		string.gsub!(/<script[\s\/]*/i, '<script ')
         
 		doc = Hpricot(string)
 		
@@ -29,6 +30,8 @@ module PostParser
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
 			if elem.raw_attributes
 				elem.raw_attributes.each do |name, value|
+					# XSS fix
+					elem.raw_attributes.delete(name) if value.downcase.gsub(/[\\]*/, '') =~ /^[\s]*javascript\:/
 					# Strip out event handlers
 					elem.raw_attributes.delete(name) if name.downcase =~ /^on/
 					# Change allowScriptAccess to sameDomain
