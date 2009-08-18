@@ -10,8 +10,9 @@ module PostParser
         
 		doc = Hpricot(string)
 		
-		# Delete <script> tags
+		# Delete script and iframe tags
 		(doc/"script").remove
+		(doc/"iframe").remove
 		
 		# Parse <code> blocks
 		doc.search('code') do |codeblock|
