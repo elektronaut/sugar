@@ -330,7 +330,7 @@ var Sugar = {
 					quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
 					// Trim empty blockquotes
 					while(quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)){
-						quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
+						quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '');
 					}
 				}
 				addToReply(quotedPost);
