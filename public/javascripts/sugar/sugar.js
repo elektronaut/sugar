@@ -49,7 +49,12 @@ var Sugar = {
 						// Escape HTML
 						.addButton("Escape HTML", function(){
 						    var selection = this.textArea.selectedText();
-						    this.textArea.replaceSelection(selection.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+							var response = prompt('Enter language (leave blank for no syntax highlighting)','');
+							if(response) {
+								this.textArea.replaceSelection('<code language="'+response+'">'+selection+'</code>');
+							} else {
+							    this.textArea.replaceSelection('<code>'+selection+'</code>');
+							}
 						});
 				}
 			});
@@ -272,9 +277,39 @@ var Sugar = {
 			};
 		}
 
+		window.deparsePost = function(content){
+			content = content
+				.replace(/^[\s]*/, '')          // Strip leading space
+				.replace(/[\s]*$/, '')          // Strip trailing space
+				.replace(/<br[\s\/]*>/g, "\n"); // Change <br /> to line breaks
+			if(content.match(/<div class="codeblock/)){
+				if($('#hiddenPostDeparser').length < 1) {
+					$(document.body).append('<div id="hiddenPostDeparser"></div>');
+				}
+				var hiddenBlock = $('#hiddenPostDeparser');
+				hiddenBlock.show();
+				hiddenBlock.html(content);
+				hiddenBlock.hide();
+				
+				// Remove line numbers
+				$(hiddenBlock).find('.codeblock .line-numbers').remove();
+				$(hiddenBlock).find('.codeblock').each(function(){
+					var codeLanguage = this.className.match(/language_([\w\d\-\.\+_]+)/)[1];
+					blockContent = $(this).children('pre').text().replace(/^[\s]*/, '').replace(/[\s]*$/, '');
+					$(this).replaceWith('<code language="'+codeLanguage+'">'+blockContent+'</code>');
+				});
+				
+				content = hiddenBlock.html();
+				hiddenBlock.html('');
+				content = content
+					.replace("<code", "</blockquote>\n<code")
+					.replace("</code>", "</code><blockquote>");
+			}
+			return content;
+		};
+		
 		// Post quoting
 		window.quotePost = function(postId){
-			
 			var postDiv = '#post-'+postId;
 			if(jQuery(postDiv).length > 0) {
 				var permalink  = '';
@@ -291,11 +326,12 @@ var Sugar = {
 				} else {
 					permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
 					username  = jQuery(postDiv+' .post_info .username a').text();
-					content   = jQuery(postDiv+' .body .content').html()
-						.replace(/^[\s]*/, '')
-						.replace(/[\s]*$/, '')
-						.replace(/<br[\s\/]*>/g, "\n");
+					content   = window.deparsePost(jQuery(postDiv+' .body .content').html());
 					quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+					// Trim empty blockquotes
+					while(quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)){
+						quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
+					}
 				}
 				addToReply(quotedPost);
 			}
