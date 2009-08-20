@@ -84,6 +84,16 @@ Sugar.KeyboardNavigator = {
 				document.location = Sugar.KeyboardNavigator.currentTarget.href;
 			}
 		}
+		var markAsRead = function(){
+			if(Sugar.KeyboardNavigator.currentTarget) {
+				var target = Sugar.KeyboardNavigator.currentTarget;
+				var url = '/discussions/'+target.discussionId+'/mark_as_read';
+				$.get(url, {}, function(){
+					$('.discussion'+target.discussionId).removeClass('new_posts');
+					$('.discussion'+target.discussionId+' .new_posts').html('');
+				});
+			}
+		}
 
 		$(document).bind('keydown', {combi: 'p', disableInInput: true}, gotoPrevTarget);
 		$(document).bind('keydown', {combi: 'k', disableInInput: true}, gotoPrevTarget);
@@ -91,6 +101,8 @@ Sugar.KeyboardNavigator = {
 		$(document).bind('keydown', {combi: 'j', disableInInput: true}, gotoNextTarget);
 		$(document).bind('keydown', {combi: 'o', disableInInput: true}, openTarget);
 		$(document).bind('keydown', {combi: 'Return', disableInInput: true}, openTarget);
+		$(document).bind('keydown', {combi: 'y', disableInInput: true}, markAsRead);
+		$(document).bind('keydown', {combi: 'm', disableInInput: true}, markAsRead);
 
 		// New discussion/category
 		$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(){

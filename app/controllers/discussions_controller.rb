@@ -1,6 +1,7 @@
 class DiscussionsController < ApplicationController
     
     requires_authentication
+	protect_from_forgery :except => :mark_as_read
     
     def load_discussion
         @discussion = Discussion.find(params[:id]) rescue nil
@@ -14,7 +15,7 @@ class DiscussionsController < ApplicationController
         end
     end
     protected     :load_discussion
-    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts]
+    before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read]
 
     def verify_editable
         unless @discussion.editable_by?(@current_user)
@@ -142,5 +143,18 @@ class DiscussionsController < ApplicationController
 	def unfavorite
 		DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
 		redirect_to discussion_url(@discussion, :page => params[:page])
+	end
+	
+	def mark_as_read
+		last_index = @discussion.posts_count
+		last_post = Post.find(:first, :conditions => {:discussion_id => @discussion.id}, :order => 'created_at DESC')
+        if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
+            discussion_view.update_attributes(:post_index => last_index, :post_id => last_post.id) if discussion_view.post_index < last_index
+        else
+            DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => last_post.id)
+        end
+		if request.xhr?
+			render :layout => false, :text => 'OK'
+		end
 	end
 end
