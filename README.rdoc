@@ -10,7 +10,10 @@ Sugar aims for simplicity, and is first and foremost built for performance, espe
 
 * Publically browseable, signup required or invite-only
 * Realtime discussions (via AJAX)
+* iPhone version
 * OpenID support
+* Unread posts tracking
+* Following and favoriting discussions
 * Mouse drawing using Napkin
 * Google Reader/GMail style keyboard navigation
 * Syntax highlighting of code
@@ -18,6 +21,13 @@ Sugar aims for simplicity, and is first and foremost built for performance, espe
 * Xbox Live integration
 * Loads data from Twitter, Flickr, Last.fm
 * Custom stylesheets
+
+Things you *WON'T* find in Sugar:
+
+* Threaded discussions
+* User groups and access control lists
+* Emoticons and signatures
+* Wizards
 
 == Requirements, and how to install them
 
