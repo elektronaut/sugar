@@ -1,11 +1,23 @@
 = Sugar
 
-Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. The name? It's what Butterscotch is made of, and it's totally sweet.
+Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. 
+
+The name? It's what Butterscotch is made of, and it's totally sweet.
 
 == Features
 
-* Mouse drawing
-* "Live" discussions using AJAX
+Sugar aims for simplicity, and is first and foremost built for performance, especially with a high volume of posts. There's a few interesting bullet points, though:
+
+* Publically browseable, signup required or invite-only
+* Realtime discussions (via AJAX)
+* OpenID support
+* Mouse drawing using Napkin
+* Google Reader/GMail style keyboard navigation
+* Syntax highlighting of code
+* Google Maps support
+* Xbox Live integration
+* Loads data from Twitter, Flickr, Last.fm
+* Custom stylesheets
 
 == Requirements, and how to install them
 
