@@ -14,6 +14,7 @@ module PostParser
 		# Delete script and iframe tags
 		(doc/"script").remove
 		(doc/"iframe").remove
+		(doc/"meta").remove
 		
 		# Parse <code> blocks
 		doc.search('code') do |codeblock|

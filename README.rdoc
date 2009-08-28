@@ -1,26 +1,51 @@
 = Sugar
 
-Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. The name? It's what Butterscotch is made of, and it's totally sweet.
+Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. 
+
+The name? It's what Butterscotch is made of, and it's totally sweet.
+
+== Features
+
+Sugar aims for simplicity, and is first and foremost built for performance, especially with a high volume of posts. There's a few interesting bullet points, though:
+
+* Publically browseable, signup required or invite-only
+* Realtime discussions (via AJAX)
+* iPhone version
+* OpenID support
+* Unread posts tracking
+* Following and favoriting discussions
+* Mouse drawing using Napkin
+* Google Reader/GMail style keyboard navigation
+* Syntax highlighting of code
+* Google Maps support
+* Xbox Live integration
+* Loads data from Twitter, Flickr, Last.fm
+* Custom stylesheets
+
+Things you *WON'T* find in Sugar:
+
+* Threaded discussions
+* User groups and access control lists
+* Emoticons and signatures
+* Wizards
 
 == Requirements, and how to install them
 
-Sugar is currently targetting version 2.3.2 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
+Sugar is currently targetting version 2.3.3 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
   
-  sudo gem install rails -v 2.3.2
+  sudo gem install rails -v 2.3.3
 
 You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Remember to install the appropriate gems for your DBM of choice.
 
-You'll need to have the Oniguruma library installed.
+You'll also want to install the Oniguruma (http://www.geocities.jp/kosako3/oniguruma/) and Sphinx (http://www.sphinxsearch.com) libraries.
 
-To install all required gems, do: 
+Finally, to install the rest of the required gems, do: 
 
   sudo rake gems:install
 
-Searching relies on Sphinx 0.9.8 or newer, to install it see http://www.sphinxsearch.com for downloads and instructions.
-
 == Credits
 
-Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com). Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned.
+Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com).
 
 == License
 
