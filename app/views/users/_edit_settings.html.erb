@@ -1,0 +1,15 @@
+<%= labelled_field f.text_field(:openid_url, :size => 50), "OpenID Identity URL", :errors => @user.errors[:openid_url] %>
+<%= labelled_field f.text_field(:email, :size => 50), "Email address", :description => 'Required', :errors => @user.errors[:email] %>
+
+<% labelled_field f.password_field(:password), "Password", :description => "Enter twice to change", :errors => @user.errors[:password] do %>
+	<%= f.password_field(:confirm_password) %>
+<% end %>
+
+<%= labelled_field f.check_box(:work_safe_urls), "I'm at work", :description => "Disables thread titles in URLs", :errors => @user.errors[:work_safe_urls] %>
+<%= labelled_field f.check_box(:notify_on_message), "Notify me on messages", :description => "You'll be notified by email whenever someone sends you a message", :errors => @user.errors[:notify_on_message] %>
+
+<%= labelled_field f.text_field(:stylesheet_url, :size => 80), "Stylesheet URL", :description => "Enter a URL here to override the stylesheet", :errors => @user.errors[:stylesheet_url] %>
+
+<p>
+	You can download the newest version of the <%= link_to "default theme here", theme_path(Sugar.config(:default_theme))+".zip" %>.
+</p>

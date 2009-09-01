@@ -151,6 +151,7 @@ class UsersController < ApplicationController
     end
 
     def edit
+		@page = params[:page] || 'info'
         # TODO: refactor to .editable_by?
         require_user_admin_or_user(@user, :redirect => user_url(@user))
     end
@@ -189,6 +190,7 @@ class UsersController < ApplicationController
 	end
     
 	def update
+		@page = params[:page] || 'info'
         require_user_admin_or_user(@user, :redirect => user_url(@user))
 		attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
 
@@ -214,7 +216,7 @@ class UsersController < ApplicationController
 				end
 			else
 				flash[:notice] = "Your changes were saved!"
-				redirect_to user_url(:id => @user.username) and return
+				redirect_to edit_user_page_url(:id => @user.username, :page => @page) and return
 			end
 		end
 		flash.now[:notice] ||= "There were errors saving your changes"

@@ -74,9 +74,6 @@ var Sugar = {
 					window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 				}
 			});
-			jQuery('#profile-tabs').each(function(){
-				window.profileTabs = new SugarTabs(this, {showFirstTab: true});
-			});
 		},
 
 		postFunctions: function() {
