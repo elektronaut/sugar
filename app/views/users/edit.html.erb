@@ -48,10 +48,8 @@
 	<div id="profileLocation">
 		<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
 
-		<% if Sugar.config(:google_api) %>
-			<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
-			<%= labelled_field '<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
-		<% end %>
+		<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
+		<%= labelled_field '<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
 	</div>
 	<div id="profileSettings">
 		<%= labelled_field f.text_field(:openid_url, :size => 50), "OpenID Identity URL", :errors => @user.errors[:openid_url] %>
