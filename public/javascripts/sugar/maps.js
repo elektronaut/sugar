@@ -2,10 +2,10 @@ $.extend(Sugar.Initializers, {
 
 	usersMap : function() {
 		$('#usersMap').each(function(){
-			var defaultLocation = new google.maps.LatLng(46.073231,-32.343750);
+			var defaultLocation = new google.maps.LatLng(30,-20);
 			var map = new google.maps.Map(this, {
 				center: defaultLocation, 
-				zoom: 3,
+				zoom: 2,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			});
 
