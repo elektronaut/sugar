@@ -16,6 +16,9 @@ config.action_view.cache_template_loading            = true
 # config.cache_store = :mem_cache_store
 
 # Enable serving of images, stylesheets, and javascripts from an asset server
+if Sugar.config(:asset_host)
+	config.action_controller.asset_host Sugar.config(:asset_host)
+end
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
 # Disable delivery errors, bad email addresses will be ignored

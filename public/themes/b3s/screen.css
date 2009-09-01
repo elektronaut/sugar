@@ -1,4 +1,28 @@
-@import url(reset.css);
+/* -----------------------------------------------------------------------
+   RESET STYLES
+   ----------------------------------------------------------------------- */
+
+html,body,div,span,applet,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+a,abbr,acronym,address,big,cite,code,
+del,dfn,em,font,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
+:focus{outline:0;}
+body{line-height:1;color:black;background:white;}
+ol,ul{list-style:none;}
+table{border-collapse:separate;border-spacing:0;}
+caption,th,td{text-align:left;font-weight:normal;}
+blockquote:before,blockquote:after,
+q:before,q:after{content:"";}
+blockquote,q{quotes:"" "";}
+
+
+/* -----------------------------------------------------------------------
+   GENERAL
+   ----------------------------------------------------------------------- */
 
 html, body {
 	height:              100%;
@@ -14,12 +38,6 @@ body {
 body       { font-size: 10px; } 
 * html     { font-size: 125%; } 
 * html body{ font-size: 50%; }
-
-
-
-/* -----------------------------------------------------------------------
-   GENERAL
-   ----------------------------------------------------------------------- */
 
 h2, h3, h4, h5, h6, p, ul, ol, pre {
 	margin-bottom:       1em;
@@ -145,7 +163,7 @@ div.errors {
 	margin:              0 -16px 1em -16px;
 }
 div.errors ul {
-	margin:              none;
+	margin:              0;
 	list-style-type:     disc;
 	list-style-position: inside;
 }
@@ -461,6 +479,19 @@ table.discussions tr.closed td.name a:hover {
 	max-width:           600px;
 }
 
+/* Targetted discussion (Keyboard navigation) */
+table.discussions .targetted_discussion td {
+	background: #3B89C7;
+	color: #fff;
+}
+table.discussions .targetted_discussion td:first-child {
+	padding-left: 10px;
+}
+table.discussions .targetted_discussion td a, table.discussions .targetted_discussion td a:visited{
+	color: #fff !important;
+}
+table.discussions .targetted_discussion td.name {
+}
 
 
 /* -----------------------------------------------------------------------
@@ -863,3 +894,23 @@ a.mp3player_playing .position {
 	font-size:           0.7em;
 	padding-left:        2px;
 }
+
+/* -----------------------------------------------------------------------
+   CLEARFIX
+   ----------------------------------------------------------------------- */
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE5/Mac \*/
+* html .clearfix {height: 1px;}
+.clearfix {display: block;}
+/* End hide from IE5/Mac */

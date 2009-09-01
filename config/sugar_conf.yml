@@ -6,6 +6,7 @@ forum_short_name: B3S
 forum_title: BUTT<em>3</em>RSCOTCH
 
 default_domain: butt3rscotch.org
+asset_host: http://assets%d.butt3rscotch.org
 mail_sender: Butt3rscotch <noreply@butt3rscotch.org>
 session_key: _butt3rscotch_session
 
