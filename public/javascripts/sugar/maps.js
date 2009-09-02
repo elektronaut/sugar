@@ -56,10 +56,10 @@ $.extend(Sugar.Initializers, {
 				$('#user_longitude').val(latlng.lng());
 			};
 			
-			var userNarker = false;
+			var userMarker = false;
 
 			var createUserMarker = function(position){
-				if(userNarker){
+				if(userMarker){
 					userMarker.set_visible(true);
 					userMarker.set_position(position);
 				} else {
