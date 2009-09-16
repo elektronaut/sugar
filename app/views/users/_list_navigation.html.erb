@@ -9,9 +9,7 @@
 	<% end %>
 	<%= users_tab "Banned", banned_users_path, :action => 'banned', :class => 'BannedUsersTab' %>
 	<%= users_tab "Twitter", twitter_users_path, :action => 'twitter', :class => 'TwitterUsersTab' %>
-	<% if Sugar.config(:google_api) %>
-		<%= users_tab "Map", map_users_path, :action => 'map', :class => 'UsersMapTab' %>
-	<% end %>
+	<%= users_tab "Map", map_users_path, :action => 'map', :class => 'UsersMapTab' %>
 	<% if Sugar.config(:xbox_live_enabled) %>
 		<%= users_tab "Xbox Live", xboxlive_users_path, :action => 'xboxlive', :class => 'XboxLiveUsersTab' %>
 	<% end %>

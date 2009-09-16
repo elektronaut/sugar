@@ -77,6 +77,7 @@ ActionController::Routing::Routes.draw do |map|
 	map.revoke_invites_user '/users/profile/:id/revoke_invites',     :controller => 'users', :action => 'revoke_invites'
 	map.update_openid_user  '/users/profile/:id/update_openid',      :controller => 'users', :action => 'update_openid'
 	map.edit_user           '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
+	map.edit_user_page      '/users/profile/:id/edit/:page',         :controller => 'users', :action => 'edit'
 	map.user_profile        '/users/profile/:id',                    :controller => 'users', :action => 'show'
     map.discussions_user    '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
     map.connect             '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'

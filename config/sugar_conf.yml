@@ -6,6 +6,7 @@ forum_short_name: B3S
 forum_title: BUTT<em>3</em>RSCOTCH
 
 default_domain: butt3rscotch.org
+asset_host: http://assets%d.butt3rscotch.org
 mail_sender: Butt3rscotch <noreply@butt3rscotch.org>
 session_key: _butt3rscotch_session
 
@@ -17,7 +18,6 @@ default_iphone_theme: default-iphone
 flickr_api: 016918184821edf95505d9acd61e64c4
 
 # Google API key
-google_api: ABQIAAAAnWSYmGpYjyofU-RkR7khnxQaLv7OURE2GkMujmXaX4v89Xp-jxTAPesjyBvKHuLc29BxnjWmJa7n9w
 google_analytics: UA-8897656-1
 
 # Enable Xbox Live integration

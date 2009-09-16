@@ -13,86 +13,19 @@
 	</div>
 <% end %>
 
-<ul id="profile-tabs" class="topTabs">  
-	<li class="tab" id="info-tab"><a href="#profileInfo">Personal Info</a></li>  
-	<li class="tab" id="links-tab"><a href="#profileLinks">Links and Services</a></li>  
-	<li class="tab" id="location-tab"><a href="#profileLocation">Location</a></li>  
-	<li class="tab" id="settings-tab"><a href="#profileSettings">Settings</a></li>  
+<ul class="topTabs">
+	<li class="tab<%= ' active' if @page == 'info' %>"><%= link_to "Personal Info", edit_user_page_path(@user.username, 'info') %></li>  
+	<li class="tab<%= ' active' if @page == 'services' %>"><%= link_to "Links and Services", edit_user_page_path(@user.username, 'services') %></li>  
+	<li class="tab<%= ' active' if @page == 'location' %>"><%= link_to "Location", edit_user_page_path(@user.username, 'location') %></li>  
+	<li class="tab<%= ' active' if @page == 'settings' %>"><%= link_to "Settings", edit_user_page_path(@user.username, 'settings') %></li>  
 	<% if @current_user.admin? %>
-		<li class="tab" id="admin-tab"><a href="#profileAdmin">Admin</a></li>
+		<li class="tab<%= ' active' if @page == 'admin' %>"><%= link_to "Admin", edit_user_page_path(@user.username, 'admin') %></li>  
 	<% end %>
 </ul>
 
 <% form_for(@user) do |f| %>
-
-	<div id="profileInfo">
-		<%= labelled_field f.text_field(:username, :disabled => !@current_user.admin?), "Username", :errors => @user.errors[:username] %>
-		<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
-		<%= labelled_field f.date_select(:birthday, :start_year => 1900), "Birthday", :description => "Your age won't be shown, but your birthday will", :errors => @user.errors[:birthday] %>
-		<% labelled_field f.text_field(:avatar_url, :size => 80), "Avatar URL", :description => "Enter a link to a 32x32px image", :errors => @user.errors[:avatar_url] do %>
-			Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> 
-			using your registered email to get an avatar.
-		<% end %>
-		<%= labelled_field f.text_area(:description, :rows => 12, :cols => 80, :class => :rich), "Profile text", :errors => @user.errors[:description] %>
-	</div>
-	<div id="profileLinks">
-		<%= labelled_field f.text_field(:website, :size => 50), "Web site", :errors => @user.errors[:website] %>
-		<%= labelled_field f.text_field(:gtalk), "Google Talk", :errors => @user.errors[:gtalk] %>
-		<%= labelled_field f.text_field(:msn), "MSN Messenger", :errors => @user.errors[:msn] %>
-		<%= labelled_field f.text_field(:aim), "AIM", :errors => @user.errors[:aim] %>
-		<%= labelled_field f.text_field(:gamertag), "Xbox Live Gamertag", :errors => @user.errors[:gamertag] %>
-		<%= labelled_field f.text_field(:twitter), "Twitter username", :errors => @user.errors[:twitter] %>
-		<%= labelled_field f.text_field(:flickr), "Flickr user ID", :errors => @user.errors[:flickr], :description => "Note: This is not your username" %>
-		<%= labelled_field f.text_field(:last_fm), "Last.fm username", :errors => @user.errors[:last_fm] %>
-	</div>
-	<div id="profileLocation">
-		<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
-
-		<% if Sugar.config(:google_api) %>
-			<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
-			<%= labelled_field '<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
-		<% end %>
-	</div>
-	<div id="profileSettings">
-		<%= labelled_field f.text_field(:openid_url, :size => 50), "OpenID Identity URL", :errors => @user.errors[:openid_url] %>
-		<%= labelled_field f.text_field(:email, :size => 50), "Email address", :description => 'Required', :errors => @user.errors[:email] %>
-
-		<% labelled_field f.password_field(:password), "Password", :description => "Enter twice to change", :errors => @user.errors[:password] do %>
-			<%= f.password_field(:confirm_password) %>
-		<% end %>
-
-		<%= labelled_field f.check_box(:work_safe_urls), "I'm at work", :description => "Disables thread titles in URLs", :errors => @user.errors[:work_safe_urls] %>
-		<%= labelled_field f.check_box(:notify_on_message), "Notify me on messages", :description => "You'll be notified by email whenever someone sends you a message", :errors => @user.errors[:notify_on_message] %>
-
-		<%= labelled_field f.text_field(:stylesheet_url, :size => 80), "Stylesheet URL", :description => "Enter a URL here to override the stylesheet", :errors => @user.errors[:stylesheet_url] %>
-
-		<p>
-			You can download the newest version of the <%= link_to "default theme here", theme_path(Sugar.config(:default_theme))+".zip" %>.
-		</p>
-	</div>
-	<% if @current_user.user_admin? %>
-	<div id="profileAdmin">
-		<% if !Sugar.config(:signups_allowed) %>
-			<%= labelled_field f.text_field(:available_invites, :size => 4), "Invites", :errors => @user.errors[:available_invites] %>
-		<% end %>
-		<p>
-			<label>Flags</label>
-			<%= f.check_box(:activated) %> Activated<br />
-			<%= f.check_box(:banned) %> Banned<br />
-			<%= f.check_box(:html_disabled) %> Disable HTML posting<br />
-			<%= f.check_box(:trusted) %> Trusted<br />
-		</p>
-		<p>
-			<label>User levels</label>
-			<% if @current_user.admin? %>
-				<%= f.check_box(:admin) %> Administrator<br />
-			<% end %>
-			<%= f.check_box(:moderator) %> Moderator<br />
-			<%= f.check_box(:user_admin) %> User administator<br />
-		</p>
-	</div>
-	<% end %>
-	
+	<%= hidden_field_tag :page, @page %>
+	<%= render :partial => "edit_#{@page}", :locals => {:f => f} %>
 	<p>
 		<%= submit_tag "Save" %>
 	</p>
