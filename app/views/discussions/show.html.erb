@@ -33,7 +33,7 @@
 
 <a name="bottom"></a>
 <div class="bottomlinks">
-	<%= link_to "Back to discussions", discussions_path %>,
+	<%= link_to "Back to discussions", discussions_path, :id => 'back_link' %>,
 	<% if @current_user.following?(@discussion) -%>
 		<%= link_to "Back to followed", following_discussions_path %>,
 	<% end %>

@@ -14,7 +14,7 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
 	<div class="posts">
 		<% @messages.each do |message| -%>
-		<div class="post message <%= "new_message" if message.recipient == @current_user && !message.read? %>">
+		<div class="post message <%= "new_message" if message.recipient == @current_user && !message.read? %>" id="message-<%= message.id %>">
 			<% if message.subject? && last_subject != message.subject %>
 				<div class="title"><%= h(last_subject = message.subject) %></div>
 			<% end %>
@@ -34,7 +34,7 @@
 <% end %>
 
 <div class="bottomlinks">
-	<%= link_to "Back to conversations", messages_path %>,
+	<%= link_to "Back to conversations", messages_path, :id => 'back_link' %>,
 	<%= link_to "Top of page", "#top" %>
 </div>
 

@@ -66,7 +66,7 @@
 		</div>
 		<% if @current_user || Sugar.config(:public_browsing) %>
 			<ul id="navigation">
-				<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path %></li>
+				<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path, :id => 'discussions_link' %></li>
 				<% if @current_user %>
 					<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path %></li>
 					<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path %></li>

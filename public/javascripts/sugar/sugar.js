@@ -84,7 +84,7 @@ var Sugar = {
 				if(!this.functionalityApplied) {
 					$(this).click(function(){
 						var postId = this.id.match(/-([\d]+)$/)[1];
-						window.quotePost(postId);
+						Sugar.quotePost(postId);
 					});
 					this.functionalityApplied = true;
 				}
@@ -222,43 +222,45 @@ var Sugar = {
 	},
 	
 	loadNewPosts : function(){
-		var newPosts    = $('#newPosts').get()[0];
-		var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
+		if($('#discussionLink').length > 0){
+			var newPosts    = $('#newPosts').get()[0];
+			var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
 
-		$(newPosts).html('Loading&hellip;');
-		$(newPosts).addClass('new_posts_since_refresh');
+			$(newPosts).html('Loading&hellip;');
+			$(newPosts).addClass('new_posts_since_refresh');
 
-		clearInterval(newPosts.refreshInterval);
+			clearInterval(newPosts.refreshInterval);
 
-		$.get(newPostsURL, function(data){
-			$(newPosts).hide();
+			$.get(newPostsURL, function(data){
+				$(newPosts).hide();
 
-			if($('.posts #ajaxPosts').length < 1) {
-				$('.posts').append('<div id="ajaxPosts"></div>');
-			}
-
-			$('.posts #ajaxPosts').append(data);
-			$('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
-			
-			// Reset the notifier
-			document.title = newPosts.documentTitle;
-			newPosts.serverPostsCount = newPosts.originalCount + $('.posts #ajaxPosts').children('.post').size();
-			newPosts.postsCount = newPosts.serverPostsCount;
-			newPosts.shown = false;
-
-			$('.shown_items_count').text(newPosts.postsCount);
-			$('.total_items_count').text(newPosts.postsCount);
-
-			Sugar.Initializers.postFunctions();
-			Sugar.updateNewPostsCounter();
-
-			for(var f in Sugar.onLoadedPosts) {
-				if(Sugar.onLoadedPosts.hasOwnProperty(f)){
-					Sugar.onLoadedPosts[f]();
+				if($('.posts #ajaxPosts').length < 1) {
+					$('.posts').append('<div id="ajaxPosts"></div>');
 				}
-			}
-		});
-		
+
+				$('.posts #ajaxPosts').append(data);
+				$('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
+			
+				// Reset the notifier
+				document.title = newPosts.documentTitle;
+				newPosts.serverPostsCount = newPosts.originalCount + $('.posts #ajaxPosts').children('.post').size();
+				newPosts.postsCount = newPosts.serverPostsCount;
+				newPosts.shown = false;
+
+				$('.shown_items_count').text(newPosts.postsCount);
+				$('.total_items_count').text(newPosts.postsCount);
+
+				Sugar.Initializers.postFunctions();
+				Sugar.updateNewPostsCounter();
+
+				for(var f in Sugar.onLoadedPosts) {
+					if(Sugar.onLoadedPosts.hasOwnProperty(f)){
+						Sugar.onLoadedPosts[f]();
+					}
+				}
+				$(document).trigger('postsloaded');
+			});
+		}
 		return false;
 	},
 
@@ -306,35 +308,6 @@ var Sugar = {
 					.replace("</code>", "</code><blockquote>");
 			}
 			return content;
-		};
-		
-		// Post quoting
-		window.quotePost = function(postId){
-			var postDiv = '#post-'+postId;
-			if(jQuery(postDiv).length > 0) {
-				var permalink  = '';
-				var username   = '';
-				var content    = '';
-				var quotedPost = '';
-				if(jQuery(postDiv).hasClass('me_post')) {
-					username  = jQuery(postDiv+' .body .poster').text();
-					content   = jQuery(postDiv+' .body .content').html()
-						.replace(/^[\s]*/, '')
-						.replace(/[\s]*$/, '')
-						.replace(/<br[\s\/]*>/g, "\n");
-					quotedPost = '<blockquote><cite>Posted by '+username+':</cite>'+content+'</blockquote>';
-				} else {
-					permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
-					username  = jQuery(postDiv+' .post_info .username a').text();
-					content   = window.deparsePost(jQuery(postDiv+' .body .content').html());
-					quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
-					// Trim empty blockquotes
-					while(quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)){
-						quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '');
-					}
-				}
-				addToReply(quotedPost);
-			}
 		};
 		
 	}

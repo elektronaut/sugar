@@ -95,7 +95,7 @@ module ApplicationHelper
 
 	# Class names for conversation
 	def conversation_classes(users, user)
-        [%w{odd even}[users.index(user)%2], (@current_user.unread_messages_from?(user) ? 'new_posts' : nil), "by_user#{user.id}"].flatten.compact.join(' ')
+		[%w{odd even}[users.index(user)%2], (@current_user.unread_messages_from?(user) ? 'new_posts' : nil), "by_user#{user.id}", "conversation#{user.id}", "conversation"].flatten.compact.join(' ')
 	end
     
     def format_post(string)

@@ -8,6 +8,36 @@ $.extend(Sugar.Initializers, {
 
 $.extend(Sugar, {
 
+	// Post quoting
+	quotePost: function(postId){
+		var postDiv = '#post-'+postId;
+		if(jQuery(postDiv).length > 0) {
+			var permalink  = '';
+			var username   = '';
+			var content    = '';
+			var quotedPost = '';
+			if(jQuery(postDiv).hasClass('me_post')) {
+				username  = jQuery(postDiv+' .body .poster').text();
+				content   = jQuery(postDiv+' .body .content').html()
+					.replace(/^[\s]*/, '')
+					.replace(/[\s]*$/, '')
+					.replace(/<br[\s\/]*>/g, "\n");
+				quotedPost = '<blockquote><cite>Posted by '+username+':</cite>'+content+'</blockquote>';
+			} else {
+				permalink = jQuery(postDiv+' .post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
+				username  = jQuery(postDiv+' .post_info .username a').text();
+				content   = window.deparsePost(jQuery(postDiv+' .body .content').html());
+				quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+				// Trim empty blockquotes
+				while(quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)){
+					quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '');
+				}
+			}
+			addToReply(quotedPost);
+			$('#compose-body').focus();
+		}
+	},
+
 	// ---- Posting ----
 
 	// parseSubmit() reads the contents of the posting textarea and applies it to a hidden div.

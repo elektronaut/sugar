@@ -53,16 +53,18 @@ Keyboard shortcuts:
 	g then m - Conversations (messages)
 x	Shift+j/k or n/p - Next/previous page
 
-	In discussion list:
+	Discussions or conversations list:
 x	j/k and n/p - Next/previous item
 x	o/enter - Open discussion (Hold shift to open in new tab)
 x	m/y - Mark as read
 	r - Refresh list
 x	c - New discussion
 	
+	Viewing posts and messages:
+x	j/k and n/p - Next/previous post
+x	c - Go to compose reply
+x	u - Go back to list
+
 	Viewing posts:
-	j/k and n/p - Next/previous post
-	q - Quote post
-	c - Go to compose reply
-	r - Load new posts
-	u - Back to discussions
+x	q - Quote post
+x	r - Load new posts
