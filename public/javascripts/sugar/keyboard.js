@@ -21,13 +21,13 @@ Sugar.KeyboardNavigator = {
 	},
 	
 	apply: function(){
-		this.applyGlobalHotkeys();
 		if($('table.discussions').length > 0){
 			this.applyDiscussionsHotkeys();
 		}
 		if($('.posts .post').length > 0){
 			this.applyPostsHotkeys();
 		}
+		this.applyGlobalHotkeys();
 	},
 	
 	addTarget: function(target, targetId){
@@ -104,6 +104,28 @@ Sugar.KeyboardNavigator = {
 	applyGlobalHotkeys: function(){
 		var keynav = this;
 
+		// Pagination
+		var gotoPrevPage = function(){
+			if($('.prev_page_link').length > 0){
+				document.location = $('.prev_page_link').get(0).href;
+			}
+		};
+		var gotoNextPage = function(){
+			if($('.next_page_link').length > 0){
+				document.location = $('.next_page_link').get(0).href;
+			}
+		};
+		$(document).bind('keydown', {combi: 'shift+p', disableInInput: true}, gotoPrevPage);
+		$(document).bind('keydown', {combi: 'shift+k', disableInInput: true}, gotoPrevPage);
+		$(document).bind('keydown', {combi: 'shift+n', disableInInput: true}, gotoNextPage);
+		$(document).bind('keydown', {combi: 'shift+j', disableInInput: true}, gotoNextPage);
+		$(document).bind('keydown', {combi: 'u', disableInInput: true}, function(){
+			if($('#back_link').length > 0){
+				document.location = $('#back_link').get(0).href;
+			}
+			return false;
+		});
+
 		// Listen for sequences
 		$(document).bind('keydown', function(event){
 			var target = $(event.target);
@@ -133,28 +155,6 @@ Sugar.KeyboardNavigator = {
 					}
 				}
 			}
-		});
-
-		// Pagination
-		var gotoPrevPage = function(){
-			if($('.prev_page_link').length > 0){
-				document.location = $('.prev_page_link').get(0).href;
-			}
-		};
-		var gotoNextPage = function(){
-			if($('.next_page_link').length > 0){
-				document.location = $('.next_page_link').get(0).href;
-			}
-		};
-		$(document).bind('keydown', {combi: 'shift+p', disableInInput: true}, gotoPrevPage);
-		$(document).bind('keydown', {combi: 'shift+k', disableInInput: true}, gotoPrevPage);
-		$(document).bind('keydown', {combi: 'shift+n', disableInInput: true}, gotoNextPage);
-		$(document).bind('keydown', {combi: 'shift+j', disableInInput: true}, gotoNextPage);
-		$(document).bind('keydown', {combi: 'u', disableInInput: true}, function(){
-			if($('#back_link').length > 0){
-				document.location = $('#back_link').get(0).href;
-			}
-			return false;
 		});
 	},
 	
