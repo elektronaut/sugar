@@ -10,6 +10,15 @@ Sugar.KeyboardNavigator = {
 	defaultTarget: false,
 	targets: [],
 	currentTarget: false,
+	keySequence: '',
+    specialKeys: { 27: 'esc', 9: 'tab', 32:'space', 13: 'return', 8:'backspace', 145: 'scroll', 
+        20: 'capslock', 144: 'numlock', 19:'pause', 45:'insert', 36:'home', 46:'del',
+        35:'end', 33: 'pageup', 34:'pagedown', 37:'left', 38:'up', 39:'right',40:'down', 
+        112:'f1',113:'f2', 114:'f3', 115:'f4', 116:'f5', 117:'f6', 118:'f7', 119:'f8', 
+        120:'f9', 121:'f10', 122:'f11', 123:'f12', 191: '/',
+		96: '0', 97:'1', 98: '2', 99: '3', 100: '4', 101: '5', 102: '6', 103: '7', 104: '8', 105: '9', 106: '*', 
+		107: '+', 109: '-', 110: '.', 111 : '/'
+	},
 	
 	apply: function(){
 		this.applyGlobalHotkeys();
@@ -79,19 +88,64 @@ Sugar.KeyboardNavigator = {
 		}
 	},
 
+
+	findElement: function (elem){
+        if (!jQuery(elem).attr('hkId')){
+            if (jQuery.browser.opera || jQuery.browser.safari){
+                while (!jQuery(elem).attr('hkId') && elem.parentNode){
+                    elem = elem.parentNode;
+                }
+            }
+        }
+        return elem;
+    },
+
 	// Global hotkeys
 	applyGlobalHotkeys: function(){
+		var keynav = this;
+
+		// Listen for sequences
+		$(document).bind('keydown', function(event){
+			var target = $(event.target);
+			var character = !keynav.specialKeys[event.which] && String.fromCharCode(event.keyCode).toLowerCase();
+			if(event.shiftKey && event.which >= 65 && event.which <= 90) {
+				character = character.toUpperCase();
+			}
+			if (target.is("input") || target.is("textarea") || target.is("select") ){
+				keynav.keySequence = '';
+			} else {
+				if(character && character.match(/^[\w\d]$/)){
+					keynav.keySequence += character;
+					keySequence = keynav.keySequence = keynav.keySequence.match(/([\w\d]{0,5})$/)[1]; // Limit to 5 keys
+					var shortcuts = {
+						'#discussions_link': /gd$/,
+						'#following_link':   /gf$/,
+						'#favorites_link':   /gF$/,
+						'#categories_link':  /gc$/,
+						'#messages_link':    /gm$/,
+						'#invites_link':     /gi$/,
+						'#users_link':       /gu$/
+					};
+					for(var selector in shortcuts){
+						if(keySequence.match(shortcuts[selector]) && $(selector).length > 0){ 
+							document.location = $(selector).get(0).href;
+						}
+					}
+				}
+			}
+		});
+
 		// Pagination
 		var gotoPrevPage = function(){
 			if($('.prev_page_link').length > 0){
 				document.location = $('.prev_page_link').get(0).href;
 			}
-		}
+		};
 		var gotoNextPage = function(){
 			if($('.next_page_link').length > 0){
 				document.location = $('.next_page_link').get(0).href;
 			}
-		}
+		};
 		$(document).bind('keydown', {combi: 'shift+p', disableInInput: true}, gotoPrevPage);
 		$(document).bind('keydown', {combi: 'shift+k', disableInInput: true}, gotoPrevPage);
 		$(document).bind('keydown', {combi: 'shift+n', disableInInput: true}, gotoNextPage);
@@ -171,7 +225,7 @@ Sugar.KeyboardNavigator = {
 			if(keynav.currentTarget) {
 				document.location = keynav.currentTarget.href;
 			}
-		}
+		};
 
 		var markAsRead = function(){
 			if(keynav.currentTarget && $(keynav.currentTarget.parentNode.parentNode).hasClass('discussion')) {
@@ -183,7 +237,7 @@ Sugar.KeyboardNavigator = {
 					$('.discussion'+targetId+' .new_posts').html('');
 				});
 			}
-		}
+		};
 
 		$(document).bind('keydown', {combi: 'p', disableInInput: true}, function(){keynav.gotoPrevTarget();});
 		$(document).bind('keydown', {combi: 'k', disableInInput: true}, function(){keynav.gotoPrevTarget();});
@@ -201,6 +255,6 @@ Sugar.KeyboardNavigator = {
 			}
 		});
 	}
-}
+};
 
 

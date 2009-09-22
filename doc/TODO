@@ -46,11 +46,13 @@ Someday/fun:
 Keyboard shortcuts:
 
 	Global:
-	g then d - All discussions
-	g then f - Followed discussions
-	g then F - Favourite discussions
-	g then c - Categories
-	g then m - Conversations (messages)
+x	g then d - All discussions
+x	g then f - Followed discussions
+x	g then F - Favourite discussions
+x	g then c - Categories
+x	g then u - Users
+x	g then i - Invites
+x	g then m - Messages
 x	Shift+j/k or n/p - Next/previous page
 
 	Discussions or conversations list:

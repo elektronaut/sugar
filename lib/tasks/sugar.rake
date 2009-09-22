@@ -25,7 +25,14 @@ namespace :sugar do
 	task :pack_scripts do
 		puts "Minifying javascript files..."
 		puts `juicer merge --force public/javascripts/application.js`
-		js_files = ['vendor/jquery', 'vendor/swfobject', 'vendor/soundmanager2.min', 'application.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
+		js_files = [
+			'vendor/jquery', 
+			'vendor/jquery.hotkeys.min', 
+			'vendor/jquery.scrollTo.min', 
+			'vendor/swfobject', 
+			'vendor/soundmanager2.min', 
+			'application.min'
+		].map{|f| "public/javascripts/#{f}.js"}.join(" ")
 		`cat #{js_files} > public/javascripts/bundled/application.js`
 
 		puts "Minifying javascript files for the iPhone..."
