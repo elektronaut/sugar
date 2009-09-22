@@ -479,18 +479,18 @@ table.discussions tr.closed td.name a:hover {
 	max-width:           600px;
 }
 
-/* Targetted discussion (Keyboard navigation) */
-table.discussions .targetted td {
+/* Targeted discussion (Keyboard navigation) */
+table.discussions .targeted td {
 	background:          #3B89C7;
 	color:               #fff;
 }
-table.discussions .targetted td:first-child {
+table.discussions .targeted td:first-child {
 	padding-left:        10px;
 }
-table.discussions .targetted td a, table.discussions .targetted td a:visited{
+table.discussions .targeted td a, table.discussions .targeted td a:visited{
 	color:               #fff !important;
 }
-table.discussions .targetted td.name {
+table.discussions .targeted td.name {
 }
 
 
@@ -634,8 +634,8 @@ table.discussions .targetted td.name {
 	color:               #001d32;
 }
 
-/* Targetted post (Keyboard navigation) */
-.posts .targetted {
+/* Targeted post (Keyboard navigation) */
+.posts .targeted {
 	border:              1px solid #3B89C7;
 	margin-left:         -1px;
 	margin-right:        -1px;

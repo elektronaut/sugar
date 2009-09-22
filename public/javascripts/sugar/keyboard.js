@@ -181,8 +181,8 @@ Sugar.KeyboardNavigator = {
 
 		// Target changed event
 		$(this).bind('targetchanged', function(e, target){
-			$('.posts .post').removeClass('targetted');
-			$(target).addClass('targetted');
+			$('.posts .post').removeClass('targeted');
+			$(target).addClass('targeted');
 			this.scrollTo(target);
 		});
 
@@ -210,10 +210,10 @@ Sugar.KeyboardNavigator = {
 		var keynav = this;
 		
 		$(this).bind('targetchanged', function(e, target){
-			$('tr.discussion').removeClass('targetted');
-			$('tr.discussion'+$(target).data('targetId')).addClass('targetted');
-			$('tr.conversation').removeClass('targetted');
-			$('tr.conversation'+$(target).data('targetId')).addClass('targetted');
+			$('tr.discussion').removeClass('targeted');
+			$('tr.discussion'+$(target).data('targetId')).addClass('targeted');
+			$('tr.conversation').removeClass('targeted');
+			$('tr.conversation'+$(target).data('targetId')).addClass('targeted');
 			this.scrollTo(target);
 		});
 
