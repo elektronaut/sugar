@@ -31,10 +31,10 @@ class DiscussionsController < ApplicationController
     end
     before_filter :load_categories, :only => [:new, :create, :edit, :update]
 
-    def index
-        @discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
-        find_discussion_views
-    end
+	def index
+		@discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
+		find_discussion_views
+	end
     
 	def search
 		if params[:q]

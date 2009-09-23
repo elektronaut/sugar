@@ -255,10 +255,26 @@ var Sugar = {
 						Sugar.onLoadedPosts[f]();
 					}
 				}
-				$(document).trigger('postsloaded');
+				$(Sugar).trigger('postsloaded');
 			});
 		}
 		return false;
+	},
+	
+	log: function(){
+		if(this.Configuration.debug){
+			if(console){
+				if(arguments.length == 1){
+					console.log(arguments[0]);
+				} else if(arguments.length > 1) {
+					var output = [];
+					$(arguments).each(function(){
+						output[output.length] = this;
+					});
+					console.log(output);
+				}
+			}
+		}
 	},
 
 	init : function() {

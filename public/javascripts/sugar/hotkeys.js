@@ -1,7 +1,12 @@
+/*
+ * Sugar.Hotkeys - Contextual aware keyboard navigation hotkeys.
+ * Copyright (c) 2009 Inge Jørgensen (elektronaut.no)
+ */
+
 (function($S){
 
 	$($S).bind('ready', function(){
-		if(this.Configuration.Hotkeys){
+		if(this.Configuration.hotkeys){
 			this.Hotkeys.apply();
 		}
 	});
@@ -165,7 +170,7 @@
 				});
 				
 				// Add targets on postsloaded
-				$(document).bind('postsloaded', function(){
+				$($S).bind('postsloaded', function(){
 					$('.posts .post').each(function(){
 						$S.Hotkeys.addTarget(this, this.id.match(/(post|message)\-([\d]+)/)[1]);
 					});
