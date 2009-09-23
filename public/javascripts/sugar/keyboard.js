@@ -105,13 +105,13 @@ Sugar.KeyboardNavigator = {
 		var keynav = this;
 
 		// Pagination
-		var gotoPrevPage = function(){
-			if($('.prev_page_link').length > 0){
+		var gotoPrevPage = function(event){
+			if(!event.metaKey && $('.prev_page_link').length > 0){
 				document.location = $('.prev_page_link').get(0).href;
 			}
 		};
-		var gotoNextPage = function(){
-			if($('.next_page_link').length > 0){
+		var gotoNextPage = function(event){
+			if(!event.metaKey && $('.next_page_link').length > 0){
 				document.location = $('.next_page_link').get(0).href;
 			}
 		};
@@ -119,11 +119,11 @@ Sugar.KeyboardNavigator = {
 		$(document).bind('keydown', {combi: 'shift+k', disableInInput: true}, gotoPrevPage);
 		$(document).bind('keydown', {combi: 'shift+n', disableInInput: true}, gotoNextPage);
 		$(document).bind('keydown', {combi: 'shift+j', disableInInput: true}, gotoNextPage);
-		$(document).bind('keydown', {combi: 'u', disableInInput: true}, function(){
-			if($('#back_link').length > 0){
+		$(document).bind('keydown', {combi: 'u', disableInInput: true}, function(event){
+			if(!event.metaKey && $('#back_link').length > 0){
 				document.location = $('#back_link').get(0).href;
+				return false;
 			}
-			return false;
 		});
 
 		// Listen for sequences
@@ -136,7 +136,7 @@ Sugar.KeyboardNavigator = {
 			if (target.is("input") || target.is("textarea") || target.is("select") ){
 				keynav.keySequence = '';
 			} else {
-				if(character && character.match(/^[\w\d]$/)){
+				if(!event.metaKey && character && character.match(/^[\w\d]$/)){
 					keynav.keySequence += character;
 					keySequence = keynav.keySequence = keynav.keySequence.match(/([\w\d]{0,5})$/)[1]; // Limit to 5 keys
 					var shortcuts = {
@@ -186,22 +186,22 @@ Sugar.KeyboardNavigator = {
 			this.scrollTo(target);
 		});
 
-		$(document).bind('keydown', {combi: 'p', disableInInput: true}, function(){keynav.gotoPrevTarget();});
-		$(document).bind('keydown', {combi: 'k', disableInInput: true}, function(){keynav.gotoPrevTarget();});
-		$(document).bind('keydown', {combi: 'n', disableInInput: true}, function(){keynav.gotoNextTarget();});
-		$(document).bind('keydown', {combi: 'j', disableInInput: true}, function(){keynav.gotoNextTarget();});
-		$(document).bind('keydown', {combi: 'r', disableInInput: true}, function(){Sugar.loadNewPosts();});
-		$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(){
-			if($('#replyText textarea').length > 0){
+		$(document).bind('keydown', {combi: 'p', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoPrevTarget();}});
+		$(document).bind('keydown', {combi: 'k', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoPrevTarget();}});
+		$(document).bind('keydown', {combi: 'n', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoNextTarget();}});
+		$(document).bind('keydown', {combi: 'j', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoNextTarget();}});
+		$(document).bind('keydown', {combi: 'r', disableInInput: true}, function(event){if(!event.metaKey){Sugar.loadNewPosts();}});
+		$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(event){
+			if(!event.metaKey && $('#replyText textarea').length > 0){
 				$('#replyText textarea').focus();
+				return false;
 			}
-			return false;
 		});
-		$(document).bind('keydown', {combi: 'q', disableInInput: true}, function(){
-			if(keynav.getTarget()){
+		$(document).bind('keydown', {combi: 'q', disableInInput: true}, function(event){
+			if(!event.metaKey && keynav.getTarget()){
 				Sugar.quotePost($(keynav.getTarget()).data('targetId'));
+				return false;
 			}
-			return false;
 		});
 	},
 
@@ -221,14 +221,19 @@ Sugar.KeyboardNavigator = {
 			keynav.addTarget(this, this.parentNode.parentNode.className.match(/(discussion|conversation)([\d]+)/)[2]);
 		});
 		
-		var openTarget = function(){
+		var openTarget = function(openInNewTab){
 			if(keynav.currentTarget) {
-				document.location = keynav.currentTarget.href;
+				var targetUrl = keynav.currentTarget.href;
+				if(openInNewTab){
+					window.open(targetUrl);
+				} else {
+					document.location = targetUrl;
+				}
 			}
 		};
 
-		var markAsRead = function(){
-			if(keynav.currentTarget && $(keynav.currentTarget.parentNode.parentNode).hasClass('discussion')) {
+		var markAsRead = function(event){
+			if(!event.metaKey && keynav.currentTarget && $(keynav.currentTarget.parentNode.parentNode).hasClass('discussion')) {
 				var target = keynav.currentTarget;
 				var targetId = $(target).data('targetId');
 				var url = '/discussions/'+targetId+'/mark_as_read';
@@ -239,18 +244,20 @@ Sugar.KeyboardNavigator = {
 			}
 		};
 
-		$(document).bind('keydown', {combi: 'p', disableInInput: true}, function(){keynav.gotoPrevTarget();});
-		$(document).bind('keydown', {combi: 'k', disableInInput: true}, function(){keynav.gotoPrevTarget();});
-		$(document).bind('keydown', {combi: 'n', disableInInput: true}, function(){keynav.gotoNextTarget();});
-		$(document).bind('keydown', {combi: 'j', disableInInput: true}, function(){keynav.gotoNextTarget();});
-		$(document).bind('keydown', {combi: 'o', disableInInput: true}, openTarget);
-		$(document).bind('keydown', {combi: 'Return', disableInInput: true}, openTarget);
+		$(document).bind('keydown', {combi: 'p', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoPrevTarget();}});
+		$(document).bind('keydown', {combi: 'k', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoPrevTarget();}});
+		$(document).bind('keydown', {combi: 'n', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoNextTarget();}});
+		$(document).bind('keydown', {combi: 'j', disableInInput: true}, function(event){if(!event.metaKey){keynav.gotoNextTarget();}});
+		$(document).bind('keydown', {combi: 'o', disableInInput: true}, function(event){if(!event.metaKey){openTarget(false);}});
+		$(document).bind('keydown', {combi: 'shift+o', disableInInput: true}, function(event){if(!event.metaKey){openTarget(true);}});
+		$(document).bind('keydown', {combi: 'Return', disableInInput: true}, function(event){if(!event.metaKey){openTarget(false);}});
+		$(document).bind('keydown', {combi: 'shift+Return', disableInInput: true}, function(event){if(!event.metaKey){openTarget(true);}});
 		$(document).bind('keydown', {combi: 'y', disableInInput: true}, markAsRead);
 		$(document).bind('keydown', {combi: 'm', disableInInput: true}, markAsRead);
 
 		// New discussion/category
-		$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(){
-			if($('.functions .create').length > 0){
+		$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(event){
+			if(!event.metaKey && $('.functions .create').length > 0){
 				document.location = $('.functions .create').get(0).href;
 			}
 		});
