@@ -31,7 +31,7 @@
 	<% end -%>
 	<script type="text/javascript">
 		<%= "Sugar.Configuration.FlickrAPI = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
-		<%= "Sugar.Configuration.KeyboardShortcuts = true;" if @current_user && @current_user.keyboard_navigation? %>
+		<%= "Sugar.Configuration.Hotkeys = true;" if @current_user && @current_user.keyboard_navigation? %>
 	</script>
 	<% if @google_maps_api -%>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>

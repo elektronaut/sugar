@@ -267,6 +267,7 @@ var Sugar = {
 				this.Initializers[initializer]();
 			}
 		}
+		$(this).trigger('ready');
 		
 		// Detect discussion view
 		if(jQuery('body.discussion').length > 0) {
