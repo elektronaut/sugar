@@ -37,6 +37,7 @@
 			}
 			this.setup.global();
 			this.setup.sequences();
+			$S.log('Hotkeys: Loaded, '+this.targets.length+' targets detected.');
 		},
 	
 		// Add target to list

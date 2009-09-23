@@ -1,3 +1,9 @@
+/*
+ * Sugar.MP3Player - Javascript MP3 player
+ * Copyright (c) 2009 Inge Jørgensen (elektronaut.no)
+ */
+
+
 // Configure SoundManager2
 soundManager.debugMode = false;
 soundManager.url = '/flash/soundmanager2';
