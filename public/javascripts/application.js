@@ -4,7 +4,7 @@
  * @depends sugar/maps.js
  * @depends sugar/mp3player.js
  * @depends sugar/posts.js
- * @depends sugar/keyboard.js
+ * @depends sugar/hotkeys.js
  */
 
 
