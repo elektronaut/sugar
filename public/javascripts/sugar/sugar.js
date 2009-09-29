@@ -285,14 +285,6 @@ var Sugar = {
 		}
 		$(this).trigger('ready');
 		
-		// Detect discussion view
-		if(jQuery('body.discussion').length > 0) {
-			window.addToReply = function(string) {
-				window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
-				jQuery('#compose-body').val(jQuery('#compose-body').val() + string);
-			};
-		}
-
 		window.deparsePost = function(content){
 			content = content
 				.replace(/^[\s]*/, '')          // Strip leading space

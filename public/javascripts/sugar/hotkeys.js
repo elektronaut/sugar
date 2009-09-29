@@ -16,7 +16,7 @@
 		targets:       [],
 		currentTarget: false,
 		keySequence:   '',
-	    specialKeys: { 27:'esc', 9:'tab', 32:'space', 13:'return', 8:'backspace', 145:'scroll', 
+		specialKeys: { 27:'esc', 9:'tab', 32:'space', 13:'return', 8:'backspace', 145:'scroll', 
 	        20: 'capslock', 144: 'numlock', 19:'pause', 45:'insert', 36:'home', 46:'del',
 	        35:'end', 33:'pageup', 34:'pagedown', 37:'left', 38:'up', 39:'right', 40:'down', 
 	        112:'f1',113:'f2', 114:'f3', 115:'f4', 116:'f5', 117:'f6', 118:'f7', 119:'f8', 
@@ -205,8 +205,8 @@
 
 				// Go to compose
 				$(document).bind('keydown', {combi: 'c', disableInInput: true}, function(event){
-					if(!event.metaKey && $('#replyText textarea').length > 0){
-						$('#replyText textarea').focus();
+					if(!event.metaKey){
+						$S.compose();
 						return false;
 					}
 				});

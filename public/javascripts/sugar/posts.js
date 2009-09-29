@@ -33,9 +33,25 @@ $.extend(Sugar, {
 					quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '');
 				}
 			}
-			addToReply(quotedPost);
-			$('#compose-body').focus();
+			this.compose({add: quotedPost});
 		}
+	},
+	
+	addToReply: function(){
+		jQuery('#compose-body').val(jQuery('#compose-body').val() + string);
+	},
+
+	compose: function(options){
+		options = $.extend({}, options);
+		if(window.replyTabs){
+			window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
+		}
+		$('#replyText textarea').each(function(){
+			if(options.add){
+				$(this).val($(this).val() + options.add);
+			}
+			$(this).focus();
+		});
 	},
 
 	// ---- Posting ----

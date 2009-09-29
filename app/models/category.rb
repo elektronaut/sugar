@@ -10,11 +10,11 @@
 # determine if a category is visible to a user. 
 
 class Category < ActiveRecord::Base
-    
-    has_many :discussions
-    validates_presence_of :name
-    acts_as_list
-    
+
+	has_many :discussions
+	validates_presence_of :name
+	acts_as_list
+
 	# Flag for trusted status, which will update after save if it has been changed.
 	attr_accessor :update_trusted
 
@@ -27,17 +27,17 @@ class Category < ActiveRecord::Base
 			Discussion.update_all("trusted = " + (category.trusted? ? '1' : '0'), "category_id = #{category.id}")
 		end
 	end
-    
-    class << self
-        # Enable work safe URLs
-        def work_safe_urls=(state)
-            @@work_safe_urls = state
-        end
+
+	class << self
+		# Enable work safe URLs
+		def work_safe_urls=(state)
+			@@work_safe_urls = state
+		end
 		# Reports the state of the work_safe_urls flag.
-        def work_safe_urls
-            @@work_safe_urls ||= false
-        end
-    end
+		def work_safe_urls
+			@@work_safe_urls ||= false
+		end
+	end
 
 	# Returns true if this category has any labels
 	def labels?
@@ -52,19 +52,19 @@ class Category < ActiveRecord::Base
 	end
 
 	# Returns true if this category is viewable by the given <tt>user</tt>.
-    def viewable_by?(user)
-        (user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
-    end
-    
-    # Humanized ID for URLs.
-    def to_param
-        slug = self.name
-        slug = slug.gsub(/[\[\{]/,'(')
-        slug = slug.gsub(/[\]\}]/,')')
-        slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
+	def viewable_by?(user)
+		(user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
+	end
+
+	# Humanized ID for URLs.
+	def to_param
+		slug = self.name
+		slug = slug.gsub(/[\[\{]/,'(')
+		slug = slug.gsub(/[\]\}]/,')')
+		slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
 		(Category.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
-    end
-    
+	end
+
 	# Fixes any inconsistencies in the counter_cache columns.
 	def fix_counter_cache!
 		if discussions_count != discussions.count
