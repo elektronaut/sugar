@@ -284,37 +284,5 @@ var Sugar = {
 			}
 		}
 		$(this).trigger('ready');
-		
-		window.deparsePost = function(content){
-			content = content
-				.replace(/^[\s]*/, '')          // Strip leading space
-				.replace(/[\s]*$/, '')          // Strip trailing space
-				.replace(/<br[\s\/]*>/g, "\n"); // Change <br /> to line breaks
-			if(content.match(/<div class="codeblock/)){
-				if($('#hiddenPostDeparser').length < 1) {
-					$(document.body).append('<div id="hiddenPostDeparser"></div>');
-				}
-				var hiddenBlock = $('#hiddenPostDeparser');
-				hiddenBlock.show();
-				hiddenBlock.html(content);
-				hiddenBlock.hide();
-				
-				// Remove line numbers
-				$(hiddenBlock).find('.codeblock .line-numbers').remove();
-				$(hiddenBlock).find('.codeblock').each(function(){
-					var codeLanguage = this.className.match(/language_([\w\d\-\.\+_]+)/)[1];
-					blockContent = $(this).children('pre').text().replace(/^[\s]*/, '').replace(/[\s]*$/, '');
-					$(this).replaceWith('<code language="'+codeLanguage+'">'+blockContent+'</code>');
-				});
-				
-				content = hiddenBlock.html();
-				hiddenBlock.html('');
-				content = content
-					.replace("<code", "</blockquote>\n<code")
-					.replace("</code>", "</code><blockquote>");
-			}
-			return content;
-		};
-		
 	}
 };
