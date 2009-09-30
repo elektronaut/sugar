@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 		end
 	end
 	protected     :load_user
-	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites]
+	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites, :stats]
 
 	def index
 		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
@@ -85,6 +85,11 @@ class UsersController < ApplicationController
 
 	def posts
 		@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?)
+	end
+
+	def stats
+		@posts_per_week = Post.find_by_sql("SELECT COUNT(*) AS `count`, YEAR(created_at) AS `year`, WEEK(created_at) AS `week` FROM posts WHERE user_id = #{@user.id} GROUP BY YEAR(created_at), WEEK(created_at);")
+		@max_posts_per_week = @posts_per_week.map{|p| p.count.to_i}.max
 	end
 
 	def new
