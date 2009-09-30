@@ -17,11 +17,6 @@ Stylus:
 * Set up a Slicehost account (and take notes for the setup guide)
 * Move everything over
 
-B3S specific:
-
-* Work out some kind of magic to ensure that the search indexing daemon is running.
-* Set up deployment as app user, not root.
-
 Before Sugar launch:
 
 * Select from available installed themes in a drop-down
@@ -38,8 +33,6 @@ Before Sugar launch:
 Someday/fun:
 
 * Better map page - show avatars, online status etc.
-* Quoting by selection
-* More secure posts parsing (proper HTML, scrub for malicious content)
 * Group messages in proper conversations rather than per user
 * User themes
 
