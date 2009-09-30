@@ -1,5 +1,22 @@
 class ApplicationController < ActionController::Base
 
+	if RAILS_ENV == 'profile'
+		require 'ruby-prof'
+		
+		def profile_start
+			RubyProf.measure_mode = RubyProf::WALL_TIME
+			RubyProf.start
+		end
+		before_filter :profile_start
+		
+		def profile_end
+			result = RubyProf.stop
+			printer = RubyProf::FlatPrinter.new(result)
+			printer.print(STDOUT, 0)
+		end
+		after_filter :profile_end
+	end
+
 	layout 'default'
 	helper :all
 	filter_parameter_logging :password, :drawing
@@ -132,5 +149,5 @@ class ApplicationController < ActionController::Base
 				session[:ips]             = nil
 			end
 		end
-
+		
 end

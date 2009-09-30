@@ -11,7 +11,7 @@
 	<% else -%>
 		<%= stylesheet_link_tag "#{theme_path}/screen" %>
 	<% end -%>
-	<% if RAILS_ENV == 'production' -%>
+	<% unless RAILS_ENV == 'production' -%>
 		<%= javascript_include_tag "bundled/application.js" %>
 	<% else -%>
 		<!-- Libraries -->
