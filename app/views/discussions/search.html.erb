@@ -3,6 +3,9 @@
 	add_body_class "search", "search_discussions"
 %>
 
+<div class="functions">
+	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
+</div>
 <h2 class="section">Searching titles for <em><%= @search_query %></em></h2>
 
 <% if @discussions && @discussions.length > 0 %>
