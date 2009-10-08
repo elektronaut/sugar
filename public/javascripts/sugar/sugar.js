@@ -210,7 +210,7 @@ var Sugar = {
 									for(var a = 0; a < 10; a++){
 										if(a < json.discussions.length){
 											discussion = json.discussions[a].discussion;
-											output += '<a href="/discussions/'+discussion.id+'" class="discussion">'+discussion.title+' <span class="posts_count">'+discussion.posts_count+' posts</span></a>'
+											output += '<a href="/discussions/'+discussion.id+'" class="discussion">'+discussion.title+' <span class="posts_count">'+discussion.posts_count+' posts</span></a>';
 										}
 									}
 									if(json.total_entries > 10) {
@@ -275,7 +275,7 @@ var Sugar = {
 	stopwords: [
 		'i', 'a', 'about', 'an', 'and', 'are', 'as', 'at', 'by', 'for', 'from', 'has', 'have',
 		'how', 'in', 'is', 'it', 'la', 'my', 'of', 'on', 'or', 'that', 'the',
-		'this', 'to', 'was', 'what', 'when','where','who', 'will', 'with', 'the',
+		'this', 'to', 'was', 'what', 'when','where','who', 'will', 'with', 'the'
 	],
 	
 	loadNewPosts : function(){
