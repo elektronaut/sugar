@@ -37,7 +37,8 @@ ActionController::Routing::Routes.draw do |map|
     
     # Discussions search
 	#map.connect '/search/:query/:page', :controller => 'discussions', :action => 'search'
-	map.connect '/search/*query', :controller => 'discussions', :action => 'search'
+	map.formatted_search_with_query '/search/:query.:format', :controller => 'discussions', :action => 'search'
+	map.search_with_query '/search/:query', :controller => 'discussions', :action => 'search'
 	map.search  '/search', :controller => 'discussions', :action => 'search'
 
     # Posts search

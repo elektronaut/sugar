@@ -38,15 +38,22 @@ class DiscussionsController < ApplicationController
 
 	def search
 		if params[:q]
-			redirect_to( { :action => :search, :query => params[:q] } ) and return
+			redirect_to(search_with_query_url(:query => params[:q]).gsub(/\.([^\/]*)$/, '%2E\1')) and return
 		end
 		unless @search_query = params[:query]
 			flash[:notice] = "No query specified!"
 			redirect_to discussions_path and return
 		end
 		@discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
-		find_discussion_views
-		@search_path = search_path
+		respond_to do |format|
+			format.html do
+				find_discussion_views
+				@search_path = search_path
+			end
+			format.json do
+				render :text => @discussions.to_json
+			end
+		end
 	end
 
 	def search_posts

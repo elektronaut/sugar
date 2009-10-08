@@ -64,7 +64,6 @@ class Discussion < ActiveRecord::Base
 
 	define_index do
 		indexes title
-		indexes first_post(:body), :as => :first_post_body
 		has     poster_id, last_poster_id, category_id
 		has     trusted
 		has     closed
@@ -93,7 +92,7 @@ class Discussion < ActiveRecord::Base
 			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
 			search_options = {
 				:sort_mode  => :expr,
-				:sort_by    => "(@weight / 1000000) + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				:sort_by    => "(posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],
