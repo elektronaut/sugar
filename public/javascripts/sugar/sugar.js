@@ -195,7 +195,7 @@ var Sugar = {
 								});
 								// Ignore special characters
 								words = $.map(words, function(word){
-									return word.replace(/[!~\^=\$\*]/, '');
+									return word.replace(/[!~\^=\$\*\[\]\{\}]/, '');
 								});
 								if(words[words.length-1].match(/^[\w]{3}[^\*]*$/)){
 									words[words.length-1] += '*';
