@@ -9,6 +9,13 @@
 
 <h2 class="section">Searching posts for <em><%= @search_query %></em></h2>
 
+<p class="search_tips">
+	<strong>Search tips:</strong>
+	To search for an exact phrase, use double quotes: <span class="example">"hello world"</span>.
+	A vertical bar lets you find entries containing either word: <span class="example">hello | world</span>.
+	To exclude a word, use a minus symbol: <span class="example">hello -world</span>.
+</p>
+
 <% if @posts && @posts.length > 0 %>
 	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
 <% else %>

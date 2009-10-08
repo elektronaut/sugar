@@ -58,11 +58,12 @@ class Post < ActiveRecord::Base
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
 			search_options = {
-				:order     => :created_at, 
-				:sort_mode => :desc, 
-				:per_page  => POSTS_PER_PAGE,
-				:page      => page,
-				:include   => [:user, :discussion]
+				:order      => :created_at, 
+				:sort_mode  => :desc, 
+				:per_page   => POSTS_PER_PAGE,
+				:page       => page,
+				:include    => [:user, :discussion],
+				:match_mode => :extended2
 			}
 			search_options[:conditions] = {}
 			search_options[:conditions][:trusted] = false unless options[:trusted]

@@ -903,6 +903,28 @@ table.discussions .targeted td.name {
 
 
 /* -----------------------------------------------------------------------
+   SEARCH
+   ----------------------------------------------------------------------- */
+
+.search_tips {
+	margin-top:          -10px;
+	margin-bottom:       30px;
+	max-width:           600px;
+	font-size:           1.1em;
+	color:               #444;
+}
+.search_tips .example {
+	font-family:         Monaco, Consolas, Courier, monospace;
+	font-size:           11px;
+	background:          #F3F1E9;
+	padding:             2px 4px;
+	white-space:         nowrap;
+}
+.search_tips .example, .search_tips strong {
+	color:               #000;
+}
+
+/* -----------------------------------------------------------------------
    INVITES SECTION
    ----------------------------------------------------------------------- */
 

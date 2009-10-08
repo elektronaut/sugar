@@ -8,6 +8,8 @@
 </div>
 <h2 class="section">Searching discussions for <em><%= @search_query %></em></h2>
 
+<%= render :partial => 'search/tips' %>
+
 <% if @discussions && @discussions.length > 0 %>
 	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
 <% else %>
