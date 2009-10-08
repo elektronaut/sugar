@@ -155,7 +155,7 @@ module ApplicationHelper
 	end
 
 	def search_mode_options
-		options = [['in titles', search_path], ['in posts', search_posts_path]]
+		options = [['in discussions', search_path], ['in posts', search_posts_path]]
 		options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion && @discussion.id
 		options
 	end

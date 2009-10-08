@@ -10,6 +10,7 @@ class Discussion < ActiveRecord::Base
 	belongs_to :last_poster, :class_name => 'User'
 	belongs_to :category
 	has_many   :posts, :order => ['created_at ASC'], :dependent => :destroy
+	has_one    :first_post, :class_name => 'Post', :order => ['created_at ASC']
 	has_many   :discussion_views,                    :dependent => :destroy
 	has_many   :discussion_relationships,            :dependent => :destroy
 
@@ -63,12 +64,14 @@ class Discussion < ActiveRecord::Base
 
 	define_index do
 		indexes title
+		indexes first_post(:body), :as => :first_post_body
 		has     poster_id, last_poster_id, category_id
 		has     trusted
 		has     closed
 		has     sticky
-		has     created_at, updated_at, last_post_at
+		has     created_at, updated_at, last_post_at, posts_count
 		set_property :delta => :delayed
+		set_property :field_weights => {:title => 200, :first_post_body => 1}
 	end
 
 	# Class methods
@@ -86,12 +89,15 @@ class Discussion < ActiveRecord::Base
 		def search_paginated(options={})
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
+			max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
+			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
 			search_options = {
-				:order     => :last_post_at, 
-				:sort_mode => :desc, 
-				:per_page  => DISCUSSIONS_PER_PAGE,
-				:page      => page,
-				:include   => [:poster, :last_poster, :category]
+				:sort_mode  => :expr,
+				:sort_by    => "(@weight / 1000000) + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				:per_page   => DISCUSSIONS_PER_PAGE,
+				:page       => page,
+				:include    => [:poster, :last_poster, :category],
+				:match_mode => :extended2
 			}
 			search_options[:conditions] = {:trusted => false} unless options[:trusted]
 			discussions = Discussion.search(options[:query], search_options)
