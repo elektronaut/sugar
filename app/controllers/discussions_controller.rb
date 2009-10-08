@@ -51,7 +51,12 @@ class DiscussionsController < ApplicationController
 				@search_path = search_path
 			end
 			format.json do
-				render :text => @discussions.to_json
+				json = {
+					:pages => @discussions.pages,
+					:total_entries => @discussions.total_entries,
+					:discussions => @discussions
+				}.to_json(:except => [:delta])
+				render :text => json
 			end
 		end
 	end

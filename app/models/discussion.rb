@@ -70,7 +70,7 @@ class Discussion < ActiveRecord::Base
 		has     sticky
 		has     created_at, updated_at, last_post_at, posts_count
 		set_property :delta => :delayed
-		set_property :field_weights => {:title => 200, :first_post_body => 1}
+		set_property :field_weights => {:title => 2}
 	end
 
 	# Class methods
@@ -92,7 +92,7 @@ class Discussion < ActiveRecord::Base
 			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
 			search_options = {
 				:sort_mode  => :expr,
-				:sort_by    => "(posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],

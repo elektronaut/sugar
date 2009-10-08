@@ -1,14 +1,14 @@
 <p>
 	<label>Enter title</label>
-	<%= f.text_field(:title, :class => :text) %>
-</p>
-<p>
-	<label>Choose a category</label>
-	<%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
+	<%= f.text_field(:title, :class => 'text title') %>
 </p>
 <p>
 	<label>Enter your first post</label>
 	<%= f.text_area(:body, :rows => 10, :id => 'compose-body', :class => :rich) %>
+</p>
+<p>
+	<label>Choose a category</label>
+	<%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
 </p>
 <p>
 	<%= f.check_box(:nsfw) %> Mark as NSFW<br />

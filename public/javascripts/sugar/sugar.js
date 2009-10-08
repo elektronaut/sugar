@@ -172,6 +172,60 @@ var Sugar = {
 			if($('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0){
 				Sugar.updateNewPostsCounter();
 			}
+		},
+		
+		newDiscussionSearcher: function(){
+			$('#new_discussion').each(function(){
+				var title = $(this).find('.title').get(0);
+				$(title).after('<div class="title_search"></div>');
+				var searchResults = $(this).find('.title_search').get(0);
+				$(searchResults).hide();
+				$(title).keydown(function(event){
+					var character = !Sugar.Hotkeys.specialKeys[event.which] && String.fromCharCode(event.keyCode).toLowerCase();
+					if(!event.metaKey && character){
+						$(searchResults).addClass('loading').html('Searching for similar discussions...').show();
+						if(this.keypressInterval){
+							clearInterval(this.keypressInterval);
+						}
+						this.keypressInterval = setInterval(function(){
+							var words = $(title).val().toLowerCase().split(/\s+/);
+							words = $.grep(words, function(word){
+								return ($.inArray(word, Sugar.stopwords) < 0);
+							});
+							// Ignore special characters
+							words = $.map(words, function(word){
+								return word.replace(/[!~\^=\$\*]/, '');
+							});
+							if(words[words.length-1].match(/^[\w]{3}[^\*]*$/)){
+								words[words.length-1] += '*';
+							}
+							var query = words.join(' | ');
+							// Load results
+							$.getJSON('/discussions/search.json', {query: query}, function(json){
+								Sugar.log('New discussion: Loaded '+json.discussions.length+' of '+json.total_entries+' search results for "'+query+'"');
+								$(searchResults).removeClass('loading');
+								if(json.discussions.length > 0) {
+									var output = "<h4>Similar discussions found. Maybe you should check them out before posting?</h4>";
+									var discussion = null;
+									for(var a = 0; a < 10; a++){
+										if(a < json.discussions.length){
+											discussion = json.discussions[a].discussion;
+											output += '<a href="/discussions/'+discussion.id+'" class="discussion">'+discussion.title+' <span class="posts_count">'+discussion.posts_count+' posts</span></a>'
+										}
+									}
+									if(json.total_entries > 10) {
+										output += '<a href="/search?q='+encodeURIComponent(query)+'">Show all '+(json.total_entries)+' results</a>';
+									}
+									$(searchResults).html(output).hide().slideDown('fast');
+								} else {
+									$(searchResults).html('').hide();
+								}
+							});
+							clearInterval(title.keypressInterval);
+						}, 500);
+					}
+				});
+			});
 		}
 		
 	},
@@ -217,6 +271,12 @@ var Sugar = {
 			});
 		}, 5000);
 	},
+	
+	stopwords: [
+		'i', 'a', 'about', 'an', 'and', 'are', 'as', 'at', 'by', 'for', 'from', 'has', 'have',
+		'how', 'in', 'is', 'it', 'la', 'my', 'of', 'on', 'or', 'that', 'the',
+		'this', 'to', 'was', 'what', 'when','where','who', 'will', 'with', 'the',
+	],
 	
 	loadNewPosts : function(){
 		if($('#discussionLink').length > 0){
