@@ -107,7 +107,7 @@ class DiscussionsController < ApplicationController
 		if @discussion.valid?
 			redirect_to discussion_path(@discussion) and return
 		else
-			flash.now[:notice] = "Could not save your discussion, did you fill in all required fields?"
+			flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
 			render :action => :new
 		end
 	end
@@ -119,7 +119,7 @@ class DiscussionsController < ApplicationController
 			flash[:notice] = "Your changes were saved."
 			redirect_to discussion_path(@discussion) and return
 		else
-			flash.now[:notice] = "Could not save your discussion, did you fill in all required fields?"
+			flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
 			render :action => :edit
 		end
 	end

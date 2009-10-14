@@ -496,6 +496,11 @@ table.discussions td.name {
 	padding-top:         7px;
 	border-bottom:       0;
 }
+table.discussions td.name .title {
+	white-space:         normal;
+	float:               left;
+	max-width:           600px;
+}
 table.discussions td.last {
 	width:               100%;
 }

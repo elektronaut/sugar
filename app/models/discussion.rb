@@ -16,6 +16,7 @@ class Discussion < ActiveRecord::Base
 
 	validates_presence_of :category_id, :title
 	validates_presence_of :body, :on => :create
+	validates_length_of   :title, :maximum => 100, :too_long => 'is too long'
 
 	# Virtual attribute for the body of the first post. 
 	# Makes forms a bit easier, no nested models.
@@ -36,7 +37,7 @@ class Discussion < ActiveRecord::Base
 			end
 		end
 	end
-
+	
 	# Update the first post if @body has been changed
 	after_update do |discussion|
 		if discussion.body && !discussion.body.empty? && discussion.body != discussion.posts.first.body
