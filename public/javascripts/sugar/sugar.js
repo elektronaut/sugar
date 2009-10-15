@@ -101,7 +101,26 @@ var Sugar = {
 				}
 			});
 		},
-		
+
+		// Strip discussion and category names from links if workSafe is enabled.
+		makeURLSWorkSafe : function(){
+			var apply = function(){
+				if(Sugar.Configuration.workSafe){
+					var stripExp  = /(\/[\d]+)(;[^\/]+)/;
+					var domainExp = /^(https?:\/\/[^\/]+)/;
+					var currentDomain = document.location.toString().match(domainExp)[1];
+					var currentDomainExp = new RegExp("^"+currentDomain);
+					$('a').each(function(){
+						if(this.href.match(currentDomainExp) && this.href.match(stripExp)){
+							this.href = this.href.toString().replace(stripExp, "$1");
+						}
+					});
+				}
+			};
+			$(Sugar).bind('postsloaded', apply);
+			apply();
+		},
+
 		napkin: function(){
 			if(jQuery('#napkin').length > 0) {
 				// Setup callbacks
