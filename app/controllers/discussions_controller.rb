@@ -50,6 +50,10 @@ class DiscussionsController < ApplicationController
 				find_discussion_views
 				@search_path = search_path
 			end
+			format.iphone do
+				find_discussion_views
+				@search_path = search_path
+			end
 			format.json do
 				json = {
 					:pages => @discussions.pages,
