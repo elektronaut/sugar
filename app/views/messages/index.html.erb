@@ -11,9 +11,9 @@
 	<%= render :partial => 'components/pagination', :locals => { :p => @users } %>
 	<table class="discussions conversations"><% @users.each do |user| %>
 		<tr class="<%= conversation_classes(@users, user) %>">
-			<td class="name" colspan="5">
+			<td class="name" colspan="5"><span class="title">
 				<%= link_to h(user.username), last_user_conversation_page_path(:username => user.username, :anchor => 'new') %>
-			</td>
+			</span></td>
 		</tr>
 		<tr class="<%= conversation_classes(@users, user) %>">
 			<td class="started_by">Started by <%= profile_link(@current_user.first_message_with(user).sender) %></td>

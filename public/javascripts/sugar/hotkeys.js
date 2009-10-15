@@ -224,7 +224,7 @@
 			discussionsNavigation: function(){
 				// Find targets
 				$('table.discussions td.name a').each(function(){
-					$S.Hotkeys.addTarget(this, this.parentNode.parentNode.className.match(/(discussion|conversation)([\d]+)/)[2]);
+					$S.Hotkeys.addTarget(this, this.parentNode.parentNode.parentNode.className.match(/(discussion|conversation)([\d]+)/)[2]);
 				});
 
 				// Target change event
