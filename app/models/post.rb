@@ -27,6 +27,7 @@ class Post < ActiveRecord::Base
 	
 	define_index do
 		indexes body
+		indexes user(:username), :as => :username
 		has     user_id, discussion_id
 		has     created_at, updated_at
 		has     trusted
