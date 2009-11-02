@@ -8,6 +8,11 @@ class CreateMessages < ActiveRecord::Migration
             t.datetime   :replied_at
             t.timestamps
         end
+        add_index :messages, :recipient_id, :name => 'recipient_id_index'
+        add_index :messages, :sender_id, :name => 'sender_id_index'
+        add_index :messages, :read, :name => 'read_index'
+        add_index :messages, :deleted, :name => 'deleted_index'
+        add_index :messages, :deleted_by_sender, :name => 'deleted_by_sender_index'
     end
 
     def self.down

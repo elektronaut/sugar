@@ -7,7 +7,6 @@ Pre-Stylus:
 
 * Clean up and centralize the OpenID verification actions.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
-* Rebase migrations
 
 Stylus:
 
