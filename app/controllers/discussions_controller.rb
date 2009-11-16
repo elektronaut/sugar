@@ -79,6 +79,10 @@ class DiscussionsController < ApplicationController
 	end
 
 	def new
+		unless @categories.length > 0
+			flash[:notice] = "Can't create a new discussion, no categories have been made!"
+			redirect_to categories_url
+		end
 		@discussion = @current_user.discussions.new
 	end
 
