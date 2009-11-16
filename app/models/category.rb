@@ -53,7 +53,11 @@ class Category < ActiveRecord::Base
 
 	# Returns true if this category is viewable by the given <tt>user</tt>.
 	def viewable_by?(user)
-		(user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
+		if self.trusted?
+			(user && (user.trusted? || user.admin?)) ? true : false
+		else
+			(Sugar.config(:public_browsing) || user) ? true : false
+		end
 	end
 
 	# Humanized ID for URLs.

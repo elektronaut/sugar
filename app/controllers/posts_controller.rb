@@ -3,6 +3,7 @@ require 'digest/sha1'
 class PostsController < ApplicationController
 
 	requires_authentication :except => [:count]
+	requires_user           :except => [:count, :since, :search]
 	protect_from_forgery    :except => [:doodle]
 
 	# Disable sessions and filters for the posts count action, and cache it

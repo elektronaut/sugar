@@ -8,19 +8,21 @@
 <a name="top" class="anchor"></a>
 
 <div class="functions">
-	<% if @discussion.editable_by?(@current_user) -%>
-		<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> / 
-	<% end -%>
-	<% if @current_user.following?(@discussion) -%>
-		<%= link_to "Stop following", unfollow_discussion_path(@discussion, :page => @posts.page) %>
-	<% else -%>
-		<%= link_to "Follow", follow_discussion_path(@discussion, :page => @posts.page) %>
-	<% end -%> / 
-	<% if @current_user.favorite?(@discussion) -%>
-		<%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, :page => @posts.page) %>
-	<% else -%>
-		<%= link_to "Favorite", favorite_discussion_path(@discussion, :page => @posts.page) %>
-	<% end -%>
+	<% if @current_user %>
+		<% if @discussion.editable_by?(@current_user) -%>
+			<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> / 
+		<% end -%>
+		<% if @current_user.following?(@discussion) -%>
+			<%= link_to "Stop following", unfollow_discussion_path(@discussion, :page => @posts.page) %>
+		<% else -%>
+			<%= link_to "Follow", follow_discussion_path(@discussion, :page => @posts.page) %>
+		<% end -%> / 
+		<% if @current_user.favorite?(@discussion) -%>
+			<%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, :page => @posts.page) %>
+		<% else -%>
+			<%= link_to "Favorite", favorite_discussion_path(@discussion, :page => @posts.page) %>
+		<% end -%>
+	<% end %>
 </div>
 
 <h2 class="section">
@@ -34,7 +36,7 @@
 <a name="bottom"></a>
 <div class="bottomlinks">
 	<%= link_to "Back to discussions", discussions_path, :id => 'back_link' %>,
-	<% if @current_user.following?(@discussion) -%>
+	<% if @current_user && @current_user.following?(@discussion) -%>
 		<%= link_to "Back to followed", following_discussions_path %>,
 	<% end %>
 	<%= link_to "Top of page", "#top" %>

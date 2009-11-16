@@ -1,6 +1,8 @@
 class DiscussionsController < ApplicationController
 
 	requires_authentication
+	requires_user :except => [:index, :search, :search_posts, :show]
+
 	protect_from_forgery :except => :mark_as_read
 
 	def load_discussion
@@ -27,12 +29,12 @@ class DiscussionsController < ApplicationController
 	before_filter :verify_editable, :only => [:edit, :update, :destroy]
 
 	def load_categories
-		@categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user.trusted? || @current_user.admin?) }
+		@categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user && (@current_user.trusted? || @current_user.admin?)) }
 	end
 	before_filter :load_categories, :only => [:new, :create, :edit, :update]
 
 	def index
-		@discussions = Discussion.find_paginated(:page => params[:page], :trusted => @current_user.trusted?)
+		@discussions = Discussion.find_paginated(:page => params[:page], :trusted => (@current_user && @current_user.trusted?))
 		find_discussion_views
 	end
 
@@ -97,10 +99,12 @@ class DiscussionsController < ApplicationController
 		end
 		@posts = Post.find_paginated(:page => params[:page], :discussion => @discussion, :context => context)
 		last_index = @posts.offset + @posts.length
-		if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
-			discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id) if discussion_view.post_index < last_index
-		else
-			DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => @posts.last.id)
+		if @current_user
+			if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', @current_user.id, @discussion.id])
+				discussion_view.update_attributes(:post_index => last_index, :post_id => @posts.last.id) if discussion_view.post_index < last_index
+			else
+				DiscussionView.create(:discussion_id => @discussion.id, :user_id => @current_user.id, :post_index => last_index, :post_id => @posts.last.id)
+			end
 		end
 	end
 

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
 	requires_authentication :except => [:login, :complete_openid_login, :logout, :password_reset, :new, :create]
+	requires_user           :only => [:edit, :update, :grant_invite, :revoke_invites]
 
 	def load_user
 		@user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -72,7 +73,7 @@ class UsersController < ApplicationController
 	def show
 		respond_to do |format|
 			format.html do
-				@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?, :limit => 15)
+				@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :limit => 15)
 			end
 			format.iphone {}
 		end
@@ -317,7 +318,8 @@ class UsersController < ApplicationController
 
 	def logout
 		deauthenticate!
-		redirect_to login_users_url
+		flash[:notice] = "You have been logged out."
+		redirect_to Sugar.config(:public_browsing) ? discussions_url : login_users_url
 	end
 
 	def grant_invite

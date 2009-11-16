@@ -20,11 +20,23 @@ class ApplicationController < ActionController::Base
 		append_before_filter(args){ |controller| controller.require_authenticated }
 	end
 
-	# Redirect to login page unless <tt>@current_user</tt> is activated. 
-	# The IP is verified to avoid session hijacking.
+	# Shortcut for setting up the required user filter. Example:
+	#   requires_user :except => [:login, :logout, :forgot_password]
+	def self.requires_user(*args)
+		append_before_filter(args){ |controller| controller.require_user }
+	end
+
+	# Redirect to login page if authentication is required.
 	def require_authenticated
-		unless @current_user #&& session[:ips] && session[:ips].include?(request.env['REMOTE_ADDR'])
-			#flash[:notice] = 'You must be logged in to to that.'
+		unless Sugar.config(:public_browsing)
+			require_user # Delegate to require_user
+		end
+	end
+
+	# Redirect to login page unless <tt>@current_user</tt> is activated. 
+	def require_user
+		unless @current_user && @current_user.activated?
+			flash[:notice] = 'You must be logged in to to that.'
 			redirect_to login_users_url and return
 		end
 	end

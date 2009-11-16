@@ -26,10 +26,10 @@ xbox_live_enabled: true
 # == PERMISSIONS ==
 
 # Enable public browsing
-public_browsing: false
+public_browsing: true
 
 # Enable signups. The invites system will be enabled if this is set to false.
-signups_allowed: false
+signups_allowed: true
 
 # Signups must be approved by a user admin
 signup_approval_required: false

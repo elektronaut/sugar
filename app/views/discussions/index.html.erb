@@ -4,7 +4,9 @@
 %>
 
 <div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
+	<% if @current_user %>
+		<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
+	<% end %>
 </div>
 <h2 class="section"><%= link_to "Discussions", discussions_path %></h2>
 

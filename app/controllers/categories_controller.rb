@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
 
 	requires_authentication
+	requires_user :except => [:index, :show]
 
 	def require_admin
 		unless @current_user && @current_user.admin?
@@ -30,7 +31,7 @@ class CategoriesController < ApplicationController
 	end
 
 	def show
-		@discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => @current_user.trusted?)
+		@discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => (@current_user && @current_user.trusted?))
 		find_discussion_views
 	end
 

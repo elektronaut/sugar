@@ -1,6 +1,7 @@
 class InvitesController < ApplicationController
 
 	requires_authentication :except => [:accept]
+	requires_user           :except => [:accept]
     
 	def load_invite
 		@invite = Invite.find(params[:id]) rescue nil

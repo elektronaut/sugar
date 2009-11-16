@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
 
 	requires_authentication
+	requires_user
 
 	def update_read_status
 		if @messages && @messages.length > 0

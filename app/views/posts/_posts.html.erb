@@ -38,7 +38,7 @@
 		<% end %>
 		<% if functions %>
 		<div class="post_functions">
-			<% unless post.user == @current_user %>
+			<% if @current_user && post.user != @current_user %>
 				<%= link_to "PM", last_user_conversation_page_path(:username => post.user.username, :anchor => 'new', :subject => "Re: #{(discussion||post.discussion).title}") %> |
 			<% end %>
 			<% if post.editable_by?(@current_user) %>
