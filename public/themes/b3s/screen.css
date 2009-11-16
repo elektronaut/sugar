@@ -974,6 +974,69 @@ a.mp3player_playing .position {
 	padding-left:        2px;
 }
 
+
+/* -----------------------------------------------------------------------
+   LOGIN
+   ----------------------------------------------------------------------- */
+
+/*
+body.login h2.section, body.login #header {
+	display:             none;
+}
+body.login {
+	background:          #f5b701 url(images/login_background.jpg) top center repeat-x;
+}
+body.login #content {
+	position:            absolute;
+	top:                 0;
+	width:               788px;
+	margin:              0 auto;
+	background:          transparent url(images/login_graphics.jpg) no-repeat;
+	min-height:          350px;
+}
+body.login #login {
+	float: left;
+	margin: 160px 0 0 225px;
+	background:          #F3F1E9;
+	color:               #3C392C;
+	border:              1px solid #DEDCD4;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 20px;
+}
+body.login label {
+	width: 80px;
+	padding-right: 10px;
+	display: block;
+	float: left;
+	padding-top: 2px;
+	font-size: 1.2em;
+	font-weight: normal;
+	text-align: right;
+}
+body.login input.text {
+	background: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #ddd;
+	width: 202px;
+	padding: 2px 4px; 
+	margin: 0 0 10px 0; 
+	font-weight: bold;
+	font-size: 15px;
+}
+body.login #login #openid_url {
+	background: #fff url(images/login_openid.gif) 3px 3px no-repeat;
+	padding-left: 24px;
+	width: 182px;
+}
+body.login form h3 {
+	padding-left: 100px;
+	margin-bottom: 0.5em;
+}
+*/
+
+
 /* -----------------------------------------------------------------------
    CLEARFIX
    ----------------------------------------------------------------------- */

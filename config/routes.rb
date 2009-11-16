@@ -1,40 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-    # The priority is based upon order of creation: first created -> highest priority.
 
-    # Sample of regular route:
-    #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-    # Keep in mind you can assign values other than :controller and :action
-
-    # Sample of named route:
-    #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-    # This route can be invoked with purchase_url(:id => product.id)
-
-    # Sample resource route (maps HTTP verbs to controller actions automatically):
-    #   map.resources :products
-
-    # Sample resource route with options:
-    #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-    # Sample resource route with sub-resources:
-    #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-
-    # Sample resource route with more complex sub-resources
-    #   map.resources :products do |products|
-    #     products.resources :comments
-    #     products.resources :sales, :collection => { :recent => :get }
-    #   end
-
-    # Sample resource route within a namespace:
-    #   map.namespace :admin do |admin|
-    #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-    #     admin.resources :products
-    #   end
-
-    # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-    # map.root :controller => "welcome"
-
-    # See how all your routes lay out with "rake routes"
-    
     # Discussions search
 	#map.connect '/search/:query/:page', :controller => 'discussions', :action => 'search'
 	map.formatted_search_with_query '/search/:query.:format', :controller => 'discussions', :action => 'search'
@@ -48,30 +13,32 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.connect '/discussions/:id/search_posts/*query', :controller => 'discussions', :action => 'search_posts'
 
+	# Users
     map.resources(
         :users,
         :member => {
-			:participated => :get, 
-			:discussions => :get, 
-			:posts => :get, 
-			:update_openid => :any,
-			:grant_invite => :any,
+			:participated   => :get, 
+			:discussions    => :get, 
+			:posts          => :get, 
+			:update_openid  => :any,
+			:grant_invite   => :any,
 			:revoke_invites => :any
 		},
         :collection => { 
-			:login => :any,
+			:login                 => :any,
+			:logout                => :any, 
+			:password_reset        => :any, 
 			:complete_openid_login => :any,
-			:logout => :any, 
-			:forgot_password => :any, 
-			:xboxlive => :get, 
-			:twitter => :get, 
-			:online => :get, 
-			:recently_joined => :get,
-			:admins => :get,
-			:top_posters => :get,
-			:trusted => :get,
-			:map => :get,
-			:banned => :any
+			# Lists
+			:xboxlive              => :get, 
+			:twitter               => :get, 
+			:online                => :get, 
+			:recently_joined       => :get,
+			:admins                => :get,
+			:top_posters           => :get,
+			:trusted               => :get,
+			:map                   => :get,
+			:banned                => :any
 		}
     )
 	map.grant_invite_user   '/users/profile/:id/grant_invite',       :controller => 'users', :action => 'grant_invite'
@@ -88,11 +55,13 @@ ActionController::Routing::Routes.draw do |map|
     map.paged_user_posts    '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
 	map.new_user_by_token   '/users/new/:token',                     :controller => 'users', :action => 'new'
 
+	# Categories
     map.resources(
         :categories
     )
     map.connect '/categories/:id/:page', :controller => 'categories', :action => 'show'
 
+	# Messages
     map.resources(
         :messages,
         :collection => { :outbox => :any, :conversations => :any }
@@ -103,6 +72,7 @@ ActionController::Routing::Routes.draw do |map|
     map.paged_user_conversation     '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
     map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
 
+	# Discussions
     map.resources(
         :discussions,
         :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any},
@@ -114,10 +84,11 @@ ActionController::Routing::Routes.draw do |map|
             :collection => { :doodle => :post, :count => :any, :since => :any }
         )
     end
-	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts', :action => 'since'
-    map.paged_discussions '/discussions/archive/:page', :controller => 'discussions', :action => 'index'
-    map.paged_discussion  '/discussions/:id/:page', :controller => 'discussions', :action => 'show'
+	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'
+    map.paged_discussions '/discussions/archive/:page',                     :controller => 'discussions', :action => 'index'
+    map.paged_discussion  '/discussions/:id/:page',                         :controller => 'discussions', :action => 'show'
 
+	# Invites
 	map.resources(
 		:invites,
 		:collection => {:all => :get},
@@ -136,5 +107,6 @@ ActionController::Routing::Routes.draw do |map|
     map.connect ':controller/:action/:id'
     map.connect ':controller/:action/:id.:format'
 
+	# Root
     map.root :controller => 'discussions', :action => 'index'
 end

@@ -1,46 +1,32 @@
+<%
+	add_body_class "login"
+	@page_title = "Login"
+%>
 
-<div id="forgot-password-link">
-	<p><%= link_to_function "Err, I forgot my password&hellip;", "forgot_password();" %></p>
-</div>
+<h2 class="section">
+	<%= link_to "Login", login_users_path %>
+</h2>
 
 <div id="login">
 	<% form_tag(login_users_path, :class => 'form') do %>
-		<p>
+		<fieldset>
 			<label>Username</label>
 			<%= text_field_tag 'username', '', :class => :text %>
-		</p>
-		<p>
+		</fieldset>
+		<fieldset>
 			<label>Password</label>
 			<%= password_field_tag 'password', '', :class => :text %>
-		</p>
-		<p class="openid_description">
-			or log in using OpenID (<%= link_to "What's this?", "http://openid.net/what/" %>):
-		</p>
-		<p>
+		</fieldset>
+		<!--
+		<h3>OpenID login (<%= link_to "What's this?", "http://openid.net/what/" %>)</h3>
+		-->
+		<fieldset>
 			<label>OpenID URL</label>
 			<%= text_field_tag 'openid_url', '', :class => :text %>
-		</p>
-		<p>
+		</fieldset>
+		<fieldset>
 			<%= submit_tag "Login" %>
-		</p>
+			<%= link_to "I forgot my password", password_reset_users_path %>
+		</fieldset>
 	<% end %>
 </div>
-
-<div id="password-reminder">
-	<% form_tag(forgot_password_users_path, :class => 'form') do %>
-		<p>
-			<label>Email</label>
-			<%= text_field_tag 'email', '', :class => :text %>
-			<%= submit_tag "Send" %>
-		</p>
-	<% end %>
-</div>
-
-<script type="text/javascript">
-	$('#password-reminder').hide();
-	function forgot_password() {
-		$('#forgot-password-link').hide();
-		$('#login').hide();
-		$('#password-reminder').show();
-	}
-</script>

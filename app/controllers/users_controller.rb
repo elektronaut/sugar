@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	requires_authentication :except => [:login, :complete_openid_login, :logout, :forgot_password, :new, :create]
+	requires_authentication :except => [:login, :complete_openid_login, :logout, :password_reset, :new, :create]
 
 	def load_user
 		@user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -283,24 +283,28 @@ class UsersController < ApplicationController
 			end
 			flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
 		end
-		render :layout => 'login'
+		#render :layout => 'login'
 	end
 
-	def forgot_password
-		@user = User.find_by_email(params[:email])
-		if @user
-			if @user.activated? && !@user.banned?
-				@user.generate_password!
-				Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
-				@user.save
-				flash[:notice] = "A new password has been mailed to you"
+	def password_reset
+		if request.post? && params[:email]
+			@user = User.find_by_email(params[:email])
+			if @user
+				if @user.activated? && !@user.banned?
+					@user.generate_password!
+					Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
+					@user.save
+					flash[:notice] = "A new password has been mailed to you"
+				else
+					flash[:notice] = "Your account isn't active, you can't do that yet"
+				end
 			else
-				flash[:notice] = "Your account isn't active, you can't do that yet"
+				flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
 			end
+			redirect_to login_users_url
 		else
-			flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
+			# Render form
 		end
-		redirect_to login_users_url
 	end
 
 	def logout
