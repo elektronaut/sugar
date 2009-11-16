@@ -12,6 +12,12 @@ class UsersController < ApplicationController
 	protected     :load_user
 	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites]
 
+	def detect_admin_signup
+		@admin_signup = true if User.count(:all) == 0
+	end
+	protected     :detect_admin_signup
+	before_filter :detect_admin_signup, :only => [:login, :new, :create]
+
 	def index
 		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
 		respond_to do |format|
@@ -99,7 +105,7 @@ class UsersController < ApplicationController
 				redirect_to login_users_url and return
 			end
 			# Signups allowed
-		elsif Sugar.config(:signups_allowed)
+		elsif Sugar.config(:signups_allowed) || @admin_signup
 			@user = User.new
 		else
 			flash[:notice] = "Signups are not allowed!"
@@ -113,7 +119,7 @@ class UsersController < ApplicationController
 			@invite = nil if @invite.expired?
 		end
 
-		unless Sugar.config(:signups_allowed) || @invite
+		unless Sugar.config(:signups_allowed) || @invite || @admin_signup
 			flash[:notice] = "Signups are not allowed!"
 			redirect_to login_users_url and return
 		end
@@ -125,7 +131,8 @@ class UsersController < ApplicationController
 		end
 		attributes[:username]   = params[:user][:username]
 		attributes[:inviter_id] = @invite.user_id if @invite
-		attributes[:activated]  = Sugar.config(:signup_approval_required) ? false : true
+		attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup) ? true : false
+		attributes[:admin]      = true if @admin_signup
 
 		@user = User.create(attributes)
 		if @user.valid?
@@ -263,6 +270,7 @@ class UsersController < ApplicationController
 	end
 
 	def login
+		redirect_to new_user_path   and return if @admin_signup
 		redirect_to discussions_url and return if @current_user
 		if request.post?
 			if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?
