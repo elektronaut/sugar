@@ -2,6 +2,8 @@ class Message < ActiveRecord::Base
 
     MESSAGES_PER_PAGE = 30
 
+	belongs_to :conversation
+
     belongs_to :recipient, :class_name => 'User'
     belongs_to :sender, :class_name => 'User'
     

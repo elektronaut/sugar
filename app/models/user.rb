@@ -33,9 +33,14 @@ class User < ActiveRecord::Base
 	end
 	has_many   :discussion_views, :dependent => :destroy
 	has_many   :discussion_relationships, :dependent => :destroy
+	
+	has_many   :conversation_relationships, :dependent => :destroy
+	has_many   :conversations, :through => :conversation_relationships
+	
 	has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
 	has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND `read` = 0'], :order => ['created_at DESC']
 	has_many   :sent_messages,   :class_name => 'Message', :foreign_key => 'sender_id',    :conditions => ['deleted_by_sender = 0'],      :order => ['created_at DESC']
+
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for OpenID users
