@@ -1,12 +1,13 @@
-iPhone:
+Messaging:
 
-* Clean up default theme
-* Custom iPhone theme URL
+* Finish the new messaging interface
 
 Pre-Stylus:
 
 * Clean up and centralize the OpenID verification actions.
 * Post attachments: Image uploads should be displayed inline. Link to download file.
+* Cleanup iPhone theme
+* Themes support: Select from available installed themes in a drop-down
 
 Stylus:
 
@@ -18,7 +19,6 @@ Stylus:
 
 Before Sugar launch:
 
-* Select from available installed themes in a drop-down
 * Enable custom iPhone themes
 * If there aren't any users registered: One should be able to sign up and be set as admin
 * Finish up the optional approval of signups functionality
