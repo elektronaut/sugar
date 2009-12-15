@@ -1,5 +1,54 @@
 namespace :sugar do
 
+	desc "Test something"
+	task :test_something => :environment do 
+		Conversation.delete_all
+		ConversationRelationship.delete_all
+		Message.update_all({:conversation_id => nil})
+
+		# Convert messages to conversations
+		messages = Message.find(:all, :order => 'created_at ASC')
+		conversations = {}
+		messages.each do |message|
+			recipient_ids = [message.sender_id, message.recipient_id].sort
+			conversations[recipient_ids] ||= []
+			conversation = nil
+			if message.subject?
+				conversation = conversations[recipient_ids].select{|c| c.name == message.subject}.first rescue nil
+				if !conversation
+					conversation = Conversation.create(:name => message.subject)
+					conversations[recipient_ids] << conversation
+				end
+			else
+				if conversations[recipient_ids].length > 0
+					conversation = conversations[recipient_ids].last
+				else
+					conversation = Conversation.create(:name => '(No subject)')
+					conversations[recipient_ids] << conversation
+				end
+			end
+			message.update_attribute(:conversation_id, conversation.id)
+		end
+		
+		# Create conversation participations and fix metadata
+		Conversation.find(:all).each do |c|
+			messages = c.messages
+			user_ids = messages.map{|m| [m.recipient_id, m.sender_id]}.flatten.uniq
+			user_ids.each do |user_id|
+				unread_count = messages.select{|m| m.recipient_id == user_id && !m.read?}.length
+				# TODO:
+				#last_read_message = messages.select{|m| }
+				c.conversation_relationships.create(:user_id => user_id, :unread_count => unread_count)
+			end
+			c.update_attributes({
+				:messages_count  => messages.length,
+				:poster_id       => messages.first.sender_id,
+				:created_at      => messages.first.created_at,
+				:last_message_at => messages.last.created_at
+			})
+		end
+	end
+
 	desc "Generate new passwords for everyone and send welcome mail"
 	task :welcome => :environment do 
 		User.find_active.each do |user|
