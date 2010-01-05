@@ -11,8 +11,8 @@ mail_sender: Butt3rscotch <noreply@butt3rscotch.org>
 session_key: _butt3rscotch_session
 
 # Themes
-default_theme: b3s
-default_iphone_theme: default-iphone
+default_theme: default
+default_iphone_theme: b3s
 
 # Enter your API key to enable Flickr integration:
 flickr_api: 016918184821edf95505d9acd61e64c4
