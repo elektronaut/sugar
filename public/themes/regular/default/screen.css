@@ -1,0 +1,1003 @@
+/* -----------------------------------------------------------------------
+   RESET STYLES
+   ----------------------------------------------------------------------- */
+
+html,body,div,span,applet,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+a,abbr,acronym,address,big,cite,code,
+del,dfn,em,font,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
+:focus{outline:0;}
+body{line-height:1;color:black;background:white;}
+ol,ul{list-style:none;}
+table{border-collapse:separate;border-spacing:0;}
+caption,th,td{text-align:left;font-weight:normal;}
+blockquote:before,blockquote:after,
+q:before,q:after{content:"";}
+blockquote,q{quotes:"" "";}
+
+
+/* -----------------------------------------------------------------------
+   GENERAL
+   ----------------------------------------------------------------------- */
+
+html, body {
+	height:              100%;
+}
+body {
+	background:          #fff url(images/header_bg.png) top center repeat-x;
+	font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
+	color:               #000000;
+	line-height:         1.3;
+}
+
+/* Set 1em == 10px */
+body       { font-size: 10px; } 
+* html     { font-size: 125%; } 
+* html body{ font-size: 50%; }
+
+h2, h3, h4, h5, h6, p, ul, ol, pre {
+	margin-bottom:       1em;
+}
+
+h2 {
+	font-size:           1.5em;
+	font-weight:         bold;
+}
+h3 {
+	font-size:           1.3em;
+	font-weight:         bold;
+	margin-bottom:       0em;
+}
+h2 em {
+	font-weight:         normal;
+	font-style:          normal;
+	color:               #555;
+}
+
+strong {
+	font-weight:         bold;
+}
+em {
+	font-style:          italic;
+}
+small {
+	font-size:           0.8em;
+	color:               #444;
+}
+
+blockquote {
+	margin:              0;
+	padding:             10px 10px;
+	background:          #F3F1E9;
+	color:               #3C392C;
+	border:              1px solid #DEDCD4;
+	border-left:         5px solid #CCC9BC;
+}
+
+/* Posted by.. inside blockquotes */
+blockquote cite {
+	display:             block;
+	color:               #7E7B70;
+	border-bottom:       1px solid #CCC9BC;
+	padding-bottom:      5px;
+	margin-bottom:       10px;
+	margin-top:          -5px;
+}
+
+code, pre {
+	font-family:         Monaco, Consolas, Courier, monospace;
+	font-size:           0.9em;
+}
+code {
+	display:             block;
+	white-space:         pre;
+}
+label {
+	display:             block;
+	font-size:           1.1em;
+	font-weight:         bold;
+	margin-bottom:       0.2em;
+}
+label .description {
+	font-weight:         normal;
+	color:               #555;
+}
+input#openid_url, input#user_openid_url {
+	background: #fff url(images/login_openid.gif) no-repeat;
+	padding-left: 20px;
+}
+
+a, a:visited {
+	text-decoration:     none;
+	color:               #05506d;
+	color:               #05506d;
+}
+a:hover {
+	color:               #460000;
+	color:               #3b8fa8;
+}
+a.create, a.create:visited {
+	color:               #007b36;
+}
+a.create:hover {
+	color:               #004820;
+}
+
+/* Tables */
+th {
+	font-weight:         bold;
+}
+table.list {
+	border-collapse:     collapse;
+	border-top:          1px solid #E2DCBF;
+	width:               100%;
+}
+table.list td, table.list th {
+	padding:             7px 20px 7px 0;
+	border-bottom:       1px solid #E2DCBF;
+	white-space:         nowrap;
+}
+table.list th {
+	color:               #321;
+	background:          #F5F1E0;
+}
+table.list td {
+	color:               #6f5a43;
+}
+
+/* Contextual links, ie. "New Discussion" */
+.functions {
+	font-size:           1.5em;
+	float:               right;
+	font-weight:         bold;
+	color:               #888;
+}
+
+div.errors {
+	color:               #100;
+	border:              1px solid #d88;
+	background:          #fdd;
+	padding:             10px 15px 1px 15px;
+	margin:              0 -16px 1em -16px;
+}
+div.errors ul {
+	margin:              0;
+	list-style-type:     disc;
+	list-style-position: inside;
+}
+
+.field_with_errors {
+	display:             block;
+}
+.field_with_errors label {
+	margin-top:          12px;
+	color:               #100;
+	background:          #fdd;
+	padding:             2px 8px;
+	margin-left:         -8px;
+}
+.field_with_errors label span.description {
+	color:               #633;
+}
+div.fieldWithErrors {
+	display:             inline;
+}
+
+.iphone_link {
+	font-size:           15px;
+	margin-top:          15px;
+	font-weight:         bold;
+}
+.compose_new_message {
+	margin-top:          10px;
+}
+.compose_new_message h3 {
+	margin-bottom:       10px;
+}
+
+/* Pagination links */
+.pagination {
+	font-size:           1.3em;
+	font-weight:         bold;
+	color:               #888;
+	margin-top:          -1em;
+	margin-bottom:       5px;
+	clear:               both;
+}
+.pagination .links {
+	float:               right;
+}
+
+
+/* -----------------------------------------------------------------------
+   RICH TEXT EDITOR
+   ----------------------------------------------------------------------- */
+
+#button-container.posting {
+	background: transparent url("images/ajax_spinner_small.gif") 0 2px no-repeat;
+	padding: 2px 24px;
+}
+
+#compose-body {
+	width:               100%;
+	max-width:           600px;
+} 
+.richTextToolbar {
+	position:            relative;
+	list-style:          none;
+	border:              1px solid #d7d7d7;
+	background-color:    #F6F6F6;
+	margin:              0;
+	padding:             0;
+	height:              18px;
+	margin-bottom:       2px;
+	max-width:           600px;
+} 
+.richTextToolbar li {
+	list-style:          none;
+	margin:              0;
+	padding:             0;
+	float:               left;
+} 
+.richTextToolbar li a {
+	width:               24px;
+	height:              16px;
+	float:               left;
+	display:             block;
+	background-image:    url("images/textarea_controls.gif");
+	border:              1px solid #fff;
+	border-right-color:  #d7d7d7;
+} 
+.richTextToolbar li a:hover {
+	border-color:        #900;
+} 
+.richTextToolbar li span {
+	display:             none;
+} 
+.richTextToolbar .BoldButton          { background-position: 0 -102px; } 
+.richTextToolbar .ItalicsButton       { background-position: 0 -119px; } 
+.richTextToolbar .LinkButton          { background-position: 0 0; } 
+.richTextToolbar .ImageButton         { background-position: 0 -170px; } 
+.richTextToolbar .UnorderedListButton { background-position: 0 -34px; } 
+.richTextToolbar .OrderedListButton   { background-position: 0 -51px; } 
+.richTextToolbar .BlockQuoteButton    { background-position: 0 -68px; } 
+.richTextToolbar .CodeButton          { background-position: 0 -136px; } 
+.richTextToolbar .HelpButton          { background-position: 0 -153px; } 
+.richTextToolbar .HeadingButton       { background-position: 0 -85px; }
+.richTextToolbar .EscapeHTMLButton    { background-position: 0 -306px; }
+.richTextToolbar .MP3Button           { background-position: 0 -323px; }
+
+
+
+/* -----------------------------------------------------------------------
+   LAYOUT
+   ----------------------------------------------------------------------- */
+
+/* Top heading/breadcrumbs with line */
+h2.section {
+	padding-bottom:      7px;
+	border-bottom:       1px solid #E2DCBF;
+}
+
+/* Header block (the background is set on the body) */
+#header {
+	height:              96px;
+	color:               #fff;
+	position:            absolute;
+	top:                 0;
+	left:                0;
+	right:               0;
+}
+#header h1 {
+	font-size:           4em;
+	font-weight:         bold;
+	margin:              15px 0 0 20px;
+}
+#search {
+	position:            absolute;
+	top:                 33px;
+	right:               20px;
+}
+#account {
+	position:            absolute;
+	bottom:              2px;
+	right:               20px;
+	font-size:           1.2em;
+	color:               #def;
+}
+#account a, #account a:visited {
+	color:               #def;
+	font-weight:         bold;
+	text-decoration:     underline;
+}
+#account a:hover {
+	color:               #fff;
+}
+#navigation {
+	margin:              0;
+	position:            absolute;
+	bottom:              3px;
+	left:                20px;
+	font-size:           1.2em;
+	line-height:         1;
+	padding-bottom:      0.7px; /* Yeah, that's right.. Fixes inconsistencies between FF/Safari */
+}
+#navigation li {
+	display:             inline;
+	margin:              0 3px 0 0;
+	float:               left;
+}
+#navigation li a, #navigation li a:visited {
+	margin:              0;
+	text-decoration:     none;
+	padding:             1px 10px 1px 10px;
+	background:          #3589a2 url(images/tab_bg.png) repeat-x;
+	border:              1px solid #5eb1c7;
+	border-bottom:       1px solid #023850;
+	color:               #fff;
+}
+#navigation li a:hover {
+	background:          #529fb8 url(images/tab_hover_bg.png) repeat-x;
+	color:               #fff;
+}
+#navigation li.current a, #navigation li.current a:visited {
+	background:          #f9f9f9 url(images/tab_current_bg.png) repeat-x;
+	padding-top:         2px;
+	color:               #000;
+	border:              1px solid #5eb1c7;
+	border-bottom:       1px solid #f9f9f9;
+	font-weight:         bold;
+}
+#navigation li.current a:hover {
+}
+#navigation li.new_messages a, #navigation li.new_messages a:visited {
+	background:          #d14b40 url(images/tab_new_messages_bg.gif) repeat-x;
+	color:               #fff;
+	border:              1px solid #c24236;
+	border-bottom:       1px solid #c98175;
+	padding-left:        22px;
+}
+#navigation li.new_messages a:hover {
+	background:          #d14b40 url(images/tab_new_messages_hover_bg.gif) repeat-x;
+}
+
+/* Errors and other notices */
+.notice {
+	background:          #fdd;
+	border-top:          1px solid #d88;
+	border-bottom:       1px solid #d88;
+	color:               #800;
+	margin:              -20px -30px 20px -30px;
+	padding:             10px 30px;
+	font-size:           1.2em;
+	font-weight:         bold;
+}
+
+#content {
+	position:            absolute;
+	top:                 116px;
+	left:                30px;
+	right:               30px;
+	font-size:           1.2em;
+	padding-bottom:      30px;
+}
+#content td, #content th {
+	padding-right:       20px;
+}
+.tabbed_navigation {
+	float:               right;
+	font-weight:         bold;
+	font-size:           1.3em;
+	max-width:           600px;
+}
+.tabbed_navigation li {
+	display:             inline;
+}
+
+.tabbed_navigation li a {
+	padding:             2px 5px;
+}
+.tabbed_navigation li.active a {
+	background:          #05506d;
+	color:               #fff;
+}
+
+/* Top tabs: users list and editing profiles */
+.topTabs {
+	border-bottom:       1px solid #E2DCBF;
+	padding-bottom:      1px;
+}
+.topTabs li {
+	display:             inline;
+}
+.topTabs li a {
+	border:              1px solid #E2DCBF;
+	padding:             2px 7px;
+	background:          #f8f7f1;
+	color:               #484030;
+	font-weight:         bold;
+	font-size:           1.1em;
+}
+.topTabs li a:hover {
+	color:               #460000;
+}
+.topTabs li.active a {
+	background:          #05506d;
+	border:              1px solid #05506d;
+	color:               #fff;
+}
+
+
+
+/* -----------------------------------------------------------------------
+   NEW DISCUSSION
+   ----------------------------------------------------------------------- */
+
+.new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
+	width:               100%;
+	max-width:           600px;
+}
+
+#new_discussion input.title, #edit_discussion input.title {
+	font-size:           1.2em;
+}
+
+#new_discussion .title_search {
+	border:              1px solid #E2DCBF;
+	padding:             2px 8px;
+	width:               100%;
+	max-width:           588px;
+	margin-top:          2px;
+}
+#new_discussion .title_search.loading {
+	background:          transparent url("images/ajax_spinner_small.gif") 0 2px no-repeat;
+	padding:             2px 24px;
+	border:              0;
+	color:               #84806d;
+}
+#new_discussion .title_search h4 {
+	margin-bottom:       0;
+	padding:             8px 0;
+	font-size:           1.2em;
+	color:               #84806d;
+}
+#new_discussion .title_search a, #new_discussion .title_search a:visited {
+	border-top:          1px solid #E2DCBF;
+	padding:             4px 0;
+	font-size:           1.2em;
+	display:             block;
+}
+#new_discussion .title_search a.discussion {
+	font-weight:         bold;
+}
+#new_discussion .title_search a.discussion .posts_count {
+	font-weight:         normal;
+	font-size:           0.8em;
+	padding-left:        4px;
+	color:               #84806d;
+}
+
+/* -----------------------------------------------------------------------
+   DISCUSSIONS LIST
+   ----------------------------------------------------------------------- */
+
+table.discussions {
+	border-collapse:     collapse;
+	border-top:          1px solid #E2DCBF;
+	width:               100%;
+	margin-bottom:       20px;
+}
+table.discussions td {
+	padding:             3px 20px 7px 0;
+	border-bottom:       1px solid #E2DCBF;
+	white-space:         nowrap;
+	color:               #6f5a43;
+}
+table.discussions td.name {
+	font-size:           1.3em;
+	font-weight:         bold;
+	padding-bottom:      0;
+	padding-top:         7px;
+	border-bottom:       0;
+}
+table.discussions td.name .title {
+	white-space:         normal;
+	float:               left;
+	max-width:           600px;
+}
+table.discussions td.last {
+	width:               100%;
+}
+table.discussions tr.new_posts td.new_posts strong {
+	color:               #c76700;
+}
+
+table.discussions tr.new_posts {
+	background:          #ffffe8;
+}
+table.discussions tr.nsfw {
+	opacity:             0.6;
+}
+table.discussions tr.closed td.name a, table.discussions tr.closed td.name a:visited {
+	color:               #666;
+}
+table.discussions tr.closed td.name a:hover {
+	color:               #333;
+}
+
+.userinfo {
+	margin-bottom:       1em;
+}
+#categories .name .count {
+	color:               #aaa;
+}
+
+/* Targeted discussion (Keyboard navigation) */
+table.discussions .targeted td {
+	background:          #3B89C7;
+	color:               #fff;
+}
+table.discussions .targeted td:first-child {
+	padding-left:        10px;
+}
+table.discussions .targeted td a, table.discussions .targeted td a:visited{
+	color:               #fff !important;
+}
+table.discussions .targeted td.name {
+}
+
+
+/* -----------------------------------------------------------------------
+   POSTS - DISCUSSIONS AND MESSAGES
+   ----------------------------------------------------------------------- */
+
+.posts {
+	border-top:          1px solid #E2DCBF;
+	margin-bottom:       20px;
+}
+.posts .context {
+	border-bottom:       3px solid #E2DCBF;
+}
+.posts .context .post, .posts .context .post blockquote, .posts .context .post a, .posts .context .post a:visited {
+	color:               #777;
+}
+.posts .context .post a:hover {
+	color:               #555;
+}
+.posts .context .post .avatar {
+	opacity:             0.7;
+}
+/* Container for posts loaded via AJAX */
+#ajaxPosts {
+	border-top:          3px solid #E2DCBF;
+}
+/* Small block between posts that say "2 days later..." */
+.posts .post_distance {
+	border-bottom:       1px solid #E2DCBF;
+	padding:             2px 0 2px 45px;
+	background:          #f8f7f1;
+	color:               #84806d;
+}
+
+.post {
+	padding-top:         15px;
+	padding-bottom:      15px;
+	border-bottom:       1px solid #E2DCBF;
+}
+.post .title {
+	background:          transparent url(images/discussion_title_bg.png) 0px 14px no-repeat;
+	font-size:           1.3em;
+	font-weight:         bold;
+	padding:             7px 0 7px 19px;
+	margin:              -15px 0 0 0;
+}
+.post .title small {
+	font-size:           0.8em;
+	font-weight:         normal;
+	margin-left:         7px;
+}
+.post .title .labels {
+	color:               #555;
+}
+.post .post_functions {
+	line-height:         1;
+	color:               #888;
+	float:               right;
+	margin-right:        10px;
+}
+
+.post .post_info {
+	line-height:         1;
+	color:               #888;
+	margin-bottom:       -8px;
+}
+.post .post_info .avatar {
+	width:               32px;
+	height:              32px;
+	margin-right:        10px;
+}
+.post .post_info .avatar img {
+	vertical-align:      top;
+}
+.post .post_info .username {
+	font-size:           1.3em;
+	font-weight:         bold;
+	margin-right:        5px;
+}
+.post .post_info .permalink a, .post .post_info .permalink a:visited {
+	color:               #888;
+}
+.post .post_info .permalink a:hover {
+	color:               #333;
+}
+
+.post .body {
+	clear:               both;
+	font-size:           1.1em;
+	max-width:           600px;
+	margin-left:         45px;
+}
+.post .body ul {
+	list-style-type:     disc;
+	list-style-position: inside;
+}
+
+.me_post {
+	background:          #f8f7f1;
+	color:               #484030;
+}
+.me_post .avatar {
+	float:               left;
+	margin-top:          -6px;
+}
+.me_post .body {
+	font-weight:         bold;
+	clear:               none;
+	max-width:           100%;
+}
+.me_post .body .date {
+	color:               #888;
+	font-size:           0.9em;
+	font-weight:         normal;
+}
+.me_post .body a.poster, .me_post .body a.poster:visited {
+	text-decoration:     none;
+	color:               #05506d;
+}
+.me_post .body a.poster:hover {
+	color:               #460000;
+}
+.post .body .edited {
+	color:               #888;
+	font-size:           0.9em;
+	margin-top:          1em;
+}
+.post .body p {
+	margin-bottom:       0.8em;
+}
+
+.post .body a {
+	color:               #005794;
+	text-decoration:     underline;
+}
+.post .body a:visited {
+	color:               #3900a2;
+}
+.post .body a:hover {
+	color:               #001d32;
+}
+
+/* Targeted post (Keyboard navigation) */
+.posts .targeted {
+	border:              1px solid #3B89C7;
+	margin-left:         -1px;
+	margin-right:        -1px;
+}
+
+.new_posts_since_refresh {
+	font-size:           1.3em;
+	border-bottom:       1px solid #E2DCBF;
+	padding:             5px 0 5px 45px;
+	background:          #f8f7f1;
+	color:               #484030;
+	margin-top:          -1.3em;
+	margin-bottom:       1.3em;
+}
+.new_posts_since_refresh p {
+	margin:              0;
+}
+
+.bottomlinks {
+	font-size:           1.3em;
+	font-weight:         bold;
+	border-top:          1px solid #E2DCBF;
+	padding:             5px 0;
+}
+
+#compose-toggle {
+	border-top:          1px solid #E2DCBF;
+	padding-top:         15px;
+	font-size:           1.3em;
+	font-weight:         bold;
+}
+
+.compose {
+	border-top:          1px solid #E2DCBF;
+	padding-top:         15px;
+}
+.compose .napkin {
+	width:               100%;
+	height:              400px;
+	border:              1px solid #ccc;
+	margin-bottom:       1em;
+}
+.newpage_warning {
+	background:          #F3F1E9;
+	color:               #3C392C;
+	font-size:           1.3em;
+	padding:             5px 15px;
+	max-width:           570px;
+}
+.newpage_warning strong {
+	color:               #460000;
+}
+
+#reply-tabs {
+	font-weight:         bold;
+	font-size:           1.3em;
+	max-width:           600px;
+}
+#reply-tabs li {
+	display:             inline;
+}
+#reply-tabs li a {
+	padding:             2px 5px;
+}
+#reply-tabs li.active a {
+	background:          #05506d;
+	color:               #fff;
+}
+
+#replyImage {
+	display:             none;
+}
+
+
+
+/* -----------------------------------------------------------------------
+   USERS
+   ----------------------------------------------------------------------- */
+
+.users_list .username {
+	font-weight:         bold;
+	font-size:           1.2em;
+}
+.users_list .status {
+}
+
+.banned {
+	color:               #d00;
+	font-weight:         bold;
+}
+.admin {
+	color:               #062;
+}
+.users_list .xbox_online {
+	font-weight:         bold;
+}
+.users_list .xbox_tile {
+	padding:             0 10px 0 0 !important;
+}
+.users_list .xbox_tile img {
+	margin-bottom:       -7px;
+}
+
+
+
+/* -----------------------------------------------------------------------
+   USER PROFILE
+   ----------------------------------------------------------------------- */
+
+#userinfo {
+	width:               425px;
+	float:               left;
+	position:            absolute;
+}
+.user_profile .avatar_and_name {
+	margin-left:         42px;
+	font-size:           1.2em;
+}
+.user_profile .avatar_and_name .avatar {
+	float:               left;
+	margin-left:         -42px;
+}
+.user_profile .username {
+	font-weight:         bold;
+	font-size:           1.1em;
+}
+.user_profile small {
+	font-size:           1em;
+	color:               #888;
+}
+.user_profile .description {
+	margin-bottom:       1em;
+	max-width:           100%;
+	overflow:            hidden;
+}
+.user_profile .posts_and_discussions {
+	font-size:           1.2em;
+}
+.user_profile .grant_invites {
+	font-size:           1.2em;
+	margin-bottom:       0;
+}
+.user_profile .posts_and_discussions a {
+	font-weight:         bold;
+}
+.user_profile .social, .user_profile .invitees {
+	border-top:          1px solid #E2DCBF;
+	padding-top:         1em;
+	margin-bottom:       1em;
+}
+.user_profile .social h3, .user_profile .invitees h3 {
+	font-weight:         normal;
+	margin-bottom:       4px;
+}
+.user_profile .social h3 a, .user_profile .invitees h3 a {
+	font-weight:         bold;
+}
+.user_profile .twitter .tweet p {
+	margin-bottom:       4px;
+}
+.user_profile .twitter .tweet .time {
+	font-size:           0.85em;
+}
+.user_profile .flickr li {
+	display:             inline;
+	margin:              0 2px 2px 0;
+}
+.user_profile .xboxlive p {
+	margin-left:         76px;
+}
+.user_profile .xboxlive p .avatar {
+	float:               left;
+	margin-left:         -76px;
+}
+.user_profile .invitees li a {
+	font-weight:         bold;
+	font-size:           1.3em;
+}
+
+.user_profile .welcome {
+	font-size:           1.3em;
+	margin-top:          -19px;
+	max-width:           600px;
+	margin-left:         10px;
+}
+.user_profile .welcome h2 {
+	margin-bottom:       0;
+	color:               #544;
+}
+.user_profile .welcome a {
+	text-decoration:     underline;
+}
+
+
+/* Overrides for the recent posts on the user profile */
+.user_profile #userPosts {
+	margin-left:         437px;
+	border-left:         1px solid #E2DCBF;
+	padding-left:        12px;
+	padding-top:         15px;
+}
+.user_profile #userPosts .posts {
+	border-top:          0;
+}
+.user_profile #userPosts .posts .post:first-child {
+	padding-top:         0;
+}
+.user_profile #userPosts .posts .post:last-child {
+	border-bottom:       0;
+}
+.user_profile #userPosts .posts .post:first-child .title {
+	padding-top:         0;
+	background-position: 0 7px;
+}
+
+#editProfileMap {
+	width:               600px;
+	height:              450px;
+	margin-bottom:       1em;
+}
+
+
+/* -----------------------------------------------------------------------
+   SEARCH
+   ----------------------------------------------------------------------- */
+
+.search_tips {
+	margin-top:          -10px;
+	margin-bottom:       30px;
+	max-width:           600px;
+	font-size:           1.1em;
+	color:               #444;
+}
+.search_tips .example {
+	font-family:         Monaco, Consolas, Courier, monospace;
+	font-size:           11px;
+	background:          #F3F1E9;
+	padding:             2px 4px;
+	white-space:         nowrap;
+}
+.search_tips .example, .search_tips strong {
+	color:               #000;
+}
+
+/* -----------------------------------------------------------------------
+   INVITES SECTION
+   ----------------------------------------------------------------------- */
+
+.invites p {
+	font-size:           1.2em;
+}
+.invites_list .email {
+	font-weight:         bold;
+}
+.invites_list .actions {
+	width:               50%;
+}
+
+/* -----------------------------------------------------------------------
+   MP3 PLAYER
+   ----------------------------------------------------------------------- */
+
+a.mp3player, a.mp3player:visited {
+	display:             inline-block;
+	margin:              2px;
+	padding:             2px 10px 2px 22px;
+	text-decoration:     none !important;
+	font-size:           1.1em;
+	color:               #000 !important;
+}
+
+a.mp3player:hover {
+	text-decoration:     underline;
+}
+
+a.mp3player_stopped, a.mp3player_stopped:visited {
+	background:          #f8f8f4 url(images/mp3player.png) repeat-x 0 -1px;
+	border:              1px solid #e5e7d8;
+}
+a.mp3player_playing, a.mp3player_playing:visited {
+	background:          #ecf6ec url(images/mp3player_playing.png) repeat-x 0 -1px;;
+	border:              1px solid #c3dfc3;
+}
+a.mp3player_playing .position {
+	color:               #454;
+	font-size:           0.7em;
+	padding-left:        2px;
+}
+
+/* -----------------------------------------------------------------------
+   CLEARFIX
+   ----------------------------------------------------------------------- */
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE5/Mac \*/
+* html .clearfix {height: 1px;}
+.clearfix {display: block;}
+/* End hide from IE5/Mac */

@@ -1,0 +1,115 @@
+@import url(reset.css);
+
+body {
+	background: #f5b701 url(images/login_background.jpg) top center repeat-x;
+	font-family: Calibri, Arial, Verdana;
+	color: #fff;
+}
+
+.content {
+	width: 788px;
+	margin: 0 auto;
+	background: transparent url(images/login_graphics.jpg) no-repeat;
+	min-height: 350px;
+}
+
+#notice {
+	position: absolute;
+	left: 0; right: 0;
+	top: 35px;
+	text-align: center;
+	z-index: 5000;
+}
+#notice p {
+	font-weight: normal;
+	font-size: 14px;
+	display: inline;
+	background: #d54000 url(images/login_notice_bg.gif) repeat-x;
+	border: 2px solid #bc4200;
+	padding: 5px 10px;
+	color: #ffc6b9;
+}
+#notice p strong {
+	color: #fff;
+	font-weight: bold;
+}
+
+#login {
+	width: 788px;
+	/*background: transparent url(images/login.jpg) no-repeat;*/
+	min-height: 300px;
+}
+.form {
+	float: left;
+	margin: 176px 0 0 250px;
+}
+.form input.text {
+	background: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid #ddd;
+	width: 202px;
+	padding: 2px 4px; 
+	margin: 0 0 10px 0; 
+	font-weight: bold;
+	font-size: 15px;
+}
+#login .form #openid_url {
+	background: #fff url(images/login_openid.gif) 3px 3px no-repeat;
+	padding-left: 24px;
+	width: 182px;
+}
+.openid_description {
+	margin-bottom: 1em;
+}
+
+#login a, #login a:visited {
+	text-decoration: underline;
+	color: #852400;
+}
+
+/*
+#login-button {
+	opacity: 0;
+	margin-left: 151px;
+}*/
+
+
+#reminder-button {
+	float: right;
+	margin: -7px 0 0 14px;
+	opacity: 0;
+}
+
+label {
+	width: 100px;
+	display: block;
+	float: left;
+	padding-top: 3px;
+}
+
+/*
+label {
+	display: none;
+}
+*/
+
+#forgot-password-link {
+	position: absolute;
+	left: 0; right: 0;
+	bottom: 30px;
+	text-align: center;
+}
+#forgot-password-link p {
+	display: inline;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#forgot-password-link a, #forgot-password-link a:visited {
+	color: #fff;
+	text-decoration: none;
+}
+#forgot-password-link a:hover {
+	text-decoration: underline;
+}
