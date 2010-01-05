@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
 
 		# Detects the iPhone user agent string and sets <tt>request.format = :iphone</tt>.
 		def detect_iphone
-			@iphone_user_agent = (request.host =~ /^(iphone|m)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/])) ? true : false
+			@iphone_user_agent = (request.host =~ /^(iphone|m)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/])) ? true : false
 			if @iphone_user_agent
 				session[:iphone_format] ||= 'iphone'
 				session[:iphone_format] = params[:iphone_format] if params[:iphone_format]

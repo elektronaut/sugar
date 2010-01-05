@@ -172,7 +172,7 @@ class User < ActiveRecord::Base
 		) do |pagination|
 			discussions = Discussion.find(
 				:all, 
-				:conditions => ['poster_id = ?', self.id], 
+				:conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'sticky DESC, last_post_at DESC',
@@ -194,7 +194,7 @@ class User < ActiveRecord::Base
 		) do |pagination|
 			Post.find(
 				:all, 
-				:conditions => ['user_id = ?', self.id], 
+				:conditions => options[:trusted] ? ['user_id = ?', self.id] : ['user_id = ? AND trusted = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'created_at DESC',

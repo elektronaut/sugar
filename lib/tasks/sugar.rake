@@ -15,9 +15,11 @@ namespace :sugar do
 
 	desc "Pack themes"
 	task :pack_themes do
-		themes_dir = File.join(File.dirname(__FILE__), '../../public/themes')
-		Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
-			`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
+		['regular', 'iphone'].each do |theme_format|
+			themes_dir = File.join(File.dirname(__FILE__), "../../public/themes/#{theme_format}")
+			Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
+				`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
+			end
 		end
 	end
 	

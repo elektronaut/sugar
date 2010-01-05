@@ -261,15 +261,11 @@ var Sugar = {
 		newPosts.documentTitle = document.title;
 
 		newPosts.refreshInterval = setInterval(function(){
-			$.getJSON(newPosts.postsCountUrl, function(json) {
-				if(json.posts_count > newPosts.postsCount){
-					var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
-					$('.total_items_count').text(json.posts_count);
-					if(newPostsSinceRefresh > 50) {
-						$(newPosts).html('<p>New posts have been made since this page was loaded, reload the page to see them.</p>');
-						document.title = "[New posts] "+newPosts.documentTitle;
-						clearInterval(newPosts.refreshInterval);
-					} else {
+			if(!Sugar.loadingPosts){
+				$.getJSON(newPosts.postsCountUrl, function(json) {
+					if(json.posts_count > newPosts.postsCount && !Sugar.loadingPosts){
+						var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
+						$('.total_items_count').text(json.posts_count);
 						var newPostsString = "A new post has";
 						if(newPostsSinceRefresh == 1) {
 							document.title = "["+newPostsSinceRefresh+" new post] "+newPosts.documentTitle;
@@ -283,13 +279,13 @@ var Sugar = {
 							$(newPosts).html('<p>'+newPostsString+' been made since this page was loaded, move on to the last page to see them.</p>');
 						}
 						newPosts.serverPostsCount = json.posts_count;
+						if(!newPosts.shown) {
+							$(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
+							newPosts.shown = true;
+						}
 					}
-					if(!newPosts.shown) {
-						$(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
-						newPosts.shown = true;
-					}
-				}
-			});
+				});
+			}
 		}, 5000);
 	},
 	
@@ -304,10 +300,9 @@ var Sugar = {
 			var newPosts    = $('#newPosts').get()[0];
 			var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/"+newPosts.postsCount;
 
+			Sugar.loadingPosts = true;
 			$(newPosts).html('Loading&hellip;');
 			$(newPosts).addClass('new_posts_since_refresh');
-
-			clearInterval(newPosts.refreshInterval);
 
 			$.get(newPostsURL, function(data){
 				$(newPosts).hide();
@@ -329,7 +324,7 @@ var Sugar = {
 				$('.total_items_count').text(newPosts.postsCount);
 
 				Sugar.Initializers.postFunctions();
-				Sugar.updateNewPostsCounter();
+				Sugar.loadingPosts = false;
 
 				for(var f in Sugar.onLoadedPosts) {
 					if(Sugar.onLoadedPosts.hasOwnProperty(f)){

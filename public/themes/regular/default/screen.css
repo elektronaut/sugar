@@ -28,7 +28,7 @@ html, body {
 	height:              100%;
 }
 body {
-	background:          #fff url(images/header_bg_danz.jpg) top center repeat-x;
+	background:          #fff url(images/header_bg.png) top center repeat-x;
 	font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
 	color:               #000000;
 	line-height:         1.3;
@@ -113,10 +113,12 @@ input#openid_url, input#user_openid_url {
 
 a, a:visited {
 	text-decoration:     none;
-	color:               #9f0000;
+	color:               #05506d;
+	color:               #05506d;
 }
 a:hover {
 	color:               #460000;
+	color:               #3b8fa8;
 }
 a.create, a.create:visited {
 	color:               #007b36;
@@ -291,7 +293,9 @@ h2.section {
 	right:               0;
 }
 #header h1 {
-	display:             none;
+	font-size:           4em;
+	font-weight:         bold;
+	margin:              15px 0 0 20px;
 }
 #search {
 	position:            absolute;
@@ -303,11 +307,15 @@ h2.section {
 	bottom:              2px;
 	right:               20px;
 	font-size:           1.2em;
-	color:               #9f0000;
+	color:               #def;
 }
 #account a, #account a:visited {
+	color:               #def;
 	font-weight:         bold;
 	text-decoration:     underline;
+}
+#account a:hover {
+	color:               #fff;
 }
 #navigation {
 	margin:              0;
@@ -327,20 +335,20 @@ h2.section {
 	margin:              0;
 	text-decoration:     none;
 	padding:             1px 10px 1px 10px;
-	background:          #9d5178 url(images/tab_bg.gif) repeat-x;
-	border:              1px solid #854155;
-	border-bottom:       1px solid #c67b6a;
+	background:          #3589a2 url(images/tab_bg.png) repeat-x;
+	border:              1px solid #5eb1c7;
+	border-bottom:       1px solid #023850;
 	color:               #fff;
 }
 #navigation li a:hover {
-	background:          #9d5178 url(images/tab_hover_bg.gif) repeat-x;
+	background:          #529fb8 url(images/tab_hover_bg.png) repeat-x;
 	color:               #fff;
 }
 #navigation li.current a, #navigation li.current a:visited {
-	background:          #f9f9f9 url(images/tab_current_bg.gif) repeat-x;
+	background:          #f9f9f9 url(images/tab_current_bg.png) repeat-x;
 	padding-top:         2px;
 	color:               #000;
-	border:              1px solid #c67b6a;
+	border:              1px solid #5eb1c7;
 	border-bottom:       1px solid #f9f9f9;
 	font-weight:         bold;
 }
@@ -394,7 +402,7 @@ h2.section {
 	padding:             2px 5px;
 }
 .tabbed_navigation li.active a {
-	background:          #9f0000;
+	background:          #05506d;
 	color:               #fff;
 }
 
@@ -418,8 +426,8 @@ h2.section {
 	color:               #460000;
 }
 .topTabs li.active a {
-	background:          #9f0000;
-	border:              1px solid #9f0000;
+	background:          #05506d;
+	border:              1px solid #05506d;
 	color:               #fff;
 }
 
@@ -512,7 +520,7 @@ table.discussions tr.new_posts {
 	background:          #ffffe8;
 }
 table.discussions tr.nsfw {
-	background:          #ffeeee;
+	opacity:             0.6;
 }
 table.discussions tr.closed td.name a, table.discussions tr.closed td.name a:visited {
 	color:               #666;
@@ -658,7 +666,7 @@ table.discussions .targeted td.name {
 }
 .me_post .body a.poster, .me_post .body a.poster:visited {
 	text-decoration:     none;
-	color:               #9f0000;
+	color:               #05506d;
 }
 .me_post .body a.poster:hover {
 	color:               #460000;
@@ -750,7 +758,7 @@ table.discussions .targeted td.name {
 	padding:             2px 5px;
 }
 #reply-tabs li.active a {
-	background:          #9f0000;
+	background:          #05506d;
 	color:               #fff;
 }
 
