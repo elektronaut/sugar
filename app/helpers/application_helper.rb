@@ -127,6 +127,7 @@ module ApplicationHelper
 	end
 
 	def last_discussion_page(discussion)
+		return 1 unless @current_user
 		return discussion.last_page unless @discussion_views && new_posts?(discussion)
 		page = (discussion_view(discussion, @current_user)[:post_index].to_f / Post::POSTS_PER_PAGE).ceil
 		page = 1 if page < 1
