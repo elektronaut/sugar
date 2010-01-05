@@ -12,7 +12,7 @@ session_key: _butt3rscotch_session
 
 # Themes
 default_theme: b3s
-default_iphone_theme: default-iphone
+default_iphone_theme: default
 
 # Enter your API key to enable Flickr integration:
 flickr_api: 016918184821edf95505d9acd61e64c4
