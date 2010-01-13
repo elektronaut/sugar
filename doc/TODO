@@ -1,3 +1,9 @@
+Bugs/issues:
+
+* Fix code blocks parsing
+* Creating a new thread on the iPhone version causes a crash
+* YouTube videos overlays the menu
+
 Messaging:
 
 * Finish the new messaging interface
@@ -34,6 +40,8 @@ Someday/fun:
 * Better map page - show avatars, online status etc.
 * Group messages in proper conversations rather than per user
 * User themes
+* Sort followed discussions by last participated date
+* Anonymous redirection
 
 Keyboard shortcuts:
 
