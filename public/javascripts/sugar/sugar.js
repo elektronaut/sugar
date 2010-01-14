@@ -16,13 +16,13 @@ var Sugar = {
 				$(container).find('.openid_toggle').click(function(){
 					$(container).find('.username_and_password.form').hide();
 					$(container).find('.openid.form').show();
-					$.cookie('login_method', 'openid', {expires: 365})
+					$.cookie('login_method', 'openid', {expires: 365});
 				});
 
 				$(container).find('.username_and_password_toggle').click(function(){
 					$(container).find('.username_and_password.form').show();
 					$(container).find('.openid.form').hide();
-					$.cookie('login_method', null, {expires: 365})
+					$.cookie('login_method', null, {expires: 365});
 				});
 			});
 		},
