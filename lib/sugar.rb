@@ -68,6 +68,10 @@ module Sugar
 	
 		def update_configuration(config)
 			new_config = DEFAULT_CONFIGURATION
+			config_keys = config.keys.map{|k| k.to_sym}
+			CONFIGURATION_BOOLEANS.each do |key|
+				config[key] = false unless config_keys.include?(key)
+			end
 			config.each do |key, value|
 				key = key.to_sym
 				if CONFIGURATION_BOOLEANS.include?(key)
