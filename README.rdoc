@@ -27,21 +27,20 @@ Things you *WON'T* find in Sugar:
 * Threaded discussions
 * User groups and access control lists
 * Emoticons and signatures
-* Wizards
 
 == Requirements, and how to install them
 
 Sugar is currently targetting version 2.3.3 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
   
-  sudo gem install rails -v 2.3.3
+ sudo gem install rails -v 2.3.3
 
 You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Remember to install the appropriate gems for your DBM of choice.
 
-You'll also want to install the Oniguruma (http://www.geocities.jp/kosako3/oniguruma/) and Sphinx (http://www.sphinxsearch.com) libraries.
+You'll also want to install the Oniguruma (http://www.geocities.jp/kosako3/oniguruma) and Sphinx (http://www.sphinxsearch.com) libraries.
 
 Finally, to install the rest of the required gems, do: 
 
-  sudo rake gems:install
+ sudo rake gems:install
 
 == Credits
 
@@ -49,7 +48,7 @@ Although it's written from scratch, the look and feel of Sugar was inspired by V
 
 == License
 
-Copyright © 2008-2009 Inge Jørgensen
+Copyright © 2008-2010 Inge Jørgensen
 
 The MIT License
 
