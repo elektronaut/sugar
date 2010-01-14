@@ -57,7 +57,8 @@
 		<% end -%>
 		<div id="account">
 			<% if @current_user %>
-				Hello, <%= profile_link(@current_user) %>! (<%= link_to "Sign out", logout_users_path %>)
+				Hello, <%= profile_link(@current_user) %>! 
+				(<%= link_to('Admin', configuration_admin_path)+' / ' if @current_user && @current_user.admin? %><%= link_to "Sign out", logout_users_path %>)
 			<% else %>
 				<%= link_to "Login", login_users_path %>
 				<% if Sugar.config(:signups_allowed) %>

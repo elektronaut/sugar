@@ -1,0 +1,41 @@
+<% 
+	add_body_class "admin configuration"
+	@page_title = "Admin - Configuration" 
+%>
+
+<h2 class="section">
+	<%= link_to "Admin", admin_path %> &raquo; 
+	<%= link_to "Configuration", configuration_admin_path %>
+</h2>
+
+<% form_tag configuration_admin_path do %>
+
+	<h2>Forum name</h2>
+	<%= labelled_field text_field_tag('config[forum_name]', Sugar.config(:forum_name)), "Forum name" %>
+	<%= labelled_field text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name)), "Short version of forum name" %>
+	<%= labelled_field text_field_tag('config[forum_title]', Sugar.config(:forum_title)), "Forum title", :description => '(HTML allowed)' %>
+
+	<h2>Settings</h2>
+	<%= labelled_field check_box_tag('config[public_browsing]', '1', Sugar.config(:public_browsing)), "Public browsing", :description => 'Check to enable browsing while not logged in' %>
+	<%= labelled_field check_box_tag('config[signups_allowed]', '1', Sugar.config(:signups_allowed)), "Signups allowed", :description => 'Disable to enable invite-only mode' %>
+	<%= labelled_field check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)), "Signup approval required", :description => 'Enable to require approval from user moderators' %>
+	
+	<%= labelled_field text_field_tag('config[default_domain]', Sugar.config(:default_domain)), "Default domain name", :description => '(without http://)' %>
+	<%= labelled_field text_field_tag('config[mail_sender]', Sugar.config(:mail_sender)), "Mail sender", :description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>' %>
+	<%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", :description => 'Example: <em>http://assets%d.mydomain.com</em>' %>
+	<%= labelled_field text_field_tag('config[session_key]', Sugar.config(:session_key)), "Session cookie name" %>
+	
+
+	<h2>Themes</h2>
+	<%= labelled_field text_field_tag('config[default_theme]', Sugar.config(:default_theme)), "Default theme" %>
+	<%= labelled_field text_field_tag('config[default_iphone_theme]', Sugar.config(:default_iphone_theme)), "Default iPhone theme" %>
+
+	<h2>Services and integration</h2>
+	<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api)), "Flickr API key", :description => 'Enter to enable Flickr integration' %>
+	<%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Google Analytics tracking code", :description => 'Enter to enable tracking' %>
+	<%= labelled_field check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)), "Xbox Live support enabled" %>
+
+	<p>
+		<%= submit_tag "Save" %>
+	</p>
+<% end %>
