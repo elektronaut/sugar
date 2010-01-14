@@ -114,10 +114,8 @@ input#openid_url, input#user_openid_url {
 a, a:visited {
 	text-decoration:     none;
 	color:               #05506d;
-	color:               #05506d;
 }
 a:hover {
-	color:               #460000;
 	color:               #3b8fa8;
 }
 a.create, a.create:visited {
@@ -783,7 +781,7 @@ table.discussions .targeted td.name {
 	color:               #d00;
 	font-weight:         bold;
 }
-.admin {
+span.admin {
 	color:               #062;
 }
 .users_list .xbox_online {
