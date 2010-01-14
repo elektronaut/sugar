@@ -14,7 +14,7 @@ module Sugar
 		
 		# Themes
 		:default_theme            => 'default',
-		:default_theme            => 'b3s',
+		:default_theme            => 'default',
 		:default_iphone_theme     => 'default',
 
 		# Options
