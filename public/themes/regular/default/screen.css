@@ -985,6 +985,30 @@ a.mp3player_playing .position {
    LOGIN
    ----------------------------------------------------------------------- */
 
+body.login #login {
+	font-size: 1.2em;
+}
+
+body.login #login input[type=text], body.login #login input[type=password] {
+	font-size:           1.2em;
+	margin-bottom:       10px;
+	width:               250px;
+}
+
+body.login #login a {
+	padding-left:        5px;
+	text-decoration:     underline;
+}
+
+body.login #login .openid_toggle {
+	background:          #fff url(images/openid_signin_button.png) no-repeat;
+	border:              0;
+	width:               177px;
+	height:              39px;
+	text-indent:         -9000px;
+	margin-top:          20px;
+}
+
 /*
 body.login h2.section, body.login #header {
 	display:             none;

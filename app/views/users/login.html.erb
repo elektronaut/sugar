@@ -8,7 +8,8 @@
 </h2>
 
 <div id="login">
-	<% form_tag(login_users_path, :class => 'form') do %>
+
+	<% form_tag(login_users_path, :class => 'form username_and_password') do %>
 		<fieldset>
 			<label>Username</label>
 			<%= text_field_tag 'username', '', :class => :text %>
@@ -17,16 +18,22 @@
 			<label>Password</label>
 			<%= password_field_tag 'password', '', :class => :text %>
 		</fieldset>
-		<!--
-		<h3>OpenID login (<%= link_to "What's this?", "http://openid.net/what/" %>)</h3>
-		-->
+		<fieldset>
+			<%= submit_tag "Sign in" %> <%= link_to "<strong>Help!</strong> I forgot my password!", password_reset_users_path, :class => 'password_reset' %>
+		</fieldset>
+		<p>
+			<button class="openid_toggle" type="button">Sign in with OpenID</button>
+		</p>
+	<% end %>
+	
+	<% form_tag(login_users_path, :class => 'form openid') do %>
 		<fieldset>
 			<label>OpenID URL</label>
 			<%= text_field_tag 'openid_url', '', :class => :text %>
 		</fieldset>
 		<fieldset>
-			<%= submit_tag "Login" %>
-			<%= link_to "I forgot my password", password_reset_users_path %>
+			<%= submit_tag "Sign in" %>
+			<%= link_to_function "Login with username/password", :class => 'username_and_password_toggle' %>
 		</fieldset>
 	<% end %>
 </div>
