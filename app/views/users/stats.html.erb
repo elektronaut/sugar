@@ -1,0 +1,15 @@
+<% 
+	add_body_class "stats"
+	@page_title = "#{@user.username}'s Statistics" 
+%>
+
+<h2 class="section">
+	<%= link_to "Users", users_path %> &raquo; 
+	<%= profile_link(@user) %> &raquo;
+	<%= link_to "Statistics", stats_user_path(:id => @user.username) %>
+</h2>
+
+<h2>Posts per week</h2>
+<p>
+	<%= image_tag "http://chart.apis.google.com/chart?cht=lc&chd=t:#{@posts_per_week.map{|p| p.count}.join(',')}&chds=0,#{@max_posts_per_week}&chs=800x200&chxt=y&chxr=0,0,#{@max_posts_per_week}" %>
+</p>

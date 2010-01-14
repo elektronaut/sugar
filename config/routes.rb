@@ -22,7 +22,8 @@ ActionController::Routing::Routes.draw do |map|
 			:posts          => :get, 
 			:update_openid  => :any,
 			:grant_invite   => :any,
-			:revoke_invites => :any
+			:revoke_invites => :any,
+			:stats          => :any
 		},
         :collection => { 
 			:login                 => :any,
@@ -53,6 +54,7 @@ ActionController::Routing::Routes.draw do |map|
     map.connect             '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
     map.posts_user          '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
     map.paged_user_posts    '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
+    map.stats_user          '/users/profile/:id/stats',              :controller => 'users', :action => 'stats'
 	map.new_user_by_token   '/users/new/:token',                     :controller => 'users', :action => 'new'
 
 	# Categories
