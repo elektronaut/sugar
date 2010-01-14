@@ -775,7 +775,7 @@ table.discussions .targeted td.name {
 	color:               #d00;
 	font-weight:         bold;
 }
-.admin {
+span.admin {
 	color:               #062;
 }
 .users_list .xbox_online {

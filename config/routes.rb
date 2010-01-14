@@ -124,6 +124,9 @@ ActionController::Routing::Routes.draw do |map|
 		:member => {:accept => :get}
 	)
 
+	map.resource :admin, :member => {:configuration => :any}, :controller => 'admin'
+
+
     # Vanilla redirects
     map.with_options :controller => 'vanilla' do |vanilla|
         vanilla.connect '/vanilla',              :action => 'discussions'

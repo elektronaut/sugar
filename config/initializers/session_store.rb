@@ -3,7 +3,8 @@
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
 
-SESSION_KEY_NAME = YAML.load_file(File.join(File.dirname(__FILE__), '../sugar_conf.yml'))['session_key']
+#SESSION_KEY_NAME = YAML.load_file(File.join(File.dirname(__FILE__), '../sugar_conf.yml'))['session_key']
+SESSION_KEY_NAME = '_sugar_session'
 SESSION_KEY      = File.read(File.join(File.dirname(__FILE__), '../session_key'))
 
 ActionController::Base.session = {
