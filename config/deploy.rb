@@ -93,6 +93,6 @@ after "deploy:setup",   :create_shared_dirs
 after "deploy:symlink", :fix_permissions
 after "deploy:symlink", :create_symlinks
 after "deploy:symlink", :pack_themes
-after "deploy:symlink", "thinking_sphinx:configure"
+after "deploy:finalize_update", "thinking_sphinx:configure"
 
 
