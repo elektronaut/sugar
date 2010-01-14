@@ -1,15 +1,17 @@
-# Copy this to database.yml
 development:
   adapter: mysql
-  username: root
-  database: b3s_dev
+  username: my_username
+  password: my_password
+  database: sugar_dev
 
 test:
   adapter: mysql
-  username: root
-  database: b3s_test
+  username: my_username
+  password: my_password
+  database: sugar_test
 
 production:
   adapter: mysql
-  username: root
-  database: b3s
+  username: my_username
+  password: my_password
+  database: sugar

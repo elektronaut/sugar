@@ -1,8 +1,6 @@
 = Sugar
 
-Sugar is a free, open-source forum written for Ruby on Rails. It was written to replace Vanilla (http://getvanilla.com) for the butt3rscotch.org community, which struggled with performance issues as the number of discussions and posts increased. 
-
-The name? It's what Butterscotch is made of, and it's totally sweet.
+Sugar is a free, open-source forum optimized for performance and usability, written in Ruby on Rails.
 
 == Features
 
@@ -42,9 +40,22 @@ Finally, to install the rest of the required gems, do:
 
  sudo rake gems:install
 
+== Installation
+
+Copy database.yml.init to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
+
+ sudo rake db:create
+ sudo rake db:migrate
+
+You're now ready to start the development server:
+
+ ruby script/server
+
 == Credits
 
 Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com).
+
+The name? It's what Butterscotch is made of, and it's totally sweet.
 
 == License
 
