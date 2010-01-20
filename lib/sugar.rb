@@ -26,6 +26,9 @@ module Sugar
 		:xbox_live_enabled        => false,
 		:flickr_api               => nil,
 		:google_analytics         => nil,
+		
+		# Customization
+		:custom_javascript        => nil,
 	}
 	CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]
 

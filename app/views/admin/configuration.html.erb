@@ -22,8 +22,11 @@
 	
 	<%= labelled_field text_field_tag('config[default_domain]', Sugar.config(:default_domain)), "Default domain name", :description => '(without http://)' %>
 	<%= labelled_field text_field_tag('config[mail_sender]', Sugar.config(:mail_sender)), "Mail sender", :description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>' %>
+
+	<!--
 	<%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", :description => 'Example: <em>http://assets%d.mydomain.com</em>' %>
 	<%= labelled_field text_field_tag('config[session_key]', Sugar.config(:session_key)), "Session cookie name" %>
+	-->
 	
 
 	<h2>Themes</h2>
@@ -34,6 +37,9 @@
 	<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api)), "Flickr API key", :description => 'Enter to enable Flickr integration' %>
 	<%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Google Analytics tracking code", :description => 'Enter to enable tracking' %>
 	<%= labelled_field check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)), "Xbox Live support enabled" %>
+
+	<h2>Customization</h2>
+	<%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x10'), "Custom Javascript" %>
 
 	<p>
 		<%= submit_tag "Save" %>
