@@ -688,6 +688,16 @@ table.discussions .targeted td.name {
 .post .body a:hover {
 	color:               #001d32;
 }
+.spoiler {
+	border:              1px dotted #aaa;
+	padding:             4px;
+	background:          #fee;
+}
+.spoiler .spoilerLabel {
+	font-weight:         bold;
+	font-size:           0.9em;
+	color:               #900;
+}
 
 /* Targeted post (Keyboard navigation) */
 .posts .targeted {

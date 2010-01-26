@@ -3,6 +3,22 @@ var Sugar = {
 	onLoadedPosts: {},
 	Initializers: {
 		
+		spoilerTags : function(){
+			$('.spoiler').each(function(){
+				var container = this;
+				var content = $(container).html();
+				$(container).html('<span class="spoilerLabel">Spoiler!</span> <span class="innerSpoiler">'+content+'</span>');
+				$(container).find('.innerSpoiler').css('visibility', 'hidden');
+				$(container).hover(function(){
+					$(container).find('.spoilerLabel').hide();
+					$(container).find('.innerSpoiler').css('visibility', 'visible');
+				}, function(){
+					$(container).find('.spoilerLabel').show();
+					$(container).find('.innerSpoiler').css('visibility', 'hidden');
+				});
+			});
+		},
+
 		loginForm : function() {
 			$('body.login #login').each(function(){
 				var container = this;
