@@ -100,7 +100,9 @@ var Sugar = {
 							} else {
 							    this.textArea.replaceSelection('<code>'+selection+'</code>');
 							}
-						});
+						})
+						//
+						.addButton("Spoiler", function(){ this.textArea.wrapSelection('<div class="spoiler">','</div>'); });
 				}
 			});
 		},
