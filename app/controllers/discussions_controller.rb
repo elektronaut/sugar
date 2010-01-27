@@ -46,7 +46,7 @@ class DiscussionsController < ApplicationController
 			flash[:notice] = "No query specified!"
 			redirect_to discussions_path and return
 		end
-		@discussions = Discussion.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
+		@discussions = Discussion.search_paginated(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :query => @search_query)
 		respond_to do |format|
 			format.html do
 				find_discussion_views
@@ -76,7 +76,7 @@ class DiscussionsController < ApplicationController
 			flash[:notice] = "No query specified!"
 			redirect_to discussions_path and return
 		end
-		@posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query, :discussion_id => @discussion.id)
+		@posts = Post.search_paginated(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :query => @search_query, :discussion_id => @discussion.id)
 		@search_path = search_posts_discussion_path(@discussion)
 	end
 
