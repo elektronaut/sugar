@@ -313,6 +313,15 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	# Marks a discussion as viewed
+	def mark_discussion_viewed(discussion, post, index)
+		if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+			discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
+		else
+			DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
+		end
+	end
+
 	# Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
 	def posts_per_day(precision=2)
 		ppd = posts_count.to_f / ((Time.now - self.created_at).to_f / 60 / 60 / 24)
