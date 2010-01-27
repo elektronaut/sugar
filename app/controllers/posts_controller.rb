@@ -60,7 +60,7 @@ class PostsController < ApplicationController
 			end
 			@posts = @discussion.posts_since_index(params[:index])
 			if @current_user
-				@current_user.mark_discussion_viewed(@discussion, @posts.last, last_index, (params[:index].to_i + @posts.length))
+				@current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
 			end
 			if request.xhr?
 				render :layout => false
