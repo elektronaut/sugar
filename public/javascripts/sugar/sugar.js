@@ -8,8 +8,12 @@ var Sugar = {
 				$('.spoiler').each(function(){
 					var container = this;
 					if(!container.spoilerApplied) {
-						var content = $(container).html();
-						$(container).html('<span class="spoilerLabel">Spoiler!</span> <span class="innerSpoiler">'+content+'</span>');
+						if($(container).find('.innerSpoiler').length < 1){
+							$(container).wrapInner('<span class="innerSpoiler"></span>');
+						}
+						if($(container).find('.spoilerLabel').length < 1){
+							$(container).prepend('<span class="spoilerLabel">Spoiler!</span> ');
+						}
 						$(container).find('.innerSpoiler').css('visibility', 'hidden');
 						$(container).hover(function(){
 							$(container).find('.innerSpoiler').css('visibility', 'visible');
