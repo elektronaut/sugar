@@ -246,7 +246,7 @@ div.fieldWithErrors {
 	height:              16px;
 	float:               left;
 	display:             block;
-	background-image:    url("images/textarea_controls.gif");
+	background-image:    url("images/textarea_controls.png");
 	border:              1px solid #fff;
 	border-right-color:  #d7d7d7;
 } 
@@ -268,7 +268,7 @@ div.fieldWithErrors {
 .richTextToolbar .HeadingButton       { background-position: 0 -85px; }
 .richTextToolbar .EscapeHTMLButton    { background-position: 0 -306px; }
 .richTextToolbar .MP3Button           { background-position: 0 -323px; }
-.richTextToolbar .SpoilerButton       { background-position: 0 -68px; } 
+.richTextToolbar .SpoilerButton       { background-position: 0 -340px; } 
 
 
 
@@ -690,9 +690,9 @@ table.discussions .targeted td.name {
 	color:               #001d32;
 }
 .spoiler {
-	border:              1px dotted #aaa;
+	border:              1px dotted #baa;
 	padding:             4px;
-	background:          #fee;
+	background:          #fff8f0;
 }
 .spoiler .spoilerLabel {
 	font-weight:         bold;
