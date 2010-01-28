@@ -90,10 +90,14 @@ class Post < ActiveRecord::Base
 	end
 
 	def body_html
-		unless body_html?
-			self.update_attribute(:body_html, PostParser.parse(self.body.dup))
+		if self.new_record?
+			PostParser.parse(self.body.dup)
+		else
+			unless body_html?
+				self.update_attribute(:body_html, PostParser.parse(self.body.dup))
+			end
+			self[:body_html]
 		end
-		self[:body_html]
 	end
 
 	def edited?

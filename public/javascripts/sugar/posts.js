@@ -3,10 +3,58 @@ $.extend(Sugar.Initializers, {
 		$("#replyText form").submit(function(){
 			return Sugar.parseSubmit(this);
 		});
+	},
+	applyPostPreview: function(){
+		$('#replyText .preview').click(function(){
+			Sugar.previewPost();
+			return false;
+		});
 	}
 });
 
 $.extend(Sugar, {
+	
+	previewPost: function(){
+		var postBody   = $('#compose-body').val();
+		var previewUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview";
+
+		var statusField = $('#button-container');
+		var oldPostButton = statusField.html();
+		statusField.addClass('posting');
+		statusField.html('Previewing post..');
+
+		$('.posts #previewPost').fadeOut();
+
+		$.ajax({
+			url:  previewUrl,
+			type: 'POST',
+			data: {
+				'post[body]': postBody,
+				authenticity_token: $("#replyText form").find("input[name='authenticity_token']").val()
+			},
+			success: function(previewPost){
+				if($('.posts #ajaxPosts').length < 1) {
+					$('.posts').append('<div id="ajaxPosts"></div>');
+				}
+				if($('.posts #previewPost').length < 1) {
+					$('.posts').append('<div id="previewPost"></div>');
+					$('.posts #previewPost').hide();
+				}
+				$('.posts #previewPost').html(previewPost).fadeIn();
+			},
+			error: function(xhr, textStatus, errorThrown){
+				alert(textStatus);
+			},
+			complete: function(){
+				statusField.each(function(){
+					$(this).removeClass('posting');
+					$(this).html(oldPostButton);
+					$(this).find('.preview').text('Update Preview');
+					Sugar.Initializers.applyPostPreview();
+				});
+			}
+		});
+	},
 
 	// Post quoting
 	quotePost: function(postId){

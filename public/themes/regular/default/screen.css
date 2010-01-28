@@ -571,7 +571,7 @@ table.discussions .targeted td.name {
 	opacity:             0.7;
 }
 /* Container for posts loaded via AJAX */
-#ajaxPosts {
+#ajaxPosts .post:first-child, #previewPost {
 	border-top:          3px solid #E2DCBF;
 }
 /* Small block between posts that say "2 days later..." */

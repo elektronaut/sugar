@@ -82,8 +82,8 @@ ActionController::Routing::Routes.draw do |map|
     ) do |discussions|
         discussions.resources(
             :posts,
-            :member => { :quote => :any },
-            :collection => { :doodle => :post, :count => :any, :since => :any }
+            :member     => { :quote => :any },
+            :collection => { :doodle => :post, :count => :any, :since => :any, :preview => :any }
         )
     end
 	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'

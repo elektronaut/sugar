@@ -103,6 +103,14 @@ class PostsController < ApplicationController
 				redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
 			end
 		end
+		
+		def preview
+			@post = @discussion.posts.new(params[:post])
+			@post.user = @current_user
+			if request.xhr?
+				render :layout => false
+			end
+		end
 
 		def doodle
 			if @discussion.postable_by?(@current_user)
