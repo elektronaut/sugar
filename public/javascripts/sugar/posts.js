@@ -248,6 +248,7 @@ $.extend(Sugar, {
 					},
 					success: function(){
 						$('#compose-body').val('');
+						$('.posts #previewPost').hide();
 						Sugar.loadNewPosts();
 					},
 					error: function(xhr, textStatus, errorThrown){
