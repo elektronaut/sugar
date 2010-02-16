@@ -110,7 +110,7 @@ module ApplicationHelper
 	def discussion_view(discussion, user)
 		return nil unless @discussion_views
 		@_discussion_view_lookup_table ||= @discussion_views.inject(Hash.new) do |hash, dv|
-			hash[[dv.discussion_id, dv.user_id]] = dv
+			hash[[dv.discussion_id, dv.user_id]] = dv unless hash[[dv.discussion_id, dv.user_id]] && hash[[dv.discussion_id, dv.user_id]].post_index > db.post_index
 			hash
 		end
 		@_discussion_view_lookup_table[[discussion.id, user.id]] ||= DiscussionView.new(:user_id => user.id, :discussion_id => discussion.id, :post_index => 0)
