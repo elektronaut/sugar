@@ -53,9 +53,8 @@ namespace :sugar do
 	end
 
 	desc "Disable web"
-	task :disable_web do
+	task :disable_web => :environment  do
 		require 'erb'
-		require File.join(File.dirname(__FILE__), 'sugar')
 		reason = ENV['REASON'] || "DOWNTIME! The toobs are being vacuumed, check back in a couple of minutes."
 		template_file = File.join(File.dirname(__FILE__), '../../config/maintenance.erb')
 		template = ''; File.open(template_file){ |fh| template = fh.read }

@@ -3,6 +3,7 @@ default_run_options[:pty] = true
 set :application, "b3s"
 set :runner,      "app"
 set :user,        "app"
+set :use_sudo,    false
 
 set :scm,                   "git"
 set :repository,            "git@github.com:elektronaut/sugar.git"
