@@ -65,7 +65,7 @@ module PostParser
 		doc.search("object").each do |elem|
 			param_attributes = elem.search('>param').map do |subelem|
 				if subelem.kind_of?(Hpricot::Elem)
-					subelem.attributes ? subelem.attributes.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
+					subelem.attributes ? subelem.attributes.to_hash.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
 				end
 			end
 			unless param_attributes.flatten.include?('allowscriptaccess')
