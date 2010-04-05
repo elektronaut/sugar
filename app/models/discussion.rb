@@ -92,8 +92,10 @@ class Discussion < ActiveRecord::Base
 			max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
 			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
 			search_options = {
-				:sort_mode  => :expr,
-				:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				#:sort_mode  => :expr,
+				#:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				:sort_mode  => :desc, 
+				:order      => :last_post_at, 
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],
