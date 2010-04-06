@@ -112,4 +112,15 @@ class Post < ActiveRecord::Base
 	def viewable_by?(user)
 		(user && !(self.discussion.trusted? && !(user.trusted? || user.admin?))) ? true : false
 	end
+	
+	def mentions_users?
+		(mentioned_users.length > 0) ? true : false
+	end
+
+	def mentioned_users
+		@mentioned_users ||= User.find(:all).select do |user|
+			user_expression = Regexp.new('@'+Regexp.quote(user.username), Regexp::IGNORECASE)
+			self.body.match(user_expression) ? true : false
+		end
+	end
 end

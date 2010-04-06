@@ -85,6 +85,11 @@ class PostsController < ApplicationController
 				if @post.valid?
 					@discussion.reload
 					@discussion.fix_counter_cache!
+					# if @post.mentions_users?
+					# 	@post.mentioned_users.each do |mentioned_user|
+					# 		logger.info "Mentions: #{mentioned_user.username}"
+					# 	end
+					# end
 					if request.xhr?
 						render :status => 201, :text => 'Created'
 					else
