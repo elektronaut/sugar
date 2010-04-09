@@ -143,7 +143,7 @@ class UsersController < ApplicationController
 		@user = User.create(attributes)
 		if @user.valid?
 			@invite.expire! if @invite
-			Notifications.deliver_new_user(@user, login_users_path(:only_path => false))
+			Mailer.deliver_new_user(@user, login_users_path(:only_path => false))
 			@current_user = @user
 			store_session_authentication
 
@@ -306,7 +306,7 @@ class UsersController < ApplicationController
 			if @user
 				if @user.activated? && !@user.banned?
 					@user.generate_password!
-					Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
+					Mailer.deliver_password_reminder(@user, login_users_path(:only_path => false))
 					@user.save
 					flash[:notice] = "A new password has been mailed to you"
 				else

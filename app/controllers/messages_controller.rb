@@ -38,7 +38,7 @@ class MessagesController < ApplicationController
 		@message.reload
 		if @message.recipient.notify_on_message?
 			begin
-				Notifications.deliver_new_message(@message, last_user_conversation_page_url(:username => @message.sender.username, :anchor => "message-#{@message.id}"))
+				Mailer.deliver_new_message(@message, last_user_conversation_page_url(:username => @message.sender.username, :anchor => "message-#{@message.id}"))
 			rescue
 				logger.error "Message to #{@message.recipient.full_email} could not be sent."
 			end

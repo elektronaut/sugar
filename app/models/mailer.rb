@@ -1,12 +1,12 @@
-class Notifications < ActionMailer::Base
+class Mailer < ActionMailer::Base
   
 	def self.default_sender
 		Sugar.config(:mail_sender)
 	end
 
 	def default_options
-		@recipients ||= Notifications.default_sender
-		@from       ||= Notifications.default_sender
+		@recipients ||= Mailer.default_sender
+		@from       ||= Mailer.default_sender
 		@cc         ||= ""
 		@bcc        ||= ""
 		@subject    ||= ""

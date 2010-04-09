@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
-class NotificationsTest < ActionMailer::TestCase
-  tests Notifications
+class MailerTest < ActionMailer::TestCase
+  tests Mailer
   # replace this with your real tests
   def test_truth
     assert true
