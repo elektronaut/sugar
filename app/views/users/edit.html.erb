@@ -1,0 +1,32 @@
+<% 
+	add_body_class "edit_user_profile"
+	@page_title = "Edit profile"
+	@google_maps_api = true
+%>
+
+<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(:id => @user.username) %> </h2>
+
+<% unless @user.errors.empty? %>
+	<div class="errors">
+		<h3>There were errors saving the following fields:</h3>
+		<%= error_messages_for :user, :header_message => nil, :message => nil %>
+	</div>
+<% end %>
+
+<ul class="topTabs">
+	<li class="tab<%= ' active' if @page == 'info' %>"><%= link_to "Personal Info", edit_user_page_path(@user.username, 'info') %></li>  
+	<li class="tab<%= ' active' if @page == 'services' %>"><%= link_to "Links and Services", edit_user_page_path(@user.username, 'services') %></li>  
+	<li class="tab<%= ' active' if @page == 'location' %>"><%= link_to "Location", edit_user_page_path(@user.username, 'location') %></li>  
+	<li class="tab<%= ' active' if @page == 'settings' %>"><%= link_to "Settings", edit_user_page_path(@user.username, 'settings') %></li>  
+	<% if @current_user.admin? %>
+		<li class="tab<%= ' active' if @page == 'admin' %>"><%= link_to "Admin", edit_user_page_path(@user.username, 'admin') %></li>  
+	<% end %>
+</ul>
+
+<% form_for(@user) do |f| %>
+	<%= hidden_field_tag :page, @page %>
+	<%= render :partial => "edit_#{@page}", :locals => {:f => f} %>
+	<p>
+		<%= submit_tag "Save" %>
+	</p>
+<% end %>

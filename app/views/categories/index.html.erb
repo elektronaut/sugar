@@ -1,0 +1,31 @@
+<% 
+	add_body_class "categories"
+	@page_name = "Categories" 
+%>
+
+<% if @current_user && @current_user.admin? %>
+	<div class="functions">
+		<%= link_to "New Category +", new_category_path, :class => :create %>
+	</div>
+<% end %>
+
+<h2 class="section"><%= link_to "Categories", categories_path %></h2>
+
+<% if @categories && @categories.length > 0 %><div id="categories">
+	<% @categories.each do |category| %>
+		<div class="category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
+			<h3 class="name">
+				<% if category.labels? %><span class="labels">[<%= category.labels.join(', ') %>]</span><% end %>
+				<%= link_to category.name, category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
+			</h3>
+			<p class="description">
+				<%= h category.description %>
+				<% if @current_user && @current_user.admin? %>
+					<%= link_to "[edit]", edit_category_path(category) %>
+				<% end %>
+			</p>
+		</div>
+	<% end %>
+</div><% else %>
+	<p>No categories have been made yet.</p>
+<% end %>

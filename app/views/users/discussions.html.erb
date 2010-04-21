@@ -1,0 +1,18 @@
+<% 
+	add_body_class "created_by discussions"
+	@page_title = "#{@user.username}'s Discussions"
+%>
+
+<div class="functions">
+	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
+</div>
+
+<h2 class="section">
+	<%= link_to "Users", users_path %> &raquo; 
+	<%= profile_link(@user) %> &raquo;
+	<%= link_to "Discussions", discussions_user_path(:id => @user.username) %>
+</h2>
+
+
+<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+

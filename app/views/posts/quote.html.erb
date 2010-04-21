@@ -1,0 +1,1 @@
+<blockquote><cite>Posted by <%= link_to @post.user.username, paged_discussion_path(:id => @post.discussion, :page => @post.page, :anchor => "post-#{@post.id}") %>:</cite><%= meify(@post.body, @post.user) %></blockquote>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title><%= [@page_title, Sugar.config(:forum_name)].compact.join(' - ') %></title>
+	<%= stylesheet_link_tag 'syntax/twilight' %>
+	<% if @current_user && @current_user.stylesheet_url? -%>
+		<%= stylesheet_link_tag @current_user.stylesheet_url %>
+	<% else -%>
+		<%= stylesheet_link_tag "#{theme_path}/screen" %>
+	<% end -%>
+	<% if RAILS_ENV == 'production' -%>
+		<%= javascript_include_tag "bundled/application.js" %>
+	<% else -%>
+		<!-- Libraries -->
+		<%= javascript_include_tag "vendor/jquery" %>
+		<%= javascript_include_tag "vendor/jquery.hotkeys.min" %>
+		<%= javascript_include_tag "vendor/jquery.scrollTo.min" %>
+		<%= javascript_include_tag "vendor/jquery.libraries" %>
+		<%= javascript_include_tag 'vendor/swfobject' %>
+		<%= javascript_include_tag 'vendor/soundmanager2.min' %>
+		<!-- Sugar specific -->
+		<%= javascript_include_tag 'sugar/sugar' %>
+		<%= javascript_include_tag 'sugar/maps' %>
+		<%= javascript_include_tag 'sugar/mp3player' %>
+		<%= javascript_include_tag 'sugar/posts' %>
+		<%= javascript_include_tag 'sugar/hotkeys' %>
+		<%= javascript_include_tag 'application' %>
+	<% end -%>
+	<script type="text/javascript">
+		<%= "Sugar.Configuration.debug     = true;" if RAILS_ENV == 'development' %>
+		<%= "Sugar.Configuration.FlickrAPI = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
+		<%= "Sugar.Configuration.hotkeys   = true;" if @current_user && @current_user.keyboard_navigation? %>
+		<%= "Sugar.Configuration.workSafe  = true;" if @current_user && @current_user.work_safe_urls? %>
+	</script>
+	<% if Sugar.config(:custom_javascript) %>
+		<script type="text/javascript">
+			<%= Sugar.config(:custom_javascript) %>
+		</script>
+	<% end %>
+	<% if @google_maps_api -%>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<% end -%>
+	<link rel="icon" type="image/gif" href="<%= theme_path %>/images/favicon.gif" />
+</head>
+<body class="<%= body_classes %>">
+	<% if Sugar.config(:custom_header) %>
+		<%= Sugar.config(:custom_header) %>
+	<% end %>
+	<div id="header">
+		<h1><%= Sugar.config(:forum_title) %></h1>
+		<% if @current_user || Sugar.config(:public_browsing) %>
+			<div id="search">
+				<% form_tag((@search_path || search_path), :method => 'get') do %>
+					<%= text_field_tag 'q', @search_query, :class => :query %>
+					<%= select_tag 'search_mode', options_for_select(
+						search_mode_options,
+						@search_path || search_path
+					) %>
+					<%= submit_tag "Search", :name => nil %>
+				<% end %>
+			</div>
+		<% end -%>
+		<div id="account">
+			<% if @current_user %>
+				Hello, <%= profile_link(@current_user) %>! 
+				(<%= link_to('Admin', configuration_admin_path)+' / ' if @current_user && @current_user.admin? %><%= link_to "Sign out", logout_users_path %>)
+			<% else %>
+				<%= link_to "Login", login_users_path %>
+				<% if Sugar.config(:signups_allowed) %>
+					or <%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %>
+				<% end %>
+			<% end %>
+		</div>
+		<% if @current_user || Sugar.config(:public_browsing) %>
+			<ul id="navigation">
+				<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path, :id => 'discussions_link' %></li>
+				<% if @current_user %>
+					<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path, :id => 'following_link' %></li>
+					<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path, :id => 'favorites_link' %></li>
+				<% end %>
+				<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path, :id => 'categories_link' %></li>
+				<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path, :id => 'users_link' %></li>
+				<% if @current_user %>
+					<% if @current_user.invites? || @current_user.available_invites? -%>
+						<% invites_link_name = (!@current_user.user_admin? && @current_user.available_invites?) ? "Invites (#{@current_user.available_invites})" : "Invites" %>
+						<li class="invites<%= ' current' if @section == :invites %>"><%= link_to invites_link_name, invites_path, :id => 'invites_link' %></li>
+					<% end %>
+					<% if @section != :messages && @current_user.unread_messages? -%>
+						<li class="messages new_messages"><%= link_to (@current_user.unread_messages_count > 1) ? "#{@current_user.unread_messages_count} New messages!" : "1 New message!", messages_path, :id => 'messages_link' %></li>
+					<% else -%>
+						<li class="messages<%= ' current' if @section == :messages %>"><%= link_to "Messages", messages_path, :id => 'messages_link' %></li>
+					<% end -%>
+				<% end -%>
+			</ul>
+		<% end -%>
+	</div>
+	<div id="content">
+		<% if flash[:notice] %>
+			<div class="notice"><%= flash[:notice] %></div>
+		<% end %>
+		<%= yield %>
+		<% if @iphone_user_agent %><div class="iphone_link">
+			<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
+		</div><% end %>
+	</div>
+	<% if Sugar.config(:custom_footer) %>
+		<%= Sugar.config(:custom_footer) %>
+	<% end %>
+<% if Sugar.config(:google_analytics) -%>
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config(:google_analytics) %>"); pageTracker._trackPageview(); } catch(err) {}</script>
+<% end -%>
+</body>
+</html>

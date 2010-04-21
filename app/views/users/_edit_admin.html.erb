@@ -1,0 +1,18 @@
+<% if !Sugar.config(:signups_allowed) %>
+	<%= labelled_field f.text_field(:available_invites, :size => 4), "Invites", :errors => @user.errors[:available_invites] %>
+<% end %>
+<p>
+	<label>Flags</label>
+	<%= f.check_box(:activated) %> Activated<br />
+	<%= f.check_box(:banned) %> Banned<br />
+	<%= f.check_box(:html_disabled) %> Disable HTML posting<br />
+	<%= f.check_box(:trusted) %> Trusted<br />
+</p>
+<p>
+	<label>User levels</label>
+	<% if @current_user.admin? %>
+		<%= f.check_box(:admin) %> Administrator<br />
+	<% end %>
+	<%= f.check_box(:moderator) %> Moderator<br />
+	<%= f.check_box(:user_admin) %> User administator<br />
+</p>

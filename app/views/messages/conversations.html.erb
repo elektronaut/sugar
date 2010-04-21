@@ -1,0 +1,61 @@
+<% 
+	add_body_class "conversations"
+	add_body_class 'last_page' if @messages.last_page?
+	@page_title = "Conversation with #{@user.username}"
+	last_subject = nil
+%>
+
+<h2 class="section">
+	<%= link_to "Conversations", messages_path %> &raquo;
+	<%= link_to "#{@user.username}", user_conversation_path(:username => @user.username) %>
+</h2>
+
+<% if @messages && @messages.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+	<div class="posts">
+		<% @messages.each do |message| -%>
+		<div class="post message <%= "new_message" if message.recipient == @current_user && !message.read? %>" id="message-<%= message.id %>">
+			<% if message.subject? && last_subject != message.subject %>
+				<div class="title"><%= h(last_subject = message.subject) %></div>
+			<% end %>
+			<div class="post_info">
+				<a class="anchor" name="message-<%= message.id %>"></a>
+				<span class="avatar"><%= avatar_image_tag(message.sender) %></span>
+				<span class="username"><%= profile_link(message.sender) %></span>
+				<span class="date"><%= formatted_time message.created_at %></span>
+			</div>
+			<div class="body">
+				<div class="content"><%= message.sender.html_disabled? ? h(message.body).gsub(/\n/,'<br />') : meify(message.body_html, message.sender) %></div>
+			</div>
+		</div>
+		<% end -%>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => @messages } %>
+<% end %>
+
+<div class="bottomlinks">
+	<%= link_to "Back to conversations", messages_path, :id => 'back_link' %>,
+	<%= link_to "Top of page", "#top" %>
+</div>
+
+<div class="compose" id="compose">
+	<a name="new" class="anchor" /></a>
+	<ul id="reply-tabs" class="tabs">  
+		<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
+	</ul>
+
+	<div id="replyText">
+		<% form_for(@new_message, :html => { :class => 'compose_new_message' }) do |f| %>
+			<%= f.hidden_field(:recipient_id) %>
+			<p>
+				<label>Subject <span class="description">&mdash; Optional</span></label>
+				<%= f.text_field(:subject, :size => 80) %>
+			</p>
+			<p>
+				<label>Message</label>
+				<%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => :rich) %>
+			</p>
+			<p id="button-container"><button type="submit">Send</button></p>
+		<% end %>
+	</div>
+</div>

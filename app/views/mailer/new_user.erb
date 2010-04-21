@@ -1,0 +1,34 @@
+Hi <%= @user.realname_or_username %>,
+
+Thanks for signing up! This email is just a note to let you know that
+your account has been successfully created. Keep it around as a reminder
+of your login details, or delete away.
+
+<% unless @user.activated? -%>
+Your account will have to be approved by a moderator before you'll be able
+to access the site. We'll drop you a new note once your approval 
+status changes.
+
+<% end -%>
+<% if @user.openid_url? -%>
+You've signed up using an OpenID Identity URL, which is the only thing
+you'll need to log in:
+
+  <%= @user.openid_url %>
+
+Unless you've specified your own password, a backup password has been
+generated for you. You can also use this to log in:
+
+  Username: <%= @user.username %>
+  Password: <%= @user.password %>
+<% else -%>
+Here are your login details:
+
+  Username: <%= @user.username %>
+  Password: <%= @user.password %>
+<% end -%>
+
+You can log in using the following link: 
+<%= @login_url %>
+
+Have fun!

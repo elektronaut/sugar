@@ -1,0 +1,33 @@
+<% 
+	add_body_class "conversation"
+	@page_title = "Conversations" 
+%>
+
+<h2 class="section">
+	<%= link_to "Conversations", messages_path %>
+</h2>
+
+<% if @users.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => @users } %>
+	<table class="discussions conversations"><% @users.each do |user| %>
+		<tr class="<%= conversation_classes(@users, user) %>">
+			<td class="name" colspan="5"><span class="title">
+				<%= link_to h(user.username), last_user_conversation_page_path(:username => user.username, :anchor => 'new') %>
+			</span></td>
+		</tr>
+		<tr class="<%= conversation_classes(@users, user) %>">
+			<td class="started_by">Started by <%= profile_link(@current_user.first_message_with(user).sender) %></td>
+			<td class="last_post">Last post by <%= profile_link(@current_user.last_message_with(user).sender) %></td>
+			<td class="last_active">Last active <strong><%= formatted_time @current_user.last_message_with(user).created_at %></strong></td>
+			<td class="post_count"><strong><%= @current_user.message_count_with(user) %></strong> <%= @current_user.message_count_with(user) > 1 ? 'posts' : 'post' %></td>
+			<td class="new_posts last">
+				<% if @current_user.unread_messages_from?(user) %>
+					New: <strong><%= @current_user.unread_message_count_from(user) %></strong>
+				<% end %>
+			</td>
+		</tr>
+	<% end %></table>
+	<%= render :partial => 'components/pagination', :locals => { :p => @users } %>
+<% else %>
+	<p>You haven't sent or received any messages.</p>
+<% end %>

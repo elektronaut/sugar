@@ -1,0 +1,11 @@
+<p>
+	<label>Name <span class="description">&mdash; Required</span></label>
+	<%= form.text_field(:name) %>
+</p>
+<p>
+	<label>Description</label>
+	<%= form.text_area(:description, :rows => 4, :cols => 80) %>
+</p>
+<p>
+	<%= form.check_box :trusted %> Only trusted people can view this category
+</p>

@@ -1,0 +1,20 @@
+<% 
+	add_body_class "users users_map"
+	@page_title = "Users Map" 
+	@google_maps_api = true
+%>
+
+<div class="functions">
+	<%= render :partial => 'users_functions' %>
+</div>
+
+
+<h2 class="section">
+	<%= link_to "Users", users_path %>
+	&raquo;
+	<%= link_to "Map", map_users_path %>
+</h2>
+
+<%= render :partial => 'list_navigation' %>
+
+<div id="usersMap" class="map" style="min-width: 600px; min-height: 600px;"></div>

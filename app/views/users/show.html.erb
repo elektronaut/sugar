@@ -1,0 +1,144 @@
+<% 
+	add_body_class "user_profile"
+	@page_title = "#{@user.username}" 
+%>
+
+<% if @current_user %>
+	<div class="functions">
+		<% if @user == @current_user %>
+			<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
+		<% elsif @current_user.admin? %>
+			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
+		<% end %>
+		<% unless @user == @current_user %>
+			<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
+		<% end %>
+	</div>
+<% end %>
+
+<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
+
+<div id="userinfo">
+	<p class="avatar_and_name clearfix">
+		<% if @user.avatar_url? %>
+			<%= image_tag @user.avatar_url, :alt => @user.username, :size => '32x32', :class => :avatar %>
+		<% else %>
+			<%= image_tag @user.gravatar_url(:size => 80), :alt => @user.username, :size => '32x32', :class => :avatar %>
+		<% end %>
+		<%= profile_link(@user, @user.username, :class => 'username') %>
+		<% if @user.realname? || @user.location? %>
+			<br />
+			<% if @user.realname? %>
+				<%= h @user.realname %>
+			<% end %>
+			<% if @user.location? %>
+				<small>from</small> <%= h @user.location %>
+			<% end %>
+		<% end %>
+		<% if @user.website? %>
+			<br /><%= pretty_link(@user.website) %>
+		<% end %>
+	</p>
+
+	<% if @user.description? %>
+	<div class="description">
+		<%= format_post @user.description %>
+	</div>
+	<% end %>
+
+	<% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? %>
+		<p class="grant_invites">
+			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
+			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
+			or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), :confirm => 'Are you sure you want to revoke all invites?' %>
+			<br />
+		</p>
+	<% end %>
+
+	<p class="posts_and_discussions">
+		<% if @user.discussions_count > 0 %>
+			<%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
+		<% end %>
+		<% if @user.participated_count > 0 %>
+			<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
+		<% end %>
+		<% if @user.posts_count > 0 %>
+			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% end %>
+		<% unless !@current_user || @user == @current_user %>
+			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
+		<% end %>
+	</p>
+	
+	<p>
+		<% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
+		<strong>Member since</strong>: <%= formatted_time(@user.created_at) %><br />
+		<% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
+		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %><br />
+		<% if @user.banned? %>
+			<%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
+		<% elsif @user.admin? %>
+			<%= @user.username %> is an <span class="admin"><strong>admin</strong></span>.<br />
+		<% end %>
+	</p>
+
+	<p>
+		<% if @user.gtalk? %><strong>Google Talk</strong>: <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br /><% end %>
+		<% if @user.msn? %><strong>MSN Messenger</strong>: <%= @user.msn %><br /><% end %>
+		<% if @user.aim? %><strong>AIM</strong>: <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br /><% end %>
+	</p>
+
+	<% if @user.twitter? %><div class="social twitter">
+		<h3>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", :class => 'username' %></h3>
+		<div id="profileTweets">
+			<ul id="twitter_update_list"></ul>
+		</div>
+	</div><% end %>
+
+	<% if @user.gamertag? %><div class="social xboxlive">
+		<h3>Xbox Live: <%= link_to "#{@user.gamertag}", "http://live.xbox.com/member/#{@user.gamertag}" %></h3>
+		<% if Sugar.config(:xbox_live_enabled) && @user.xbox_info && @user.xbox_info.valid_xml? %>
+			<p class="clearfix">
+				<%= image_tag @user.xbox_info.tile_url, :class => 'avatar', :size => '64x64' %>
+				<strong>Gamerscore</strong>: <%= @user.xbox_info.gamerscore %><br />
+				<strong>Zone</strong>: <%= @user.xbox_info.zone %><br />
+				<strong>Reputation</strong>: <%= @user.xbox_info.reputation.to_i %><br />
+				<%= @user.xbox_info.info %>
+			</p>
+		<% end %>
+	</div><% end %>
+
+	<% if @user.flickr? %><div class="social flickr clearfix">
+		<h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", :id => 'flickrProfileURL' %></h3>
+		<div id="flickrPhotos"></div>
+	</div><% end %>
+
+	<% if @user.last_fm? %><div class="social lastfm">
+		<h3>Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></h3>
+		<a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1"><img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" /></a>
+	</div><% end %>
+
+	<% if @user.invitees.count > 0 %><div class="invitees">
+		<h3><%= @user.username %> has invited <%= @user.invitees.count %> users:</h3>
+		<ul><% @user.invitees.each do |invitee| %>
+			<li><%= profile_link(invitee) %> (joined <%= formatted_time invitee.created_at %>)</li>
+		<% end %></ul>
+	</div><% end %>
+
+</div>
+<div id="userPosts">
+	<% if @posts && @posts.length > 0 %>
+		<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+	<% elsif @current_user && @user == @current_user %>
+		<div class="welcome">
+			<h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
+			<p>
+				This is your user profile. Normally your posts will show up in this space, but you haven't posted anything yet.
+			</p>
+			<p>
+				Why don't you go <%= link_to "check out some discussions", discussions_path %>, and maybe introduce yourself?<br />
+				Or maybe <%= link_to "edit your profile", edit_user_path(:id => @user.username) %> and add some more info about yourself?
+			</p>
+		</div>
+	<% end %>
+</div>

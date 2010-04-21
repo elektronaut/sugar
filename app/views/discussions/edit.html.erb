@@ -1,0 +1,15 @@
+<% 
+	add_body_class "edit_discussion discussion_form"
+	@page_title = h(@discussion.title)
+%>
+
+<h2 class="section">
+	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo; 
+	<%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
+	<%= link_to "Edit", edit_discussion_path(@discussion) %>
+</h2>
+
+<% form_for(@discussion) do |f| %>
+	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
+	<p><%= submit_tag "Save" %></p>
+<% end %>

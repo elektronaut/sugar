@@ -1,0 +1,17 @@
+<% 
+	@page_title = "Title Search" 
+	add_body_class "search", "search_discussions"
+%>
+
+<div class="functions">
+	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
+</div>
+<h2 class="section">Searching discussions for <em><%= @search_query %></em></h2>
+
+<%= render :partial => 'search/tips' %>
+
+<% if @discussions && @discussions.length > 0 %>
+	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+<% else %>
+	<p>No discussions were found.</p>
+<% end %>

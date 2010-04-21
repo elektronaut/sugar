@@ -1,0 +1,9 @@
+<% @page_title = "Posts: \"#{@search_query}\"" %>
+
+<% if @posts %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
+<% else %>
+	<div class="page_content">
+		<p>No posts were found.</p>
+	</div>
+<% end %>

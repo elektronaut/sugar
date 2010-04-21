@@ -1,0 +1,10 @@
+<% 
+	add_body_class "discussions favorite_discussions"
+	@page_title = "Favorite Discussions" 
+%>
+
+<%= render :partial => 'discussions/table', :locals => {
+	:discussions    => @discussions,
+	:no_discussions => "You haven't marked any discussions as favorites!"
+} %>
+

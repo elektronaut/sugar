@@ -1,0 +1,16 @@
+Welcome to <%= Sugar.config(:forum_name) %>!
+
+We've moved over to the new site, here's your login details:
+
+Username: <%= @user.username %>
+Password: <%= @user.password %>
+
+You can change your password once you've logged in.
+
+The domain is being changed over, you can use this URL if 
+you're not seeing the new site yet:
+
+http://<%= Sugar.config(:default_domain) %>/users/login
+
+If you experience any trouble logging in, 
+send an email to inge@elektronaut.no.

@@ -1,0 +1,14 @@
+<%= labelled_field f.text_field(:title, :class => 'text title'), "Title", :errors => @discussion.errors[:title] %>
+<%= labelled_field f.text_area(:body, :rows => 10, :id => 'compose-body', :class => :rich), 'First post', :errors => @discussion.errors[:body] %>
+<%= labelled_field f.select(:category_id, @categories.map{|c| [c.name, c.id] } ), "Category", :errors => @discussion.errors[:category_id] %>
+
+<p>
+	<%= f.check_box(:nsfw) %> Mark as NSFW<br />
+	<% if @discussion.closeable_by?(@current_user) %>
+		<%= f.check_box(:closed) %> Closed<br />
+	<% end %>
+	<% if @current_user.moderator? %>
+		<%= f.check_box(:sticky) %> Sticky<br />
+	<% end %>
+</p>
+

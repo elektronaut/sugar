@@ -1,0 +1,17 @@
+development:
+  adapter: mysql
+  username: my_username
+  password: my_password
+  database: sugar_dev
+
+test:
+  adapter: mysql
+  username: my_username
+  password: my_password
+  database: sugar_test
+
+production:
+  adapter: mysql
+  username: my_username
+  password: my_password
+  database: sugar

@@ -1,0 +1,10 @@
+<% 
+	add_body_class "discussions followed_discussions"
+	@page_title = "Followed Discussions" 
+%>
+
+<%= render :partial => 'discussions/table', :locals => {
+	:discussions    => @discussions,
+	:no_discussions => "You aren't following any discussions!"
+} %>
+

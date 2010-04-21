@@ -1,0 +1,15 @@
+development:
+  port: 3312
+  enable_star: true
+  min_prefix_len: 3
+  mem_limit: 64M
+test:
+  port: 3312
+  enable_star: true
+  min_prefix_len: 3
+  mem_limit: 64M
+production:
+  port: 3312
+  enable_star: true
+  min_prefix_len: 3
+  mem_limit: 64M

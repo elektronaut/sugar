@@ -1,0 +1,14 @@
+<% 
+	add_body_class "new_invite"
+	@page_title = "New Invite" 
+%>
+
+<h2 class="section"><%= link_to "Invites", invites_path %> &raquo; <%= link_to "New", new_invite_path %></h2>
+
+<% form_for @invite do |f| %>
+	<%= labelled_field f.text_field(:email, :size => 60), "Email", :errors => @invite.errors[:email] %>
+	<%= labelled_field f.text_area(:message, :cols => 60, :rows => 10), "Message", :errors => @invite.errors[:message], :description => 'Optional, will appear in the welcoming email' %>
+	<p>
+		<%= submit_tag "Send invite" %>
+	</p>
+<% end %>

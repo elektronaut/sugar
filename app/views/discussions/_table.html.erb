@@ -1,0 +1,33 @@
+<%
+	no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
+%>
+<% if discussions && discussions.length > 0 %>
+	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
+	<table class="discussions">
+		<% discussions.each do |d| %>
+			<tr class="<%= discussion_classes(discussions, d) %>">
+				<td class="name" colspan="6"><span class="title">
+					<% if d.labels? %>
+						<span class="labels">[<%= d.labels.join(',') %>]</span>
+					<% end %>
+					<%= link_to h(d.title), last_discussion_page_path(d) %>
+				</span></td>
+			</tr>
+			<tr class="<%= discussion_classes(discussions, d) %>">
+				<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
+				<td class="started_by">Started by <%= profile_link(d.poster) %></td>
+				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
+				<td class="last_active">Last active <strong><%= formatted_time d.last_post_at %></strong></td>
+				<td class="post_count"><strong><%= d.posts_count %></strong> <%= d.posts_count > 1 ? 'posts' : 'post' %></td>
+				<td class="new_posts last">
+					<% if new_posts?(d) %>
+						New: <strong><%= new_posts_count(d) %></strong>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</table>
+	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
+<% else %>
+	<p><%= no_discussions %></p>
+<% end %>

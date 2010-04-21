@@ -1,0 +1,16 @@
+<ul class="topTabs">
+	<%= users_tab "All Users", users_path, :action => 'index', :class => 'AllUsersTab' %>
+	<%= users_tab "Online", online_users_path, :action => 'online', :class => 'OnlineUsersTab' %>
+	<%= users_tab "Recently Joined", recently_joined_users_path, :action => 'recently_joined', :class => 'RecentlyJoinedTab' %>
+	<%= users_tab "Top Posters", top_posters_users_path, :action => 'top_posters', :class => 'TopPostersTab' %>
+	<%= users_tab "Admins", admins_users_path, :action => 'admins', :class => 'AdminsTab' %>
+	<% if @current_user && @current_user.trusted? %>
+		<%= users_tab "Trusted", trusted_users_path, :action => 'trusted', :class => 'TrustedUsersTab' %>
+	<% end %>
+	<%= users_tab "Banned", banned_users_path, :action => 'banned', :class => 'BannedUsersTab' %>
+	<%= users_tab "Twitter", twitter_users_path, :action => 'twitter', :class => 'TwitterUsersTab' %>
+	<%= users_tab "Map", map_users_path, :action => 'map', :class => 'UsersMapTab' %>
+	<% if Sugar.config(:xbox_live_enabled) %>
+		<%= users_tab "Xbox Live", xboxlive_users_path, :action => 'xboxlive', :class => 'XboxLiveUsersTab' %>
+	<% end %>
+</ul>
