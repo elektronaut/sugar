@@ -28,6 +28,8 @@ module Sugar
 		:google_analytics         => nil,
 		
 		# Customization
+		:custom_header            => nil,
+		:custom_footer            => nil,
 		:custom_javascript        => nil,
 	}
 	CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]

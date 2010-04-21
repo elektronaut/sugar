@@ -39,7 +39,9 @@
 	<%= labelled_field check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)), "Xbox Live support enabled" %>
 
 	<h2>Customization</h2>
-	<%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x10'), "Custom Javascript" %>
+	<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x10'), "Custom header (HTML)" %>
+	<%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x10'), "Custom footer (HTML)" %>
+	<%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x10'), "Custom Javascript (jQuery enabled)" %>
 
 	<p>
 		<%= submit_tag "Save" %>
