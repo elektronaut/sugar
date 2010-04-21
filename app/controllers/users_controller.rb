@@ -313,7 +313,8 @@ class UsersController < ApplicationController
 					flash[:notice] = "Your account isn't active, you can't do that yet"
 				end
 			else
-				flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
+				flash[:notice] = "Could not find that email address"
+				redirect_to password_reset_users_url and return
 			end
 			redirect_to login_users_url
 		else
