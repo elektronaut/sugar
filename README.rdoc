@@ -28,9 +28,9 @@ Things you *WON'T* find in Sugar:
 
 == Requirements, and how to install them
 
-Sugar is currently targetting version 2.3.3 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
+Sugar is currently targetting version 2.3.2 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
   
- sudo gem install rails -v 2.3.3
+ sudo gem install rails -v 2.3.2
 
 You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Remember to install the appropriate gems for your DBM of choice.
 
