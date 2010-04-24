@@ -91,7 +91,7 @@ class UsersController < ApplicationController
 	end
 
 	def posts
-		@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?)
+		@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?))
 	end
 
 	def stats
