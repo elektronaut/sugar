@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	requires_authentication :except => [:login, :complete_openid_login, :logout, :password_reset, :new, :create]
+	requires_authentication :except => [:login, :facebook_login, :complete_openid_login, :logout, :password_reset, :new, :create]
 	requires_user           :only => [:edit, :update, :grant_invite, :revoke_invites]
 
 	def load_user
