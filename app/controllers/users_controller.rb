@@ -173,8 +173,10 @@ class UsersController < ApplicationController
 		if @facebook_session && @facebook_session[:uid]
 			@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
 			flash[:notice] = "You have connected your Facebook account"
-			redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+		else
+			flash[:notice] = "Can't get a Facebook session, sorry!"
 		end
+		redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
 	end
 	
 	def disconnect_facebook
