@@ -1,4 +1,19 @@
 <%= labelled_field f.text_field(:website, :size => 50), "Web site", :errors => @user.errors[:website] %>
+<% if Sugar.config(:facebook_app_id) %>
+	<p>
+		<label>Facebook</label>
+		<% if @user.facebook_uid? %>
+			You have connected your Facebook account. <%= link_to "Remove?", disconnect_facebook_users_path %>
+		<% else %>
+			<fb:login-button size="large" length="long"></fb:login-button>
+			<script type="text/javascript">
+				window.onFacebookLogin = function(){
+					document.location = "<%= connect_facebook_users_path %>";
+				}
+			</script>
+		<% end %>
+	</p>
+<% end %>
 <%= labelled_field f.text_field(:gtalk), "Google Talk", :errors => @user.errors[:gtalk] %>
 <%= labelled_field f.text_field(:msn), "MSN Messenger", :errors => @user.errors[:msn] %>
 <%= labelled_field f.text_field(:aim), "AIM", :errors => @user.errors[:aim] %>
@@ -6,3 +21,4 @@
 <%= labelled_field f.text_field(:twitter), "Twitter username", :errors => @user.errors[:twitter] %>
 <%= labelled_field f.text_field(:flickr), "Flickr user ID", :errors => @user.errors[:flickr], :description => "Note: This is not your username" %>
 <%= labelled_field f.text_field(:last_fm), "Last.fm username", :errors => @user.errors[:last_fm] %>
+

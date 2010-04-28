@@ -1020,6 +1020,15 @@ body.login #login .openid_toggle {
 	margin-top:          20px;
 }
 
+body.login #login .facebook {
+	margin-top:          20px;
+}
+
+body.login #login .facebook a {
+	padding-left:        1px;
+	text-decoration:     none;
+}
+
 /*
 body.login h2.section, body.login #header {
 	display:             none;

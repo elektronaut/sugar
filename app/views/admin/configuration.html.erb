@@ -37,6 +37,12 @@
 	<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api)), "Flickr API key", :description => 'Enter to enable Flickr integration' %>
 	<%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Google Analytics tracking code", :description => 'Enter to enable tracking' %>
 	<%= labelled_field check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)), "Xbox Live support enabled" %>
+	
+	<h2>Facebook</h2>
+	<%= labelled_field text_field_tag('config[facebook_api_key]', Sugar.config(:facebook_api_key)), "API Key" %>
+	<%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret)), "Application Secret" %>
+	<%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id)), "Application ID" %>
+	
 
 	<h2>Customization</h2>
 	<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x10'), "Custom header (HTML)" %>

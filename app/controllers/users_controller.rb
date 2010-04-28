@@ -169,6 +169,21 @@ class UsersController < ApplicationController
 		require_user_admin_or_user(@user, :redirect => user_url(@user))
 	end
 
+	def connect_facebook
+		if @facebook_session && @facebook_session[:uid]
+			@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
+			flash[:notice] = "You have connected your Facebook account"
+			redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+		end
+	end
+	
+	def disconnect_facebook
+		@current_user.update_attribute(:facebook_uid, nil)
+		cookies['fb_logout'] = true
+		flash[:notice] = "You have disconnected your Facebook account"
+		redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+	end
+
 	def update_openid
 		require_user_admin_or_user(@user, :redirect => user_url(@user))
 		response_params = params
@@ -278,6 +293,20 @@ class UsersController < ApplicationController
 	def login
 		redirect_to new_user_path   and return if @admin_signup
 		redirect_to discussions_url and return if @current_user
+
+		# Check for Facebook authentication
+		if @facebook_session && @facebook_session[:uid]
+			if user = User.find_by_facebook_uid(@facebook_session[:uid])
+				@current_user = user
+				store_session_authentication
+				redirect_to discussions_url and return
+			else
+				flash[:notice] = "Your Facebook account wasn't recognized"
+				cookies['fb_logout'] = true
+				redirect_to login_users_url and return
+			end
+		end
+
 		if request.post?
 			if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?
 				user = User.find_by_username(params[:username])
