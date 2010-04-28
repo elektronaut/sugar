@@ -36,4 +36,10 @@
 			<%= link_to_function "Login with username/password", :class => 'username_and_password_toggle' %>
 		</fieldset>
 	<% end %>
+
+	<% if Sugar.config(:facebook_app_id) -%>
+		<div class="facebook">
+			<fb:login-button size="large" length="long"></fb:login-button>
+		</div>
+	<% end %>
 </div>

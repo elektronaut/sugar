@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 class ApplicationController < ActionController::Base
 
 	layout 'default'
@@ -10,6 +12,7 @@ class ApplicationController < ActionController::Base
 
 	# Filters
 	before_filter :authenticate_session
+	before_filter :facebook_authenticate
 	before_filter :detect_iphone
 	before_filter :set_section
 	after_filter  :store_session_authentication
@@ -74,7 +77,7 @@ class ApplicationController < ActionController::Base
 				request.format = :iphone if session[:iphone_format] == 'iphone'
 			end
 		end
-
+		
 		# Sets <tt>@section</tt> to the current section.
 		def set_section
 			case self.class.to_s
@@ -121,8 +124,31 @@ class ApplicationController < ActionController::Base
 			end
 		end
 
+		# Facebook authentication
+		def facebook_authenticate
+			if Sugar.config(:facebook_app_id) && request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"] && !cookies['fb_logout']
+				# Parse the facebook session
+				facebook_session = request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"].gsub(/(^\"|\"$)/, '')
+				facebook_session = CGI::parse(facebook_session).inject(Hash.new) do |memo, val|
+					memo[val.first] = val.last.first
+					memo
+				end
+				facebook_session.symbolize_keys!
+				
+				# Verify the payload
+				payload = facebook_session.keys.sort.reject{|k| k == :sig}.map{|k| "#{k.to_s}=#{facebook_session[k]}"}.join
+				expected_sig = Digest::MD5.hexdigest(payload + Sugar.config(:facebook_api_secret))
+				if facebook_session[:sig] && !facebook_session[:sig].empty? && facebook_session[:sig] == expected_sig
+					@facebook_session = facebook_session
+				else
+					@facebook_session = false
+				end
+			end
+		end
+
 		# Deauthenticates <tt>@current_user</tt>.
 		def deauthenticate!
+			cookies['fb_logout'] = true
 			@current_user = nil
 			store_session_authentication
 		end

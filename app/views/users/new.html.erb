@@ -7,6 +7,10 @@
 	<%= link_to @page_title, new_user_path %>
 </h2>
 
+<% if Sugar.config(:facebook_app_id) && false -%>
+	<fb:login-button size="large" length="long" perms="email"></fb:login-button>
+<% end %>
+
 <% form_for @user do |f| %>
 	<% if @invite %>
 		<%= hidden_field_tag 'token', @invite.token %>
