@@ -172,6 +172,10 @@ class UsersController < ApplicationController
 	def connect_facebook
 		if @facebook_session && @facebook_session[:uid]
 			@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
+			# Update the access token if it has changed
+			if @facebook_session[:access_token] && @facebook_session[:access_token] != @current_user.facebook_access_token
+				@current_user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
+			end
 			flash[:notice] = "You have connected your Facebook account"
 		else
 			flash[:notice] = "Can't get a Facebook session, sorry!"
@@ -292,22 +296,27 @@ class UsersController < ApplicationController
 		redirect_to login_users_url
 	end
 
-	def login
-		redirect_to new_user_path   and return if @admin_signup
-		redirect_to discussions_url and return if @current_user
-
+	def facebook_login
 		# Check for Facebook authentication
 		if @facebook_session && @facebook_session[:uid]
 			if user = User.find_by_facebook_uid(@facebook_session[:uid])
+				if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token
+					# Update the access token if it has changed
+					user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
+				end
 				@current_user = user
 				store_session_authentication
 				redirect_to discussions_url and return
 			else
 				flash[:notice] = "Your Facebook account wasn't recognized"
-				cookies['fb_logout'] = true
 				redirect_to login_users_url and return
 			end
 		end
+	end
+
+	def login
+		redirect_to new_user_path   and return if @admin_signup
+		redirect_to discussions_url and return if @current_user
 
 		if request.post?
 			if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?

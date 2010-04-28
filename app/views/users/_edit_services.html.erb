@@ -5,12 +5,7 @@
 		<% if @user.facebook_uid? %>
 			You have connected your Facebook account. <%= link_to "Remove?", disconnect_facebook_users_path %>
 		<% else %>
-			<fb:login-button size="large" length="long"></fb:login-button>
-			<script type="text/javascript">
-				window.onFacebookLogin = function(){
-					document.location = "<%= connect_facebook_users_path %>";
-				}
-			</script>
+			<a class="facebook_login">Connect with Facebook</a>
 		<% end %>
 	</p>
 <% end %>

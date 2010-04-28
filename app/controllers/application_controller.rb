@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
 
 		# Facebook authentication
 		def facebook_authenticate
-			if Sugar.config(:facebook_app_id) && request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"] && !cookies['fb_logout']
+			if Sugar.config(:facebook_app_id) && request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"]
 				# Parse the facebook session
 				facebook_session = request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"].gsub(/(^\"|\"$)/, '')
 				facebook_session = CGI::parse(facebook_session).inject(Hash.new) do |memo, val|
@@ -148,7 +148,6 @@ class ApplicationController < ActionController::Base
 
 		# Deauthenticates <tt>@current_user</tt>.
 		def deauthenticate!
-			cookies['fb_logout'] = true
 			@current_user = nil
 			store_session_authentication
 		end

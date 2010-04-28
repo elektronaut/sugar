@@ -30,6 +30,7 @@ ActionController::Routing::Routes.draw do |map|
 			:logout                => :any, 
 			:password_reset        => :any, 
 			:complete_openid_login => :any,
+			:facebook_login        => :any,
 			:connect_facebook      => :any,
 			:disconnect_facebook   => :any,
 			# Lists

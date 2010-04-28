@@ -27,13 +27,15 @@
 		<%= javascript_include_tag 'sugar/mp3player' %>
 		<%= javascript_include_tag 'sugar/posts' %>
 		<%= javascript_include_tag 'sugar/hotkeys' %>
+		<%= javascript_include_tag 'sugar/facebook' %>
 		<%= javascript_include_tag 'application' %>
 	<% end -%>
 	<script type="text/javascript">
-		<%= "Sugar.Configuration.debug     = true;" if RAILS_ENV == 'development' %>
-		<%= "Sugar.Configuration.FlickrAPI = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
-		<%= "Sugar.Configuration.hotkeys   = true;" if @current_user && @current_user.keyboard_navigation? %>
-		<%= "Sugar.Configuration.workSafe  = true;" if @current_user && @current_user.work_safe_urls? %>
+		<%= "Sugar.Configuration.debug         = true;" if RAILS_ENV == 'development' %>
+		<%= "Sugar.Configuration.FlickrAPI     = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
+		<%= "Sugar.Configuration.hotkeys       = true;" if @current_user && @current_user.keyboard_navigation? %>
+		<%= "Sugar.Configuration.workSafe      = true;" if @current_user && @current_user.work_safe_urls? %>
+		<%= "Sugar.Configuration.FacebookAppId = '#{Sugar.config(:facebook_app_id)}';" if Sugar.config(:facebook_app_id) %>
 	</script>
 	<% if Sugar.config(:custom_javascript) %>
 		<script type="text/javascript">
@@ -116,7 +118,7 @@
 </script>
 <script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config(:google_analytics) %>"); pageTracker._trackPageview(); } catch(err) {}</script>
 <% end -%>
-<% if Sugar.config(:facebook_app_id) -%>
+<% if Sugar.config(:facebook_app_id) && false -%>
 <div id="fb-root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript">
