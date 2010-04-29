@@ -1,0 +1,30 @@
+<%
+	mode ||= false
+%>
+
+<% if @invite %>
+	<%= hidden_field_tag 'token', @invite.token %>
+<% end %>
+<%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
+<%= labelled_field f.text_field(:email, :size => 50), "Email address", :errors => @user.errors[:email] %>
+<% if mode == :openid %>
+	<%= labelled_field f.text_field(:openid_url, :size => 47), "OpenID Identity URL", :errors => @user.errors[:openid_url], :description => "#{link_to("What's this?", "http://openid.net/what/")}" %>
+<% else %>
+	<% labelled_field f.password_field(:password), "Password", :errors => @user.errors[:password], :description => "Enter twice to confirm" do %>
+		<%= f.password_field(:confirm_password) %>
+	<% end %>
+<% end %>
+
+<% if Sugar.config(:signup_approval_required) %>
+	<p>Your account will have to be approved. Please provide some information about your application:</p>
+<% else %>
+	<p>The following fields are optional, but it's always nice to provide a bit more information:</p>
+<% end %>
+
+<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
+<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
+
+<% if Sugar.config(:signup_approval_required) %>
+	<%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
+<% end %>
+

@@ -38,9 +38,9 @@ class User < ActiveRecord::Base
 	has_many   :sent_messages,   :class_name => 'Message', :foreign_key => 'sender_id',    :conditions => ['deleted_by_sender = 0'],      :order => ['created_at DESC']
 	has_one    :xbox_info, :dependent => :destroy
 
-	# Automatically generate a password for OpenID users
+	# Automatically generate a password for Facebook and OpenID users
 	before_validation_on_create do |user|
-		if user.openid_url? && !user.hashed_password? && (!user.password || user.password.blank?)
+		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end
 	end
@@ -66,12 +66,18 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	validates_presence_of   :hashed_password, :unless => :openid_url?
+	validates_presence_of   :hashed_password, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}
 	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
-	validates_presence_of   :username, :email
+	validates_uniqueness_of :facebook_uid, :allow_nil => true, :allow_blank => true, :message => 'is already registered.'
+
+	validates_presence_of   :username
 	validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
-	validates_presence_of   :realname, :application, :if => Proc.new { |u| Sugar.config(:signup_approval_required) }
+
+	validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}, :case_sensitive => false
+	validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
+
+	validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
 	
 	class << self
 		# Finds active users.

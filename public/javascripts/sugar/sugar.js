@@ -125,6 +125,9 @@ var Sugar = {
 					window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 				}
 			});
+			jQuery('#signup-tabs').each(function(){
+				window.signupTabs = new SugarTabs(this, {showFirstTab: true});
+			});
 		},
 
 		postFunctions: function() {
