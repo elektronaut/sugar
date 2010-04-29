@@ -51,31 +51,19 @@
 		</fieldset>
 		<fieldset>
 			<h2>Login and signup</h2>
-			<!--
-			<%= labelled_field(
-					check_box_tag('config[public_browsing]', '1', Sugar.config(:public_browsing)), 
-					"Public browsing", 
-					:description => 'Check to enable browsing while not logged in'
-			) %>
-			<%= labelled_field(
-					check_box_tag('config[signups_allowed]', '1', Sugar.config(:signups_allowed)), 
-					"Signups allowed", 
-					:description => 'Disable to enable invite-only mode'
-			) %>
-			-->
 			<%= labelled_field(
 					radio_button_tag('config[public_browsing]', true, Sugar.config(:public_browsing)) +
 					" Anyone can browse<br />" +
 					radio_button_tag('config[public_browsing]', false, !Sugar.config(:public_browsing)) +
 					" Browsing requires login",
-					"Access"
+					"Access control"
 			) %>
 			<%= labelled_field(
 					radio_button_tag('config[signups_allowed]', true, Sugar.config(:public_browsing)) +
 					" Users can sign up<br />" +
 					radio_button_tag('config[signups_allowed]', false, !Sugar.config(:signups_allowed)) +
 					" Users must be invited",
-					"Signup mode"
+					"Signing up"
 			) %>
 			<%= labelled_field(
 					check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)) +
@@ -129,8 +117,8 @@
 	<div id="customization">
 		<fieldset>
 			<h2>Custom HTML</h2>
-			<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x15', :class => 'code'), "Header", :description => 'Included at the beginning of &lt;body&gt;' %>
-			<%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x15', :class => 'code'), "Footer", :description => 'Included at the end of &lt;body&gt;'  %>
+			<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x15', :class => 'code'), "Header", :description => 'Included right after &lt;body&gt;' %>
+			<%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x15', :class => 'code'), "Footer", :description => 'Included just before &lt;/body&gt;'  %>
 		</fieldset>
 		<fieldset>
 			<h2>Custom JavaScript</h2>
