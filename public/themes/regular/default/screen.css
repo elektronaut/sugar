@@ -184,6 +184,32 @@ div.errors ul {
 div.fieldWithErrors {
 	display:             inline;
 }
+fieldset {
+	margin-bottom:       20px;
+}
+fieldset h2 {
+	border-bottom:       1px solid #E2DCBF;
+	margin-top:          20px;
+	padding-bottom:      7px;
+	margin-bottom:       7px;
+	color:               #444;
+}
+fieldset p.info {
+	font-size:           1.2em;
+}
+textarea.code {
+	width:               100%;
+	font-family:         Monaco, Consolas, Courier New, Courier, monospace;
+}
+
+span.example {
+	font-family:         Monaco, Consolas, Courier, monospace;
+	font-size:           11px;
+	background:          #F3F1E9;
+	padding:             2px 4px;
+	white-space:         nowrap;
+	color:               #000;
+}
 
 .iphone_link {
 	font-size:           15px;
@@ -935,14 +961,7 @@ span.admin {
 	font-size:           1.1em;
 	color:               #444;
 }
-.search_tips .example {
-	font-family:         Monaco, Consolas, Courier, monospace;
-	font-size:           11px;
-	background:          #F3F1E9;
-	padding:             2px 4px;
-	white-space:         nowrap;
-}
-.search_tips .example, .search_tips strong {
+.search_tips strong {
 	color:               #000;
 }
 

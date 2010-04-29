@@ -85,7 +85,7 @@ module Sugar
 			config.each do |key, value|
 				key = key.to_sym
 				if CONFIGURATION_BOOLEANS.include?(key)
-					new_config[key] = (!value || value == '0') ? false : true
+					new_config[key] = (!value || value == '0' || value.to_s == 'false') ? false : true
 				else
 					new_config[key] = value
 				end

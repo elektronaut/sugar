@@ -8,46 +8,139 @@
 	<%= link_to "Configuration", configuration_admin_path %>
 </h2>
 
+<ul class="tabs topTabs">  
+	<li class="tab"><a href="#general">General settings</a></li>
+	<li class="tab"><a href="#themes">Themes</a></li>
+	<li class="tab"><a href="#integration">Services and Integration</a></li>
+	<li class="tab"><a href="#customization">Customization</a></li>
+</ul>
+
+
 <% form_tag configuration_admin_path do %>
 
-	<h2>Forum name</h2>
-	<%= labelled_field text_field_tag('config[forum_name]', Sugar.config(:forum_name)), "Forum name" %>
-	<%= labelled_field text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name)), "Short version of forum name" %>
-	<%= labelled_field text_field_tag('config[forum_title]', Sugar.config(:forum_title)), "Forum title", :description => '(HTML allowed)' %>
+	<div id="general">
+		<fieldset>
+			<h2>Forum name</h2>
+			<%= labelled_field(
+					text_field_tag('config[forum_name]', Sugar.config(:forum_name), :size => 48), 
+					"Forum name"
+			) %>
+			<%= labelled_field(
+					text_field_tag('config[forum_title]', 
+					Sugar.config(:forum_title), :size => 48), 
+					"Forum title", 
+					:description => 'HTML allowed'
+			) %>
+			<%= labelled_field(
+					text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name), :size => 10), 
+					"Short version of forum name", 
+					:description => 'Will be used where applicable, ie. on the mobile version' 
+			) %>
+		</fieldset>
+		<fieldset>
+			<h2>Domain and email</h2>
+			<%= labelled_field(
+					"http://"+text_field_tag('config[default_domain]', Sugar.config(:default_domain), :size => 32), 
+					"Default domain name"
+			) %>
+			<%= labelled_field(
+					text_field_tag('config[mail_sender]', Sugar.config(:mail_sender), :size => 48), 
+					"Mail sender", 
+					:description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>'
+			) %>
+		</fieldset>
+		<fieldset>
+			<h2>Login and signup</h2>
+			<!--
+			<%= labelled_field(
+					check_box_tag('config[public_browsing]', '1', Sugar.config(:public_browsing)), 
+					"Public browsing", 
+					:description => 'Check to enable browsing while not logged in'
+			) %>
+			<%= labelled_field(
+					check_box_tag('config[signups_allowed]', '1', Sugar.config(:signups_allowed)), 
+					"Signups allowed", 
+					:description => 'Disable to enable invite-only mode'
+			) %>
+			-->
+			<%= labelled_field(
+					radio_button_tag('config[public_browsing]', true, Sugar.config(:public_browsing)) +
+					" Anyone can browse<br />" +
+					radio_button_tag('config[public_browsing]', false, !Sugar.config(:public_browsing)) +
+					" Browsing requires login",
+					"Access"
+			) %>
+			<%= labelled_field(
+					radio_button_tag('config[signups_allowed]', true, Sugar.config(:public_browsing)) +
+					" Users can sign up<br />" +
+					radio_button_tag('config[signups_allowed]', false, !Sugar.config(:signups_allowed)) +
+					" Users must be invited",
+					"Signup mode"
+			) %>
+			<%= labelled_field(
+					check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)) +
+					" User moderators must approve new users", 
+					"Approval"
+			) %>
+		</fieldset>
 
-	<h2>Settings</h2>
-	<%= labelled_field check_box_tag('config[public_browsing]', '1', Sugar.config(:public_browsing)), "Public browsing", :description => 'Check to enable browsing while not logged in' %>
-	<%= labelled_field check_box_tag('config[signups_allowed]', '1', Sugar.config(:signups_allowed)), "Signups allowed", :description => 'Disable to enable invite-only mode' %>
-	<%= labelled_field check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)), "Signup approval required", :description => 'Enable to require approval from user moderators' %>
-	
-	<%= labelled_field text_field_tag('config[default_domain]', Sugar.config(:default_domain)), "Default domain name", :description => '(without http://)' %>
-	<%= labelled_field text_field_tag('config[mail_sender]', Sugar.config(:mail_sender)), "Mail sender", :description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>' %>
 
-	<!--
-	<%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", :description => 'Example: <em>http://assets%d.mydomain.com</em>' %>
-	<%= labelled_field text_field_tag('config[session_key]', Sugar.config(:session_key)), "Session cookie name" %>
-	-->
-	
+		<!--
+		<%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", :description => 'Example: <em>http://assets%d.mydomain.com</em>' %>
+		<%= labelled_field text_field_tag('config[session_key]', Sugar.config(:session_key)), "Session cookie name" %>
+		-->
 
-	<h2>Themes</h2>
-	<%= labelled_field text_field_tag('config[default_theme]', Sugar.config(:default_theme)), "Default theme" %>
-	<%= labelled_field text_field_tag('config[default_iphone_theme]', Sugar.config(:default_iphone_theme)), "Default iPhone theme" %>
 
-	<h2>Services and integration</h2>
-	<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api)), "Flickr API key", :description => 'Enter to enable Flickr integration' %>
-	<%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Google Analytics tracking code", :description => 'Enter to enable tracking' %>
-	<%= labelled_field check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)), "Xbox Live support enabled" %>
-	
-	<h2>Facebook</h2>
-	<%= labelled_field text_field_tag('config[facebook_api_key]', Sugar.config(:facebook_api_key)), "API Key" %>
-	<%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret)), "Application Secret" %>
-	<%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id)), "Application ID" %>
-	
-
-	<h2>Customization</h2>
-	<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x10'), "Custom header (HTML)" %>
-	<%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x10'), "Custom footer (HTML)" %>
-	<%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x10'), "Custom Javascript (jQuery enabled)" %>
+	</div>
+	<div id="themes">
+		<fieldset>
+			<h2>Themes</h2>
+			<%= labelled_field text_field_tag('config[default_theme]', Sugar.config(:default_theme), :size => 32), "Default theme" %>
+			<%= labelled_field text_field_tag('config[default_iphone_theme]', Sugar.config(:default_iphone_theme), :size => 32), "Default iPhone theme" %>
+		</fieldset>
+	</div>
+	<div id="integration">
+		<fieldset>
+			<h2>Google Analytics</h2>
+			<%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Tracking code", :description => 'Enter to enable tracking' %>
+		</fieldset>
+		<fieldset>
+			<h2>Facebook</h2>
+			<p class="info">
+				To enable this feature,  
+				<%= link_to "set up an application on Facebook", "http://www.facebook.com/developers" %>
+				and enter your Application ID and API keys here.
+			</p>
+			<%= labelled_field text_field_tag('config[facebook_api_key]', Sugar.config(:facebook_api_key), :size => '48'), "API Key" %>
+			<%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret), :size => '48'), "Application Secret" %>
+			<%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id), :size => '48'), "Application ID" %>
+		</fieldset>
+		<fieldset>
+			<h2>Flickr</h2>
+			<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api), :size => '48'), "API key", :description => 'Enter to enable Flickr integration' %>
+		</fieldset>
+		<fieldset>
+			<h2>Xbox Live</h2>
+			<p class="field">
+				<%= check_box_tag('config[xbox_live_enabled]', '1', Sugar.config(:xbox_live_enabled)) %> Enabled
+			</p>
+		</fieldset>
+	</div>
+	<div id="customization">
+		<fieldset>
+			<h2>Custom HTML</h2>
+			<%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x15', :class => 'code'), "Header", :description => 'Included at the beginning of &lt;body&gt;' %>
+			<%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x15', :class => 'code'), "Footer", :description => 'Included at the end of &lt;body&gt;'  %>
+		</fieldset>
+		<fieldset>
+			<h2>Custom JavaScript</h2>
+			<p class="info">
+				Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with
+				<span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.
+			</p>
+			<%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x15', :class => 'code'), "Javascript" %>
+		</fieldset>
+	</div>
 
 	<p>
 		<%= submit_tag "Save" %>

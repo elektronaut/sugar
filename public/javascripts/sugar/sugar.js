@@ -128,6 +128,10 @@ var Sugar = {
 			jQuery('#signup-tabs').each(function(){
 				window.signupTabs = new SugarTabs(this, {showFirstTab: true});
 			});
+			jQuery('.admin.configuration .tabs').each(function(){
+				window.configTabs = new SugarTabs(this, {showFirstTab: true});
+			});
+			
 		},
 
 		postFunctions: function() {

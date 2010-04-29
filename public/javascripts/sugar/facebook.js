@@ -89,10 +89,8 @@
 						FB.login(function(response){
 							if(response.session){
 								doSignup();
-							} else {
-								// User cancelled, do nothing
 							}
-						}, {perms:'user_likes,read_friendlists,offline_access'});
+						}, {perms:'email,user_likes,read_friendlists,offline_access'});
 					}
 				});
 				return false;
@@ -107,8 +105,6 @@
 					FB.login(function(response){
 						if(response.session){
 							document.location = redirectUrl;
-						} else {
-							// User cancelled, do nothing
 						}
 					}, {perms:'user_likes,read_friendlists,offline_access'});
 				}
