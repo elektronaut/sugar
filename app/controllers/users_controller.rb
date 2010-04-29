@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class UsersController < ApplicationController
 
 	requires_authentication :except => [:login, :facebook_login, :complete_openid_login, :logout, :password_reset, :new, :create]
@@ -100,11 +102,29 @@ class UsersController < ApplicationController
 	end
 
 	def new
+		user_params = {}
+		if @facebook_session && @facebook_session[:uid]
+			begin
+				fb_url = "http://graph.facebook.com/#{@facebook_session[:uid]}"
+				if @facebook_session[:access_token]
+					fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
+					fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
+					fb_url += "&client_secret=#{Sugar.config(:facebook_api_secret)}"
+				end
+				json = open(fb_url).read
+				json = ActiveSupport::JSON.decode(json).symbolize_keys
+				user_params[:email]    = json[:email]
+				user_params[:realname] = json[:name]
+				user_params[:username] = json[:name]
+			rescue
+				# Nothing to do
+			end
+		end
 		# New by invitation
 		if params[:token]
 			@invite = Invite.first(:conditions => {:token => params[:token]})
 			if @invite && !@invite.expired?
-				@user = @invite.user.invitees.new
+				@user = @invite.user.invitees.new(user_params)
 				@user.email = @invite.email
 			else
 				flash[:notice] = "That's not a valid invite!"
@@ -112,7 +132,7 @@ class UsersController < ApplicationController
 			end
 			# Signups allowed
 		elsif Sugar.config(:signups_allowed) || @admin_signup
-			@user = User.new
+			@user = User.new(user_params)
 		else
 			flash[:notice] = "Signups are not allowed!"
 			redirect_to login_users_url and return
@@ -308,8 +328,13 @@ class UsersController < ApplicationController
 				store_session_authentication
 				redirect_to discussions_url and return
 			else
-				flash[:notice] = "Your Facebook account wasn't recognized"
-				redirect_to login_users_url and return
+				if Sugar.config(:signups_allowed)
+					flash[:notice] = "You must choose a username before connecting"
+					redirect_to new_user_url and return
+				else
+					flash[:notice] = "Your Facebook account wasn't recognized"
+					redirect_to login_users_url and return
+				end
 			end
 		end
 	end

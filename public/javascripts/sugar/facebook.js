@@ -71,7 +71,7 @@
 						} else {
 							// User cancelled, do nothing
 						}
-					}, {perms:'user_likes,user_online_presence,user_status,read_friendlists,offline_access'});
+					}, {perms:'user_likes,read_friendlists,offline_access'});
 				}
 			});
 		}

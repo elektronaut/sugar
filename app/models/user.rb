@@ -68,6 +68,7 @@ class User < ActiveRecord::Base
 
 	validates_presence_of   :hashed_password, :unless => :openid_url?
 	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
+	validates_uniqueness_of :facebook_uid, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
 	validates_presence_of   :username, :email
 	validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
