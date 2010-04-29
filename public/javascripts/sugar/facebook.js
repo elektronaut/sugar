@@ -58,6 +58,45 @@
 				$S.Facebook.loginAndRedirect('/users/facebook_login');
 				return false;
 			});
+			
+			// Signing up
+			var doSignup = function(){
+				$('#facebook .signup').hide();
+				FB.getLoginStatus(function(response){
+					if(response.session){
+						$('#facebook .connect').hide();
+						$('#facebook .signup').show();
+						FB.api('/me', function(response){
+							$('#facebook .login_status').html('You are logged into Facebook as <strong>'+response.name+'</strong>.');
+							if(!$('#facebook #user_username').val()){
+								$('#facebook #user_username').val(response.name);
+							}
+							if(!$('#facebook #user_realname').val()){
+								$('#facebook #user_realname').val(response.name);
+							}
+						});
+					}
+				});
+			};
+			$('.signup #facebook').each(function(){
+				doSignup();
+			});
+			$('.signup .facebook_login').click(function(){
+				FB.getLoginStatus(function(response){
+					if(response.session){
+						doSignup();
+					} else {
+						FB.login(function(response){
+							if(response.session){
+								doSignup();
+							} else {
+								// User cancelled, do nothing
+							}
+						}, {perms:'user_likes,read_friendlists,offline_access'});
+					}
+				});
+				return false;
+			});
 		},
 		
 		loginAndRedirect: function(redirectUrl){

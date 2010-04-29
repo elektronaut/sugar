@@ -20,6 +20,19 @@ class UsersController < ApplicationController
 	end
 	protected     :detect_admin_signup
 	before_filter :detect_admin_signup, :only => [:login, :new, :create]
+	
+	def get_facebook_user
+		if @facebook_session && @facebook_session[:uid] && user = User.find_by_facebook_uid(@facebook_session[:uid])
+			if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token
+				# Update the access token if it has changed
+				user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
+			end
+			user
+		else
+			nil
+		end
+	end
+	protected :get_facebook_user
 
 	def index
 		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
@@ -103,23 +116,6 @@ class UsersController < ApplicationController
 
 	def new
 		user_params = {}
-		if @facebook_session && @facebook_session[:uid]
-			begin
-				fb_url = "http://graph.facebook.com/#{@facebook_session[:uid]}"
-				if @facebook_session[:access_token]
-					fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
-					fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
-					fb_url += "&client_secret=#{Sugar.config(:facebook_api_secret)}"
-				end
-				json = open(fb_url).read
-				json = ActiveSupport::JSON.decode(json).symbolize_keys
-				user_params[:email]    = json[:email]
-				user_params[:realname] = json[:name]
-				user_params[:username] = json[:name]
-			rescue
-				# Nothing to do
-			end
-		end
 		# New by invitation
 		if params[:token]
 			@invite = Invite.first(:conditions => {:token => params[:token]})
@@ -149,7 +145,7 @@ class UsersController < ApplicationController
 			flash[:notice] = "Signups are not allowed!"
 			redirect_to login_users_url and return
 		end
-
+		
 		# Secure and parse attributes
 		attributes = User.safe_attributes(params[:user])
 		if attributes[:openid_url] && !attributes[:openid_url].blank?
@@ -159,11 +155,42 @@ class UsersController < ApplicationController
 		attributes[:inviter_id] = @invite.user_id if @invite
 		attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup) ? true : false
 		attributes[:admin]      = true if @admin_signup
+		
+		# Get data from Facebook
+		if params[:mode] == 'facebook' && @facebook_session && @facebook_session[:uid]
+			if user = get_facebook_user
+				# You already have an account, dimwit
+				@current_user = user
+				store_session_authentication
+				redirect_to discussions_url and return
+			else
+				facebook_params = {
+					:facebook_uid          => @facebook_session[:uid],
+					:facebook_access_token => @facebook_session[:access_token]
+				}
+				begin
+					fb_url = "http://graph.facebook.com/#{@facebook_session[:uid]}"
+					if @facebook_session[:access_token]
+						fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
+						fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
+						fb_url += "&client_secret=#{Sugar.config(:facebook_api_secret)}"
+					end
+					json = open(fb_url).read
+					json = ActiveSupport::JSON.decode(json).symbolize_keys
+					facebook_params[:email]    = json[:email]
+					facebook_params[:realname] = json[:name]
+					facebook_params[:username] = json[:name]
+				rescue
+					# Nothing to do
+				end
+				attributes = facebook_params.merge(attributes)
+			end
+		end
 
 		@user = User.create(attributes)
 		if @user.valid?
 			@invite.expire! if @invite
-			Mailer.deliver_new_user(@user, login_users_path(:only_path => false))
+			Mailer.deliver_new_user(@user, login_users_path(:only_path => false)) if @user.email?
 			@current_user = @user
 			store_session_authentication
 
@@ -317,24 +344,17 @@ class UsersController < ApplicationController
 	end
 
 	def facebook_login
-		# Check for Facebook authentication
-		if @facebook_session && @facebook_session[:uid]
-			if user = User.find_by_facebook_uid(@facebook_session[:uid])
-				if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token
-					# Update the access token if it has changed
-					user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
-				end
-				@current_user = user
-				store_session_authentication
-				redirect_to discussions_url and return
+		if user = get_facebook_user
+			@current_user = user
+			store_session_authentication
+			redirect_to discussions_url and return
+		else
+			if Sugar.config(:signups_allowed)
+				flash[:notice] = "You must choose a username before connecting"
+				redirect_to new_user_url(:anchor => 'facebook') and return
 			else
-				if Sugar.config(:signups_allowed)
-					flash[:notice] = "You must choose a username before connecting"
-					redirect_to new_user_url and return
-				else
-					flash[:notice] = "Your Facebook account wasn't recognized"
-					redirect_to login_users_url and return
-				end
+				flash[:notice] = "Your Facebook account wasn't recognized"
+				redirect_to login_users_url and return
 			end
 		end
 	end
