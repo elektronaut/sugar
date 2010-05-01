@@ -7,7 +7,7 @@
 	<div class="functions">
 		<% if @user == @current_user %>
 			<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
-		<% elsif @current_user.admin? %>
+		<% elsif @current_user.user_admin? %>
 			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
 		<% end %>
 		<% unless @user == @current_user %>
