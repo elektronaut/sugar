@@ -1,7 +1,15 @@
 <%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
 
-<%= f.hidden_field(:latitude) %><%= f.hidden_field(:longitude) %>
-<%= labelled_field '', "Map", :description => 'Click to place yourself on the map. ('+link_to_function("Clear location", "clearLocation();")+')' %>
+<%= f.hidden_field(:latitude) %>
+<%= f.hidden_field(:longitude) %>
 
-<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>
+<div class="field">
+	<label>
+		Map 
+		<span class="description">&mdash; Click to place yourself on the map. (<%= link_to_function("Clear location", "clearLocation();") %>)</span>
+	</label>
+	<div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>
+</div>
+
+
 
