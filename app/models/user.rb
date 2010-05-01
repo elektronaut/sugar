@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
 	# The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt> for regular users.
 	UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id, :available_invites
+	STATUS_OPTIONS    = :inactive, :activated, :banned
 
 	# Virtual attributes for clear text passwords
 	attr_accessor :password, :confirm_password
@@ -64,6 +65,8 @@ class User < ActiveRecord::Base
 			user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
 			user.openid_url = OpenID.normalize_url(user.openid_url)
 		end
+		# Set trusted to true if applicable
+		user.trusted = true if user.moderator? && user.user_admin?
 	end
 
 	validates_presence_of   :hashed_password, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}
@@ -445,6 +448,29 @@ class User < ActiveRecord::Base
 		self.invites
 	end
 
+	# Get account status
+	def status
+		return 2 if banned?
+		return 1 if activated?
+		return 0
+	end
+
+	# Set account status
+	def status=(new_status)
+		new_status = STATUS_OPTIONS[new_status.to_i] unless new_status.kind_of?(Symbol)
+		case new_status
+		when :banned
+			self.banned    = true
+			self.activated = true
+		when :activated
+			self.banned    = false
+			self.activated = true
+		when :inactive
+			self.banned    = false
+			self.activated = false
+		end
+	end
+
 	# Generates a Gravatar URL
 	def gravatar_url(options={})
 		options[:size] ||= 24
@@ -462,7 +488,7 @@ class User < ActiveRecord::Base
 		if self.admin?
 			labels << "Admin"
 		else
-			labels << "User admin" if self.user_admin?
+			labels << "User Admin" if self.user_admin?
 			labels << "Moderator" if self.moderator?
 		end
 		labels

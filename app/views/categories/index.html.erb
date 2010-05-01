@@ -20,7 +20,7 @@
 			</h3>
 			<p class="description">
 				<%= h category.description %>
-				<% if @current_user && @current_user.admin? %>
+				<% if @current_user && @current_user.moderator? %>
 					<%= link_to "[edit]", edit_category_path(category) %>
 				<% end %>
 			</p>

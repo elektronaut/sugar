@@ -106,7 +106,7 @@ class Post < ActiveRecord::Base
 	end
 
 	def editable_by?(user)
-		(user && (user.admin? || user == self.user)) ? true : false
+		(user && (user.moderator? || user == self.user)) ? true : false
 	end
 
 	def viewable_by?(user)

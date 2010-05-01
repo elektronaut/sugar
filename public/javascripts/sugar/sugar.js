@@ -51,6 +51,39 @@ var Sugar = {
 				});
 			});
 		},
+		
+		profileEditing : function() {
+			$('.edit_user_profile').each(function(){
+				var checkTrusted = function(){
+					if($('#user_user_admin:checked').val() || $('#user_moderator:checked').val()){
+						$('#user_trusted').attr('checked', true);
+						$('#user_trusted').attr('disabled', true);
+					} else {
+						$('#user_trusted').attr('disabled', false);
+					}
+				};
+				var checkAdmin = function(){
+					if($('#user_admin:checked').val()){
+						$('#user_moderator').attr('checked', true);
+						$('#user_user_admin').attr('checked', true);
+						$('#user_moderator').attr('disabled', true);
+						$('#user_user_admin').attr('disabled', true);
+					} else {
+						$('#user_moderator').attr('disabled', false);
+						$('#user_user_admin').attr('disabled', false);
+					}
+				};
+				$('#user_moderator, #user_user_admin').click(function(){
+					checkTrusted();
+				});
+				$('#user_admin').click(function(){
+					checkAdmin();
+					checkTrusted();
+				});
+				checkAdmin();
+				checkTrusted();
+			});
+		},
 
 		richText : function() {
 			jQuery('textarea.rich').each(function(){

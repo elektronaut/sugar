@@ -36,6 +36,12 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	# Shortcut for setting up the required moderator filter. Example:
+	#   requires_user :except => [:login, :logout, :forgot_password]
+	def self.requires_moderator(*args)
+		append_before_filter(args){ |controller| controller.require_moderator }
+	end
+
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
 	def require_user
 		unless @current_user && @current_user.activated?
@@ -61,6 +67,17 @@ class ApplicationController < ActionController::Base
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
 		unless @current_user == user || @current_user.user_admin?
+			flash[:notice] = options[:notice]
+			redirect_to options[:redirect] and return
+		end
+	end
+
+	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
+	# unless <tt>@current_user</tt> is a moderator
+	def require_moderator(options={})
+		options[:redirect] ||= discussions_path
+		options[:notice] ||= "You don't have permission to do that!"
+		unless @current_user.moderator?
 			flash[:notice] = options[:notice]
 			redirect_to options[:redirect] and return
 		end

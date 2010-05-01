@@ -1,16 +1,7 @@
 class CategoriesController < ApplicationController
 
 	requires_authentication
-	requires_user :except => [:index, :show]
-
-	def require_admin
-		unless @current_user && @current_user.admin?
-			flash[:notice] = "You don't have permission to do that!"
-			redirect_to categories_path and return
-		end
-	end
-	protected     :require_admin
-	before_filter :require_admin, :except => [:index,:show]
+	requires_moderator :except => [:index, :show]
 
 	def load_category
 		@category = Category.find(params[:id]) rescue nil

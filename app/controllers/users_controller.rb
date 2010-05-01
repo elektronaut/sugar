@@ -273,7 +273,8 @@ class UsersController < ApplicationController
 	def update
 		@page = params[:page] || 'info'
 		require_user_admin_or_user(@user, :redirect => user_url(@user))
-		attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
+		attributes = @current_user.user_admin? ? params[:user] : User.safe_attributes(params[:user])
+		attributes.delete(:administrator) unless @current_user.admin?
 
 		if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
 			new_openid_url = attributes[:openid_url]
