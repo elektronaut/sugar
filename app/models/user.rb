@@ -488,7 +488,7 @@ class User < ActiveRecord::Base
 		if self.admin?
 			labels << "Admin"
 		else
-			labels << "User admin" if self.user_admin?
+			labels << "User Admin" if self.user_admin?
 			labels << "Moderator" if self.moderator?
 		end
 		labels
