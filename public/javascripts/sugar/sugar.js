@@ -27,6 +27,27 @@ var Sugar = {
 			$(Sugar).bind('postsloaded', apply);
 			apply();
 		},
+		
+		layout : function(){
+			// Adjust min-width of #content to always contain table.discussions
+			$('table.discussions').each(function(){
+				$('#content').css('min-width', $(this).outerWidth()+'px');
+			});
+			// Adjust min-width of #wrapper to always contain content and sidebar if the sidebar exists
+			$('#sidebar').each(function(){
+				var minWidth = $('#content').outerWidth() + $('#sidebar').outerWidth();
+				$('#wrapper').css('min-width', minWidth+'px');
+			});
+			// Make entire category li clickable
+			$('ul.categories li a').each(function(){
+				var url = this.href;
+				$(this).closest('li').click(function(){
+					document.location = url;
+				});
+			});
+			// Wrap buttons in span
+			$('a.button').wrapInner('<span />');
+		},
 
 		loginForm : function() {
 			$('body.login #login').each(function(){

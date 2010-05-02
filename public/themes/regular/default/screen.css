@@ -118,11 +118,28 @@ a, a:visited {
 a:hover {
 	color:               #3b8fa8;
 }
-a.create, a.create:visited {
-	color:               #007b36;
+
+a.button, a.button:visited {
+	display:             block;
+	background:          #fbfbfb url("images/button.png") top right no-repeat;
+	padding:             0 15px 0 0;
+	font-size:           15px;
+	font-weight:         bold;
+	color:               #616161;
+	text-shadow:         #ffffff 1px -1px -1px;
 }
-a.create:hover {
-	color:               #004820;
+a.button span {
+	padding:             5px 0 0 15px;
+	display:             block;
+	background:          #fbfbfb url("images/button.png") top left no-repeat;
+	height:              24px;
+}
+a.button:hover {
+	background-position: -29px right;
+}
+a.button:hover span {
+	background:          #fbfbfb url("images/button.png") -29px left no-repeat;
+	color:               #444;
 }
 
 /* Tables */
@@ -303,9 +320,14 @@ span.example {
    ----------------------------------------------------------------------- */
 
 /* Top heading/breadcrumbs with line */
-h2.section {
+h2.section, #sidebar h2 {
 	padding-bottom:      7px;
 	border-bottom:       1px solid #E2DCBF;
+	width: 100%;
+}
+#sidebar h2 {
+	color:               #6f5a43;
+	margin-bottom:       10px;
 }
 
 /* Header block (the background is set on the body) */
@@ -316,6 +338,7 @@ h2.section {
 	top:                 0;
 	left:                0;
 	right:               0;
+	min-width:           800px;
 }
 #header h1 {
 	font-size:           4em;
@@ -398,15 +421,19 @@ h2.section {
 	color:               #800;
 	margin:              -20px -30px 20px -30px;
 	padding:             10px 30px;
-	font-size:           1.2em;
+	font-size:           1.4em;
 	font-weight:         bold;
 }
 
-#content {
+#wrapper {
 	position:            absolute;
 	top:                 116px;
 	left:                30px;
 	right:               30px;
+}
+
+#content {
+	min-width:           600px;
 	font-size:           1.2em;
 	padding-bottom:      30px;
 }
@@ -454,6 +481,54 @@ h2.section {
 	background:          #05506d;
 	border:              1px solid #05506d;
 	color:               #fff;
+}
+
+
+
+/* -----------------------------------------------------------------------
+   SIDEBAR
+   ----------------------------------------------------------------------- */
+
+body.with_sidebar #content {
+	margin-right:        230px;
+}
+
+#sidebar {
+	position:            absolute;
+	right:               0;
+	width:               200px;
+	padding:             0 0 0 30px;
+	font-size:           1.2em;
+}
+
+#sidebar .categories {
+	margin-top:          -10px;
+}
+#sidebar .categories li {
+	border-bottom:       1px solid #E2DCBF;
+	padding:             4px 0;
+	font-size:           1.1em;
+	display:             block;
+	clear:               both;
+}
+#sidebar .categories li .count {
+	float:               right;
+	font-size:           0.9em;
+	padding-top:         1px;
+	color:               #888;
+}
+#sidebar .categories li:hover .count {
+	padding-top:         2px;
+}
+#sidebar .categories li.current .count {
+	padding-top:         3px;
+}
+#sidebar .categories li:hover a {
+	font-size:           1.1em;
+}
+#sidebar .categories li.current a {
+	font-size:           1.2em;
+	font-weight:         bold;
 }
 
 
@@ -576,6 +651,7 @@ table.discussions .targeted td.name {
 }
 
 
+
 /* -----------------------------------------------------------------------
    POSTS - DISCUSSIONS AND MESSAGES
    ----------------------------------------------------------------------- */
@@ -583,6 +659,7 @@ table.discussions .targeted td.name {
 .posts {
 	border-top:          1px solid #E2DCBF;
 	margin-bottom:       20px;
+	width:               100%;
 }
 .posts .context {
 	border-bottom:       3px solid #E2DCBF;

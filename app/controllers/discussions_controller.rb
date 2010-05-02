@@ -111,7 +111,11 @@ class DiscussionsController < ApplicationController
 				flash[:notice] = "Can't create a new discussion, no categories have been made!"
 				redirect_to categories_url
 			end
-			@discussion = @current_user.discussions.new
+			@category = @categories.first
+			if params[:category_id] && category = Category.find(params[:category_id])
+				@category = category
+			end
+			@discussion = @current_user.discussions.new(:category => @category)
 		end
 
 		# Show a discussion

@@ -54,6 +54,21 @@ module ApplicationHelper
 		concat(output, block.binding) if block_given?
 		return output
 	end
+	
+	# Render a sidebar
+	def sidebar(options={}, &block)
+		@sidebar_content ||= ""
+		@sidebar_content += capture(&block) if block_given?
+		unless @sidebar_content.blank?
+			add_body_class 'with_sidebar'
+		end
+		return @sidebar_content
+	end
+	
+	# Render a sidebar?
+	def sidebar?
+		(@sidebar_content && !@sidebar_content.empty?) ? true : false
+	end
 
 	# Generates avatar image tag for a user
 	def avatar_image_tag(user, size='32')

@@ -168,6 +168,14 @@ class Discussion < ActiveRecord::Base
 	def last_page(per_page=Post::POSTS_PER_PAGE)
 		(self.posts_count.to_f/per_page).ceil
 	end
+	
+	def participants
+		User.find_by_sql("SELECT u.*, MAX(p.created_at) AS last_post_at
+		FROM users u, posts p
+		WHERE p.discussion_id = #{self.id} AND p.user_id = u.id
+		GROUP BY u.id
+		ORDER BY MAX(p.created_at) DESC")
+	end
 
 	# Creates the first post. This should probably be called from an after_create filter,
 	# right now it's run manually from the controller.

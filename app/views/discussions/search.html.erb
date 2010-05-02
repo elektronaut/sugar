@@ -3,9 +3,10 @@
 	add_body_class "search", "search_discussions"
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
+<% sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
 <h2 class="section">Searching discussions for <em><%= @search_query %></em></h2>
 
 <%= render :partial => 'search/tips' %>

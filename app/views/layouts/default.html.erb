@@ -68,12 +68,12 @@
 		<div id="account">
 			<% if @current_user %>
 				Hello, <%= profile_link(@current_user) %>! 
-				(<%= link_to('Admin', configuration_admin_path)+' / ' if @current_user && @current_user.admin? %><%= link_to "Sign out", logout_users_path %>)
+				(<%= link_to "Sign out", logout_users_path %>)
 			<% else %>
-				<%= link_to "Login", login_users_path %>
 				<% if Sugar.config(:signups_allowed) %>
-					or <%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %>
+					<%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %> or
 				<% end %>
+				<%= link_to "Log in", login_users_path %>
 			<% end %>
 		</div>
 		<% if @current_user || Sugar.config(:public_browsing) %>
@@ -83,7 +83,6 @@
 					<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path, :id => 'following_link' %></li>
 					<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path, :id => 'favorites_link' %></li>
 				<% end %>
-				<li class="categories<%= ' current' if @section == :categories %>"><%= link_to "Categories", categories_path, :id => 'categories_link' %></li>
 				<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path, :id => 'users_link' %></li>
 				<% if @current_user %>
 					<% if @current_user.invites? || @current_user.available_invites? -%>
@@ -99,14 +98,21 @@
 			</ul>
 		<% end -%>
 	</div>
-	<div id="content">
+	<div id="wrapper">
 		<% if flash[:notice] %>
 			<div class="notice"><%= flash[:notice] %></div>
 		<% end %>
-		<%= yield %>
-		<% if @iphone_user_agent %><div class="iphone_link">
-			<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
-		</div><% end %>
+		<% if sidebar? %>
+			<div id="sidebar">
+				<%= sidebar %>
+			</div>
+		<% end %>
+		<div id="content">
+			<%= yield %>
+			<% if @iphone_user_agent %><div class="iphone_link">
+				<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
+			</div><% end %>
+		</div>
 	</div>
 	<% if Sugar.config(:custom_footer) %>
 		<%= Sugar.config(:custom_footer) %>
