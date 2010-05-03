@@ -119,6 +119,7 @@ $.extend(Sugar, {
 			.replace(/^[\s]*/, '')          // Strip leading space
 			.replace(/[\s]*$/, '')          // Strip trailing space
 			.replace(/<br[\s\/]*>/g, "\n"); // Change <br /> to line breaks
+
 		if(content.match(/<div class="codeblock/)){
 			if($('#hiddenPostDeparser').length < 1) {
 				$(document.body).append('<div id="hiddenPostDeparser"></div>');
