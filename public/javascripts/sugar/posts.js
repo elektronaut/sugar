@@ -169,6 +169,9 @@ $.extend(Sugar, {
 
 			var postBody = $('#compose-body').val();
 
+			// Auto-link URLs
+			postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/gi, "$1<a href=\"$2\">$2</a>")
+
 			if($('#hiddenPostVerifier').length < 1) {
 				$(document.body).append('<div id="hiddenPostVerifier"></div>');
 			}
@@ -176,7 +179,18 @@ $.extend(Sugar, {
 			postNotifier.show();
 			postNotifier.html(postBody);
 			postNotifier.hide();
+			
+			// Rewrite local links
+			var currentDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.:]+)/)[1];
+			var postLinks = postNotifier.find('a');
+			if(postLinks.length > 0){
+				for(var a = 0; a < postLinks.length; a++){
+					postLinks[a].href = postLinks[a].href.replace(currentDomain, '');
+				}
+				$('#compose-body').val(postNotifier.html());
+			}
 
+			// Load images
 			var postImages = postNotifier.find('img');
 			var loadedImages = Array();
 			if(postImages.length > 0) {
