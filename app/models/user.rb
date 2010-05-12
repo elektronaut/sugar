@@ -163,11 +163,6 @@ class User < ActiveRecord::Base
 		DiscussionRelationship.find_favorite(self, options)
 	end
 
-	# Counts participated discussions.
-	def participated_count
-		DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = 1', self.id])
-	end
-
 	# Finds and paginate discussions created by this user.
 	# === Parameters
 	# * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.

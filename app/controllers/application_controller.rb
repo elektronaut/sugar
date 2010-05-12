@@ -100,8 +100,6 @@ class ApplicationController < ActionController::Base
 			case self.class.to_s
 			when 'UsersController'
 				@section = :users
-			when 'CategoriesController'
-				@section = :categories
 			when 'MessagesController'
 				@section = :messages
 			when 'InvitesController'
