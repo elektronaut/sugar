@@ -46,7 +46,7 @@ var Sugar = {
 				});
 			});
 			// Wrap buttons in span
-			$('a.button').wrapInner('<span />');
+			$('a.button, button').wrapInner('<span />');
 		},
 
 		loginForm : function() {

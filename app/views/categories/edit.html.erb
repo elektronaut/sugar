@@ -11,7 +11,5 @@
 
 <% form_for(@category) do |form| %>
 	<%= render :partial => 'category_form', :locals => {:form => form} %>
-	<p>
-		<%= submit_tag "Save" %>
-	</p>
+	<p><button type="submit">Save</button></p>
 <% end %>

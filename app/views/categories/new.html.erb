@@ -7,7 +7,5 @@
 
 <% form_for(@category) do |form| %>
 	<%= render :partial => 'category_form', :locals => {:form => form} %>
-	<p>
-		<%= submit_tag "Create" %>
-	</p>
+	<p><button type="submit">Create</button></p>
 <% end %>

@@ -49,7 +49,7 @@ $.extend(Sugar, {
 				statusField.each(function(){
 					$(this).removeClass('posting');
 					$(this).html(oldPostButton);
-					$(this).find('.preview').text('Update Preview');
+					$(this).find('.preview span').text('Update Preview');
 					Sugar.Initializers.applyPostPreview();
 				});
 			}

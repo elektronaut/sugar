@@ -19,7 +19,8 @@
 			<%= password_field_tag 'password', '', :class => :text %>
 		</fieldset>
 		<fieldset>
-			<%= submit_tag "Sign in" %> <%= link_to "<strong>Help!</strong> I forgot my password!", password_reset_users_path, :class => 'password_reset' %>
+			<button type="submit">Sign in</button>
+			<%= link_to "<strong>Help!</strong> I forgot my password!", password_reset_users_path, :class => 'password_reset' %>
 		</fieldset>
 		<p>
 			<button class="openid_toggle" type="button">Sign in with OpenID</button>
@@ -32,7 +33,7 @@
 			<%= text_field_tag 'openid_url', '', :class => :text %>
 		</fieldset>
 		<fieldset>
-			<%= submit_tag "Sign in" %>
+			<button type="submit">Sign in</button>
 			<%= link_to_function "Login with username/password", :class => 'username_and_password_toggle' %>
 		</fieldset>
 	<% end %>

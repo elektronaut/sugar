@@ -15,9 +15,10 @@ a, a:visited {
 a, a:visited, #account, #account a, #account a:visited, .me_post .body a.poster, .me_post .body a.poster:visited {
 	color:               #9f0000;
 }
-a:hover, #account a:hover {
+a:hover, #account a:hover, #sidebar .categories li.current a {
 	color:               #460000;
 }
+
 
 #account a, #account a:visited {
 	font-weight:         bold;
