@@ -45,8 +45,15 @@ var Sugar = {
 					document.location = url;
 				});
 			});
+		},
+
+		styleButtons : function(){
 			// Wrap buttons in span
-			$('a.button, button').wrapInner('<span />');
+			$('a.button, button').each(function(){
+				if($(this).find('span').length === 0){
+					$(this).wrapInner('<span />');
+				}
+			});
 		},
 
 		loginForm : function() {
@@ -206,6 +213,7 @@ var Sugar = {
 						$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
 						$("#postBody-"+postID).load(editURL, null, function(){
 							Sugar.Initializers.richText();
+							Sugar.Initializers.styleButtons();
 						});
 						return false;
 					});

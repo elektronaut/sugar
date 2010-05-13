@@ -119,8 +119,13 @@ a:hover {
 	color:               #3b8fa8;
 }
 
+/* Damn you, Firefox */
+button::-moz-focus-inner { 
+    border:              0;
+    padding:             0;
+}
 a.button, a.button:visited, button {
-	border:              0;
+	border:              0px;
 	background:          #fbfbfb url("images/button.png") top right no-repeat;
 	padding:             0 15px 0 0;
 	font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
