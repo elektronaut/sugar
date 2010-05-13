@@ -145,6 +145,11 @@ class Discussion < ActiveRecord::Base
 			end
 			return safe_params
 		end
+		
+		# Counts total discussion for a user
+		def count_for(user)
+			(user && user.trusted?) ? Discussion.count(:all) : Discussion.count(:all, :conditions => {:trusted => 0})
+		end
 
 	end
 	

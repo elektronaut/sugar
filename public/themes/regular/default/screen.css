@@ -513,7 +513,7 @@ body.with_sidebar #content {
 	display:             block;
 }
 
-#sidebar .categories {
+#sidebar .categories ul {
 	margin-top:          -10px;
 }
 #sidebar .categories li {
@@ -529,7 +529,7 @@ body.with_sidebar #content {
 	padding-top:         1px;
 	color:               #888;
 }
-#sidebar .meta.categories li .count, #sidebar .categories li.current .count {
+#sidebar .categories .meta li .count, #sidebar .categories li.current .count {
 	padding-top:         3px;
 }
 #sidebar .categories li.current a {
@@ -537,7 +537,7 @@ body.with_sidebar #content {
 	font-size:           1.2em;
 	font-weight:         bold;
 }
-#sidebar .meta.categories li a {
+#sidebar .categories .meta li a {
 	font-size:           1.2em;
 }
 
