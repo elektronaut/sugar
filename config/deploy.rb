@@ -58,7 +58,9 @@ desc "Symlink configs"
 task :symlink_configs, :roles => [:web, :app] do
 	run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
 	run "ln -nsf #{shared_path}/config/session_key #{release_path}/config/session_key"
+	run "ln -nsf #{shared_path}/config/newrelic.yml #{release_path}/config/newrelic.yml"
 	run "ln -nsf #{shared_path}/config/initializers/mailer.rb #{release_path}/config/initializers/mailer.rb"
+	run "ln -nsf #{shared_path}/config/initializers/newrelic.rb #{release_path}/config/initializers/newrelic.rb"
 end
 
 desc "Packs themes"
