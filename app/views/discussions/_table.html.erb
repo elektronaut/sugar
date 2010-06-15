@@ -2,7 +2,7 @@
 	no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
 %>
 <% if discussions && discussions.length > 0 %>
-	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
+	<%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions } %>
 	<table class="discussions">
 		<% discussions.each do |d| %>
 			<tr class="<%= discussion_classes(discussions, d) %>">
@@ -27,7 +27,7 @@
 			</tr>
 		<% end %>
 	</table>
-	<%= render :partial => 'components/pagination', :locals => { :p => discussions } %>
+	<%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions } %>
 <% else %>
 	<p><%= no_discussions %></p>
 <% end %>

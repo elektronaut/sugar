@@ -138,7 +138,8 @@ module ApplicationHelper
 
 	def new_posts?(discussion)
 		return false unless @discussion_views
-		(new_posts_count(discussion) > 0) ? true : false
+		@_new_posts ||= {}
+		@_new_posts[discussion] ||= (new_posts_count(discussion) > 0) ? true : false
 	end
 
 	def last_discussion_page(discussion)
