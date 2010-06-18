@@ -18,8 +18,11 @@
 	<li class="tab<%= ' active' if @page == 'services' %>"><%= link_to "Links and Services", edit_user_page_path(@user.username, 'services') %></li>  
 	<li class="tab<%= ' active' if @page == 'location' %>"><%= link_to "Location", edit_user_page_path(@user.username, 'location') %></li>  
 	<li class="tab<%= ' active' if @page == 'settings' %>"><%= link_to "Settings", edit_user_page_path(@user.username, 'settings') %></li>  
+	<% if @current_user == @user %>
+		<li class="tab<%= ' active' if @page == 'temporary_ban' %>"><%= link_to "Temporary ban", edit_user_page_path(@user.username, 'temporary_ban') %></li>  
+	<% end %>
 	<% if @current_user.user_admin? %>
-		<li class="tab<%= ' active' if @page == 'admin' %>"><%= link_to "Admin", edit_user_page_path(@user.username, 'admin') %></li>  
+		<li class="tab<%= ' active' if @page == 'admin' %>"><%= link_to "Admin", edit_user_page_path(@user.username, 'admin') %></li>
 	<% end %>
 </ul>
 

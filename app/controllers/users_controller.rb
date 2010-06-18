@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 	end
 
 	def banned
-		@users  = User.find(:all, :order => 'username ASC', :conditions => 'banned = 1')
+		@users  = User.find(:all, :order => 'username ASC', :conditions => ['banned = 1 OR banned_until < ?', Time.now])
 	end
 
 	def recently_joined

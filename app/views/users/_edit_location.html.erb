@@ -1,3 +1,5 @@
+<%= labelled_field f.time_zone_select(:time_zone), "Time zone", :errors => @user.errors[:time_zone] %>
+
 <%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
 
 <%= f.hidden_field(:latitude) %>

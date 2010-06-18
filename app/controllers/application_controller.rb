@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 	layout 'default'
 	helper :all
 	filter_parameter_logging :password, :drawing
+	
+	include ActionView::Helpers::DateHelper
 
 	# See ActionController::RequestForgeryProtection for details
 	# Uncomment the :secret if you're not using the cookie session store
@@ -14,6 +16,7 @@ class ApplicationController < ActionController::Base
 	before_filter :authenticate_session
 	before_filter :facebook_authenticate
 	before_filter :detect_iphone
+	before_filter :set_time_zone
 	before_filter :set_section
 	after_filter  :store_session_authentication
 
@@ -108,6 +111,11 @@ class ApplicationController < ActionController::Base
 				@section = :discussions
 			end
 		end
+		
+		# Set time zone for user
+		def set_time_zone
+			Time.zone = @current_user.time_zone if @current_user && @current_user.time_zone
+		end
 
 		# Finds DiscussionViews for @discussion.
 		def find_discussion_views
@@ -132,9 +140,13 @@ class ApplicationController < ActionController::Base
 			if session[:user_id] && session[:hashed_password]
 				user = User.find(session[:user_id]) rescue nil
 				if user && session[:hashed_password] == user.hashed_password && !user.banned? && user.activated?
-					@current_user = user
-					Discussion.work_safe_urls = user.work_safe_urls?
-					Category.work_safe_urls   = user.work_safe_urls?
+					if user.temporary_banned?
+						flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now - user.banned_until)}!"
+					else
+						@current_user = user
+						Discussion.work_safe_urls = user.work_safe_urls?
+						Category.work_safe_urls   = user.work_safe_urls?
+					end
 				end
 			end
 		end
@@ -177,6 +189,10 @@ class ApplicationController < ActionController::Base
 				# No need to update this on every request
 				if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
 					@current_user.update_attribute(:last_active, Time.now)
+				end
+				# Clean up banned_until
+				if @current_user.banned_until? && !@current_user.temporary_banned?
+					@current_user.update_attribute(:banned_until, nil)
 				end
 			else
 				session[:user_id]         = nil

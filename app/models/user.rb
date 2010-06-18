@@ -82,6 +82,10 @@ class User < ActiveRecord::Base
 
 	validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
 	
+	before_save do |user|
+		user.banned_until = nil if user.banned_until? && user.banned_until <= Time.now
+	end
+	
 	class << self
 		# Finds active users.
 		def find_active
@@ -390,39 +394,44 @@ class User < ActiveRecord::Base
 	# Returns true if this user is following the given discussion.
 	def following?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.following?) ? true : false
+		relationship && relationship.following?
 	end
 
 	# Returns true if this user has favorited the given discussion.
 	def favorite?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.favorite?) ? true : false
+		relationship && relationship.favorite?
+	end
+	
+	# Returns true if this user is temporarily banned.
+	def temporary_banned?
+		self.banned_until? && self.banned_until > Time.now
 	end
 	
 	# Returns true if this user has invited someone.
 	def invites?
-		(self.invites.count > 0) ? true : false
+		self.invites.count > 0
 	end
 
 	# Returns true if this user has invitees.
 	def invitees?
-		(self.invitees.count > 0) ? true : false
+		self.invitees.count > 0
 	end
 	
 	# Returns true if this user has invited someone or has invitees.
 	def invites_or_invitees?
-		(self.invites? || self.invitees?) ? true : false
+		self.invites? || self.invitees?
 	end
 
 	# Returns true if this user can invite someone.
 	def available_invites?
-		(self.user_admin? || self.available_invites > 0)
+		self.user_admin? || self.available_invites > 0
 	end
 	
 	# Number of remaining invites. User admins always have at least one invite.
 	def available_invites
 	 	number = self[:available_invites]
-	 	(self.user_admin?) ? 1 : self[:available_invites]
+	 	self.user_admin? ? 1 : self[:available_invites]
 	end
 
 	# Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.

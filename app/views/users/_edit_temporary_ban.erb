@@ -1,0 +1,7 @@
+<%= labelled_field f.datetime_select(:banned_until, :minute_step => 15, :default => 1.minute.ago), 'Ban me until' %>
+<% unless @user.time_zone? %>
+	<p>
+		<strong>Warning:</strong> You haven't 
+		<%= link_to "chosen a time zone", edit_user_page_path(@user.username, 'location') %> yet!
+	</p>
+<% end %>
