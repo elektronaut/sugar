@@ -50,9 +50,10 @@ window.quotePost = function(postId){
 };
 
 var currentWidth = 0;
+var currentHeight = 0;
 function checkWindowOrientation() {
 	if (window.innerWidth != currentWidth) {   
-		currentWidth = window.innerWidth;
+		currentWidth  = window.innerWidth;
 		currentHeight = window.innerHeight;
 		var orient = (currentWidth < currentHeight) ? 'profile' : 'landscape';
 		document.body.setAttribute("orient", orient);
