@@ -92,8 +92,19 @@ body[orient="landscape"] #header h1.page_title {
 
 	padding: 5px;
 }
+#navigation .search {
+	border-top: 1px solid #D0BBBB;
+	margin-top: 10px;
+	padding-top: 10px;
+	padding-left: 6px;
+}
+#navigation .search select {
+	font-size: 0.9em;
+	margin-left: 82px;
+}
 #navigation .search .query {
-	width: 211px;
+	width: 195px;
+	margin-left: 5px;
 }
 body[orient="landscape"] #navigation .search .query {
 	width: 300px;
@@ -199,6 +210,7 @@ label {
 	background: #fff url(images/contentbg.gif) repeat-x;
 	padding: 25px 0 10px 0;
 	min-height: 285px;
+    -webkit-user-select: auto;
 }
 
 .page_content {
@@ -550,4 +562,15 @@ blockquote cite {
 }
 .imageloader img {
 	display: none;
+}
+
+.spoiler {
+	border:              1px dotted #baa;
+	padding:             4px;
+	background:          #fff8f0;
+}
+.spoiler .spoilerLabel {
+	font-weight:         bold;
+	font-size:           0.9em;
+	color:               #900;
 }
