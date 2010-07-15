@@ -89,10 +89,14 @@ class Post < ActiveRecord::Base
 	end
 
 	def body_html
-		unless body_html?
-			self.update_attribute(:body_html, PostParser.parse(self.body.dup))
+		if self.new_record?
+			PostParser.parse(self.body.dup)
+		else
+			unless body_html?
+				self.update_attribute(:body_html, PostParser.parse(self.body.dup))
+			end
+			self[:body_html]
 		end
-		self[:body_html]
 	end
 
 	def edited?
@@ -101,10 +105,21 @@ class Post < ActiveRecord::Base
 	end
 
 	def editable_by?(user)
-		(user && (user.admin? || user == self.user)) ? true : false
+		(user && (user.moderator? || user == self.user)) ? true : false
 	end
 
 	def viewable_by?(user)
 		(user && !(self.discussion.trusted? && !(user.trusted? || user.admin?))) ? true : false
+	end
+	
+	def mentions_users?
+		(mentioned_users.length > 0) ? true : false
+	end
+
+	def mentioned_users
+		@mentioned_users ||= User.find(:all).select do |user|
+			user_expression = Regexp.new('@'+Regexp.quote(user.username), Regexp::IGNORECASE)
+			self.body.match(user_expression) ? true : false
+		end
 	end
 end

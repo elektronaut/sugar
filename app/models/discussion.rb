@@ -15,12 +15,12 @@ class Discussion < ActiveRecord::Base
 	has_many   :discussion_relationships,            :dependent => :destroy
 
 	validates_presence_of :category_id, :title
-	validates_presence_of :body, :on => :create
 	validates_length_of   :title, :maximum => 100, :too_long => 'is too long'
 
 	# Virtual attribute for the body of the first post. 
 	# Makes forms a bit easier, no nested models.
-	attr_accessor :body
+	attr_accessor         :body
+	validates_presence_of :body, :on => :create
 	
 	# Flag for trusted status, which will update after save if it has been changed.
 	attr_accessor :update_trusted, :new_closer
@@ -92,8 +92,10 @@ class Discussion < ActiveRecord::Base
 			max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
 			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
 			search_options = {
-				:sort_mode  => :expr,
-				:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				#:sort_mode  => :expr,
+				#:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
+				:sort_mode  => :desc, 
+				:order      => :last_post_at, 
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],
@@ -105,24 +107,28 @@ class Discussion < ActiveRecord::Base
 		end
 		
 		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
-		# The collection is extended with the Pagination module, which provides pagination info.
+		# The collection is decorated with the Pagination module, which provides pagination info.
 		# Takes the following options: 
-		#     :page     - Page number, starting on 1 (default: first page)
-		#     :limit    - Number of posts per page (default: 20)
-		#     :category - Only get discussions in category
+		# * :page     - Page number, starting on 1 (default: first page)
+		# * :limit    - Number of posts per page (default: 20)
+		# * :category - Only get discussions in this category
+		# * :trusted  - Boolean, get trusted posts as well
 		def find_paginated(options={})
-			if options[:trusted]
-				discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count
-				conditions        = (options[:category]) ? ['category_id = ?', options[:category].id] : nil
-			else
-				discussions_count = (options[:category]) ? options[:category].discussions.count : Discussion.count(:conditions => 'trusted = 0')
-				conditions        = (options[:category]) ? ['category_id = ? AND trusted = 0', options[:category].id] : 'trusted = 0'
+			conditions = options[:category] ? ['category_id = ?', options[:category].id] : []
+
+			# Ignore trusted posts unless requested
+			unless options[:trusted]
+				conditions = [[conditions.shift, 'trusted = 0'].compact.join(' AND ')] + conditions
 			end
+
+			# Utilize the counter cache on category if possible, if not do the query.
+			discussions_count   = options[:category].discussions_count if options[:category]
+			discussions_count ||= Discussion.count(:conditions => conditions)
 
 			Pagination.paginate(
 				:total_count => discussions_count,
 				:per_page    => options[:limit] || DISCUSSIONS_PER_PAGE,
-				:page        => options[:page] || 1
+				:page        => options[:page]  || 1
 			) do |pagination|
 				Discussion.find(
 					:all, 
@@ -142,6 +148,11 @@ class Discussion < ActiveRecord::Base
 				safe_params.delete(r)
 			end
 			return safe_params
+		end
+		
+		# Counts total discussion for a user
+		def count_for(user)
+			(user && user.trusted?) ? Discussion.count(:all) : Discussion.count(:all, :conditions => {:trusted => 0})
 		end
 
 	end
@@ -166,9 +177,16 @@ class Discussion < ActiveRecord::Base
 	def last_page(per_page=Post::POSTS_PER_PAGE)
 		(self.posts_count.to_f/per_page).ceil
 	end
+	
+	def participants
+		User.find_by_sql("SELECT u.*, MAX(p.created_at) AS last_post_at
+		FROM users u, posts p
+		WHERE p.discussion_id = #{self.id} AND p.user_id = u.id
+		GROUP BY u.id
+		ORDER BY MAX(p.created_at) DESC")
+	end
 
-	# Creates the first post. This should probably be called from an after_create filter,
-	# right now it's run manually from the controller.
+	# Creates the first post.
 	def create_first_post!
 		if self.body && !self.body.empty?
 			self.posts.create(:user => self.poster, :body => self.body)
@@ -191,24 +209,28 @@ class Discussion < ActiveRecord::Base
 	def labels
 		labels = []
 		labels << "Trusted" if self.trusted?
-		labels << "Sticky" if self.sticky?
-		labels << "Closed" if self.closed?
-		labels << "NSFW" if self.nsfw?
+		labels << "Sticky"  if self.sticky?
+		labels << "Closed"  if self.closed?
+		labels << "NSFW"    if self.nsfw?
 		return labels
 	end
 
 	# Is this discussion editable by the given user?
 	def editable_by?(user)
-		(user && (user.admin? || user.moderator? || user == self.poster)) ? true : false
+		(user && (user.moderator? || user == self.poster)) ? true : false
 	end
 
 	# Can the given user post in this thread?
 	def postable_by?(user)
-		(user && (user.admin? || user.moderator? || !self.closed?)) ? true : false
+		(user && (user.moderator? || !self.closed?)) ? true : false
 	end
 
 	def viewable_by?(user)
-		(user && !(self.trusted? && !(user.trusted? || user.admin?))) ? true : false
+		if self.trusted?
+			(user && user.trusted?) ? true : false
+		else
+			(Sugar.config(:public_browsing) || user) ? true : false
+		end
 	end
 	
 	# Can the given user close this thread?

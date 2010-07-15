@@ -3,10 +3,58 @@ $.extend(Sugar.Initializers, {
 		$("#replyText form").submit(function(){
 			return Sugar.parseSubmit(this);
 		});
+	},
+	applyPostPreview: function(){
+		$('#replyText .preview').click(function(){
+			Sugar.previewPost();
+			return false;
+		});
 	}
 });
 
 $.extend(Sugar, {
+	
+	previewPost: function(){
+		var postBody   = $('#compose-body').val();
+		var previewUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview";
+
+		var statusField = $('#button-container');
+		var oldPostButton = statusField.html();
+		statusField.addClass('posting');
+		statusField.html('Previewing post..');
+
+		$('.posts #previewPost').fadeOut();
+
+		$.ajax({
+			url:  previewUrl,
+			type: 'POST',
+			data: {
+				'post[body]': postBody,
+				authenticity_token: $("#replyText form").find("input[name='authenticity_token']").val()
+			},
+			success: function(previewPost){
+				if($('.posts #ajaxPosts').length < 1) {
+					$('.posts').append('<div id="ajaxPosts"></div>');
+				}
+				if($('.posts #previewPost').length < 1) {
+					$('.posts').append('<div id="previewPost"></div>');
+					$('.posts #previewPost').hide();
+				}
+				$('.posts #previewPost').html(previewPost).fadeIn();
+			},
+			error: function(xhr, textStatus, errorThrown){
+				alert(textStatus);
+			},
+			complete: function(){
+				statusField.each(function(){
+					$(this).removeClass('posting');
+					$(this).html(oldPostButton);
+					$(this).find('.preview span').text('Update Preview');
+					Sugar.Initializers.applyPostPreview();
+				});
+			}
+		});
+	},
 
 	// Post quoting
 	quotePost: function(postId){
@@ -71,6 +119,7 @@ $.extend(Sugar, {
 			.replace(/^[\s]*/, '')          // Strip leading space
 			.replace(/[\s]*$/, '')          // Strip trailing space
 			.replace(/<br[\s\/]*>/g, "\n"); // Change <br /> to line breaks
+
 		if(content.match(/<div class="codeblock/)){
 			if($('#hiddenPostDeparser').length < 1) {
 				$(document.body).append('<div id="hiddenPostDeparser"></div>');
@@ -120,6 +169,9 @@ $.extend(Sugar, {
 
 			var postBody = $('#compose-body').val();
 
+			// Auto-link URLs
+			postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/gi, "$1<a href=\"$2\">$2</a>");
+
 			if($('#hiddenPostVerifier').length < 1) {
 				$(document.body).append('<div id="hiddenPostVerifier"></div>');
 			}
@@ -127,7 +179,18 @@ $.extend(Sugar, {
 			postNotifier.show();
 			postNotifier.html(postBody);
 			postNotifier.hide();
+			
+			// Rewrite local links
+			var currentDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.:]+)/)[1];
+			var postLinks = postNotifier.find('a');
+			if(postLinks.length > 0){
+				for(var a = 0; a < postLinks.length; a++){
+					postLinks[a].href = postLinks[a].href.replace(currentDomain, '');
+				}
+				$('#compose-body').val(postNotifier.html());
+			}
 
+			// Load images
 			var postImages = postNotifier.find('img');
 			var loadedImages = Array();
 			if(postImages.length > 0) {
@@ -200,6 +263,7 @@ $.extend(Sugar, {
 					},
 					success: function(){
 						$('#compose-body').val('');
+						$('.posts #previewPost').hide();
 						Sugar.loadNewPosts();
 					},
 					error: function(xhr, textStatus, errorThrown){

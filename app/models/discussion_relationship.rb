@@ -2,6 +2,14 @@ class DiscussionRelationship < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :discussion
 	
+	after_save do |relationship|
+		relationship.update_user_caches!
+	end
+	
+	after_destroy do |relationship|
+		relationship.update_user_caches!
+	end
+
 	class << self
 		# Define a relationship with a discussion
 		def define(user, discussion, options={})
@@ -70,5 +78,13 @@ class DiscussionRelationship < ActiveRecord::Base
 			end
 			discussions
 		end
+	end
+	
+	def update_user_caches!
+		self.user.update_attributes({
+			:participated_count => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = 1', self.user.id]),
+			:following_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND following = 1', self.user.id]),
+			:favorites_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND favorite = 1', self.user.id])
+		})
 	end
 end

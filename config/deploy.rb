@@ -3,6 +3,7 @@ default_run_options[:pty] = true
 set :application, "b3s"
 set :runner,      "app"
 set :user,        "app"
+set :use_sudo,    false
 
 set :scm,                   "git"
 set :repository,            "git@github.com:elektronaut/sugar.git"
@@ -57,7 +58,9 @@ desc "Symlink configs"
 task :symlink_configs, :roles => [:web, :app] do
 	run "ln -nsf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
 	run "ln -nsf #{shared_path}/config/session_key #{release_path}/config/session_key"
+	run "ln -nsf #{shared_path}/config/newrelic.yml #{release_path}/config/newrelic.yml"
 	run "ln -nsf #{shared_path}/config/initializers/mailer.rb #{release_path}/config/initializers/mailer.rb"
+	run "ln -nsf #{shared_path}/config/initializers/newrelic.rb #{release_path}/config/initializers/newrelic.rb"
 end
 
 desc "Packs themes"
@@ -88,10 +91,31 @@ namespace :deploy do
 	end
 end
 
+namespace :delayed_job do
+	desc "Start delayed_job process" 
+	task :start, :roles => :app do
+		run "cd #{current_path}; script/delayed_job start production" 
+	end
+
+	desc "Stop delayed_job process" 
+	task :stop, :roles => :app do
+		run "cd #{current_path}; script/delayed_job stop production" 
+	end
+
+	desc "Restart delayed_job process" 
+	task :restart, :roles => :app do
+		run "cd #{current_path}; script/delayed_job restart production" 
+	end
+end
+
+
 after "deploy:finalize_update", :symlink_configs
 after "deploy:setup",   :create_shared_dirs
 after "deploy:symlink", :fix_permissions
 after "deploy:symlink", :create_symlinks
 after "deploy:symlink", :pack_themes
+after "deploy:finalize_update", "thinking_sphinx:configure"
 
-
+after "deploy:start", "delayed_job:start" 
+after "deploy:stop", "delayed_job:stop" 
+after "deploy:restart", "delayed_job:restart" 

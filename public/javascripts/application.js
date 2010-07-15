@@ -5,6 +5,7 @@
  * @depends sugar/mp3player.js
  * @depends sugar/posts.js
  * @depends sugar/hotkeys.js
+ * @depends sugar/facebook.js
  */
 
 

@@ -12,7 +12,7 @@
 		<%= javascript_include_tag 'iphone' %>
 	<% end -%>
 	<%= stylesheet_link_tag    "#{theme_path}/screen" %>
-	<meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 	<link rel="apple-touch-icon" href="<%= theme_path %>/apple-touch-icon.png" />
 </head>
 <body>
@@ -28,32 +28,40 @@
 			<% end %>
 		</h1>
     </div>
-	<div id="navigation"><ul>
-		<li><%= link_to "Discussions", discussions_path %></li>
-		<li><%= link_to "Categories", categories_path %></li>
-		<li><%= link_to "Following", following_discussions_path %></li>
-		<li><%= link_to "Favorites", favorites_discussions_path %></li>
-		<li><%= link_to "Users", users_path %></li>
-		<% if @current_user.unread_messages? -%>
-			<li><strong><%= link_to "Messages (#{@current_user.unread_messages_count})", messages_path %></strong></li>
-		<% else -%>
-			<li><%= link_to "Messages", messages_path %></li>
-		<% end -%>
-		<li><%= link_to "New discussion", new_discussion_path %></li>
-		<% if @discussion && @discussion.editable_by?(@current_user) %>
-			<li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>
-		<% end %>
-		<li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
-		<li class="search">
-			<% form_tag search_path, :method => 'get' do %>
-				Search in 
-				<%= radio_button_tag 'search_mode', search_path, true, :id => 'search_mode_titles' %> titles
-				<%= radio_button_tag 'search_mode', search_posts_path, false, :id => 'search_mode_posts' %> posts
-				<%= text_field_tag 'q', @search_query, :class => :query %>
-				<%= submit_tag "Go", :name => nil %>
+	<% if @current_user || Sugar.config(:public_browsing) %>
+		<div id="navigation"><ul>
+			<li><%= link_to "Discussions", discussions_path %></li>
+			<li><%= link_to "Categories", categories_path %></li>
+			<% if @current_user %>
+				<li><%= link_to "Following", following_discussions_path %></li>
+				<li><%= link_to "Favorites", favorites_discussions_path %></li>
 			<% end %>
-		</li>
-	</ul></div>
+			<li><%= link_to "Users", users_path %></li>
+			<% if @current_user %>
+				<% if @current_user.unread_messages? -%>
+					<li><strong><%= link_to "Messages (#{@current_user.unread_messages_count})", messages_path %></strong></li>
+				<% else -%>
+					<li><%= link_to "Messages", messages_path %></li>
+				<% end -%>
+				<li><%= link_to "New discussion", new_discussion_path %></li>
+				<% if @discussion && !@discussion.new_record? && @discussion.editable_by?(@current_user) %>
+					<li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>
+				<% end %>
+				<li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
+			<% end %>
+			<li class="search">
+				<% form_tag((@search_path || search_path), :method => 'get') do %>
+					Search for
+					<%= text_field_tag 'q', @search_query, :class => :query %>
+					<%= select_tag 'search_mode', options_for_select(
+						search_mode_options,
+						@search_path || search_path
+					) %>
+					<%= submit_tag "Go", :name => nil %>
+				<% end %>
+			</li>
+		</ul></div>
+	<% end %>
 	<script type="text/javascript">
 		$('#navigation').hide();
 	</script>
@@ -64,7 +72,11 @@
 		<%= yield %>
 	</div>
 	<div id="footer">
-		<%= link_to "Back to discussions", discussions_path %> | 
+		<%= link_to "Discussions", discussions_path %> | 
+		<% if @current_user %>
+			<%= link_to "Following", following_discussions_path %> | 
+			<%= link_to "Favorites", favorites_discussions_path %> | 
+		<% end %>
 		<%= link_to "Regular site", :iphone_format => 'html' %>
 	</div>
 	<script type="text/javascript">

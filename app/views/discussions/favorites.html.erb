@@ -3,9 +3,10 @@
 	@page_title = "Favorite Discussions" 
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
+<% sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
 <h2 class="section"><%= link_to "Favorite Discussions", favorites_discussions_path %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {

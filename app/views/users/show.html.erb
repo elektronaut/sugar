@@ -3,16 +3,18 @@
 	@page_title = "#{@user.username}" 
 %>
 
-<div class="functions">
-	<% if @user == @current_user %>
-		<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
-	<% elsif @current_user.admin? %>
-		<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
-	<% end %>
-	<% unless @user == @current_user %>
-		<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
-	<% end %>
-</div>
+<% if @current_user %>
+	<div class="functions">
+		<% if @user == @current_user %>
+			<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
+		<% elsif @current_user.user_admin? %>
+			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
+		<% end %>
+		<% unless @user == @current_user %>
+			<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
+		<% end %>
+	</div>
+<% end %>
 
 <h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
 
@@ -44,7 +46,7 @@
 	</div>
 	<% end %>
 
-	<% if !Sugar.config(:signups_allowed) && @current_user.user_admin? && !@user.user_admin? %>
+	<% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? %>
 		<p class="grant_invites">
 			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
 			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
@@ -63,7 +65,7 @@
 		<% if @user.posts_count > 0 %>
 			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
 		<% end %>
-		<% unless @user == @current_user %>
+		<% unless !@current_user || @user == @current_user %>
 			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
 		<% end %>
 	</p>
@@ -127,7 +129,7 @@
 <div id="userPosts">
 	<% if @posts && @posts.length > 0 %>
 		<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
-	<% elsif @user == @current_user %>
+	<% elsif @current_user && @user == @current_user %>
 		<div class="welcome">
 			<h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
 			<p>

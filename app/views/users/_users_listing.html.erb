@@ -40,8 +40,10 @@
 			when :status
 				if user.banned?
 					'<span class="banned">Banned</span>'
-				elsif user.admin? || user.user_admin? || user.moderator?
-					'<span class="admin">'+user.admin_labels.join(', ')+'</span>'
+				elsif user.temporary_banned?
+					'<span class="banned">Banned</span> for '+distance_of_time_in_words(Time.now - user.banned_until)
+				elsif user.user_admin? || user.moderator?
+					'<span class="admin">'+user.admin_labels.to_sentence+'</span>'
 				end
 			when :twitter
 				link_to "@#{user.twitter}", "http://twitter.com/#{user.twitter}"

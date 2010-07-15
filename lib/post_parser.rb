@@ -4,19 +4,17 @@ require 'uv'
 module PostParser
     def PostParser.parse(string)
 		string = string.strip
+		
+		# Wrap <code> stuff in CDATA
+		string.gsub!(/(<code[\s\w\d\"\'=\-_\+\.]*>)/i){"#{$1}<![CDATA["}
+		string.gsub!(/(<\/code>)/i){"]]>#{$1}"}
 
-		# Autolink URLs
-		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 		string.gsub!(/<script[\s\/]*/i, '<script ')
-        
+		
 		doc = Hpricot(string)
 		
-		# Delete script and iframe tags
-		(doc/"script").remove
-		(doc/"iframe").remove
-		(doc/"meta").remove
-		
 		# Parse <code> blocks
+		codeblocks = []
 		doc.search('code') do |codeblock|
 			if codeblock.attributes && codeblock.attributes['language']
 				code_language = codeblock.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
@@ -24,9 +22,18 @@ module PostParser
 			else
 				code_language = 'plain_text'
 			end
-			codeblock.swap('<div class="codeblock language_'+code_language+'">'+Uv.parse(codeblock.inner_html, "xhtml", code_language, true, 'twilight')+'</div>')
+			codeblock.swap("<div id=\"replace_codeblock_#{codeblocks.length}\"></div>")
+			codeblocks << {
+				:language => code_language,
+				:body     => Uv.parse(codeblock.children.first.content, "xhtml", code_language, true, 'twilight')
+			}
 		end
 
+		# Delete script and iframe tags
+		(doc/"script").remove
+		(doc/"iframe").remove
+		(doc/"meta").remove
+		
 		# Filter malicious attributes on all elements
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
 			if elem.raw_attributes
@@ -65,7 +72,7 @@ module PostParser
 		doc.search("object").each do |elem|
 			param_attributes = elem.search('>param').map do |subelem|
 				if subelem.kind_of?(Hpricot::Elem)
-					subelem.attributes ? subelem.attributes.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
+					subelem.attributes ? subelem.attributes.to_hash.map{|k,v| (k.downcase == 'name') ? v.downcase : nil }.compact : []
 				end
 			end
 			unless param_attributes.flatten.include?('allowscriptaccess')
@@ -75,6 +82,14 @@ module PostParser
 
 		# ..and convert back to HTML again
 		string = doc.to_html
+		
+		# Autolink URLs
+		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
+
+		# Replace code blocks
+		codeblocks.each_with_index do |codeblock, index|
+			string.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<div class="codeblock language_'+codeblock[:language]+'">'+codeblock[:body]+'</div>')
+		end
 
         # Replace line breaks
 		string.gsub!(/\r?\n/,'<br />')

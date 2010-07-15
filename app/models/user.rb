@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
 	# The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt> for regular users.
 	UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id, :available_invites
+	STATUS_OPTIONS    = :inactive, :activated, :banned
 
 	# Virtual attributes for clear text passwords
 	attr_accessor :password, :confirm_password
@@ -43,9 +44,9 @@ class User < ActiveRecord::Base
 
 	has_one    :xbox_info, :dependent => :destroy
 
-	# Automatically generate a password for OpenID users
+	# Automatically generate a password for Facebook and OpenID users
 	before_validation_on_create do |user|
-		if user.openid_url? && !user.hashed_password? && (!user.password || user.password.blank?)
+		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end
 	end
@@ -69,14 +70,26 @@ class User < ActiveRecord::Base
 			user.openid_url = "http://"+user.openid_url unless user.openid_url =~ /^https?:\/\//
 			user.openid_url = OpenID.normalize_url(user.openid_url)
 		end
+		# Set trusted to true if applicable
+		user.trusted = true if user.moderator? && user.user_admin?
 	end
 
-	validates_presence_of   :hashed_password, :unless => :openid_url?
-	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.'
-	validates_presence_of   :username, :email
-	validates_uniqueness_of :username, :message => 'is already registered.'
+	validates_presence_of   :hashed_password, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}
+	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
+	validates_uniqueness_of :facebook_uid, :allow_nil => true, :allow_blank => true, :message => 'is already registered.'
+
+	validates_presence_of   :username
+	validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
-	validates_presence_of   :realname, :application, :if => Proc.new { |u| Sugar.config(:signup_approval_required) }
+
+	validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}, :case_sensitive => false
+	validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
+
+	validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
+	
+	before_save do |user|
+		user.banned_until = nil if user.banned_until? && user.banned_until <= Time.now
+	end
 	
 	class << self
 		# Finds active users.
@@ -159,11 +172,6 @@ class User < ActiveRecord::Base
 		DiscussionRelationship.find_favorite(self, options)
 	end
 
-	# Counts participated discussions.
-	def participated_count
-		DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = 1', self.id])
-	end
-
 	# Finds and paginate discussions created by this user.
 	# === Parameters
 	# * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.
@@ -177,7 +185,7 @@ class User < ActiveRecord::Base
 		) do |pagination|
 			discussions = Discussion.find(
 				:all, 
-				:conditions => ['poster_id = ?', self.id], 
+				:conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'sticky DESC, last_post_at DESC',
@@ -199,7 +207,7 @@ class User < ActiveRecord::Base
 		) do |pagination|
 			Post.find(
 				:all, 
-				:conditions => ['user_id = ?', self.id], 
+				:conditions => options[:trusted] ? ['user_id = ?', self.id] : ['user_id = ? AND trusted = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'created_at DESC',
@@ -318,6 +326,15 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	# Marks a discussion as viewed
+	def mark_discussion_viewed(discussion, post, index)
+		if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+			discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
+		else
+			DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
+		end
+	end
+
 	# Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
 	def posts_per_day(precision=2)
 		ppd = posts_count.to_f / ((Time.now - self.created_at).to_f / 60 / 60 / 24)
@@ -382,39 +399,44 @@ class User < ActiveRecord::Base
 	# Returns true if this user is following the given discussion.
 	def following?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.following?) ? true : false
+		relationship && relationship.following?
 	end
 
 	# Returns true if this user has favorited the given discussion.
 	def favorite?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.favorite?) ? true : false
+		relationship && relationship.favorite?
+	end
+	
+	# Returns true if this user is temporarily banned.
+	def temporary_banned?
+		self.banned_until? && self.banned_until > Time.now
 	end
 	
 	# Returns true if this user has invited someone.
 	def invites?
-		(self.invites.count > 0) ? true : false
+		self.invites.count > 0
 	end
 
 	# Returns true if this user has invitees.
 	def invitees?
-		(self.invitees.count > 0) ? true : false
+		self.invitees.count > 0
 	end
 	
 	# Returns true if this user has invited someone or has invitees.
 	def invites_or_invitees?
-		(self.invites? || self.invitees?) ? true : false
+		self.invites? || self.invitees?
 	end
 
 	# Returns true if this user can invite someone.
 	def available_invites?
-		(self.user_admin? || self.available_invites > 0)
+		self.user_admin? || self.available_invites > 0
 	end
 	
 	# Number of remaining invites. User admins always have at least one invite.
 	def available_invites
 	 	number = self[:available_invites]
-	 	(self.user_admin?) ? 1 : self[:available_invites]
+	 	self.user_admin? ? 1 : self[:available_invites]
 	end
 
 	# Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.
@@ -435,6 +457,29 @@ class User < ActiveRecord::Base
 		self.invites
 	end
 
+	# Get account status
+	def status
+		return 2 if banned?
+		return 1 if activated?
+		return 0
+	end
+
+	# Set account status
+	def status=(new_status)
+		new_status = STATUS_OPTIONS[new_status.to_i] unless new_status.kind_of?(Symbol)
+		case new_status
+		when :banned
+			self.banned    = true
+			self.activated = true
+		when :activated
+			self.banned    = false
+			self.activated = true
+		when :inactive
+			self.banned    = false
+			self.activated = false
+		end
+	end
+
 	# Generates a Gravatar URL
 	def gravatar_url(options={})
 		options[:size] ||= 24
@@ -452,7 +497,7 @@ class User < ActiveRecord::Base
 		if self.admin?
 			labels << "Admin"
 		else
-			labels << "User admin" if self.user_admin?
+			labels << "User Admin" if self.user_admin?
 			labels << "Moderator" if self.moderator?
 		end
 		labels

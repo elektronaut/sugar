@@ -2,6 +2,116 @@ var Sugar = {
 	Configuration: {},
 	onLoadedPosts: {},
 	Initializers: {
+		
+		spoilerTags : function(){
+			var apply = function(){
+				$('.spoiler').each(function(){
+					var container = this;
+					if(!container.spoilerApplied) {
+						if($(container).find('.innerSpoiler').length < 1){
+							$(container).wrapInner('<span class="innerSpoiler"></span>');
+						}
+						if($(container).find('.spoilerLabel').length < 1){
+							$(container).prepend('<span class="spoilerLabel">Spoiler!</span> ');
+						}
+						$(container).find('.innerSpoiler').css('visibility', 'hidden');
+						$(container).hover(function(){
+							$(container).find('.innerSpoiler').css('visibility', 'visible');
+						}, function(){
+							$(container).find('.innerSpoiler').css('visibility', 'hidden');
+						});
+						container.spoilerApplied = true;
+					}
+				});
+			};
+			$(Sugar).bind('postsloaded', apply);
+			apply();
+		},
+		
+		layout : function(){
+			// Adjust min-width of #content to always contain table.discussions
+			$('table.discussions').each(function(){
+				$('#content').css('min-width', $(this).outerWidth()+'px');
+			});
+			// Adjust min-width of #wrapper to always contain content and sidebar if the sidebar exists
+			$('#sidebar').each(function(){
+				var minWidth = $('#content').outerWidth() + $('#sidebar').outerWidth();
+				$('#wrapper').css('min-width', minWidth+'px');
+			});
+			// Make entire category li clickable
+			$('ul.categories li a').each(function(){
+				var url = this.href;
+				$(this).closest('li').click(function(){
+					document.location = url;
+				});
+			});
+		},
+
+		styleButtons : function(){
+			// Wrap buttons in span
+			$('a.button, button').each(function(){
+				if($(this).find('span').length === 0){
+					$(this).wrapInner('<span />');
+				}
+			});
+		},
+
+		loginForm : function() {
+			$('body.login #login').each(function(){
+				var container = this;
+				
+				if($.cookie('login_method') == 'openid') {
+					$(container).find('.username_and_password.form').hide();
+				} else {
+					$(container).find('.openid.form').hide();
+				}
+				
+				$(container).find('.openid_toggle').click(function(){
+					$(container).find('.username_and_password.form').hide();
+					$(container).find('.openid.form').show();
+					$.cookie('login_method', 'openid', {expires: 365});
+				});
+
+				$(container).find('.username_and_password_toggle').click(function(){
+					$(container).find('.username_and_password.form').show();
+					$(container).find('.openid.form').hide();
+					$.cookie('login_method', null, {expires: 365});
+				});
+			});
+		},
+		
+		profileEditing : function() {
+			$('.edit_user_profile').each(function(){
+				var checkTrusted = function(){
+					if($('#user_user_admin:checked').val() || $('#user_moderator:checked').val()){
+						$('#user_trusted').attr('checked', true);
+						$('#user_trusted').attr('disabled', true);
+					} else {
+						$('#user_trusted').attr('disabled', false);
+					}
+				};
+				var checkAdmin = function(){
+					if($('#user_admin:checked').val()){
+						$('#user_moderator').attr('checked', true);
+						$('#user_user_admin').attr('checked', true);
+						$('#user_moderator').attr('disabled', true);
+						$('#user_user_admin').attr('disabled', true);
+					} else {
+						$('#user_moderator').attr('disabled', false);
+						$('#user_user_admin').attr('disabled', false);
+					}
+				};
+				$('#user_moderator, #user_user_admin').click(function(){
+					checkTrusted();
+				});
+				$('#user_admin').click(function(){
+					checkAdmin();
+					checkTrusted();
+				});
+				checkAdmin();
+				checkTrusted();
+			});
+		},
 
 		richText : function() {
 			jQuery('textarea.rich').each(function(){
@@ -55,7 +165,9 @@ var Sugar = {
 							} else {
 							    this.textArea.replaceSelection('<code>'+selection+'</code>');
 							}
-						});
+						})
+						//
+						.addButton("Spoiler", function(){ this.textArea.wrapSelection('<div class="spoiler">','</div>'); });
 				}
 			});
 		},
@@ -74,6 +186,13 @@ var Sugar = {
 					window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 				}
 			});
+			jQuery('#signup-tabs').each(function(){
+				window.signupTabs = new SugarTabs(this, {showFirstTab: true});
+			});
+			jQuery('.admin.configuration .tabs').each(function(){
+				window.configTabs = new SugarTabs(this, {showFirstTab: true});
+			});
+			
 		},
 
 		postFunctions: function() {
@@ -94,6 +213,7 @@ var Sugar = {
 						$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
 						$("#postBody-"+postID).load(editURL, null, function(){
 							Sugar.Initializers.richText();
+							Sugar.Initializers.styleButtons();
 						});
 						return false;
 					});

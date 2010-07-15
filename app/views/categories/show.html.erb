@@ -3,9 +3,10 @@
 	@page_title = @category.name 
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
-<h2 class="section"><%= link_to "Categories", categories_path %> &raquo; <%= link_to @category.name, category_path(@category) %></h2>
+<% sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<h2 class="section"><%= link_to @category.name, category_path(@category) %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>

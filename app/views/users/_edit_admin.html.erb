@@ -1,18 +1,37 @@
-<% if !Sugar.config(:signups_allowed) %>
-	<%= labelled_field f.text_field(:available_invites, :size => 4), "Invites", :errors => @user.errors[:available_invites] %>
+<fieldset>
+	<h2>Account status</h2>
+	<p class="field">
+		<%= f.radio_button(:status, 0) %> Inactive<br />
+		<%= f.radio_button(:status, 1) %> Activated<br />
+		<%= f.radio_button(:status, 2) %> Banned<br />
+	</p>
+	<%= labelled_field f.check_box(:html_disabled), "Disable HTML", :description => 'All posts by this user will be displayed as plain text' %>
+	<%= labelled_field f.check_box(:trusted), "Trusted", :description => 'User will be able to see discussions in categories marked as trusted' %>
+</fieldset>
+
+<% if !Sugar.config(:signups_allowed) && !@user.user_admin? %>
+	<fieldset>
+		<h2>Invites</h2>
+		<p class="field">
+			<%= f.text_field(:available_invites, :size => 4) %> invites
+		</p>
+	</fieldset>
 <% end %>
-<p>
-	<label>Flags</label>
-	<%= f.check_box(:activated) %> Activated<br />
-	<%= f.check_box(:banned) %> Banned<br />
-	<%= f.check_box(:html_disabled) %> Disable HTML posting<br />
-	<%= f.check_box(:trusted) %> Trusted<br />
-</p>
-<p>
-	<label>User levels</label>
-	<% if @current_user.admin? %>
-		<%= f.check_box(:admin) %> Administrator<br />
-	<% end %>
-	<%= f.check_box(:moderator) %> Moderator<br />
-	<%= f.check_box(:user_admin) %> User administator<br />
-</p>
+
+<% if @current_user.user_admin? %>
+	<fieldset>
+		<h2>Temporary ban</h2>
+		<%= labelled_field f.datetime_select(:banned_until, :minute_step => 15, :default => 1.minute.ago), 'Banned until' %>
+	</fieldset>
+
+	<fieldset>
+		<h2>Administrator privileges</h2>
+		<p>
+			<%= f.check_box(:moderator) %> <strong>Moderator</strong> (Can edit all categories, discussions and posts)<br />
+			<%= f.check_box(:user_admin) %> <strong>User administrator</strong> (Can edit other users and handle invites or approvals)<br />
+			<% if @current_user.admin? %>
+				<%= f.check_box(:admin) %> <strong>Administrator</strong> (Same as the two above, plus access to forum configuration)<br />
+			<% end %>
+		</p>
+	</fieldset>
+<% end %>

@@ -1,6 +1,9 @@
+require 'open-uri'
+
 class UsersController < ApplicationController
 
-	requires_authentication :except => [:login, :complete_openid_login, :logout, :forgot_password, :new, :create]
+	requires_authentication :except => [:login, :facebook_login, :complete_openid_login, :logout, :password_reset, :new, :create]
+	requires_user           :only => [:edit, :update, :grant_invite, :revoke_invites]
 
 	def load_user
 		@user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
@@ -10,7 +13,26 @@ class UsersController < ApplicationController
 		end
 	end
 	protected     :load_user
-	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites]
+	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites, :stats]
+
+	def detect_admin_signup
+		@admin_signup = true if User.count(:all) == 0
+	end
+	protected     :detect_admin_signup
+	before_filter :detect_admin_signup, :only => [:login, :new, :create]
+	
+	def get_facebook_user
+		if @facebook_session && @facebook_session[:uid] && user = User.find_by_facebook_uid(@facebook_session[:uid])
+			if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token
+				# Update the access token if it has changed
+				user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
+			end
+			user
+		else
+			nil
+		end
+	end
+	protected :get_facebook_user
 
 	def index
 		@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
@@ -26,7 +48,7 @@ class UsersController < ApplicationController
 	end
 
 	def banned
-		@users  = User.find(:all, :order => 'username ASC', :conditions => 'banned = 1')
+		@users  = User.find(:all, :order => 'username ASC', :conditions => ['banned = 1 OR banned_until < ?', Time.now])
 	end
 
 	def recently_joined
@@ -66,7 +88,7 @@ class UsersController < ApplicationController
 	def show
 		respond_to do |format|
 			format.html do
-				@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?, :limit => 15)
+				@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :limit => 15)
 			end
 			format.iphone {}
 		end
@@ -84,23 +106,29 @@ class UsersController < ApplicationController
 	end
 
 	def posts
-		@posts = @user.paginated_posts(:page => params[:page], :trusted => @current_user.trusted?)
+		@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?))
+	end
+
+	def stats
+		@posts_per_week = Post.find_by_sql("SELECT COUNT(*) AS `count`, YEAR(created_at) AS `year`, WEEK(created_at) AS `week` FROM posts WHERE user_id = #{@user.id} GROUP BY YEAR(created_at), WEEK(created_at);")
+		@max_posts_per_week = @posts_per_week.map{|p| p.count.to_i}.max
 	end
 
 	def new
+		user_params = {}
 		# New by invitation
 		if params[:token]
 			@invite = Invite.first(:conditions => {:token => params[:token]})
 			if @invite && !@invite.expired?
-				@user = @invite.user.invitees.new
+				@user = @invite.user.invitees.new(user_params)
 				@user.email = @invite.email
 			else
 				flash[:notice] = "That's not a valid invite!"
 				redirect_to login_users_url and return
 			end
 			# Signups allowed
-		elsif Sugar.config(:signups_allowed)
-			@user = User.new
+		elsif Sugar.config(:signups_allowed) || @admin_signup
+			@user = User.new(user_params)
 		else
 			flash[:notice] = "Signups are not allowed!"
 			redirect_to login_users_url and return
@@ -113,11 +141,11 @@ class UsersController < ApplicationController
 			@invite = nil if @invite.expired?
 		end
 
-		unless Sugar.config(:signups_allowed) || @invite
+		unless Sugar.config(:signups_allowed) || @invite || @admin_signup
 			flash[:notice] = "Signups are not allowed!"
 			redirect_to login_users_url and return
 		end
-
+		
 		# Secure and parse attributes
 		attributes = User.safe_attributes(params[:user])
 		if attributes[:openid_url] && !attributes[:openid_url].blank?
@@ -125,12 +153,44 @@ class UsersController < ApplicationController
 		end
 		attributes[:username]   = params[:user][:username]
 		attributes[:inviter_id] = @invite.user_id if @invite
-		attributes[:activated]  = Sugar.config(:signup_approval_required) ? false : true
+		attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup) ? true : false
+		attributes[:admin]      = true if @admin_signup
+		
+		# Get data from Facebook
+		if params[:mode] == 'facebook' && @facebook_session && @facebook_session[:uid]
+			if user = get_facebook_user
+				# You already have an account, dimwit
+				@current_user = user
+				store_session_authentication
+				redirect_to discussions_url and return
+			else
+				facebook_params = {
+					:facebook_uid          => @facebook_session[:uid],
+					:facebook_access_token => @facebook_session[:access_token]
+				}
+				begin
+					fb_url = "http://graph.facebook.com/#{@facebook_session[:uid]}"
+					if @facebook_session[:access_token]
+						fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
+						fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
+						fb_url += "&client_secret=#{Sugar.config(:facebook_api_secret)}"
+					end
+					json = open(fb_url).read
+					json = ActiveSupport::JSON.decode(json).symbolize_keys
+					facebook_params[:email]    = json[:email]
+					facebook_params[:realname] = json[:name]
+					facebook_params[:username] = json[:name]
+				rescue
+					# Nothing to do
+				end
+				attributes = facebook_params.merge(attributes)
+			end
+		end
 
 		@user = User.create(attributes)
 		if @user.valid?
 			@invite.expire! if @invite
-			Notifications.deliver_new_user(@user, login_users_path(:only_path => false))
+			Mailer.deliver_new_user(@user, login_users_path(:only_path => false)) if @user.email?
 			@current_user = @user
 			store_session_authentication
 
@@ -154,6 +214,27 @@ class UsersController < ApplicationController
 		@page = params[:page] || 'info'
 		# TODO: refactor to .editable_by?
 		require_user_admin_or_user(@user, :redirect => user_url(@user))
+	end
+
+	def connect_facebook
+		if @facebook_session && @facebook_session[:uid]
+			@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
+			# Update the access token if it has changed
+			if @facebook_session[:access_token] && @facebook_session[:access_token] != @current_user.facebook_access_token
+				@current_user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
+			end
+			flash[:notice] = "You have connected your Facebook account"
+		else
+			flash[:notice] = "Can't get a Facebook session, sorry!"
+		end
+		redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+	end
+	
+	def disconnect_facebook
+		@current_user.update_attribute(:facebook_uid, nil)
+		cookies['fb_logout'] = true
+		flash[:notice] = "You have disconnected your Facebook account"
+		redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
 	end
 
 	def update_openid
@@ -192,7 +273,8 @@ class UsersController < ApplicationController
 	def update
 		@page = params[:page] || 'info'
 		require_user_admin_or_user(@user, :redirect => user_url(@user))
-		attributes = @current_user.admin? ? params[:user] : User.safe_attributes(params[:user])
+		attributes = @current_user.user_admin? ? params[:user] : User.safe_attributes(params[:user])
+		attributes.delete(:administrator) unless @current_user.admin?
 
 		if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
 			new_openid_url = attributes[:openid_url]
@@ -262,8 +344,26 @@ class UsersController < ApplicationController
 		redirect_to login_users_url
 	end
 
+	def facebook_login
+		if user = get_facebook_user
+			@current_user = user
+			store_session_authentication
+			redirect_to discussions_url and return
+		else
+			if Sugar.config(:signups_allowed)
+				flash[:notice] = "You must choose a username before connecting"
+				redirect_to new_user_url(:anchor => 'facebook') and return
+			else
+				flash[:notice] = "Your Facebook account wasn't recognized"
+				redirect_to login_users_url and return
+			end
+		end
+	end
+
 	def login
+		redirect_to new_user_path   and return if @admin_signup
 		redirect_to discussions_url and return if @current_user
+
 		if request.post?
 			if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?
 				user = User.find_by_username(params[:username])
@@ -283,29 +383,35 @@ class UsersController < ApplicationController
 			end
 			flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
 		end
-		render :layout => 'login'
+		#render :layout => 'login'
 	end
 
-	def forgot_password
-		@user = User.find_by_email(params[:email])
-		if @user
-			if @user.activated? && !@user.banned?
-				@user.generate_password!
-				Notifications.deliver_password_reminder(@user, login_users_path(:only_path => false))
-				@user.save
-				flash[:notice] = "A new password has been mailed to you"
+	def password_reset
+		if request.post? && params[:email]
+			@user = User.find_by_email(params[:email])
+			if @user
+				if @user.activated? && !@user.banned?
+					@user.generate_password!
+					Mailer.deliver_password_reminder(@user, login_users_path(:only_path => false))
+					@user.save
+					flash[:notice] = "A new password has been mailed to you"
+				else
+					flash[:notice] = "Your account isn't active, you can't do that yet"
+				end
 			else
-				flash[:notice] = "Your account isn't active, you can't do that yet"
+				flash[:notice] = "Could not find that email address"
+				redirect_to password_reset_users_url and return
 			end
+			redirect_to login_users_url
 		else
-			flash[:notice] = "<strong>Oops!</strong> Couldn't find your email address."
+			# Render form
 		end
-		redirect_to login_users_url
 	end
 
 	def logout
 		deauthenticate!
-		redirect_to login_users_url
+		flash[:notice] = "You have been logged out."
+		redirect_to Sugar.config(:public_browsing) ? discussions_url : login_users_url
 	end
 
 	def grant_invite

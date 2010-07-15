@@ -54,6 +54,21 @@ module ApplicationHelper
 		concat(output, block.binding) if block_given?
 		return output
 	end
+	
+	# Render a sidebar
+	def sidebar(options={}, &block)
+		@sidebar_content ||= ""
+		@sidebar_content += capture(&block) if block_given?
+		unless @sidebar_content.blank?
+			add_body_class 'with_sidebar'
+		end
+		return @sidebar_content
+	end
+	
+	# Render a sidebar?
+	def sidebar?
+		(@sidebar_content && !@sidebar_content.empty?) ? true : false
+	end
 
 	# Generates avatar image tag for a user
 	def avatar_image_tag(user, size='32')
@@ -110,7 +125,7 @@ module ApplicationHelper
 	def discussion_view(discussion, user)
 		return nil unless @discussion_views
 		@_discussion_view_lookup_table ||= @discussion_views.inject(Hash.new) do |hash, dv|
-			hash[[dv.discussion_id, dv.user_id]] = dv
+			hash[[dv.discussion_id, dv.user_id]] = dv unless hash[[dv.discussion_id, dv.user_id]] && hash[[dv.discussion_id, dv.user_id]].post_index > dv.post_index
 			hash
 		end
 		@_discussion_view_lookup_table[[discussion.id, user.id]] ||= DiscussionView.new(:user_id => user.id, :discussion_id => discussion.id, :post_index => 0)
@@ -123,10 +138,12 @@ module ApplicationHelper
 
 	def new_posts?(discussion)
 		return false unless @discussion_views
-		(new_posts_count(discussion) > 0) ? true : false
+		@_new_posts ||= {}
+		@_new_posts[discussion] ||= (new_posts_count(discussion) > 0) ? true : false
 	end
 
 	def last_discussion_page(discussion)
+		return 1 unless @current_user
 		return discussion.last_page unless @discussion_views && new_posts?(discussion)
 		page = (discussion_view(discussion, @current_user)[:post_index].to_f / Post::POSTS_PER_PAGE).ceil
 		page = 1 if page < 1
@@ -150,8 +167,9 @@ module ApplicationHelper
 	end
 
 	def theme_path(theme_name=nil)
+		theme_format = (request.format == :iphone) ? 'iphone' : 'regular'
 		theme_name ||= (request.format == :iphone) ? Sugar.config(:default_iphone_theme) : Sugar.config(:default_theme)
-		"/themes/#{theme_name}"
+		"/themes/#{theme_format}/#{theme_name}"
 	end
 
 	def search_mode_options

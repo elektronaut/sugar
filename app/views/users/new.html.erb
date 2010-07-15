@@ -1,4 +1,7 @@
-<% @page_title = "Signup" %>
+<% 
+	add_body_class "signup"
+	@page_title = "Signup" 
+%>
 
 <h2 class="section">
 	<% if @current_user || Sugar.config(:public_browsing) -%>
@@ -7,31 +10,56 @@
 	<%= link_to @page_title, new_user_path %>
 </h2>
 
-<% form_for @user do |f| %>
-	<% if @invite %>
-		<%= hidden_field_tag 'token', @invite.token %>
-	<% end %>
-	<%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
-	<%= labelled_field f.text_field(:email, :size => 50), "Email address", :errors => @user.errors[:email] %>
-	<%= labelled_field f.text_field(:openid_url, :size => 47), "OpenID Identity URL", :errors => @user.errors[:openid_url], :description => "#{link_to("What's this?", "http://openid.net/what/")}" %>
-	<% labelled_field f.password_field(:password), "Password", :errors => @user.errors[:password], :description => "Enter twice to confirm. You can safely leave these blank if you've supplied an OpenID URL." do %>
-		<%= f.password_field(:confirm_password) %>
-	<% end %>
 
-	<% if Sugar.config(:signup_approval_required) %>
-		<p>Your account will have to be approved. Please provide some information about your application:</p>
-	<% else %>
-		<p>The following fields are optional, but it's always nice to provide a bit more information:</p>
+<ul id="signup-tabs" class="topTabs">  
+	<li class="tab" id="regular-tab"><a href="#password">Username and password</a></li>
+	<% if Sugar.config(:facebook_app_id) %>
+		<li class="tab" id="facebook-tab"><a href="#facebook">Facebook</a></li>
 	<% end %>
+	<li class="tab" id="openid-tab"><a href="#openid">OpenID</a></li>
+</ul>
 
-	<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
-	<%= labelled_field f.text_field(:location, :size => 50), "Location", :errors => @user.errors[:location] %>
-
-	<% if Sugar.config(:signup_approval_required) %>
-		<%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
+<%# Normal signup %>
+<div id="password">
+	<% form_for @user do |f| %>
+		<%= render :partial => 'signup_form', :locals => {:f => f} %>
+		<p><button type="submit">Sign up</button></p>
 	<% end %>
+</div>
 
-	<p>
-		<%= submit_tag "Signup" %>
-	</p>
+<%# Facebook signup %>
+<% if Sugar.config(:facebook_app_id) %>
+	<div id="facebook">
+		<div class="connect">
+			<p><a class="facebook_login">Login with Facebook</a></p>
+		</div>
+		<div class="signup">
+			<p class="login_status"></p>
+			<% form_for @user do |f| %>
+				<% if @invite %>
+					<%= hidden_field_tag 'token', @invite.token %>
+				<% end %>
+				<%= hidden_field_tag 'mode', 'facebook' %>
+				<%= labelled_field f.text_field(:username), "Please choose a username", :errors => @user.errors[:username] %>
+				<% if Sugar.config(:signup_approval_required) %>
+					<p>Your account will have to be approved. Please provide some information about your application:</p>
+					<%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
+					<%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
+				<% end %>
+				<p><button type="submit">Sign up</button></p>
+			<% end %>
+		</div>
+	</div>
 <% end %>
+
+<%# OpenID signup %>
+<div id="openid">
+	<% form_for @user do |f| %>
+		<%= render :partial => 'signup_form', :locals => {:f => f, :mode => :openid} %>
+		<p><button type="submit">Sign up</button></p>
+	<% end %>
+</div>
+
+
+
+

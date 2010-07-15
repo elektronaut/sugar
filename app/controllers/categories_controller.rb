@@ -1,15 +1,7 @@
 class CategoriesController < ApplicationController
 
 	requires_authentication
-
-	def require_admin
-		unless @current_user && @current_user.admin?
-			flash[:notice] = "You don't have permission to do that!"
-			redirect_to categories_path and return
-		end
-	end
-	protected     :require_admin
-	before_filter :require_admin, :except => [:index,:show]
+	requires_moderator :except => [:index, :show]
 
 	def load_category
 		@category = Category.find(params[:id]) rescue nil
@@ -30,7 +22,7 @@ class CategoriesController < ApplicationController
 	end
 
 	def show
-		@discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => @current_user.trusted?)
+		@discussions = Discussion.find_paginated(:page => params[:page], :category => @category, :trusted => (@current_user && @current_user.trusted?))
 		find_discussion_views
 	end
 

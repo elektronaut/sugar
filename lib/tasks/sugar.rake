@@ -55,7 +55,7 @@ namespace :sugar do
 			user.generate_password!
 			user.save
 			begin
-				Notifications.deliver_welcome(user)
+				Mailer.deliver_welcome(user)
 			rescue
 				puts "Couldn't send message to: #{user.username} - #{user.full_email}"
 			end
@@ -64,9 +64,11 @@ namespace :sugar do
 
 	desc "Pack themes"
 	task :pack_themes do
-		themes_dir = File.join(File.dirname(__FILE__), '../../public/themes')
-		Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
-			`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
+		['regular', 'iphone'].each do |theme_format|
+			themes_dir = File.join(File.dirname(__FILE__), "../../public/themes/#{theme_format}")
+			Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
+				`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
+			end
 		end
 	end
 	
@@ -100,9 +102,8 @@ namespace :sugar do
 	end
 
 	desc "Disable web"
-	task :disable_web do
+	task :disable_web => :environment  do
 		require 'erb'
-		require File.join(File.dirname(__FILE__), 'sugar')
 		reason = ENV['REASON'] || "DOWNTIME! The toobs are being vacuumed, check back in a couple of minutes."
 		template_file = File.join(File.dirname(__FILE__), '../../config/maintenance.erb')
 		template = ''; File.open(template_file){ |fh| template = fh.read }
