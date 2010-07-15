@@ -10,19 +10,18 @@ class Post < ActiveRecord::Base
 
 	validates_presence_of :body, :user_id, :discussion_id
 
-	validate do |post|
-		post.trusted = post.discussion.trusted if post.discussion
-		post.edited_at ||= Time.now
-	end
-
-	# Automatically update the discussion with last poster info
 	after_create do |post|
+		# Automatically update the discussion with last poster info
 		post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
+		# Make sure the discussion is marked as participated for the user
 		DiscussionRelationship.define(post.user, post.discussion, :participated => true)
 	end
 
 	before_save do |post|
-		post.body_html = PostParser.parse(post.body)
+		post.edited_at  ||= Time.now
+		post.trusted      = post.discussion.trusted if post.discussion
+		post.conversation = post.discussion.kind_of?(Conversation)
+		post.body_html    = PostParser.parse(post.body)
 	end
 	
 	define_index do
