@@ -12,7 +12,7 @@ class Exchange < ActiveRecord::Base
 	belongs_to :last_poster, :class_name => 'User'
 	has_many   :posts, :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
 	has_one    :first_post, :class_name => 'Post',   :order => ['created_at ASC']
-	has_many   :discussion_views,                    :dependent => :destroy
+	has_many   :discussion_views,                    :dependent => :destroy, :foreign_key => 'discussion_id'
 
 	validates_presence_of :title
 	validates_length_of   :title, :maximum => 100, :too_long => 'is too long'
