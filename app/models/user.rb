@@ -39,10 +39,6 @@ class User < ActiveRecord::Base
 	has_many   :conversation_relationships, :dependent => :destroy
 	has_many   :conversations, :through => :conversation_relationships
 	
-	has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
-	has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND `read` = 0'], :order => ['created_at DESC']
-	has_many   :sent_messages,   :class_name => 'Message', :foreign_key => 'sender_id',    :conditions => ['deleted_by_sender = 0'],      :order => ['created_at DESC']
-
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for Facebook and OpenID users
@@ -237,116 +233,6 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	# Finds and paginate all messages sent to this user.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_messages(options={})
-		Pagination.paginate(
-			:total_count => self.messages.count,
-			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => ['recipient_id = ? AND deleted = 0', self.id],
-				:order      => ['created_at DESC'],
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset,
-				:include    => [:sender]
-			)
-		end
-	end
-
-	# Finds and paginate messages sent by this user.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_sent_messages(options={})
-		Pagination.paginate(
-		:total_count => self.sent_messages.count,
-		:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-		:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => ['sender_id = ? AND deleted_by_sender = 0', self.id],
-				:order      => ['created_at DESC'],
-				:limit      => limit, 
-				:offset     => offset,
-				:include    => [:recipient]
-			)
-		end
-	end
-
-	# Finds and paginate this users conversation partners.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of users per page. Default: Discussion::DISCUSSIONS_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_conversation_partners(options={})
-		Pagination.paginate(
-			:total_count => self.conversation_partners.length,
-			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC LIMIT #{pagination.offset}, #{pagination.limit}")
-		end
-	end
-
-	# Find this users conversation partners.
-	def conversation_partners
-		User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC")
-	end
-
-	# Finds first message exchanged with <tt>user</tt>.
-	def first_message_with(user)
-		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at ASC')
-	end
-
-	# Finds last message exchanged with <tt>user</tt>.
-	def last_message_with(user)
-		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at DESC')
-	end
-
-	# Counts number of messages exchanged with <tt>user</tt>.
-	def message_count_with(user)
-		Message.count(:all, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id])
-	end
-
-	# Counts number of unread messages from <tt>user</tt>.
-	def unread_message_count_from(user)
-		Message.count(:all, :conditions => ['sender_id = ? AND recipient_id = ? AND `read` = 0', user.id, self.id])
-	end
-
-	# Returns true if there are unread messages from <tt>user</tt> to this user.
-	def unread_messages_from?(user)
-		(unread_message_count_from(user) > 0) ? true : false
-	end
-
-	# Finds and paginates messages exchanged with <tt>options[:user]</tt>.
-	# === Parameters
-	# * <tt>:user</tt>    - The other user.
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_conversation(options={})
-		user = options[:user]
-		conditions = ['(sender_id = ? AND recipient_id = ? AND deleted_by_sender = 0) OR (recipient_id = ? AND sender_id = ? AND deleted = 0)', self.id, user.id, self.id, user.id]
-		Pagination.paginate(
-			:total_count => Message.count(:all, :conditions => conditions),
-			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => conditions,
-				:order      => ['created_at ASC'],
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset,
-				:include    => [:recipient,:sender]
-			)
-		end
-	end
-
 	# Marks a discussion as viewed
 	def mark_discussion_viewed(discussion, post, index)
 		if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
@@ -378,16 +264,6 @@ class User < ActiveRecord::Base
 
 	def unread_conversations?
 		unread_conversations_count > 0
-	end
-
-	# Counts this users unread messages.
-	def unread_messages_count
-		@unread_messages_count ||= self.unread_messages.count
-	end
-
-	# Returns true if this user has unread messages.
-	def unread_messages?
-		(unread_messages_count > 0) ? true : false
 	end
 
 	# Returns the full email address with real name.

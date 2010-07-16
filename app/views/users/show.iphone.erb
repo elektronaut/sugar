@@ -8,7 +8,10 @@
 			<%= image_tag @user.gravatar_url(:size => 48), :alt => @user.username, :size => '48x48' %>
 		<% end %>
 		<h2><%= @user.username %></h2>
-		<p><%= link_to "Conversation", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %></p>
+
+		<% unless !@current_user || @user == @current_user %>
+			<p><%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %></p>
+		<% end %>
 	</div>
 
 	<% if @user.banned? %>

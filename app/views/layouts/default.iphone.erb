@@ -35,14 +35,14 @@
 			<% if @current_user %>
 				<li><%= link_to "Following", following_discussions_path %></li>
 				<li><%= link_to "Favorites", favorites_discussions_path %></li>
+				<% if @current_user.unread_conversations? %>
+					<li><strong><%= link_to "Conversations", conversations_path %></strong></li>
+				<% else %>
+					<li><%= link_to "Conversations", conversations_path %></li>
+				<% end %>
 			<% end %>
 			<li><%= link_to "Users", users_path %></li>
 			<% if @current_user %>
-				<% if @current_user.unread_messages? -%>
-					<li><strong><%= link_to "Messages (#{@current_user.unread_messages_count})", messages_path %></strong></li>
-				<% else -%>
-					<li><%= link_to "Messages", messages_path %></li>
-				<% end -%>
 				<li><%= link_to "New discussion", new_discussion_path %></li>
 				<% if @discussion && !@discussion.new_record? && @discussion.editable_by?(@current_user) %>
 					<li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>

@@ -1,0 +1,7 @@
+<% 
+	add_body_class "discussions all_discussions conversations"
+	@page_title = "Conversations" 
+%>
+
+<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+

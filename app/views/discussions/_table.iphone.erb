@@ -14,7 +14,20 @@
 				<%= link_to h(d.title), last_discussion_page_path(d) %>
 			</h2>
 			<p>
-				By <%= d.poster.username %>,
+				<% if d.kind_of?(Conversation) %>
+					<% 
+						other_participants = d.participants.reject{|p| p == @current_user}
+					%>
+					<% if other_participants.length == 0 %>
+						With nobody,
+					<% elsif other_participants.length > 2 %>
+						With <%= other_participants.length %> participants,
+					<% else %>
+						With <%= other_participants.map{|p| profile_link(p)}.join(', ') %>,
+					<% end %>
+				<% else %>
+					By <%= d.poster.username %>,
+				<% end %>
 				<%= d.posts_count %> posts.
 				Last: <%= d.last_poster.username %> <%= formatted_time d.last_post_at %>
 			</p>
