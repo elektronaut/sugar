@@ -78,10 +78,11 @@ ActionController::Routing::Routes.draw do |map|
     map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
 
 	# Discussions
+	map.conversations '/conversations', :controller => 'discussions', :action => 'conversations'
     map.resources(
         :discussions,
-        :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any},
-		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any, :search_posts => :any, :mark_as_read => :any}
+        :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any, :conversations => :any},
+		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any, :search_posts => :any, :mark_as_read => :any, :invite_participant => :any}
     ) do |discussions|
         discussions.resources(
             :posts,
@@ -89,9 +90,12 @@ ActionController::Routing::Routes.draw do |map|
             :collection => { :doodle => :post, :count => :any, :since => :any, :preview => :any }
         )
     end
-	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'
-    map.paged_discussions '/discussions/archive/:page',                     :controller => 'discussions', :action => 'index'
-    map.paged_discussion  '/discussions/:id/:page',                         :controller => 'discussions', :action => 'show'
+	map.connect               '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'
+    map.paged_discussions     '/discussions/archive/:page',                     :controller => 'discussions', :action => 'index'
+    map.paged_discussion      '/discussions/:id/:page',                         :controller => 'discussions', :action => 'show'
+	map.new_conversation      '/conversations/new',                             :controller => 'discussions', :action => 'new', :type => 'conversation'
+	map.new_conversation_with '/conversations/new/with/:username',              :controller => 'discussions', :action => 'new', :type => 'conversation'
+    map.paged_conversations   '/conversations/archive/:page',                   :controller => 'discussions', :action => 'conversations'
 
 	# Invites
 	map.resources(

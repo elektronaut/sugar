@@ -408,14 +408,14 @@ h2.section, #sidebar h2 {
 }
 #navigation li.current a:hover {
 }
-#navigation li.new_messages a, #navigation li.new_messages a:visited {
+#navigation li.new a, #navigation li.new a:visited {
 	background:          #d14b40 url(images/tab_new_messages_bg.gif) repeat-x;
 	color:               #fff;
 	border:              1px solid #c24236;
 	border-bottom:       1px solid #c98175;
 	padding-left:        22px;
 }
-#navigation li.new_messages a:hover {
+#navigation li.new a:hover {
 	background:          #d14b40 url(images/tab_new_messages_hover_bg.gif) repeat-x;
 }
 
@@ -513,6 +513,13 @@ body.with_sidebar #content {
 	display:             block;
 }
 
+#sidebar .participants ul {
+	list-style-type:     disc;
+	list-style-position: inside;
+}
+#sidebar .participants li {
+	font-size:           1.1em;
+}
 #sidebar .categories ul {
 	margin-top:          -10px;
 }
@@ -1193,6 +1200,46 @@ body.login form h3 {
 }
 */
 
+
+
+/* -----------------------------------------------------------------------
+   AUTOCOMPLETE
+   ----------------------------------------------------------------------- */
+
+.ac_results {
+	margin-top:          4px;
+	padding:             2px;
+	border:              1px solid #E2DCBF;
+	background-color:    #fff;
+	overflow:            hidden;
+	z-index:             99999;
+}
+
+.ac_results ul {
+	margin:              0;
+	padding:             0;
+}
+
+.ac_results li {
+	margin:              0;
+	padding:             2px 5px;
+	cursor:              default;
+	display:             block;
+	font-size:           1.4em;
+	line-height:         18px;
+	overflow:            hidden;
+	color:               #484030;
+}
+
+.ac_odd {
+	background-color:    #eee;
+	background:          #f8f7f1;
+}
+
+.ac_results .ac_over {
+	background-color:    #05506d;
+	color:               #fff;
+}
 
 /* -----------------------------------------------------------------------
    CLEARFIX

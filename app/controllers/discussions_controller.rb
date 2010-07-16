@@ -4,15 +4,16 @@ class DiscussionsController < ApplicationController
 	requires_user           :except => [:index, :search, :search_posts, :show]
 	protect_from_forgery    :except => :mark_as_read
 	
-	before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read]
+	before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read, :invite_participant]
 	before_filter :verify_editable, :only => [:edit, :update, :destroy]
 	before_filter :load_categories, :only => [:new, :create, :edit, :update]
+	before_filter :set_exchange_params
 	
 	protected
 
 		# Loads discussion by params[:id] and checks permissions.
 		def load_discussion
-			@discussion = Discussion.find(params[:id]) rescue nil
+			@discussion = Exchange.find(params[:id]) rescue nil
 			unless @discussion
 				flash[:notice] = "Could not find that discussion!"
 				redirect_to discussions_path and return
@@ -28,6 +29,14 @@ class DiscussionsController < ApplicationController
 			unless @discussion.editable_by?(@current_user)
 				flash[:notice] = "You don't have permission to edit that discussion!"
 				redirect_to discussions_path and return
+			end
+		end
+		
+		def set_exchange_params
+			if params[:conversation]
+				params[:exchange] = params[:conversation]
+			elsif params[:discussion]
+				params[:exchange] = params[:discussion]
 			end
 		end
 
@@ -100,22 +109,33 @@ class DiscussionsController < ApplicationController
 				:discussion_id => @discussion.id,
 				:page          => params[:page], 
 				:query         => @search_query, 
-				:trusted       => (@current_user && @current_user.trusted?)
+				:trusted       => (@current_user && @current_user.trusted?),
+				:conversation  => @discussion.kind_of?(Conversation)
 			)
 			@search_path = search_posts_discussion_path(@discussion)
 		end
 
 		# Creates a new discussion
 		def new
-			unless @categories.length > 0
-				flash[:notice] = "Can't create a new discussion, no categories have been made!"
-				redirect_to categories_url
+			exchange_class = params[:type] == 'conversation' ? Conversation : Discussion
+			create_options = {}
+			if exchange_class == Discussion
+				unless @categories.length > 0
+					flash[:notice] = "Can't create a new discussion, no categories have been made!"
+					redirect_to categories_url
+				end
+				@category = @categories.first
+				if params[:category_id] && category = Category.find(params[:category_id])
+					@category = category
+				end
+				create_options[:category => @category]
+				@discussion = exchange_class.new(:category => @category)
+			elsif exchange_class == Conversation
+				if params[:username]
+					@recipient = User.find_by_username(params[:username])
+				end
 			end
-			@category = @categories.first
-			if params[:category_id] && category = Category.find(params[:category_id])
-				@category = category
-			end
-			@discussion = @current_user.discussions.new(:category => @category)
+			@discussion = exchange_class.new(create_options)
 		end
 
 		# Show a discussion
@@ -130,6 +150,11 @@ class DiscussionsController < ApplicationController
 			if @current_user
 				@current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset + @posts.length))
 			end
+			if @discussion.kind_of?(Conversation)
+				@section = :conversations
+				ConversationRelationship.find(:first, :conditions => {:conversation_id => @discussion, :user_id => @current_user.id}).update_attribute(:new_posts, false)
+				render :template => 'discussions/show_conversation'
+			end
 		end
 
 		# Edit a discussion
@@ -139,10 +164,20 @@ class DiscussionsController < ApplicationController
 
 		# Create a new discussion
 		def create
-			safe_attributes = @current_user.moderator? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
-			@discussion = @current_user.discussions.create(safe_attributes)
+			safe_attributes = @current_user.moderator? ? params[:exchange] : Discussion.safe_attributes(params[:exchange])
+			exchange_class = params[:exchange][:type] == 'Conversation' ? Conversation : Discussion
+
+			if params[:recipient_id]
+				@recipient = User.find(params[:recipient_id]) rescue nil
+			end
+
+			@discussion = exchange_class.create(safe_attributes.merge({:poster_id => @current_user.id}))
 			@discussion.update_attributes(safe_attributes.merge(:new_closer => @current_user))
+
 			if @discussion.valid?
+				if @discussion.kind_of?(Conversation) && @recipient
+					ConversationRelationship.create(:user => @recipient, :conversation => @discussion, :new_posts => true)
+				end
 				redirect_to discussion_path(@discussion) and return
 			else
 				flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
@@ -152,7 +187,7 @@ class DiscussionsController < ApplicationController
 
 		# Update a discussion
 		def update
-			safe_attributes = @current_user.moderator? ? params[:discussion] : Discussion.safe_attributes(params[:discussion])
+			safe_attributes = @current_user.moderator? ? params[:exchange] : Exchange.safe_attributes(params[:exchange])
 			@discussion.update_attributes(safe_attributes.merge(:new_closer => @current_user))
 			if @discussion.valid?
 				flash[:notice] = "Your changes were saved."
@@ -161,6 +196,13 @@ class DiscussionsController < ApplicationController
 				flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
 				render :action => :edit
 			end
+		end
+
+		# List discussions marked as favorite
+		def conversations
+			@section = :conversations
+			@discussions = @current_user.paginated_conversations(:page => params[:page])
+			find_discussion_views
 		end
 
 		# List discussions marked as favorite
@@ -199,6 +241,23 @@ class DiscussionsController < ApplicationController
 		def unfavorite
 			DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
 			redirect_to discussion_url(@discussion, :page => params[:page])
+		end
+		
+		# Invite a participant
+		def invite_participant
+			if @discussion.kind_of?(Conversation) && params[:username]
+				usernames = params[:username].split(/\s*,\s*/)
+				usernames.each do |username|
+					if user = User.find_by_username(username)
+						ConversationRelationship.create(:conversation => @discussion, :user => user, :new_posts => true)
+					end
+				end
+			end
+			if request.xhr?
+				render :template => 'discussions/participants', :layout => false
+			else
+				redirect_to discussion_url(@discussion)
+			end
 		end
 
 		# Mark discussion as read

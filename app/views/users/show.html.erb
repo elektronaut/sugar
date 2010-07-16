@@ -62,11 +62,11 @@
 		<% if @user.participated_count > 0 %>
 			<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
 		<% end %>
-		<% if @user.posts_count > 0 %>
-			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% if @user.discussion_posts.count > 0 %>
+			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.discussion_posts.count %>)<br />
 		<% end %>
 		<% unless !@current_user || @user == @current_user %>
-			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
+			<%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>
 		<% end %>
 	</p>
 	

@@ -5,7 +5,9 @@
 %>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% if @discussion.kind_of?(Discussion) %>
+		<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% end %>
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
 	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 	&raquo;

@@ -1,51 +1,66 @@
 namespace :sugar do
 
-	desc "Test something"
-	task :test_something => :environment do 
+	task :convert_messages => :environment do
+		
+		ThinkingSphinx.deltas_enabled = false
+		
 		Conversation.delete_all
 		ConversationRelationship.delete_all
-		Message.update_all({:conversation_id => nil})
-
-		# Convert messages to conversations
-		messages = Message.find(:all, :order => 'created_at ASC')
-		conversations = {}
-		messages.each do |message|
-			recipient_ids = [message.sender_id, message.recipient_id].sort
-			conversations[recipient_ids] ||= []
-			conversation = nil
-			if message.subject?
-				conversation = conversations[recipient_ids].select{|c| c.name == message.subject}.first rescue nil
-				if !conversation
-					conversation = Conversation.create(:name => message.subject)
-					conversations[recipient_ids] << conversation
-				end
-			else
-				if conversations[recipient_ids].length > 0
-					conversation = conversations[recipient_ids].last
-				else
-					conversation = Conversation.create(:name => '(No subject)')
-					conversations[recipient_ids] << conversation
-				end
-			end
-			message.update_attribute(:conversation_id, conversation.id)
-		end
 		
-		# Create conversation participations and fix metadata
-		Conversation.find(:all).each do |c|
-			messages = c.messages
-			user_ids = messages.map{|m| [m.recipient_id, m.sender_id]}.flatten.uniq
-			user_ids.each do |user_id|
-				unread_count = messages.select{|m| m.recipient_id == user_id && !m.read?}.length
-				# TODO:
-				#last_read_message = messages.select{|m| }
-				c.conversation_relationships.create(:user_id => user_id, :unread_count => unread_count)
+		puts "Finding partners..."
+		partners = Message.find_by_sql("SELECT DISTINCT sender_id, recipient_id FROM messages")
+		partners = partners.map{|m| [m.sender_id, m.recipient_id].sort}.uniq
+		partners = partners.map{|p| p.map{|i| User.find(i)}}
+		
+		partners.each do |user1, user2|
+			puts "#{user1.username} -> #{user2.username}"
+			messages = Message.find(
+				:all, 
+				:conditions => ['(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)', user1.id, user2.id, user2.id, user1.id],
+				:order      => 'created_at ASC',
+				:include    => [:sender, :recipient]
+			)
+
+			puts "- #{messages.length} messages"
+			threaded_messages = {}
+			subject           = "Conversation between "+[user1.username, user2.username].sort.join(' and ')
+			messages.each do |message|
+				subject = message.subject if message.subject?
+				subject = subject[0...100]
+				if message.body?
+					threaded_messages[subject] ||= []
+					threaded_messages[subject] << message
+				end
 			end
-			c.update_attributes({
-				:messages_count  => messages.length,
-				:poster_id       => messages.first.sender_id,
-				:created_at      => messages.first.created_at,
-				:last_message_at => messages.last.created_at
-			})
+			puts "- #{threaded_messages.length} threads: #{threaded_messages.keys.inspect}"
+			puts '- Saving conversations..'
+			threaded_messages.each do |title, messages|
+				conversation = Conversation.create({:skip_validation => true, :title => title, :poster => messages.first.sender, :created_at => messages.first.created_at})
+				last_read = {}
+				messages.each do |message|
+					begin
+						post = conversation.posts.create(:user => message.sender, :body => message.body, :created_at => message.created_at, :updated_at => message.updated_at, :skip_html => true)
+						last_read[message.sender] = post
+						if message.read?
+							last_read[message.recipient] = post
+						end
+					rescue
+						raise message.inspect
+					end
+				end
+				# Create relationships
+				[user1, user2].each do |user|
+					ConversationRelationship.create(
+						:conversation => conversation,
+						:user         => user,
+						:new_posts    => ((messages.select{|m| m.recipient_id == user.id && !m.read?}.length > 0) ? true : false)
+					)
+				end
+				# Mark as viewed
+				last_read.each do |user, last_post|
+					user.mark_discussion_viewed(conversation, last_post, (conversation.posts.index(last_post) + 1))
+				end
+			end
 		end
 	end
 
@@ -80,6 +95,7 @@ namespace :sugar do
 			'vendor/jquery', 
 			'vendor/jquery.hotkeys.min', 
 			'vendor/jquery.scrollTo.min', 
+			'vendor/jquery.autocomplete.pack', 
 			'vendor/swfobject', 
 			'vendor/soundmanager2.min', 
 			'application.min'

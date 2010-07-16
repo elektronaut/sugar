@@ -6,7 +6,7 @@
 	<table class="discussions">
 		<% discussions.each do |d| %>
 			<tr class="<%= discussion_classes(discussions, d) %>">
-				<td class="name" colspan="6"><span class="title">
+				<td class="name" colspan="<%= d.kind_of?(Conversation) ? 5 : 6 %>"><span class="title">
 					<% if d.labels? %>
 						<span class="labels">[<%= d.labels.join(',') %>]</span>
 					<% end %>
@@ -14,8 +14,21 @@
 				</span></td>
 			</tr>
 			<tr class="<%= discussion_classes(discussions, d) %>">
-				<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
-				<td class="started_by">Started by <%= profile_link(d.poster) %></td>
+				<% if d.kind_of?(Conversation) %>
+					<% 
+						other_participants = d.participants.reject{|p| p == @current_user}
+					%>
+					<% if other_participants.length == 0 %>
+						<td class="participants">Conversation with yourself</td>
+					<% elsif other_participants.length > 3 %>
+					<td class="participants">Conversation with <%= other_participants.length %> participants</td>
+					<% else %>
+						<td class="participants">Conversation with <%= other_participants.map{|p| profile_link(p)}.join(', ') %></td>
+					<% end %>
+				<% else %>
+					<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
+					<td class="started_by">Started by <%= profile_link(d.poster) %></td>
+				<% end %>
 				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
 				<td class="last_active">Last active <strong><%= formatted_time d.last_post_at %></strong></td>
 				<td class="post_count"><strong><%= d.posts_count %></strong> <%= d.posts_count > 1 ? 'posts' : 'post' %></td>

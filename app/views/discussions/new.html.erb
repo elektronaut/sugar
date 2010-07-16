@@ -1,11 +1,25 @@
 <% 
 	add_body_class "new_discussion discussion_form"
-	@page_title = "New discussion" 
+	@page_title = "New #{@discussion.class.to_s.downcase}" 
+	if @recipient
+		@page_title += " with #{@recipient.username}" 
+	end
 %>
 
-<h2 class="section"><%= link_to "Discussions", discussions_path %> &raquo; <%= link_to "New", new_discussion_path %></h2>
+<h2 class="section">
+	<% if @discussion.kind_of?(Conversation) %>
+		<%= link_to "Conversations", conversations_path %> &raquo; 
+		<% if @recipient %>
+			<%= link_to "New conversation with #{@recipient.username}", new_conversation_with_path(:username => @recipient.username) %>
+		<% else %>
+			<%= link_to "New", new_conversation_path %>
+		<% end %>
+	<% else %>
+		<%= link_to "Discussions", discussions_path %> &raquo; <%= link_to "New", new_discussion_path %>
+	<% end %>
+</h2>
 
-<% form_for(@discussion) do |f| %>
+<% form_for(@discussion, :url => discussions_path) do |f| %>
 	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
-	<p><button type="submit">Create discussion</button></p>
+	<p><button type="submit">Create <%= @discussion.class.to_s.downcase %></button></p>
 <% end %>

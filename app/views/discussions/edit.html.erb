@@ -4,12 +4,14 @@
 %>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo; 
+	<% if @discussion.kind_of?(Discussion) %>
+		<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% end %>
 	<%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
 	<%= link_to "Edit", edit_discussion_path(@discussion) %>
 </h2>
 
-<% form_for(@discussion) do |f| %>
+<% form_for(@discussion, :url => discussion_path(@discussion)) do |f| %>
 	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
 	<p><button type="submit">Save</button></p>
 <% end %>

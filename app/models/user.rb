@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
 	has_many   :discussions, :foreign_key => 'poster_id'
 	has_many   :closed_discussions, :foreign_key => 'closer_id'
 	has_many   :posts
+	has_many   :discussion_posts, :class_name => 'Post', :conditions => {:conversation => false}
 	belongs_to :inviter, :class_name => 'User'
 	has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'
 	has_many   :invites, :dependent => :destroy, :order => 'created_at DESC' do
@@ -193,6 +194,26 @@ class User < ActiveRecord::Base
 			)
 		end
 	end
+	
+	def paginated_conversations(options)
+		Pagination.paginate(
+			:total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
+			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			joins = "INNER JOIN `conversation_relationships` ON `conversation_relationships`.conversation_id = `discussions`.id"
+			joins += " AND `conversation_relationships`.user_id = #{self.id}"
+			conversations = Conversation.find(
+				:all,
+				:select     => '`discussions`.*',
+				:joins      => joins,
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset, 
+				:order      => '`discussions`.last_post_at DESC',
+				:include    => [:poster, :last_poster]
+			)
+		end
+	end
 
 	# Finds and paginate posts created by this user.
 	# === Parameters
@@ -201,13 +222,13 @@ class User < ActiveRecord::Base
 	# * <tt>:page</tt>    - Page, defaults to 1.
 	def paginated_posts(options)
 		Pagination.paginate(
-			:total_count => options[:trusted] ? self.posts.count(:all) : self.posts.count(:all, :conditions => ['trusted = 0']),
+			:total_count => options[:trusted] ? self.discussion_posts.count(:all) : self.discussion_posts.count(:all, :conditions => {:conversation => false, :trusted => false}),
 			:per_page    => options[:limit] || Post::POSTS_PER_PAGE,
 			:page        => options[:page] || 1
 		) do |pagination|
 			Post.find(
 				:all, 
-				:conditions => options[:trusted] ? ['user_id = ?', self.id] : ['user_id = ? AND trusted = 0', self.id], 
+				:conditions => options[:trusted] ? ['user_id = ? AND conversation = 0', self.id] : ['user_id = ? AND trusted = 0 AND conversation = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'created_at DESC',
@@ -349,6 +370,14 @@ class User < ActiveRecord::Base
 		seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
 		(7+rand(3)).times{ new_password += seed[rand(seed.length)] }
 		self.password = self.confirm_password = new_password
+	end
+
+	def unread_conversations_count
+		@unread_conversations_count ||= self.conversation_relationships.count(:all, :conditions => {:new_posts => true, :notifications => true})
+	end
+
+	def unread_conversations?
+		unread_conversations_count > 0
 	end
 
 	# Counts this users unread messages.
