@@ -27,7 +27,7 @@ class Discussion < Exchange
 		# * :trusted  - Boolean, get trusted posts as well
 		def find_popular(options={})
 			options = {
-				:since => 40.days.ago
+				:since => 7.days.ago
 			}.merge(options)
 
 			conditions = ['posts.discussion_id = discussions.id AND posts.created_at > ?', options[:since]]
