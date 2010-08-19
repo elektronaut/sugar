@@ -17,6 +17,47 @@ class Discussion < Exchange
 		end
 	end
 	
+	class << self
+		# Finds popular discussions within a defined time range, sorted by popularity.
+		# The collection is decorated with the Pagination module, which provides pagination info.
+		# Takes the following options: 
+		# * :page     - Page number, starting on 1 (default: first page)
+		# * :since    - Since time
+		# * :limit    - Number of posts per page (default: 20)
+		# * :trusted  - Boolean, get trusted posts as well
+		def find_popular(options={})
+			options = {
+				:since => 40.days.ago
+			}.merge(options)
+
+			conditions = ['posts.discussion_id = discussions.id AND posts.created_at > ?', options[:since]]
+
+			# Ignore trusted posts unless requested
+			unless options[:trusted]
+				conditions = [[conditions.shift, 'discussions.trusted = 0'].compact.join(' AND ')] + conditions
+			end
+			
+			discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE created_at > ?", options[:since]])
+
+			Pagination.paginate(
+				:total_count => discussions_count,
+				:per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
+				:page        => options[:page]  || 1
+			) do |pagination|
+				discussions = Discussion.find(
+					:all,
+					:select     => 'discussions.*, COUNT(posts.id) AS recent_posts_count',
+					:from       => 'discussions, posts',
+					:conditions => conditions,
+					:group      => 'discussions.id',
+					:limit      => pagination.limit, 
+					:offset     => pagination.offset, 
+					:order      => 'recent_posts_count DESC'
+				)
+			end
+		end
+	end
+	
 	def participants
 		User.find_by_sql("SELECT u.*, MAX(p.created_at) AS last_post_at
 		FROM users u, posts p

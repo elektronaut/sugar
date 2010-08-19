@@ -1,0 +1,13 @@
+<% 
+	add_body_class "discussions popular_discussions"
+	@page_title = "Popular Discussions" 
+%>
+
+<% sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<h2 class="section"><%= link_to "Recently popular discussions", popular_discussions_path %></h2>
+
+<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+

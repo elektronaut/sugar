@@ -55,6 +55,15 @@ class DiscussionsController < ApplicationController
 			)
 			find_discussion_views
 		end
+		
+		# Popular discussions
+		def popular
+			@discussions = Discussion.find_popular(
+				:page    => params[:page], 
+				:trusted => (@current_user && @current_user.trusted?)
+			)
+			find_discussion_views
+		end
 
 		# Searches discusion titles
 		def search
