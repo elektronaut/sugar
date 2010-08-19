@@ -37,7 +37,15 @@ class Discussion < Exchange
 				conditions = [[conditions.shift, 'discussions.trusted = 0'].compact.join(' AND ')] + conditions
 			end
 			
-			discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) FROM posts WHERE created_at > ?", options[:since]])
+			if options[:trusted]
+				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
+					FROM posts, discussions 
+					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = \"Discussion\"", options[:since]])
+			else
+				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
+					FROM posts, discussions 
+					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = \"Discussion\" AND discussions.trusted = 0", options[:since]])
+			end
 
 			Pagination.paginate(
 				:total_count => discussions_count,
