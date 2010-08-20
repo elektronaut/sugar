@@ -29,10 +29,12 @@ module PostParser
 			}
 		end
 
-		# Delete script and iframe tags
+		# Delete unsafe tags
 		(doc/"script").remove
-		(doc/"iframe").remove
 		(doc/"meta").remove
+		
+		# Whitelist iframes from Vimeo and YouTube
+		doc.search("iframe").map!{|iframe| iframe unless iframe.attributes['src'] =~ /^https?:\/\/([\w\d\.\-]+)?(vimeo\.com|youtube\.com)\//}.compact.remove
 		
 		# Filter malicious attributes on all elements
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
