@@ -215,9 +215,9 @@ var Sugar = {
 				});
 				// Make better search URLs
 				$(form).submit(function(){
-					var baseDomain = document.location.toString().match(/^(https?:\/\/[\w\d\.\-]+)/)[1];
 					var query = encodeURIComponent($(form).find('.query').val());
-					document.location = baseDomain + form.action + "?q=" + query;
+					var searchURL = form.action + "?q=" + query;
+					document.location = searchURL;
 					return false;
 				});
 			});
