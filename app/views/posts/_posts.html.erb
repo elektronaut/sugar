@@ -10,8 +10,9 @@
 	no_container       ||= false
 	
 	previous_post = nil
+	pagination_params ||= {}
 -%>
-<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start }) unless no_pagination %>
+<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start, :pagination_params => pagination_params }) unless no_pagination %>
 <% unless no_container %><div class="posts"><% end %>
 <% posts.each do |post| %>
 	<% if posts.respond_to?(:context) && posts.context? && posts.index(post) == 0 %><div class="context"><% end %>
@@ -29,4 +30,4 @@
 <% end %>
 <% unless no_container %></div><% end %>
 <% if new_posts_notifier %><div id="newPosts"></div><% end %>	
-<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start }) unless no_pagination %>
+<%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start, :pagination_params => pagination_params }) unless no_pagination %>

@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
 	map.search  '/search', :controller => 'discussions', :action => 'search'
 
     # Posts search
-	map.connect '/posts/search/:query/:page', :controller => 'posts', :action => 'search'
+	#map.connect '/posts/search/:query/:page', :controller => 'posts', :action => 'search'
     map.connect '/posts/search/*query', :controller => 'posts', :action => 'search'
     map.search_posts '/posts/search', :controller => 'posts', :action => 'search'
 
