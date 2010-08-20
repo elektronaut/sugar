@@ -66,17 +66,6 @@ ActionController::Routing::Routes.draw do |map|
     )
     map.connect '/categories/:id/:page', :controller => 'categories', :action => 'show'
 
-	# Messages
-    map.resources(
-        :messages,
-        :collection => { :outbox => :any, :conversations => :any }
-    )
-    map.paged_messages              '/messages/inbox/:page', :controller => 'messages', :action => 'index'
-    map.paged_sent_messages         '/messages/outbox/:page', :controller => 'messages', :action => 'outbox'
-    map.user_conversation           '/messages/conversations/:username', :controller => 'messages', :action => 'conversations'
-    map.paged_user_conversation     '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
-    map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
-
 	# Discussions
 	map.conversations '/conversations', :controller => 'discussions', :action => 'conversations'
     map.resources(

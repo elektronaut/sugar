@@ -11,7 +11,7 @@
 			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
 		<% end %>
 		<% unless @user == @current_user %>
-			<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
+			<%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %>
 		<% end %>
 	</div>
 <% end %>
