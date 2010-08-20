@@ -80,6 +80,8 @@ ActionController::Routing::Routes.draw do |map|
         )
     end
 	map.connect               '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'
+    map.connect               '/discussions/popular/:days/:page',               :controller => 'discussions', :action => 'popular'
+    map.connect               '/discussions/popular/:days',                     :controller => 'discussions', :action => 'popular'
     map.paged_discussions     '/discussions/archive/:page',                     :controller => 'discussions', :action => 'index'
     map.paged_discussion      '/discussions/:id/:page',                         :controller => 'discussions', :action => 'show'
 	map.new_conversation      '/conversations/new',                             :controller => 'discussions', :action => 'new', :type => 'conversation'

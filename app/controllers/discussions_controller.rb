@@ -58,9 +58,15 @@ class DiscussionsController < ApplicationController
 		
 		# Popular discussions
 		def popular
+			@days = params[:days].to_i
+			#@days = 70 
+			unless (1..180).include?(@days)
+				redirect_to params.merge({:days => 7}) and return
+			end
 			@discussions = Discussion.find_popular(
 				:page    => params[:page], 
-				:trusted => (@current_user && @current_user.trusted?)
+				:trusted => (@current_user && @current_user.trusted?),
+				:since   => @days.days.ago
 			)
 			find_discussion_views
 		end

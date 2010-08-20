@@ -9,5 +9,6 @@
 
 <h2 class="section"><%= link_to "Recently popular discussions", popular_discussions_path %></h2>
 
-<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions, :no_discussions => "No discussions in the last #{@days} days!"
+} %>
 
