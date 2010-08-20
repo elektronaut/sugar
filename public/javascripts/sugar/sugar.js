@@ -207,9 +207,19 @@ var Sugar = {
 		},
 
 		searchMode: function(){
-			// Observe the search mode selection box, set the proper action.
-			jQuery('#search_mode').change(function(){
-				this.parentNode.action = this.value;
+			$('#search form').each(function(){
+				var form = this;
+				// Observe the search mode selection box, set the proper action.
+				$(form).find('#search_mode').change(function(){
+					this.parentNode.action = this.value;
+				});
+				// Make better search URLs
+				$(form).submit(function(){
+					var baseDomain = document.location.toString().match(/^(https?:\/\/[\w\d\.\-]+)/)[1];
+					var query = encodeURIComponent($(form).find('.query').val());
+					document.location = baseDomain + form.action + "?q=" + query;
+					return false;
+				});
 			});
 		},
 

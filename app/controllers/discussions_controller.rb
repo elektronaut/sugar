@@ -67,11 +67,8 @@ class DiscussionsController < ApplicationController
 
 		# Searches discusion titles
 		def search
-			# Beautify URL
-			if params[:q]
-				redirect_to(search_with_query_url(:query => params[:q]).gsub(/\.([^\/]*)$/, '%2E\1')) and return
-			end
 			# Check for missing query
+			params[:query] = params[:q] if params[:q]
 			unless @search_query = params[:query]
 				flash[:notice] = "No query specified!"
 				redirect_to discussions_path and return
@@ -105,9 +102,7 @@ class DiscussionsController < ApplicationController
 		# Searches posts within a discussion
 		def search_posts
 			# Beautify URL
-			if params[:q]
-				redirect_to({:action => :search_posts, :query => params[:q], :id => @discussion}) and return
-			end
+			params[:query] = params[:q] if params[:q]
 			# Check for missing query
 			unless @search_query = params[:query]
 				flash[:notice] = "No query specified!"

@@ -79,9 +79,7 @@ class PostsController < ApplicationController
 		end
 
 		def search
-			if params[:q]
-				redirect_to( { :action => :search, :query => params[:q] } ) and return
-			end
+			params[:query] = params[:q] if params[:q]
 			unless @search_query = params[:query]
 				flash[:notice] = "No query specified!"
 				redirect_to discussions_path and return
