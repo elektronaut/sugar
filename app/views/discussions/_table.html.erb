@@ -32,11 +32,10 @@
 				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
 				<td class="last_active">Last active <strong><%= formatted_time d.last_post_at %></strong></td>
 				<td class="post_count">
-					<% if @days && d.respond_to?(:recent_posts_count) %>
-						<%= d.recent_posts_count %> / 
+					<strong><%= d.posts_count %></strong>
+					<%= d.posts_count > 1 ? 'posts' : 'post' %><% if @days && d.respond_to?(:recent_posts_count) %>,
+						<strong><%= d.recent_posts_count %></strong> recently
 					<% end %>
-					<strong><%= d.posts_count %></strong> 
-					<%= d.posts_count > 1 ? 'posts' : 'post' %>
 				</td>
 				<td class="new_posts last">
 					<% if new_posts?(d) %>
