@@ -109,13 +109,13 @@ namespace :delayed_job do
 end
 
 
-after "deploy:finalize_update", :symlink_configs
-after "deploy:setup",   :create_shared_dirs
-after "deploy:symlink", :fix_permissions
-after "deploy:symlink", :create_symlinks
-after "deploy:symlink", :pack_themes
+after "deploy:finalize_update", "symlink_configs"
+after "deploy:setup",           "create_shared_dirs"
+after "deploy:symlink",         "fix_permissions"
+after "deploy:symlink",         "create_symlinks"
+after "deploy:symlink",         "pack_themes"
 after "deploy:finalize_update", "thinking_sphinx:configure"
 
-after "deploy:start", "delayed_job:start" 
-after "deploy:stop", "delayed_job:stop" 
-after "deploy:restart", "delayed_job:restart" 
+after "deploy:start",          "delayed_job:start" 
+after "deploy:stop",           "delayed_job:stop" 
+after "deploy:restart",        "delayed_job:restart" 
