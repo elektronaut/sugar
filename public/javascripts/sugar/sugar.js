@@ -215,8 +215,14 @@ var Sugar = {
 				});
 				// Make better search URLs
 				$(form).submit(function(){
+					var action = form.action;
+					if(!action.match(/^https?:\/\//)){
+						// Safari doesn't like document.location being set to a relative path
+						var baseDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.]+)/)[1];
+						action = baseDomain + action;
+					}
 					var query = encodeURIComponent($(form).find('.query').val());
-					var searchURL = form.action + "?q=" + query;
+					var searchURL = action + "?q=" + query;
 					document.location = searchURL;
 					return false;
 				});
