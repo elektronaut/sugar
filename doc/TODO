@@ -2,44 +2,36 @@ Bugs/issues:
 
 * Fix code blocks parsing
 
-Messaging:
+Before launch:
 
-* Finish the new messaging interface
-
-Pre-Stylus:
-
+* Upgrade to Rails 3
+* Identify and fix all dependencies with Bundler
 * Clean up and centralize the OpenID verification actions.
-* Post attachments: Image uploads should be displayed inline. Link to download file.
-* Cleanup iPhone theme
-* Themes support: Select from available installed themes in a drop-down
-
-Stylus:
-
-* Implement the theme
-* Get a database export from Ray
-* Bring the Vanilla conversion scripts up to speed
-* Set up a Slicehost account (and take notes for the setup guide)
-* Move everything over
-
-Before Sugar launch:
-
-* Enable custom iPhone themes
 * If there aren't any users registered: One should be able to sign up and be set as admin
 * Finish up the optional approval of signups functionality
-* Finish up public browsing
-* HTTP or token authentication (for feeds)
-* RSS/Atom feeds for everything
 * Clean up configuration files
 * Documentation
 * Go public!
 
+Feeds/JSON API:
+
+* HTTP and/or token authentication
+* Finish JSON and XML API
+* RSS/Atom feeds for everything
+
+Themes:
+
+* Make a standard theme format
+* Show available installed themes
+* Cleanup iPhone theme
+* Enable custom iPhone themes
+
 Someday/fun:
 
+* Post attachments: Image uploads should be displayed inline. Link to download file.
+* Post bookmarks
 * Better map page - show avatars, online status etc.
-* Group messages in proper conversations rather than per user
 * User themes
-* Sort followed discussions by last participated date
-* Anonymous redirection
 
 Keyboard shortcuts:
 
