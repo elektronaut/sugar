@@ -181,11 +181,11 @@ class ApplicationController < ActionController::Base
 
 		# Stores authentication credentials in the session.
 		def store_session_authentication
+			session.delete(:ips) if session.has_key?(:ips) # TODO: Remove this later
 			if @current_user
 				session[:user_id]         = @current_user.id
 				session[:hashed_password] = @current_user.hashed_password
-				session[:ips] ||= []
-				session[:ips] << request.env['REMOTE_ADDR'] unless session[:ips].include?(request.env['REMOTE_ADDR'])
+
 				# No need to update this on every request
 				if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
 					@current_user.update_attribute(:last_active, Time.now)
