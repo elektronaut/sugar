@@ -574,3 +574,37 @@ blockquote cite {
 	font-size:           0.9em;
 	color:               #900;
 }
+
+
+/* Retina display overrides */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	#header {
+		background: #111 url(images/header_x2.png);
+		background-size: 480px 45px;
+	}
+	#header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
+		background: transparent url(images/b3slogo_x2.png);
+		background-size: 49px 45px;
+	}
+	#header #navigationToggle a, #header #navigationToggle a a:visited {
+		background: transparent url(images/header_navigation_x2.png);
+		background-size: 67px 44px;
+	}
+	.content {
+		background: #fff url(images/contentbg_x2.png) repeat-x;
+		background-size: 23px 24px;
+	}
+	.imageloader {
+		background: transparent url(images/imageloader_x2.png) no-repeat;
+		background-size: 290px 36px;
+	}
+	.discussions .discussion {
+		background: #fff url(images/contentbg_light_x2.png) bottom left repeat-x;
+		background-size: 23px 12px;
+	}
+	.discussions .new_posts, .conversations .new_posts {
+		background: #fffde8 url(images/contentbg_light_new_posts_x2.png) bottom left repeat-x;
+		background-size: 240px 12px;
+	}
+}
+
