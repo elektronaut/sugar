@@ -100,8 +100,14 @@ $(document).ready(function(){
 		});
 	});
 
-	// Scroll to top w/o location bar unless targeting an anchor
-	if ( !document.location.toString().match(/\#/) ) {
+	if (document.location.toString().match(/\#/)) {
+		setTimeout(function(){
+			var anchorName = document.location.toString().match(/\#([\w\d\-_]+)/)[1];
+			var scrollPosition = $("#"+anchorName).offset().top;
+			scrollTo(0, scrollPosition);
+		}, 1000);
+	} else {
+		// Scroll to top w/o location bar unless targeting an anchor
 		setTimeout(scrollTo, 100, 0, 1);
 	}
 	
