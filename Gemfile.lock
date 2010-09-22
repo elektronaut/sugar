@@ -14,6 +14,7 @@ GEM
     daemon-spawn (0.2.0)
     hpricot (0.8.2)
     mysql (2.8.1)
+    newrelic_rpm (2.13.1)
     oniguruma (1.1.0)
     plist (3.1.0)
     rack (1.1.0)
@@ -39,6 +40,7 @@ DEPENDENCIES
   daemon-spawn (= 0.2.0)
   hpricot
   mysql
+  newrelic_rpm
   rails (= 2.3.9)
   ruby-openid (= 2.1.6)
   ultraviolet

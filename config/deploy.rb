@@ -1,4 +1,5 @@
 require "bundler/capistrano"
+require 'new_relic/recipes'
 
 default_run_options[:pty] = true
 
