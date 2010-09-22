@@ -81,6 +81,7 @@ class Discussion < Exchange
 		ORDER BY MAX(p.created_at) DESC")
 	end
 	
+	# Returns true if the user can view this discussion
 	def viewable_by?(user)
 		if self.trusted?
 			(user && user.trusted?) ? true : false
@@ -89,17 +90,17 @@ class Discussion < Exchange
 		end
 	end
 
-	# Is this discussion editable by the given user?
+	# Returns true if the user can edit this discussion
 	def editable_by?(user)
 		(user && (user.moderator? || user == self.poster)) ? true : false
 	end
 
-	# Can the given user post in this thread?
+	# Returns true if the user can post in this discussion
 	def postable_by?(user)
 		(user && (user.moderator? || !self.closed?)) ? true : false
 	end
 
-	# Can the given user close this thread?
+	# Returns true if the user can close this discussion
 	def closeable_by?(user)
 		return false unless user
 		(user.moderator? || (!self.closer && self.poster == user) || self.closer == user) ? true : false
