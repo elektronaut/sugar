@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for Facebook and OpenID users
-	before_validation_on_create do |user|
+	before_validation(:on => :create) do |user|
 		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end

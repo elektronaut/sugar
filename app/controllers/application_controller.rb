@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
 	layout 'default'
 	helper :all
-	filter_parameter_logging :password, :drawing
 	
 	include ActionView::Helpers::DateHelper
 
