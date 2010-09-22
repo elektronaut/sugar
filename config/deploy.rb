@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 default_run_options[:pty] = true
 
 set :application, "b3s"
@@ -114,7 +116,7 @@ after "deploy:setup",           "create_shared_dirs"
 after "deploy:symlink",         "fix_permissions"
 after "deploy:symlink",         "create_symlinks"
 after "deploy:symlink",         "pack_themes"
-after "deploy:finalize_update", "thinking_sphinx:configure"
+#after "deploy:finalize_update", "thinking_sphinx:configure"
 
 after "deploy:start",          "delayed_job:start" 
 after "deploy:stop",           "delayed_job:stop" 

@@ -11,6 +11,7 @@ GEM
     activeresource (2.3.9)
       activesupport (= 2.3.9)
     activesupport (2.3.9)
+    daemon-spawn (0.2.0)
     hpricot (0.8.2)
     mysql (2.8.1)
     oniguruma (1.1.0)
@@ -35,6 +36,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  daemon-spawn
   hpricot
   mysql
   rails (= 2.3.9)
