@@ -1,0 +1,42 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    actionmailer (2.3.9)
+      actionpack (= 2.3.9)
+    actionpack (2.3.9)
+      activesupport (= 2.3.9)
+      rack (~> 1.1.0)
+    activerecord (2.3.9)
+      activesupport (= 2.3.9)
+    activeresource (2.3.9)
+      activesupport (= 2.3.9)
+    activesupport (2.3.9)
+    hpricot (0.8.2)
+    mysql (2.8.1)
+    oniguruma (1.1.0)
+    plist (3.1.0)
+    rack (1.1.0)
+    rails (2.3.9)
+      actionmailer (= 2.3.9)
+      actionpack (= 2.3.9)
+      activerecord (= 2.3.9)
+      activeresource (= 2.3.9)
+      activesupport (= 2.3.9)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    ruby-openid (2.1.6)
+    textpow (0.10.1)
+      oniguruma (>= 1.1.0)
+      plist (>= 3.0.0)
+    ultraviolet (0.10.2)
+      textpow (>= 0.10.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hpricot
+  mysql
+  rails (= 2.3.9)
+  ruby-openid (= 2.1.6)
+  ultraviolet
