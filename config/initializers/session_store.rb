@@ -7,7 +7,7 @@ SESSION_KEY_NAME = Sugar.config(:session_key) rescue '_sugar_session'
 SESSION_KEY      = File.read(File.join(File.dirname(__FILE__), '../session_key'))
 
 ActionController::Base.session = {
-	:session_key  => SESSION_KEY_NAME,
+	:key          => SESSION_KEY_NAME,
 	:secret       => SESSION_KEY,
 	:expire_after => 3.years
 }
