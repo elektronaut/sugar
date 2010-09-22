@@ -38,7 +38,7 @@ gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
 group :test do
-	gem 'shoulda'#, :require => 'shoulda'
-	gem 'machinist'#, :require => 'machinist'
+	gem 'shoulda'
+	gem 'machinist'
 	gem 'faker'
 end
