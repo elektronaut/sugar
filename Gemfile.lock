@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/collectiveidea/delayed_job.git
+  revision: 234fcf8a441e0b9890de05acb46845f4b997690b
+  specs:
+    delayed_job (2.1.0.pre2)
+      activesupport (~> 3.0)
+      daemons
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -38,6 +46,7 @@ GEM
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
     daemon-spawn (0.2.0)
+    daemons (1.1.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     faker (0.3.1)
@@ -99,6 +108,7 @@ PLATFORMS
 DEPENDENCIES
   capistrano
   daemon-spawn (= 0.2.0)
+  delayed_job!
   faker
   hpricot
   machinist

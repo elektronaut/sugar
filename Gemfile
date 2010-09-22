@@ -37,6 +37,8 @@ gem 'ultraviolet', :require => 'uv'
 gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
+gem "delayed_job", :git => 'git://github.com/collectiveidea/delayed_job.git'
+
 group :test do
 	gem 'shoulda'
 	gem 'machinist'
