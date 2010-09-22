@@ -6,6 +6,15 @@ GIT
       activesupport (~> 3.0)
       daemons
 
+GIT
+  remote: git://github.com/freelancing-god/thinking-sphinx.git
+  revision: 644f57e2ac68998c0511bdee13d11aa86a15fc63
+  branch: rails3
+  specs:
+    thinking-sphinx (2.0.0.rc2)
+      activerecord (>= 3.0.0.rc)
+      riddle (>= 1.0.12)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -90,6 +99,7 @@ GEM
       rake (>= 0.8.4)
       thor (~> 0.14.0)
     rake (0.8.7)
+    riddle (1.1.0)
     ruby-openid (2.1.6)
     shoulda (2.11.3)
     textpow (0.10.1)
@@ -117,4 +127,5 @@ DEPENDENCIES
   rails (= 3.0.0)
   ruby-openid (= 2.1.6)
   shoulda
+  thinking-sphinx!
   ultraviolet
