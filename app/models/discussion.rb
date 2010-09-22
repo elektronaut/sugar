@@ -4,8 +4,15 @@ class Discussion < Exchange
 	belongs_to :category
 	validates_presence_of :category_id
 	
+	# Flag for trusted status, which will update after save if it has been changed.
+	attr_accessor :update_trusted
+
 	validate do |discussion|
 		discussion.trusted = discussion.category.trusted if discussion.category
+	end
+
+	before_update do |discussion|
+		discussion.update_trusted = true if discussion.trusted_changed?
 	end
 
 	# Set trusted status on all posts and relationships on save

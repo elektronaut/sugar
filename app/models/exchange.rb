@@ -1,56 +1,69 @@
 require 'pagination'
 
+# = Exchange
+#
+# Exchange is the base class for all threads, which both Discussion and Conversation inherit from.
+#
+# == Pagination
+# 
+# The *_paginated methods returns a collection decorated with pagination info, 
+# see the Pagination module for more information. 
+
 class Exchange < ActiveRecord::Base
 	
 	set_table_name 'discussions'
 
-	UNSAFE_ATTRIBUTES    = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
+	# Default number of discussions per page
 	DISCUSSIONS_PER_PAGE = 30
 
-	belongs_to :poster,      :class_name => 'User', :counter_cache => :discussions_count
-	belongs_to :closer,      :class_name => 'User'
-	belongs_to :last_poster, :class_name => 'User'
-	has_many   :posts, :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
-	has_one    :first_post, :class_name => 'Post',   :order => ['created_at ASC']
-	has_many   :discussion_views,                    :dependent => :destroy, :foreign_key => 'discussion_id'
+	# These attributes should be filtered from params
+	UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
+
+	# Virtual attribute for the body of the first post
+	attr_accessor :body
+
+	# Skips validation of @body if true 
+	attr_accessor :skip_body_validation
+
+	# User which is updating the exchange, required for closing exchanges
+	attr_accessor :updated_by
+
+	belongs_to :poster,           :class_name => 'User', :counter_cache => :discussions_count
+	belongs_to :closer,           :class_name => 'User'
+	belongs_to :last_poster,      :class_name => 'User'
+	has_many   :posts,            :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
+	has_one    :first_post,       :class_name => 'Post',   :order => ['created_at ASC']
+	has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
 
 	validates_presence_of :title
 	validates_length_of   :title, :maximum => 100, :too_long => 'is too long'
+	validates_presence_of :body, :on => :create, :unless => :skip_body_validation
 
-	# Virtual attribute for the body of the first post. 
-	# Makes forms a bit easier, no nested models.
-	attr_accessor         :body, :skip_validation
-	validates_presence_of :body, :on => :create, :unless => :skip_validation
-	
-	# Flag for trusted status, which will update after save if it has been changed.
-	attr_accessor :update_trusted, :new_closer
-
-	validate do |discussion|
-		if discussion.closed_changed?
-			if !discussion.closed? && (!discussion.new_closer || !discussion.closeable_by?(discussion.new_closer))
-				discussion.errors.add(:closed, "can't be changed!") 
-			elsif discussion.closed?
-				discussion.closer = discussion.new_closer
+	validate do |exchange|
+		# Validate and handle closing of discussions
+		if exchange.closed_changed?
+			if !exchange.closed? && (!exchange.updated_by || !exchange.closeable_by?(exchange.updated_by))
+				exchange.errors.add(:closed, "can't be changed!") 
+			elsif exchange.closed?
+				exchange.closer = exchange.updated_by
 			else
-				discussion.closer = nil
+				exchange.closer = nil
 			end
 		end
 	end
 	
-	# Update the first post if @body has been changed
-	after_update do |discussion|
-		if discussion.body && !discussion.body.empty? && discussion.body != discussion.posts.first.body
-			discussion.posts.first.update_attributes(:body => discussion.body, :edited_at => Time.now)
+	after_update do |exchange|
+		# Update the first post if @body has been changed
+		if exchange.body && !exchange.body.empty? && exchange.body != exchange.posts.first.body
+			exchange.posts.first.update_attributes(:body => exchange.body, :edited_at => Time.now)
 		end
 	end
 
-	before_update do |discussion|
-		discussion.update_trusted = true if discussion.trusted_changed?
-	end
-
 	# Automatically create the first post
-	after_create do |discussion|
-		discussion.create_first_post!
+	after_create do |exchange|
+		if exchange.body && !exchange.body.empty?
+			exchange.posts.create(:user => exchange.poster, :body => exchange.body)
+		end
 	end
 
 	define_index do
@@ -65,23 +78,32 @@ class Exchange < ActiveRecord::Base
 		set_property :field_weights => {:title => 2}
 	end
 
-	# Class methods
 	class << self
 
-		# Enable work safe URLs
+		# Sets the state of work safe URLs
 		def work_safe_urls=(state)
 			@@work_safe_urls = state
 		end
 
+		# Gets the state of work safe URLs
 		def work_safe_urls
 			@@work_safe_urls ||= false
 		end
 
+		# Searches exchanges (with Sphinx)
+		#
+		# === Parameters
+		# * :query    - The query string
+		# * :page     - Page number, starting on 1 (default: first page)
+		# * :limit    - Number of posts per page (default: 20)
+		# * :trusted  - Boolean, get trusted posts as well (default: false)
 		def search_paginated(options={})
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
-			max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
-			first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
+
+			#max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
+			#first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
+
 			search_options = {
 				#:sort_mode  => :expr,
 				#:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
@@ -93,17 +115,24 @@ class Exchange < ActiveRecord::Base
 				:match_mode => :extended2
 			}
 			search_options[:conditions] = {:trusted => false} unless options[:trusted]
-			discussions = Discussion.search(options[:query], search_options)
-			Pagination.apply(discussions, Pagination::Paginater.new(:total_count => discussions.total_entries, :page => page, :per_page => DISCUSSIONS_PER_PAGE))
+			exchanges = Discussion.search(options[:query], search_options)
+			Pagination.apply(
+				exchanges, 
+				Pagination::Paginater.new(
+					:total_count => exchanges.total_entries, 
+					:page        => page, 
+					:per_page    => DISCUSSIONS_PER_PAGE
+				)
+			)
 		end
 		
-		# Finds paginated discussions, sorted by activity, with the sticky ones on top.
-		# The collection is decorated with the Pagination module, which provides pagination info.
-		# Takes the following options: 
+		# Find paginated exchanges, sorted by activity, with the sticky ones on top
+		#
+		# === Parameters
 		# * :page     - Page number, starting on 1 (default: first page)
 		# * :limit    - Number of posts per page (default: 20)
-		# * :category - Only get discussions in this category
-		# * :trusted  - Boolean, get trusted posts as well
+		# * :category - Only get exchanges in this category
+		# * :trusted  - Boolean, get trusted posts as well (default: false)
 		def find_paginated(options={})
 			conditions = options[:category] ? ['category_id = ?', options[:category].id] : []
 
@@ -113,11 +142,11 @@ class Exchange < ActiveRecord::Base
 			end
 
 			# Utilize the counter cache on category if possible, if not do the query.
-			discussions_count   = options[:category].discussions_count if options[:category]
-			discussions_count ||= Discussion.count(:conditions => conditions)
+			exchanges_count   = options[:category].discussions_count if options[:category]
+			exchanges_count ||= Discussion.count(:conditions => conditions)
 
 			Pagination.paginate(
-				:total_count => discussions_count,
+				:total_count => exchanges_count,
 				:per_page    => options[:limit] || DISCUSSIONS_PER_PAGE,
 				:page        => options[:page]  || 1
 			) do |pagination|
@@ -143,7 +172,11 @@ class Exchange < ActiveRecord::Base
 		
 		# Counts total discussion for a user
 		def count_for(user)
-			(user && user.trusted?) ? Discussion.count(:all) : Discussion.count(:all, :conditions => {:trusted => 0})
+			if user && user.trusted?
+				Discussion.count(:all)
+			else
+				Discussion.count(:all, :conditions => {:trusted => 0})
+			end
 		end
 
 	end
@@ -153,7 +186,7 @@ class Exchange < ActiveRecord::Base
 		Post.find_paginated({:discussion => self}.merge(options))
 	end
 
-	# Finds posts created since offset.
+	# Finds posts created since offset
 	def posts_since_index(offset)
 		Post.find(:all, 
 			:conditions => ['discussion_id = ?', self.id], 
@@ -164,26 +197,20 @@ class Exchange < ActiveRecord::Base
 		)
 	end
 
-	# Finds the number of the last page.
+	# Finds the number of the last page
 	def last_page(per_page=Post::POSTS_PER_PAGE)
 		(self.posts_count.to_f/per_page).ceil
 	end
 	
-	# Creates the first post.
-	def create_first_post!
-		if self.body && !self.body.empty?
-			self.posts.create(:user => self.poster, :body => self.body)
-		end
-	end
-
+	# Detects and fixes discrepancies in the counter cache
 	def fix_counter_cache!
 		if posts_count != posts.count
-			logger.warn "counter_cache error detected on Discussion ##{self.id}"
+			logger.warn "counter_cache error detected on Exchange ##{self.id}"
 			Exchange.update_counters(self.id, :posts_count => (posts.count - posts_count) )
 		end
 	end
 
-	# Does this discussion have any labels?
+	# Does this exchange have any labels?
 	def labels?
 		(self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
 	end
@@ -204,7 +231,7 @@ class Exchange < ActiveRecord::Base
 		slug = slug.gsub(/[\[\{]/,'(')
 		slug = slug.gsub(/[\]\}]/,')')
 		slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-		(Discussion.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
+		(self.class.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
 	end
 	
 	if ENV['RAILS_ENV'] == 'test'

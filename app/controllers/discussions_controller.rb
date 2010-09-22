@@ -182,7 +182,7 @@ class DiscussionsController < ApplicationController
 			end
 
 			@discussion = exchange_class.create(safe_attributes.merge({:poster_id => @current_user.id}))
-			@discussion.update_attributes(safe_attributes.merge(:new_closer => @current_user))
+			@discussion.update_attributes(safe_attributes.merge(:updated_by => @current_user))
 
 			if @discussion.valid?
 				if @discussion.kind_of?(Conversation) && @recipient
@@ -198,7 +198,7 @@ class DiscussionsController < ApplicationController
 		# Update a discussion
 		def update
 			safe_attributes = @current_user.moderator? ? params[:exchange] : Exchange.safe_attributes(params[:exchange])
-			@discussion.update_attributes(safe_attributes.merge(:new_closer => @current_user))
+			@discussion.update_attributes(safe_attributes.merge(:updated_by => @current_user))
 			if @discussion.valid?
 				flash[:notice] = "Your changes were saved."
 				redirect_to discussion_path(@discussion) and return

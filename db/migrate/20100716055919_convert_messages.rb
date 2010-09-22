@@ -26,7 +26,7 @@ class ConvertMessages < ActiveRecord::Migration
 				end
 			end
 			threaded_messages.each do |title, messages|
-				conversation = Conversation.create({:skip_validation => true, :title => title, :poster => messages.first.sender, :created_at => messages.first.created_at})
+				conversation = Conversation.create({:skip_body_validation => true, :title => title, :poster => messages.first.sender, :created_at => messages.first.created_at})
 				last_read = {}
 				messages.each do |message|
 					#begin
