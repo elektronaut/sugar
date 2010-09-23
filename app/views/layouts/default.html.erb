@@ -40,7 +40,7 @@
 	</script>
 	<% if Sugar.config(:custom_javascript) %>
 		<script type="text/javascript">
-			<%= Sugar.config(:custom_javascript) %>
+			<%= raw Sugar.config(:custom_javascript) %>
 		</script>
 	<% end %>
 	<% if @google_maps_api -%>
@@ -50,7 +50,7 @@
 </head>
 <body class="<%= body_classes %>">
 	<% if Sugar.config(:custom_header) %>
-		<%= Sugar.config(:custom_header) %>
+		<%= raw Sugar.config(:custom_header) %>
 	<% end %>
 	<div id="header">
 		<h1><%= Sugar.config(:forum_title) %></h1>
@@ -101,11 +101,11 @@
 	</div>
 	<div id="wrapper">
 		<% if flash[:notice] %>
-			<div class="notice"><%= flash[:notice] %></div>
+			<div class="notice"><%= raw flash[:notice] %></div>
 		<% end %>
-		<% if sidebar? %>
+		<% if content_for?(:sidebar) %>
 			<div id="sidebar">
-				<%= sidebar %>
+				<%= yield :sidebar %>
 			</div>
 		<% end %>
 		<div id="content">
@@ -116,7 +116,7 @@
 		</div>
 	</div>
 	<% if Sugar.config(:custom_footer) %>
-		<%= Sugar.config(:custom_footer) %>
+		<%= raw Sugar.config(:custom_footer) %>
 	<% end %>
 <% if Sugar.config(:google_analytics) -%>
 <script type="text/javascript">

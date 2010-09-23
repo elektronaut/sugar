@@ -96,6 +96,6 @@ module PostParser
         # Replace line breaks
 		string.gsub!(/\r?\n/,'<br />')
 
-        return string
+        return string.html_safe
     end
 end

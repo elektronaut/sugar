@@ -3,7 +3,7 @@ require 'open-uri'
 class UsersController < ApplicationController
 
 	requires_authentication :except => [:login, :facebook_login, :complete_openid_login, :logout, :password_reset, :new, :create]
-	requires_user           :only => [:edit, :update, :grant_invite, :revoke_invites]
+	requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
 
 	def load_user
 		@user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil

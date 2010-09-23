@@ -22,13 +22,13 @@ class ApplicationController < ActionController::Base
 	# Shortcut for setting up the authentication filter. Example:
 	#   requires_authentication :except => [:login, :logout, :forgot_password]
 	def self.requires_authentication(*args)
-		append_before_filter(args){ |controller| controller.require_authenticated }
+		self.send(:before_filter, :require_authenticated, *args)
 	end
 
 	# Shortcut for setting up the required user filter. Example:
 	#   requires_user :except => [:login, :logout, :forgot_password]
 	def self.requires_user(*args)
-		append_before_filter(args){ |controller| controller.require_user }
+		self.send(:before_filter, :require_user, *args)
 	end
 
 	# Redirect to login page if authentication is required.
@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 	# Shortcut for setting up the required moderator filter. Example:
 	#   requires_user :except => [:login, :logout, :forgot_password]
 	def self.requires_moderator(*args)
-		append_before_filter(args){ |controller| controller.require_moderator }
+		self.send(:before_filter, :require_moderator, *args)
 	end
 
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
