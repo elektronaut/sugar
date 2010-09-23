@@ -53,14 +53,14 @@
 			<h2>Login and signup</h2>
 			<%= labelled_field(
 					radio_button_tag('config[public_browsing]', true, Sugar.config(:public_browsing)) +
-					" Anyone can browse<br />" +
+					" Anyone can browse<br />".html_safe +
 					radio_button_tag('config[public_browsing]', false, !Sugar.config(:public_browsing)) +
 					" Browsing requires login",
 					"Access control"
 			) %>
 			<%= labelled_field(
 					radio_button_tag('config[signups_allowed]', true, Sugar.config(:public_browsing)) +
-					" Users can sign up<br />" +
+					" Users can sign up<br />".html_safe +
 					radio_button_tag('config[signups_allowed]', false, !Sugar.config(:signups_allowed)) +
 					" Users must be invited",
 					"Signing up"

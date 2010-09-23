@@ -40,6 +40,7 @@ gem 'newrelic_rpm'
 # These are still bleeding edge
 gem "delayed_job",     :git => 'git://github.com/collectiveidea/delayed_job.git'
 gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
+#gem 'ts-delayed-delta', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 group :test do
 	gem 'shoulda'
