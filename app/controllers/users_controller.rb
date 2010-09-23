@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'open-uri'
 
 class UsersController < ApplicationController
@@ -248,7 +250,6 @@ class UsersController < ApplicationController
 		case response
 		when OpenID::Consumer::SetupNeededResponse
 			setup_url = response.instance_eval{ @setup_url } rescue nil
-			raise setup_url.inspect
 			if setup_url
 				redirect_to setup_url and return
 			else

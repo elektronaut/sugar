@@ -32,7 +32,10 @@ gem 'capistrano'
 
 
 gem 'mysql'
-gem 'ruby-openid', '2.1.6', :require => 'openid'
+
+# OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
+gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
+
 gem 'hpricot'
 gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
