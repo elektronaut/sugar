@@ -1,4 +1,5 @@
 source 'http://rubygems.org'
+source 'http://gems.github.com'
 
 gem 'rails', '3.0.0'
 
@@ -33,9 +34,18 @@ gem 'capistrano'
 gem 'mysql'
 gem 'ruby-openid', '2.1.6', :require => 'openid'
 gem 'hpricot'
-gem 'ultraviolet', :require => 'uv'
 gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
+
+# Ruby 1.8 version of Ultraviolet
+#gem 'ultraviolet', :require => 'uv', :platforms => :ruby_18
+
+# Ruby 1.9 version of Ultraviolet
+gem 'spox-plist', :platforms => :ruby_19
+gem 'spox-textpow', :platforms => :ruby_19
+gem 'spox-ultraviolet', :require => 'uv', :platforms => :ruby_19
+#gem 'ultraviolet', :require => 'uv', :git => 'git://github.com/spox/ultraviolet.git', :platforms => :ruby_19
+
 
 # These are still bleeding edge
 gem "delayed_job",     :git => 'git://github.com/collectiveidea/delayed_job.git'
