@@ -9,7 +9,7 @@
 	<%= link_to "Edit", edit_category_path(@category) %>
 </h2>
 
-<% form_for(@category) do |form| %>
+<%= form_for(@category) do |form| %>
 	<%= render :partial => 'category_form', :locals => {:form => form} %>
 	<p><button type="submit">Save</button></p>
 <% end %>

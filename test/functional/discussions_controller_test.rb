@@ -55,14 +55,21 @@ class DiscussionsControllerTest < ActionController::TestCase
 
 	context "When logged in" do 
 		setup do
+			populate_application
 			login_session
 		end
 		should "a GET on index retrieve a list of discussions" do
 			get :index
 			assert_response :success
 			assert assigns(:discussions).kind_of?(Enumerable)
-			should render_template(:index)
-			should_not set_the_flash
+			assert assigns(:discussions).length > 0
+			assert_template 'discussions/index'
+		end
+		should "a GET on discussion retrieve the discussion" do
+			get :show, :id => Discussion.first
+			assert_response :success
+			assert assigns(:discussion).kind_of?(Discussion)
+			assert_template 'discussions/show'
 		end
 	end
 end

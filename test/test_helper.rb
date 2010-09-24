@@ -8,9 +8,10 @@ class ActiveSupport::TestCase
 	#fixtures :all
 
 	def populate_application(options={})
-		regular_categories = (1..5).map{ Factory(:category) }
-		trusted_categories = (1..2).map{ Factory(:category, :trusted => true) }
-		all_categories = regular_categories + trusted_categories
+		@normal_category = Factory(:category)
+		@trusted_category = Factory(:category, :trusted => true)
+		3.times{ Factory(:discussion, :category => @normal_category) }
+		3.times{ Factory(:discussion, :category => @trusted_category) }
 	end
 
 	def login_session(user=Factory(:user))

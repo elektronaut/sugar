@@ -19,7 +19,7 @@ class Invite < ActiveRecord::Base
 	end
 	
 	before_create do |invite|
-		invite.expires_at = Time.now + Invite.expiration_time
+		invite.expires_at ||= Time.now + Invite.expiration_time
 		if invite.valid?
 			invite.user.revoke_invite!
 		end
