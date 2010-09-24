@@ -61,6 +61,8 @@ class DiscussionsControllerTest < ActionController::TestCase
 			get :index
 			assert_response :success
 			assert assigns(:discussions).kind_of?(Enumerable)
+			should render_template(:index)
+			should_not set_the_flash
 		end
 	end
 end
