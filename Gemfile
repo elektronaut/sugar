@@ -1,7 +1,7 @@
 source :gemcutter
 
 gem 'mysql'
-gem 'rails', '2.3.9'
+gem 'rails', '2.3.5'
 gem 'ruby-openid', '2.1.6', :require => 'openid'
 gem 'hpricot'
 gem 'ultraviolet', :require => 'uv'
