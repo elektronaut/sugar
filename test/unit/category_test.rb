@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class CategoryTest < ActiveSupport::TestCase
 
-	should_have_many :discussions
-	should_validate_presence_of :name
+	should have_many(:discussions)
+	should validate_presence_of(:name)
 	
 	context "A category" do
-		setup { @category = Category.make(:name => 'This is my Category') }
+		setup { @category = Factory(:category, :name => 'This is my Category') }
 
 		should "slug urls" do
 			Category.work_safe_urls = false
@@ -22,7 +22,8 @@ class CategoryTest < ActiveSupport::TestCase
 	end
 	
 	context "A trusted category" do
-		setup { @category = Category.make(:trusted => true) }
+
+		setup { @category = Factory(:trusted_category) }
 
 		should "be trusted" do
 			assert @category.trusted?
@@ -34,15 +35,15 @@ class CategoryTest < ActiveSupport::TestCase
 		end
 
 		should "not be viewable by a regular user" do
-			assert !@category.viewable_by?(User.make)
+			assert !@category.viewable_by?(Factory(:user))
 		end
 
 		should "should be viewable by a trusted user" do
-			assert @category.viewable_by?(User.make(:trusted))
+			assert @category.viewable_by?(Factory(:user, :trusted => true))
 		end
 
 		should "should be viewable by an admin" do
-			assert @category.viewable_by?(User.make(:admin))
+			assert @category.viewable_by?(Factory(:user, :admin => true))
 		end
 		
 		should "not have the trusted label" do
@@ -53,9 +54,17 @@ class CategoryTest < ActiveSupport::TestCase
 		# Category with discussions
 		context "with 10 discussions" do
 			setup do
-				@category = Category.make(:trusted => true)
-				@user = User.make
-				10.times { @category.discussions.make(:poster => @user) }
+				@category    = Factory(:trusted_category)
+				@user        = Factory(:user)
+				@discussions = (0...10).map{ Factory(:discussion, :category => @category, :poster => @user) }
+			end
+			
+			should 'have discussions made' do
+				assert_equal 10, @discussions.length
+			end
+			
+			should "have all belonging to category" do
+				assert_equal 10, @discussions.select{|d| d.category == @category}.length
 			end
 
 			should "report proper count" do
@@ -81,7 +90,7 @@ class CategoryTest < ActiveSupport::TestCase
 	end
 
 	context "A series of categories" do
-		setup { 5.times { Category.make } }
+		setup { 5.times { Factory(:category) } }
 
 		should "be created" do
 			assert_equal 5, Category.count(:all)

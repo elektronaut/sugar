@@ -11,7 +11,7 @@
 	<% else -%>
 		<%= stylesheet_link_tag "#{theme_path}/screen" %>
 	<% end -%>
-	<% if RAILS_ENV == 'production' -%>
+	<% if Rails.env == 'production' -%>
 		<%= javascript_include_tag "bundled/application.js" %>
 	<% else -%>
 		<!-- Libraries -->
@@ -32,7 +32,7 @@
 		<%= javascript_include_tag 'application' %>
 	<% end -%>
 	<script type="text/javascript">
-		<%= "Sugar.Configuration.debug         = true;" if RAILS_ENV == 'development' %>
+		<%= "Sugar.Configuration.debug         = true;" if Rails.env == 'development' %>
 		<%= "Sugar.Configuration.FlickrAPI     = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
 		<%= "Sugar.Configuration.hotkeys       = true;" if @current_user && @current_user.keyboard_navigation? %>
 		<%= "Sugar.Configuration.workSafe      = true;" if @current_user && @current_user.work_safe_urls? %>
@@ -56,7 +56,7 @@
 		<h1><%= Sugar.config(:forum_title) %></h1>
 		<% if @current_user || Sugar.config(:public_browsing) %>
 			<div id="search">
-				<% form_tag((@search_path || search_path), :method => 'get') do %>
+				<%= form_tag((@search_path || search_path), :method => 'get') do %>
 					<%= text_field_tag 'q', @search_query, :class => :query %>
 					<%= select_tag 'search_mode', options_for_select(
 						search_mode_options,

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 class CategoriesControllerTest < ActionController::TestCase
 
 	context "When logged in" do 
-		setup { login_session(User.make(:trusted)) }
+		setup { login_session(Factory(:user, :trusted => true)) }
 
 		context "a GET on :index" do
 			setup { get :index }
@@ -20,8 +20,8 @@ class CategoriesControllerTest < ActionController::TestCase
 			
 			context "with categories created" do
 				setup do 
-					5.times {Category.make}
-					2.times {Category.make(:trusted)}
+					5.times {Factory(:category)}
+					2.times {Factory(:category, :trusted => true)}
 					get :index
 				end
 				

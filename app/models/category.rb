@@ -76,4 +76,11 @@ class Category < ActiveRecord::Base
 			Category.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
 		end
 	end
+	
+	if ENV['RAILS_ENV'] == 'test'
+		def discussions_count
+			self.discussions.count
+		end 
+	end
+	
 end

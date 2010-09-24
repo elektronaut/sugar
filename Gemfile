@@ -56,6 +56,6 @@ end
 
 group :test do
 	gem 'shoulda'
-	gem 'machinist'
+	gem 'factory_girl_rails'
 	gem 'faker'
 end
