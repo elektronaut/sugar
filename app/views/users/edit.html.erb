@@ -26,7 +26,7 @@
 	<% end %>
 </ul>
 
-<% form_for(@user) do |f| %>
+<%= form_for(@user) do |f| %>
 	<%= hidden_field_tag :page, @page %>
 	<%= render :partial => "edit_#{@page}", :locals => {:f => f} %>
 	<p><button type="submit">Save</button></p>

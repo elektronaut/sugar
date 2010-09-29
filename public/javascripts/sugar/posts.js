@@ -30,7 +30,7 @@ $.extend(Sugar, {
 			type: 'POST',
 			data: {
 				'post[body]': postBody,
-				authenticity_token: $("#replyText form").find("input[name='authenticity_token']").val()
+				authenticity_token: Sugar.authToken("#replyText form")
 			},
 			success: function(previewPost){
 				if($('.posts #ajaxPosts').length < 1) {
@@ -259,7 +259,7 @@ $.extend(Sugar, {
 					type: 'POST',
 					data: {
 						'post[body]': postBody,
-						authenticity_token: $(this).find("input[name='authenticity_token']").val()
+						authenticity_token: Sugar.authToken(this)
 					},
 					success: function(){
 						$('#compose-body').val('');

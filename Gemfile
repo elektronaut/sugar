@@ -54,6 +54,10 @@ else
 	gem 'spox-ultraviolet', :require => 'uv', :platforms => :ruby_19
 end
 
+group :development do
+	gem 'juicer'
+end
+
 group :test do
 	gem 'shoulda'
 	gem 'factory_girl_rails'

@@ -1,6 +1,13 @@
+Thinks that are broken on Rails 3:
+
+* Inviting participant to conversation
+* Mailers need to be updated
+* Searching for similar discussions
+
 Bugs/issues:
 
 * Fix code blocks parsing
+* Do not show available invites for user admins
 
 Before launch:
 

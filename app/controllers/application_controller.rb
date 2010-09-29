@@ -180,7 +180,6 @@ class ApplicationController < ActionController::Base
 
 		# Stores authentication credentials in the session.
 		def store_session_authentication
-			session.delete(:ips) if session.has_key?(:ips) # TODO: Remove this later
 			if @current_user
 				session[:user_id]         = @current_user.id
 				session[:hashed_password] = @current_user.hashed_password

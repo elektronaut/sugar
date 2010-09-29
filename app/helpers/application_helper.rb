@@ -35,7 +35,7 @@ module ApplicationHelper
 	#   <% end %>
 	#
 	def labelled_field(field, label=nil, options={}, &block)
-		if options[:errors]
+		if !options[:errors].blank?
 			output  = '<p class="field field_with_errors">'
 		else
 			output  = '<p class="field">'
@@ -51,7 +51,6 @@ module ApplicationHelper
 		output += field
 		output += "<br />"+capture(&block) if block_given?
 		output += "</p>"
-		concat(output, block.binding) if block_given?
 		return output.html_safe
 	end
 	
