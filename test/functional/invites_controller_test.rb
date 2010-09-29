@@ -13,8 +13,8 @@ class InvitesControllerTest < ActionController::TestCase
 			should respond_with(:redirect)
 		end
 
-		context 'a POST on :new' do
-			setup { post :new }
+		context 'a POST on :create' do
+			setup { post :create }
 			should set_the_flash.to(/You don't have any invites!/)
 			should respond_with(:redirect)
 		end
