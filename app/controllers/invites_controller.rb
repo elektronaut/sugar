@@ -62,7 +62,7 @@ class InvitesController < ApplicationController
 			@invite = @current_user.invites.create(params[:invite])
 			if @invite.valid?
 				begin
-					Mailer.deliver_invite(@invite, accept_invite_url(:id => @invite.token))
+					Mailer.invite(@invite, accept_invite_url(:id => @invite.token)).deliver
 					flash[:notice] = "Your invite has been sent to #{@invite.email}"
 				rescue
 					flash[:notice] = "There was a problem sending your invite to #{@invite.email}, it has been cancelled."

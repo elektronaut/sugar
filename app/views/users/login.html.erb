@@ -9,7 +9,7 @@
 
 <div id="login">
 
-	<% form_tag(login_users_path, :class => 'form username_and_password') do %>
+	<%= form_tag(login_users_path, :class => 'form username_and_password') do %>
 		<fieldset>
 			<label>Username</label>
 			<%= text_field_tag 'username', '', :class => :text %>
@@ -27,7 +27,7 @@
 		</p>
 	<% end %>
 	
-	<% form_tag(login_users_path, :class => 'form openid') do %>
+	<%= form_tag(login_users_path, :class => 'form openid') do %>
 		<fieldset>
 			<label>OpenID URL</label>
 			<%= text_field_tag 'openid_url', '', :class => :text %>

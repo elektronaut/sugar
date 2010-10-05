@@ -6,7 +6,7 @@ namespace :sugar do
 			user.generate_password!
 			user.save
 			begin
-				Mailer.deliver_welcome(user)
+				Mailer.welcome(user).deliver
 			rescue
 				puts "Couldn't send message to: #{user.username} - #{user.full_email}"
 			end

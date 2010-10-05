@@ -1,6 +1,6 @@
 Thinks that are broken on Rails 3:
 
-* Mailers need to be updated
+* Fix all deprecation notices
 
 Bugs/issues:
 
