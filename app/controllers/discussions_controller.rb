@@ -98,7 +98,9 @@ class DiscussionsController < ApplicationController
 					json = {
 						:pages         => @discussions.pages,
 						:total_entries => @discussions.total_entries,
-						:discussions   => @discussions
+						# TODO: Fix when Rails bug is fixed
+						#:discussions   => @discussions
+						:discussions   => @discussions.map{|d| {:discussion => d.attributes}}
 					}.to_json(:except => [:delta])
 					render :text => json
 				end

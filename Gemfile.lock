@@ -53,6 +53,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
+    cmdparse (2.0.2)
     daemon-spawn (0.2.0)
     daemons (1.1.0)
     delayed_job (2.0.3)
@@ -66,6 +67,10 @@ GEM
     highline (1.5.0)
     hpricot (0.8.2)
     i18n (0.4.1)
+    juicer (1.0.7)
+      cmdparse
+      nokogiri
+      rubyzip
     mail (2.2.5)
       activesupport (>= 2.3.6)
       mime-types
@@ -80,6 +85,7 @@ GEM
     net-ssh-gateway (1.0.0)
       net-ssh (>= 1.99.1)
     newrelic_rpm (2.13.1)
+    nokogiri (1.4.3.1)
     oniguruma (1.1.0)
     plist (3.1.0)
     polyglot (0.3.1)
@@ -103,6 +109,7 @@ GEM
       thor (~> 0.14.0)
     rake (0.8.7)
     riddle (1.1.0)
+    rubyzip (0.9.4)
     shoulda (2.11.3)
     textpow (0.10.1)
       oniguruma (>= 1.1.0)
@@ -126,6 +133,7 @@ DEPENDENCIES
   delayed_job (= 2.0.3)
   factory_girl_rails
   hpricot
+  juicer
   mysql
   newrelic_rpm
   rails (= 3.0.0)

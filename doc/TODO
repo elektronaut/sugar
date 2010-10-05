@@ -2,7 +2,6 @@ Thinks that are broken on Rails 3:
 
 * Inviting participant to conversation
 * Mailers need to be updated
-* Searching for similar discussions
 
 Bugs/issues:
 
@@ -12,7 +11,6 @@ Bugs/issues:
 Before launch:
 
 * Upgrade to Rails 3
-* Identify and fix all dependencies with Bundler
 * Clean up and centralize the OpenID verification actions.
 * If there aren't any users registered: One should be able to sign up and be set as admin
 * Finish up the optional approval of signups functionality
