@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
 		def openid_consumer
 			require 'openid/store/filesystem'
 			@openid_consumer ||= OpenID::Consumer.new(session,      
-				OpenID::Store::Filesystem.new("#{RAILS_ROOT}/tmp/openid"))
+				OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
 	    end
 	
 		# Loads and authenticates @current_user from session. Will fail
