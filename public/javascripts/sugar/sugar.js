@@ -471,7 +471,7 @@ var Sugar = {
 	authToken : function(elem){
 		var authToken = null;
 		if(elem){
-			authToken = $(form).find("input[name='authenticity_token']").val();
+			authToken = $(elem).find("input[name='authenticity_token']").val();
 		} else {
 			authToken = $("input[name='authenticity_token']").val();
 		}

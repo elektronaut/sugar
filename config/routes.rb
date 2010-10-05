@@ -76,7 +76,7 @@ Sugar::Application.routes.draw do
 			get 'unfavorite'
 			get 'search_posts'
 			get 'mark_as_read'
-			get 'invite_participant'
+			post 'invite_participant'
 		end
 		collection do
 			get 'participated'

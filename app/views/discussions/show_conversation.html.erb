@@ -5,13 +5,13 @@
 	previous_post = nil
 -%>
 
-<% content_for :sidebar do %>
+<%= content_for :sidebar do %>
 	<div class="participants">
 		<%= render :partial => 'discussions/participants', :locals => {:participants => @discussion.participants} %>
 	</div>
 	<div class="invite">
 		<h2>Invite someone</h2>
-		<% form_for @discussion, :url => invite_participant_discussion_path(@discussion), :html => {:id => 'invite_participant_form'} do |f| %>
+		<%= form_for @discussion, :url => invite_participant_discussion_path(@discussion), :html => {:id => 'invite_participant_form'} do |f| %>
 			<%= text_field_tag 'username', '', :class => :username %>
 			<%= submit_tag 'Invite' %>
 		<% end %>
@@ -55,7 +55,7 @@
 		
 		<%# Text reply %>
 		<div id="replyText">
-			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
 				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
 				<p id="button-container">
 					<button type="submit">Post</button>

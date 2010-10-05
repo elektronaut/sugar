@@ -1,6 +1,5 @@
 Thinks that are broken on Rails 3:
 
-* Inviting participant to conversation
 * Mailers need to be updated
 
 Bugs/issues:
