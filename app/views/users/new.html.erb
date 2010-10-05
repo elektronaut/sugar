@@ -21,7 +21,7 @@
 
 <%# Normal signup %>
 <div id="password">
-	<% form_for @user do |f| %>
+	<%= form_for @user do |f| %>
 		<%= render :partial => 'signup_form', :locals => {:f => f} %>
 		<p><button type="submit">Sign up</button></p>
 	<% end %>
@@ -35,7 +35,7 @@
 		</div>
 		<div class="signup">
 			<p class="login_status"></p>
-			<% form_for @user do |f| %>
+			<%= form_for @user do |f| %>
 				<% if @invite %>
 					<%= hidden_field_tag 'token', @invite.token %>
 				<% end %>
@@ -54,7 +54,7 @@
 
 <%# OpenID signup %>
 <div id="openid">
-	<% form_for @user do |f| %>
+	<%= form_for @user do |f| %>
 		<%= render :partial => 'signup_form', :locals => {:f => f, :mode => :openid} %>
 		<p><button type="submit">Sign up</button></p>
 	<% end %>

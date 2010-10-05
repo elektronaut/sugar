@@ -1,7 +1,7 @@
 <% 
 	add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
 	add_body_class 'last_page' if @posts.last_page?
-	@page_title = h(@discussion.title)
+	@page_title = @discussion.title
 	previous_post = nil
 -%>
 

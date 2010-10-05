@@ -21,11 +21,11 @@
 	<table class="userinfo">
 		<% if @user.realname? %><tr>
 			<th>Real name</th>
-			<td><%= h @user.realname %></td>
+			<td><%= @user.realname %></td>
 		</tr><% end %>
 		<% if @user.location? %><tr>
 			<th>Location</th>
-			<td><%= h @user.location %></td>
+			<td><%= @user.location %></td>
 		</tr><% end %>
 		<% if @user.birthday? %><tr>
 			<th>Birthday</th>
@@ -38,11 +38,11 @@
 
 		<% if @user.msn? %><tr>
 			<th>MSN</th>
-			<td><%= h @user.msn %></td>
+			<td><%= @user.msn %></td>
 		</tr><% end %>
 		<% if @user.gtalk? %><tr>
 			<th>Gtalk</th>
-			<td><%= h @user.gtalk %></td>
+			<td><%= @user.gtalk %></td>
 		</tr><% end %>
 		<% if @user.aim? %><tr>
 			<th>AIM</th>
@@ -63,7 +63,7 @@
 
 		<% if @user.gamertag? %><tr>
 			<th>Xbox Live</th>
-			<td><%= h @user.gamertag %></td>
+			<td><%= @user.gamertag %></td>
 		</tr><% end %>
 		<% if @user.inviter %><tr>
 			<th>Invited by</th>

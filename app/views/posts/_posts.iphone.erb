@@ -16,7 +16,7 @@
 				<% if post.discussion.labels? %>
 					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
 				<% end %>
-				<%= link_to h(post.discussion.title), last_discussion_page_path(post.discussion) %>
+				<%= link_to post.discussion.title, last_discussion_page_path(post.discussion) %>
 			</h2>
 		</div>
 		<% end %>
@@ -47,7 +47,7 @@
 					<%= link_to "Quote", discussion_post_path((discussion||post.discussion), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>
 				</div>
 				<div class="body">
-					<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : post.body_html %>
+					<%= post.user.html_disabled? ? post.body.gsub(/\n/,'<br />') : post.body_html %>
 				</div>
 				<% if post.edited? %>
 					<div class="post_edited">Edited <%= formatted_time post.edited_at %></div>

@@ -1,6 +1,6 @@
 <% 
 	@page_title = "Posts Search" 
-	@page_title = h(@discussion.title) + " - Search: " + h(@search_query)
+	@page_title = @discussion.title + " - Search: " + h(@search_query)
 	add_body_class "search", "search_posts_in_discussion"
 %>
 

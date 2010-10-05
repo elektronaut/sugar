@@ -1,7 +1,3 @@
-Thinks that are broken on Rails 3:
-
-* Fix all deprecation notices
-
 Bugs/issues:
 
 * Fix code blocks parsing

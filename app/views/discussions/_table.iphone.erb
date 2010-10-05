@@ -12,7 +12,7 @@
 				<% if d.labels? %>
 					<span class="labels">[<%= d.labels.join(',') %>]</span>
 				<% end %>
-				<%= link_to h(d.title), last_discussion_page_path(d) %>
+				<%= link_to d.title, last_discussion_page_path(d) %>
 			</h2>
 			<p>
 				<% if d.kind_of?(Conversation) %>
@@ -24,7 +24,7 @@
 					<% elsif other_participants.length > 2 %>
 						With <%= other_participants.length %> participants,
 					<% else %>
-						With <%= other_participants.map{|p| profile_link(p)}.join(', ') %>,
+						With <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %>,
 					<% end %>
 				<% else %>
 					By <%= d.poster.username %>,

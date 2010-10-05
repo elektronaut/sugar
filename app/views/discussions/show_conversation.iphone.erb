@@ -1,5 +1,5 @@
 <% 
-	@page_title = h(@discussion.title)
+	@page_title = @discussion.title
 	previous_post = nil
 %>
 
@@ -8,7 +8,7 @@
 </div>
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
 
-<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
 <div class="reply">
 	<p>
 		<label>Reply</label>

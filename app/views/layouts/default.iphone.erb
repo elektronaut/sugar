@@ -50,7 +50,7 @@
 				<li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
 			<% end %>
 			<li class="search">
-				<% form_tag((@search_path || search_path), :method => 'get') do %>
+				<%= form_tag((@search_path || search_path), :method => 'get') do %>
 					Search for
 					<%= text_field_tag 'q', @search_query, :class => :query %>
 					<%= select_tag 'search_mode', options_for_select(
