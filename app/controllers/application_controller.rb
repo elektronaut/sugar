@@ -107,17 +107,19 @@ class ApplicationController < ActionController::Base
 	def require_moderator(options={})
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
-		unless @current_user.moderator?
-			format.html do
-				flash[:notice] = options[:notice]
-				redirect_to login_users_url and return
+		unless @current_user && @current_user.moderator?
+			respond_to do |format|
+				format.html do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.mobile do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => options[:notice], :status => 401 and return }
+				format.xml  { render :xml  => options[:notice], :status => 401 and return }
 			end
-			format.mobile do
-				flash[:notice] = options[:notice]
-				redirect_to login_users_url and return
-			end
-			format.json { render :json => options[:notice], :status => 401 and return }
-			format.xml  { render :xml  => options[:notice], :status => 401 and return }
 		end
 	end
 

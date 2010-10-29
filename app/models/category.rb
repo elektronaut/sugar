@@ -29,6 +29,12 @@ class Category < ActiveRecord::Base
 	end
 
 	class << self
+		
+		# Finds all categories viewable by the given user
+		def find_viewable_by(user=nil)
+			self.all(:order => :position).select{|c| c.viewable_by?(user)}
+		end
+		
 		# Enable work safe URLs
 		def work_safe_urls=(state)
 			@@work_safe_urls = state
