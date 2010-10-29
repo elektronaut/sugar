@@ -90,7 +90,7 @@ class DiscussionsController < ApplicationController
 					find_discussion_views
 					@search_path = search_path
 				end
-				format.iphone do
+				format.mobile do
 					find_discussion_views
 					@search_path = search_path
 				end
@@ -152,7 +152,7 @@ class DiscussionsController < ApplicationController
 
 		# Show a discussion
 		def show
-			context = (request.format == :iphone) ? 0 : 3
+			context = (request.format == :mobile) ? 0 : 3
 			@posts = Post.find_paginated(
 				:discussion => @discussion, 
 				:page       => params[:page], 

@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 			@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
 			respond_to do |format|
 				format.html {}
-				format.iphone {
+				format.mobile {
 					@online_users = @users.select{|u| u.online?}
 				}
 				format.json {
@@ -94,7 +94,7 @@ class UsersController < ApplicationController
 				format.html do
 					@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :limit => 15)
 				end
-				format.iphone {}
+				format.mobile {}
 			end
 		end
 

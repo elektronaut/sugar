@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
 		def index
 			respond_to do |format|
 				format.html
-				format.iphone
+				format.mobile
 				format.xml    {render :xml  => @categories}
 				format.json   {render :json => @categories}
 			end

@@ -6,10 +6,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
 	<% if RAILS_ENV == 'production' -%>
-		<%= javascript_include_tag "bundled/iphone.js" %>
+		<%= javascript_include_tag "bundled/mobile.js" %>
 	<% else -%>
 		<%= javascript_include_tag 'vendor/jquery' %>
-		<%= javascript_include_tag 'iphone' %>
+		<%= javascript_include_tag 'mobile' %>
 	<% end -%>
 	<%= stylesheet_link_tag    "#{theme_path}/screen" %>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
@@ -77,7 +77,7 @@
 			<%= link_to "Following", following_discussions_path %> | 
 			<%= link_to "Favorites", favorites_discussions_path %> | 
 		<% end %>
-		<%= link_to "Regular site", :iphone_format => 'html' %>
+		<%= link_to "Regular site", :imobile_format => 'html' %>
 	</div>
 	<script type="text/javascript">
 		hideImagesInPosts();

@@ -110,8 +110,8 @@
 		<% end %>
 		<div id="content">
 			<%= yield %>
-			<% if @iphone_user_agent %><div class="iphone_link">
-				<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
+			<% if @mobile_user_agent %><div class="mobile_link">
+				<p><%= link_to "mobile version", :mobile_format => 'mobile' %></p>
 			</div><% end %>
 		</div>
 	</div>

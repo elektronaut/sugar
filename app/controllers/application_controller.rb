@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 	# Filters
 	before_filter :authenticate_session
 	before_filter :facebook_authenticate
-	before_filter :detect_iphone
+	before_filter :detect_mobile
 	before_filter :set_time_zone
 	before_filter :set_section
 	after_filter  :store_session_authentication
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
 					flash[:notice] = 'You must be logged in to to that.'
 					redirect_to login_users_url and return
 				end
-				format.iphone do
+				format.mobile do
 					flash[:notice] = 'You must be logged in to to that.'
 					redirect_to login_users_url and return
 				end
@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
 				flash[:notice] = options[:notice]
 				redirect_to login_users_url and return
 			end
-			format.iphone do
+			format.mobile do
 				flash[:notice] = options[:notice]
 				redirect_to login_users_url and return
 			end
@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
 					flash[:notice] = options[:notice]
 					redirect_to login_users_url and return
 				end
-				format.iphone do
+				format.mobile do
 					flash[:notice] = options[:notice]
 					redirect_to login_users_url and return
 				end
@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
 				flash[:notice] = options[:notice]
 				redirect_to login_users_url and return
 			end
-			format.iphone do
+			format.mobile do
 				flash[:notice] = options[:notice]
 				redirect_to login_users_url and return
 			end
@@ -131,20 +131,20 @@ class ApplicationController < ActionController::Base
 			}
 			respond_to do |format|
 				format.html   {options[:template] ||= "errors/#{error}"}
-				format.iphone {options[:template] ||= "errors/#{error}"}
+				format.mobile {options[:template] ||= "errors/#{error}"}
 				format.xml    {options[:text] ||= error_messages[error]}
 				format.json   {options[:text] ||= error_messages[error]}
 			end
 			render options
 		end
 
-		# Detects the iPhone user agent string and sets <tt>request.format = :iphone</tt>.
-		def detect_iphone
-			@iphone_user_agent = (request.host =~ /^(iphone|m)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/])) ? true : false
-			if @iphone_user_agent
-				session[:iphone_format] ||= 'iphone'
-				session[:iphone_format] = params[:iphone_format] if params[:iphone_format]
-				request.format = :iphone if session[:iphone_format] == 'iphone'
+		# Detects the mobile user agent string and sets <tt>request.format = :mobile</tt>.
+		def detect_mobile
+			@mobile_user_agent = (request.host =~ /^(iphone|m|mobile)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/])) ? true : false
+			if @mobile_user_agent
+				session[:mobile_format] ||= 'mobile'
+				session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
+				request.format = :mobile if session[:mobile_format] == 'mobile'
 			end
 		end
 		
