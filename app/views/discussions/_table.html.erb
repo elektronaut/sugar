@@ -48,5 +48,5 @@
 	</table>
 	<%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
 <% else %>
-	<p><%= no_discussions %></p>
+	<p><%= no_discussions.html_safe %></p>
 <% end %>
