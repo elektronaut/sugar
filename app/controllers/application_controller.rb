@@ -47,8 +47,18 @@ class ApplicationController < ActionController::Base
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
 	def require_user
 		unless @current_user && @current_user.activated?
-			flash[:notice] = 'You must be logged in to to that.'
-			redirect_to login_users_url and return
+			respond_to do |format|
+				format.html do
+					flash[:notice] = 'You must be logged in to to that.'
+					redirect_to login_users_url and return
+				end
+				format.iphone do
+					flash[:notice] = 'You must be logged in to to that.'
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => 'Authentication required', :status => 401 and return }
+				format.xml  { render :xml  => 'Authentication required', :status => 401 and return }
+			end
 		end
 	end
 
@@ -58,8 +68,16 @@ class ApplicationController < ActionController::Base
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
 		unless @current_user == user || @current_user.admin?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+			format.html do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.iphone do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.json { render :json => options[:notice], :status => 401 and return }
+			format.xml  { render :xml  => options[:notice], :status => 401 and return }
 		end
 	end
 
@@ -67,10 +85,20 @@ class ApplicationController < ActionController::Base
 	# unless <tt>@current_user</tt> is <tt>user</tt> or a user admin.
 	def require_user_admin_or_user(user, options={})
 		options[:redirect] ||= discussions_path
-		options[:notice] ||= "You don't have permission to do that!"
+		options[:notice]   ||= "You don't have permission to do that!"
 		unless @current_user == user || @current_user.user_admin?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+			respond_to do |format|
+				format.html do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.iphone do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => options[:notice], :status => 401 and return }
+				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+			end
 		end
 	end
 
@@ -80,12 +108,35 @@ class ApplicationController < ActionController::Base
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
 		unless @current_user.moderator?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+			format.html do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.iphone do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.json { render :json => options[:notice], :status => 401 and return }
+			format.xml  { render :xml  => options[:notice], :status => 401 and return }
 		end
 	end
 
 	protected
+	
+		# Renders an error
+		def render_error(error, options={})
+			options[:status] ||= error if error.kind_of?(Numeric)
+			error_messages = {
+				404 => 'Not found'
+			}
+			respond_to do |format|
+				format.html   {options[:template] ||= "errors/#{error}"}
+				format.iphone {options[:template] ||= "errors/#{error}"}
+				format.xml    {options[:text] ||= error_messages[error]}
+				format.json   {options[:text] ||= error_messages[error]}
+			end
+			render options
+		end
 
 		# Detects the iPhone user agent string and sets <tt>request.format = :iphone</tt>.
 		def detect_iphone

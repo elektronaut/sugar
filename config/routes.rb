@@ -126,6 +126,7 @@ Sugar::Application.routes.draw do
 	# Admin
 	resource :admin, :controller => 'admin' do
 		get 'configuration', :on => :member
+		post 'configuration', :on => :member
 	end
 
 	# Vanilla redirects

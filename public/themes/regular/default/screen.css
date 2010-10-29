@@ -430,6 +430,9 @@ h2.section, #sidebar h2 {
 	font-size:           1.4em;
 	font-weight:         bold;
 }
+.error_message {
+	font-size:           1.4em;
+}
 
 #wrapper {
 	position:            absolute;
