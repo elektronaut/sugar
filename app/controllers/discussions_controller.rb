@@ -13,25 +13,25 @@ class DiscussionsController < ApplicationController
 
 		# Loads discussion by params[:id] and checks permissions.
 		def load_discussion
-			@discussion = Exchange.find(params[:id]) rescue nil
-			unless @discussion
-				flash[:notice] = "Could not find that discussion!"
-				redirect_to discussions_path and return
+			begin
+				@discussion = Exchange.find(params[:id])
+			rescue ActiveRecord::RecordNotFound
+				render_error 404 and return
 			end
+			
 			unless @discussion.viewable_by?(@current_user)
-				flash[:notice] = "You don't have permission to view that discussion!"
-				redirect_to discussions_path and return
+				render_error 403 and return
 			end
 		end
 
 		# Deflects the request unless the discussion is editable by the logged in user.
 		def verify_editable
 			unless @discussion.editable_by?(@current_user)
-				flash[:notice] = "You don't have permission to edit that discussion!"
-				redirect_to discussions_path and return
+				render_error 403 and return
 			end
 		end
 		
+		# This is pretty silly and needs rewriting.
 		def set_exchange_params
 			if params[:conversation]
 				params[:exchange] = params[:conversation]
@@ -53,7 +53,7 @@ class DiscussionsController < ApplicationController
 				:page    => params[:page], 
 				:trusted => (@current_user && @current_user.trusted?)
 			)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 		
 		# Popular discussions
@@ -68,7 +68,7 @@ class DiscussionsController < ApplicationController
 				:trusted => (@current_user && @current_user.trusted?),
 				:since   => @days.days.ago
 			)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		# Searches discusion titles
@@ -86,12 +86,8 @@ class DiscussionsController < ApplicationController
 				:trusted => (@current_user && @current_user.trusted?)
 			)
 			respond_to do |format|
-				format.html do
-					find_discussion_views
-					@search_path = search_path
-				end
-				format.mobile do
-					find_discussion_views
+				format.any(:html, :mobile) do
+					load_views_for(@discussions)
 					@search_path = search_path
 				end
 				format.json do
@@ -214,21 +210,21 @@ class DiscussionsController < ApplicationController
 		def conversations
 			@section = :conversations
 			@discussions = @current_user.paginated_conversations(:page => params[:page])
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		# List discussions marked as favorite
 		def favorites
 			@section = :favorites
 			@discussions = @current_user.favorite_discussions(:page => params[:page], :trusted => @current_user.trusted?)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		# List discussions marked as followed
 		def following
 			@section = :following
 			@discussions = @current_user.following_discussions(:page => params[:page], :trusted => @current_user.trusted?)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		# Follow a discussion

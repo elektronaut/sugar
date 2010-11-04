@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CategoriesController < ApplicationController
 
 	requires_authentication
@@ -28,8 +30,7 @@ class CategoriesController < ApplicationController
 		# Verifies that the category is viewable by @current_user
 		def verify_viewable
 			unless @category.viewable_by?(@current_user)
-				flash[:notice] = "You don't have permission to view that category"
-				redirect_to(categories_path) and return unless @category
+				render_error 403 and return
 			end
 		end
 		
@@ -49,7 +50,7 @@ class CategoriesController < ApplicationController
 						:category => @category, 
 						:trusted  => (@current_user && @current_user.trusted?)
 					)
-					find_discussion_views
+					load_views_for(@discussions)
 				end
 			end
 		end

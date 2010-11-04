@@ -3,25 +3,34 @@ class InvitesController < ApplicationController
 	requires_authentication :except => [:accept]
 	requires_user           :except => [:accept]
     
+	respond_to :html, :mobile, :xml, :json
+
 	before_filter :load_invite,    :only => [:show, :edit, :update, :destroy]
 	before_filter :verify_invites, :only => [:new, :create]
 
 	protected
 	
-		# Loads the requested invite
+		# Finds the requested invite
 		def load_invite
-			@invite = Invite.find(params[:id]) rescue nil
-			unless @invite
-				flash[:notice] = "Could not find invite with ID ##{params[:id]}"
-				redirect_to invites_url and return
+			begin
+				@invite = Invite.find(params[:id])
+			rescue ActiveRecord::RecordNotFound
+				render_error 404 and return
 			end
 		end
 	
 		# Verifies that the user has available invites
 		def verify_invites
 			unless @current_user && @current_user.available_invites?
-				flash[:notice] = "You don't have any invites!"
-				redirect_to online_users_url
+				respond_to do |format|
+					format.any(:html, :mobile) do
+						flash[:notice] = "You don't have any invites!"
+						redirect_to online_users_url and return
+					end
+					format.any(:xml, :json) do
+						render :text => "You don't have any invites!", :status => :method_not_allowed
+					end
+				end
 			end
 		end
 
@@ -29,13 +38,13 @@ class InvitesController < ApplicationController
 	
 		# Show active invites
 		def index
-			@invites = @current_user.invites.active
+			respond_with(@invites = @current_user.invites.active)
 		end
 
 		# Show everyone's invites
 		def all
 			require_user_admin_or_user(nil, :redirect => invites_url)
-			@invites = Invite.find_active
+			respond_with(@invites = Invite.find_active)
 		end
 
 		# Accept an invite
@@ -54,7 +63,7 @@ class InvitesController < ApplicationController
 
 		# Create a new invite
 		def new
-			@invite = @current_user.invites.new
+			respond_with(@invite = @current_user.invites.new)
 		end
 	
 		# Create a new invite

@@ -170,11 +170,11 @@ class ApplicationController < ActionController::Base
 		end
 
 		# Finds DiscussionViews for @discussion.
-		def find_discussion_views
-			if @current_user && @discussions && @discussions.length > 0
+		def load_views_for(discussions)
+			if @current_user && discussions && discussions.length > 0
 				@discussion_views = DiscussionView.find(
 					:all,
-					:conditions => {:user_id => @current_user.id, :discussion_id => @discussions.map(&:id).uniq}
+					:conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
 				)
 			end
 		end

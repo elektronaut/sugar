@@ -100,13 +100,13 @@ class UsersController < ApplicationController
 
 		def discussions
 			@discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		def participated
 			@section = :participated if @user == @current_user
 			@discussions = @user.participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
-			find_discussion_views
+			load_views_for(@discussions)
 		end
 
 		def posts
