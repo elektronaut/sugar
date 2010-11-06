@@ -1,5 +1,5 @@
 <%
-	no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
+	no_discussions ||= "No discussions here yet. " + (@current_user ? link_to("Create the first!", new_discussion_path) : '')
 	pagination_params ||= {}
 %>
 <% if discussions && discussions.length > 0 %>
@@ -48,5 +48,7 @@
 	</table>
 	<%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
 <% else %>
-	<p><%= no_discussions.html_safe %></p>
+	<div class="content">
+		<p><%= no_discussions.html_safe %></p>
+	</div>
 <% end %>

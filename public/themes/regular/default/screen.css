@@ -259,6 +259,12 @@ span.example {
 	float:               right;
 }
 
+.content {
+	font-size: 1.3em;
+}
+.content a {
+	text-decoration: underline;
+}
 
 /* -----------------------------------------------------------------------
    RICH TEXT EDITOR
@@ -1070,9 +1076,6 @@ span.admin {
    INVITES SECTION
    ----------------------------------------------------------------------- */
 
-.invites p {
-	font-size:           1.2em;
-}
 .invites_list .email {
 	font-weight:         bold;
 }

@@ -171,5 +171,21 @@ module ApplicationHelper
 			post.page
 		end
 	end
+	
+	def header_tab(name, url, options={})
+		options[:section] ||= name.downcase.to_sym
+		options[:id]      ||= "#{options[:section]}_link"
+		options[:class]   ||= []
+		options[:class]   = [options[:class]] unless options[:class].kind_of?(Array)
+
+		classes = [options[:section].to_s] + options[:class]
+		classes << 'current' if @section == options[:section]
+		
+		content_tag(
+			:li, 
+			link_to(name, url, :id => options[:id]), 
+			:class => classes
+		)
+	end
 
 end

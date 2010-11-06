@@ -12,14 +12,18 @@
 <%= render :partial => 'list_navigation' %>
 
 <% if @users.length > 0 %>
-	<p>
-		<% if @users.length == 1 %>
-			<strong>1</strong> user is online right now.
-		<% else %>
-			<strong><%= @users.length %></strong> users are online right now.
-		<% end %>
-	</p>
+	<div class="content">
+		<p>
+			<% if @users.length == 1 %>
+				<strong>1</strong> user is online right now.
+			<% else %>
+				<strong><%= @users.length %></strong> users are online right now.
+			<% end %>
+		</p>
+	</div>
 	<%= render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :member_since, :discussions_and_posts, :status]} %>
 <% else %>
-	<p>No users are online.</p>
+	<div class="content">
+		<p>No users are online.</p>
+	</div>
 <% end %>
