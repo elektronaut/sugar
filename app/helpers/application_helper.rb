@@ -11,7 +11,7 @@ module ApplicationHelper
 	end
 
 	def meify(string, user)
-		string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
+		string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }.html_safe
 	end
 
 	def pretty_link(url)
