@@ -48,5 +48,5 @@ Sugar::Application.configure do
 	config.active_support.deprecation = :notify
 	
 	# Store all page caches in a subfolder of public
-	config.action_controller.page_cache_directory = Rails.root.join('public/cache')
+	config.action_controller.page_cache_directory = File.join(File.dirname(__FILE__), '../../public/cache')
 end
