@@ -260,10 +260,10 @@ span.example {
 }
 
 .content {
-	font-size: 1.3em;
+	font-size:           1.3em;
 }
 .content a {
-	text-decoration: underline;
+	text-decoration:     underline;
 }
 
 /* -----------------------------------------------------------------------
@@ -776,6 +776,9 @@ table.discussions .targeted td.name {
 .post .body ul {
 	list-style-type:     disc;
 	list-style-position: inside;
+}
+.post .body .content {
+	font-size:           1em;
 }
 
 .me_post {

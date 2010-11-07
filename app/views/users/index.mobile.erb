@@ -16,6 +16,6 @@
 				<%= profile_link(user) %>
 			<% end %>
 		</td>
-		<td class="last_active"><%= (user.online?) ? "<strong>Online now</strong>" : formatted_time(user.last_active) %></td>
+		<td class="last_active"><%= (user.online?) ? "<strong>Online now</strong>".html_safe : formatted_time(user.last_active) %></td>
 	</tr><% end %>
 </table>
