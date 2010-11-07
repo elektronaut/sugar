@@ -49,11 +49,11 @@ class ApplicationController < ActionController::Base
 		unless @current_user && @current_user.activated?
 			respond_to do |format|
 				format.html do
-					flash[:notice] = 'You must be logged in to to that.'
+					flash[:notice] = 'You must be logged in to do that.'
 					redirect_to login_users_url and return
 				end
 				format.mobile do
-					flash[:notice] = 'You must be logged in to to that.'
+					flash[:notice] = 'You must be logged in to do that.'
 					redirect_to login_users_url and return
 				end
 				format.json { render :json => 'Authentication required', :status => 401 and return }
