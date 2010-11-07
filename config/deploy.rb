@@ -39,13 +39,6 @@ task :create_shared_dirs, :roles => [:web,:app] do
 	run "touch #{deploy_to}/#{shared_dir}/config/initializers/mailer.rb"
 end
 
-desc "Fix permissions"
-task :fix_permissions, :roles => [:web, :app] do
-	run "chmod -R u+x #{deploy_to}/#{current_dir}/script/*"
-	run "chmod u+x    #{deploy_to}/#{current_dir}/public/dispatch.*"
-	run "chmod u+rwx  #{deploy_to}/#{current_dir}/public"
-end
-
 desc "Create symlinks"
 task :create_symlinks, :roles => [:web,:app] do
 	run "ln -s #{deploy_to}/#{shared_dir}/cache #{deploy_to}/#{current_dir}/tmp/cache"
@@ -114,7 +107,6 @@ end
 
 after "deploy:finalize_update", "symlink_configs"
 after "deploy:setup",           "create_shared_dirs"
-after "deploy:symlink",         "fix_permissions"
 after "deploy:symlink",         "create_symlinks"
 after "deploy:symlink",         "pack_themes"
 #after "deploy:finalize_update", "thinking_sphinx:configure"
