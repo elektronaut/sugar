@@ -3,7 +3,7 @@
 	@page_title = "Favorite Discussions" 
 %>
 
-<% sidebar do %>
+<%= content_for :sidebar do %>
 	<%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
@@ -11,6 +11,6 @@
 
 <%= render :partial => 'discussions/table', :locals => {
 	:discussions    => @discussions,
-	:no_discussions => "You haven't marked any discussions as favorites!"
+	:no_discussions => "You haven't marked any discussions as a favorite."
 } %>
 

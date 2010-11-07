@@ -1,0 +1,10 @@
+<% 
+	@page_title = "New #{@discussion.class.to_s.downcase}" 
+%>
+
+<div class="page_content">
+<%= form_for(@discussion, :url => discussions_path) do |f| %>
+	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
+	<p><%= submit_tag "Create discussion" %></p>
+<% end %>
+</div>

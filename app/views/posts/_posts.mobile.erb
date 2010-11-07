@@ -1,0 +1,59 @@
+<%
+	# Options
+	discussion    ||= false
+	functions     ||= false
+	permalink     ||= false
+	post_distance ||= false
+	title         ||= false
+
+	previous_post = nil
+-%>
+<div class="posts">
+	<% posts.each do |post| %>
+		<% if title %>
+		<div class="discussion">
+			<h2>
+				<% if post.discussion.labels? %>
+					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
+				<% end %>
+				<%= link_to post.discussion.title, last_discussion_page_path(post.discussion) %>
+			</h2>
+		</div>
+		<% end %>
+		<% if post_distance && previous_post && (post.created_at - previous_post.created_at) >= 12.hours %>
+			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
+		<% end %>
+		<div class="post<%= " me_post" if post.me_post? %>" id="post-<%= post.id %>">
+			<% if post.me_post? %>
+				<div class="body">
+					<%= meify post.body, post.user %>
+					<span class="date">&ndash; <%= formatted_time post.created_at %></span>
+				</div>
+			<% else %>
+				<div class="post_info">
+					<a name="post-<%= post.id %>" class="anchor"></a>
+					<span class="username"><%= profile_link(post.user) %></span>
+					<span class="date">
+						<%= formatted_time post.created_at %>
+					</span>
+					<span class="permalink">
+						<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+					</span>
+				</div>
+				<div class="functions">
+					<% if post.editable_by?(@current_user) %>
+						<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %> / 
+					<% end %>
+					<%= link_to "Quote", discussion_post_path((discussion||post.discussion), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+				</div>
+				<div class="body">
+					<%= post.user.html_disabled? ? post.body.gsub(/\n/,'<br />') : post.body_html %>
+				</div>
+				<% if post.edited? %>
+					<div class="post_edited">Edited <%= formatted_time post.edited_at %></div>
+				<% end %>
+			<% end %>
+		</div>
+		<% previous_post = post -%>
+	<% end %>
+</div>

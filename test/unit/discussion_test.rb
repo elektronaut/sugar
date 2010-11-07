@@ -2,19 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class DiscussionTest < ActiveSupport::TestCase
 
-	should_belong_to :category
-	should_belong_to :poster
-	should_belong_to :last_poster
+	should belong_to(:category)
+	should belong_to(:poster)
+	should belong_to(:last_poster)
 
-	should_have_many :posts
-	should_have_many :discussion_views
-	should_have_many :discussion_relationships
+	should have_many(:posts)
+	should have_many(:discussion_views)
+	should have_many(:discussion_relationships)
 
-	should_validate_presence_of :category_id
-	should_validate_presence_of :body
+	should validate_presence_of(:category_id)
+	should validate_presence_of(:body)
 
 	context "A discussion" do
-		setup { @discussion = Discussion.make(:title => 'This is my Discussion', :body => 'It has content') }
+		setup { @discussion = Factory(:discussion, :title => 'This is my Discussion', :body => 'It has content') }
 
 		should "slug urls" do
 			Discussion.work_safe_urls = false
@@ -44,31 +44,30 @@ class DiscussionTest < ActiveSupport::TestCase
 
 		should "be editable only by poster or users with privileges" do
 			assert @discussion.editable_by?(@discussion.poster)
-			assert @discussion.editable_by?(User.make(:admin))
-			assert @discussion.editable_by?(User.make(:moderator))
-			assert !@discussion.editable_by?(User.make)
-			assert !@discussion.editable_by?(User.make(:user_admin))
+			assert @discussion.editable_by?(Factory(:user, :admin => true))
+			assert @discussion.editable_by?(Factory(:user, :moderator => true))
+			assert !@discussion.editable_by?(Factory(:user))
+			assert !@discussion.editable_by?(Factory(:user, :user_admin => true))
 		end
 
 		should "be postable by anyone if open" do
 			assert @discussion.postable_by?(@discussion.poster)
-			assert @discussion.postable_by?(User.make)
+			assert @discussion.postable_by?(Factory(:user))
 		end
 
 		should "only be postable by admins if closed" do
 			@discussion.update_attribute(:closed, true)
 			assert @discussion.closed?
 			assert !@discussion.postable_by?(@discussion.poster)
-			assert !@discussion.postable_by?(User.make)
-			assert @discussion.postable_by?(User.make(:admin))
-			assert @discussion.postable_by?(User.make(:moderator))
+			assert !@discussion.postable_by?(Factory(:user))
+			assert @discussion.postable_by?(Factory(:user, :admin => true))
+			assert @discussion.postable_by?(Factory(:user, :moderator => true))
 		end
 
 		# Discussion with posts
 		context "with posts" do
 			setup do
-				@user = User.make
-				54.times { @discussion.posts.make(:user => @user) }
+				54.times { Factory(:post, :discussion => @discussion) }
 			end
 
 			should "have posts" do
@@ -95,8 +94,8 @@ class DiscussionTest < ActiveSupport::TestCase
 	
 	context "A discussion in a trusted category" do
 		setup do
-			@category = Category.make(:trusted)
-			@discussion = @category.discussions.make(:title => 'This is my Discussion')
+			@category   = Factory(:trusted_category)
+			@discussion = Factory(:discussion, :category => @category)
 		end
 
 		should "be trusted" do
@@ -109,22 +108,21 @@ class DiscussionTest < ActiveSupport::TestCase
 		end
 
 		should "not be viewable by a regular user" do
-			assert !@discussion.viewable_by?(User.make)
+			assert !@discussion.viewable_by?(Factory(:user))
 		end
 
 		should "should be viewable by a trusted user or admin" do
-			assert @discussion.viewable_by?(User.make(:trusted))
-			assert @discussion.viewable_by?(User.make(:admin))
+			assert @discussion.viewable_by?(Factory(:user, :trusted => true))
+			assert @discussion.viewable_by?(Factory(:user, :admin => true))
 		end
 	end
 	
 	context "A mixed sets of discussions" do
 		setup do
-			@user = User.make
-			@regular_category = Category.make
-			@trusted_category = Category.make(:trusted)
-			35.times { @regular_category.discussions.make(:poster => @user) }
-			35.times { @trusted_category.discussions.make(:poster => @user) }
+			@regular_category = Factory(:category)
+			@trusted_category = Factory(:category, :trusted => true)
+			35.times { Factory(:discussion, :category => @regular_category) }
+			35.times { Factory(:discussion, :category => @trusted_category) }
 		end
 
 		should "be created" do
@@ -133,16 +131,19 @@ class DiscussionTest < ActiveSupport::TestCase
 		end
 
 		should "paginate" do
+			# Find non-trusted discussions and check for pagination
 			discussions = Discussion.find_paginated
 			assert_equal Discussion::DISCUSSIONS_PER_PAGE, discussions.length
 			assert discussions.kind_of?(Pagination::InstanceMethods)
 			assert_equal 35, discussions.total_count
 			assert_equal 2, discussions.pages
 
+			# Find all discussions
 			discussions = Discussion.find_paginated(:trusted => true)
 			assert_equal 70, discussions.total_count
 			assert_equal 3, discussions.pages
 
+			# Find only trusted discussions
 			discussions = Discussion.find_paginated(:trusted => true, :category => @trusted_category)
 			assert_equal 35, discussions.total_count
 			assert_equal 2, discussions.pages

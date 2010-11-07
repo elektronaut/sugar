@@ -24,7 +24,7 @@ var Sugar = {
 				$(this).submit(function(){
 					var data = {
 						username:           $(inputField).val(),
-						authenticity_token: $(form).find("input[name='authenticity_token']").val()
+						authenticity_token: Sugar.authToken(form)
 					};
 					$('#sidebar .participants ul').fadeTo('fast', 0.8);
 					$.post(form.action, data, function(response){
@@ -464,6 +464,19 @@ var Sugar = {
 		'how', 'in', 'is', 'it', 'la', 'my', 'of', 'on', 'or', 'that', 'the',
 		'this', 'to', 'was', 'what', 'when','where','who', 'will', 'with', 'the'
 	],
+	
+	/*
+		Get authenticity token from a form
+	*/
+	authToken : function(elem){
+		var authToken = null;
+		if(elem){
+			authToken = $(elem).find("input[name='authenticity_token']").val();
+		} else {
+			authToken = $("input[name='authenticity_token']").val();
+		}
+		return authToken;
+	},
 	
 	loadNewPosts : function(){
 		if($('#discussionLink').length > 0){

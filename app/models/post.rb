@@ -98,7 +98,7 @@ class Post < ActiveRecord::Base
 			unless body_html?
 				self.update_attribute(:body_html, PostParser.parse(self.body.dup))
 			end
-			self[:body_html]
+			self[:body_html].html_safe
 		end
 	end
 

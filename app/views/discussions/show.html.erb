@@ -1,7 +1,7 @@
 <% 
 	add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
 	add_body_class 'last_page' if @posts.last_page?
-	@page_title = h(@discussion.title)
+	@page_title = @discussion.title
 	previous_post = nil
 -%>
 
@@ -53,7 +53,7 @@
 		
 		<%# Text reply %>
 		<div id="replyText">
-			<% form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
 				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
 				<p id="button-container">
 					<button type="submit">Post</button>

@@ -1,0 +1,96 @@
+<% @page_title = "#{@user.username}" %>
+<div class="page_content user_profile">
+
+	<div class="avatar">
+		<% if @user.avatar_url? %>
+			<%= image_tag @user.avatar_url, :alt => @user.username, :size => '48x48' %>
+		<% else %>
+			<%= image_tag @user.gravatar_url(:size => 48), :alt => @user.username, :size => '48x48' %>
+		<% end %>
+		<h2><%= @user.username %></h2>
+
+		<% unless !@current_user || @user == @current_user %>
+			<p><%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %></p>
+		<% end %>
+	</div>
+
+	<% if @user.banned? %>
+		<p class="banned"><%= @user.username %> is banned!</p>
+	<% end %>
+
+	<table class="userinfo">
+		<% if @user.realname? %><tr>
+			<th>Real name</th>
+			<td><%= @user.realname %></td>
+		</tr><% end %>
+		<% if @user.location? %><tr>
+			<th>Location</th>
+			<td><%= @user.location %></td>
+		</tr><% end %>
+		<% if @user.birthday? %><tr>
+			<th>Birthday</th>
+			<td><%= @user.birthday.strftime("%b %d") %></td>
+		</tr><% end %>
+		<% if @user.website? %><tr>
+			<th>Web site</th>
+			<td><%= link_to @user.website, @user.website %></td>
+		</tr><% end %>
+
+		<% if @user.msn? %><tr>
+			<th>MSN</th>
+			<td><%= @user.msn %></td>
+		</tr><% end %>
+		<% if @user.gtalk? %><tr>
+			<th>Gtalk</th>
+			<td><%= @user.gtalk %></td>
+		</tr><% end %>
+		<% if @user.aim? %><tr>
+			<th>AIM</th>
+			<td><%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}&message=Hello%20from%20#{CGI.escape(Sugar.config(:forum_name))}" %></td>
+		</tr><% end %>
+		<% if @user.twitter? %><tr>
+			<th>Twitter</th>
+			<td><%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %></td>
+		</tr><% end %>
+		<% if @user.flickr? %><tr>
+			<th>Flickr</th>
+			<td><%= link_to @user.flickr, "http://www.flickr.com/photos/#{@user.flickr}/" %></td>
+		</tr><% end %>
+		<% if @user.last_fm? %><tr>
+			<th>Last.fm</th>
+			<td><%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></td>
+		</tr><% end %>
+
+		<% if @user.gamertag? %><tr>
+			<th>Xbox Live</th>
+			<td><%= @user.gamertag %></td>
+		</tr><% end %>
+		<% if @user.inviter %><tr>
+			<th>Invited by</th>
+			<td><%= profile_link(@user.inviter) %></td>
+		</tr><% end %>
+		<tr>
+			<th>Joined</th>
+			<td><%= formatted_time(@user.created_at) %></td>
+		</tr>
+		<tr>
+			<th>Last active</th>
+			<td><%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %></td>
+		</tr>
+		<tr>
+			<th>Discussions</th>
+			<td><%= link_to @user.discussions_count, discussions_user_path(:id => @user.username) %></td>
+		</tr>
+		<tr>
+			<th>Participated</th>
+			<td><%= link_to @user.participated_count, participated_user_path(:id => @user.username) %></td>
+		</tr>
+		<tr>
+			<th>Posts</th>
+			<td><%= @user.posts_count %></td>
+		</tr>
+		<tr>
+			<th>Users invited</th>
+			<td><%= @user.invitees.count %></td>
+		</tr>
+	</table></div>

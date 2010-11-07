@@ -3,18 +3,18 @@
 	@page_title = "Conversations" 
 %>
 
-<% sidebar do %>
+<%= content_for :sidebar do %>
 	<%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
 <div class="functions">
-	<%= link_to "New conversation", new_conversation_path, :class => :add %>
+	<%= link_to "Start a conversation", new_conversation_path, :class => :add %>
 </div>
 
 <h2 class="section"><%= link_to "Conversations", conversations_discussions_path %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {
 	:discussions    => @discussions,
-	:no_discussions => "You don't have any conversations!"
+	:no_discussions => "You aren't part of any conversations."
 } %>
 

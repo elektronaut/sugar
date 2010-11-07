@@ -8,7 +8,7 @@
 	:errors      => @user.errors[:birthday] 
 )%>
 
-<% labelled_field f.text_field(:avatar_url, :size => 80), "Avatar URL", :description => "Enter a link to a 32x32px image", :errors => @user.errors[:avatar_url] do %>
+<%= labelled_field f.text_field(:avatar_url, :size => 80), "Avatar URL", :description => "Enter a link to a 32x32px image", :errors => @user.errors[:avatar_url] do %>
 	Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %> 
 	using your registered email to get an avatar.
 <% end %>

@@ -1,0 +1,14 @@
+<% 
+	@page_title = "Edit post" 
+%>
+
+<div class="page_content">
+	<%= form_for(@post, :url => discussion_post_path(@discussion,@post)) do |f| %>
+		<p>
+			<%= f.text_area(:body, :rows => 10, :id => 'compose-body') %>
+		</p>
+		<p>
+			<%= submit_tag "Save" %>
+		</p>
+	<% end %>
+</div>

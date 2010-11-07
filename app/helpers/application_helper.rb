@@ -35,7 +35,7 @@ module ApplicationHelper
 	#   <% end %>
 	#
 	def labelled_field(field, label=nil, options={}, &block)
-		if options[:errors]
+		if !options[:errors].blank?
 			output  = '<p class="field field_with_errors">'
 		else
 			output  = '<p class="field">'
@@ -51,25 +51,9 @@ module ApplicationHelper
 		output += field
 		output += "<br />"+capture(&block) if block_given?
 		output += "</p>"
-		concat(output, block.binding) if block_given?
-		return output
+		return output.html_safe
 	end
 	
-	# Render a sidebar
-	def sidebar(options={}, &block)
-		@sidebar_content ||= ""
-		@sidebar_content += capture(&block) if block_given?
-		unless @sidebar_content.blank?
-			add_body_class 'with_sidebar'
-		end
-		return @sidebar_content
-	end
-	
-	# Render a sidebar?
-	def sidebar?
-		(@sidebar_content && !@sidebar_content.empty?) ? true : false
-	end
-
 	# Generates avatar image tag for a user
 	def avatar_image_tag(user, size='32')
 		if user.avatar_url?
@@ -86,6 +70,7 @@ module ApplicationHelper
 
 	def body_classes
 		@body_classes ||= []
+		@body_classes << 'with_sidebar' if content_for?(:sidebar) && !@body_classes.include?('with_sidebar')
 		@body_classes.uniq.join(' ')
 	end
 
@@ -167,8 +152,8 @@ module ApplicationHelper
 	end
 
 	def theme_path(theme_name=nil)
-		theme_format = (request.format == :iphone) ? 'iphone' : 'regular'
-		theme_name ||= (request.format == :iphone) ? Sugar.config(:default_iphone_theme) : Sugar.config(:default_theme)
+		theme_format = (request.format == :mobile) ? 'mobile' : 'regular'
+		theme_name ||= (request.format == :mobile) ? Sugar.config(:default_mobile_theme) : Sugar.config(:default_theme)
 		"/themes/#{theme_format}/#{theme_name}"
 	end
 
@@ -185,6 +170,22 @@ module ApplicationHelper
 		else
 			post.page
 		end
+	end
+	
+	def header_tab(name, url, options={})
+		options[:section] ||= name.downcase.to_sym
+		options[:id]      ||= "#{options[:section]}_link"
+		options[:class]   ||= []
+		options[:class]   = [options[:class]] unless options[:class].kind_of?(Array)
+
+		classes = [options[:section].to_s] + options[:class]
+		classes << 'current' if @section == options[:section]
+		
+		content_tag(
+			:li, 
+			link_to(name, url, :id => options[:id]), 
+			:class => classes
+		)
 	end
 
 end

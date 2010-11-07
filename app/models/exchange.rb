@@ -134,7 +134,11 @@ class Exchange < ActiveRecord::Base
 		# * :category - Only get exchanges in this category
 		# * :trusted  - Boolean, get trusted posts as well (default: false)
 		def find_paginated(options={})
-			conditions = options[:category] ? ['category_id = ?', options[:category].id] : []
+			if options[:category]
+				conditions = ['category_id = ?', options[:category].id]
+			else
+				conditions = []
+			end
 
 			# Ignore trusted posts unless requested
 			unless options[:trusted]

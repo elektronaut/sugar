@@ -1,0 +1,21 @@
+<% 
+	@page_title = @discussion.title
+	previous_post = nil
+%>
+
+<div class="posts">
+	<%= render :partial => 'posts/posts', :locals => { :posts => @posts, :post_distance => true } %>
+</div>
+<%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
+
+<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+<div class="reply">
+	<p>
+		<label>Reply</label>
+		<%= f.text_area(:body, :id => 'reply-body') %>
+	</p>
+	<p><%= submit_tag "Post" %></p>
+</div>
+<% end %>
+
+

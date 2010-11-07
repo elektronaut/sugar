@@ -24,7 +24,7 @@
 				<% if post.discussion.labels? %>
 					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
 				<% end %>
-				<%= link_to h(post.discussion.title), paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
+				<%= link_to post.discussion.title, paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
 				<small>
 					Started by <%= profile_link(post.discussion.poster) %>,
 					Last active <%= formatted_time post.discussion.last_post_at %>,

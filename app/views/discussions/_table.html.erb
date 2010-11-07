@@ -1,5 +1,5 @@
 <%
-	no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
+	no_discussions ||= "No discussions here yet. " + (@current_user ? link_to("Create the first!", new_discussion_path) : '')
 	pagination_params ||= {}
 %>
 <% if discussions && discussions.length > 0 %>
@@ -11,7 +11,7 @@
 					<% if d.labels? %>
 						<span class="labels">[<%= d.labels.join(',') %>]</span>
 					<% end %>
-					<%= link_to h(d.title), last_discussion_page_path(d) %>
+					<%= link_to d.title, last_discussion_page_path(d) %>
 				</span></td>
 			</tr>
 			<tr class="<%= discussion_classes(discussions, d) %>">
@@ -24,7 +24,7 @@
 					<% elsif other_participants.length > 3 %>
 						<td class="participants">Conversation with <%= other_participants.length %> participants</td>
 					<% else %>
-						<td class="participants">Conversation with <%= other_participants.map{|p| profile_link(p)}.join(', ') %></td>
+						<td class="participants">Conversation with <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %></td>
 					<% end %>
 				<% else %>
 					<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
@@ -48,5 +48,7 @@
 	</table>
 	<%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
 <% else %>
-	<p><%= no_discussions %></p>
+	<div class="content">
+		<p><%= no_discussions.html_safe %></p>
+	</div>
 <% end %>

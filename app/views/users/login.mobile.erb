@@ -1,0 +1,52 @@
+<%
+	@page_title = "Please log in"
+%>
+
+<div id="login" class="login_box">
+	<%= form_tag(login_users_path, :class => 'form') do %>
+		<p>
+			<label>Username</label>
+			<%= text_field_tag 'username', '', :class => :text %>
+		</p>
+		<p>
+			<label>Password</label>
+			<%= password_field_tag 'password', '', :class => :text %>
+		</p>
+		<p>
+			<label>..or log in using OpenID</label>
+			<%= text_field_tag 'openid_url', '', :class => :text %>
+		</p>
+		<p>
+			<%= submit_tag "Login" %>
+		</p>
+	<% end %>
+</div>
+
+<div id="password-reminder" class="login_box">
+	<%= form_tag(password_reset_users_path, :class => 'form') do %>
+		<p>Enter your email address, and we'll send you a new password.</p>
+		<p>
+			<label>Email</label>
+			<%= text_field_tag 'email', '', :class => :text %>
+		</p>
+		<p>
+			<%= submit_tag "Send" %>
+		</p>
+	<% end %>
+</div>
+
+<div id="login-functions">
+	<p>
+		<%= link_to_function "Password reminder", "forgot_password();" %> 
+		<span class="separator">|</span>
+		<%= link_to "Regular site", :imobile_format => 'html' %>
+	</p>
+</div>
+
+<script type="text/javascript">
+	$('#password-reminder').hide();
+	function forgot_password() {
+		$('#login').toggle();
+		$('#password-reminder').toggle();
+	}
+</script>

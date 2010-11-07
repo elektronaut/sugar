@@ -6,7 +6,7 @@ namespace :sugar do
 			user.generate_password!
 			user.save
 			begin
-				Mailer.deliver_welcome(user)
+				Mailer.welcome(user).deliver
 			rescue
 				puts "Couldn't send message to: #{user.username} - #{user.full_email}"
 			end
@@ -15,7 +15,7 @@ namespace :sugar do
 
 	desc "Pack themes"
 	task :pack_themes do
-		['regular', 'iphone'].each do |theme_format|
+		['regular', 'mobile'].each do |theme_format|
 			themes_dir = File.join(File.dirname(__FILE__), "../../public/themes/#{theme_format}")
 			Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'screen.css'))}.each do |theme|
 				`cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
@@ -38,13 +38,13 @@ namespace :sugar do
 		].map{|f| "public/javascripts/#{f}.js"}.join(" ")
 		`cat #{js_files} > public/javascripts/bundled/application.js`
 
-		puts "Minifying javascript files for the iPhone..."
-		puts `juicer merge --force public/javascripts/iphone.js`
-		js_files = ['vendor/jquery', 'iphone.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
-		`cat #{js_files} > public/javascripts/bundled/iphone.js`
+		puts "Minifying javascript files for mobile..."
+		puts `juicer merge --force public/javascripts/mobile.js`
+		js_files = ['vendor/jquery', 'mobile.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
+		`cat #{js_files} > public/javascripts/bundled/mobile.js`
 		
 		`rm public/javascripts/application.min.js`
-		`rm public/javascripts/iphone.min.js`
+		`rm public/javascripts/mobile.min.js`
 		
 		puts "All done!"
 	end

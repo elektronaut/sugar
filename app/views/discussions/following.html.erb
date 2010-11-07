@@ -3,7 +3,7 @@
 	@page_title = "Followed Discussions" 
 %>
 
-<% sidebar do %>
+<%= content_for :sidebar do %>
 	<%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
@@ -11,6 +11,6 @@
 
 <%= render :partial => 'discussions/table', :locals => {
 	:discussions    => @discussions,
-	:no_discussions => "You aren't following any discussions!"
+	:no_discussions => "You aren't following any discussions."
 } %>
 

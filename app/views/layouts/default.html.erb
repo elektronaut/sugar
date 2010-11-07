@@ -1,62 +1,67 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title><%= [@page_title, Sugar.config(:forum_name)].compact.join(' - ') %></title>
+
+	<%# Stylesheet %>
 	<%= stylesheet_link_tag 'syntax/twilight' %>
-	<% if @current_user && @current_user.stylesheet_url? -%>
+	<% if @current_user && @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
-	<% else -%>
+	<% else %>
 		<%= stylesheet_link_tag "#{theme_path}/screen" %>
-	<% end -%>
-	<% if RAILS_ENV == 'production' -%>
+	<% end %>
+
+	<%# Javascripts %>
+	<% if Rails.env == 'production' %>
 		<%= javascript_include_tag "bundled/application.js" %>
-	<% else -%>
-		<!-- Libraries -->
-		<%= javascript_include_tag "vendor/jquery" %>
-		<%= javascript_include_tag "vendor/jquery.hotkeys.min" %>
-		<%= javascript_include_tag "vendor/jquery.scrollTo.min" %>
-		<%= javascript_include_tag "vendor/jquery.autocomplete.pack" %>
-		<%= javascript_include_tag "vendor/jquery.libraries" %>
-		<%= javascript_include_tag 'vendor/swfobject' %>
-		<%= javascript_include_tag 'vendor/soundmanager2.min' %>
-		<!-- Sugar specific -->
-		<%= javascript_include_tag 'sugar/sugar' %>
-		<%= javascript_include_tag 'sugar/maps' %>
-		<%= javascript_include_tag 'sugar/mp3player' %>
-		<%= javascript_include_tag 'sugar/posts' %>
-		<%= javascript_include_tag 'sugar/hotkeys' %>
-		<%= javascript_include_tag 'sugar/facebook' %>
-		<%= javascript_include_tag 'application' %>
-	<% end -%>
-	<script type="text/javascript">
-		<%= "Sugar.Configuration.debug         = true;" if RAILS_ENV == 'development' %>
+	<% else %>
+		<%=
+			scripts  = %w{jquery jquery.hotkeys.min jquery.scrollTo.min jquery.autocomplete.pack jquery.libraries}.map{|s| "vendor/#{s}"}
+			scripts += %w{swfobject soundmanager2.min}.map{|s| "vendor/#{s}"}
+			scripts += %w{sugar maps mp3player posts hotkeys facebook}.map{|s| "sugar/#{s}"}
+			scripts += %w{application}
+			scripts.map{|s| javascript_include_tag(s)}.join("\n").html_safe
+		%>
+	<% end %>
+
+	<%# Sugar configuration %>
+	<script>
+		<%= "Sugar.Configuration.debug         = true;" if Rails.env == 'development' %>
 		<%= "Sugar.Configuration.FlickrAPI     = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
 		<%= "Sugar.Configuration.hotkeys       = true;" if @current_user && @current_user.keyboard_navigation? %>
 		<%= "Sugar.Configuration.workSafe      = true;" if @current_user && @current_user.work_safe_urls? %>
 		<%= "Sugar.Configuration.FacebookAppId = '#{Sugar.config(:facebook_app_id)}';" if Sugar.config(:facebook_app_id) %>
 	</script>
+
+	<%# Custom javascript %>
 	<% if Sugar.config(:custom_javascript) %>
-		<script type="text/javascript">
-			<%= Sugar.config(:custom_javascript) %>
+		<script>
+			<%= raw Sugar.config(:custom_javascript) %>
 		</script>
 	<% end %>
-	<% if @google_maps_api -%>
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<% end -%>
-	<link rel="icon" type="image/gif" href="<%= theme_path %>/images/favicon.gif" />
+
+	<%# Google Maps API %>
+	<% if @google_maps_api %>
+		<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<% end %>
+
+	<link rel="icon" type="image/gif" href="<%= theme_path %>/images/favicon.gif">
 </head>
 <body class="<%= body_classes %>">
+
+	<%# Custom header %>
 	<% if Sugar.config(:custom_header) %>
-		<%= Sugar.config(:custom_header) %>
+		<%= raw Sugar.config(:custom_header) %>
 	<% end %>
+
 	<div id="header">
 		<h1><%= Sugar.config(:forum_title) %></h1>
+
+		<%# Search form %>
 		<% if @current_user || Sugar.config(:public_browsing) %>
 			<div id="search">
-				<% form_tag((@search_path || search_path), :method => 'get') do %>
+				<%= form_tag((@search_path || search_path), :method => 'get') do %>
 					<%= text_field_tag 'q', @search_query, :class => :query %>
 					<%= select_tag 'search_mode', options_for_select(
 						search_mode_options,
@@ -66,84 +71,124 @@
 				<% end %>
 			</div>
 		<% end -%>
+
+		<%# Account info %>
 		<div id="account">
 			<% if @current_user %>
 				Hello, <%= profile_link(@current_user) %>! 
 				(<%= link_to "Sign out", logout_users_path %>)
 			<% else %>
 				<% if Sugar.config(:signups_allowed) %>
-					<%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %> or
+					<%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %> 
+					or
 				<% end %>
 				<%= link_to "Log in", login_users_path %>
 			<% end %>
 		</div>
+
+		<%# Navigation tabs %>
 		<% if @current_user || Sugar.config(:public_browsing) %>
 			<ul id="navigation">
-				<li class="discussions<%= ' current' if @section == :discussions %>"><%= link_to "Discussions", discussions_path, :id => 'discussions_link' %></li>
+				<%= header_tab 'Discussions', discussions_path %>
 				<% if @current_user %>
-					<li class="following<%= ' current' if @section == :following %>"><%= link_to "Following", following_discussions_path, :id => 'following_link' %></li>
-					<li class="favorites<%= ' current' if @section == :favorites %>"><%= link_to "Favorites", favorites_discussions_path, :id => 'favorites_link' %></li>
+					<%= header_tab 'Following', following_discussions_path %>
+					<%= header_tab 'Favorites', favorites_discussions_path %>
 					<% if @current_user.unread_conversations? %>
-						<li class="new conversations<%= ' current' if @section == :conversations %>"><%= link_to "Conversations (#{@current_user.unread_conversations_count})", conversations_path, :id => 'conversations_link' %></li>
+						<%= header_tab(
+								"Conversations (#{@current_user.unread_conversations_count})", 
+								conversations_path, 
+								:section => :conversations, 
+								:class   => 'new'
+							)
+						%>
 					<% else %>
-						<li class="conversations<%= ' current' if @section == :conversations %>"><%= link_to "Conversations", conversations_path, :id => 'conversations_link' %></li>
+						<%= header_tab 'Conversations', conversations_path %>
 					<% end %>
 				<% end %>
-				<li class="users<%= ' current' if @section == :users %>"><%= link_to "Users", online_users_path, :id => 'users_link' %></li>
-				<% if @current_user %>
-					<% if @current_user.invites? || @current_user.available_invites? -%>
-						<% invites_link_name = (!@current_user.user_admin? && @current_user.available_invites?) ? "Invites (#{@current_user.available_invites})" : "Invites" %>
-						<li class="invites<%= ' current' if @section == :invites %>"><%= link_to invites_link_name, invites_path, :id => 'invites_link' %></li>
+				<%= header_tab 'Users', online_users_path %>
+				<% if @current_user && (@current_user.invites? || @current_user.available_invites?) %>
+					<% if !@current_user.user_admin? && @current_user.available_invites? %>
+						<%= header_tab(
+								"Invites (#{@current_user.available_invites})", 
+								invites_path, 
+								:section => :invites
+							)
+						%>
+					<% else %>
+						<%= header_tab 'Invites', invites_path %>
 					<% end %>
-				<% end -%>
+				<% end %>
 			</ul>
-		<% end -%>
-	</div>
-	<div id="wrapper">
-		<% if flash[:notice] %>
-			<div class="notice"><%= flash[:notice] %></div>
 		<% end %>
-		<% if sidebar? %>
-			<div id="sidebar">
-				<%= sidebar %>
+	</div>
+
+	<div id="wrapper">
+
+		<%# Notice %>
+		<% if flash[:notice] %>
+			<div class="notice">
+				<%= raw flash[:notice] %>
 			</div>
 		<% end %>
+
+		<%# Sidebar %>
+		<% if content_for?(:sidebar) %>
+			<div id="sidebar">
+				<%= yield :sidebar %>
+			</div>
+		<% end %>
+
+		<%# Main content %>
 		<div id="content">
 			<%= yield %>
-			<% if @iphone_user_agent %><div class="iphone_link">
-				<p><%= link_to "iPhone version", :iphone_format => 'iphone' %></p>
-			</div><% end %>
+			<% if @mobile_user_agent %>
+				<div class="mobile_link">
+					<p><%= link_to "mobile version", :mobile_format => 'mobile' %></p>
+				</div>
+			<% end %>
 		</div>
 	</div>
+
+	<%# Custom footer %>
 	<% if Sugar.config(:custom_footer) %>
-		<%= Sugar.config(:custom_footer) %>
+		<%= raw Sugar.config(:custom_footer) %>
 	<% end %>
-<% if Sugar.config(:google_analytics) -%>
-<script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config(:google_analytics) %>"); pageTracker._trackPageview(); } catch(err) {}</script>
-<% end -%>
-<% if Sugar.config(:facebook_app_id) && false -%>
-<div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript">
-	FB.init({appId: '<%= Sugar.config(:facebook_app_id) %>', status: true, cookie: true, xfbml: true});
-	if($.cookie('fb_logout')){
-		$.cookie('fb_logout', null);
-		FB.logout();
-	}
-	FB.Event.subscribe('auth.sessionChange', function(response) {
-		if(response.session){
-			if(window.onFacebookLogin){
-				window.onFacebookLogin();
-			} else {
-				window.location.reload();
+
+	<%# Google Analytics %>
+	<% if Sugar.config(:google_analytics) %>
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', '<%= Sugar.config(:google_analytics) %>']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	<% end %>
+
+	<%# Facebook %>
+	<% if Sugar.config(:facebook_app_id) %>
+		<div id="fb-root"></div>
+		<script src="http://connect.facebook.net/en_US/all.js"></script>
+		<script type="text/javascript">
+			FB.init({appId: '<%= Sugar.config(:facebook_app_id) %>', status: true, cookie: true, xfbml: true});
+			if($.cookie('fb_logout')){
+				$.cookie('fb_logout', null);
+				FB.logout();
 			}
-		}
-	});
-</script>
-<% end -%>
+			FB.Event.subscribe('auth.sessionChange', function(response) {
+				if(response.session){
+					if(window.onFacebookLogin){
+						window.onFacebookLogin();
+					} else {
+						window.location.reload();
+					}
+				}
+			});
+		</script>
+	<% end %>
+	
 </body>
 </html>

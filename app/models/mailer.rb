@@ -4,55 +4,65 @@ class Mailer < ActionMailer::Base
 		Sugar.config(:mail_sender)
 	end
 
-	def default_options
-		@recipients ||= Mailer.default_sender
-		@from       ||= Mailer.default_sender
-		@cc         ||= ""
-		@bcc        ||= ""
-		@subject    ||= ""
-		@body       ||= {}
-		@headers    ||= {}
-		@charset    ||= "utf-8"
-		@sent_on    ||= Time.now
-	end
-
-    def password_reminder(user, login_url)
-        default_options
-		@subject    = "Your login details at #{Sugar.config(:forum_name)}"
-		@body       = { :user => user, :login_url => login_url }
-		@recipients = user.full_email
-	end
-	
+	# Send an invite
 	def invite(invite, login_url)
-		default_options
-		@subject    = "#{invite.user.realname_or_username} has invited you to #{Sugar.config(:forum_name)}!"
-		@body       = {:invite => invite, :login_url => login_url}
-		@recipients = invite.email
+		@invite    = invite
+		@login_url = login_url
+		mail(
+			:to      => @invite.email,
+			:from    => Mailer.default_sender,
+			:subject => "#{@invite.user.realname_or_username} has invited you to #{Sugar.config(:forum_name)}!"
+		)
 	end
 
-    def new_user(user, login_url)
-        default_options
-		@subject    = "Welcome to #{Sugar.config(:forum_name)}!"
-		@body       = { :user => user, :login_url => login_url}
-		@recipients = user.full_email
+	# Notifies user on new message
+	# TODO: This is not in use
+	def new_message(message, url)
+		@message = message
+		@url     = url
+		if message.subject?
+			subject = "Message from #{@message.sender.username}: #{@message.subject}"
+		else
+			subject = "Message from #{@message.sender.username}"
+		end
+		mail(
+			:to      => @message.recipient.full_email,
+			:from    => Mailer.default_sender,
+			:subject => subject
+		)
+	end
+
+	# Send a welcome mail to a new user
+	def new_user(user, login_url)
+		@user      = user
+		@login_url = login_url
+		mail(
+			:to      => @user.full_email,
+			:from    => Mailer.default_sender,
+			:subject => "Welcome to #{Sugar.config(:forum_name)}!"
+		)
     end
     
-	def welcome(user)
-	    default_options
-		@subject    = "Welcome to #{Sugar.config(:forum_name)}!"
-		@body       = { :user => user }
-		@recipients = user.full_email
-    end
-
-	def new_message(message, url)
-		default_options
-		if message.subject?
-			@subject = "Message from #{message.sender.username}: #{message.subject}"
-		else
-			@subject = "Message from #{message.sender.username}"
-		end
-		@body       = {:message => message, :url => url}
-		@recipients = message.recipient.full_email
+	# Send a password reminder
+	def password_reminder(user, login_url)
+		@user      = user
+		@login_url = login_url
+		mail(
+			:to      => @user.full_email,
+			:from    => Mailer.default_sender,
+			:subject => "Your login details at #{Sugar.config(:forum_name)}"
+		)
 	end
+	
+	# Deliver welcome message
+	# TODO: This is not in use
+	def welcome(user)
+		@user = user
+		mail(
+			:to      => @user.full_email,
+			:from    => Mailer.default_sender,
+			:subject => "Welcome to #{Sugar.config(:forum_name)}!"
+		)
+    end
 
 end

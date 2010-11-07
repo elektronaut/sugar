@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
 	layout 'default'
 	helper :all
-	filter_parameter_logging :password, :drawing
 	
 	include ActionView::Helpers::DateHelper
 
@@ -15,7 +14,7 @@ class ApplicationController < ActionController::Base
 	# Filters
 	before_filter :authenticate_session
 	before_filter :facebook_authenticate
-	before_filter :detect_iphone
+	before_filter :detect_mobile
 	before_filter :set_time_zone
 	before_filter :set_section
 	after_filter  :store_session_authentication
@@ -23,13 +22,13 @@ class ApplicationController < ActionController::Base
 	# Shortcut for setting up the authentication filter. Example:
 	#   requires_authentication :except => [:login, :logout, :forgot_password]
 	def self.requires_authentication(*args)
-		append_before_filter(args){ |controller| controller.require_authenticated }
+		self.send(:before_filter, :require_authenticated, *args)
 	end
 
 	# Shortcut for setting up the required user filter. Example:
 	#   requires_user :except => [:login, :logout, :forgot_password]
 	def self.requires_user(*args)
-		append_before_filter(args){ |controller| controller.require_user }
+		self.send(:before_filter, :require_user, *args)
 	end
 
 	# Redirect to login page if authentication is required.
@@ -42,14 +41,24 @@ class ApplicationController < ActionController::Base
 	# Shortcut for setting up the required moderator filter. Example:
 	#   requires_user :except => [:login, :logout, :forgot_password]
 	def self.requires_moderator(*args)
-		append_before_filter(args){ |controller| controller.require_moderator }
+		self.send(:before_filter, :require_moderator, *args)
 	end
 
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
 	def require_user
 		unless @current_user && @current_user.activated?
-			flash[:notice] = 'You must be logged in to to that.'
-			redirect_to login_users_url and return
+			respond_to do |format|
+				format.html do
+					flash[:notice] = 'You must be logged in to to that.'
+					redirect_to login_users_url and return
+				end
+				format.mobile do
+					flash[:notice] = 'You must be logged in to to that.'
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => 'Authentication required', :status => 401 and return }
+				format.xml  { render :xml  => 'Authentication required', :status => 401 and return }
+			end
 		end
 	end
 
@@ -59,8 +68,16 @@ class ApplicationController < ActionController::Base
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
 		unless @current_user == user || @current_user.admin?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+			format.html do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.mobile do
+				flash[:notice] = options[:notice]
+				redirect_to login_users_url and return
+			end
+			format.json { render :json => options[:notice], :status => 401 and return }
+			format.xml  { render :xml  => options[:notice], :status => 401 and return }
 		end
 	end
 
@@ -68,10 +85,20 @@ class ApplicationController < ActionController::Base
 	# unless <tt>@current_user</tt> is <tt>user</tt> or a user admin.
 	def require_user_admin_or_user(user, options={})
 		options[:redirect] ||= discussions_path
-		options[:notice] ||= "You don't have permission to do that!"
+		options[:notice]   ||= "You don't have permission to do that!"
 		unless @current_user == user || @current_user.user_admin?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+			respond_to do |format|
+				format.html do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.mobile do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => options[:notice], :status => 401 and return }
+				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+			end
 		end
 	end
 
@@ -80,21 +107,46 @@ class ApplicationController < ActionController::Base
 	def require_moderator(options={})
 		options[:redirect] ||= discussions_path
 		options[:notice] ||= "You don't have permission to do that!"
-		unless @current_user.moderator?
-			flash[:notice] = options[:notice]
-			redirect_to options[:redirect] and return
+		unless @current_user && @current_user.moderator?
+			respond_to do |format|
+				format.html do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.mobile do
+					flash[:notice] = options[:notice]
+					redirect_to login_users_url and return
+				end
+				format.json { render :json => options[:notice], :status => 401 and return }
+				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+			end
 		end
 	end
 
 	protected
+	
+		# Renders an error
+		def render_error(error, options={})
+			options[:status] ||= error if error.kind_of?(Numeric)
+			error_messages = {
+				404 => 'Not found'
+			}
+			respond_to do |format|
+				format.html   {options[:template] ||= "errors/#{error}"}
+				format.mobile {options[:template] ||= "errors/#{error}"}
+				format.xml    {options[:text] ||= error_messages[error]}
+				format.json   {options[:text] ||= error_messages[error]}
+			end
+			render options
+		end
 
-		# Detects the iPhone user agent string and sets <tt>request.format = :iphone</tt>.
-		def detect_iphone
-			@iphone_user_agent = (request.host =~ /^(iphone|m)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/])) ? true : false
-			if @iphone_user_agent
-				session[:iphone_format] ||= 'iphone'
-				session[:iphone_format] = params[:iphone_format] if params[:iphone_format]
-				request.format = :iphone if session[:iphone_format] == 'iphone'
+		# Detects the mobile user agent string and sets <tt>request.format = :mobile</tt>.
+		def detect_mobile
+			@mobile_user_agent = (request.host =~ /^(iphone|m|mobile)\./ || (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/])) ? true : false
+			if @mobile_user_agent
+				session[:mobile_format] ||= 'mobile'
+				session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
+				request.format = :mobile if session[:mobile_format] == 'mobile'
 			end
 		end
 		
@@ -118,11 +170,11 @@ class ApplicationController < ActionController::Base
 		end
 
 		# Finds DiscussionViews for @discussion.
-		def find_discussion_views
-			if @current_user && @discussions && @discussions.length > 0
+		def load_views_for(discussions)
+			if @current_user && discussions && discussions.length > 0
 				@discussion_views = DiscussionView.find(
 					:all,
-					:conditions => {:user_id => @current_user.id, :discussion_id => @discussions.map(&:id).uniq}
+					:conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
 				)
 			end
 		end
@@ -131,7 +183,7 @@ class ApplicationController < ActionController::Base
 		def openid_consumer
 			require 'openid/store/filesystem'
 			@openid_consumer ||= OpenID::Consumer.new(session,      
-				OpenID::Store::Filesystem.new("#{RAILS_ROOT}/tmp/openid"))
+				OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
 	    end
 	
 		# Loads and authenticates @current_user from session. Will fail
@@ -181,7 +233,6 @@ class ApplicationController < ActionController::Base
 
 		# Stores authentication credentials in the session.
 		def store_session_authentication
-			session.delete(:ips) if session.has_key?(:ips) # TODO: Remove this later
 			if @current_user
 				session[:user_id]         = @current_user.id
 				session[:hashed_password] = @current_user.hashed_password

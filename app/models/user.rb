@@ -1,5 +1,5 @@
 require 'digest/sha1'
-require 'md5'
+require 'digest/md5'
 
 # = User accounts
 #
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for Facebook and OpenID users
-	before_validation_on_create do |user|
+	before_validation(:on => :create) do |user|
 		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end
@@ -390,7 +390,7 @@ class User < ActiveRecord::Base
 		options[:size] ||= 24
 		@gravatar_url ||= {}
 		unless @gravatar_url[options[:size]]
-			gravatar_hash = MD5::md5(self.email)
+			gravatar_hash = Digest::MD5.hexdigest(self.email)
 			@gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=any"
 		end
 		@gravatar_url[options[:size]]

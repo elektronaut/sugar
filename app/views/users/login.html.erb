@@ -9,7 +9,7 @@
 
 <div id="login">
 
-	<% form_tag(login_users_path, :class => 'form username_and_password') do %>
+	<%= form_tag(login_users_path, :class => 'form username_and_password') do %>
 		<fieldset>
 			<label>Username</label>
 			<%= text_field_tag 'username', '', :class => :text %>
@@ -20,14 +20,14 @@
 		</fieldset>
 		<fieldset>
 			<button type="submit">Sign in</button>
-			<%= link_to "<strong>Help!</strong> I forgot my password!", password_reset_users_path, :class => 'password_reset' %>
+			<%= link_to("<strong>Help!</strong> I forgot my password!".html_safe, password_reset_users_path, :class => 'password_reset') %>
 		</fieldset>
 		<p>
 			<button class="openid_toggle" type="button">Sign in with OpenID</button>
 		</p>
 	<% end %>
 	
-	<% form_tag(login_users_path, :class => 'form openid') do %>
+	<%= form_tag(login_users_path, :class => 'form openid') do %>
 		<fieldset>
 			<label>OpenID URL</label>
 			<%= text_field_tag 'openid_url', '', :class => :text %>

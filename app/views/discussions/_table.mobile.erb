@@ -1,0 +1,40 @@
+<%
+	no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
+	pagination_params ||= {}
+%>
+<% if discussions && discussions.length > 0 %>
+	<div class="discussions">
+		<% @discussions.each do |d| %><div class="discussion <%= discussion_classes(discussions, d) %>">
+			<% if new_posts?(d) %>
+				<div class="new_posts_count"><%= new_posts_count(d) %></div>
+			<% end %>
+			<h2>
+				<% if d.labels? %>
+					<span class="labels">[<%= d.labels.join(',') %>]</span>
+				<% end %>
+				<%= link_to d.title, last_discussion_page_path(d) %>
+			</h2>
+			<p>
+				<% if d.kind_of?(Conversation) %>
+					<% 
+						other_participants = d.participants.reject{|p| p == @current_user}
+					%>
+					<% if other_participants.length == 0 %>
+						With nobody,
+					<% elsif other_participants.length > 2 %>
+						With <%= other_participants.length %> participants,
+					<% else %>
+						With <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %>,
+					<% end %>
+				<% else %>
+					By <%= d.poster.username %>,
+				<% end %>
+				<%= d.posts_count %> posts.
+				Last: <%= d.last_poster.username %> <%= formatted_time d.last_post_at %>
+			</p>
+		</div><% end %>
+	</div>
+	<%= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
+<% else %>
+	<p><%= no_discussions %></p>
+<% end %>

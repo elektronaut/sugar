@@ -1,0 +1,10 @@
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<h2 class="section">Sorry, but you don't have permission to view that page</h2>
+<div class="error_message">
+	<p>
+		<%= link_to "Go back to Discussions", discussions_path %>.
+	</p>
+</div>

@@ -107,16 +107,16 @@ label .description {
 	color:               #555;
 }
 input#openid_url, input#user_openid_url {
-	background: #fff url(images/login_openid.gif) no-repeat;
-	padding-left: 20px;
+	background: #fff url(images/login_openid.gif) 3px 3px no-repeat;
+	padding-left: 22px;
 }
 
 a, a:visited {
 	text-decoration:     none;
-	color:               #05506d;
+	color:               #622;
 }
 a:hover {
-	color:               #3b8fa8;
+	color:               #c22;
 }
 
 /* Damn you, Firefox */
@@ -234,7 +234,7 @@ span.example {
 	color:               #000;
 }
 
-.iphone_link {
+.mobile_link {
 	font-size:           15px;
 	margin-top:          15px;
 	font-weight:         bold;
@@ -259,6 +259,12 @@ span.example {
 	float:               right;
 }
 
+.content {
+	font-size:           1.3em;
+}
+.content a {
+	text-decoration:     underline;
+}
 
 /* -----------------------------------------------------------------------
    RICH TEXT EDITOR
@@ -350,6 +356,8 @@ h2.section, #sidebar h2 {
 	font-size:           4em;
 	font-weight:         bold;
 	margin:              15px 0 0 20px;
+	text-shadow:         #aaa 1px 1px 1px;
+	letter-spacing:      -0.03em;
 }
 #search {
 	position:            absolute;
@@ -361,15 +369,15 @@ h2.section, #sidebar h2 {
 	bottom:              2px;
 	right:               20px;
 	font-size:           1.2em;
-	color:               #def;
+	color:               #555;
 }
 #account a, #account a:visited {
-	color:               #def;
+	color:               #555;
 	font-weight:         bold;
 	text-decoration:     underline;
 }
 #account a:hover {
-	color:               #fff;
+	color:               #333;
 }
 #navigation {
 	margin:              0;
@@ -389,20 +397,22 @@ h2.section, #sidebar h2 {
 	margin:              0;
 	text-decoration:     none;
 	padding:             1px 10px 1px 10px;
-	background:          #3589a2 url(images/tab_bg.png) repeat-x;
-	border:              1px solid #5eb1c7;
-	border-bottom:       1px solid #023850;
+	background:          #888 url(images/tab_bg.png) repeat-x;
+	border:              1px solid #787878;
+	border-bottom:       1px solid #666;
 	color:               #fff;
 }
 #navigation li a:hover {
-	background:          #529fb8 url(images/tab_hover_bg.png) repeat-x;
+	background:          #666 url(images/tab_hover_bg.png) repeat-x;
+	border:              1px solid #666;
+	border-bottom:       1px solid #666;
 	color:               #fff;
 }
 #navigation li.current a, #navigation li.current a:visited {
 	background:          #f9f9f9 url(images/tab_current_bg.png) repeat-x;
 	padding-top:         2px;
 	color:               #000;
-	border:              1px solid #5eb1c7;
+	border:              1px solid #aaa;
 	border-bottom:       1px solid #f9f9f9;
 	font-weight:         bold;
 }
@@ -429,6 +439,9 @@ h2.section, #sidebar h2 {
 	padding:             10px 30px;
 	font-size:           1.4em;
 	font-weight:         bold;
+}
+.error_message {
+	font-size:           1.4em;
 }
 
 #wrapper {
@@ -485,7 +498,8 @@ h2.section, #sidebar h2 {
 }
 .topTabs li.active a {
 	background:          #05506d;
-	border:              1px solid #05506d;
+	background:          #622;
+	border:              1px solid #622;
 	color:               #fff;
 }
 
@@ -540,7 +554,7 @@ body.with_sidebar #content {
 	padding-top:         3px;
 }
 #sidebar .categories li.current a {
-	color:               #3b8fa8;
+	color:               #c22;
 	font-size:           1.2em;
 	font-weight:         bold;
 }
@@ -762,6 +776,9 @@ table.discussions .targeted td.name {
 .post .body ul {
 	list-style-type:     disc;
 	list-style-position: inside;
+}
+.post .body .content {
+	font-size:           1em;
 }
 
 .me_post {
@@ -1062,9 +1079,6 @@ span.admin {
    INVITES SECTION
    ----------------------------------------------------------------------- */
 
-.invites p {
-	font-size:           1.2em;
-}
 .invites_list .email {
 	font-weight:         bold;
 }

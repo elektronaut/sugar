@@ -39,7 +39,7 @@
 
 <% if @current_user %>
 	<div class="buttons">
-		<p><%= link_to "Create a new discussion", new_discussion_path(:category_id => (@category ? @category : nil)), :class => 'create button' %></p>
+		<p><%= link_to "Start a new discussion", new_discussion_path(:category_id => (@category ? @category : nil)), :class => 'create button' %></p>
 	</div>
 <% end %>
 

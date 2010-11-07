@@ -29,6 +29,12 @@ class Category < ActiveRecord::Base
 	end
 
 	class << self
+		
+		# Finds all categories viewable by the given user
+		def find_viewable_by(user=nil)
+			self.all(:order => :position).select{|c| c.viewable_by?(user)}
+		end
+		
 		# Enable work safe URLs
 		def work_safe_urls=(state)
 			@@work_safe_urls = state
@@ -76,4 +82,11 @@ class Category < ActiveRecord::Base
 			Category.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
 		end
 	end
+	
+	if ENV['RAILS_ENV'] == 'test'
+		def discussions_count
+			self.discussions.count
+		end 
+	end
+	
 end

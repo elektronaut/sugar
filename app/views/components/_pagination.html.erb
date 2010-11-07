@@ -4,7 +4,7 @@
 %>
 <div class="pagination">
 	<% if p.pages > 1 %><div class="links">
-		<%= link_to_if p.previous_page, "&lt; Prev", {:page => p.previous_page, :anchor => anchor}.merge(pagination_params), :class => :prev_page_link %>
+		<%= link_to_if p.previous_page, "&lt; Prev".html_safe, {:page => p.previous_page, :anchor => anchor}.merge(pagination_params), :class => :prev_page_link %>
 
 		<% nearest_pages = p.nearest_pages(9) %>
 		<% if nearest_pages.first > 1 %>
@@ -19,7 +19,7 @@
 			<%= link_to_unless (p.page == p.last_page), "#{p.last_page}", {:page => p.last_page, :anchor => anchor}.merge(pagination_params) %>
 		<% end %>
 
-		<%= link_to_if p.next_page,     "Next &gt;", {:page => p.next_page, :anchor => anchor}.merge(pagination_params), :class => :next_page_link %>
+		<%= link_to_if p.next_page,     "Next &gt;".html_safe, {:page => p.next_page, :anchor => anchor}.merge(pagination_params), :class => :next_page_link %>
 	</div><% end %>
 	<%= p.offset + 1 %> to <span class="shown_items_count"><%= p.offset + p.length %></span> of <span class="total_items_count"><%= p.total_count %></span>
 </div>
