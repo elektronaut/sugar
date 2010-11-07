@@ -3,6 +3,7 @@
 log/*.log
 log/*.pid
 tmp/**/*
+tmp/*
 doc/api
 doc/plugins
 doc/app
