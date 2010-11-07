@@ -97,7 +97,7 @@ Sugar::Application.routes.draw do
 				post 'doodle'
 				get  'count'
 				get  'since'
-				get  'preview'
+				post 'preview'
 			end
 		end
 	end
