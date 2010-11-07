@@ -168,27 +168,5 @@
 		</script>
 	<% end %>
 
-	<%# Facebook %>
-	<% if Sugar.config(:facebook_app_id) %>
-		<div id="fb-root"></div>
-		<script src="http://connect.facebook.net/en_US/all.js"></script>
-		<script type="text/javascript">
-			FB.init({appId: '<%= Sugar.config(:facebook_app_id) %>', status: true, cookie: true, xfbml: true});
-			if($.cookie('fb_logout')){
-				$.cookie('fb_logout', null);
-				FB.logout();
-			}
-			FB.Event.subscribe('auth.sessionChange', function(response) {
-				if(response.session){
-					if(window.onFacebookLogin){
-						window.onFacebookLogin();
-					} else {
-						window.location.reload();
-					}
-				}
-			});
-		</script>
-	<% end %>
-	
 </body>
 </html>
