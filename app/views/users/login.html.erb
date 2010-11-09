@@ -26,8 +26,8 @@
 			<button class="openid_toggle" type="button">Sign in with OpenID</button>
 		</p>
 	<% end %>
-	
-	<%= form_tag(login_users_path, :class => 'form openid') do %>
+
+	<%= form_tag(openid_path, :class => 'form openid') do %>
 		<fieldset>
 			<label>OpenID URL</label>
 			<%= text_field_tag 'openid_url', '', :class => :text %>

@@ -4,7 +4,6 @@ Bugs/issues:
 
 Before launch:
 
-* Clean up and centralize the OpenID verification actions.
 * Finish up the optional approval of signups functionality
 * Clean up configuration files
 * Documentation

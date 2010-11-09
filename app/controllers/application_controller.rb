@@ -179,26 +179,57 @@ class ApplicationController < ActionController::Base
 			end
 		end
 
-		# Gets the OpenID consumer, creates it if necessary.
+		# Returns an OpenID consumer, creating it if necessary
 		def openid_consumer
 			require 'openid/store/filesystem'
 			@openid_consumer ||= OpenID::Consumer.new(session,      
 				OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
-	    end
+		end
 	
+		# Starts an OpenID session
+		def start_openid_session(identity_url, options={})
+			options[:success] ||= root_path
+			options[:fail]    ||= login_users_path
+			session[:openid_redirect_success] = options[:success]
+			session[:openid_redirect_fail]    = options[:fail]
+
+			response = openid_consumer.begin(identity_url) rescue nil
+			if response #&& response.status == OpenID::SUCCESS
+				perform_openid_authentication(response, options)
+				return true
+			else
+				return false
+			end
+		end
+
+		# Performs the OpenID authentication
+		def perform_openid_authentication(response, options={})
+			options = {
+				:url       => complete_openid_url,
+				:base_url  => root_url,
+				:immediate => false
+			}.merge(options)
+			redirect_to response.redirect_url(options[:base_url], options[:url], options[:immediate])
+		end
+
 		# Loads and authenticates @current_user from session. Will fail
 		# if the password has been changed. This is a feature.
 		def authenticate_session
-			if session[:user_id] && session[:hashed_password]
+			if session[:authenticated_openid_url]
+				user = User.find_by_openid_url(session[:authenticated_openid_url])
+			end
+			if !user && session[:user_id] && session[:hashed_password]
 				user = User.find(session[:user_id]) rescue nil
-				if user && session[:hashed_password] == user.hashed_password && !user.banned? && user.activated?
-					if user.temporary_banned?
-						flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now - user.banned_until)}!"
-					else
-						@current_user = user
-						Discussion.work_safe_urls = user.work_safe_urls?
-						Category.work_safe_urls   = user.work_safe_urls?
-					end
+				user = nil unless user && session[:hashed_password] == user.hashed_password
+			end
+			
+			if user && !user.banned? && user.activated?
+				if user.temporary_banned?
+					flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now - user.banned_until)}!"
+				else
+					@current_user = user
+					Discussion.work_safe_urls = user.work_safe_urls?
+					Category.work_safe_urls   = user.work_safe_urls?
 				end
 			end
 		end
@@ -229,6 +260,7 @@ class ApplicationController < ActionController::Base
 		# Deauthenticates the current user
 		def deauthenticate!
 			@current_user = nil
+			session[:authenticated_openid_url] = nil
 			store_session_authentication
 		end
 

@@ -1,5 +1,12 @@
 Sugar::Application.routes.draw do
 
+	# OpenID
+	resource :openid, :controller => 'openid' do
+		member do
+			get 'complete'
+		end
+	end
+
 	# Search discussions
 	match '/search/:query.:format' => 'discussions#search', :as => :formatted_search_with_query
 	match '/search/:query'         => 'discussions#search', :as => :search_with_query
@@ -14,22 +21,12 @@ Sugar::Application.routes.draw do
 
 	# Users
 	resources :users do
-		member do
-			#get 'participated'
-			#get 'discussions'
-			#get 'posts'
-			#get 'update_openid'
-			#get 'grant_invite'
-			#get 'revoke_invites'
-			#get 'stats'
-		end
 		collection do
 			get 'login'
 			post 'login'
 			get 'logout'
 			get 'password_reset'
 			post 'password_reset'
-			get 'complete_openid_login'
 			get 'facebook_login'
 			get 'connect_facebook'
 			get 'disconnect_facebook'
