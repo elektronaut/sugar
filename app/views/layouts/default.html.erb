@@ -56,7 +56,7 @@
 	<% end %>
 
 	<div id="header">
-		<h1><%= Sugar.config(:forum_title) %></h1>
+		<h1><%= Sugar.config(:forum_title).html_safe %></h1>
 
 		<%# Search form %>
 		<% if @current_user || Sugar.config(:public_browsing) %>
