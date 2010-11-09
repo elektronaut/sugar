@@ -1,13 +1,10 @@
 Bugs/issues:
 
 * Fix code blocks parsing
-* Do not show available invites for user admins
 
 Before launch:
 
-* Upgrade to Rails 3
 * Clean up and centralize the OpenID verification actions.
-* If there aren't any users registered: One should be able to sign up and be set as admin
 * Finish up the optional approval of signups functionality
 * Clean up configuration files
 * Documentation
