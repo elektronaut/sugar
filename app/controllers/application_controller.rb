@@ -44,6 +44,12 @@ class ApplicationController < ActionController::Base
 		self.send(:before_filter, :require_moderator, *args)
 	end
 
+	# Shortcut for setting up the required user admin filter. Example:
+	#   requires_user :except => [:login, :logout, :forgot_password]
+	def self.requires_user_admin(*args)
+		self.send(:before_filter, :require_user_admin, *args)
+	end
+
 	# Redirect to login page unless <tt>@current_user</tt> is activated. 
 	def require_user
 		unless @current_user && @current_user.activated?
@@ -106,16 +112,29 @@ class ApplicationController < ActionController::Base
 	# unless <tt>@current_user</tt> is a moderator
 	def require_moderator(options={})
 		options[:redirect] ||= discussions_path
-		options[:notice] ||= "You don't have permission to do that!"
+		options[:notice]   ||= "You don't have permission to do that!"
 		unless @current_user && @current_user.moderator?
 			respond_to do |format|
-				format.html do
+				format.any(:html, :mobile) do
 					flash[:notice] = options[:notice]
-					redirect_to login_users_url and return
+					redirect_to options[:redirect] and return
 				end
-				format.mobile do
+				format.json { render :json => options[:notice], :status => 401 and return }
+				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+			end
+		end
+	end
+
+	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
+	# unless <tt>@current_user</tt> is a user admin
+	def require_user_admin(options={})
+		options[:redirect] ||= discussions_path
+		options[:notice]   ||= "You don't have permission to do that!"
+		unless @current_user && @current_user.user_admin?
+			respond_to do |format|
+				format.any(:html, :mobile) do
 					flash[:notice] = options[:notice]
-					redirect_to login_users_url and return
+					redirect_to options[:redirect] and return
 				end
 				format.json { render :json => options[:notice], :status => 401 and return }
 				format.xml  { render :xml  => options[:notice], :status => 401 and return }

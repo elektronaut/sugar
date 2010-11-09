@@ -24,7 +24,7 @@ class InvitesControllerTest < ActionController::TestCase
 			should set_the_flash
 			should respond_with(:redirect)
 			should 'redirect back to invites' do
-				assert_redirected_to invites_path
+				assert_redirected_to discussions_path
 			end
 		end
 	end

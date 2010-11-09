@@ -2,6 +2,7 @@ class InvitesController < ApplicationController
 
 	requires_authentication :except => [:accept]
 	requires_user           :except => [:accept]
+	requires_user_admin     :only   => [:all]
     
 	respond_to :html, :mobile, :xml, :json
 
@@ -43,7 +44,6 @@ class InvitesController < ApplicationController
 
 		# Show everyone's invites
 		def all
-			require_user_admin_or_user(nil, :redirect => invites_url)
 			respond_with(@invites = Invite.find_active)
 		end
 
