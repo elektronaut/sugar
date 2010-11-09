@@ -3,13 +3,14 @@
 	@page_title = "Followed Discussions" 
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
 <h2 class="section"><%= link_to "Followed Discussions", following_discussions_path %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {
 	:discussions    => @discussions,
-	:no_discussions => "You aren't following any discussions!"
+	:no_discussions => "You aren't following any discussions."
 } %>
 

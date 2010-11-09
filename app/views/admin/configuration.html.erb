@@ -16,7 +16,7 @@
 </ul>
 
 
-<% form_tag configuration_admin_path do %>
+<%= form_tag configuration_admin_path do %>
 
 	<div id="general">
 		<fieldset>
@@ -53,14 +53,14 @@
 			<h2>Login and signup</h2>
 			<%= labelled_field(
 					radio_button_tag('config[public_browsing]', true, Sugar.config(:public_browsing)) +
-					" Anyone can browse<br />" +
+					" Anyone can browse<br />".html_safe +
 					radio_button_tag('config[public_browsing]', false, !Sugar.config(:public_browsing)) +
 					" Browsing requires login",
 					"Access control"
 			) %>
 			<%= labelled_field(
 					radio_button_tag('config[signups_allowed]', true, Sugar.config(:public_browsing)) +
-					" Users can sign up<br />" +
+					" Users can sign up<br />".html_safe +
 					radio_button_tag('config[signups_allowed]', false, !Sugar.config(:signups_allowed)) +
 					" Users must be invited",
 					"Signing up"
@@ -84,7 +84,7 @@
 		<fieldset>
 			<h2>Themes</h2>
 			<%= labelled_field text_field_tag('config[default_theme]', Sugar.config(:default_theme), :size => 32), "Default theme" %>
-			<%= labelled_field text_field_tag('config[default_iphone_theme]', Sugar.config(:default_iphone_theme), :size => 32), "Default iPhone theme" %>
+			<%= labelled_field text_field_tag('config[default_mobile_theme]', Sugar.config(:default_mobile_theme), :size => 32), "Default mobile theme" %>
 		</fieldset>
 	</div>
 	<div id="integration">
@@ -130,7 +130,5 @@
 		</fieldset>
 	</div>
 
-	<p>
-		<%= submit_tag "Save" %>
-	</p>
+	<p><button type="submit">Save</button></p>
 <% end %>

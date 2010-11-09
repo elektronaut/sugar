@@ -2,6 +2,7 @@
 
 Sugar is a free, open-source forum optimized for performance and usability, written in Ruby on Rails.
 
+
 == Features
 
 Sugar aims for simplicity, and is first and foremost built for performance, especially with a high volume of posts. There's a few interesting bullet points, though:
@@ -26,19 +27,20 @@ Things you *WON'T* find in Sugar:
 * User groups and access control lists
 * Emoticons and signatures
 
+
 == Requirements, and how to install them
 
-Sugar is currently targetting version 2.3.2 of Ruby on Rails, to install it on any system with Rubygems installed (including Mac OSX 10.5), type:
-  
- sudo gem install rails -v 2.3.2
+Sugar is written in Ruby on Rails 3.0. Ruby 1.8.7 is supported, Ruby 1.9 isn't completely tested, but should work to my knowledge.
 
-You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Remember to install the appropriate gems for your DBM of choice.
+First, make sure you have the Oniguruma (http://www.geocities.jp/kosako3/oniguruma) and Sphinx (http://www.sphinxsearch.com) libraries installed. 
 
-You'll also want to install the Oniguruma (http://www.geocities.jp/kosako3/oniguruma) and Sphinx (http://www.sphinxsearch.com) libraries.
+You'll also need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choise.
 
-Finally, to install the rest of the required gems, do: 
+Finally, install Bundler (if you haven't) and use it to install the rest of the required gems:
 
- sudo rake gems:install
+ gem install bundler
+ bundle install
+
 
 == Installation
 
@@ -49,13 +51,15 @@ Copy database.yml.init to database.yml in the config directory, then edit it and
 
 You're now ready to start the development server:
 
- ruby script/server
+ rails server
+
 
 == Credits
 
 Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com).
 
 The name? It's what Butterscotch is made of, and it's totally sweet.
+
 
 == License
 

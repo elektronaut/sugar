@@ -1,120 +1,147 @@
-ActionController::Routing::Routes.draw do |map|
+Sugar::Application.routes.draw do
 
-    # Discussions search
-	#map.connect '/search/:query/:page', :controller => 'discussions', :action => 'search'
-	map.formatted_search_with_query '/search/:query.:format', :controller => 'discussions', :action => 'search'
-	map.search_with_query '/search/:query', :controller => 'discussions', :action => 'search'
-	map.search  '/search', :controller => 'discussions', :action => 'search'
+	# Search discussions
+	match '/search/:query.:format' => 'discussions#search', :as => :formatted_search_with_query
+	match '/search/:query'         => 'discussions#search', :as => :search_with_query
+	match '/search'                => 'discussions#search', :as => :search
 
-    # Posts search
-	map.connect '/posts/search/:query/:page', :controller => 'posts', :action => 'search'
-    map.connect '/posts/search/*query', :controller => 'posts', :action => 'search'
-    map.search_posts '/posts/search', :controller => 'posts', :action => 'search'
+	# Search posts
+	match '/posts/search/:query' => 'posts#search'
+	match '/posts/search' => 'posts#search', :as => :search_posts
 
-	map.connect '/discussions/:id/search_posts/*query', :controller => 'discussions', :action => 'search_posts'
+	# Search posts in discussion
+	match '/discussions/:id/search_posts/:query' => 'discussions#search_posts'
 
 	# Users
-    map.resources(
-        :users,
-        :member => {
-			:participated   => :get, 
-			:discussions    => :get, 
-			:posts          => :get, 
-			:update_openid  => :any,
-			:grant_invite   => :any,
-			:revoke_invites => :any,
-			:stats          => :any
-		},
-        :collection => { 
-			:login                 => :any,
-			:logout                => :any, 
-			:password_reset        => :any, 
-			:complete_openid_login => :any,
-			:facebook_login        => :any,
-			:connect_facebook      => :any,
-			:disconnect_facebook   => :any,
-			# Lists
-			:xboxlive              => :get, 
-			:twitter               => :get, 
-			:online                => :get, 
-			:recently_joined       => :get,
-			:admins                => :get,
-			:top_posters           => :get,
-			:trusted               => :get,
-			:map                   => :get,
-			:banned                => :any
-		}
-    )
-	map.grant_invite_user   '/users/profile/:id/grant_invite',       :controller => 'users', :action => 'grant_invite'
-	map.revoke_invites_user '/users/profile/:id/revoke_invites',     :controller => 'users', :action => 'revoke_invites'
-	map.update_openid_user  '/users/profile/:id/update_openid',      :controller => 'users', :action => 'update_openid'
-	map.edit_user           '/users/profile/:id/edit',               :controller => 'users', :action => 'edit'
-	map.edit_user_page      '/users/profile/:id/edit/:page',         :controller => 'users', :action => 'edit'
-	map.user_profile        '/users/profile/:id',                    :controller => 'users', :action => 'show'
-    map.discussions_user    '/users/profile/:id/discussions',        :controller => 'users', :action => 'discussions'
-    map.connect             '/users/profile/:id/discussions/:page',  :controller => 'users', :action => 'discussions'
-    map.participated_user   '/users/profile/:id/participated',       :controller => 'users', :action => 'participated'
-    map.connect             '/users/profile/:id/participated/:page', :controller => 'users', :action => 'participated'
-    map.posts_user          '/users/profile/:id/posts',              :controller => 'users', :action => 'posts'
-    map.paged_user_posts    '/users/profile/:id/posts/:page',        :controller => 'users', :action => 'posts'
-    map.stats_user          '/users/profile/:id/stats',              :controller => 'users', :action => 'stats'
-	map.new_user_by_token   '/users/new/:token',                     :controller => 'users', :action => 'new'
+	resources :users do
+		member do
+			#get 'participated'
+			#get 'discussions'
+			#get 'posts'
+			#get 'update_openid'
+			#get 'grant_invite'
+			#get 'revoke_invites'
+			#get 'stats'
+		end
+		collection do
+			get 'login'
+			post 'login'
+			get 'logout'
+			get 'password_reset'
+			post 'password_reset'
+			get 'complete_openid_login'
+			get 'facebook_login'
+			get 'connect_facebook'
+			get 'disconnect_facebook'
+
+			get 'xboxlive'
+			get 'twitter'
+			get 'online'
+			get 'recently_joined'
+			get 'admins'
+			get 'top_posters'
+			get 'trusted'
+			get 'map'
+			get 'banned'
+		end
+	end
+
+	controller :users do
+		match '/users/profile/:id/grant_invite'       => :grant_invite,   :as => :grant_invite_user
+		match '/users/profile/:id/revoke_invites'     => :revoke_invites, :as => :revoke_invites_user
+		match '/users/profile/:id/update_openid'      => :update_openid,  :as => :update_openid_user
+		match '/users/profile/:id/edit'               => :edit,           :as => :edit_user
+		match '/users/profile/:id/edit/:page'         => :edit,           :as => :edit_user_page
+		match '/users/profile/:id'                    => :show,           :as => :user_profile
+		match '/users/profile/:id/discussions'        => :discussions,    :as => :discussions_user
+		match '/users/profile/:id/discussions/:page'  => :discussions
+		match '/users/profile/:id/participated'       => :participated,   :as => :participated_user
+		match '/users/profile/:id/participated/:page' => :participated
+		match '/users/profile/:id/posts'              => :posts,          :as => :posts_user
+		match '/users/profile/:id/posts/:page'        => :posts,          :as => :paged_user_posts
+		match '/users/profile/:id/stats'              => :stats,          :as => :stats_user
+		match '/users/new/:token'                     => :new,            :as => :new_user_by_token
+	end
 
 	# Categories
-    map.resources(
-        :categories
-    )
-    map.connect '/categories/:id/:page', :controller => 'categories', :action => 'show'
-
-	# Messages
-    map.resources(
-        :messages,
-        :collection => { :outbox => :any, :conversations => :any }
-    )
-    map.paged_messages              '/messages/inbox/:page', :controller => 'messages', :action => 'index'
-    map.paged_sent_messages         '/messages/outbox/:page', :controller => 'messages', :action => 'outbox'
-    map.user_conversation           '/messages/conversations/:username', :controller => 'messages', :action => 'conversations'
-    map.paged_user_conversation     '/messages/conversations/:username/:page', :controller => 'messages', :action => 'conversations'
-    map.last_user_conversation_page '/messages/conversations/:username/last', :controller => 'messages', :action => 'conversations', :page => :last
+	resources :categories
+    match '/categories/:id/:page' => 'categories#show'
 
 	# Discussions
-    map.resources(
-        :discussions,
-        :collection => {:participated => :any, :search => :any, :following => :any, :favorites => :any},
-		:member     => {:follow => :any, :unfollow => :any, :favorite => :any, :unfavorite => :any, :search_posts => :any, :mark_as_read => :any}
-    ) do |discussions|
-        discussions.resources(
-            :posts,
-            :member     => { :quote => :any },
-            :collection => { :doodle => :post, :count => :any, :since => :any, :preview => :any }
-        )
-    end
-	map.connect           '/discussions/:discussion_id/posts/since/:index', :controller => 'posts',       :action => 'since'
-    map.paged_discussions '/discussions/archive/:page',                     :controller => 'discussions', :action => 'index'
-    map.paged_discussion  '/discussions/:id/:page',                         :controller => 'discussions', :action => 'show'
+	controller :discussions do
+		match '/discussions/popular/:days/:page'  => :popular
+		match '/discussions/popular/:days'        => :popular
+		match '/discussions/archive/:page'        => :index,         :as => :paged_discussions
+		match '/discussions/:id/:page'            => :show,          :as => :paged_discussion
+		match '/conversations/new'                => :new,           :as => :new_conversation, :type => 'conversation'
+		match '/conversations/new/with/:username' => :new,           :as => :new_conversation_with, :type => 'conversation'
+		match '/conversations/archive/:page'      => :conversations, :as => :paged_conversations
+	end
+	match '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
+	match '/conversations' => 'discussions#conversations', :as => :conversations
+	resources :discussions do
+		member do
+			get 'follow'
+			get 'unfollow'
+			get 'favorite'
+			get 'unfavorite'
+			get 'search_posts'
+			get 'mark_as_read'
+			post 'invite_participant'
+		end
+		collection do
+			get 'participated'
+			get 'search'
+			get 'following'
+			get 'favorites'
+			get 'conversations'
+			get 'popular'
+		end
+		
+		# Posts
+		resources :posts do
+			member do
+				get 'quote'
+			end
+			collection do
+				post 'doodle'
+				get  'count'
+				get  'since'
+				post 'preview'
+			end
+		end
+	end
+
 
 	# Invites
-	map.resources(
-		:invites,
-		:collection => {:all => :get},
-		:member => {:accept => :get}
-	)
+	resources :invites do
+		member do
+			get :accept
+		end
+		collection do
+			get :all
+		end
+	end
+	
+	# Admin
+	resource :admin, :controller => 'admin' do
+		get 'configuration', :on => :member
+		post 'configuration', :on => :member
+	end
 
-	map.resource :admin, :member => {:configuration => :any}, :controller => 'admin'
+	# Vanilla redirects
+	controller :vanilla do
+		match '/vanilla'              => :discussions
+		match '/vanilla/index.php'    => :discussions
+		match '/vanilla/comments.php' => :discussion
+		match '/vanilla/account.php'  => :user
+	end
 
-
-    # Vanilla redirects
-    map.with_options :controller => 'vanilla' do |vanilla|
-        vanilla.connect '/vanilla',              :action => 'discussions'
-        vanilla.connect '/vanilla/index.php',    :action => 'discussions'
-        vanilla.connect '/vanilla/comments.php', :action => 'discussion'
-        vanilla.connect '/vanilla/account.php',  :action => 'user'
-    end
-
-    # Install the default routes as the lowest priority.
-    map.connect ':controller/:action/:id'
-    map.connect ':controller/:action/:id.:format'
+	# This is a legacy wild controller route that's not recommended for RESTful applications.
+	# Note: This route will make all actions in every controller accessible via GET requests.
+	#match ':controller(/:action(/:id(.:format)))'
 
 	# Root
-    map.root :controller => 'discussions', :action => 'index'
+	root :to => "discussions#index"
+
 end

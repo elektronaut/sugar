@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
+	<% if Rails.env == 'production' -%>
+		<%= javascript_include_tag "bundled/mobile.js" %>
+	<% else -%>
+		<%= javascript_include_tag 'vendor/jquery' %>
+		<%= javascript_include_tag 'mobile' %>
+	<% end -%>
+	<%= stylesheet_link_tag    "#{theme_path}/screen" %>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+	<link rel="apple-touch-icon-precomposed" href="<%= theme_path %>/apple-touch-icon.png" />
+</head>
+<body>
+    <div id="header">
+		<div id="navigationToggle">
+			<%= link_to_function "", "toggleNavigation();" %>
+		</div>
+        <h1 id="pageTitle" class="page_title">
+			<% if @page_title %>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}:", discussions_path %></span> <%= @page_title %>
+			<% else %>
+				<span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}", discussions_path %></span>
+			<% end %>
+		</h1>
+    </div>
+	<% if @current_user || Sugar.config(:public_browsing) %>
+		<div id="navigation"><ul>
+			<li><%= link_to "Discussions", discussions_path %></li>
+			<li><%= link_to "Categories", categories_path %></li>
+			<% if @current_user %>
+				<li><%= link_to "Following", following_discussions_path %></li>
+				<li><%= link_to "Favorites", favorites_discussions_path %></li>
+				<% if @current_user.unread_conversations? %>
+					<li><strong><%= link_to "Conversations", conversations_path %></strong></li>
+				<% else %>
+					<li><%= link_to "Conversations", conversations_path %></li>
+				<% end %>
+			<% end %>
+			<li><%= link_to "Users", users_path %></li>
+			<% if @current_user %>
+				<li><%= link_to "New discussion", new_discussion_path %></li>
+				<% if @discussion && !@discussion.new_record? && @discussion.editable_by?(@current_user) %>
+					<li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>
+				<% end %>
+				<li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
+			<% end %>
+			<li class="search">
+				<%= form_tag((@search_path || search_path), :method => 'get') do %>
+					Search for
+					<%= text_field_tag 'q', @search_query, :class => :query %>
+					<%= select_tag 'search_mode', options_for_select(
+						search_mode_options,
+						@search_path || search_path
+					) %>
+					<%= submit_tag "Go", :name => nil %>
+				<% end %>
+			</li>
+		</ul></div>
+	<% end %>
+	<script type="text/javascript">
+		$('#navigation').hide();
+	</script>
+	<% if flash[:notice] %>
+		<div id="notice"><p><%= raw flash[:notice] %></p></div>
+	<% end %>
+	<div class="content">
+		<%= yield %>
+	</div>
+	<div id="footer">
+		<%= link_to "Discussions", discussions_path %> | 
+		<% if @current_user %>
+			<%= link_to "Following", following_discussions_path %> | 
+			<%= link_to "Favorites", favorites_discussions_path %> | 
+		<% end %>
+		<%= link_to "Regular site", :mobile_format => 'html' %>
+	</div>
+	<script type="text/javascript">
+		hideImagesInPosts();
+	</script>
+	<% if Sugar.config(:google_analytics) -%>
+	<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config(:google_analytics) %>"); pageTracker._trackPageview(); } catch(err) {}</script>
+	<% end -%>
+</body>
+</html>

@@ -1,11 +1,13 @@
 <% 
 	@page_title = "Posts Search" 
-	@page_title = h(@discussion.title) + " - Search: " + h(@search_query)
+	@page_title = @discussion.title + " - Search: " + h(@search_query)
 	add_body_class "search", "search_posts_in_discussion"
 %>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% if @discussion.kind_of?(Discussion) %>
+		<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<% end %>
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
 	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 	&raquo;
@@ -20,7 +22,7 @@
 </p>
 
 <% if @posts && @posts.length > 0 %>
-	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :permalink => true} %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :permalink => true, :pagination_params => {:q => @search_query}} %>
 <% else %>
 	<p>No posts were found.</p>
 <% end %>

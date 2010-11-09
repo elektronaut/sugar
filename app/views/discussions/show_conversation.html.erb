@@ -1,0 +1,92 @@
+<% 
+	add_body_class "discussion", "conversation", "discussion_by_user#{@discussion.poster_id}"
+	add_body_class 'last_page' if @posts.last_page?
+	@page_title = h(@discussion.title)
+	previous_post = nil
+-%>
+
+<%= content_for :sidebar do %>
+	<div class="participants">
+		<%= render :partial => 'discussions/participants', :locals => {:participants => @discussion.participants} %>
+	</div>
+	<div class="invite">
+		<h2>Invite someone</h2>
+		<%= form_for @discussion, :url => invite_participant_discussion_path(@discussion), :html => {:id => 'invite_participant_form'} do |f| %>
+			<%= text_field_tag 'username', '', :class => :username %>
+			<%= submit_tag 'Invite' %>
+		<% end %>
+	</div>
+<% end %>
+
+<a name="top" class="anchor"></a>
+
+<div class="functions">
+	<% if @current_user %>
+		<% if @discussion.editable_by?(@current_user) -%>
+			<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
+		<% end -%>
+	<% end %>
+</div>
+
+<h2 class="section">
+	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
+	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
+</h2>
+
+<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true, :new_posts_notifier => true} %>
+
+<a name="bottom"></a>
+<div class="bottomlinks">
+	<%= link_to "Back to discussions", discussions_path, :id => 'back_link' %>,
+	<% if @current_user && @current_user.following?(@discussion) -%>
+		<%= link_to "Back to followed", following_discussions_path %>,
+	<% end %>
+	<%= link_to "Top of page", "#top" %>
+</div>
+
+<% if @discussion.postable_by?(@current_user) %>
+
+	<div class="compose" id="compose">
+
+		<ul id="reply-tabs" class="tabs">  
+			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
+			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>  
+		</ul>
+		
+		<%# Text reply %>
+		<div id="replyText">
+			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+				<p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
+				<p id="button-container">
+					<button type="submit">Post</button>
+					<button type="button" class="preview">Preview</button>
+				</p>
+			<% end %>
+		</div>
+
+		<%# Napkin reply %>
+		<div id="replyImage">
+			<script type="text/javascript">swfobject.registerObject("napkin", "9.0.31");</script>
+			<div class="napkin">
+				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="400" id="napkin">
+					<% napkin_vars = "service=" + doodle_discussion_posts_path(@discussion) -%>
+					<param name="movie" value="/flash/napkin.swf" />
+					<param name="flashvars" value="<%= napkin_vars %>" />
+					<param name="allowScriptAccess" value="always" />
+					<!--[if !IE]>-->
+					<object type="application/x-shockwave-flash" data="/flash/napkin.swf?<%= napkin_vars %>" width="100%" height="400">
+					<!--<![endif]-->
+						<a href="http://www.adobe.com/go/getflashplayer">
+							<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+						</a>
+					<!--[if !IE]>-->
+					</object>
+					<!--<![endif]-->
+				</object>
+			</div>
+			<p id="napkin-submit">
+				<button type="submit" onClick="uploadDrawing()">Post drawing</button>
+			</p>
+		</div>
+	</div>
+<% end %>

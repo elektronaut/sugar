@@ -3,9 +3,9 @@
 	add_body_class "search", "search_posts"
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
 
 <h2 class="section">Searching posts for <em><%= @search_query %></em></h2>
 
@@ -17,7 +17,7 @@
 </p>
 
 <% if @posts && @posts.length > 0 %>
-	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true} %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :pagination_params => {:q => @search_query}} %>
 <% else %>
 	<p>No posts were found.</p>
 <% end %>

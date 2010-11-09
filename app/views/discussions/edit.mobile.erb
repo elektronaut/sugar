@@ -1,0 +1,10 @@
+<% 
+	@page_title = @discussion.title
+%>
+
+<div class="page_content">
+<%= form_for(@discussion, :url => discussion_path(@discussion)) do |f| %>
+	<%= render :partial => 'discussion_form', :locals => {:f => f} %>
+	<p><%= submit_tag "Save" %></p>
+<% end %>
+</div>

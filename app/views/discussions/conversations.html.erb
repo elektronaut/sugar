@@ -1,0 +1,20 @@
+<% 
+	add_body_class "discussions conversations"
+	@page_title = "Conversations" 
+%>
+
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<div class="functions">
+	<%= link_to "Start a conversation", new_conversation_path, :class => :add %>
+</div>
+
+<h2 class="section"><%= link_to "Conversations", conversations_discussions_path %></h2>
+
+<%= render :partial => 'discussions/table', :locals => {
+	:discussions    => @discussions,
+	:no_discussions => "You aren't part of any conversations."
+} %>
+

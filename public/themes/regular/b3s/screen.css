@@ -1,0 +1,66 @@
+@import url(../default/screen.css);
+
+body {
+	background-image: url(images/header_bg_danz.jpg);
+}
+
+#header h1 {
+	display: none;
+}
+
+a, a:visited {
+	text-decoration:     none;
+}
+
+a, a:visited, #account, #account a, #account a:visited, .me_post .body a.poster, .me_post .body a.poster:visited {
+	color:               #9f0000;
+}
+a:hover, #account a:hover, #sidebar .categories li.current a {
+	color:               #460000;
+}
+
+
+#account a, #account a:visited {
+	font-weight:         bold;
+	text-decoration:     underline;
+}
+
+
+/* Top tabs */
+#navigation li a, #navigation li a:visited {
+	background:          #9d5178 url(images/tab_bg.gif) repeat-x;
+	border:              1px solid #854155;
+	border-bottom:       1px solid #c67b6a;
+	color:               #fff;
+}
+#navigation li a:hover {
+	background:          #9d5178 url(images/tab_hover_bg.gif) repeat-x;
+	color:               #fff;
+}
+#navigation li.current a, #navigation li.current a:visited {
+	background:          #f9f9f9 url(images/tab_current_bg.gif) repeat-x;
+	color:               #000;
+	border:              1px solid #c67b6a;
+	border-bottom:       1px solid #f9f9f9;
+}
+#navigation li.new a, #navigation li.new a:visited {
+	background:          #d14b40 url(images/tab_new_messages_bg.gif) repeat-x;
+	color:               #fff;
+	border:              1px solid #c24236;
+	border-bottom:       1px solid #c98175;
+}
+#navigation li.new a:hover {
+	background:          #d14b40 url(images/tab_new_messages_hover_bg.gif) repeat-x;
+}
+
+/* Other colors*/
+.tabbed_navigation li.active a, #reply-tabs li.active a, .topTabs li.active a {
+	background:          #9f0000;
+}
+.topTabs li.active a {
+	border:              1px solid #9f0000;
+}
+.ac_results .ac_over {
+	background-color:    #9f0000;
+	color:               #fff;
+}

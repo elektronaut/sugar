@@ -5,24 +5,25 @@ class Post < ActiveRecord::Base
 	POSTS_PER_PAGE  = 50
 
 	belongs_to :user, :counter_cache => true
-	belongs_to :discussion, :counter_cache => true
+	belongs_to :discussion, :class_name => 'Exchange', :counter_cache => true, :foreign_key => 'discussion_id'
 	has_many   :discussion_views
 
 	validates_presence_of :body, :user_id, :discussion_id
 
-	validate do |post|
-		post.trusted = post.discussion.trusted if post.discussion
-		post.edited_at ||= Time.now
+	after_create do |post|
+		# Automatically update the discussion with last poster info
+		post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
+		# Make sure the discussion is marked as participated for the user
+		DiscussionRelationship.define(post.user, post.discussion, :participated => true) unless post.conversation?
 	end
 
-	# Automatically update the discussion with last poster info
-	after_create do |post|
-		post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
-		DiscussionRelationship.define(post.user, post.discussion, :participated => true)
-	end
+	attr_accessor :skip_html
 
 	before_save do |post|
-		post.body_html = PostParser.parse(post.body)
+		post.edited_at  ||= Time.now
+		post.trusted      = post.discussion.trusted if post.discussion
+		post.conversation = post.discussion.kind_of?(Conversation)
+		post.body_html    = PostParser.parse(post.body) unless post.skip_html
 	end
 	
 	define_index do
@@ -30,7 +31,7 @@ class Post < ActiveRecord::Base
 		indexes user(:username), :as => :username
 		has     user_id, discussion_id
 		has     created_at, updated_at
-		has     trusted
+		has     trusted, conversation
 		set_property :delta => :delayed
 	end
 
@@ -68,6 +69,7 @@ class Post < ActiveRecord::Base
 			}
 			search_options[:conditions] = {}
 			search_options[:conditions][:trusted] = false unless options[:trusted]
+			search_options[:conditions][:conversation] = options[:conversation] || false
 			search_options[:conditions][:discussion_id] = options[:discussion_id] if options[:discussion_id]
 			posts = Post.search(options[:query], search_options)
 			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
@@ -96,7 +98,7 @@ class Post < ActiveRecord::Base
 			unless body_html?
 				self.update_attribute(:body_html, PostParser.parse(self.body.dup))
 			end
-			self[:body_html]
+			self[:body_html].html_safe
 		end
 	end
 

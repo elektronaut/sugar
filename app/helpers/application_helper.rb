@@ -11,7 +11,7 @@ module ApplicationHelper
 	end
 
 	def meify(string, user)
-		string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }
+		string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1 + profile_link(user, nil, :class => :poster) }.html_safe
 	end
 
 	def pretty_link(url)
@@ -35,7 +35,7 @@ module ApplicationHelper
 	#   <% end %>
 	#
 	def labelled_field(field, label=nil, options={}, &block)
-		if options[:errors]
+		if !options[:errors].blank?
 			output  = '<p class="field field_with_errors">'
 		else
 			output  = '<p class="field">'
@@ -51,10 +51,9 @@ module ApplicationHelper
 		output += field
 		output += "<br />"+capture(&block) if block_given?
 		output += "</p>"
-		concat(output, block.binding) if block_given?
-		return output
+		return output.html_safe
 	end
-
+	
 	# Generates avatar image tag for a user
 	def avatar_image_tag(user, size='32')
 		if user.avatar_url?
@@ -71,6 +70,7 @@ module ApplicationHelper
 
 	def body_classes
 		@body_classes ||= []
+		@body_classes << 'with_sidebar' if content_for?(:sidebar) && !@body_classes.include?('with_sidebar')
 		@body_classes.uniq.join(' ')
 	end
 
@@ -123,7 +123,8 @@ module ApplicationHelper
 
 	def new_posts?(discussion)
 		return false unless @discussion_views
-		(new_posts_count(discussion) > 0) ? true : false
+		@_new_posts ||= {}
+		@_new_posts[discussion] ||= (new_posts_count(discussion) > 0) ? true : false
 	end
 
 	def last_discussion_page(discussion)
@@ -151,8 +152,8 @@ module ApplicationHelper
 	end
 
 	def theme_path(theme_name=nil)
-		theme_format = (request.format == :iphone) ? 'iphone' : 'regular'
-		theme_name ||= (request.format == :iphone) ? Sugar.config(:default_iphone_theme) : Sugar.config(:default_theme)
+		theme_format = (request.format == :mobile) ? 'mobile' : 'regular'
+		theme_name ||= (request.format == :mobile) ? Sugar.config(:default_mobile_theme) : Sugar.config(:default_theme)
 		"/themes/#{theme_format}/#{theme_name}"
 	end
 
@@ -169,6 +170,22 @@ module ApplicationHelper
 		else
 			post.page
 		end
+	end
+	
+	def header_tab(name, url, options={})
+		options[:section] ||= name.downcase.to_sym
+		options[:id]      ||= "#{options[:section]}_link"
+		options[:class]   ||= []
+		options[:class]   = [options[:class]] unless options[:class].kind_of?(Array)
+
+		classes = [options[:section].to_s] + options[:class]
+		classes << 'current' if @section == options[:section]
+		
+		content_tag(
+			:li, 
+			link_to(name, url, :id => options[:id]), 
+			:class => classes
+		)
 	end
 
 end

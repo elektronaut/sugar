@@ -2,26 +2,36 @@ class InvitesController < ApplicationController
 
 	requires_authentication :except => [:accept]
 	requires_user           :except => [:accept]
+	requires_user_admin     :only   => [:all]
     
+	respond_to :html, :mobile, :xml, :json
+
 	before_filter :load_invite,    :only => [:show, :edit, :update, :destroy]
 	before_filter :verify_invites, :only => [:new, :create]
 
 	protected
 	
-		# Loads the requested invite
+		# Finds the requested invite
 		def load_invite
-			@invite = Invite.find(params[:id]) rescue nil
-			unless @invite
-				flash[:notice] = "Could not find invite with ID ##{params[:id]}"
-				redirect_to invites_url and return
+			begin
+				@invite = Invite.find(params[:id])
+			rescue ActiveRecord::RecordNotFound
+				render_error 404 and return
 			end
 		end
 	
 		# Verifies that the user has available invites
 		def verify_invites
 			unless @current_user && @current_user.available_invites?
-				flash[:notice] = "You don't have any invites!"
-				redirect_to online_users_url
+				respond_to do |format|
+					format.any(:html, :mobile) do
+						flash[:notice] = "You don't have any invites!"
+						redirect_to online_users_url and return
+					end
+					format.any(:xml, :json) do
+						render :text => "You don't have any invites!", :status => :method_not_allowed
+					end
+				end
 			end
 		end
 
@@ -29,28 +39,31 @@ class InvitesController < ApplicationController
 	
 		# Show active invites
 		def index
-			@invites = @current_user.invites.active
+			respond_with(@invites = @current_user.invites.active)
 		end
 
 		# Show everyone's invites
 		def all
-			require_user_admin_or_user(nil, :redirect => invites_url)
-			@invites = Invite.find_active
+			respond_with(@invites = Invite.find_active)
 		end
 
 		# Accept an invite
 		def accept
 			@invite = Invite.first(:conditions => {:token => params[:id]})
-			if @invite && !@invite.expired?
+			if @invite && @invite.expired?
+				@invite.destroy
+				flash[:notice] ||= "Your invite has expired!"
+			elsif @invite
 				redirect_to new_user_by_token_url(:token => @invite.token) and return
+			else
+				flash[:notice] ||= "That's not a valid invite!"
 			end
-			flash[:notice] ||= "That's not a valid invite!"
 			redirect_to login_users_url and return
 		end
 
 		# Create a new invite
 		def new
-			@invite = @current_user.invites.new
+			respond_with(@invite = @current_user.invites.new)
 		end
 	
 		# Create a new invite
@@ -58,7 +71,7 @@ class InvitesController < ApplicationController
 			@invite = @current_user.invites.create(params[:invite])
 			if @invite.valid?
 				begin
-					Mailer.deliver_invite(@invite, accept_invite_url(:id => @invite.token))
+					Mailer.invite(@invite, accept_invite_url(:id => @invite.token)).deliver
 					flash[:notice] = "Your invite has been sent to #{@invite.email}"
 				rescue
 					flash[:notice] = "There was a problem sending your invite to #{@invite.email}, it has been cancelled."

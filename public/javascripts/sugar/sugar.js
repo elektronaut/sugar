@@ -3,6 +3,40 @@ var Sugar = {
 	onLoadedPosts: {},
 	Initializers: {
 		
+		inviteParticipants : function(){
+			$('#invite_participant_form').each(function(){
+				var form = this;
+				var inputField = $(this).find('.username').get(0);
+				
+				$(inputField).autocomplete([], {autoFill: true, width: 200}).focus(function(){
+					if(!inputField.usernames){
+						inputField.usernames = [];
+						$.getJSON('/users.json', function(results){
+							for(var a = 0; a < results.length; a++){
+								inputField.usernames[inputField.usernames.length] = results[a].user.username;
+							}
+							$(inputField).setOptions({data: inputField.usernames});
+						});
+						$(inputField).setOptions({data: inputField.usernames});
+					}
+				});
+				
+				$(this).submit(function(){
+					var data = {
+						username:           $(inputField).val(),
+						authenticity_token: Sugar.authToken(form)
+					};
+					$('#sidebar .participants ul').fadeTo('fast', 0.8);
+					$.post(form.action, data, function(response){
+						$('#sidebar .participants').html(response);
+						$('#sidebar .participants ul').fadeTo(0, 0.8).fadeTo('fast', 1.0);
+					});
+					$(inputField).val('');
+					return false;
+				});
+			});
+		},
+		
 		spoilerTags : function(){
 			var apply = function(){
 				$('.spoiler').each(function(){
@@ -26,6 +60,34 @@ var Sugar = {
 			};
 			$(Sugar).bind('postsloaded', apply);
 			apply();
+		},
+		
+		layout : function(){
+			// Adjust min-width of #content to always contain table.discussions
+			$('table.discussions').each(function(){
+				$('#content').css('min-width', $(this).outerWidth()+'px');
+			});
+			// Adjust min-width of #wrapper to always contain content and sidebar if the sidebar exists
+			$('#sidebar').each(function(){
+				var minWidth = $('#content').outerWidth() + $('#sidebar').outerWidth();
+				$('#wrapper').css('min-width', minWidth+'px');
+			});
+			// Make entire category li clickable
+			$('ul.categories li a').each(function(){
+				var url = this.href;
+				$(this).closest('li').click(function(){
+					document.location = url;
+				});
+			});
+		},
+
+		styleButtons : function(){
+			// Wrap buttons in span
+			$('a.button, button').each(function(){
+				if($(this).find('span').length === 0){
+					$(this).wrapInner('<span />');
+				}
+			});
 		},
 
 		loginForm : function() {
@@ -145,9 +207,25 @@ var Sugar = {
 		},
 
 		searchMode: function(){
-			// Observe the search mode selection box, set the proper action.
-			jQuery('#search_mode').change(function(){
-				this.parentNode.action = this.value;
+			$('#search form').each(function(){
+				var form = this;
+				// Observe the search mode selection box, set the proper action.
+				$(form).find('#search_mode').change(function(){
+					this.parentNode.action = this.value;
+				});
+				// Make better search URLs
+				$(form).submit(function(){
+					var action = form.action;
+					if(!action.match(/^https?:\/\//)){
+						// Safari doesn't like document.location being set to a relative path
+						var baseDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.]+)/)[1];
+						action = baseDomain + action;
+					}
+					var query = encodeURIComponent($(form).find('.query').val());
+					var searchURL = action + "?q=" + query;
+					document.location = searchURL;
+					return false;
+				});
 			});
 		},
 
@@ -185,6 +263,7 @@ var Sugar = {
 						$("#postBody-"+postID).html('<span class="ticker">Loading...</span>');
 						$("#postBody-"+postID).load(editURL, null, function(){
 							Sugar.Initializers.richText();
+							Sugar.Initializers.styleButtons();
 						});
 						return false;
 					});
@@ -385,6 +464,19 @@ var Sugar = {
 		'how', 'in', 'is', 'it', 'la', 'my', 'of', 'on', 'or', 'that', 'the',
 		'this', 'to', 'was', 'what', 'when','where','who', 'will', 'with', 'the'
 	],
+	
+	/*
+		Get authenticity token from a form
+	*/
+	authToken : function(elem){
+		var authToken = null;
+		if(elem){
+			authToken = $(elem).find("input[name='authenticity_token']").val();
+		} else {
+			authToken = $("input[name='authenticity_token']").val();
+		}
+		return authToken;
+	},
 	
 	loadNewPosts : function(){
 		if($('#discussionLink').length > 0){

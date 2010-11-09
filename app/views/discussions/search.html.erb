@@ -3,15 +3,16 @@
 	add_body_class "search", "search_discussions"
 %>
 
-<div class="functions">
-	<%= link_to "New Discussion +", new_discussion_path, :class => :create %>
-</div>
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
 <h2 class="section">Searching discussions for <em><%= @search_query %></em></h2>
 
 <%= render :partial => 'search/tips' %>
 
 <% if @discussions && @discussions.length > 0 %>
-	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions, :pagination_params => {:q => @search_query}} %>
 <% else %>
 	<p>No discussions were found.</p>
 <% end %>

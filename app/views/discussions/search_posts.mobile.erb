@@ -1,0 +1,12 @@
+<% 
+	@page_title = "\"#{@search_query}\" in " + @discussion.title
+%>
+<%# @page_title = "Posts: \"#{@search_query}\"" %>
+
+<% if @posts %>
+	<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :pagination_params => {:q => @search_query}} %>
+<% else %>
+	<div class="page_content">
+		<p>No posts were found.</p>
+	</div>
+<% end %>

@@ -28,7 +28,7 @@
 			when :location
 				h(user.location)
 			when :last_active
-				(user.online?) ? "<strong>Online now</strong>" : formatted_time(user.last_active)
+				(user.online?) ? "<strong>Online now</strong>".html_safe : formatted_time(user.last_active)
 			when :member_since
 				formatted_time user.created_at
 			when :discussions_and_posts
@@ -39,9 +39,11 @@
 				user.posts_per_day
 			when :status
 				if user.banned?
-					'<span class="banned">Banned</span>'
+					'<span class="banned">Banned</span>'.html_safe
+				elsif user.temporary_banned?
+					('<span class="banned">Banned</span> for '+distance_of_time_in_words(Time.now - user.banned_until)).html_safe
 				elsif user.user_admin? || user.moderator?
-					'<span class="admin">'+user.admin_labels.to_sentence+'</span>'
+					('<span class="admin">'+user.admin_labels.to_sentence+'</span>').html_safe
 				end
 			when :twitter
 				link_to "@#{user.twitter}", "http://twitter.com/#{user.twitter}"

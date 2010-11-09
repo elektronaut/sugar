@@ -25,7 +25,7 @@ namespace :benchmark do
                 :closed => (rand > 0.9) ? true : false,
                 :body => lorem
             )
-            d.create_first_post!
+            #d.create_first_post!
             9000.times do |i|
                d.posts.create(:body => lorem, :user => users[rand(users.length - 1)]) 
             end

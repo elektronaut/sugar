@@ -15,7 +15,7 @@ module Sugar
 		# Themes
 		:default_theme            => 'default',
 		:default_theme            => 'default',
-		:default_iphone_theme     => 'default',
+		:default_mobile_theme     => 'default',
 
 		# Options
 		:public_browsing          => false,

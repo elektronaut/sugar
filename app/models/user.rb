@@ -1,5 +1,5 @@
 require 'digest/sha1'
-require 'md5'
+require 'digest/md5'
 
 # = User accounts
 #
@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
 	has_many   :discussions, :foreign_key => 'poster_id'
 	has_many   :closed_discussions, :foreign_key => 'closer_id'
 	has_many   :posts
+	has_many   :discussion_posts, :class_name => 'Post', :conditions => {:conversation => false}
 	belongs_to :inviter, :class_name => 'User'
 	has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'
 	has_many   :invites, :dependent => :destroy, :order => 'created_at DESC' do
@@ -34,13 +35,14 @@ class User < ActiveRecord::Base
 	end
 	has_many   :discussion_views, :dependent => :destroy
 	has_many   :discussion_relationships, :dependent => :destroy
-	has_many   :messages, :foreign_key => 'recipient_id', :conditions => ['deleted = 0'], :order => ['created_at DESC']
-	has_many   :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => ['deleted = 0 AND `read` = 0'], :order => ['created_at DESC']
-	has_many   :sent_messages,   :class_name => 'Message', :foreign_key => 'sender_id',    :conditions => ['deleted_by_sender = 0'],      :order => ['created_at DESC']
+	
+	has_many   :conversation_relationships, :dependent => :destroy
+	has_many   :conversations, :through => :conversation_relationships
+	
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for Facebook and OpenID users
-	before_validation_on_create do |user|
+	before_validation(:on => :create) do |user|
 		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end
@@ -81,6 +83,10 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
 
 	validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
+	
+	before_save do |user|
+		user.banned_until = nil if user.banned_until? && user.banned_until <= Time.now
+	end
 	
 	class << self
 		# Finds active users.
@@ -163,11 +169,6 @@ class User < ActiveRecord::Base
 		DiscussionRelationship.find_favorite(self, options)
 	end
 
-	# Counts participated discussions.
-	def participated_count
-		DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = 1', self.id])
-	end
-
 	# Finds and paginate discussions created by this user.
 	# === Parameters
 	# * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.
@@ -189,6 +190,26 @@ class User < ActiveRecord::Base
 			)
 		end
 	end
+	
+	def paginated_conversations(options)
+		Pagination.paginate(
+			:total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
+			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
+			:page        => options[:page] || 1
+		) do |pagination|
+			joins = "INNER JOIN `conversation_relationships` ON `conversation_relationships`.conversation_id = `discussions`.id"
+			joins += " AND `conversation_relationships`.user_id = #{self.id}"
+			conversations = Conversation.find(
+				:all,
+				:select     => '`discussions`.*',
+				:joins      => joins,
+				:limit      => pagination.limit, 
+				:offset     => pagination.offset, 
+				:order      => '`discussions`.last_post_at DESC',
+				:include    => [:poster, :last_poster]
+			)
+		end
+	end
 
 	# Finds and paginate posts created by this user.
 	# === Parameters
@@ -197,127 +218,17 @@ class User < ActiveRecord::Base
 	# * <tt>:page</tt>    - Page, defaults to 1.
 	def paginated_posts(options)
 		Pagination.paginate(
-			:total_count => options[:trusted] ? self.posts.count(:all) : self.posts.count(:all, :conditions => ['trusted = 0']),
+			:total_count => options[:trusted] ? self.discussion_posts.count(:all) : self.discussion_posts.count(:all, :conditions => {:conversation => false, :trusted => false}),
 			:per_page    => options[:limit] || Post::POSTS_PER_PAGE,
 			:page        => options[:page] || 1
 		) do |pagination|
 			Post.find(
 				:all, 
-				:conditions => options[:trusted] ? ['user_id = ?', self.id] : ['user_id = ? AND trusted = 0', self.id], 
+				:conditions => options[:trusted] ? ['user_id = ? AND conversation = 0', self.id] : ['user_id = ? AND trusted = 0 AND conversation = 0', self.id], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'created_at DESC',
 				:include    => [:user, :discussion]
-			)
-		end
-	end
-
-	# Finds and paginate all messages sent to this user.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_messages(options={})
-		Pagination.paginate(
-			:total_count => self.messages.count,
-			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => ['recipient_id = ? AND deleted = 0', self.id],
-				:order      => ['created_at DESC'],
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset,
-				:include    => [:sender]
-			)
-		end
-	end
-
-	# Finds and paginate messages sent by this user.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_sent_messages(options={})
-		Pagination.paginate(
-		:total_count => self.sent_messages.count,
-		:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-		:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => ['sender_id = ? AND deleted_by_sender = 0', self.id],
-				:order      => ['created_at DESC'],
-				:limit      => limit, 
-				:offset     => offset,
-				:include    => [:recipient]
-			)
-		end
-	end
-
-	# Finds and paginate this users conversation partners.
-	# === Parameters
-	# * <tt>:limit</tt>   - Number of users per page. Default: Discussion::DISCUSSIONS_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_conversation_partners(options={})
-		Pagination.paginate(
-			:total_count => self.conversation_partners.length,
-			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC LIMIT #{pagination.offset}, #{pagination.limit}")
-		end
-	end
-
-	# Find this users conversation partners.
-	def conversation_partners
-		User.find_by_sql("SELECT u.*, MAX(m.created_at) AS last_messaged_at FROM users u, messages m WHERE (m.sender_id = #{self.id} AND m.recipient_id = u.id) OR (m.recipient_id = #{self.id} AND m.sender_id = u.id) GROUP BY u.username ORDER BY last_messaged_at DESC")
-	end
-
-	# Finds first message exchanged with <tt>user</tt>.
-	def first_message_with(user)
-		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at ASC')
-	end
-
-	# Finds last message exchanged with <tt>user</tt>.
-	def last_message_with(user)
-		Message.find(:first, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id], :order => 'created_at DESC')
-	end
-
-	# Counts number of messages exchanged with <tt>user</tt>.
-	def message_count_with(user)
-		Message.count(:all, :conditions => ['(sender_id = ? AND recipient_id = ?) OR (recipient_id = ? AND sender_id = ?)', self.id, user.id, self.id, user.id])
-	end
-
-	# Counts number of unread messages from <tt>user</tt>.
-	def unread_message_count_from(user)
-		Message.count(:all, :conditions => ['sender_id = ? AND recipient_id = ? AND `read` = 0', user.id, self.id])
-	end
-
-	# Returns true if there are unread messages from <tt>user</tt> to this user.
-	def unread_messages_from?(user)
-		(unread_message_count_from(user) > 0) ? true : false
-	end
-
-	# Finds and paginates messages exchanged with <tt>options[:user]</tt>.
-	# === Parameters
-	# * <tt>:user</tt>    - The other user.
-	# * <tt>:limit</tt>   - Number of messages per page. Default: Message:MESSAGES_PER_PAGE
-	# * <tt>:page</tt>    - Page, defaults to 1.
-	def paginated_conversation(options={})
-		user = options[:user]
-		conditions = ['(sender_id = ? AND recipient_id = ? AND deleted_by_sender = 0) OR (recipient_id = ? AND sender_id = ? AND deleted = 0)', self.id, user.id, self.id, user.id]
-		Pagination.paginate(
-			:total_count => Message.count(:all, :conditions => conditions),
-			:per_page    => options[:limit] || Message::MESSAGES_PER_PAGE,
-			:page        => options[:page] || 1
-		) do |pagination|
-			Message.find(
-				:all,
-				:conditions => conditions,
-				:order      => ['created_at ASC'],
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset,
-				:include    => [:recipient,:sender]
 			)
 		end
 	end
@@ -347,14 +258,12 @@ class User < ActiveRecord::Base
 		self.password = self.confirm_password = new_password
 	end
 
-	# Counts this users unread messages.
-	def unread_messages_count
-		@unread_messages_count ||= self.unread_messages.count
+	def unread_conversations_count
+		@unread_conversations_count ||= self.conversation_relationships.count(:all, :conditions => {:new_posts => true, :notifications => true})
 	end
 
-	# Returns true if this user has unread messages.
-	def unread_messages?
-		(unread_messages_count > 0) ? true : false
+	def unread_conversations?
+		unread_conversations_count > 0
 	end
 
 	# Returns the full email address with real name.
@@ -395,39 +304,44 @@ class User < ActiveRecord::Base
 	# Returns true if this user is following the given discussion.
 	def following?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.following?) ? true : false
+		relationship && relationship.following?
 	end
 
 	# Returns true if this user has favorited the given discussion.
 	def favorite?(discussion)
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-		(relationship && relationship.favorite?) ? true : false
+		relationship && relationship.favorite?
+	end
+	
+	# Returns true if this user is temporarily banned.
+	def temporary_banned?
+		self.banned_until? && self.banned_until > Time.now
 	end
 	
 	# Returns true if this user has invited someone.
 	def invites?
-		(self.invites.count > 0) ? true : false
+		self.invites.count > 0
 	end
 
 	# Returns true if this user has invitees.
 	def invitees?
-		(self.invitees.count > 0) ? true : false
+		self.invitees.count > 0
 	end
 	
 	# Returns true if this user has invited someone or has invitees.
 	def invites_or_invitees?
-		(self.invites? || self.invitees?) ? true : false
+		self.invites? || self.invitees?
 	end
 
 	# Returns true if this user can invite someone.
 	def available_invites?
-		(self.user_admin? || self.available_invites > 0)
+		self.user_admin? || self.available_invites > 0
 	end
 	
 	# Number of remaining invites. User admins always have at least one invite.
 	def available_invites
 	 	number = self[:available_invites]
-	 	(self.user_admin?) ? 1 : self[:available_invites]
+	 	self.user_admin? ? 1 : self[:available_invites]
 	end
 
 	# Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.
@@ -476,7 +390,7 @@ class User < ActiveRecord::Base
 		options[:size] ||= 24
 		@gravatar_url ||= {}
 		unless @gravatar_url[options[:size]]
-			gravatar_hash = MD5::md5(self.email)
+			gravatar_hash = Digest::MD5.hexdigest(self.email)
 			@gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=any"
 		end
 		@gravatar_url[options[:size]]

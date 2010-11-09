@@ -2,28 +2,36 @@ require 'digest/sha1'
 
 class PostsController < ApplicationController
 
-	requires_authentication :except => [:count]
-	requires_user           :except => [:count, :since, :search]
-	protect_from_forgery    :except => [:doodle]
-
 	# Disable sessions and filters for the posts count action, and cache it
 	before_filter :authenticate_session,         :except => [:count]
-	before_filter :detect_iphone,                :except => [:count]
+	before_filter :detect_mobile,                :except => [:count]
 	before_filter :set_section,                  :except => [:count]
 	after_filter  :store_session_authentication, :except => [:count]
 	caches_page   :count
 
+	requires_authentication :except => [:count]
+	requires_user           :except => [:count, :since, :search]
+	protect_from_forgery    :except => [:doodle]
+
 	# Other filters
-	before_filter :load_discussion, :except => [:search]
+	before_filter :load_discussion,    :except => [:search]
+	before_filter :verify_viewability, :except => [:search, :count]
 	before_filter :load_post,       :only => [:show, :edit, :update, :destroy, :quote]
 	before_filter :verify_editable, :only => [:edit, :update, :destroy]
 
 	protected
 
 		def load_discussion
-			@discussion = Discussion.find(params[:discussion_id]) rescue nil
+			@discussion = Exchange.find(params[:discussion_id]) rescue nil
 			unless @discussion
 				flash[:notice] = "Can't find that discussion!"
+				redirect_to discussions_url and return
+			end
+		end
+		
+		def verify_viewability
+			unless @discussion && @discussion.viewable_by?(@current_user)
+				flash[:notice] = "You don't have permission to view that discussion!"
 				redirect_to discussions_url and return
 			end
 		end
@@ -62,15 +70,16 @@ class PostsController < ApplicationController
 			if @current_user
 				@current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
 			end
+			if @discussion.kind_of?(Conversation)
+				ConversationRelationship.find(:first, :conditions => {:conversation_id => @discussion, :user_id => @current_user.id}).update_attribute(:new_posts, false)
+			end
 			if request.xhr?
 				render :layout => false
 			end
 		end
 
 		def search
-			if params[:q]
-				redirect_to( { :action => :search, :query => params[:q] } ) and return
-			end
+			params[:query] = params[:q] if params[:q]
 			unless @search_query = params[:query]
 				flash[:notice] = "No query specified!"
 				redirect_to discussions_path and return
@@ -85,6 +94,9 @@ class PostsController < ApplicationController
 				if @post.valid?
 					@discussion.reload
 					@discussion.fix_counter_cache!
+					if @discussion.kind_of?(Conversation)
+						@discussion.conversation_relationships.reject{|r| r.user == @current_user}.each{|r| r.update_attribute(:new_posts, true)}
+					end
 					# if @post.mentions_users?
 					# 	@post.mentioned_users.each do |mentioned_user|
 					# 		logger.info "Mentions: #{mentioned_user.username}"

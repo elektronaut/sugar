@@ -20,6 +20,11 @@
 
 <% if @current_user.user_admin? %>
 	<fieldset>
+		<h2>Temporary ban</h2>
+		<%= labelled_field f.datetime_select(:banned_until, :minute_step => 15, :default => 1.minute.ago), 'Banned until' %>
+	</fieldset>
+
+	<fieldset>
 		<h2>Administrator privileges</h2>
 		<p>
 			<%= f.check_box(:moderator) %> <strong>Moderator</strong> (Can edit all categories, discussions and posts)<br />

@@ -1,0 +1,13 @@
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<h2 class="section">Sorry, but the page you were looking for could not be found</h2>
+
+<div class="error_message">
+	<p>
+		Yeah, we are bummed too. You could try 
+		<%= link_to "going to Discussions", discussions_path %> 
+		and ask around, someone might know.
+	</p>
+</div>

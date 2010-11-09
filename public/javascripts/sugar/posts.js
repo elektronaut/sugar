@@ -30,7 +30,7 @@ $.extend(Sugar, {
 			type: 'POST',
 			data: {
 				'post[body]': postBody,
-				authenticity_token: $("#replyText form").find("input[name='authenticity_token']").val()
+				authenticity_token: Sugar.authToken("#replyText form")
 			},
 			success: function(previewPost){
 				if($('.posts #ajaxPosts').length < 1) {
@@ -49,7 +49,7 @@ $.extend(Sugar, {
 				statusField.each(function(){
 					$(this).removeClass('posting');
 					$(this).html(oldPostButton);
-					$(this).find('.preview').text('Update Preview');
+					$(this).find('.preview span').text('Update Preview');
 					Sugar.Initializers.applyPostPreview();
 				});
 			}
@@ -259,7 +259,7 @@ $.extend(Sugar, {
 					type: 'POST',
 					data: {
 						'post[body]': postBody,
-						authenticity_token: $(this).find("input[name='authenticity_token']").val()
+						authenticity_token: Sugar.authToken(this)
 					},
 					success: function(){
 						$('#compose-body').val('');

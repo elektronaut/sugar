@@ -1,0 +1,14 @@
+<% 
+	add_body_class "discussions popular_discussions"
+	@page_title = "Popular Discussions" 
+%>
+
+<%= content_for :sidebar do %>
+	<%= render :partial => 'discussions/sidebar'%>
+<% end %>
+
+<h2 class="section"><%= link_to "Popular discussions", popular_discussions_path %> (<%= "last #{@days > 1 ? "#{@days} days" : "day"}"%>)</h2>
+
+<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions, :no_discussions => "No discussions in the last #{@days} days!"
+} %>
+

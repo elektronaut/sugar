@@ -1,0 +1,35 @@
+<%= f.hidden_field :type %>
+<% if @recipient %>
+	<%= hidden_field_tag :recipient_id, @recipient.id %>
+<% end %>
+
+<% if @recipient %>
+<p>
+	Conversation with: <%= profile_link @recipient %>
+</p>	
+<% end %>
+
+<p>
+	<label>Enter title</label>
+	<%= f.text_field(:title, :class => :text) %>
+</p>
+<% if @discussion.kind_of?(Discussion) %>
+	<p>
+		<label>Choose a category</label>
+		<%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
+	</p>
+<% end %>
+<p>
+	<label>Enter your first post</label>
+	<%= f.text_area(:body, :rows => 10, :id => 'compose-body') %>
+</p>
+<p>
+	<%= f.check_box(:nsfw) %> Mark as NSFW<br />
+	<% if @discussion.closeable_by?(@current_user) %>
+		<%= f.check_box(:closed) %> Closed<br />
+	<% end %>
+	<% if @discussion.kind_of?(Discussion) && @current_user.moderator? %>
+		<%= f.check_box(:sticky) %> Sticky<br />
+	<% end %>
+</p>
+

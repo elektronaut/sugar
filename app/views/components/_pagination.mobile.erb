@@ -1,0 +1,13 @@
+<%
+	anchor ||= nil
+	pagination_params ||= {}
+%>
+<div class="pagination">
+	<% if p.pages > 1 %><div class="links">
+		<%= link_to_unless (p.page == 1),           "First",    {:page => 1, :anchor => anchor}.merge(pagination_params) %>
+		<%= link_to_if p.previous_page,             "Previous", {:page => p.previous_page, :anchor => anchor}.merge(pagination_params) %>
+		<%= link_to_if p.next_page,                 "Next",     {:page => p.next_page, :anchor => anchor}.merge(pagination_params) %>
+		<%= link_to_unless (p.page == p.last_page), "Last",     {:page => p.last_page, :anchor => anchor}.merge(pagination_params) %>
+	</div><% end %>
+	Page <%= p.page %>/<%= p.last_page %>
+</div>

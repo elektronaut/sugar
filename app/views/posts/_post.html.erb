@@ -24,7 +24,7 @@
 				<% if post.discussion.labels? %>
 					<span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
 				<% end %>
-				<%= link_to h(post.discussion.title), paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
+				<%= link_to post.discussion.title, paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
 				<small>
 					Started by <%= profile_link(post.discussion.poster) %>,
 					Last active <%= formatted_time post.discussion.last_post_at %>,
@@ -34,9 +34,6 @@
 		<% end %>
 		<% if functions %>
 		<div class="post_functions">
-			<% if @current_user && post.user != @current_user %>
-				<%= link_to "PM", last_user_conversation_page_path(:username => post.user.username, :anchor => 'new', :subject => "Re: #{(discussion||post.discussion).title}") %> |
-			<% end %>
 			<% if post.editable_by?(@current_user) %>
 				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %> |
 			<% end %>			

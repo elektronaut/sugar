@@ -11,7 +11,7 @@
 			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
 		<% end %>
 		<% unless @user == @current_user %>
-			<%= link_to "Send #{@user.username} a message", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %>
+			<%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %>
 		<% end %>
 	</div>
 <% end %>
@@ -46,7 +46,7 @@
 	</div>
 	<% end %>
 
-	<% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? %>
+	<% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? && !@user.user_admin? %>
 		<p class="grant_invites">
 			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
 			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
@@ -62,11 +62,11 @@
 		<% if @user.participated_count > 0 %>
 			<%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
 		<% end %>
-		<% if @user.posts_count > 0 %>
-			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.posts_count %>)<br />
+		<% if @user.discussion_posts.count > 0 %>
+			<%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.discussion_posts.count %>)<br />
 		<% end %>
 		<% unless !@current_user || @user == @current_user %>
-			<%= link_to "Your private messages with #{@user.username}", last_user_conversation_page_path(:username => @user.username, :anchor => 'new') %> (<%= @current_user.message_count_with(@user) %>)<br />
+			<%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>
 		<% end %>
 	</p>
 	
@@ -74,7 +74,7 @@
 		<% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
 		<strong>Member since</strong>: <%= formatted_time(@user.created_at) %><br />
 		<% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
-		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %><br />
+		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : formatted_time(@user.last_active) %><br />
 		<% if @user.banned? %>
 			<%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
 		<% elsif @user.admin? %>

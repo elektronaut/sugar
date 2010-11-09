@@ -1,10 +1,13 @@
 .DS_Store
+.bundle
 log/*.log
 log/*.pid
 tmp/**/*
+tmp/*
 doc/api
 doc/plugins
 doc/app
+config/deploy.rb
 config/session_key
 config/*.sphinx.conf
 config/database.yml

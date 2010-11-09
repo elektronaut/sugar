@@ -1,0 +1,54 @@
+<%
+	@categories = Category.find(:all, :order => :position).reject{ |c| !c.viewable_by?(@current_user) }
+%>
+
+<div class="categories">
+	<h2>Categories</h2>
+	<ul class="meta">
+		<li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "index" %>">
+			<%= link_to "All discussions", discussions_path %>
+			<span class="count"><%= Discussion.count_for(@current_user) %></span>
+		</li>
+		<% if @current_user %>
+			<% if @current_user.following_count > 0 %>
+				<li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "following" %>">
+					<%= link_to "Following", following_discussions_path %>
+					<span class="count"><%= @current_user.following_count %></span>
+				</li>
+			<% end %>
+			<% if @current_user.favorites_count > 0 %>
+				<li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "favorites" %>">
+					<%= link_to "Favorites", favorites_discussions_path %>
+					<span class="count"><%= @current_user.favorites_count %></span>
+				</li>
+			<% end %>
+		<% end %>
+		<li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "popular" %>">
+			<%= link_to "Popular", popular_discussions_path %>
+		</li>
+	</ul>
+	<ul>
+		<% @categories.each do |category| %>
+			<li class="<%= 'current' if @category && @category == category %>">
+				<%= link_to category.name, category, :title => category.description %>
+				<span class="count"><%= category.discussions_count %></span>
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<% if @current_user %>
+	<div class="buttons">
+		<p><%= link_to "Start a new discussion", new_discussion_path(:category_id => (@category ? @category : nil)), :class => 'create button' %></p>
+	</div>
+<% end %>
+
+<% if @current_user && (@current_user.admin? || @current_user.moderator?) %>
+	<h2>Admin</h2>
+	<p>
+		<% if @current_user.admin? %>
+			<%= link_to "Forum configuration", configuration_admin_path %><br />
+		<% end %>
+		<%= link_to "Edit categories", categories_path %><br />
+	</p>
+<% end %>
