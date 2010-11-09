@@ -72,13 +72,10 @@ Sugar::Application.routes.draw do
 		match '/discussions/popular/:days/:page'  => :popular
 		match '/discussions/popular/:days'        => :popular
 		match '/discussions/archive/:page'        => :index,         :as => :paged_discussions
-		match '/discussions/:id/:page'            => :show,          :as => :paged_discussion
 		match '/conversations/new'                => :new,           :as => :new_conversation, :type => 'conversation'
 		match '/conversations/new/with/:username' => :new,           :as => :new_conversation_with, :type => 'conversation'
 		match '/conversations/archive/:page'      => :conversations, :as => :paged_conversations
 	end
-	match '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
-	match '/conversations' => 'discussions#conversations', :as => :conversations
 	resources :discussions do
 		member do
 			get 'follow'
@@ -111,6 +108,9 @@ Sugar::Application.routes.draw do
 			end
 		end
 	end
+	match '/discussions/:id/:page' => 'discussions#show', :as => :paged_discussion
+	match '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
+	match '/conversations' => 'discussions#conversations', :as => :conversations
 
 
 	# Invites
