@@ -84,30 +84,33 @@ class InvitesController < ApplicationController
 		end
 	
 		# def show
-		# 	require_user_admin_or_user(@invite.user, :redirect => invites_url)
-		# 	render :action => :edit
+		# 	if verify_user(:user => @invite.user, :user_admin => true)
+		# 		render :action => :edit
+		# 	end
 		# end
 		#
 		# def edit
-		# 	require_admin_or_user(@invite.user, :redirect => invites_url)
+		# 	verify_user(:user => @invite.user, :user_admin => true)
 		# end
 		# 
 		# def update
-		# 	require_admin_or_user(@invite.user, :redirect => invites_url)
-		# 	if @invite.update_attributes(params[:invite])
-		# 		flash[:notice] = "Invite was updated"
-		# 		redirect_to invites_url and return
-		# 	else
-		# 		render :action => :edit
+		# 	if verify_user(:user => @invite.user, :user_admin => true)
+		# 		if @invite.update_attributes(params[:invite])
+		# 			flash[:notice] = "Invite was updated"
+		# 			redirect_to invites_url and return
+		# 		else
+		# 			render :action => :edit
+		# 		end
 		# 	end
 		# end
 
 		# Delete an invite
 		def destroy
-			require_user_admin_or_user(@invite.user, :redirect => invites_url)
-			@invite.destroy
-			flash[:notice] = "Your invite has been cancelled."
-			redirect_to invites_url and return
+			if verify_user(:user => @invite.user, :user_admin => true)
+				@invite.destroy
+				flash[:notice] = "Your invite has been cancelled."
+				redirect_to invites_url and return
+			end
 		end
 
 end

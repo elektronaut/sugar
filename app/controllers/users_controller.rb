@@ -216,8 +216,7 @@ class UsersController < ApplicationController
 
 		def edit
 			@page = params[:page] || 'info'
-			# TODO: refactor to .editable_by?
-			require_user_admin_or_user(@user, :redirect => user_url(@user))
+			verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
 		end
 
 		def connect_facebook
@@ -242,70 +241,72 @@ class UsersController < ApplicationController
 		end
 
 		def update_openid
-			require_user_admin_or_user(@user, :redirect => user_url(@user))
-			response_params = params
-			response_params.delete(:controller)
-			response_params.delete(:action)
-			response_params.delete(:id)
-			response = openid_consumer.complete(response_params, update_openid_user_url(:id => @user.username))
+			if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
+				response_params = params
+				response_params.delete(:controller)
+				response_params.delete(:action)
+				response_params.delete(:id)
+				response = openid_consumer.complete(response_params, update_openid_user_url(:id => @user.username))
 
-			case response
-			when OpenID::Consumer::SetupNeededResponse
-				setup_url = response.instance_eval{ @setup_url } rescue nil
-				if setup_url
-					redirect_to setup_url and return
-				else
-					setup_response = openid_consumer.begin(response.identity_url) rescue nil
-					if setup_response
-						redirect_to setup_response.redirect_url(root_url, update_openid_user_url(:id => @user.username)) and return
+				case response
+				when OpenID::Consumer::SetupNeededResponse
+					setup_url = response.instance_eval{ @setup_url } rescue nil
+					if setup_url
+						redirect_to setup_url and return
+					else
+						setup_response = openid_consumer.begin(response.identity_url) rescue nil
+						if setup_response
+							redirect_to setup_response.redirect_url(root_url, update_openid_user_url(:id => @user.username)) and return
+						end
 					end
+				when OpenID::Consumer::SuccessResponse
+					if @user.update_attribute(:openid_url, OpenID.normalize_url(response.identity_url))
+						flash[:notice] = "Your OpenID URL was updated!"
+						redirect_to user_url(:id => @user.username) and return
+					end
+				when OpenID::Consumer::FailureResponse
+					# Do nothing
 				end
-			when OpenID::Consumer::SuccessResponse
-				if @user.update_attribute(:openid_url, OpenID.normalize_url(response.identity_url))
-					flash[:notice] = "Your OpenID URL was updated!"
-					redirect_to user_url(:id => @user.username) and return
-				end
-			when OpenID::Consumer::FailureResponse
-				# Do nothing
-			end
 
-			flash[:notice] ||= 'OpenID verification failed!'
-			redirect_to edit_user_url(:id => @user.username)
+				flash[:notice] ||= 'OpenID verification failed!'
+				redirect_to edit_user_url(:id => @user.username)
+			end
 		end
 
 		def update
 			@page = params[:page] || 'info'
-			require_user_admin_or_user(@user, :redirect => user_url(@user))
-			attributes = @current_user.user_admin? ? params[:user] : User.safe_attributes(params[:user])
-			attributes.delete(:administrator) unless @current_user.admin?
+			if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
+				attributes = @current_user.user_admin? ? params[:user] : User.safe_attributes(params[:user])
+				attributes.delete(:administrator) unless @current_user.admin?
 
-			if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
-				new_openid_url = attributes[:openid_url]
-				attributes.delete(:openid_url)
-			end
-
-			@user.update_attributes(attributes)
-			if @user.valid?
-				if @user == @current_user
-					# Make sure the session data is updated
-					@current_user.reload
-					store_session_authentication
+				if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
+					new_openid_url = attributes[:openid_url]
+					attributes.delete(:openid_url)
 				end
-				# Verify the changed OpenID URL
-				if new_openid_url
-					response = openid_consumer.begin(new_openid_url) rescue nil
-					if response
-						redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), false) and return
-					else
-						flash.now[:notice] = "That's not a valid OpenID URL!"
+
+				@user.update_attributes(attributes)
+				if @user.valid?
+					if @user == @current_user
+						# Make sure the session data is updated
+						@current_user.reload
+						store_session_authentication
 					end
-				else
-					flash[:notice] = "Your changes were saved!"
-					redirect_to edit_user_page_url(:id => @user.username, :page => @page) and return
+					# Verify the changed OpenID URL
+					if new_openid_url
+						response = openid_consumer.begin(new_openid_url) rescue nil
+						if response
+							redirect_to response.redirect_url(root_url, update_openid_user_url(:id => @user.username), false) and return
+						else
+							flash.now[:notice] = "That's not a valid OpenID URL!"
+						end
+					else
+						flash[:notice] = "Your changes were saved!"
+						redirect_to edit_user_page_url(:id => @user.username, :page => @page) and return
+					end
 				end
+				flash.now[:notice] ||= "There were errors saving your changes"
+				render :action => :edit
 			end
-			flash.now[:notice] ||= "There were errors saving your changes"
-			render :action => :edit
 		end
 
 		def complete_openid_login

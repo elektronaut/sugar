@@ -19,131 +19,112 @@ class ApplicationController < ActionController::Base
 	before_filter :set_section
 	after_filter  :store_session_authentication
 
-	# Shortcut for setting up the authentication filter. Example:
-	#   requires_authentication :except => [:login, :logout, :forgot_password]
-	def self.requires_authentication(*args)
-		self.send(:before_filter, :require_authenticated, *args)
-	end
+	class << self
 
-	# Shortcut for setting up the required user filter. Example:
-	#   requires_user :except => [:login, :logout, :forgot_password]
-	def self.requires_user(*args)
-		self.send(:before_filter, :require_user, *args)
-	end
-
-	# Redirect to login page if authentication is required.
-	def require_authenticated
-		unless Sugar.config(:public_browsing)
-			require_user # Delegate to require_user
-		end
-	end
-
-	# Shortcut for setting up the required moderator filter. Example:
-	#   requires_user :except => [:login, :logout, :forgot_password]
-	def self.requires_moderator(*args)
-		self.send(:before_filter, :require_moderator, *args)
-	end
-
-	# Shortcut for setting up the required user admin filter. Example:
-	#   requires_user :except => [:login, :logout, :forgot_password]
-	def self.requires_user_admin(*args)
-		self.send(:before_filter, :require_user_admin, *args)
-	end
-
-	# Redirect to login page unless <tt>@current_user</tt> is activated. 
-	def require_user
-		unless @current_user && @current_user.activated?
-			respond_to do |format|
-				format.html do
-					flash[:notice] = 'You must be logged in to do that.'
-					redirect_to login_users_url and return
+		# Requires a user unless public browsing is on
+		def requires_authentication(*args)
+			self.send(:before_filter, *args) do |controller|
+				unless Sugar.config(:public_browsing)
+					controller.send(:require_user_account) 
 				end
-				format.mobile do
-					flash[:notice] = 'You must be logged in to do that.'
-					redirect_to login_users_url and return
-				end
-				format.json { render :json => 'Authentication required', :status => 401 and return }
-				format.xml  { render :xml  => 'Authentication required', :status => 401 and return }
 			end
 		end
-	end
 
-	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
-	# unless <tt>@current_user</tt> is <tt>user</tt> or an admin.
-	def require_admin_or_user(user, options={})
-		options[:redirect] ||= discussions_path
-		options[:notice] ||= "You don't have permission to do that!"
-		unless @current_user == user || @current_user.admin?
-			format.html do
-				flash[:notice] = options[:notice]
-				redirect_to login_users_url and return
-			end
-			format.mobile do
-				flash[:notice] = options[:notice]
-				redirect_to login_users_url and return
-			end
-			format.json { render :json => options[:notice], :status => 401 and return }
-			format.xml  { render :xml  => options[:notice], :status => 401 and return }
-		end
-	end
-
-	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
-	# unless <tt>@current_user</tt> is <tt>user</tt> or a user admin.
-	def require_user_admin_or_user(user, options={})
-		options[:redirect] ||= discussions_path
-		options[:notice]   ||= "You don't have permission to do that!"
-		unless @current_user == user || @current_user.user_admin?
-			respond_to do |format|
-				format.html do
-					flash[:notice] = options[:notice]
-					redirect_to login_users_url and return
-				end
-				format.mobile do
-					flash[:notice] = options[:notice]
-					redirect_to login_users_url and return
-				end
-				format.json { render :json => options[:notice], :status => 401 and return }
-				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+		# Requires a logged in user
+		def requires_user(*args)
+			self.send(:before_filter, *args) do |controller|
+				controller.send(:require_user_account) 
 			end
 		end
-	end
 
-	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
-	# unless <tt>@current_user</tt> is a moderator
-	def require_moderator(options={})
-		options[:redirect] ||= discussions_path
-		options[:notice]   ||= "You don't have permission to do that!"
-		unless @current_user && @current_user.moderator?
-			respond_to do |format|
-				format.any(:html, :mobile) do
-					flash[:notice] = options[:notice]
-					redirect_to options[:redirect] and return
-				end
-				format.json { render :json => options[:notice], :status => 401 and return }
-				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+		# Requires a logged in admin
+		def requires_admin(*args)
+			self.send(:before_filter, *args) do |controller|
+				controller.send(:verify_user, :admin => true)
 			end
 		end
-	end
 
-	# Redirect to <tt>options[:redirect]</tt> (default: <tt>discussions_path</tt>)
-	# unless <tt>@current_user</tt> is a user admin
-	def require_user_admin(options={})
-		options[:redirect] ||= discussions_path
-		options[:notice]   ||= "You don't have permission to do that!"
-		unless @current_user && @current_user.user_admin?
-			respond_to do |format|
-				format.any(:html, :mobile) do
-					flash[:notice] = options[:notice]
-					redirect_to options[:redirect] and return
-				end
-				format.json { render :json => options[:notice], :status => 401 and return }
-				format.xml  { render :xml  => options[:notice], :status => 401 and return }
+		# Requires a logged in moderator
+		def requires_moderator(*args)
+			self.send(:before_filter, *args) do |controller|
+				controller.send(:verify_user, :moderator => true)
 			end
 		end
-	end
 
-	protected
+		# Requires a logged in user admin
+		def requires_user_admin(*args)
+			self.send(:before_filter, *args) do |controller|
+				controller.send(:verify_user, :user_admin => true)
+			end
+		end
+
+	end
 	
+	protected
+
+		# Verifies the @current_user. The user is considered verified if one or more
+		# criteria are met. If not, a redirect is performed. 
+		#
+		# Criteria:
+		#
+		#  :user       - Checks that @current_user matches the given user or :any
+		#  :admin      - Checks that @current_user is an admin
+		#  :moderator  - Checks that @current_user is a moderator
+		#  :user_admin - Checks that @current_user is a user admin
+		#
+		# Other options:
+		#
+		#  :notice   - Notice to display if verification fails
+		#  :redirect - URL to redirect to if verification fails
+		#
+		# Examples:
+		#
+		#  # Require any user
+		#  verify_user(:user => :any, :redirect => login_users_url, :notice => 'You must be logged in!')
+		#
+		#  # Only accessible by a moderator
+		#  verify_user(:moderator => true, :notice => 'You must be a moderator!')
+		#
+		#  # Only accessible by a user admin or the user who owns the invite
+		#  verify_user(:user => @invite.user, :user_admin => true)
+		#
+		def verify_user(options={})
+			options[:redirect]   ||= discussions_url
+			options[:notice]     ||= "You don't have permission to do that!"
+			options[:api_notice] ||= options[:notice]
+
+			verified = false
+			if @current_user && @current_user.activated?
+				verified ||= options[:user] == :any          if options[:user]
+				verified ||= options[:user] == @current_user if options[:user]
+				verified ||= @current_user.admin?            if options[:admin]
+				verified ||= @current_user.moderator?        if options[:moderator]
+				verified ||= @current_user.user_admin?       if options[:user_admin]
+			end
+
+			unless verified
+				respond_to do |format|
+					format.any(:html, :mobile) do
+						flash[:notice] = options[:notice]
+						redirect_to options[:redirect]
+					end
+					format.json { render :json => options[:api_notice], :status => 401 }
+					format.xml  { render :xml  => options[:api_notice], :status => 401 }
+				end
+			end
+			return verified
+		end
+		
+		# Requires a user account
+		def require_user_account
+			verify_user(
+				:user       => :any, 
+				:redirect   => login_users_url, 
+				:notice     => 'You must be logged in to do that',
+				:api_notice => 'Authorization required'
+			)
+		end
+
 		# Renders an error
 		def render_error(error, options={})
 			options[:status] ||= error if error.kind_of?(Numeric)
@@ -225,6 +206,7 @@ class ApplicationController < ActionController::Base
 		# Facebook authentication
 		def facebook_authenticate
 			if Sugar.config(:facebook_app_id) && request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"]
+
 				# Parse the facebook session
 				facebook_session = request.cookies["fbs_#{Sugar.config(:facebook_app_id)}"].gsub(/(^\"|\"$)/, '')
 				facebook_session = CGI::parse(facebook_session).inject(Hash.new) do |memo, val|
@@ -244,7 +226,7 @@ class ApplicationController < ActionController::Base
 			end
 		end
 
-		# Deauthenticates <tt>@current_user</tt>.
+		# Deauthenticates the current user
 		def deauthenticate!
 			@current_user = nil
 			store_session_authentication
@@ -260,6 +242,7 @@ class ApplicationController < ActionController::Base
 				if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
 					@current_user.update_attribute(:last_active, Time.now)
 				end
+
 				# Clean up banned_until
 				if @current_user.banned_until? && !@current_user.temporary_banned?
 					@current_user.update_attribute(:banned_until, nil)
