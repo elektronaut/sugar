@@ -3,10 +3,10 @@ require 'digest/sha1'
 class PostsController < ApplicationController
 
 	# Disable sessions and filters for the posts count action, and cache it
-	before_filter :authenticate_session,         :except => [:count]
-	before_filter :detect_mobile,                :except => [:count]
-	before_filter :set_section,                  :except => [:count]
-	after_filter  :store_session_authentication, :except => [:count]
+	#before_filter :authenticate_session,         :except => [:count]
+	#before_filter :detect_mobile,                :except => [:count]
+	#before_filter :set_section,                  :except => [:count]
+	#after_filter  :store_session_authentication, :except => [:count]
 	caches_page   :count
 
 	requires_authentication :except => [:count]
