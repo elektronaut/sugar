@@ -23,7 +23,7 @@ class OpenidController < ApplicationController
 		case response
 
 		# Setup needed
-		when OpenID::Consumer::SetupNeededResponse
+		when ::OpenID::Consumer::SetupNeededResponse
 			setup_url = response.instance_eval{ @setup_url } rescue nil
 			if setup_url
 				redirect_to setup_url and return
@@ -35,13 +35,13 @@ class OpenidController < ApplicationController
 			end
 
 		# Authentication success
-		when OpenID::Consumer::SuccessResponse
-			session[:authenticated_openid_url] = OpenID.normalize_url(response.identity_url)
+		when ::OpenID::Consumer::SuccessResponse
+			session[:authenticated_openid_url] = ::OpenID.normalize_url(response.identity_url)
 			redirect_url = session[:openid_redirect_success] || root_url
 			redirect_to redirect_url and return
 
 		# Authentication failed
-		when OpenID::Consumer::FailureResponse
+		when ::OpenID::Consumer::FailureResponse
 			# Do nothing, let it fail
 		end
 

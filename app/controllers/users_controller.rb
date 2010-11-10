@@ -4,7 +4,7 @@ require 'open-uri'
 
 class UsersController < ApplicationController
 
-	requires_authentication :except => [:login, :facebook_login, :logout, :password_reset, :new, :create]
+	requires_authentication :except => [:login, :logout, :password_reset, :new, :create]
 	requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
 
 	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites, :stats]
@@ -24,18 +24,6 @@ class UsersController < ApplicationController
 			@admin_signup = true if User.count(:all) == 0
 		end
 	
-		def get_facebook_user
-			if @facebook_session && @facebook_session[:uid] && user = User.find_by_facebook_uid(@facebook_session[:uid])
-				if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token
-					# Update the access token if it has changed
-					user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
-				end
-				user
-			else
-				nil
-			end
-		end
-		
 	public
 
 		def index
@@ -162,9 +150,8 @@ class UsersController < ApplicationController
 		
 			# Get data from Facebook
 			if params[:mode] == 'facebook' && @facebook_session && @facebook_session[:uid]
-				if user = get_facebook_user
+				if @current_user && @current_user.facebook_uid == @facebook_session[:uid]
 					# You already have an account, dimwit
-					@current_user = user
 					store_session_authentication
 					redirect_to discussions_url and return
 				else
@@ -235,7 +222,7 @@ class UsersController < ApplicationController
 	
 		def disconnect_facebook
 			@current_user.update_attribute(:facebook_uid, nil)
-			cookies['fb_logout'] = true
+			cookies['facebook_logout'] = 'true'
 			flash[:notice] = "You have disconnected your Facebook account"
 			redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
 		end
@@ -286,22 +273,6 @@ class UsersController < ApplicationController
 				else
 					flash.now[:notice] ||= "There were errors saving your changes"
 					render :action => :edit
-				end
-			end
-		end
-
-		def facebook_login
-			if user = get_facebook_user
-				@current_user = user
-				store_session_authentication
-				redirect_to discussions_url and return
-			else
-				if Sugar.config(:signups_allowed)
-					flash[:notice] = "You must choose a username before connecting"
-					redirect_to new_user_url(:anchor => 'facebook') and return
-				else
-					flash[:notice] = "Your Facebook account wasn't recognized"
-					redirect_to login_users_url and return
 				end
 			end
 		end

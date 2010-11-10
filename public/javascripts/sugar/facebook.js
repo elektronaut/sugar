@@ -28,11 +28,16 @@
 				});
 				// Bind events
 				FB.Event.subscribe('auth.sessionChange', function(response) {
-					$(facebook_lib).trigger('auth.sessionChange');
-					if(response.session){
-						$(facebook_lib).trigger('auth.login');
+					if($.cookie('facebook_logout') == 'true') {
+						FB.logout(function(){});
+						$.cookie('facebook_logout', null, {path: '/'});
 					} else {
-						$(facebook_lib).trigger('auth.logout');
+						$(facebook_lib).trigger('auth.sessionChange');
+						if(response.session){
+							$(facebook_lib).trigger('auth.login');
+						} else {
+							$(facebook_lib).trigger('auth.logout');
+						}
 					}
 				});
 				$(facebook_lib).trigger('ready');
@@ -55,7 +60,7 @@
 
 			// Login handler
 			$('#login .facebook_login').click(function(){
-				$S.Facebook.loginAndRedirect('/users/facebook_login');
+				$S.Facebook.loginAndRedirect('/');
 				return false;
 			});
 			

@@ -27,7 +27,6 @@ Sugar::Application.routes.draw do
 			get 'logout'
 			get 'password_reset'
 			post 'password_reset'
-			get 'facebook_login'
 			get 'connect_facebook'
 			get 'disconnect_facebook'
 
