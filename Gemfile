@@ -55,7 +55,7 @@ else
 end
 
 group :development do
-	gem 'juicer'
+	gem 'yui-compressor', :require => 'yui/compressor'
 end
 
 group :test do

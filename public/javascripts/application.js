@@ -1,14 +1,3 @@
-/**
- * @depends vendor/jquery.libraries.js
- * @depends sugar/sugar.js
- * @depends sugar/maps.js
- * @depends sugar/mp3player.js
- * @depends sugar/posts.js
- * @depends sugar/hotkeys.js
- * @depends sugar/facebook.js
- */
-
-
 window.relativeTime = function(timeString) {
 	var parsedDate = Date.parse(timeString);
 	var delta = (Date.parse(Date()) - parsedDate) / 1000;

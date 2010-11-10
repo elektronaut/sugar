@@ -22,31 +22,64 @@ namespace :sugar do
 			end
 		end
 	end
-	
-	desc "Pack javascripts"
-	task :pack_scripts do
-		puts "Minifying javascript files..."
-		puts `juicer merge --force public/javascripts/application.js`
-		js_files = [
-			'vendor/jquery', 
-			'vendor/jquery.hotkeys.min', 
-			'vendor/jquery.scrollTo.min', 
-			'vendor/jquery.autocomplete.pack', 
-			'vendor/swfobject', 
-			'vendor/soundmanager2.min', 
-			'application.min'
-		].map{|f| "public/javascripts/#{f}.js"}.join(" ")
-		`cat #{js_files} > public/javascripts/bundled/application.js`
 
-		puts "Minifying javascript files for mobile..."
-		puts `juicer merge --force public/javascripts/mobile.js`
-		js_files = ['vendor/jquery', 'mobile.min'].map{|f| "public/javascripts/#{f}.js"}.join(" ")
-		`cat #{js_files} > public/javascripts/bundled/mobile.js`
+	desc "Minify javascripts"
+	task :pack_scripts => :environment do
 		
-		`rm public/javascripts/application.min.js`
-		`rm public/javascripts/mobile.min.js`
+		class Minifier
+			def initialize
+				@scripts = []
+				@compressor = YUI::JavaScriptCompressor.new(:munge => true)
+			end
+			def add(script, options={})
+				options = {:compress => false}.merge(options)
+				@scripts << [script, options]
+			end
+
+			def to_s
+				output = []
+				@scripts.each do |filename, options|
+					script = File.read(Rails.root.join("public/javascripts/#{filename}"))
+					script = @compressor.compress(script) if options[:compress]
+					output << script
+				end
+				output.join("\n")
+			end
+		end
 		
-		puts "All done!"
+		puts "* Minifying and bundling application scripts"
+
+		minifier = Minifier.new
+		minifier.add 'vendor/jquery.js'
+		minifier.add 'vendor/jquery.hotkeys.min.js' 
+		minifier.add 'vendor/jquery.scrollTo.min.js'
+		minifier.add 'vendor/jquery.autocomplete.pack.js'
+		minifier.add 'vendor/swfobject.js'
+		minifier.add 'vendor/soundmanager2.min.js'
+		minifier.add 'vendor/jquery.libraries.js', :compress => true
+
+		minifier.add 'sugar/sugar.js', :compress => true
+		minifier.add 'sugar/maps.js', :compress => true
+		minifier.add 'sugar/mp3player.js', :compress => true
+		minifier.add 'sugar/posts.js', :compress => true
+		minifier.add 'sugar/hotkeys.js', :compress => true
+		minifier.add 'sugar/facebook.js', :compress => true
+		minifier.add 'application.js', :compress => true
+		
+		File.open(Rails.root.join('public/javascripts/bundled/application.js'), 'w') do |fh|
+			fh.write minifier.to_s
+		end
+		
+		puts "* Minifying and bundling mobile scripts"
+
+		mobile_minifier = Minifier.new
+		mobile_minifier.add 'vendor/jquery.js'
+		mobile_minifier.add 'mobile.js', :compress => true
+
+
+		File.open(Rails.root.join('public/javascripts/bundled/mobile.js'), 'w') do |fh|
+			fh.write mobile_minifier.to_s
+		end
 	end
 	
 	desc "Pack themes and javascripts"
