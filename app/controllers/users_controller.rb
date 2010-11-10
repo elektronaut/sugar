@@ -160,7 +160,7 @@ class UsersController < ApplicationController
 						:facebook_access_token => @facebook_session[:access_token]
 					}
 					begin
-						fb_url = "http://graph.facebook.com/#{@facebook_session[:uid]}"
+						fb_url = "https://graph.facebook.com/#{@facebook_session[:uid]}"
 						if @facebook_session[:access_token]
 							fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
 							fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
