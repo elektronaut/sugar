@@ -51,11 +51,11 @@ namespace :sugar do
 
 		minifier = Minifier.new
 		minifier.add 'vendor/jquery.js'
-		minifier.add 'vendor/jquery.hotkeys.min.js' 
-		minifier.add 'vendor/jquery.scrollTo.min.js'
-		minifier.add 'vendor/jquery.autocomplete.pack.js'
+		minifier.add 'vendor/jquery.hotkeys.js' 
+		minifier.add 'vendor/jquery.scrollTo.js'
+		minifier.add 'vendor/jquery.autocomplete.js'
 		minifier.add 'vendor/swfobject.js'
-		minifier.add 'vendor/soundmanager2.min.js'
+		minifier.add 'vendor/soundmanager2.js'
 		minifier.add 'vendor/jquery.libraries.js', :compress => true
 
 		minifier.add 'sugar/sugar.js', :compress => true

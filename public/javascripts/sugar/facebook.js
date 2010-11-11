@@ -1,24 +1,27 @@
-(function($S){
+/*jslint browser: true, devel: true, onevar: false, regexp: false, immed: false*/
+/*global window: false, jQuery: false, $: false, Sugar: false, FB: false*/
+
+(function ($S) {
 	
-	$($S).bind('ready', function(){
-		if(this.Configuration.FacebookAppId){
+	$($S).bind('ready', function () {
+		if (this.Configuration.FacebookAppId) {
 			this.Facebook.init();
 		}
 	});
 	
 	$S.Facebook = {
 		appId: false,
-		init: function(){
+		init: function () {
 			var facebook_lib = this;
 			this.appId = $S.Configuration.FacebookAppId;
 
-			$(this).bind('ready', function(){
+			$(this).bind('ready', function () {
 				this.applyFunctionality();
 			});
 
 			// Connect to Facebook asynchronously, jQuery style
 			$('body').append('<div id="fb-root" />');
-			window.fbAsyncInit = function() {
+			window.fbAsyncInit = function () {
 				// Initialize Facebook
 				FB.init({
 					appId  : $S.Facebook.appId,
@@ -27,13 +30,13 @@
 					xfbml  : true  // parse XFBML
 				});
 				// Bind events
-				FB.Event.subscribe('auth.sessionChange', function(response) {
-					if($.cookie('facebook_logout') == 'true') {
-						FB.logout(function(){});
+				FB.Event.subscribe('auth.sessionChange', function (response) {
+					if ($.cookie('facebook_logout') === 'true') {
+						FB.logout(function () {});
 						$.cookie('facebook_logout', null, {path: '/'});
 					} else {
 						$(facebook_lib).trigger('auth.sessionChange');
-						if(response.session){
+						if (response.session) {
 							$(facebook_lib).trigger('auth.login');
 						} else {
 							$(facebook_lib).trigger('auth.logout');
@@ -48,70 +51,70 @@
 			document.getElementById('fb-root').appendChild(e);
 		},
 
-		applyFunctionality: function(){
+		applyFunctionality: function () {
 			// Format buttons
 			$('.facebook_login').addClass('fb_button fb_button_large').wrapInner('<span class="fb_button_text" />');
 
 			// Connect under Services
-			$('.edit_user_profile .facebook_login').click(function(){
+			$('.edit_user_profile .facebook_login').click(function () {
 				$S.Facebook.loginAndRedirect('/users/connect_facebook');
 				return false;
 			});
 
 			// Login handler
-			$('#login .facebook_login').click(function(){
+			$('#login .facebook_login').click(function () {
 				$S.Facebook.loginAndRedirect('/');
 				return false;
 			});
 			
 			// Signing up
-			var doSignup = function(){
+			var doSignup = function () {
 				$('#facebook .signup').hide();
-				FB.getLoginStatus(function(response){
-					if(response.session){
+				FB.getLoginStatus(function (response) {
+					if (response.session) {
 						$('#facebook .connect').hide();
 						$('#facebook .signup').show();
-						FB.api('/me', function(response){
-							$('#facebook .login_status').html('You are logged into Facebook as <strong>'+response.name+'</strong>.');
-							if(!$('#facebook #user_username').val()){
+						FB.api('/me', function (response) {
+							$('#facebook .login_status').html('You are logged into Facebook as <strong>' + response.name + '</strong>.');
+							if (!$('#facebook #user_username').val()) {
 								$('#facebook #user_username').val(response.name);
 							}
-							if(!$('#facebook #user_realname').val()){
+							if (!$('#facebook #user_realname').val()) {
 								$('#facebook #user_realname').val(response.name);
 							}
 						});
 					}
 				});
 			};
-			$('.signup #facebook').each(function(){
+			$('.signup #facebook').each(function () {
 				doSignup();
 			});
-			$('.signup .facebook_login').click(function(){
-				FB.getLoginStatus(function(response){
-					if(response.session){
+			$('.signup .facebook_login').click(function () {
+				FB.getLoginStatus(function (response) {
+					if (response.session) {
 						doSignup();
 					} else {
-						FB.login(function(response){
-							if(response.session){
+						FB.login(function (response) {
+							if (response.session) {
 								doSignup();
 							}
-						}, {perms:'email,user_likes,read_friendlists,offline_access'});
+						}, {perms: 'email,user_likes,read_friendlists,offline_access'});
 					}
 				});
 				return false;
 			});
 		},
 		
-		loginAndRedirect: function(redirectUrl){
-			FB.getLoginStatus(function(response){
-				if(response.session){
+		loginAndRedirect: function (redirectUrl) {
+			FB.getLoginStatus(function (response) {
+				if (response.session) {
 					document.location = redirectUrl;
 				} else {
-					FB.login(function(response){
-						if(response.session){
+					FB.login(function (response) {
+						if (response.session) {
 							document.location = redirectUrl;
 						}
-					}, {perms:'user_likes,read_friendlists,offline_access'});
+					}, {perms: 'user_likes,read_friendlists,offline_access'});
 				}
 			});
 		}

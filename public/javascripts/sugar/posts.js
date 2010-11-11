@@ -1,11 +1,14 @@
+/*jslint browser: true, devel: true, onevar: false, regexp: false, immed: false*/
+/*global window: false, jQuery: false, $: false, Sugar: false*/
+
 $.extend(Sugar.Initializers, {
-	applySubmitMagic: function(){
-		$("#replyText form").submit(function(){
+	applySubmitMagic: function () {
+		$("#replyText form").submit(function () {
 			return Sugar.parseSubmit(this);
 		});
 	},
-	applyPostPreview: function(){
-		$('#replyText .preview').click(function(){
+	applyPostPreview: function () {
+		$('#replyText .preview').click(function () {
 			Sugar.previewPost();
 			return false;
 		});
@@ -14,7 +17,7 @@ $.extend(Sugar.Initializers, {
 
 $.extend(Sugar, {
 	
-	previewPost: function(){
+	previewPost: function () {
 		var postBody   = $('#compose-body').val();
 		var previewUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview";
 
@@ -32,21 +35,21 @@ $.extend(Sugar, {
 				'post[body]': postBody,
 				authenticity_token: Sugar.authToken("#replyText form")
 			},
-			success: function(previewPost){
-				if($('.posts #ajaxPosts').length < 1) {
+			success: function (previewPost) {
+				if ($('.posts #ajaxPosts').length < 1) {
 					$('.posts').append('<div id="ajaxPosts"></div>');
 				}
-				if($('.posts #previewPost').length < 1) {
+				if ($('.posts #previewPost').length < 1) {
 					$('.posts').append('<div id="previewPost"></div>');
 					$('.posts #previewPost').hide();
 				}
 				$('.posts #previewPost').html(previewPost).fadeIn();
 			},
-			error: function(xhr, textStatus, errorThrown){
+			error: function (xhr, textStatus, errorThrown) {
 				alert(textStatus);
 			},
-			complete: function(){
-				statusField.each(function(){
+			complete: function () {
+				statusField.each(function () {
 					$(this).removeClass('posting');
 					$(this).html(oldPostButton);
 					$(this).find('.preview span').text('Update Preview');
@@ -57,71 +60,68 @@ $.extend(Sugar, {
 	},
 
 	// Post quoting
-	quotePost: function(postId){
-		var postDiv = '#post-'+postId;
-		$(postDiv).each(function(){
+	quotePost: function (postId) {
+		var postDiv = '#post-' + postId;
+		$(postDiv).each(function () {
 			var permalink  = '';
 			var username   = '';
 			var content    = false;
 			var quotedPost = '';
 
-			if(window.getSelection && window.getSelection().containsNode(this, true)){
+			if (window.getSelection && window.getSelection().containsNode(this, true)) {
 				content = window.getSelection().toString();
 			}
 
-			if($(this).hasClass('me_post')) {
+			if ($(this).hasClass('me_post')) {
 				username  = $(this).find('.body .poster').text();
-				if(!content){
+				if (!content) {
 					content   = $(this).find('.body .content').html()
 					.replace(/^[\s]*/, '')
 					.replace(/[\s]*$/, '')
 					.replace(/<br[\s\/]*>/g, "\n");
 				}
-				quotedPost = '<blockquote><cite>Posted by '+username+':</cite>'+content+'</blockquote>';
+				quotedPost = '<blockquote><cite>Posted by ' + username + ':</cite>' + content + '</blockquote>';
 			} else {
-				permalink = $(this).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/,'');
+				permalink = $(this).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '');
 				username  = $(this).find('.post_info .username a').text();
-				if(!content){
+				if (!content) {
 					content   = Sugar.deparsePost($(this).find('.body .content').html());
 				}
-				quotedPost = '<blockquote><cite>Posted by <a href="'+permalink+'">'+username+'</a>:</cite>'+content+'</blockquote>';
+				quotedPost = '<blockquote><cite>Posted by <a href="' + permalink + '">' + username + '</a>:</cite>' + content + '</blockquote>';
 				// Trim empty blockquotes
-				while(quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)){
+				while (quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)) {
 					quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '');
 				}
 			}
 			Sugar.compose({add: quotedPost});
 		});
-		
-		if(jQuery(postDiv).length > 0) {
-		}
 	},
 	
-	addToReply: function(){
-		jQuery('#compose-body').val(jQuery('#compose-body').val() + string);
+	addToReply: function () {
+		jQuery('#compose-body').val(jQuery('#compose-body').val());
 	},
 
-	compose: function(options){
+	compose: function (options) {
 		options = $.extend({}, options);
-		if(window.replyTabs){
+		if (window.replyTabs) {
 			window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
 		}
-		$('#replyText textarea').each(function(){
-			if(options.add){
+		$('#replyText textarea').each(function () {
+			if (options.add) {
 				$(this).val($(this).val() + options.add);
 			}
 			$(this).focus();
 		});
 	},
 
-	deparsePost: function(content){
+	deparsePost: function (content) {
 		content = content
 			.replace(/^[\s]*/, '')          // Strip leading space
 			.replace(/[\s]*$/, '')          // Strip trailing space
 			.replace(/<br[\s\/]*>/g, "\n"); // Change <br /> to line breaks
 
-		if(content.match(/<div class="codeblock/)){
-			if($('#hiddenPostDeparser').length < 1) {
+		if (content.match(/<div class="codeblock/)) {
+			if ($('#hiddenPostDeparser').length < 1) {
 				$(document.body).append('<div id="hiddenPostDeparser"></div>');
 			}
 			var hiddenBlock = $('#hiddenPostDeparser');
@@ -131,10 +131,10 @@ $.extend(Sugar, {
 			
 			// Remove line numbers
 			$(hiddenBlock).find('.codeblock .line-numbers').remove();
-			$(hiddenBlock).find('.codeblock').each(function(){
+			$(hiddenBlock).find('.codeblock').each(function () {
 				var codeLanguage = this.className.match(/language_([\w\d\-\.\+_]+)/)[1];
-				blockContent = $(this).children('pre').text().replace(/^[\s]*/, '').replace(/[\s]*$/, '');
-				$(this).replaceWith('<code language="'+codeLanguage+'">'+blockContent+'</code>');
+				var blockContent = $(this).children('pre').text().replace(/^[\s]*/, '').replace(/[\s]*$/, '');
+				$(this).replaceWith('<code language="' + codeLanguage + '">' + blockContent + '</code>');
 			});
 			
 			content = hiddenBlock.html();
@@ -151,10 +151,10 @@ $.extend(Sugar, {
 	// parseSubmit() reads the contents of the posting textarea and applies it to a hidden div.
 	// If there are any images, parseSubmit() will attempt to load them and update the post body
 	// with proper width/height attributes. 
-	parseSubmit : function(submitForm){
+	parseSubmit : function (submitForm) {
 		var statusField = $('#button-container');
-		$('#button-container').each(function(){
-			if(!this.originalButton){
+		$('#button-container').each(function () {
+			if (!this.originalButton) {
 				this.originalButton = $(this).html();
 			}
 		});
@@ -162,7 +162,7 @@ $.extend(Sugar, {
 
 		statusField.addClass('posting');
 		
-		if($.browser.msie){
+		if ($.browser.msie) {
 			statusField.html('Posting..');
 		} else {
 			statusField.html('Validating post..');
@@ -172,7 +172,7 @@ $.extend(Sugar, {
 			// Auto-link URLs
 			postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/gi, "$1<a href=\"$2\">$2</a>");
 
-			if($('#hiddenPostVerifier').length < 1) {
+			if ($('#hiddenPostVerifier').length < 1) {
 				$(document.body).append('<div id="hiddenPostVerifier"></div>');
 			}
 			var postNotifier = $('#hiddenPostVerifier');
@@ -183,8 +183,8 @@ $.extend(Sugar, {
 			// Rewrite local links
 			var currentDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.:]+)/)[1];
 			var postLinks = postNotifier.find('a');
-			if(postLinks.length > 0){
-				for(var a = 0; a < postLinks.length; a++){
+			if (postLinks.length > 0) {
+				for (var a = 0; a < postLinks.length; a += 1) {
 					postLinks[a].href = postLinks[a].href.replace(currentDomain, '');
 				}
 				$('#compose-body').val(postNotifier.html());
@@ -192,27 +192,27 @@ $.extend(Sugar, {
 
 			// Load images
 			var postImages = postNotifier.find('img');
-			var loadedImages = Array();
-			if(postImages.length > 0) {
+			var loadedImages = [];
+			if (postImages.length > 0) {
 
 				// Async loading event
-				postImages.each(function(){
-					$(this).load(function(){
+				postImages.each(function () {
+					$(this).load(function () {
 						loadedImages.push(this);
 					});
 				});
 
 				// Check loading of images
 				postNotifier.cycles = 0;
-				postNotifier.loadInterval = setInterval(function(){
+				postNotifier.loadInterval = setInterval(function () {
 					postNotifier.cycles += 1;
-					statusField.html('Loading image '+loadedImages.length+' of '+postImages.length+'..');
+					statusField.html('Loading image ' + loadedImages.length + ' of ' + postImages.length + '..');
 
 					// Load failed
-					if(postNotifier.cycles >= 80) {
+					if (postNotifier.cycles >= 80) {
 						clearInterval(postNotifier.loadInterval);
-						if(confirm("One or more of your images timed out. Post anyway?")) {
-							$(loadedImages).each(function(){
+						if (confirm("One or more of your images timed out. Post anyway?")) {
+							$(loadedImages).each(function () {
 								$(this).attr('height', this.height);
 								$(this).attr('width', this.width);
 							});
@@ -226,8 +226,8 @@ $.extend(Sugar, {
 					}
 
 					// All images loaded
-					if(loadedImages.length == postImages.length) {
-						postImages.each(function(){
+					if (loadedImages.length === postImages.length) {
+						postImages.each(function () {
 							$(this).attr('height', this.height);
 							$(this).attr('width', this.width);
 						});
@@ -246,13 +246,13 @@ $.extend(Sugar, {
 	},
 
 	// Submits post via AJAX if supported. 
-	submitPost : function(){
-		$("#replyText form").each(function(){
+	submitPost : function () {
+		$("#replyText form").each(function () {
 			var submitForm = this;
 			var statusField = $('#button-container');
 			statusField.addClass('posting');
 			statusField.html('Posting, please wait..');
-			if($(submitForm).hasClass('livePost')){
+			if ($(submitForm).hasClass('livePost')) {
 				var postBody = $('#compose-body').val();
 				$.ajax({
 					url:  submitForm.action,
@@ -261,25 +261,25 @@ $.extend(Sugar, {
 						'post[body]': postBody,
 						authenticity_token: Sugar.authToken(this)
 					},
-					success: function(){
+					success: function () {
 						$('#compose-body').val('');
 						$('.posts #previewPost').hide();
 						Sugar.loadNewPosts();
 					},
-					error: function(xhr, textStatus, errorThrown){
+					error: function (xhr, textStatus, errorThrown) {
 						alert(textStatus);
-						if(postBody === ""){
+						if (postBody === "") {
 							alert("Your post is empty!");
 						} else {
-							if(textStatus == 'timeout'){
+							if (textStatus === 'timeout') {
 								alert('Error: The request timed out.');
 							} else {
 								alert('There was a problem validating your post.');
 							}
 						}
 					},
-					complete: function(){
-						statusField.each(function(){
+					complete: function () {
+						statusField.each(function () {
 							$(this).removeClass('posting');
 							$(this).html(this.originalButton);
 						});
