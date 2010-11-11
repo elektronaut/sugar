@@ -8,8 +8,8 @@ class ApplicationController < ActionController::Base
 	
 	protect_from_forgery
 
-	before_filter :detect_mobile
 	before_filter :set_time_zone
+	before_filter :detect_mobile
 	before_filter :set_section
 	
 	protected
@@ -27,6 +27,23 @@ class ApplicationController < ActionController::Base
 				format.json   {options[:text] ||= error_messages[error]}
 			end
 			render options
+		end
+		
+		# Finds DiscussionViews for the given discussion.
+		def load_views_for(discussions)
+			if @current_user && discussions && discussions.length > 0
+				@discussion_views = DiscussionView.find(
+					:all,
+					:conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
+				)
+			end
+		end
+
+		# Set time zone for user
+		def set_time_zone
+			if @current_user && @current_user.time_zone
+				Time.zone = @current_user.time_zone
+			end
 		end
 
 		# Detects the mobile user agent string and sets request.format = :mobile
@@ -52,21 +69,6 @@ class ApplicationController < ActionController::Base
 				@section = :invites
 			else
 				@section = :discussions
-			end
-		end
-		
-		# Set time zone for user
-		def set_time_zone
-			Time.zone = @current_user.time_zone if @current_user && @current_user.time_zone
-		end
-
-		# Finds DiscussionViews for @discussion.
-		def load_views_for(discussions)
-			if @current_user && discussions && discussions.length > 0
-				@discussion_views = DiscussionView.find(
-					:all,
-					:conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
-				)
 			end
 		end
 		

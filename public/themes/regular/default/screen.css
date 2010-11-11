@@ -668,16 +668,11 @@ table.discussions tr.closed td.name a:hover {
 
 /* Targeted discussion (Keyboard navigation) */
 table.discussions .targeted td {
-	background:          #3B89C7;
-	color:               #fff;
+	background:          #f0f5f8;
+	color:               #012;
 }
-table.discussions .targeted td:first-child {
-	padding-left:        10px;
-}
-table.discussions .targeted td a, table.discussions .targeted td a:visited{
-	color:               #fff !important;
-}
-table.discussions .targeted td.name {
+table.discussions tr.targeted.nsfw {
+	opacity:             1.0;
 }
 
 
@@ -838,9 +833,10 @@ table.discussions .targeted td.name {
 
 /* Targeted post (Keyboard navigation) */
 .posts .targeted {
-	border:              1px solid #3B89C7;
-	margin-left:         -1px;
-	margin-right:        -1px;
+	border-top:          1px solid #3B89C7;
+	border-bottom:       1px solid #3B89C7;
+	background:          #f0f5f8;
+	margin-top:          -1px;
 }
 
 .new_posts_since_refresh {
