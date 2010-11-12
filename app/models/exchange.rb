@@ -142,7 +142,7 @@ class Exchange < ActiveRecord::Base
 
 			# Ignore trusted posts unless requested
 			unless options[:trusted]
-				conditions = [[conditions.shift, 'trusted = 0'].compact.join(' AND ')] + conditions
+				conditions = [[conditions.shift, 'trusted = ?'].compact.join(' AND '), false] + conditions
 			end
 
 			# Utilize the counter cache on category if possible, if not do the query.
