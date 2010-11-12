@@ -179,7 +179,7 @@ class Exchange < ActiveRecord::Base
 			if user && user.trusted?
 				Discussion.count(:all)
 			else
-				Discussion.count(:all, :conditions => {:trusted => 0})
+				Discussion.count(:all, :conditions => {:trusted => false})
 			end
 		end
 
