@@ -91,42 +91,42 @@ class User < ActiveRecord::Base
 	class << self
 		# Finds active users.
 		def find_active
-			self.find(:all, :conditions => 'activated = 1 AND banned = 0', :order => 'username ASC')
+			self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'username ASC')
 		end
 
 		# Finds users with activity within some_time. The last_active column is only 
 		# updated every 10 minutes, smaller values won't work.
 		def find_online(some_time=15.minutes)
-			User.find(:all, :conditions => ['activated = 1 AND last_active > ?', some_time.ago], :order => 'username ASC')
+			User.find(:all, :conditions => ['activated = ? AND last_active > ?', true, some_time.ago], :order => 'username ASC')
 		end
 
 		# Finds admins.
 		def find_admins
-			User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND (admin = 1 OR user_admin = 1 OR moderator = 1)')
+			User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true])
 		end
 
 		# Finds Twitter users.
 		def find_twitter_users
-			User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND twitter IS NOT NULL AND twitter != ""')
+			User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND twitter IS NOT NULL AND twitter != ""', true, false])
 		end
 
 		# Finds new users. Pass <tt>:limit</tt> as an option to control number 
 		# of users fetched, this defaults to 25.
 		def find_new(options={})
 			options[:limit] ||= 25
-			self.find(:all, :conditions => ['activated = 1 AND banned = 0'], :order => 'created_at DESC', :limit => options[:limit])
+			self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'created_at DESC', :limit => options[:limit])
 		end
 
 		# Finds top posters. Pass <tt>:limit</tt> as an option to control number 
 		# of users fetched, this defaults to 50.
 		def find_top_posters(options={})
 			options[:limit] ||= 50
-			@users  = User.find(:all, :order => 'posts_count DESC', :conditions => 'activated = 1 AND banned = 0', :limit => options[:limit])
+			@users  = User.find(:all, :order => 'posts_count DESC', :conditions => ['activated = ? AND banned = ?', true, false], :limit => options[:limit])
 		end
 
 		# Find trusted users
 		def find_trusted
-			User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0 AND (trusted = 1 OR admin = 1 OR user_admin = 1 OR moderator = 1)')
+			User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true, true])
 		end
 
 		# Hash a string for password usage.
@@ -145,7 +145,7 @@ class User < ActiveRecord::Base
 
 		# Refreshes Xbox Live info for all users.
 		def refresh_xbox!(force=false)
-			self.find(:all, :conditions => ['activated = 1']).select{|u| u.gamertag?}.each do |u|
+			self.find(:all, :conditions => ['activated = ?', true]).select{|u| u.gamertag?}.each do |u|
 				u.refresh_xbox! if force || !u.xbox_refreshed?
 			end
 		end
@@ -197,15 +197,15 @@ class User < ActiveRecord::Base
 			:per_page    => options[:limit] || Discussion::DISCUSSIONS_PER_PAGE,
 			:page        => options[:page] || 1
 		) do |pagination|
-			joins = "INNER JOIN `conversation_relationships` ON `conversation_relationships`.conversation_id = `discussions`.id"
-			joins += " AND `conversation_relationships`.user_id = #{self.id}"
+			joins = "INNER JOIN conversation_relationships ON conversation_relationships.conversation_id = discussions.id"
+			joins += " AND conversation_relationships.user_id = #{self.id}"
 			conversations = Conversation.find(
 				:all,
-				:select     => '`discussions`.*',
+				:select     => 'discussions.*',
 				:joins      => joins,
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
-				:order      => '`discussions`.last_post_at DESC',
+				:order      => 'discussions.last_post_at DESC',
 				:include    => [:poster, :last_poster]
 			)
 		end
@@ -224,7 +224,7 @@ class User < ActiveRecord::Base
 		) do |pagination|
 			Post.find(
 				:all, 
-				:conditions => options[:trusted] ? ['user_id = ? AND conversation = 0', self.id] : ['user_id = ? AND trusted = 0 AND conversation = 0', self.id], 
+				:conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false], 
 				:limit      => pagination.limit, 
 				:offset     => pagination.offset, 
 				:order      => 'created_at DESC',

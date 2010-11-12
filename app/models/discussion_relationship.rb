@@ -38,7 +38,7 @@ class DiscussionRelationship < ActiveRecord::Base
 			paginate = options.has_key?(:page)
 			
 			find_conditions = [:participated, :following, :favorite].inject(Hash.new) do |cond, key|
-				cond[key] = ((options[key]) ? '1' : '0') if options.has_key?(key)
+				cond[key] = ((options[key]) ? true : false) if options.has_key?(key)
 				cond
 			end.merge({:user_id => user.id})
 			
@@ -61,14 +61,14 @@ class DiscussionRelationship < ActiveRecord::Base
 				}.merge(find_options)
 			end
 			
-			join_string = "INNER JOIN `discussion_relationships` ON `discussion_relationships`.discussion_id = `discussions`.id"
-			join_string += " AND " + find_conditions.map{|k,v| "`discussion_relationships`.#{k.to_s} = #{v}"}.join(" AND ")
+			join_string = "INNER JOIN discussion_relationships ON discussion_relationships.discussion_id = discussions.id"
+			join_string += " AND " + find_conditions.map{|k,v| "discussion_relationships.#{k.to_s} = #{v}"}.join(" AND ")
 			
 			find_options = {
-				:select     => '`discussions`.*',
+				:select     => 'discussions.*',
 				#:conditions => find_conditions,
 				:joins      => join_string,
-                :order      => '`discussions`.sticky DESC, `discussions`.last_post_at DESC',
+                :order      => 'discussions.sticky DESC, discussions.last_post_at DESC',
                 :include    => [:poster, :last_poster, :category]
 			}.merge(find_options)
 
@@ -82,9 +82,9 @@ class DiscussionRelationship < ActiveRecord::Base
 	
 	def update_user_caches!
 		self.user.update_attributes({
-			:participated_count => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = 1', self.user.id]),
-			:following_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND following = 1', self.user.id]),
-			:favorites_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND favorite = 1', self.user.id])
+			:participated_count => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = ?', self.user.id, true]),
+			:following_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND following = ?', self.user.id, true]),
+			:favorites_count    => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND favorite = ?', self.user.id, true])
 		})
 	end
 end
