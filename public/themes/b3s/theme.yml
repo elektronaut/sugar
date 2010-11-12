@@ -1,0 +1,8 @@
+--- 
+name: Danzicorn!
+author: Inge Jørgensen
+stylesheet: screen.css
+icon: favicon.gif
+mobile_stylesheet: mobile.css
+mobile_icon: apple-touch-icon.png
+mobile_icon_precomposed: true

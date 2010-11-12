@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 	before_filter :set_time_zone
 	before_filter :detect_mobile
 	before_filter :set_section
+	before_filter :set_theme
 	
 	protected
 
@@ -69,6 +70,14 @@ class ApplicationController < ActionController::Base
 				@section = :invites
 			else
 				@section = :discussions
+			end
+		end
+		
+		def set_theme
+			if request.format == :mobile
+				@theme = Theme.find(Sugar.config(:default_mobile_theme))
+			else
+				@theme = Theme.find(Sugar.config(:default_theme))
 			end
 		end
 		

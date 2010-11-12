@@ -16,7 +16,7 @@
 	<%= labelled_field f.text_field(:stylesheet_url, :size => 80), "Stylesheet URL", :description => "Enter a URL here to override the stylesheet", :errors => @user.errors[:stylesheet_url] %>
 
 	<p>
-	You can download the newest version of the <%= link_to "default theme here", theme_path(Sugar.config(:default_theme))+".zip" %>.
+		You can download the newest version of <%= link_to "your current theme here", @theme.path+".zip" %>.
 	</p>
 </fieldset>
 

@@ -11,9 +11,11 @@
 		<%= javascript_include_tag 'vendor/jquery' %>
 		<%= javascript_include_tag 'mobile' %>
 	<% end -%>
-	<%= stylesheet_link_tag    "#{theme_path}/screen" %>
+	<%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
-	<link rel="apple-touch-icon-precomposed" href="<%= theme_path %>/apple-touch-icon.png" />
+	<% if @theme.mobile_icon? %>
+		<link rel="<%= @theme.mobile_icon_precomposed? ? 'apple-touch-icon-precomposed' : 'apple-touch-icon'%>" href="<%= @theme.mobile_icon_path %>" />
+	<% end %>
 </head>
 <body>
     <div id="header">

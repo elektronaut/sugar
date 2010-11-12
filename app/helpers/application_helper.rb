@@ -151,12 +151,6 @@ module ApplicationHelper
 		end
 	end
 
-	def theme_path(theme_name=nil)
-		theme_format = (request.format == :mobile) ? 'mobile' : 'regular'
-		theme_name ||= (request.format == :mobile) ? Sugar.config(:default_mobile_theme) : Sugar.config(:default_theme)
-		"/themes/#{theme_format}/#{theme_name}"
-	end
-
 	def search_mode_options
 		options = [['in discussions', search_path], ['in posts', search_posts_path]]
 		options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion && @discussion.id

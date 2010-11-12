@@ -1,4 +1,20 @@
-@import url(reset.css);
+html,body,div,span,applet,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+a,abbr,acronym,address,big,cite,code,
+del,dfn,em,font,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
+:focus{outline:0;}
+body{line-height:1;color:black;background:white;}
+ol,ul{list-style:none;}
+table{border-collapse:separate;border-spacing:0;}
+caption,th,td{text-align:left;font-weight:normal;}
+blockquote:before,blockquote:after,
+q:before,q:after{content:"";}
+blockquote,q{quotes:"" "";}
+
 
 a, a:visited {
 	text-decoration: none;
@@ -30,7 +46,7 @@ body[orient="landscape"] {
 }
 
 #header {
-	background: #111 url(images/header.png);
+	background: #111 url(images/mobile/header.png);
 	height: 45px;
 }
 #header #navigationToggle {
@@ -42,13 +58,13 @@ body[orient="landscape"] {
 	display: block;
 	height: 44px;
 	width: 67px;
-	background: transparent url(images/header_navigation.png);
+	background: transparent url(images/mobile/header_navigation.png);
 }
 
 #header h1.logo {
 	width: 167px;
 	height: 45px;
-	background: transparent url(images/logo.gif);
+	background: transparent url(images/mobile/logo.gif);
 	text-indent: -9000px;
 	margin: 0 auto;
 }
@@ -71,7 +87,7 @@ body[orient="landscape"] #header h1.page_title {
 	display: block;
 	top: 0;
 	left: 0;
-	background: transparent url(images/b3slogo.png);
+	background: transparent url(images/mobile/b3slogo.png);
 	height: 45px;
 	width: 49px;
 	text-indent: -9000px;
@@ -85,7 +101,7 @@ body[orient="landscape"] #header h1.page_title {
 	overflow: auto;
 	/*border-top: 1px solid #aaa;*/
 	background: #ddd;
-	background: #f2f2f2 url(images/navigation_bg.gif) no-repeat;
+	background: #f2f2f2 url(images/mobile/navigation_bg.gif) no-repeat;
 	padding-top: 2px;
 	border-bottom: 1px solid #ddd;
 	/*-webkit-box-shadow: #888 0px 4px 4px;*/
@@ -162,7 +178,7 @@ body[orient="landscape"] #navigation .search .query {
 	margin-bottom: 5px;
 }
 input#openid_url, input#user_openid_url {
-	background: #fff url(images/login_openid.gif) no-repeat 3px 4px;
+	background: #fff url(images/mobile/login_openid.gif) no-repeat 3px 4px;
 	padding-left: 20px;
 	width: 252px;
 }
@@ -207,7 +223,7 @@ label {
 }
 
 .content {
-	background: #fff url(images/contentbg.gif) repeat-x;
+	background: #fff url(images/mobile/contentbg.gif) repeat-x;
 	padding: 25px 0 10px 0;
 	min-height: 285px;
     -webkit-user-select: auto;
@@ -247,7 +263,7 @@ body[orient="landscape"] .page_content textarea {
 	color: #555;
 }
 .discussions .discussion {
-	background: #fff url(images/contentbg_light.gif) bottom left repeat-x;
+	background: #fff url(images/mobile/contentbg_light.gif) bottom left repeat-x;
 }
 
 .discussion .new_posts_count {
@@ -299,7 +315,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 
 .discussions .new_posts, .conversations .new_posts {
 	background:      #fffde8;
-	background: #fffde8 url(images/contentbg_light_new_posts.gif) bottom left repeat-x;
+	background: #fffde8 url(images/mobile/contentbg_light_new_posts.gif) bottom left repeat-x;
 	border-bottom: 1px solid #E4DDB5;
 }
 
@@ -404,86 +420,6 @@ body[orient="landscape"] .reply textarea {
 }
 
 
-.messages {
-	position:relative;
-	background: #dbe2ed;
-	margin-top: -25px;
-	padding: 10px 0 5px 0;
-}
-.message_date {
-	color: #96979a;
-	text-align: center;
-	font-size: 11px;
-	font-weight: bold;
-	margin-bottom: 2px;
-}
-.message {
-	position:relative;
-	margin: 0 0 8px 0;
-	font-size: 15px;
-	line-height: 1.2;
-	width: auto;
-}
-.message .body {
-	padding: 8px 20px 0 0;
-}
-.message .body h3 {
-	font-weight: bold;
-	margin-bottom: 6px;
-	color: #444;
-}
-.message .body a {
-	text-decoration: underline;
-}
-.message_in {
-	padding: 0px 0 0 16px;
-	margin-right: 30px;
-	margin-left: 5px;
-}
-.message_out {
-	padding: 0px 0 0 8px;
-	margin-right: 2px;
-	margin-left: 30px;
-}
-
-.message_in, .message_in .t, .message_in .b, .message_in .b div {
-	background: transparent url(images/message_in_bg.png) no-repeat top right;
-}
-.message_out, .message_out .t, .message_out .b, .message_out .b div {
-	background: transparent url(images/message_out_bg.png) no-repeat top right;
-}
-.message .b {
-	position: relative;
-	width: 100%;
-	background-position: bottom right;
-}
-.message .b, .message .b div {
-	height:15px;
-	font-size:1px;
-}
-.message .b div {
-	position: relative;
-	width: 22px; /* bottom corner width */
-	margin-left: -22px;
-	background-position:bottom left;
-}
-.message_out .b div {
-	margin-left: -14px;
-}
-
-.message .t {
- /* top+left vertical slice */
-	position: absolute;
-	left: 0px; top: 0px;
-	width: 22px;
-	margin-left:-6px;
-	height: 100%;
-	background-position: top left;
-}
-.message_out .t {
-	width: 13px;
-}
-
 .user_profile {
 	margin-top: -10px;
 }
@@ -558,7 +494,7 @@ blockquote cite {
 .imageloader {
 	max-width: 290px;
 	height: 36px;
-	background: transparent url(images/imageloader.gif) no-repeat;
+	background: transparent url(images/mobile/imageloader.gif) no-repeat;
 }
 .imageloader img {
 	display: none;
@@ -579,31 +515,31 @@ blockquote cite {
 /* Retina display overrides */
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
 	#header {
-		background: #111 url(images/header_x2.png);
+		background: #111 url(images/mobile/header_x2.png);
 		background-size: 480px 45px;
 	}
 	#header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
-		background: transparent url(images/b3slogo_x2.png);
+		background: transparent url(images/mobile/b3slogo_x2.png);
 		background-size: 49px 45px;
 	}
 	#header #navigationToggle a, #header #navigationToggle a a:visited {
-		background: transparent url(images/header_navigation_x2.png);
+		background: transparent url(images/mobile/header_navigation_x2.png);
 		background-size: 67px 44px;
 	}
 	.content {
-		background: #fff url(images/contentbg_x2.png) repeat-x;
+		background: #fff url(images/mobile/contentbg_x2.png) repeat-x;
 		background-size: 23px 24px;
 	}
 	.imageloader {
-		background: transparent url(images/imageloader_x2.png) no-repeat;
+		background: transparent url(images/mobile/imageloader_x2.png) no-repeat;
 		background-size: 290px 36px;
 	}
 	.discussions .discussion {
-		background: #fff url(images/contentbg_light_x2.png) bottom left repeat-x;
+		background: #fff url(images/mobile/contentbg_light_x2.png) bottom left repeat-x;
 		background-size: 23px 12px;
 	}
 	.discussions .new_posts, .conversations .new_posts {
-		background: #fffde8 url(images/contentbg_light_new_posts_x2.png) bottom left repeat-x;
+		background: #fffde8 url(images/mobile/contentbg_light_new_posts_x2.png) bottom left repeat-x;
 		background-size: 240px 12px;
 	}
 }

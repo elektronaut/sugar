@@ -83,8 +83,16 @@
 	<div id="themes">
 		<fieldset>
 			<h2>Themes</h2>
-			<%= labelled_field text_field_tag('config[default_theme]', Sugar.config(:default_theme), :size => 32), "Default theme" %>
-			<%= labelled_field text_field_tag('config[default_mobile_theme]', Sugar.config(:default_mobile_theme), :size => 32), "Default mobile theme" %>
+			<%= labelled_field(
+					select_tag('config[default_theme]', options_for_select(Theme.all.map{|t| [t.full_name, t.id]}, Sugar.config(:default_theme))),
+					"Default theme"
+				) 
+			%>
+			<%= labelled_field(
+					select_tag('config[default_mobile_theme]', options_for_select(Theme.mobile.map{|t| [t.full_name, t.id]}, Sugar.config(:default_mobile_theme))),
+					"Default mobile theme"
+				) 
+			%>
 		</fieldset>
 	</div>
 	<div id="integration">
