@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 	public
 
 		def index
-			@users  = User.find(:all, :order => 'username ASC', :conditions => 'activated = 1 AND banned = 0')
+			@users  = User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ?', true, false])
 			respond_to do |format|
 				format.html {}
 				format.mobile {
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 		end
 
 		def banned
-			@users  = User.find(:all, :order => 'username ASC', :conditions => ['banned = 1 OR banned_until < ?', Time.now])
+			@users  = User.find(:all, :order => 'username ASC', :conditions => ['banned = ? OR banned_until < ?', true, Time.now])
 		end
 
 		def recently_joined
