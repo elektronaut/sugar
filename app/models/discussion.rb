@@ -1,7 +1,7 @@
 class Discussion < Exchange
 	has_many   :discussion_relationships, :dependent => :destroy
 
-	belongs_to :category
+	belongs_to :category, :counter_cache => true
 	validates_presence_of :category_id
 	
 	# Flag for trusted status, which will update after save if it has been changed.
