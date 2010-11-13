@@ -24,6 +24,10 @@ class Discussion < Exchange
 		end
 	end
 	
+	define_index do
+    indexes title
+  end
+  
 	class << self
 		# Finds popular discussions within a defined time range, sorted by popularity.
 		# The collection is decorated with the Pagination module, which provides pagination info.
@@ -41,17 +45,17 @@ class Discussion < Exchange
 
 			# Ignore trusted posts unless requested
 			unless options[:trusted]
-				conditions = [[conditions.shift, 'discussions.trusted = 0'].compact.join(' AND ')] + conditions
+				conditions = [[conditions.shift, 'discussions.trusted = ?'].compact.join(' AND '), false] + conditions
 			end
 			
 			if options[:trusted]
 				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
 					FROM posts, discussions 
-					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = \"Discussion\"", options[:since]])
+					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = ?", options[:since], 'Discussion'])
 			else
 				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
 					FROM posts, discussions 
-					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = \"Discussion\" AND discussions.trusted = 0", options[:since]])
+					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = 0", options[:since], 'Discussion'])
 			end
 
 			Pagination.paginate(
