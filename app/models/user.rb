@@ -385,12 +385,17 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	# Can we generate a Gravatar URL for this user?
+	def gravatar_url?
+		self.email?
+	end
+
 	# Generates a Gravatar URL
 	def gravatar_url(options={})
 		options[:size] ||= 24
 		@gravatar_url ||= {}
 		unless @gravatar_url[options[:size]]
-			gravatar_hash = Digest::MD5.hexdigest(self.email)
+			gravatar_hash = Digest::MD5.hexdigest(self.email.to_s)
 			@gravatar_url[options[:size]] = "http://www.gravatar.com/avatar/#{gravatar_hash}?s=#{options[:size]}&amp;r=any"
 		end
 		@gravatar_url[options[:size]]
