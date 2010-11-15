@@ -1,6 +1,6 @@
 Bugs/issues:
 
-* Fix code blocks parsing
+* Fix code blocks parsing (remove uv?)
 
 Before launch:
 
@@ -17,15 +17,17 @@ Feeds/JSON API:
 
 Themes:
 
-* Make a standard theme format
-* Show available installed themes
+* Let user select theme from a dropdown
 * Cleanup iPhone theme
 * Enable custom iPhone themes
 
 iPhone version:
 
 * Pull down to refresh
+* Search in this discussion
+* Pagination on top?
 * New posts notification
+* Tools for posting images etc?
 
 Someday/fun:
 
