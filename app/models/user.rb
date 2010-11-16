@@ -424,4 +424,14 @@ class User < ActiveRecord::Base
 			User.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
 		end
 	end
+	
+	# Returns the chosen theme or the default one
+	def theme
+		self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)
+	end
+
+	# Returns the chosen mobile theme or the default one
+	def mobile_theme
+		self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
+	end
 end

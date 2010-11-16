@@ -11,7 +11,14 @@
 		<%= javascript_include_tag 'vendor/jquery' %>
 		<%= javascript_include_tag 'mobile' %>
 	<% end -%>
-	<%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
+
+	<% if @current_user && @current_user.mobile_stylesheet_url? %>
+		<%= stylesheet_link_tag @current_user.mobile_stylesheet_url %>
+	<% else %>
+		<%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
+	<% end %>
+
+	<%# stylesheet_link_tag @theme.mobile_stylesheet_path %>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 	<% if @theme.mobile_icon? %>
 		<link rel="<%= @theme.mobile_icon_precomposed? ? 'apple-touch-icon-precomposed' : 'apple-touch-icon'%>" href="<%= @theme.mobile_icon_path %>" />

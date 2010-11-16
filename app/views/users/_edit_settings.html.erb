@@ -13,10 +13,16 @@
 	<%= labelled_field f.check_box(:notify_on_message), "Notify me on messages", :description => "You'll be notified by email whenever someone sends you a message", :errors => @user.errors[:notify_on_message] %>
 
 	<%= labelled_field f.check_box(:keyboard_navigation), "Enable keyboard shortcuts", :errors => @user.errors[:notify_on_message] %>
-	<%= labelled_field f.text_field(:stylesheet_url, :size => 80), "Stylesheet URL", :description => "Enter a URL here to override the stylesheet", :errors => @user.errors[:stylesheet_url] %>
+</fieldset>
+
+<fieldset>
+	<h2>Theme</h2>
+	<%= labelled_field f.select(:theme, Theme.all.map{|t| [t.full_name, t.id]}), "Theme", :errors => @user.errors[:theme] %>
+	<%= labelled_field f.select(:mobile_theme, Theme.mobile.map{|t| [t.full_name, t.id]}), "Mobile theme", :errors => @user.errors[:mobile_theme] %>
+	<%= labelled_field f.text_field(:stylesheet_url, :size => 80), "Custom stylesheet URL", :description => "Enter a URL here to override the theme", :errors => @user.errors[:stylesheet_url] %>
+	<%= labelled_field f.text_field(:mobile_stylesheet_url, :size => 80), "Custom mobile stylesheet URL", :description => "Enter a URL here to override the mobile theme", :errors => @user.errors[:mobile_stylesheet_url] %>
 
 	<p>
 		You can download the newest version of <%= link_to "your current theme here", @theme.path+".zip" %>.
 	</p>
 </fieldset>
-
