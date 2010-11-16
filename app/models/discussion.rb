@@ -24,10 +24,6 @@ class Discussion < Exchange
 		end
 	end
 	
-	define_index do
-    indexes title
-  end
-  
 	class << self
 		# Finds popular discussions within a defined time range, sorted by popularity.
 		# The collection is decorated with the Pagination module, which provides pagination info.
