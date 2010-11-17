@@ -88,13 +88,9 @@ blockquote cite {
 	margin-top:          -5px;
 }
 
-code, pre {
+pre {
 	font-family:         Monaco, Consolas, Courier, monospace;
 	font-size:           0.9em;
-}
-code {
-	display:             block;
-	white-space:         pre;
 }
 label {
 	display:             block;
@@ -774,6 +770,9 @@ table.discussions tr.targeted.nsfw {
 }
 .post .body .content {
 	font-size:           1em;
+}
+.post .body.syntax {
+	max-width:           100%;
 }
 
 .me_post {

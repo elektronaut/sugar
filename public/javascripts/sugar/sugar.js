@@ -3,8 +3,25 @@
 
 var Sugar = {
 	Configuration: {},
-	onLoadedPosts: {},
+	onLoadedPosts: {
+		
+		syntaxHighlight: function () {
+			Sugar.Initializers.syntaxHighlight();
+		},
+		
+	},
 	Initializers: {
+		
+		syntaxHighlight: function () {
+			$.beautyOfCode.init({
+				theme: 'Eclipse',
+				brushes: ['Xml', 'JScript', 'CSharp', 'Plain', 'Php', 'Ruby', 'AS3', 'Bash', 'Cpp', 'Css', 'Diff', 'Java', 'Perl', 'Python', 'Sql'],
+				ready: function() {
+					$.beautyOfCode.beautifyAll();
+					$('.syntaxhighlighter').closest('.body').addClass('syntax');
+				}
+		    });
+		},
 		
 		inviteParticipants : function () {
 			$('#invite_participant_form').each(function () {

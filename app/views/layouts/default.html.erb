@@ -5,7 +5,6 @@
 	<title><%= [@page_title, Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
 	<%# Stylesheet %>
-	<%= stylesheet_link_tag 'syntax/twilight' %>
 	<% if @current_user && @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else %>
@@ -17,7 +16,7 @@
 		<%= javascript_include_tag "bundled/application.js" %>
 	<% else %>
 		<%=
-			scripts  = %w{jquery jquery.hotkeys jquery.scrollTo jquery.autocomplete jquery.libraries}.map{|s| "vendor/#{s}"}
+			scripts  = %w{jquery jquery.hotkeys jquery.scrollTo jquery.autocomplete jquery.beautyOfCode jquery.libraries}.map{|s| "vendor/#{s}"}
 			scripts += %w{swfobject soundmanager2}.map{|s| "vendor/#{s}"}
 			scripts += %w{sugar maps mp3player posts hotkeys facebook}.map{|s| "sugar/#{s}"}
 			scripts += %w{application}

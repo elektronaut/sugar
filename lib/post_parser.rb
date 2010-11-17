@@ -1,7 +1,9 @@
 require 'hpricot'
-require 'uv'
 
 module PostParser
+	
+	SYNTAXES = %w{as3 actionscript3 bash shell c-sharp csharp cpp c css diff patch js jscript javascript java perl pl php plain text py python rails ror ruby sql xml xhtml xslt html xhtml}
+	
     def PostParser.parse(string)
 		string = string.strip
 		
@@ -18,14 +20,14 @@ module PostParser
 		doc.search('code') do |codeblock|
 			if codeblock.attributes && codeblock.attributes['language']
 				code_language = codeblock.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
-				code_language = 'plain_text' unless Uv.syntaxes.include?(code_language)
+				code_language = 'plain' unless SYNTAXES.include?(code_language)
 			else
-				code_language = 'plain_text'
+				code_language = 'plain'
 			end
 			codeblock.swap("<div id=\"replace_codeblock_#{codeblocks.length}\"></div>")
 			codeblocks << {
 				:language => code_language,
-				:body     => Uv.parse(codeblock.children.first.content, "xhtml", code_language, true, 'twilight')
+				:body     => codeblock.children.first.content
 			}
 		end
 
@@ -88,13 +90,13 @@ module PostParser
 		# Autolink URLs
 		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 
-		# Replace code blocks
-		codeblocks.each_with_index do |codeblock, index|
-			string.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<div class="codeblock language_'+codeblock[:language]+'">'+codeblock[:body]+'</div>')
-		end
-
         # Replace line breaks
 		string.gsub!(/\r?\n/,'<br />')
+
+		# Replace code blocks
+		codeblocks.each_with_index do |codeblock, index|
+			string.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<pre class="code"><code class="'+codeblock[:language]+'">'+CGI::escapeHTML(codeblock[:body])+'</code></pre>')
+		end
 
         return string.html_safe
     end

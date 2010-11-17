@@ -32,7 +32,7 @@ Things you *WON'T* find in Sugar:
 
 Sugar is written in Ruby on Rails 3.0. Ruby 1.8.7 is supported, Ruby 1.9 isn't completely tested, but should work to my knowledge.
 
-First, make sure you have the Oniguruma (http://www.geocities.jp/kosako3/oniguruma) and Sphinx (http://www.sphinxsearch.com) libraries installed. 
+First, make sure you have Sphinx (http://www.sphinxsearch.com) installed. 
 
 You'll also need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choise.
 

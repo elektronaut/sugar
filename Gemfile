@@ -44,16 +44,6 @@ gem 'delayed_job', '2.0.3'
 gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
 gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
 
-if RUBY_VERSION =~ /^1\.8/
-	# Ruby 1.8 version of Ultraviolet
-	gem 'ultraviolet', :require => 'uv', :platforms => :ruby_18
-else
-	# Ruby 1.9 version of Ultraviolet
-	gem 'spox-plist', :platforms => :ruby_19
-	gem 'spox-textpow', :platforms => :ruby_19
-	gem 'spox-ultraviolet', :require => 'uv', :platforms => :ruby_19
-end
-
 group :development do
 	gem 'yui-compressor', :require => 'yui/compressor'
 end

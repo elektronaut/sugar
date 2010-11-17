@@ -1,13 +1,15 @@
-Bugs/issues:
-
-* Fix code blocks parsing (remove uv?)
-
-Before launch:
+Misc:
 
 * Finish up the optional approval of signups functionality
 * Clean up configuration files
 * Documentation
 * Go public!
+
+Syntax highlighting
+
+* Previewing posts
+* Quoting posts with code
+* Page init is slllowww
 
 Feeds/JSON API:
 

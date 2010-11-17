@@ -92,7 +92,7 @@ class Post < ActiveRecord::Base
 	end
 
 	def body_html
-		if self.new_record?
+		if self.new_record? || Rails.env == 'development'
 			PostParser.parse(self.body.dup)
 		else
 			unless body_html?

@@ -54,6 +54,7 @@ namespace :sugar do
 		minifier.add 'vendor/jquery.autocomplete.js'
 		minifier.add 'vendor/swfobject.js'
 		minifier.add 'vendor/soundmanager2.js'
+		minifier.add 'vendor/jquery.beautyOfCode.js', :compress => true
 		minifier.add 'vendor/jquery.libraries.js', :compress => true
 
 		minifier.add 'sugar/sugar.js', :compress => true
