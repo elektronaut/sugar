@@ -23,7 +23,7 @@ module Authentication
 					facebook_session.symbolize_keys!
 
 					# Verify the payload
-					payload = facebook_session.keys.sort.reject{|k| k == :sig}.map{|k| "#{k.to_s}=#{facebook_session[k]}"}.join
+					payload = facebook_session.keys.sort_by{|k| k.to_s}.reject{|k| k == :sig}.map{|k| "#{k.to_s}=#{facebook_session[k]}"}.join
 					expected_sig = Digest::MD5.hexdigest(payload + Sugar.config(:facebook_api_secret))
 					if facebook_session[:sig] && !facebook_session[:sig].empty? && facebook_session[:sig] == expected_sig
 						@facebook_session = facebook_session
