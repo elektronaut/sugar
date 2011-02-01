@@ -82,6 +82,7 @@
     <% if @user.gtalk? %><strong>Google Talk</strong>: <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br /><% end %>
     <% if @user.msn? %><strong>MSN Messenger</strong>: <%= @user.msn %><br /><% end %>
     <% if @user.aim? %><strong>AIM</strong>: <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br /><% end %>
+    <% if @user.instagram? %><strong>Instagram</strong>: <%= @user.instagram %><br /><% end %>
   </p>
 
   <% if @user.twitter? %><div class="social twitter">

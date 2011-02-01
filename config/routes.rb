@@ -43,7 +43,7 @@ Sugar::Application.routes.draw do
       get 'disconnect_facebook'
 
       get 'xboxlive'
-      get 'twitter'
+      get 'social'
       get 'online'
       get 'recently_joined'
       get 'admins'
@@ -73,7 +73,7 @@ Sugar::Application.routes.draw do
 
   # Categories
   resources :categories
-    match '/categories/:id/:page' => 'categories#show'
+  match '/categories/:id/:page' => 'categories#show'
 
   # Discussions
   controller :discussions do

@@ -101,8 +101,8 @@ class User < ActiveRecord::Base
     end
 
     # Finds Twitter users.
-    def find_twitter_users
-      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND twitter IS NOT NULL AND twitter != ""', true, false])
+    def find_social_users
+      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND ((twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != ""))', true, false])
     end
 
     # Finds new users. Pass <tt>:limit</tt> as an option to control number

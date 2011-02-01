@@ -92,8 +92,8 @@ class UsersController < ApplicationController
       @users = XboxInfo.valid_users
     end
 
-    def twitter
-      @users = User.find_twitter_users
+    def social
+      @users = User.find_social_users
     end
 
     def top_posters
