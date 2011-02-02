@@ -33,9 +33,9 @@ module Authentication
 				end
 			end
 			
-			# Tries to set @current_user based on @facebook_session[:uid]
+			# Handle Facebook login 
 			def load_facebook_user
-				if @facebook_session && @facebook_session[:uid]
+				if params[:fb_login] && @facebook_session && @facebook_session[:uid]
 					if user = User.find_by_facebook_uid(@facebook_session[:uid])
 						# Update the access token if it has changed
 						if @facebook_session[:access_token] && @facebook_session[:access_token] != user.facebook_access_token

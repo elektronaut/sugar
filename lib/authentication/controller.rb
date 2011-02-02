@@ -110,10 +110,6 @@ module Authentication
 			def deauthenticate!
 				@current_user = nil
 				session[:authenticated_openid_url] = nil
-				if cookies["fbs_#{Sugar.config(:facebook_app_id)}"]
-					cookies["fbs_#{Sugar.config(:facebook_app_id)}"] = nil
-					cookies['facebook_logout'] = 'true'
-				end
 				store_session_authentication
 			end
 

@@ -40,22 +40,13 @@ Sugar.Facebook = {
 			// state over at Facebook changes.
 			FB.Event.subscribe('auth.sessionChange', function (response) {
 
-				// Did the backend tell us to log out? If so, terminate the session. 
-				// This has the side effect of logging us out of Facebook, which is
-				// silly, but that's how it's supposed to work. Oh well.
-				if ($.cookie('facebook_logout') === 'true') {
-					FB.logout(function () {});
-					$.cookie('facebook_logout', null, {path: '/'});
-
-				// If not, let's emit some nice jQuery events so we won't have to deal
+				// Let's emit some nice jQuery events so we won't have to deal
 				// with the Facebook API directly. 
+				$(facebook_lib).trigger('auth.sessionChange');
+				if (response.session) {
+					$(facebook_lib).trigger('auth.login');
 				} else {
-					$(facebook_lib).trigger('auth.sessionChange');
-					if (response.session) {
-						$(facebook_lib).trigger('auth.login');
-					} else {
-						$(facebook_lib).trigger('auth.logout');
-					}
+					$(facebook_lib).trigger('auth.logout');
 				}
 			});
 			
@@ -96,7 +87,7 @@ Sugar.Facebook = {
 		// This is the button on the login screen, which should just redirect to the root path
 		// if we can get a Facebook session. The backend handles the rest.
 		$('#login .facebook_login').click(function () {
-			Sugar.Facebook.loginAndRedirect('/');
+			Sugar.Facebook.loginAndRedirect('/?fb_login=1');
 			return false;
 		});
 		

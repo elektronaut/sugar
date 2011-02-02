@@ -39,6 +39,7 @@
 					<%= hidden_field_tag 'token', @invite.token %>
 				<% end %>
 				<%= hidden_field_tag 'mode', 'facebook' %>
+				<%= hidden_field_tag 'fb_login', true %>
 				<%= labelled_field f.text_field(:username), "Please choose a username", :errors => @user.errors[:username] %>
 				<% if Sugar.config(:signup_approval_required) %>
 					<p>Your account will have to be approved. Please provide some information about your application:</p>
