@@ -362,6 +362,13 @@ class User < ActiveRecord::Base
 		self.invites
 	end
 
+	# Updates Facebook access token if necessary
+	def update_facebook_access_token!(token)
+		if !token.blank? && token != self.facebook_access_token
+			self.update_attribute(:facebook_access_token, token)
+		end
+	end
+
 	# Get account status
 	def status
 		return 2 if banned?

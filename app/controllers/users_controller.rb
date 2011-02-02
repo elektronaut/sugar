@@ -7,13 +7,25 @@ class UsersController < ApplicationController
 	requires_authentication :except => [:login, :logout, :password_reset, :new, :create]
 	requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
 
-	before_filter :load_user, :only => [:show, :edit, :update, :destroy, :participated, :discussions, :posts, :update_openid, :grant_invite, :revoke_invites, :stats]
+	before_filter :load_user, 
+	              :only => [
+						:show, :edit, 
+						:update, :destroy, 
+						:participated, :discussions, 
+						:posts, :update_openid, 
+						:grant_invite, :revoke_invites, 
+						:stats
+                   ]
 	before_filter :detect_admin_signup, :only => [:login, :new, :create]
 
 	protected
 
 		def load_user
-			@user = User.find_by_username(params[:id]) || User.find(params[:id]) rescue nil
+			begin
+				@user = User.find_by_username(params[:id]) || User.find(params[:id])
+			rescue ActiveRecord::RecordNotFound
+				@user = nil
+			end
 			unless @user
 				flash[:notice] = "User not found!"
 				redirect_to users_url and return
@@ -27,20 +39,33 @@ class UsersController < ApplicationController
 	public
 
 		def index
-			@users  = User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ?', true, false])
+			@users = User.all( 
+				:order => 'username ASC', 
+				:conditions => ['activated = ? AND banned = ?', true, false]
+			)
 			respond_to do |format|
 				format.html {}
 				format.mobile {
 					@online_users = @users.select{|u| u.online?}
 				}
 				format.json {
-					render :layout => false, :text => @users.to_json(:only => [:id, :username, :realname, :latitude, :longitude, :last_active, :created_at, :description, :admin, :moderator, :user_admin, :posts_count, :discussions_count, :location, :gamertag, :avatar_url, :twitter, :flickr, :website])
+					render :layout => false, :text => @users.to_json(
+						:only => [
+							:id, :username, :realname, :latitude, :longitude, 
+							:last_active, :created_at, :description, :admin, 
+							:moderator, :user_admin, :posts_count, :discussions_count, 
+							:location, :gamertag, :avatar_url, :twitter, :flickr, :website
+						]
+					)
 				}
 			end
 		end
 
 		def banned
-			@users  = User.find(:all, :order => 'username ASC', :conditions => ['banned = ? OR banned_until < ?', true, Time.now])
+			@users  = User.all(
+				:order      => 'username ASC', 
+				:conditions => ['banned = ? OR banned_until > ?', true, Time.now]
+			)
 		end
 
 		def recently_joined
@@ -80,29 +105,47 @@ class UsersController < ApplicationController
 		def show
 			respond_to do |format|
 				format.html do
-					@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?), :limit => 15)
+					@posts = @user.paginated_posts(
+						:page    => params[:page], 
+						:trusted => (@current_user && @current_user.trusted?), 
+						:limit   => 15
+					)
 				end
 				format.mobile {}
 			end
 		end
 
 		def discussions
-			@discussions = @user.paginated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+			@discussions = @user.paginated_discussions(
+				:page    => params[:page], 
+				:trusted => @current_user.trusted?
+			)
 			load_views_for(@discussions)
 		end
 
 		def participated
 			@section = :participated if @user == @current_user
-			@discussions = @user.participated_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+			@discussions = @user.participated_discussions(
+				:page    => params[:page], 
+				:trusted => @current_user.trusted?
+			)
 			load_views_for(@discussions)
 		end
 
 		def posts
-			@posts = @user.paginated_posts(:page => params[:page], :trusted => (@current_user && @current_user.trusted?))
+			@posts = @user.paginated_posts(
+				:page    => params[:page], 
+				:trusted => (@current_user && @current_user.trusted?)
+			)
 		end
 
 		def stats
-			@posts_per_week = Post.find_by_sql("SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, WEEK(created_at) AS week FROM posts WHERE user_id = #{@user.id} GROUP BY YEAR(created_at), WEEK(created_at);")
+			@posts_per_week = Post.find_by_sql(
+				"SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, WEEK(created_at) AS week " +
+				"FROM posts " +
+				"WHERE user_id = #{@user.id} " +
+				"GROUP BY YEAR(created_at), WEEK(created_at);"
+			)
 			@max_posts_per_week = @posts_per_week.map{|p| p.post_count.to_i}.max
 		end
 
@@ -145,7 +188,7 @@ class UsersController < ApplicationController
 			end
 			attributes[:username]   = params[:user][:username]
 			attributes[:inviter_id] = @invite.user_id if @invite
-			attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup) ? true : false
+			attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup)
 			attributes[:admin]      = true if @admin_signup
 		
 			# Get data from Facebook
@@ -209,22 +252,25 @@ class UsersController < ApplicationController
 		def connect_facebook
 			if @facebook_session && @facebook_session[:uid]
 				@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
-				# Update the access token if it has changed
-				if @facebook_session[:access_token] && @facebook_session[:access_token] != @current_user.facebook_access_token
-					@current_user.update_attribute(:facebook_access_token, @facebook_session[:access_token])
-				end
+				@current_user.update_facebook_access_token!(@facebook_session[:access_token])
 				flash[:notice] = "You have connected your Facebook account"
 			else
 				flash[:notice] = "Can't get a Facebook session, sorry!"
 			end
-			redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+			redirect_to edit_user_page_url(
+				:id => @current_user.username, 
+				:page => 'services'
+			) and return
 		end
 	
 		def disconnect_facebook
 			@current_user.update_attribute(:facebook_uid, nil)
 			cookies['facebook_logout'] = 'true'
 			flash[:notice] = "You have disconnected your Facebook account"
-			redirect_to edit_user_page_url(:id => @current_user.username, :page => 'services') and return
+			redirect_to edit_user_page_url(
+				:id   => @current_user.username, 
+				:page => 'services'
+			) and return
 		end
 
 		def update_openid
@@ -242,10 +288,13 @@ class UsersController < ApplicationController
 		def update
 			@page = params[:page] || 'info'
 			if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
-				attributes = @current_user.user_admin? ? params[:user] : User.safe_attributes(params[:user])
+
+				# Sanitize input
+				attributes = params[:user]
+				attributes = User.safe_attributes(attributes) unless @current_user.admin?
 				attributes.delete(:administrator) unless @current_user.admin?
 
-				if attributes[:openid_url] && !attributes[:openid_url].blank? && attributes[:openid_url] != @user.openid_url
+				if attributes[:openid_url] && attributes[:openid_url] != @user.openid_url
 					new_openid_url = attributes[:openid_url]
 					attributes.delete(:openid_url)
 				end
@@ -282,7 +331,7 @@ class UsersController < ApplicationController
 			redirect_to discussions_url and return if @current_user
 
 			if request.post?
-				if params[:username] && params[:password] && !params[:username].blank? && !params[:password].blank?
+				if !params[:username].blank? && !params[:password].blank?
 					user = User.find_by_username(params[:username])
 					if user && user.valid_password?(params[:password])
 						@current_user = user
@@ -290,7 +339,9 @@ class UsersController < ApplicationController
 						redirect_to discussions_url and return
 					end
 				end
-				flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." unless @current_user
+				unless @current_user
+					flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." 
+				end
 			end
 		end
 
