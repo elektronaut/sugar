@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.0.0'
+gem 'rails', '3.0.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -40,9 +40,13 @@ gem 'hpricot'
 gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
-gem 'delayed_job', '2.0.3'
-gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
-gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
+gem 'delayed_job', '2.1.3'
+#gem 'thinking-sphinx', :git => 'git://github.com/freelancing-god/thinking-sphinx.git', :branch  => 'rails3', :require => 'thinking_sphinx'
+gem 'thinking-sphinx', '2.0.2', :require => 'thinking_sphinx'
+
+# The GitHub version has fixed the deprecation notice, so let's use that for now
+#gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
+gem 'ts-delayed-delta', :git => 'git://github.com/freelancing-god/ts-delayed-delta.git', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 group :development do
 	gem 'yui-compressor', :require => 'yui/compressor'
