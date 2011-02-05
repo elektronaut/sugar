@@ -65,12 +65,13 @@ class Post < ActiveRecord::Base
 				:per_page   => POSTS_PER_PAGE,
 				:page       => page,
 				:include    => [:user, :discussion],
-				:match_mode => :extended2
+				:match_mode => :extended2,
+				:star       => true
 			}
-			search_options[:conditions] = {}
-			search_options[:conditions][:trusted] = false unless options[:trusted]
-			search_options[:conditions][:conversation] = options[:conversation] || false
-			search_options[:conditions][:discussion_id] = options[:discussion_id] if options[:discussion_id]
+			search_options[:with] = {}
+			search_options[:with][:trusted] = false unless options[:trusted]
+			search_options[:with][:conversation] = options[:conversation] || false
+			search_options[:with][:discussion_id] = options[:discussion_id] if options[:discussion_id]
 			posts = Post.search(options[:query], search_options)
 			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
 		end

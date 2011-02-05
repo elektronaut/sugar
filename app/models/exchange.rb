@@ -112,9 +112,10 @@ class Exchange < ActiveRecord::Base
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],
-				:match_mode => :extended2
+				:match_mode => :extended2,
+				:star       => true
 			}
-			search_options[:conditions] = {:trusted => false} unless options[:trusted]
+			search_options[:with] = {:trusted => false} unless options[:trusted]
 			exchanges = Discussion.search(options[:query], search_options)
 			Pagination.apply(
 				exchanges, 
