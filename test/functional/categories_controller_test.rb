@@ -2,6 +2,26 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class CategoriesControllerTest < ActionController::TestCase
 
+	context "When logged in as a regular user" do
+		setup do
+			populate_application
+			login_session(Factory(:user, :trusted => false))
+		end
+
+		context "a GET on :show" do
+			setup { get :show, :id => Category.first }
+			
+			should assign_to(:discussions)
+			should respond_with(:success)
+			should render_template(:show)
+			should_not set_the_flash
+			
+			should "retrieve a list of discussions" do
+				assert assigns(:discussions).length > 0
+			end
+		end
+	end
+
 	context "When logged in as a trusted user" do 
 		setup do 
 			populate_application
@@ -19,7 +39,7 @@ class CategoriesControllerTest < ActionController::TestCase
 			should "retrieve a list of categories" do
 				assert assigns(:categories).length > 0
 			end
-			
+
 			should "output labels on trusted categories" do
 				assert_select 'div.category' do
 					assert_select 'h3.name' do
@@ -32,11 +52,6 @@ class CategoriesControllerTest < ActionController::TestCase
 		context 'a GET on :show' do
 			setup { get :show, :id => Category.first }
 			
-			should assign_to(:discussions)
-			should respond_with(:success)
-			should render_template(:show)
-			should_not set_the_flash
-
 			should "retrieve a list of discussions" do
 				assert assigns(:discussions).length > 0
 			end

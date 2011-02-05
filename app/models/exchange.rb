@@ -135,16 +135,9 @@ class Exchange < ActiveRecord::Base
 		# * :category - Only get exchanges in this category
 		# * :trusted  - Boolean, get trusted posts as well (default: false)
 		def find_paginated(options={})
-			if options[:category]
-				conditions = ['category_id = ?', options[:category].id]
-			else
-				conditions = []
-			end
-
-			# Ignore trusted posts unless requested
-			unless options[:trusted]
-				conditions = [[conditions.shift, 'trusted = ?'].compact.join(' AND '), false] + conditions
-			end
+			conditions = {}
+			conditions[:category_id] = options[:category].id if options[:category]
+			conditions[:trusted]     = false unless options[:trusted]
 
 			# Utilize the counter cache on category if possible, if not do the query.
 			exchanges_count   = options[:category].discussions_count if options[:category]
@@ -197,7 +190,7 @@ class Exchange < ActiveRecord::Base
 			:conditions => ['discussion_id = ?', self.id], 
 			:order      => 'created_at ASC',
 			:limit      => 200,
-			:offset     => offset,
+			:offset     => offset.to_i,
 			:include    => [:user]
 		)
 	end

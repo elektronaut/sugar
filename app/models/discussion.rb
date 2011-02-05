@@ -41,7 +41,7 @@ class Discussion < Exchange
 
 			# Ignore trusted posts unless requested
 			unless options[:trusted]
-				conditions = [[conditions.shift, 'discussions.trusted = ?'].compact.join(' AND '), false] + conditions
+				conditions = [['discussions.trusted = ?', conditions.shift].compact.join(' AND '), false] + conditions
 			end
 			
 			if options[:trusted]
