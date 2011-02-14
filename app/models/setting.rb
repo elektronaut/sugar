@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Setting < ActiveRecord::Base
 	class << self
 		def set(key, value)

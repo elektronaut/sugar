@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'post_parser'
 
 class Post < ActiveRecord::Base

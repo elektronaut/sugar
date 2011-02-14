@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Controller for redirecting old URLs
 class VanillaController < ApplicationController
 

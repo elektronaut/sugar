@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'digest/md5'
 
 class ApplicationController < ActionController::Base
@@ -74,7 +76,8 @@ class ApplicationController < ActionController::Base
 		end
 		
 		def set_theme
-			if request.format == :mobile
+			case request.format
+			when :mobile
 				if @current_user
 					@theme = Theme.find(@current_user.mobile_theme)
 				else

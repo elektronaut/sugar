@@ -1,4 +1,6 @@
-# = Category model
+# encoding: utf-8
+
+# = Category
 #
 # All discussions must belong to a category. There's not much functionality
 # attached to categories, except that discussions can be browsed by category,
@@ -24,7 +26,10 @@ class Category < ActiveRecord::Base
 
 	after_save do |category|
 		if category.update_trusted
-			Discussion.update_all("trusted = " + (category.trusted? ? '1' : '0'), "category_id = #{category.id}")
+			Discussion.update_all(
+				"trusted = " + (category.trusted? ? '1' : '0'), 
+				"category_id = #{category.id}"
+			)
 		end
 	end
 
@@ -39,10 +44,12 @@ class Category < ActiveRecord::Base
 		def work_safe_urls=(state)
 			@@work_safe_urls = state
 		end
+
 		# Reports the state of the work_safe_urls flag.
 		def work_safe_urls
 			@@work_safe_urls ||= false
 		end
+
 	end
 
 	# Returns true if this category has any labels
@@ -79,7 +86,10 @@ class Category < ActiveRecord::Base
 	def fix_counter_cache!
 		if discussions_count != discussions.count
 			logger.warn "counter_cache error detected on Category ##{self.id} (discussions)"
-			Category.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
+			Category.update_counters(
+				self.id, 
+				:discussions_count => (discussions.count - discussions_count)
+			)
 		end
 	end
 	

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require File.join(File.dirname(__FILE__), 'pagination/paginater')
 require File.join(File.dirname(__FILE__), 'pagination/instance_methods')
 

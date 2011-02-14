@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class InvitesController < ApplicationController
 
 	requires_authentication :except => [:accept]

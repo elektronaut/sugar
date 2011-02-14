@@ -1,13 +1,20 @@
+# encoding: utf-8
+
 # = Conversation
 #
 # A conversation is a private Exchange only accessible to a subset of users.
 
 class Conversation < Exchange
+
 	has_many :conversation_relationships, :dependent => :destroy, :order => 'created_at ASC'
 	has_many :participants, :through => :conversation_relationships, :source => :user
 	
 	after_create do |conversation|
-		ConversationRelationship.create(:user => conversation.poster, :conversation => conversation)
+		# Add the poster as a participant
+		ConversationRelationship.create(
+			:user         => conversation.poster, 
+			:conversation => conversation
+		)
 	end
 
 	# Returns true if the user can view this conversation

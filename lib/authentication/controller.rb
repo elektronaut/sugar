@@ -1,10 +1,13 @@
+# encoding: utf-8
+
 module Authentication
 	module Controller
 		
 		include ActionView::Helpers::DateHelper
 		
 		class << self
-			# Injects the filters
+			
+			# Filters are automatically set up when the module is included in a controller.
 			def included(base)
 				base.send(:before_filter, :load_session_user)
 				base.send(:before_filter, :finalize_authentication)

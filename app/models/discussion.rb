@@ -1,7 +1,11 @@
+# encoding: utf-8
+
 class Discussion < Exchange
+
 	has_many   :discussion_relationships, :dependent => :destroy
 
 	belongs_to :category, :counter_cache => true
+
 	validates_presence_of :category_id
 	
 	# Flag for trusted status, which will update after save if it has been changed.
@@ -37,21 +41,38 @@ class Discussion < Exchange
 				:since => 7.days.ago
 			}.merge(options)
 
-			conditions = ['posts.discussion_id = discussions.id AND posts.created_at > ?', options[:since]]
+			conditions = [
+				'posts.discussion_id = discussions.id AND posts.created_at > ?', 
+				options[:since]
+			]
 
 			# Ignore trusted posts unless requested
 			unless options[:trusted]
-				conditions = [['discussions.trusted = ?', conditions.shift].compact.join(' AND '), false] + conditions
+				conditions = [
+					['discussions.trusted = ?', conditions.shift].compact.join(' AND '), 
+					false
+				] + conditions
 			end
 			
 			if options[:trusted]
-				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
-					FROM posts, discussions 
-					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = ?", options[:since], 'Discussion'])
+				discussions_count = Discussion.count_by_sql([
+					'SELECT COUNT(DISTINCT discussion_id) ' +
+					'FROM posts, discussions ' +
+					'WHERE posts.discussion_id = discussions.id ' +
+					'AND posts.created_at > ? AND discussions.type = ?', 
+					options[:since], 
+					'Discussion'
+				])
 			else
-				discussions_count = Discussion.count_by_sql(["SELECT COUNT(DISTINCT discussion_id) 
-					FROM posts, discussions 
-					WHERE posts.discussion_id = discussions.id AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = ?", options[:since], 'Discussion', false])
+				discussions_count = Discussion.count_by_sql([
+					'SELECT COUNT(DISTINCT discussion_id) ' +
+					'FROM posts, discussions ' +
+					'WHERE posts.discussion_id = discussions.id ' +
+					'AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = ?', 
+					options[:since], 
+					'Discussion', 
+					false
+				])
 			end
 
 			Pagination.paginate(
@@ -72,13 +93,15 @@ class Discussion < Exchange
 			end
 		end
 	end
-	
+
 	def participants
-		User.find_by_sql("SELECT u.*, MAX(p.created_at) AS last_post_at
-		FROM users u, posts p
-		WHERE p.discussion_id = #{self.id} AND p.user_id = u.id
-		GROUP BY u.id
-		ORDER BY MAX(p.created_at) DESC")
+		User.find_by_sql(
+			'SELECT u.*, MAX(p.created_at) AS last_post_at ' +
+			'FROM users u, posts p ' +
+			'WHERE p.discussion_id = #{self.id} AND p.user_id = u.id ' +
+			'GROUP BY u.id ' +
+			'ORDER BY MAX(p.created_at) DESC'
+		)
 	end
 	
 	# Returns true if the user can view this discussion

@@ -16,6 +16,7 @@ class UsersController < ApplicationController
 						:grant_invite, :revoke_invites, 
 						:stats
                    ]
+
 	before_filter :detect_admin_signup, :only => [:login, :new, :create]
 
 	protected

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Theme
 
 	ATTRIBUTES = :id, :name, :author, :stylesheet, :icon, :mobile_stylesheet, :mobile_icon, :mobile_icon_precomposed

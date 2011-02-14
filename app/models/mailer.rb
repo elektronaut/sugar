@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Mailer < ActionMailer::Base
   
 	def self.default_sender

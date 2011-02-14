@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Authentication
 	module Filters
 		# Requires a user unless public browsing is on

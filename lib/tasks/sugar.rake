@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :sugar do
 
 	desc "Generate new passwords for everyone and send welcome mail"

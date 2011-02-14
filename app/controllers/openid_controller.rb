@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class OpenidController < ApplicationController
 
 	# Start an authentication session

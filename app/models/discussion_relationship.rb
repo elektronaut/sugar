@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class DiscussionRelationship < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :discussion

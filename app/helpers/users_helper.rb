@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module UsersHelper
 	# <%= users_tab "All Users", users_path, :action => 'index', :class => 'AllUsersTab' %>
 

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :benchmark do
     
     desc "Create random users"

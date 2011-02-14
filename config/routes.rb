@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 Sugar::Application.routes.draw do
 
 	# OpenID

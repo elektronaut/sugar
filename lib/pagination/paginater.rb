@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Pagination
 	# The Paginater stores pagination info and handles the math. 
 	# See the Pagination module documentation for usage examples.

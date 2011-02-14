@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Pagination
 
 	# The InstanceMethods are mixed into the collection by 
