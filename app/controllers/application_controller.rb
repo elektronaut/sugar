@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
 						@theme = Theme.find(Sugar.config(:default_mobile_theme))
 					end
 				end
-				format.html do
+				format.any do
 					if @current_user
 						@theme = Theme.find(@current_user.theme)
 					else
