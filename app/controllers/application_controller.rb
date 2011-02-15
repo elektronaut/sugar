@@ -76,18 +76,20 @@ class ApplicationController < ActionController::Base
 		end
 		
 		def set_theme
-			case request.format
-			when :mobile
-				if @current_user
-					@theme = Theme.find(@current_user.mobile_theme)
-				else
-					@theme = Theme.find(Sugar.config(:default_mobile_theme))
+			respond_to do |format|
+				format.mobile do
+					if @current_user
+						@theme = Theme.find(@current_user.mobile_theme)
+					else
+						@theme = Theme.find(Sugar.config(:default_mobile_theme))
+					end
 				end
-			else
-				if @current_user
-					@theme = Theme.find(@current_user.theme)
-				else
-					@theme = Theme.find(Sugar.config(:default_theme))
+				format.html do
+					if @current_user
+						@theme = Theme.find(@current_user.theme)
+					else
+						@theme = Theme.find(Sugar.config(:default_theme))
+					end
 				end
 			end
 		end
