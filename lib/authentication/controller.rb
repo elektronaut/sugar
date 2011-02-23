@@ -122,14 +122,14 @@ module Authentication
 					session[:user_id]         = @current_user.id
 					session[:hashed_password] = @current_user.hashed_password
 
-					# No need to update this on every request
-					if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
-						@current_user.update_attribute(:last_active, Time.now)
-					end
-
 					# Clean up banned_until
 					if @current_user.banned_until? && !@current_user.temporary_banned?
 						@current_user.update_attribute(:banned_until, nil)
+					end
+
+					# No need to update this on every request
+					if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
+						@current_user.update_attribute(:last_active, Time.now) unless @current_user.temporary_banned?
 					end
 				else
 					session[:user_id]         = nil
