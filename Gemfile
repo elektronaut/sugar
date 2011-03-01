@@ -32,8 +32,6 @@ gem 'capistrano'
 #   gem 'webrat'
 # end
 
-gem 'yui-compressor', :require => 'yui/compressor'
-
 gem 'mysql'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
@@ -50,6 +48,10 @@ gem 'thinking-sphinx', '2.0.2', :require => 'thinking_sphinx'
 # The GitHub version has fixed the deprecation notice, so let's use that for now
 #gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
 gem 'ts-delayed-delta', :git => 'git://github.com/freelancing-god/ts-delayed-delta.git', :require => 'thinking_sphinx/deltas/delayed_delta'
+
+group :development do
+  gem 'yui-compressor', :require => 'yui/compressor'
+end
 
 group :test do
 	gem 'shoulda'
