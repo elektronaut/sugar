@@ -42,6 +42,7 @@ class ScriptBundle
 	end
 	
 	def write(filename)
+		FileUtils.mkdir_p File.dirname(filename)
 		File.open(filename, 'w') do |fh|
 			fh.write self.to_s
 		end

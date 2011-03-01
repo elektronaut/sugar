@@ -5,6 +5,8 @@ module ApplicationHelper
 
 	def script_bundle_include_tag(bundle_name)
 		if Rails.env == 'production'
+			bundle_file = Rails.root.join("public/javascripts/bundles/#{bundle_name}.js")
+			ScriptBundle.bundle(bundle_name).write(bundle_file) if !File.exists?(bundle_file)
 			javascript_include_tag "bundles/#{bundle_name}.js"
 		else
 			bundle = ScriptBundle.bundle(bundle_name)

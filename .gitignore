@@ -16,4 +16,5 @@ db/sphinx
 public/cache
 public/system
 public/doodles
+public/javascripts/bundles/*
 public/themes/*.zip
