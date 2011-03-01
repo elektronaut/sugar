@@ -4,14 +4,17 @@ class ScriptBundle
 		def bundle(name, &block)
 			name = name.to_s
 			@@bundles ||= {}
-			@@bundles[name] ||= self.new
+			@@bundles[name] ||= self.new(name)
 			yield @@bundles[name] if block_given?
 			@@bundles[name]
 		end
 		
 	end
 	
-	def initialize
+	attr_reader :name
+	
+	def initialize(name)
+		@name = name
 		@scripts = []
 	end
 	

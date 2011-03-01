@@ -1,3 +1,5 @@
+require 'script_bundle'
+
 ScriptBundle.bundle 'application' do |bundle|
 	bundle.add 'jquery.min.js'
 	bundle.add 'rails.js', :compress => true

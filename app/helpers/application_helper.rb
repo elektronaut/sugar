@@ -3,6 +3,15 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+	def script_bundle_include_tag(bundle_name)
+		if Rails.env == 'production'
+			javascript_include_tag "bundles/#{bundle_name}.js"
+		else
+			bundle = ScriptBundle.bundle(bundle_name)
+			javascript_include_tag bundle.scripts
+		end
+	end
+
 	def formatted_time(time, options={})
 		return "Never" unless time
 		if time > 14.days.ago

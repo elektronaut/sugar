@@ -27,7 +27,7 @@ namespace :sugar do
 	task :pack_scripts => :environment do
 		puts "* Minifying and bundling application scripts"
 		%w{application mobile}.each do |bundle_name|
-			ScriptBundle.bundle(bundle_name).write(Rails.root.join("public/javascripts/bundled/#{bundle_name}.js"))
+			ScriptBundle.bundle(bundle_name).write(Rails.root.join("public/javascripts/bundles/#{bundle_name}.js"))
 		end
 	end
 	

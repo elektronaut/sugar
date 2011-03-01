@@ -11,19 +11,8 @@
 		<%= stylesheet_link_tag @theme.stylesheet_path %>
 	<% end %>
 
-	<%# Javascripts %>
-	<% if Rails.env == 'production' %>
-		<%= javascript_include_tag "bundled/application.js" %>
-	<% else %>
-		<%=
-			scripts  = %w{jquery rails}
-			scripts += %w{jquery.hotkeys jquery.scrollTo jquery.autocomplete jquery.beautyOfCode jquery.libraries}.map{|s| "vendor/#{s}"}
-			scripts += %w{swfobject soundmanager2}.map{|s| "vendor/#{s}"}
-			scripts += %w{sugar maps mp3player posts hotkeys facebook}.map{|s| "sugar/#{s}"}
-			scripts += %w{application}
-			scripts.map{|s| javascript_include_tag(s)}.join("\n").html_safe
-		%>
-	<% end %>
+	<%# Scripts are managed in config/initializers/script_bundles.rb %>
+	<%= script_bundle_include_tag :application %>
 
 	<%# Sugar configuration %>
 	<script>
