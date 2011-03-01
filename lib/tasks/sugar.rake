@@ -25,62 +25,9 @@ namespace :sugar do
 
 	desc "Minify javascripts"
 	task :pack_scripts => :environment do
-		
-		class Minifier
-			def initialize
-				@scripts = []
-				@compressor = YUI::JavaScriptCompressor.new(:munge => true)
-			end
-			def add(script, options={})
-				options = {:compress => false}.merge(options)
-				@scripts << [script, options]
-			end
-
-			def to_s
-				output = []
-				@scripts.each do |filename, options|
-					script = File.read(Rails.root.join("public/javascripts/#{filename}"))
-					script = @compressor.compress(script) if options[:compress]
-					output << script
-				end
-				output.join("\n")
-			end
-		end
-		
 		puts "* Minifying and bundling application scripts"
-
-		minifier = Minifier.new
-		minifier.add 'jquery.min.js'
-		minifier.add 'rails.js', :compress => true
-		minifier.add 'vendor/jquery.hotkeys.js', :compress => true
-		minifier.add 'vendor/jquery.scrollTo.js'
-		minifier.add 'vendor/jquery.autocomplete.js'
-		minifier.add 'vendor/swfobject.js'
-		minifier.add 'vendor/soundmanager2.js'
-		minifier.add 'vendor/jquery.beautyOfCode.js', :compress => true
-		minifier.add 'vendor/jquery.libraries.js', :compress => true
-
-		minifier.add 'sugar/sugar.js', :compress => true
-		minifier.add 'sugar/maps.js', :compress => true
-		minifier.add 'sugar/mp3player.js', :compress => true
-		minifier.add 'sugar/posts.js', :compress => true
-		minifier.add 'sugar/hotkeys.js', :compress => true
-		minifier.add 'sugar/facebook.js', :compress => true
-		minifier.add 'application.js', :compress => true
-		
-		File.open(Rails.root.join('public/javascripts/bundled/application.js'), 'w') do |fh|
-			fh.write minifier.to_s
-		end
-		
-		puts "* Minifying and bundling mobile scripts"
-
-		mobile_minifier = Minifier.new
-		mobile_minifier.add 'jquery.min.js'
-		mobile_minifier.add 'mobile.js', :compress => true
-
-
-		File.open(Rails.root.join('public/javascripts/bundled/mobile.js'), 'w') do |fh|
-			fh.write mobile_minifier.to_s
+		%w{application mobile}.each do |bundle_name|
+			ScriptBundle.bundle(bundle_name).write(Rails.root.join("public/javascripts/bundled/#{bundle_name}.js"))
 		end
 	end
 	
