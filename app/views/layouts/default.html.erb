@@ -16,7 +16,8 @@
 		<%= javascript_include_tag "bundled/application.js" %>
 	<% else %>
 		<%=
-			scripts  = %w{jquery jquery.hotkeys jquery.scrollTo jquery.autocomplete jquery.beautyOfCode jquery.libraries}.map{|s| "vendor/#{s}"}
+			scripts  = %w{jquery rails}
+			scripts += %w{jquery.hotkeys jquery.scrollTo jquery.autocomplete jquery.beautyOfCode jquery.libraries}.map{|s| "vendor/#{s}"}
 			scripts += %w{swfobject soundmanager2}.map{|s| "vendor/#{s}"}
 			scripts += %w{sugar maps mp3player posts hotkeys facebook}.map{|s| "sugar/#{s}"}
 			scripts += %w{application}

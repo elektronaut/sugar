@@ -8,7 +8,7 @@
 	<% if Rails.env == 'production' -%>
 		<%= javascript_include_tag "bundled/mobile.js" %>
 	<% else -%>
-		<%= javascript_include_tag 'vendor/jquery' %>
+		<%= javascript_include_tag 'jquery' %>
 		<%= javascript_include_tag 'mobile' %>
 	<% end -%>
 

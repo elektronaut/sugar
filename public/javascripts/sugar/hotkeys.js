@@ -121,11 +121,11 @@
 						document.location = $('.next_page_link').get(0).href;
 					}
 				};
-				$(document).bind('keydown', {combi: 'shift+p', disableInInput: true}, gotoPrevPage);
-				$(document).bind('keydown', {combi: 'shift+k', disableInInput: true}, gotoPrevPage);
-				$(document).bind('keydown', {combi: 'shift+n', disableInInput: true}, gotoNextPage);
-				$(document).bind('keydown', {combi: 'shift+j', disableInInput: true}, gotoNextPage);
-				$(document).bind('keydown', {combi: 'u',       disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'shift+p', gotoPrevPage);
+				$(document).bind('keydown', 'shift+k', gotoPrevPage);
+				$(document).bind('keydown', 'shift+n', gotoNextPage);
+				$(document).bind('keydown', 'shift+j', gotoNextPage);
+				$(document).bind('keydown', 'u', function (event) {
 					if (!event.metaKey && $('#back_link').length > 0) {
 						document.location = $('#back_link').get(0).href;
 						return false;
@@ -195,22 +195,22 @@
 				});
 
 				// Keyboard bindings
-				$(document).bind('keydown', {combi: 'p', disableInInput: true}, function (event) { 
+				$(document).bind('keydown', 'p', function (event) { 
 					if (!event.metaKey) { 
 						$S.Hotkeys.gotoPrevTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'k', disableInInput: true}, function (event) { 
+				$(document).bind('keydown', 'k', function (event) { 
 					if (!event.metaKey) { 
 						$S.Hotkeys.gotoPrevTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'n', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'n', function (event) {
 					if (!event.metaKey) {
 						$S.Hotkeys.gotoNextTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'j', disableInInput: true}, function (event) { 
+				$(document).bind('keydown', 'j', function (event) { 
 					if (!event.metaKey) {
 						$S.Hotkeys.gotoNextTarget();
 					}
@@ -220,14 +220,14 @@
 			// Posts functions
 			postsFunctions: function () {
 				// Load new posts
-				$(document).bind('keydown', {combi: 'r', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'r', function (event) {
 					if (!event.metaKey) {
 						$S.loadNewPosts();
 					}
 				});
 
 				// Go to compose
-				$(document).bind('keydown', {combi: 'c', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'c', function (event) {
 					if (!event.metaKey) {
 						$S.compose();
 						return false;
@@ -235,7 +235,7 @@
 				});
 
 				// Quote post
-				$(document).bind('keydown', {combi: 'q', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'q', function (event) {
 					if (!event.metaKey && $S.Hotkeys.getTarget()) {
 						$S.quotePost($($S.Hotkeys.getTarget()).data('targetId'));
 						return false;
@@ -260,22 +260,22 @@
 				});
 
 				// Key handlers
-				$(document).bind('keydown', {combi: 'p', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'p', function (event) {
 					if (!event.metaKey) { 
 						$S.Hotkeys.gotoPrevTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'k', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'k', function (event) {
 					if (!event.metaKey) {
 						$S.Hotkeys.gotoPrevTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'n', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'n', function (event) {
 					if (!event.metaKey) {
 						$S.Hotkeys.gotoNextTarget();
 					}
 				});
-				$(document).bind('keydown', {combi: 'j', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'j', function (event) {
 					if (!event.metaKey) {
 						$S.Hotkeys.gotoNextTarget();
 					}
@@ -295,22 +295,22 @@
 						}
 					}
 				};
-				$(document).bind('keydown', {combi: 'o', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'o', function (event) {
 					if (!event.metaKey) {
 						openTarget(false);
 					}
 				});
-				$(document).bind('keydown', {combi: 'shift+o', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'shift+o', function (event) {
 					if (!event.metaKey) {
 						openTarget(true);
 					}
 				});
-				$(document).bind('keydown', {combi: 'Return', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'Return', function (event) {
 					if (!event.metaKey) {
 						openTarget(false);
 					}
 				});
-				$(document).bind('keydown', {combi: 'shift+Return', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'shift+Return', function (event) {
 					if (!event.metaKey) {
 						openTarget(true);
 					}
@@ -328,11 +328,11 @@
 						});
 					}
 				};
-				$(document).bind('keydown', {combi: 'y', disableInInput: true}, markAsRead);
-				$(document).bind('keydown', {combi: 'm', disableInInput: true}, markAsRead);
+				$(document).bind('keydown', 'y', markAsRead);
+				$(document).bind('keydown', 'm', markAsRead);
 
 				// New discussion/category
-				$(document).bind('keydown', {combi: 'c', disableInInput: true}, function (event) {
+				$(document).bind('keydown', 'c', function (event) {
 					if (!event.metaKey && $('.functions .create').length > 0) {
 						document.location = $('.functions .create').get(0).href;
 					}

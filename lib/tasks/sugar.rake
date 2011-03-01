@@ -50,8 +50,9 @@ namespace :sugar do
 		puts "* Minifying and bundling application scripts"
 
 		minifier = Minifier.new
-		minifier.add 'vendor/jquery.js'
-		minifier.add 'vendor/jquery.hotkeys.js' 
+		minifier.add 'jquery.min.js'
+		minifier.add 'rails.js', :compress => true
+		minifier.add 'vendor/jquery.hotkeys.js', :compress => true
 		minifier.add 'vendor/jquery.scrollTo.js'
 		minifier.add 'vendor/jquery.autocomplete.js'
 		minifier.add 'vendor/swfobject.js'
@@ -74,7 +75,7 @@ namespace :sugar do
 		puts "* Minifying and bundling mobile scripts"
 
 		mobile_minifier = Minifier.new
-		mobile_minifier.add 'vendor/jquery.js'
+		mobile_minifier.add 'jquery.min.js'
 		mobile_minifier.add 'mobile.js', :compress => true
 
 
