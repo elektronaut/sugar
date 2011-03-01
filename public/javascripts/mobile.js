@@ -6,7 +6,7 @@ function toggleNavigation() {
 }
 
 function resizeYoutube() {
-	$('iframe[src=*.youtube.com],embed[src*=youtube.com]').each(function () {
+	$('iframe[src*=youtube.com],embed[src*=youtube.com]').each(function () {
 		if (!this.originalHeight) {
 			this.originalHeight = this.height;
 		}
