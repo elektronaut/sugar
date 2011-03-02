@@ -9,6 +9,8 @@
 	<%# Scripts are managed in config/initializers/script_bundles.rb %>
 	<%= script_bundle_include_tag :mobile %>
 
+	<%= csrf_meta_tag %>
+
 	<% if @current_user && @current_user.mobile_stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.mobile_stylesheet_url %>
 	<% else %>
