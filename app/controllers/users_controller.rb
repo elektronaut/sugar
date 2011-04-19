@@ -292,7 +292,7 @@ class UsersController < ApplicationController
 
 				# Sanitize input
 				attributes = params[:user]
-				attributes = User.safe_attributes(attributes) unless @current_user.admin?
+				attributes = User.safe_attributes(attributes) unless @current_user.user_admin?
 				attributes.delete(:administrator) unless @current_user.admin?
 
 				if attributes[:openid_url] && attributes[:openid_url] != @user.openid_url
