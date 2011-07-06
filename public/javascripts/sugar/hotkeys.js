@@ -148,13 +148,13 @@
 							$S.Hotkeys.keySequence += character;
 							var keySequence = $S.Hotkeys.keySequence = $S.Hotkeys.keySequence.match(/([\w\d]{0,5})$/)[1]; // Limit to 5 keys
 							var shortcuts = {
-								'#discussions_link': /gd$/,
-								'#following_link':   /gf$/,
-								'#favorites_link':   /gF$/,
-								'#categories_link':  /gc$/,
-								'#messages_link':    /gm$/,
-								'#invites_link':     /gi$/,
-								'#users_link':       /gu$/
+								'#discussions_link':   /gd$/,
+								'#following_link':     /gf$/,
+								'#favorites_link':     /gF$/,
+								'#conversations_link': /gc$/,
+								'#messages_link':      /gm$/,
+								'#invites_link':       /gi$/,
+								'#users_link':         /gu$/
 							};
 							for (var selector in shortcuts) {
 								if (keySequence.match(shortcuts[selector]) && $(selector).length > 0) { 
