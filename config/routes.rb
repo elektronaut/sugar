@@ -127,6 +127,10 @@ Sugar::Application.routes.draw do
 		post 'configuration', :on => :member
 	end
 
+	# Help pages
+	match 'help' => 'help#index', :as => :help
+	match 'help/:page' => 'help#show', :as => :help_page
+
 	# Vanilla redirects
 	controller :vanilla do
 		match '/vanilla'              => :discussions
