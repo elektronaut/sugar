@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
 		def detect_mobile
 			@mobile_user_agent = false
 			@mobile_user_agent ||= request.host =~ /^(iphone|m|mobile)\./ 
-			@mobile_user_agent ||= request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android)/]
+			@mobile_user_agent ||= request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android|IEMobile)/]
 			if @mobile_user_agent
 				session[:mobile_format] ||= 'mobile'
 				session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
