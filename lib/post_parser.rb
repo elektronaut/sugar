@@ -6,7 +6,7 @@ module PostParser
 	
 	SYNTAXES = %w{as3 actionscript3 bash shell c-sharp csharp cpp c css diff patch js jscript javascript java perl pl php plain text py python rails ror ruby sql xml xhtml xslt html xhtml}
 	
-    def PostParser.parse(string)
+	def PostParser.parse(string)
 		string = string.strip
 		
 		# Wrap <code> stuff in CDATA
@@ -90,7 +90,7 @@ module PostParser
 		string = doc.to_html
 		
 		# Autolink URLs
-		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
+		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 
         # Replace line breaks
 		string.gsub!(/\r?\n/,'<br />')
@@ -100,6 +100,6 @@ module PostParser
 			string.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<pre class="code"><code class="'+codeblock[:language]+'">'+CGI::escapeHTML(codeblock[:body])+'</code></pre>')
 		end
 
-        return string.html_safe
-    end
+		return string.html_safe
+	end
 end

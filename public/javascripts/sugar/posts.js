@@ -170,7 +170,7 @@ $.extend(Sugar, {
 			var postBody = $('#compose-body').val();
 
 			// Auto-link URLs
-			postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+)\b/gi, "$1<a href=\"$2\">$2</a>");
+			postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/gi, "$1<a href=\"$2\">$2</a>");
 
 			if ($('#hiddenPostVerifier').length < 1) {
 				$(document.body).append('<div id="hiddenPostVerifier"></div>');
