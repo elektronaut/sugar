@@ -1,20 +1,23 @@
 development:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   username: my_username
   password: my_password
   database: sugar_dev
+  pool: 5
 
 test:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   username: my_username
   password: my_password
   database: sugar_test
+  pool: 5
 
 production:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   username: my_username
   password: my_password
   database: sugar
+  pool: 5
