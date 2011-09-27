@@ -11,6 +11,7 @@ config/deploy.rb
 config/session_key
 config/*.sphinx.conf
 config/database.yml
+config/newrelic.yml
 db/schema.rb
 db/sphinx
 public/cache

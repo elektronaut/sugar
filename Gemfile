@@ -39,7 +39,7 @@ gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => '
 
 gem 'hpricot', '0.8.4'
 gem 'daemon-spawn', '0.2.0'
-gem 'newrelic_rpm', '2.13.4'
+gem 'newrelic_rpm'
 
 gem 'delayed_job', '2.1.4'
 gem 'thinking-sphinx', '2.0.7'
