@@ -83,7 +83,7 @@ class CategoriesControllerTest < ActionController::TestCase
 			end
 		end
 
-		context 'creating a valid discussion' do
+		context 'creating a valid category' do
 			setup do
 				post :create, :category => {
 					:name        => 'A new category',
@@ -99,7 +99,7 @@ class CategoriesControllerTest < ActionController::TestCase
 			end
 		end
 
-		context 'creating an invalid discussion' do
+		context 'creating an invalid category' do
 			setup do
 				post :create, :category => {
 					:name        => '',
@@ -109,7 +109,7 @@ class CategoriesControllerTest < ActionController::TestCase
 			should assign_to(:category)
 			should respond_with(:success)
 			should render_template(:new)
-			should set_the_flash.to(/required fields/)
+			should set_the_flash.now.to(/required fields/)
 
 			should 'instance an invalid category' do
 				assert !assigns(:category).valid?
@@ -154,7 +154,7 @@ class CategoriesControllerTest < ActionController::TestCase
 			should assign_to(:category)
 			should respond_with(:success)
 			should render_template(:edit)
-			should set_the_flash.to(/required fields/)
+			should set_the_flash.now.to(/required fields/)
 		end
 	end
 	

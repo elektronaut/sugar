@@ -3,10 +3,8 @@ source 'http://gems.github.com'
 
 gem 'rails', '3.1.0'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 # gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'mysql2'
 
 gem 'jquery-rails'
 
@@ -19,21 +17,6 @@ gem 'capistrano'
 # To use debugger
 # gem 'ruby-debug'
 
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
-
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
-
-gem 'mysql2'
-
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
@@ -43,10 +26,6 @@ gem 'newrelic_rpm'
 
 gem 'delayed_job', '2.1.4'
 gem 'thinking-sphinx', '2.0.7'
-
-# The GitHub version has fixed the deprecation notice, so let's use that for now
-#gem 'ts-delayed-delta', '1.1.0', :require => 'thinking_sphinx/deltas/delayed_delta'
-#gem 'ts-delayed-delta', :git => 'git://github.com/freelancing-god/ts-delayed-delta.git', :require => 'thinking_sphinx/deltas/delayed_delta'
 gem 'ts-delayed-delta', '1.1.2', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 group :development do

@@ -30,7 +30,7 @@ Things you *WON'T* find in Sugar:
 
 == Requirements, and how to install them
 
-Sugar is written in Ruby on Rails 3.0. Ruby 1.8.7 is supported, Ruby 1.9 isn't completely tested, but should work to my knowledge.
+Sugar is written for Ruby on Rails 3.1, and is Ruby 1.9 ready.
 
 First, make sure you have Sphinx (http://www.sphinxsearch.com) installed. 
 
