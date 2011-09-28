@@ -4,6 +4,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./vendor
+//= require ./syntaxhighlighter/shCore
+//= require_tree ./syntaxhighlighter/brushes
 //= require sugar
 //= require_tree ./sugar
 
