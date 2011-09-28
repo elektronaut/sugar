@@ -13,6 +13,7 @@ var Sugar = {
 	Initializers: {
 		
 		syntaxHighlight: function () {
+			/*
 			$.beautyOfCode.init({
 				theme: 'Eclipse',
 				brushes: ['Xml', 'JScript', 'CSharp', 'Plain', 'Php', 'Ruby', 'AS3', 'Bash', 'Cpp', 'Css', 'Diff', 'Java', 'Perl', 'Python', 'Sql'],
@@ -21,6 +22,7 @@ var Sugar = {
 					$('.syntaxhighlighter').closest('.body').addClass('syntax');
 				}
 		    });
+		*/
 		},
 		
 		inviteParticipants : function () {
