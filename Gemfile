@@ -6,6 +6,13 @@ gem 'rails', '3.1.0'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
 
+# Asset template engines
+gem 'json'
+gem 'sass-rails'
+gem 'coffee-script'
+gem 'uglifier'
+gem 'dynamic_form'
+
 gem 'jquery-rails'
 
 # Use unicorn as the web server

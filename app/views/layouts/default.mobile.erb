@@ -6,18 +6,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
-	<%# Scripts are managed in config/initializers/script_bundles.rb %>
-	<%= script_bundle_include_tag :mobile %>
-
-	<%= csrf_meta_tag %>
-
 	<% if @current_user && @current_user.mobile_stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.mobile_stylesheet_url %>
 	<% else %>
 		<%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
 	<% end %>
 
-	<%# stylesheet_link_tag @theme.mobile_stylesheet_path %>
+	<%= javascript_include_tag "mobile" %>
+
+	<%= csrf_meta_tag %>
+
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 	<% if @theme.mobile_icon? %>
 		<link rel="<%= @theme.mobile_icon_precomposed? ? 'apple-touch-icon-precomposed' : 'apple-touch-icon'%>" href="<%= @theme.mobile_icon_path %>" />

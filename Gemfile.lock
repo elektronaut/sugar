@@ -50,12 +50,19 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.1.2)
     daemon-spawn (0.2.0)
     daemons (1.1.4)
     delayed_job (2.1.4)
       activesupport (~> 3.0)
       daemons
+    dynamic_form (1.1.4)
     erubis (2.7.0)
+    execjs (1.2.7)
+      multi_json (~> 1.0)
     factory_girl (1.3.3)
     factory_girl_rails (1.0.1)
       factory_girl (~> 1.3)
@@ -71,9 +78,10 @@ GEM
     hike (1.2.1)
     hpricot (0.8.4)
     i18n (0.6.0)
-    jquery-rails (0.2.7)
-      rails (~> 3.0)
-      thor (~> 0.14.4)
+    jquery-rails (1.0.14)
+      railties (~> 3.0)
+      thor (~> 0.14)
+    json (1.6.1)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -121,6 +129,13 @@ GEM
     rdoc (3.9.4)
     riddle (1.4.0)
     ruby-prof (0.10.8)
+    sass (3.1.7)
+    sass-rails (3.1.2)
+      actionpack (~> 3.1.0)
+      railties (~> 3.1.0)
+      sass (>= 3.1.4)
+      sprockets (~> 2.0.0)
+      tilt (~> 1.3.2)
     shoulda-context (1.0.0.beta1)
     shoulda-matchers (1.0.0.beta3)
     sprockets (2.0.0)
@@ -140,6 +155,9 @@ GEM
       delayed_job (>= 2.1.0)
       thinking-sphinx (>= 1.3.6)
     tzinfo (0.3.29)
+    uglifier (1.0.3)
+      execjs (>= 0.3.0)
+      multi_json (>= 1.0.2)
     yui-compressor (0.9.6)
       POpen4 (>= 0.1.4)
 
@@ -148,22 +166,27 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano
+  coffee-script
   daemon-spawn (= 0.2.0)
   delayed_job (= 2.1.4)
+  dynamic_form
   factory_girl_rails
   growl_notify
   guard
   guard-test
   hpricot (= 0.8.4)
   jquery-rails
+  json
   mysql2
   newrelic_rpm
   rails (= 3.1.0)
   rb-fsevent
   ruby-openid!
   ruby-prof
+  sass-rails
   shoulda-context
   shoulda-matchers
   thinking-sphinx (= 2.0.7)
   ts-delayed-delta (= 1.1.2)
+  uglifier
   yui-compressor

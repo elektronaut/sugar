@@ -23,16 +23,8 @@ namespace :sugar do
 		end
 	end
 
-	desc "Minify javascripts"
-	task :pack_scripts => :environment do
-		puts "* Minifying and bundling application scripts"
-		%w{application mobile}.each do |bundle_name|
-			ScriptBundle.bundle(bundle_name).write(Rails.root.join("public/javascripts/bundles/#{bundle_name}.js"))
-		end
-	end
-	
-	desc "Pack themes and javascripts"
-	task :pack => [:pack_themes, :pack_scripts] do
+	desc "Pack themes"
+	task :pack => [:pack_themes] do
 	end
 
 	desc "Disable web"

@@ -1,6 +1,12 @@
 /*jslint browser: true, devel: true, onevar: false, regexp: false*/
 /*global window: false, jQuery: false, $: false, Sugar: false*/
 
+//= require jquery
+//= require jquery_ujs
+//= require_tree ./vendor
+//= require sugar
+//= require_tree ./sugar
+
 window.relativeTime = function (timeString) {
 	var parsedDate = Date.parse(timeString);
 	var delta = (Date.parse(Date()) - parsedDate) / 1000;

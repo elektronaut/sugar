@@ -11,8 +11,7 @@
 		<%= stylesheet_link_tag @theme.stylesheet_path %>
 	<% end %>
 
-	<%# Scripts are managed in config/initializers/script_bundles.rb %>
-	<%= script_bundle_include_tag :application %>
+	<%= javascript_include_tag "application" %>
 
 	<%= csrf_meta_tag %>
 
