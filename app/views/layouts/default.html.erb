@@ -5,6 +5,7 @@
 	<title><%= [@page_title, Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
 	<%# Stylesheet %>
+	<%= stylesheet_link_tag "application" %>
 	<% if @current_user && @current_user.stylesheet_url? %>
 		<%= stylesheet_link_tag @current_user.stylesheet_url %>
 	<% else %>

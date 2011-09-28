@@ -4,7 +4,7 @@ require 'hpricot'
 
 module PostParser
 	
-	SYNTAXES = %w{as3 actionscript3 bash shell c-sharp csharp cpp c css diff patch js jscript javascript java perl pl php plain text py python rails ror ruby sql xml xhtml xslt html xhtml}
+	SYNTAXES = %w{applescript as3 actionscript3 bash shell cf coldfusion c# c-sharp csharp cpp c css diff delphi erl erlang groovy pascal pas patch js jscript javascript java javafx jfx Perl perl pl php plain text py python powershell ps rails ror ruby rb sass scss scala sql vb vbnet xml xhtml xslt html xhtml}
 	
 	def PostParser.parse(string)
 		string = string.strip

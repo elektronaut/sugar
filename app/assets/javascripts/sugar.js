@@ -13,16 +13,16 @@ var Sugar = {
 	Initializers: {
 		
 		syntaxHighlight: function () {
-			/*
-			$.beautyOfCode.init({
-				theme: 'Eclipse',
-				brushes: ['Xml', 'JScript', 'CSharp', 'Plain', 'Php', 'Ruby', 'AS3', 'Bash', 'Cpp', 'Css', 'Diff', 'Java', 'Perl', 'Python', 'Sql'],
-				ready: function() {
-					$.beautyOfCode.beautifyAll();
-					$('.syntaxhighlighter').closest('.body').addClass('syntax');
-				}
-		    });
-		*/
+			// Transform the code blocks to work with SyntaxHighlighter
+			$('pre.code code').each(function(){
+				var code   = this;
+				var parent = $(this).closest('pre').get(0);
+				var language = code.className;
+				$(parent).html($(this).html());
+				parent.className = parent.className + ' brush: ' + language;
+				$(parent).closest('.body').addClass('syntax');
+			});
+			SyntaxHighlighter.all();
 		},
 		
 		inviteParticipants : function () {
