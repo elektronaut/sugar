@@ -97,7 +97,7 @@ module Authentication
 				if @current_user
 					if !@current_user.activated? || @current_user.banned? || @current_user.temporary_banned?
 						if @current_user.temporary_banned?
-							flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now - @current_user.banned_until)}!"
+							flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, @current_user.banned_until)}!"
 						elsif @current_user.banned?
 							flash[:notice] = "You have been banned!"
 						end

@@ -41,7 +41,7 @@
 				if user.banned?
 					'<span class="banned">Banned</span>'.html_safe
 				elsif user.temporary_banned?
-					('<span class="banned">Banned</span> for '+distance_of_time_in_words(Time.now - user.banned_until)).html_safe
+					('<span class="banned">Banned</span> for '+distance_of_time_in_words(Time.now, user.banned_until)).html_safe
 				elsif user.user_admin? || user.moderator?
 					('<span class="admin">'+user.admin_labels.to_sentence+'</span>').html_safe
 				end
