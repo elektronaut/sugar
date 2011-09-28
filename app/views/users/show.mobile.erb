@@ -5,7 +5,7 @@
 		<% if @user.avatar_url? %>
 			<%= image_tag @user.avatar_url, :alt => @user.username, :size => '48x48' %>
 		<% else %>
-			<%= image_tag @user.gravatar_url(:size => 48), :alt => @user.username, :size => '48x48' %>
+			<%= image_tag gravatar_url(@user.email, :size => 48), :alt => @user.username, :size => '48x48' %>
 		<% end %>
 		<h2><%= @user.username %></h2>
 

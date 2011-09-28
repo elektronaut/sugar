@@ -1,7 +1,18 @@
 # encoding: utf-8
 
+require 'digest/md5'
+
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+	def gravatar_url(email, options={})
+		options = {
+			:size => 24
+		}.merge(options)
+		hash = Digest::MD5.hexdigest(email)
+		base_url = request.ssl? ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+		"#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
+	end
 
 	def formatted_time(time, options={})
 		return "Never" unless time
@@ -61,7 +72,7 @@ module ApplicationHelper
 		if user.avatar_url?
 			image_tag user.avatar_url, :alt => user.username, :size => "#{size}x#{size}"
 		else
-			image_tag user.gravatar_url(:size => size), :alt => user.username, :size => "#{size}x#{size}"
+			image_tag gravatar_url(user.email, :size => size), :alt => user.username, :size => "#{size}x#{size}"
 		end
 	end
 
