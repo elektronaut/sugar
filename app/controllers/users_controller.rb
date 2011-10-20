@@ -9,13 +9,13 @@ class UsersController < ApplicationController
 
 	before_filter :load_user, 
 	              :only => [
-						:show, :edit, 
-						:update, :destroy, 
-						:participated, :discussions, 
-						:posts, :update_openid, 
-						:grant_invite, :revoke_invites, 
-						:stats
-                   ]
+	              	:show, :edit, 
+	              	:update, :destroy, 
+	              	:participated, :discussions, 
+	              	:posts, :update_openid, 
+	              	:grant_invite, :revoke_invites, 
+	              	:stats
+	              ]
 
 	before_filter :detect_admin_signup, :only => [:login, :new, :create]
 
