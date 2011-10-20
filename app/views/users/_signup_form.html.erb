@@ -10,7 +10,7 @@
 <% if mode == :openid %>
 	<%= labelled_field f.text_field(:openid_url, :size => 47), "OpenID Identity URL", :errors => @user.errors[:openid_url], :description => "#{link_to("What's this?", "http://openid.net/what/")}" %>
 <% else %>
-	<% labelled_field f.password_field(:password), "Password", :errors => @user.errors[:password], :description => "Enter twice to confirm" do %>
+	<%= labelled_field f.password_field(:password), "Password", :errors => @user.errors[:password], :description => "Enter twice to confirm" do %>
 		<%= f.password_field(:confirm_password) %>
 	<% end %>
 <% end %>
