@@ -25,7 +25,7 @@ class Post < ActiveRecord::Base
 		post.edited_at  ||= Time.now
 		post.trusted      = post.discussion.trusted if post.discussion
 		post.conversation = post.discussion.kind_of?(Conversation)
-		post.body_html    = PostParser.parse(post.body) unless post.skip_html
+		post.body_html    = PostParser.new(post.body).to_html unless post.skip_html
 	end
 	
 	define_index do
@@ -96,10 +96,10 @@ class Post < ActiveRecord::Base
 
 	def body_html
 		if self.new_record? || Rails.env == 'development'
-			PostParser.parse(self.body.dup)
+			PostParser.new(self.body.dup).to_html
 		else
 			unless body_html?
-				self.update_attribute(:body_html, PostParser.parse(self.body.dup))
+				self.update_attribute(:body_html, PostParser.new(self.body.dup).to_html)
 			end
 			self[:body_html].html_safe
 		end

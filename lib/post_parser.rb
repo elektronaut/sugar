@@ -1,23 +1,28 @@
 # encoding: utf-8
 
-require 'hpricot'
+class PostParser
 
-module PostParser
-	
 	SYNTAXES = %w{applescript as3 actionscript3 bash shell cf coldfusion c# c-sharp csharp cpp c css diff delphi erl erlang groovy pascal pas patch js jscript javascript java javafx jfx Perl perl pl php plain text py python powershell ps rails ror ruby rb sass scss scala sql vb vbnet xml xhtml xslt html xhtml}
 	
-	def PostParser.parse(string)
-		string = string.strip
-		
-		# Wrap <code> stuff in CDATA
-		string.gsub!(/(<code[\s\w\d\"\'=\-_\+\.]*>)/i){"#{$1}<![CDATA["}
-		string.gsub!(/(<\/code>)/i){"]]>#{$1}"}
+	def initialize(post)
+		@original_post = post
+	end
+	
+	def parse(post)
+		post = post.strip
+	
+		# Wrap <code> content in CDATA
+		post.gsub!(/(<code[\s\w\d\"\'=\-_\+\.]*>)/i){"#{$1}<![CDATA["}
+		post.gsub!(/(<\/code>)/i){"]]>#{$1}"}
 
-		string.gsub!(/<script[\s\/]*/i, '<script ')
-		
-		doc = Hpricot(string)
-		
-		# Parse <code> blocks
+		# Normalize <script> tags so the parser will find them
+		post.gsub!(/<script[\s\/]*/i, '<script ')
+	
+		# Parse the post
+		doc = Hpricot(post)
+	
+		# Get all <code> blocks, store them elsewhere and replace them with 
+		# empty divs for now
 		codeblocks = []
 		doc.search('code') do |codeblock|
 			if codeblock.attributes && codeblock.attributes['language']
@@ -36,10 +41,12 @@ module PostParser
 		# Delete unsafe tags
 		(doc/"script").remove
 		(doc/"meta").remove
-		
-		# Whitelist iframes from Vimeo and YouTube
-		doc.search("iframe").map!{|iframe| iframe unless iframe.attributes['src'] =~ /^https?:\/\/([\w\d\.\-]+)?(vimeo\.com|youtube\.com)\//}.compact.remove
-		
+	
+		# Filter iframes, reject all not on the whitelist
+		iframe_whitelist = /^https?:\/\/([\w\d\.\-]+)?(vimeo\.com|youtube\.com)\//
+		iframes = doc.search("iframe")
+		iframes.reject{|iframe| iframe.attributes['src'] =~ iframe_whitelist}.remove
+	
 		# Filter malicious attributes on all elements
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
 			if elem.raw_attributes
@@ -53,7 +60,7 @@ module PostParser
 				end
 			end
 		end
-		
+	
 		# Enforce correct allowScriptAccess on embed tags
 		doc.search("embed").each do |elem| 
 			if elem.raw_attributes
@@ -64,16 +71,19 @@ module PostParser
 				elem.raw_attributes = {'allowScriptAccess' => 'sameDomain'}
 			end
 		end
-		
+	
 		# Filter param tags for malicious values
 		doc.search("param").each do |elem|
 			if elem.raw_attributes
 				elem.raw_attributes.each do |name, value|
-					elem.raw_attributes = {'name' => 'allowScriptAccess', 'value' => 'sameDomain'} if name.downcase == 'name' && value.downcase == 'allowscriptaccess'
+					# Change allowScriptAccess to sameDomain
+					if name.downcase == 'name' && value.downcase == 'allowscriptaccess'
+						elem.raw_attributes = {'name' => 'allowScriptAccess', 'value' => 'sameDomain'}
+					end
 				end
 			end
 		end
-		
+	
 		# Make sure there's a <param name="allowScriptAccess" value="sameDomain"> in object tags
 		doc.search("object").each do |elem|
 			param_attributes = elem.search('>param').map do |subelem|
@@ -87,19 +97,23 @@ module PostParser
 		end
 
 		# ..and convert back to HTML again
-		string = doc.to_html
-		
+		post = doc.to_html
+	
 		# Autolink URLs
-		string.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
+		post.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 
-        # Replace line breaks
-		string.gsub!(/\r?\n/,'<br />')
+		# Replace line breaks
+		post.gsub!(/\r?\n/,'<br />')
 
 		# Replace code blocks
 		codeblocks.each_with_index do |codeblock, index|
-			string.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<pre class="code"><code class="'+codeblock[:language]+'">'+CGI::escapeHTML(codeblock[:body])+'</code></pre>')
+			post.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<pre class="code"><code class="'+codeblock[:language]+'">'+CGI::escapeHTML(codeblock[:body])+'</code></pre>')
 		end
+		
+		post
+	end
 
-		return string.html_safe
+	def to_html
+		(@parsed_post ||= parse(@original_post)).html_safe
 	end
 end

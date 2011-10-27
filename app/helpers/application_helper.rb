@@ -121,7 +121,7 @@ module ApplicationHelper
 	end
 
 	def format_post(string)
-		PostParser.parse(string)
+		PostParser.new(string).to_html
 	end
 
 	def last_viewed_post(discussion)
