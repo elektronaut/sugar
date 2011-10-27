@@ -3,6 +3,8 @@
 
 //= require jquery
 //= require jquery_ujs
+//= require sugar
+//= require sugar/amazon_associates
 
 function toggleNavigation() {
 	$('#navigation').toggle();

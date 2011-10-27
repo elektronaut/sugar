@@ -112,6 +112,10 @@
 			<%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id), :size => '48'), "Application ID" %>
 		</fieldset>
 		<fieldset>
+			<h2>Amazon Associates</h2>
+			<%= labelled_field text_field_tag('config[amazon_associates_id]', Sugar.config(:amazon_associates_id)), "Tracking ID", :description => 'Enter to enable referrals' %>
+		</fieldset>
+		<fieldset>
 			<h2>Flickr</h2>
 			<%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api), :size => '48'), "API key", :description => 'Enter to enable Flickr integration' %>
 		</fieldset>

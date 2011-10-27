@@ -28,6 +28,7 @@ module Sugar
 		:xbox_live_enabled        => false,
 		:flickr_api               => nil,
 		:google_analytics         => nil,
+		:amazon_associates_id     => nil,
 		
 		# Facebook integration
 		:facebook_app_id          => nil,
