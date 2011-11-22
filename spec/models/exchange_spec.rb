@@ -10,6 +10,8 @@ describe Exchange do
 	it { should validate_presence_of(:title)}
 	it { should validate_presence_of(:body)}
 	
+	before { @exchange = create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
+
 	it "can't have a title longer than 100 characters" do
 		build(
 			:exchange,
@@ -18,20 +20,23 @@ describe Exchange do
 	end
 
 	it "creates a first post when created" do
-		exchange = create(:exchange, :body => 'First post!')
-		exchange.first_post.body.should == 'First post!'
-		exchange.first_post.user.should == exchange.poster
+		@exchange.first_post.body.should == 'First post!'
+		@exchange.first_post.user.should == @exchange.poster
 	end
 
 	it "updates the first post if body is changed" do
-		exchange = create(:exchange, :body => 'original post')
-		exchange.update_attribute(:body, 'changed post')
-		exchange.first_post.body.should == 'changed post'
+		@exchange.update_attribute(:body, 'changed post')
+		@exchange.first_post.body.should == 'changed post'
+	end
+	
+	it 'creates a URL slug' do
+		Exchange.work_safe_urls = false
+		@exchange.to_param.should =~ /^[\d]+;This\-is\-my\-Discussion$/
+		Exchange.work_safe_urls = true
+		@exchange.to_param.should =~ /^[\d]+$/
 	end
 	
 	describe 'with no flags' do
-		before { @exchange = create(:exchange) }
-
 		it "isn't NSFW" do
 			@exchange.nsfw?.should be_false
 		end

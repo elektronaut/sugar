@@ -26,6 +26,10 @@ FactoryGirl.define do
 			user_admin true
 		end
 		
+		factory :trusted_user do
+			trusted true
+		end
+
 		factory :banned_user do
 			banned true
 		end
