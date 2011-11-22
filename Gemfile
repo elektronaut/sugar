@@ -39,13 +39,16 @@ group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
 	gem 'guard'
 	gem 'guard-test'
+	gem 'guard-rspec'
 	gem 'rb-fsevent'
-	gem 'growl_notify'
+	gem 'growl_notify', '~> 0.0.3'
 	gem 'ruby-prof'
 end
 
-group :test do
-	gem 'shoulda-context'
+group :test, :development do
+	gem 'rspec-rails'
 	gem 'shoulda-matchers'
+	gem 'shoulda-context' # TODO: remove
 	gem 'factory_girl_rails'
+	gem 'capybara'
 end
