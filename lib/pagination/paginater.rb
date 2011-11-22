@@ -13,8 +13,8 @@ module Pagination
 		attr_reader :pages
 		# Number of items to present in context
 		attr_reader :context
-		# Current page
-		attr_accessor :page
+		## Current page
+		#attr_accessor :page
 
 		# The following parameters are required:
 		# * <tt>:total_count</tt> - Total count of items.
@@ -42,6 +42,12 @@ module Pagination
 				@page = pages if @page > pages
 			end
 			@page
+		end
+		
+		# Sets the current page
+		def page=(new_page)
+			@page = new_page
+			self.page
 		end
 		
 		def limit
