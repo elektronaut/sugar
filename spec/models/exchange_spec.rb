@@ -10,9 +10,24 @@ describe Exchange do
 	it { should validate_presence_of(:title)}
 	it { should validate_presence_of(:body)}
 	
-	it "can't have a title longer than 100 characters"
+	it "can't have a title longer than 100 characters" do
+		build(
+			:exchange,
+			:title => 'This is a very, very, very, very, very, very, very, very, very, very, very, very, very, very long title'
+		).should have(1).errors_on(:title)
+	end
 
-	it "updates the first post if body is changed"
+	it "creates a first post when created" do
+		exchange = create(:exchange, :body => 'First post!')
+		exchange.first_post.body.should == 'First post!'
+		exchange.first_post.user.should == exchange.poster
+	end
+
+	it "updates the first post if body is changed" do
+		exchange = create(:exchange, :body => 'original post')
+		exchange.update_attribute(:body, 'changed post')
+		exchange.first_post.body.should == 'changed post'
+	end
 	
 	describe 'with no flags' do
 		before { @exchange = create(:exchange) }

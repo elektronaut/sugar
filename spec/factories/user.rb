@@ -13,5 +13,21 @@ FactoryGirl.define do
 		activated  true
 		banned     false
 		trusted    false
+		
+		factory :admin do
+			admin true
+		end
+
+		factory :moderator do
+			moderator true
+		end
+		
+		factory :user_admin do
+			user_admin true
+		end
+		
+		factory :banned_user do
+			banned true
+		end
 	end
 end
