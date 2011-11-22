@@ -7,7 +7,7 @@ describe Invite do
 	
 	describe '#create' do
 		before do
-			@invite = Factory(:invite)
+			@invite = create(:invite)
 		end
 
 		it 'should have an expiration date 14 days into the future' do
@@ -15,21 +15,21 @@ describe Invite do
 		end
 
 		it "verifies that the user isn't registered" do
-			user = Factory(:user, :email => 'foo@bar.com')
-			invite = Factory.build(:invite, :email => 'foo@bar.com')
+			user = create(:user, :email => 'foo@bar.com')
+			invite = build(:invite, :email => 'foo@bar.com')
 			invite.valid?.should be_false
 			invite.should have(1).errors_on(:email)
 		end
 		
 		it "verifies that the email isn't already invited" do
-			invite = Factory.build(:invite, :email => @invite.email)
+			invite = build(:invite, :email => @invite.email)
 			invite.valid?.should be_false
 			invite.should have(1).errors_on(:email)
 		end
 		
 		it 'revokes an invite from the inviter' do
-			inviter = Factory(:user, :available_invites => 5)
-			expect { Factory(:invite, :user => inviter) }.to change{inviter.available_invites}.by(-1)
+			inviter = create(:user, :available_invites => 5)
+			expect { create(:invite, :user => inviter) }.to change{inviter.available_invites}.by(-1)
 		end
 		
 		it 'generates a token of at least 40 characters' do
@@ -41,15 +41,15 @@ describe Invite do
 	
 	describe '#destroy' do
 		it 'grants the inviter a new invite' do
-			invite = Factory(:invite)
+			invite = create(:invite)
 			expect { invite.destroy }.to change{invite.user.available_invites}.by(1)
 		end
 	end
 	
 	describe '#find_active' do
 		before do
-			5.times { Factory(:invite) }
-			5.times { Factory(:invite, :expires_at => 2.days.ago) }
+			5.times { create(:invite) }
+			5.times { create(:invite, :expires_at => 2.days.ago) }
 			@invites = Invite.find_active
 		end
 
@@ -64,8 +64,8 @@ describe Invite do
 
 	describe '#find_expired' do
 		before do
-			5.times { Factory(:invite) }
-			5.times { Factory(:invite, :expires_at => 2.days.ago) }
+			5.times { create(:invite) }
+			5.times { create(:invite, :expires_at => 2.days.ago) }
 			@invites = Invite.find_expired
 		end
 
@@ -80,7 +80,7 @@ describe Invite do
 
 	context 'expired' do
 		before do
-			@invite = Factory(:invite, :expires_at => 2.days.ago)
+			@invite = create(:invite, :expires_at => 2.days.ago)
 		end
 
 		it 'is expired' do

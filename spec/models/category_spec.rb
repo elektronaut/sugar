@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Category do
 	it { should have_many(:discussions) }
 	it { should validate_presence_of(:name) }
-	before { @category = Factory(:category, :name => 'This is my Category') }
+	before { @category = create(:category, :name => 'This is my Category') }
 	
 	it 'creates a URL slug' do
 		Category.work_safe_urls = false
@@ -14,18 +14,18 @@ describe Category do
 	
 	describe '#find_viewable_by' do
 		before do
-			@normal_category  = Factory(:category)
-			@trusted_category = Factory(:trusted_category)
+			@normal_category  = create(:category)
+			@trusted_category = create(:trusted_category)
 		end
 
 		it 'only finds non-trusted categories for normal users' do
-			user = Factory(:user)
+			user = create(:user)
 			Category.find_viewable_by(user).should include(@normal_category)
 			Category.find_viewable_by(user).should_not include(@trusted_category)
 		end
 
 		it 'finds all categories for trusted users' do
-			user  = Factory(:user, :trusted => true)
+			user  = create(:user, :trusted => true)
 			Category.find_viewable_by(user).should include(@normal_category)
 			Category.find_viewable_by(user).should include(@trusted_category)
 		end
@@ -39,7 +39,7 @@ describe Category do
 	end
 	
 	context 'with the trusted flag set' do
-		before { @category = Factory(:trusted_category) }
+		before { @category = create(:trusted_category) }
 		
 		it 'is trusted' do
 			@category.trusted?.should be_true
@@ -51,20 +51,20 @@ describe Category do
 		end
 		
 		it 'is not viewable by regular users' do
-			@category.viewable_by?(Factory(:user)).should be_false
+			@category.viewable_by?(create(:user)).should be_false
 		end
 		
 		it 'is viewable by trusted users and administrators' do
-			@category.viewable_by?(Factory(:user, :trusted => true)).should be_true
-			@category.viewable_by?(Factory(:user, :admin => true)).should be_true
-			@category.viewable_by?(Factory(:user, :moderator => true)).should be_true
-			@category.viewable_by?(Factory(:user, :user_admin => true)).should be_true
+			@category.viewable_by?(create(:user, :trusted => true)).should be_true
+			@category.viewable_by?(create(:user, :admin => true)).should be_true
+			@category.viewable_by?(create(:user, :moderator => true)).should be_true
+			@category.viewable_by?(create(:user, :user_admin => true)).should be_true
 		end
 
 		context 'with discussions' do
 			before do
-				@user        = Factory(:user)
-				@discussions = (0...10).map{ Factory(:discussion, :category => @category, :poster => @user) }
+				@user        = create(:user)
+				@discussions = (0...10).map{ create(:discussion, :category => @category, :poster => @user) }
 			end
 
 			it 'returns a proper count for the discussions' do
@@ -89,7 +89,7 @@ describe Category do
 	end
 	
 	context 'several categories' do
-		before { 5.times { Factory(:category) } }
+		before { 5.times { create(:category) } }
 		
 		it 'acts as a list' do
 			categories = Category.order(:position).all

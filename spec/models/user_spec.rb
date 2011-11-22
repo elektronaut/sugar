@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
 	context 'with no special privileges' do
 		before do
-			@user = Factory(:user)
+			@user = create(:user)
 		end
 
 		it "shouldn't be marked as admin" do
