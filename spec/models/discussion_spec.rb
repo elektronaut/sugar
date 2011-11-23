@@ -65,7 +65,9 @@ describe Discussion do
 	end
 	
 	context 'with more than one page of posts' do
-		before { 54.times { create(:post, :discussion => @discussion) } }
+		before do
+			50.times { create(:post, :discussion => @discussion, :user => @discussion.poster) }
+		end
 		
 		it 'responds to last_page' do
 			@discussion.last_page.should == 2
@@ -76,10 +78,10 @@ describe Discussion do
 				posts = @discussion.paginated_posts(:page => 1)
 				posts.length.should == Post::POSTS_PER_PAGE
 				posts.should be_kind_of(Pagination::InstanceMethods)
-				posts.total_count.should == 55
+				posts.total_count.should == 51
 				posts.pages.should == 2
 				posts = @discussion.paginated_posts(:page => 2)
-				posts.length.should == 5
+				posts.length.should == 1
 			end
 		end
 		
@@ -116,21 +118,16 @@ describe Discussion do
 	
 	describe '#find_paginated' do
 		before do
-			@regular_category = create(:category)
-			@trusted_category = create(:trusted_category)
-			35.times { create(:discussion, :category => @regular_category) }
-			35.times { create(:discussion, :category => @trusted_category) }
+			create(:discussion, :category => create(:trusted_category))
 		end
 		
 		it 'does not include trusted discussions without :trusted' do
 			discussions = Discussion.find_paginated
-			discussions.pages.should == 2
 			discussions.map(&:trusted?).should_not include(true)
 		end
 		
 		it 'includes trusted discussions with :trusted' do
 			discussions = Discussion.find_paginated(:trusted => true)
-			discussions.pages.should == 3
 			discussions.map(&:trusted?).should include(true)
 		end
 	end

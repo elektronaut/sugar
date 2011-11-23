@@ -3,7 +3,7 @@ FactoryGirl.define do
 		sequence(:title)  {|n| "Discussion #{n}"}
 		sequence(:body)   {|n| "First post of discussion #{n}"}
 		association :poster,      :factory => :user
-		association :last_poster, :factory => :user
+		#association :last_poster, :factory => :user
 		category
 		trusted {|d| d.category.trusted}
 		
