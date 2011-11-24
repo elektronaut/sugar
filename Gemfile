@@ -63,9 +63,9 @@ group :test, :development do
 
 	# Guard
 	gem 'rb-fsevent' if mac?
+	gem 'ruby_gntp' if mac?
 	gem 'guard'
 	gem 'guard-spork'
 	gem 'guard-rspec'
 	gem 'guard-cucumber'
-	gem 'growl_notify', '~> 0.0.3' if mac?
 end

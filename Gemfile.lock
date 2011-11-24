@@ -92,8 +92,6 @@ GEM
     ffi (1.0.11)
     gherkin (2.6.8)
       json (>= 1.4.6)
-    growl_notify (0.0.3)
-      rb-appscript
     guard (0.8.8)
       thor (~> 0.14.6)
     guard-cucumber (0.7.4)
@@ -156,7 +154,6 @@ GEM
       rdoc (~> 3.4)
       thor (~> 0.14.6)
     rake (0.9.2)
-    rb-appscript (0.6.1)
     rb-fsevent (0.4.3.1)
     rdoc (3.11)
       json (~> 1.4)
@@ -174,6 +171,7 @@ GEM
       activesupport (~> 3.0)
       railties (~> 3.0)
       rspec (~> 2.7.0)
+    ruby_gntp (0.3.4)
     rubyzip (0.9.4)
     sass (3.1.7)
     sass-rails (3.1.2)
@@ -227,7 +225,6 @@ DEPENDENCIES
   delayed_job (= 2.1.4)
   dynamic_form
   factory_girl_rails
-  growl_notify (~> 0.0.3)
   guard
   guard-cucumber
   guard-rspec
@@ -241,6 +238,7 @@ DEPENDENCIES
   rb-fsevent
   rspec-rails
   ruby-openid!
+  ruby_gntp
   sass-rails
   shoulda-matchers
   spork (~> 0.9.0.rc)
