@@ -12,10 +12,6 @@ Spork.prefork do
 	require 'rspec/rails'
 	require 'rspec/autorun'
 
-	# Requires supporting ruby files with custom matchers and macros, etc,
-	# in spec/support/ and its subdirectories.
-	Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
-
 	RSpec.configure do |config|
 	  # == Mock Framework
 	  #
@@ -47,5 +43,13 @@ end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-  
+
+	# Requires supporting ruby files with custom matchers and macros, etc,
+	# in spec/support/ and its subdirectories.
+	Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}
+
+	RSpec.configure do |config|
+		# Macros
+		config.include LoginMacros, :type => :controller
+	end
 end
