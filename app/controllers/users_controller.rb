@@ -7,17 +7,18 @@ class UsersController < ApplicationController
 	requires_authentication :except => [:login, :logout, :password_reset, :new, :create]
 	requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
 
-	before_filter :load_user, 
+	before_filter :load_user,
 	              :only => [
-	              	:show, :edit, 
-	              	:update, :destroy, 
-	              	:participated, :discussions, 
-	              	:posts, :update_openid, 
-	              	:grant_invite, :revoke_invites, 
+	              	:show, :edit,
+	              	:update, :destroy,
+	              	:participated, :discussions,
+	              	:posts, :update_openid,
+	              	:grant_invite, :revoke_invites,
 	              	:stats
 	              ]
 
 	before_filter :detect_admin_signup, :only => [:login, :new, :create]
+	before_filter :detect_edit_page,    :only => [:edit, :update]
 
 	protected
 
@@ -36,12 +37,18 @@ class UsersController < ApplicationController
 		def detect_admin_signup
 			@admin_signup = true if User.count(:all) == 0
 		end
-	
+
+		def detect_edit_page
+			pages = %w{admin info location services settings temporary_ban}
+			@page = params[:page] if pages.include?(params[:page])
+			@page ||= 'info'
+		end
+
 	public
 
 		def index
-			@users = User.all( 
-				:order => 'username ASC', 
+			@users = User.all(
+				:order => 'username ASC',
 				:conditions => ['activated = ? AND banned = ?', true, false]
 			)
 			respond_to do |format|
@@ -52,9 +59,9 @@ class UsersController < ApplicationController
 				format.json {
 					render :layout => false, :text => @users.to_json(
 						:only => [
-							:id, :username, :realname, :latitude, :longitude, 
-							:last_active, :created_at, :description, :admin, 
-							:moderator, :user_admin, :posts_count, :discussions_count, 
+							:id, :username, :realname, :latitude, :longitude,
+							:last_active, :created_at, :description, :admin,
+							:moderator, :user_admin, :posts_count, :discussions_count,
 							:location, :gamertag, :avatar_url, :twitter, :flickr, :website
 						]
 					)
@@ -64,7 +71,7 @@ class UsersController < ApplicationController
 
 		def banned
 			@users  = User.all(
-				:order      => 'username ASC', 
+				:order      => 'username ASC',
 				:conditions => ['banned = ? OR banned_until > ?', true, Time.now]
 			)
 		end
@@ -107,8 +114,8 @@ class UsersController < ApplicationController
 			respond_to do |format|
 				format.html do
 					@posts = @user.paginated_posts(
-						:page    => params[:page], 
-						:trusted => (@current_user && @current_user.trusted?), 
+						:page    => params[:page],
+						:trusted => (@current_user && @current_user.trusted?),
 						:limit   => 15
 					)
 				end
@@ -118,7 +125,7 @@ class UsersController < ApplicationController
 
 		def discussions
 			@discussions = @user.paginated_discussions(
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => @current_user.trusted?
 			)
 			load_views_for(@discussions)
@@ -127,7 +134,7 @@ class UsersController < ApplicationController
 		def participated
 			@section = :participated if @user == @current_user
 			@discussions = @user.participated_discussions(
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => @current_user.trusted?
 			)
 			load_views_for(@discussions)
@@ -135,7 +142,7 @@ class UsersController < ApplicationController
 
 		def posts
 			@posts = @user.paginated_posts(
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => (@current_user && @current_user.trusted?)
 			)
 		end
@@ -181,7 +188,7 @@ class UsersController < ApplicationController
 				flash[:notice] = "Signups are not allowed!"
 				redirect_to login_users_url and return
 			end
-		
+
 			# Secure and parse attributes
 			attributes = User.safe_attributes(params[:user])
 			if attributes[:openid_url] && !attributes[:openid_url].blank?
@@ -191,7 +198,7 @@ class UsersController < ApplicationController
 			attributes[:inviter_id] = @invite.user_id if @invite
 			attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup)
 			attributes[:admin]      = true if @admin_signup
-		
+
 			# Get data from Facebook
 			if params[:mode] == 'facebook' && @facebook_session && @facebook_session[:uid]
 				if @current_user && @current_user.facebook_uid == @facebook_session[:uid]
@@ -231,8 +238,8 @@ class UsersController < ApplicationController
 
 				# Verify the changed OpenID URL
 				if new_openid_url
-					unless start_openid_session(new_openid_url, 
-						:success   => update_openid_user_url(:id => @user.username), 
+					unless start_openid_session(new_openid_url,
+						:success   => update_openid_user_url(:id => @user.username),
 						:fail      => edit_user_page_url(:id => @user.username, :page => 'settings')
 					)
 						flash[:notice] = "WARNING: Your OpenID URL is invalid!"
@@ -246,7 +253,6 @@ class UsersController < ApplicationController
 		end
 
 		def edit
-			@page = params[:page] || 'info'
 			verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
 		end
 
@@ -259,17 +265,17 @@ class UsersController < ApplicationController
 				flash[:notice] = "Can't get a Facebook session, sorry!"
 			end
 			redirect_to edit_user_page_url(
-				:id => @current_user.username, 
+				:id => @current_user.username,
 				:page => 'services'
 			) and return
 		end
-	
+
 		def disconnect_facebook
 			@current_user.update_attribute(:facebook_uid, nil)
 			cookies['facebook_logout'] = 'true'
 			flash[:notice] = "You have disconnected your Facebook account"
 			redirect_to edit_user_page_url(
-				:id   => @current_user.username, 
+				:id   => @current_user.username,
 				:page => 'services'
 			) and return
 		end
@@ -287,7 +293,6 @@ class UsersController < ApplicationController
 		end
 
 		def update
-			@page = params[:page] || 'info'
 			if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
 
 				# Sanitize input
@@ -309,8 +314,8 @@ class UsersController < ApplicationController
 					end
 					# Verify the changed OpenID URL
 					if new_openid_url
-						unless start_openid_session(new_openid_url, 
-							:success   => update_openid_user_url(:id => @user.username), 
+						unless start_openid_session(new_openid_url,
+							:success   => update_openid_user_url(:id => @user.username),
 							:fail      => edit_user_page_url(:id => @user.username, :page => @page)
 						)
 							flash.now[:notice] = "That's not a valid OpenID URL!"
@@ -341,7 +346,7 @@ class UsersController < ApplicationController
 					end
 				end
 				unless @current_user
-					flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password." 
+					flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password."
 				end
 			end
 		end

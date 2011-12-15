@@ -1,9 +1,9 @@
 <% @page_title = "Edit post" %>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-	<%= link_to @discussion.title, discussion_path(@discussion) %> &raquo;
+	<%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
 	<%= link_to "New post", new_discussion_post_path(@discussion) %>
 </h2>
 

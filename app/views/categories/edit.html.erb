@@ -1,12 +1,12 @@
-<% 
+<%
 	add_body_class "edit_category"
-	@page_title = "Edit #{@category.name}" 
+	@page_title = "Edit #{@category.name}"
 %>
 
 <h2 class="section">
-	<%= link_to "Categories",   categories_path %> &raquo; 
-	<%= link_to @category.name, category_path(@category) %> &raquo; 
-	<%= link_to "Edit",         edit_category_path(@category) %>
+	<%= link_to "Categories",      categories_path %> &raquo;
+	<%= link_to h(@category.name), category_path(@category) %> &raquo;
+	<%= link_to "Edit",            edit_category_path(@category) %>
 </h2>
 
 <%= form_for(@category) do |form| %>

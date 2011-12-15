@@ -8,15 +8,15 @@
 
 		<% nearest_pages = p.nearest_pages(9) %>
 		<% if nearest_pages.first > 1 %>
-			<%= link_to_unless (p.page == 1), "1", {:page => 1, :anchor => anchor}.merge(pagination_params) %>
+			<%= link_to_unless((p.page == 1), "1", {:page => 1, :anchor => anchor}.merge(pagination_params)) %>
 		<% end %>
 		<% if nearest_pages.first > 2 %>&hellip;<% end %>
 		<% nearest_pages.each do |np| %>
-			<%= link_to_unless (p.page == np), np, {:page => np, :anchor => anchor}.merge(pagination_params) %>
+			<%= link_to_unless((p.page == np), np, {:page => np, :anchor => anchor}.merge(pagination_params)) %>
 		<% end %>
 		<% if nearest_pages.last < (p.last_page - 1) %>&hellip;<% end %>
 		<% if nearest_pages.last < p.last_page %>
-			<%= link_to_unless (p.page == p.last_page), "#{p.last_page}", {:page => p.last_page, :anchor => anchor}.merge(pagination_params) %>
+			<%= link_to_unless((p.page == p.last_page), "#{p.last_page}", {:page => p.last_page, :anchor => anchor}.merge(pagination_params)) %>
 		<% end %>
 
 		<%= link_to_if p.next_page,     "Next &gt;".html_safe, {:page => p.next_page, :anchor => anchor}.merge(pagination_params), :class => :next_page_link %>

@@ -1,4 +1,4 @@
-<% 
+<%
 	add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
 	add_body_class 'last_page' if @posts.last_page?
 	@page_title = @discussion.title
@@ -10,13 +10,13 @@
 <div class="functions">
 	<% if @current_user %>
 		<% if @discussion.editable_by?(@current_user) -%>
-			<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> / 
+			<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> /
 		<% end -%>
 		<% if @current_user.following?(@discussion) -%>
 			<%= link_to "Stop following", unfollow_discussion_path(@discussion, :page => @posts.page) %>
 		<% else -%>
 			<%= link_to "Follow", follow_discussion_path(@discussion, :page => @posts.page) %>
-		<% end -%> / 
+		<% end -%> /
 		<% if @current_user.favorite?(@discussion) -%>
 			<%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, :page => @posts.page) %>
 		<% else -%>
@@ -26,7 +26,7 @@
 </div>
 
 <h2 class="section">
-	<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+	<%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
 	<% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
 	<%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 </h2>
@@ -46,11 +46,11 @@
 
 	<div class="compose" id="compose">
 
-		<ul id="reply-tabs" class="tabs">  
-			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
-			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>  
+		<ul id="reply-tabs" class="tabs">
+			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>
+			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>
 		</ul>
-		
+
 		<%# Text reply %>
 		<div id="replyText">
 			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>

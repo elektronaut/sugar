@@ -1,13 +1,13 @@
-<% 
+<%
 	add_body_class "edit_discussion discussion_form"
 	@page_title = @discussion.title
 %>
 
 <h2 class="section">
 	<% if @discussion.kind_of?(Discussion) %>
-		<%= link_to @discussion.category.name, category_path(@discussion.category) %> &raquo;
+		<%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
 	<% end %>
-	<%= link_to @discussion.title, discussion_path(@discussion) %> &raquo;
+	<%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
 	<%= link_to "Edit", edit_discussion_path(@discussion) %>
 </h2>
 

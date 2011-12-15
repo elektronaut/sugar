@@ -1,6 +1,6 @@
-<% 
+<%
 	add_body_class "categories"
-	@page_name = "Categories" 
+	@page_name = "Categories"
 %>
 
 <% if @current_user && @current_user.admin? %>
@@ -16,7 +16,7 @@
 		<div class="category category<%= category.id %> <%= "trusted_category" if category.trusted? %>">
 			<h3 class="name">
 				<% if category.labels? %><span class="labels">[<%= category.labels.join(', ') %>]</span><% end %>
-				<%= link_to category.name, category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
+				<%= link_to h(category.name), category_path(category) %> <span class="count">&mdash; <%= category.discussions.count %> discussions</span>
 			</h3>
 			<p class="description">
 				<%= category.description %>

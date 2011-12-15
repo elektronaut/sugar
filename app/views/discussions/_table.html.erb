@@ -11,12 +11,12 @@
 					<% if d.labels? %>
 						<span class="labels">[<%= d.labels.join(',') %>]</span>
 					<% end %>
-					<%= link_to d.title, last_discussion_page_path(d) %>
+					<%= link_to h(d.title), last_discussion_page_path(d) %>
 				</span></td>
 			</tr>
 			<tr class="<%= discussion_classes(discussions, d) %>">
 				<% if d.kind_of?(Conversation) %>
-					<% 
+					<%
 						other_participants = d.participants.reject{|p| p == @current_user}
 					%>
 					<% if other_participants.length == 0 %>
@@ -27,7 +27,7 @@
 						<td class="participants">Conversation with <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %></td>
 					<% end %>
 				<% else %>
-					<td class="category">Category: <%= link_to d.category.name, category_path(d.category) %></td>
+					<td class="category">Category: <%= link_to h(d.category.name), category_path(d.category) %></td>
 					<td class="started_by">Started by <%= profile_link(d.poster) %></td>
 				<% end %>
 				<td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
