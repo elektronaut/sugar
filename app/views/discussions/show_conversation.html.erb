@@ -1,4 +1,4 @@
-<% 
+<%
 	add_body_class "discussion", "conversation", "discussion_by_user#{@discussion.poster_id}"
 	add_body_class 'last_page' if @posts.last_page?
 	@page_title = h(@discussion.title)
@@ -25,6 +25,16 @@
 		<% if @discussion.editable_by?(@current_user) -%>
 			<%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
 		<% end -%>
+		<% if @discussion.editable_by?(@current_user) && @discussion.removeable?(@current_user) %>
+			/
+		<% end %>
+		<% if @discussion.removeable?(@current_user) %>
+			<%= link_to 'Remove conversation',
+			    remove_participant_discussion_path(@discussion),
+			    :method => :delete,
+			    :confirm => "Are you sure? You'll have to ask one of the other participants to invite you back if you regret it."
+			%>
+		<% end %>
 	<% end %>
 </div>
 
@@ -48,11 +58,11 @@
 
 	<div class="compose" id="compose">
 
-		<ul id="reply-tabs" class="tabs">  
-			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>  
-			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>  
+		<ul id="reply-tabs" class="tabs">
+			<li class="tab" id="write-tab"><a href="#replyText">Write</a></li>
+			<li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>
 		</ul>
-		
+
 		<%# Text reply %>
 		<div id="replyText">
 			<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>

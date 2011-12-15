@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe DiscussionsController do
@@ -27,7 +29,7 @@ describe DiscussionsController do
 	end
 
 	describe 'GET index' do
-		before do 
+		before do
 			@discussion = create(:discussion)
 			get :index
 		end
@@ -54,5 +56,24 @@ describe DiscussionsController do
 		it { should_not set_the_flash }
 	end
 
-end
+	describe 'when part of a conversation' do
+		before do
+			@user = create(:user)
+			@conversation = create(:conversation)
+			@conversation.add_participant(@user)
+			login @user
+		end
 
+		describe 'DELETE remove_participant' do
+			before { delete :remove_participant, :id => @conversation }
+			it { should set_the_flash.to(/You have been removed from the conversation/) }
+			it 'redirects back to conversations' do
+				response.should redirect_to(conversations_url)
+			end
+			it 'removes the user from the conversation' do
+				@conversation.participants.all.should_not include(@user)
+			end
+		end
+	end
+
+end

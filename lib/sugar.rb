@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 require 'yaml'
+
+require File.join(File.dirname(__FILE__), 'sugar/exceptions')
+
 module Sugar
 
 	DEFAULT_CONFIGURATION = {
@@ -13,7 +16,7 @@ module Sugar
 		:asset_host               => nil,
 		:mail_sender              => nil,
 		:session_key              => '_sugar_session',
-		
+
 		# Themes
 		:default_theme            => 'default',
 		:default_theme            => 'default',
@@ -23,18 +26,18 @@ module Sugar
 		:public_browsing          => false,
 		:signups_allowed          => true,
 		:signup_approval_required => false,
-		
+
 		# Integration
 		:xbox_live_enabled        => false,
 		:flickr_api               => nil,
 		:google_analytics         => nil,
 		:amazon_associates_id     => nil,
-		
+
 		# Facebook integration
 		:facebook_app_id          => nil,
 		:facebook_api_key         => nil,
 		:facebook_api_secret      => nil,
-		
+
 		# Customization
 		:custom_header            => nil,
 		:custom_footer            => nil,
@@ -55,7 +58,7 @@ module Sugar
 				end
 			end
 		end
-		
+
 		def save_config!
 			@@config.each do |key, value|
 				Setting.set(key, value)
@@ -72,13 +75,13 @@ module Sugar
 				@@config
 			end
 		end
-	
+
 		def configure(options={})
 			options.each do |key,value|
 				self.config(key, value)
 			end
 		end
-	
+
 		def update_configuration(config)
 			new_config = DEFAULT_CONFIGURATION
 			config_keys = config.keys.map{|k| k.to_sym}

@@ -83,6 +83,7 @@ Sugar::Application.routes.draw do
 			get 'search_posts'
 			get 'mark_as_read'
 			post 'invite_participant'
+			delete 'remove_participant'
 		end
 		collection do
 			get 'participated'
@@ -92,7 +93,7 @@ Sugar::Application.routes.draw do
 			get 'conversations'
 			get 'popular'
 		end
-		
+
 		# Posts
 		resources :posts do
 			member do
@@ -120,7 +121,7 @@ Sugar::Application.routes.draw do
 			get :all
 		end
 	end
-	
+
 	# Admin
 	resource :admin, :controller => 'admin' do
 		get 'configuration', :on => :member

@@ -5,12 +5,12 @@ class DiscussionsController < ApplicationController
 	requires_authentication
 	requires_user           :except => [:index, :search, :search_posts, :show]
 	protect_from_forgery    :except => :mark_as_read
-	
-	before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read, :invite_participant]
+
+	before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
 	before_filter :verify_editable, :only => [:edit, :update, :destroy]
 	before_filter :load_categories, :only => [:new, :create, :edit, :update]
 	before_filter :set_exchange_params
-	
+
 	protected
 
 		# Loads discussion by params[:id] and checks permissions.
@@ -20,7 +20,7 @@ class DiscussionsController < ApplicationController
 			rescue ActiveRecord::RecordNotFound
 				render_error 404 and return
 			end
-			
+
 			unless @discussion.viewable_by?(@current_user)
 				render_error 403 and return
 			end
@@ -32,7 +32,7 @@ class DiscussionsController < ApplicationController
 				render_error 403 and return
 			end
 		end
-		
+
 		# This is pretty silly and needs rewriting.
 		def set_exchange_params
 			if params[:conversation]
@@ -52,21 +52,21 @@ class DiscussionsController < ApplicationController
 		# Recent discussions
 		def index
 			@discussions = Discussion.find_paginated(
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => (@current_user && @current_user.trusted?)
 			)
 			load_views_for(@discussions)
 		end
-		
+
 		# Popular discussions
 		def popular
 			@days = params[:days].to_i
-			#@days = 70 
+			#@days = 70
 			unless (1..180).include?(@days)
 				redirect_to params.merge({:days => 7}) and return
 			end
 			@discussions = Discussion.find_popular(
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => (@current_user && @current_user.trusted?),
 				:since   => @days.days.ago
 			)
@@ -84,7 +84,7 @@ class DiscussionsController < ApplicationController
 			# Search discussions
 			@discussions = Discussion.search_paginated(
 				:query   => @search_query,
-				:page    => params[:page], 
+				:page    => params[:page],
 				:trusted => (@current_user && @current_user.trusted?)
 			)
 			respond_to do |format|
@@ -117,8 +117,8 @@ class DiscussionsController < ApplicationController
 			# Search posts
 			@posts = Post.search_paginated(
 				:discussion_id => @discussion.id,
-				:page          => params[:page], 
-				:query         => @search_query, 
+				:page          => params[:page],
+				:query         => @search_query,
 				:trusted       => (@current_user && @current_user.trusted?),
 				:conversation  => @discussion.kind_of?(Conversation)
 			)
@@ -152,8 +152,8 @@ class DiscussionsController < ApplicationController
 		def show
 			context = (request.format == :mobile) ? 0 : 3
 			@posts = Post.find_paginated(
-				:discussion => @discussion, 
-				:page       => params[:page], 
+				:discussion => @discussion,
+				:page       => params[:page],
 				:context    => context
 			)
 			# Mark discussion as viewed
@@ -252,7 +252,7 @@ class DiscussionsController < ApplicationController
 			DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
 			redirect_to discussion_url(@discussion, :page => params[:page])
 		end
-		
+
 		# Invite a participant
 		def invite_participant
 			if @discussion.kind_of?(Conversation) && params[:username]
@@ -267,6 +267,15 @@ class DiscussionsController < ApplicationController
 				render :template => 'discussions/participants', :layout => false
 			else
 				redirect_to discussion_url(@discussion)
+			end
+		end
+
+		# Remove participant from discussion
+		def remove_participant
+			if @discussion.kind_of?(Conversation)
+				@discussion.remove_participant(@current_user)
+				flash[:notice] = 'You have been removed from the conversation'
+				redirect_to conversations_url and return
 			end
 		end
 

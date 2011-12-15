@@ -6,22 +6,46 @@
 
 class Conversation < Exchange
 
+	include Sugar::Exceptions
+
 	has_many :conversation_relationships, :dependent => :destroy, :order => 'created_at ASC'
 	has_many :participants, :through => :conversation_relationships, :source => :user
-	
+
 	after_create do |conversation|
-		# Add the poster as a participant
-		ConversationRelationship.create(
-			:user         => conversation.poster, 
-			:conversation => conversation
-		)
+		conversation.add_participant(conversation.poster)
+	end
+
+	# Adds a participant
+	def add_participant(user)
+		if user.kind_of?(User) && !self.participants.include?(user)
+			ConversationRelationship.create(
+				:user         => user,
+				:conversation => self
+			)
+		end
+	end
+
+	# Removes a participant
+	def remove_participant(user)
+		if user.kind_of?(User) && self.participants.include?(user)
+			raise RemoveParticipantError unless self.removeable?(user)
+			ConversationRelationship.where(
+				:user_id         => user.id,
+				:conversation_id => self.id
+			).destroy_all
+		end
+	end
+
+	# Can this participant be removed?
+	def removeable?(user)
+		user && self.participants.include?(user) && self.participants.count > 1
 	end
 
 	# Returns true if the user can view this conversation
 	def viewable_by?(user)
 		user && self.participants.include?(user)
 	end
-	
+
 	# Returns true if the user can edit this conversation
 	def editable_by?(user)
 		user && user == self.poster
