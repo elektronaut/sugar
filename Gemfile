@@ -1,6 +1,12 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
+def mac?
+	RUBY_PLATFORM.downcase.include?('darwin')
+end
+
+mac?
+
 gem 'rails', '3.1.0'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
@@ -37,15 +43,29 @@ gem 'ts-delayed-delta', '1.1.2', :require => 'thinking_sphinx/deltas/delayed_del
 
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
-	gem 'guard'
-	gem 'guard-test'
-	gem 'rb-fsevent'
-	gem 'growl_notify'
-	gem 'ruby-prof'
 end
 
-group :test do
-	gem 'shoulda-context'
+group :test, :development do
+	# RSpec
+	gem 'rspec-rails'
 	gem 'shoulda-matchers'
+	gem 'capybara'
+
+	# FactoryGirl
 	gem 'factory_girl_rails'
+
+	# Cucumber
+	gem 'cucumber-rails'
+	gem 'database_cleaner'
+
+	# Spork
+	gem 'spork', '~> 0.9.0.rc'
+
+	# Guard
+	gem 'rb-fsevent' if mac?
+	gem 'ruby_gntp' if mac?
+	gem 'guard'
+	gem 'guard-spork'
+	gem 'guard-rspec'
+	gem 'guard-cucumber'
 end

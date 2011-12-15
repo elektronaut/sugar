@@ -5,14 +5,14 @@ class InvitesController < ApplicationController
 	requires_authentication :except => [:accept]
 	requires_user           :except => [:accept]
 	requires_user_admin     :only   => [:all]
-    
+
 	respond_to :html, :mobile, :xml, :json
 
 	before_filter :load_invite,    :only => [:show, :edit, :update, :destroy]
 	before_filter :verify_invites, :only => [:new, :create]
 
 	protected
-	
+
 		# Finds the requested invite
 		def load_invite
 			begin
@@ -21,7 +21,7 @@ class InvitesController < ApplicationController
 				render_error 404 and return
 			end
 		end
-	
+
 		# Verifies that the user has available invites
 		def verify_invites
 			unless @current_user && @current_user.available_invites?
@@ -38,7 +38,7 @@ class InvitesController < ApplicationController
 		end
 
 	public
-	
+
 		# Show active invites
 		def index
 			respond_with(@invites = @current_user.invites.active)
@@ -51,7 +51,7 @@ class InvitesController < ApplicationController
 
 		# Accept an invite
 		def accept
-			@invite = Invite.first(:conditions => {:token => params[:id]})
+			@invite = Invite.find_by_token(params[:id])
 			if @invite && @invite.expired?
 				@invite.destroy
 				flash[:notice] ||= "Your invite has expired!"
@@ -67,7 +67,7 @@ class InvitesController < ApplicationController
 		def new
 			respond_with(@invite = @current_user.invites.new)
 		end
-	
+
 		# Create a new invite
 		def create
 			@invite = @current_user.invites.create(params[:invite])
@@ -84,7 +84,7 @@ class InvitesController < ApplicationController
 				render :action => :new
 			end
 		end
-	
+
 		# def show
 		# 	if verify_user(:user => @invite.user, :user_admin => true)
 		# 		render :action => :edit
@@ -94,7 +94,7 @@ class InvitesController < ApplicationController
 		# def edit
 		# 	verify_user(:user => @invite.user, :user_admin => true)
 		# end
-		# 
+		#
 		# def update
 		# 	if verify_user(:user => @invite.user, :user_admin => true)
 		# 		if @invite.update_attributes(params[:invite])
