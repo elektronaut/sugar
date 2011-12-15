@@ -62,8 +62,8 @@ group :test, :development do
 	gem 'spork', '~> 0.9.0.rc'
 
 	# Guard
-	gem 'rb-fsevent' if mac?
-	gem 'ruby_gntp' if mac?
+	gem 'rb-fsevent' #if mac?
+	gem 'ruby_gntp' #if mac?
 	gem 'guard'
 	gem 'guard-spork'
 	gem 'guard-rspec'
