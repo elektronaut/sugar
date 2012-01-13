@@ -3,25 +3,25 @@
 class PostParser
 
 	SYNTAXES = %w{applescript as3 actionscript3 bash shell cf coldfusion c# c-sharp csharp cpp c css diff delphi erl erlang groovy pascal pas patch js jscript javascript java javafx jfx Perl perl pl php plain text py python powershell ps rails ror ruby rb sass scss scala sql vb vbnet xml xhtml xslt html xhtml}
-	
+
 	def initialize(post)
 		@original_post = post
 	end
-	
+
 	def parse(post)
 		post = post.strip
-	
+
 		# Wrap <code> content in CDATA
 		post.gsub!(/(<code[\s\w\d\"\'=\-_\+\.]*>)/i){"#{$1}<![CDATA["}
 		post.gsub!(/(<\/code>)/i){"]]>#{$1}"}
 
 		# Normalize <script> tags so the parser will find them
 		post.gsub!(/<script[\s\/]*/i, '<script ')
-	
+
 		# Parse the post
 		doc = Hpricot(post)
-	
-		# Get all <code> blocks, store them elsewhere and replace them with 
+
+		# Get all <code> blocks, store them elsewhere and replace them with
 		# empty divs for now
 		codeblocks = []
 		doc.search('code') do |codeblock|
@@ -41,12 +41,7 @@ class PostParser
 		# Delete unsafe tags
 		(doc/"script").remove
 		(doc/"meta").remove
-	
-		# Filter iframes, reject all not on the whitelist
-		iframe_whitelist = /^https?:\/\/([\w\d\.\-]+)?(vimeo\.com|youtube\.com)\//
-		iframes = doc.search("iframe")
-		iframes.reject{|iframe| iframe.attributes['src'] =~ iframe_whitelist}.remove
-	
+
 		# Filter malicious attributes on all elements
 		doc.search("*").select{ |e| e.elem? }.each do |elem|
 			if elem.raw_attributes
@@ -60,9 +55,9 @@ class PostParser
 				end
 			end
 		end
-	
+
 		# Enforce correct allowScriptAccess on embed tags
-		doc.search("embed").each do |elem| 
+		doc.search("embed").each do |elem|
 			if elem.raw_attributes
 				if !elem.raw_attributes.keys.map(&:downcase).include?('allowscriptaccess')
 					elem.raw_attributes['allowScriptAccess'] = 'sameDomain'
@@ -71,7 +66,7 @@ class PostParser
 				elem.raw_attributes = {'allowScriptAccess' => 'sameDomain'}
 			end
 		end
-	
+
 		# Filter param tags for malicious values
 		doc.search("param").each do |elem|
 			if elem.raw_attributes
@@ -83,7 +78,7 @@ class PostParser
 				end
 			end
 		end
-	
+
 		# Make sure there's a <param name="allowScriptAccess" value="sameDomain"> in object tags
 		doc.search("object").each do |elem|
 			param_attributes = elem.search('>param').map do |subelem|
@@ -98,7 +93,7 @@ class PostParser
 
 		# ..and convert back to HTML again
 		post = doc.to_html
-	
+
 		# Autolink URLs
 		post.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 
@@ -109,7 +104,7 @@ class PostParser
 		codeblocks.each_with_index do |codeblock, index|
 			post.gsub!("<div id=\"replace_codeblock_#{index}\"></div>", '<pre class="code"><code class="'+codeblock[:language]+'">'+CGI::escapeHTML(codeblock[:body])+'</code></pre>')
 		end
-		
+
 		post
 	end
 
