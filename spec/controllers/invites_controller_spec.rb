@@ -117,6 +117,9 @@ describe InvitesController do
 			before { get :accept, :id => @invite.token }
 			it { should assign_to(:invite).with_kind_of(Invite) }
 			it { should_not set_the_flash }
+			it 'sets the session token' do
+				session[:invite_token].should eq(@invite.token)
+			end
 			it 'redirects to the new user page' do
 				response.should redirect_to(new_user_by_token_url(:token => @invite.token))
 			end
@@ -130,6 +133,9 @@ describe InvitesController do
 			it 'deletes the invite' do
 				Invite.exists?(@invite).should be_false
 			end
+			it 'does not set the session token' do
+				session[:invite_token].should be_nil
+			end
 			it 'redirects to the login page' do
 				response.should redirect_to(login_users_url)
 			end
@@ -141,6 +147,9 @@ describe InvitesController do
 				assigns(:invite).should be_nil
 			end
 			it { should set_the_flash.to(/not a valid invite/) }
+			it 'does not set the session token' do
+				session[:invite_token].should be_nil
+			end
 			it 'redirects to the login page' do
 				response.should redirect_to(login_users_url)
 			end

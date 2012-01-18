@@ -158,11 +158,13 @@ class UsersController < ApplicationController
 		end
 
 		def new
-			user_params = {}
+			user_params = session[:user_params] || {}
+
 			# New by invitation
-			if params[:token]
-				@invite = Invite.first(:conditions => {:token => params[:token]})
+			if invite_token = (params[:token] || session[:invite_token])
+				@invite = Invite.first(:conditions => {:token => invite_token})
 				if @invite && !@invite.expired?
+					session[:invite_token] = @invite.token
 					@user = @invite.user.invitees.new(user_params)
 					@user.email = @invite.email
 				else
@@ -199,38 +201,10 @@ class UsersController < ApplicationController
 			attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup)
 			attributes[:admin]      = true if @admin_signup
 
-			# Get data from Facebook
-			if params[:mode] == 'facebook' && @facebook_session && @facebook_session[:uid]
-				if @current_user && @current_user.facebook_uid == @facebook_session[:uid]
-					# You already have an account, dimwit
-					store_session_authentication
-					redirect_to discussions_url and return
-				else
-					facebook_params = {
-						:facebook_uid          => @facebook_session[:uid],
-						:facebook_access_token => @facebook_session[:access_token]
-					}
-					begin
-						fb_url = "https://graph.facebook.com/#{@facebook_session[:uid]}"
-						if @facebook_session[:access_token]
-							fb_url += "?access_token=#{CGI.escape(@facebook_session[:access_token])}"
-							fb_url += "&client_id=#{CGI.escape(Sugar.config(:facebook_api_key))}"
-							fb_url += "&client_secret=#{Sugar.config(:facebook_api_secret)}"
-						end
-						json = open(fb_url).read
-						json = ActiveSupport::JSON.decode(json).symbolize_keys
-						facebook_params[:email]    = json[:email]
-						facebook_params[:realname] = json[:name]
-						facebook_params[:username] = json[:name]
-					rescue
-						# Nothing to do
-					end
-					attributes = facebook_params.merge(attributes)
-				end
-			end
-
 			@user = User.create(attributes)
 			if @user.valid?
+				session[:user_params] = nil
+				session[:invite_token] = nil
 				@invite.expire! if @invite
 				Mailer.new_user(@user, login_users_path(:only_path => false)).deliver if @user.email?
 				@current_user = @user
@@ -254,30 +228,6 @@ class UsersController < ApplicationController
 
 		def edit
 			verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
-		end
-
-		def connect_facebook
-			if @facebook_session && @facebook_session[:uid]
-				@current_user.update_attribute(:facebook_uid, @facebook_session[:uid])
-				@current_user.update_facebook_access_token!(@facebook_session[:access_token])
-				flash[:notice] = "You have connected your Facebook account"
-			else
-				flash[:notice] = "Can't get a Facebook session, sorry!"
-			end
-			redirect_to edit_user_page_url(
-				:id => @current_user.username,
-				:page => 'services'
-			) and return
-		end
-
-		def disconnect_facebook
-			@current_user.update_attribute(:facebook_uid, nil)
-			cookies['facebook_logout'] = 'true'
-			flash[:notice] = "You have disconnected your Facebook account"
-			redirect_to edit_user_page_url(
-				:id   => @current_user.username,
-				:page => 'services'
-			) and return
 		end
 
 		def update_openid

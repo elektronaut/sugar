@@ -52,10 +52,12 @@ class InvitesController < ApplicationController
 		# Accept an invite
 		def accept
 			@invite = Invite.find_by_token(params[:id])
+			session[:invite_token] = nil
 			if @invite && @invite.expired?
 				@invite.destroy
 				flash[:notice] ||= "Your invite has expired!"
 			elsif @invite
+				session[:invite_token] = @invite.token
 				redirect_to new_user_by_token_url(:token => @invite.token) and return
 			else
 				flash[:notice] ||= "That's not a valid invite!"

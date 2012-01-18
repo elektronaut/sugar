@@ -5,12 +5,12 @@ require 'digest/sha1'
 # = User accounts
 #
 # === Users activation and banning
-# Users must have the <tt>activated</tt> flag to be able to log in. They will 
+# Users must have the <tt>activated</tt> flag to be able to log in. They will
 # automatically be activated unless manual approval is enabled in the
 # configuration. Non-active and banned users won't show up in the users lists.
 #
 # === Trusted users
-# Users with the <tt>trusted</tt> flag can see the trusted categories and 
+# Users with the <tt>trusted</tt> flag can see the trusted categories and
 # discussions. Admin users also count as trusted.
 
 class User < ActiveRecord::Base
@@ -36,19 +36,19 @@ class User < ActiveRecord::Base
 	end
 	has_many   :discussion_views, :dependent => :destroy
 	has_many   :discussion_relationships, :dependent => :destroy
-	
+
 	has_many   :conversation_relationships, :dependent => :destroy
 	has_many   :conversations, :through => :conversation_relationships
-	
+
 	has_one    :xbox_info, :dependent => :destroy
 
 	# Automatically generate a password for Facebook and OpenID users
 	before_validation(:on => :create) do |user|
-		if (user.openid_url? || user.facebook_uid?) && !user.hashed_password? && (!user.password || user.password.blank?)
+		if (user.openid_url? || user.facebook?) && !user.hashed_password? && (!user.password || user.password.blank?)
 			user.generate_password!
 		end
 	end
-	
+
 	validate do |user|
 		# Has the password been changed?
 		if user.password && !user.password.blank?
@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
 		user.trusted = true if user.moderator? && user.user_admin?
 	end
 
-	validates_presence_of   :hashed_password, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}
+	validates_presence_of   :hashed_password, :unless => Proc.new{|u| u.openid_url? || u.facebook?}
 	validates_uniqueness_of :openid_url, :allow_nil => true, :allow_blank => true, :message => 'is already registered.', :case_sensitive => false
 	validates_uniqueness_of :facebook_uid, :allow_nil => true, :allow_blank => true, :message => 'is already registered.'
 
@@ -80,22 +80,22 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
 	validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
 
-	validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook_uid?}, :case_sensitive => false
+	validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook?}, :case_sensitive => false
 	validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
 
 	validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
-	
+
 	before_save do |user|
 		user.banned_until = nil if user.banned_until? && user.banned_until <= Time.now
 	end
-	
+
 	class << self
 		# Finds active users.
 		def find_active
 			self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'username ASC')
 		end
 
-		# Finds users with activity within some_time. The last_active column is only 
+		# Finds users with activity within some_time. The last_active column is only
 		# updated every 10 minutes, smaller values won't work.
 		def find_online(some_time=15.minutes)
 			User.find(:all, :conditions => ['activated = ? AND last_active > ?', true, some_time.ago], :order => 'username ASC')
@@ -111,14 +111,14 @@ class User < ActiveRecord::Base
 			User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND twitter IS NOT NULL AND twitter != ""', true, false])
 		end
 
-		# Finds new users. Pass <tt>:limit</tt> as an option to control number 
+		# Finds new users. Pass <tt>:limit</tt> as an option to control number
 		# of users fetched, this defaults to 25.
 		def find_new(options={})
 			options[:limit] ||= 25
 			self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'created_at DESC', :limit => options[:limit])
 		end
 
-		# Finds top posters. Pass <tt>:limit</tt> as an option to control number 
+		# Finds top posters. Pass <tt>:limit</tt> as an option to control number
 		# of users fetched, this defaults to 50.
 		def find_top_posters(options={})
 			options[:limit] ||= 50
@@ -134,7 +134,7 @@ class User < ActiveRecord::Base
 		def hash_string( string )
 			Digest::SHA1.hexdigest( string )
 		end
-		
+
 		# Deletes attributes which normal users shouldn't be able to touch from a param hash.
 		def safe_attributes(params)
 			safe_params = params.dup
@@ -152,7 +152,7 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	# Finds participated discussions. 
+	# Finds participated discussions.
 	# See <tt>DiscussionView.find_participated</tt> for options.
 	def participated_discussions(options={})
 		DiscussionRelationship.find_participated(self, options)
@@ -182,16 +182,16 @@ class User < ActiveRecord::Base
 			:page        => options[:page] || 1
 		) do |pagination|
 			discussions = Discussion.find(
-				:all, 
-				:conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = 0', self.id], 
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset, 
+				:all,
+				:conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = 0', self.id],
+				:limit      => pagination.limit,
+				:offset     => pagination.offset,
 				:order      => 'sticky DESC, last_post_at DESC',
 				:include    => [:poster, :last_poster, :category]
 			)
 		end
 	end
-	
+
 	def paginated_conversations(options)
 		Pagination.paginate(
 			:total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
@@ -204,8 +204,8 @@ class User < ActiveRecord::Base
 				:all,
 				:select     => 'discussions.*',
 				:joins      => joins,
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset, 
+				:limit      => pagination.limit,
+				:offset     => pagination.offset,
 				:order      => 'discussions.last_post_at DESC',
 				:include    => [:poster, :last_poster]
 			)
@@ -224,10 +224,10 @@ class User < ActiveRecord::Base
 			:page        => options[:page] || 1
 		) do |pagination|
 			Post.find(
-				:all, 
-				:conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false], 
-				:limit      => pagination.limit, 
-				:offset     => pagination.offset, 
+				:all,
+				:conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false],
+				:limit      => pagination.limit,
+				:offset     => pagination.offset,
 				:order      => 'created_at DESC',
 				:include    => [:user, :discussion]
 			)
@@ -271,10 +271,15 @@ class User < ActiveRecord::Base
 	def full_email
 		self.realname? ? "#{self.realname} <#{self.email}>" : self.email
 	end
-	
+
 	# Returns realname or username
 	def realname_or_username
 		self.realname? ? self.realname : self.username
+	end
+
+	# Is this a Facebook user?
+	def facebook?
+		self.facebook_uid?
 	end
 
 	# Is the password valid?
@@ -313,12 +318,12 @@ class User < ActiveRecord::Base
 		relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
 		relationship && relationship.favorite?
 	end
-	
+
 	# Returns true if this user is temporarily banned.
 	def temporary_banned?
 		self.banned_until? && self.banned_until > Time.now
 	end
-	
+
 	# Returns true if this user has invited someone.
 	def invites?
 		self.invites.count > 0
@@ -328,7 +333,7 @@ class User < ActiveRecord::Base
 	def invitees?
 		self.invitees.count > 0
 	end
-	
+
 	# Returns true if this user has invited someone or has invitees.
 	def invites_or_invitees?
 		self.invites? || self.invitees?
@@ -338,7 +343,7 @@ class User < ActiveRecord::Base
 	def available_invites?
 		self.user_admin? || self.available_invites > 0
 	end
-	
+
 	# Number of remaining invites. User admins always have at least one invite.
 	def available_invites
 	 	number = self[:available_invites]
@@ -354,20 +359,13 @@ class User < ActiveRecord::Base
 		self.update_attribute(:available_invites, new_invites)
 		self.available_invites
 	end
-	
+
 	# Grants a number of invites to a user.
 	def grant_invite!(number=1)
 		return self.available_invites if self.user_admin?
 		new_number = (self.available_invites + number)
 		self.update_attribute(:available_invites, new_number)
 		self.invites
-	end
-
-	# Updates Facebook access token if necessary
-	def update_facebook_access_token!(token)
-		if !token.blank? && token != self.facebook_access_token
-			self.update_attribute(:facebook_access_token, token)
-		end
 	end
 
 	# Get account status
@@ -416,7 +414,7 @@ class User < ActiveRecord::Base
 			User.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
 		end
 	end
-	
+
 	# Returns the chosen theme or the default one
 	def theme
 		self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)

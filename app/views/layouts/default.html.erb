@@ -69,11 +69,11 @@
 		<%# Account info %>
 		<div id="account">
 			<% if @current_user %>
-				Hello, <%= profile_link(@current_user) %>! 
+				Hello, <%= profile_link(@current_user) %>!
 				(<%= link_to "Sign out", logout_users_path %>)
 			<% else %>
 				<% if Sugar.config(:signups_allowed) %>
-					<%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %> 
+					<%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %>
 					or
 				<% end %>
 				<%= link_to "Log in", login_users_path %>
@@ -89,9 +89,9 @@
 					<%= header_tab 'Favorites', favorites_discussions_path %>
 					<% if @current_user.unread_conversations? %>
 						<%= header_tab(
-								"Conversations (#{@current_user.unread_conversations_count})", 
-								conversations_path, 
-								:section => :conversations, 
+								"Conversations (#{@current_user.unread_conversations_count})",
+								conversations_path,
+								:section => :conversations,
 								:class   => 'new'
 							)
 						%>
@@ -103,8 +103,8 @@
 				<% if @current_user && (@current_user.invites? || @current_user.available_invites?) %>
 					<% if !@current_user.user_admin? && @current_user.available_invites? %>
 						<%= header_tab(
-								"Invites (#{@current_user.available_invites})", 
-								invites_path, 
+								"Invites (#{@current_user.available_invites})",
+								invites_path,
 								:section => :invites
 							)
 						%>

@@ -40,7 +40,7 @@
 
 	<% if Sugar.config(:facebook_app_id) -%>
 		<div class="facebook">
-			<a class="facebook_login">Login with Facebook</a>
+			<%= link_to 'Login with Facebook', facebook_oauth_url(login_facebook_url), :class => 'fb_button' %>
 		</div>
 	<% end %>
 </div>

@@ -9,6 +9,16 @@ Sugar::Application.routes.draw do
 		end
 	end
 
+	# Facebook
+	resource :facebook, :controller => 'facebook' do
+		member do
+			get 'login'
+			get 'signup'
+			get 'connect'
+			post 'disconnect'
+		end
+	end
+
 	# Search discussions
 	match '/search/:query.:format' => 'discussions#search', :as => :formatted_search_with_query
 	match '/search/:query'         => 'discussions#search', :as => :search_with_query

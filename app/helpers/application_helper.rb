@@ -5,6 +5,10 @@ require 'digest/md5'
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+	def facebook_oauth_url(redirect_uri)
+		"https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config(:facebook_app_id)}&redirect_uri=#{redirect_uri}&scope=email"
+	end
+
 	def gravatar_url(email, options={})
 		options = {
 			:size => 24
@@ -41,8 +45,8 @@ module ApplicationHelper
 	#
 	# An example:
 	#   <% form_for 'user', @user do |f| %>
-	#     <%= labelled_field f.text_field( :username ), "Username", 
-	#                        :description => "Choose your username, minimum 4 characters", 
+	#     <%= labelled_field f.text_field( :username ), "Username",
+	#                        :description => "Choose your username, minimum 4 characters",
 	#                        :errors => @user.errors[:username] %>
 	#     <%= submit_tag "Save" %>
 	#   <% end %>
@@ -66,7 +70,7 @@ module ApplicationHelper
 		output += "</p>"
 		return output.html_safe
 	end
-	
+
 	# Generates avatar image tag for a user
 	def avatar_image_tag(user, size='32')
 		if user.avatar_url?
@@ -105,12 +109,12 @@ module ApplicationHelper
 	def discussion_classes(discussions, discussion)
 		@_discussion_classes ||= {}
 		@_discussion_classes[[discussions, discussion]] ||= [
-			discussion.labels.map(&:downcase), 
-			%w{odd even}[discussions.index(discussion)%2], 
+			discussion.labels.map(&:downcase),
+			%w{odd even}[discussions.index(discussion)%2],
 			(new_posts?(discussion) ? 'new_posts' : nil),
-			"in_category#{discussion.category_id}", 
-			"by_user#{discussion.poster_id}", 
-			"discussion", 
+			"in_category#{discussion.category_id}",
+			"by_user#{discussion.poster_id}",
+			"discussion",
 			"discussion#{discussion.id}"
 		].flatten.compact.join(' ')
 	end
@@ -186,7 +190,7 @@ module ApplicationHelper
 			post.page
 		end
 	end
-	
+
 	def header_tab(name, url, options={})
 		options[:section] ||= name.downcase.to_sym
 		options[:id]      ||= "#{options[:section]}_link"
@@ -195,10 +199,10 @@ module ApplicationHelper
 
 		classes = [options[:section].to_s] + options[:class]
 		classes << 'current' if @section == options[:section]
-		
+
 		content_tag(
-			:li, 
-			link_to(name, url, :id => options[:id]), 
+			:li,
+			link_to(name, url, :id => options[:id]),
 			:class => classes
 		)
 	end
