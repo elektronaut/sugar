@@ -27,7 +27,7 @@ Sugar::Application.configure do
   config.action_dispatch.x_sendfile_header = "X-Sendfile" # Use 'X-Accel-Redirect' for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = false
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
@@ -56,7 +56,7 @@ Sugar::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-	
+
 	# Store all page caches in a subfolder of public
 	config.action_controller.page_cache_directory = File.join(File.dirname(__FILE__), '../../public/cache')
 end
