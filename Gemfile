@@ -20,6 +20,7 @@ gem 'uglifier'
 gem 'dynamic_form'
 
 gem 'jquery-rails'
+gem 'rails-backbone'
 
 # Use unicorn as the web server
 # gem 'unicorn'

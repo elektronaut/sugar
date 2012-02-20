@@ -3,9 +3,16 @@
 
 //= require jquery
 //= require jquery_ujs
+//= require underscore
+//= require backbone
+//= require backbone_rails_sync
+//= require backbone_datalink
+
 //= require_tree ./vendor
 //= require ./syntaxhighlighter/shCore
 //= require_tree ./syntaxhighlighter/brushes
+
+//= require backbone/sugar
 //= require sugar
 //= require_tree ./sugar
 
@@ -34,7 +41,7 @@ window.relativeTime = function (timeString) {
 /* Dead simple tabs */
 function SugarTabs(controls, options) {
 	controls.tabs = [];
-	
+
 	var settings = jQuery.extend({
 		showFirstTab: true
 	}, options);
@@ -64,7 +71,7 @@ function SugarTabs(controls, options) {
 	});
 
 	controls.hideAllTabs();
-	
+
 	var anchorTab = false;
 	var tabShown  = false;
 	if (document.location.toString().match(/(#[\w\d\-_]+)$/)) {
@@ -76,7 +83,7 @@ function SugarTabs(controls, options) {
 			}
 		}
 	}
-	
+
 	if (!tabShown && settings.showFirstTab) {
 		controls.showTab(controls.tabs[0]);
 	}
@@ -94,7 +101,7 @@ function JRichTextArea(textArea, options) {
 	var settings = jQuery.extend({
 		className: "richTextToolbar"
 	}, options);
-	
+
 	this.toolbar = {
 		settings: settings,
 		textArea: textArea,
@@ -124,7 +131,7 @@ function JRichTextArea(textArea, options) {
 			}
 		}
 	};
-	
+
 	this.textArea.selectedText = function () {
 		return jQuery(this).getSelection().text;
 	};
