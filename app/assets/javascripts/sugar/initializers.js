@@ -1,4 +1,3 @@
-
 $.extend(window.Sugar.Initializers, {
 
 	inviteParticipants : function () {

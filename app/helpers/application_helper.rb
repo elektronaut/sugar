@@ -18,15 +18,6 @@ module ApplicationHelper
 		"#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
 	end
 
-	def formatted_time(time, options={})
-		return "Never" unless time
-		if time > 14.days.ago
-			time_ago_in_words(time)+" ago"
-		else
-			time.strftime("%b %d, %Y")
-		end
-	end
-
 	def meify(string, user)
 		string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1.to_s + profile_link(user, nil, :class => :poster) }.html_safe
 	end
