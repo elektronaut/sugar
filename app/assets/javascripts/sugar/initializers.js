@@ -1,5 +1,5 @@
-Sugar.Initializers = {
 
+$.extend(window.Sugar.Initializers, {
 	syntaxHighlight: function () {
 		// Transform the code blocks to work with SyntaxHighlighter
 		$('pre.code code').each(function(){
@@ -165,28 +165,28 @@ Sugar.Initializers = {
 				// Setup the buttons
 				ta.toolbar
 					// Bold
-					.addButton("Bold", function () { 
-						this.textArea.wrapSelection('<strong>', '</strong>'); 
+					.addButton("Bold", function () {
+						this.textArea.wrapSelection('<strong>', '</strong>');
 					})
 					// Italic
-					.addButton("Italics", function () { 
-						this.textArea.wrapSelection('<em>', '</em>'); 
+					.addButton("Italics", function () {
+						this.textArea.wrapSelection('<em>', '</em>');
 					})
 					// Link
 					.addButton("Link", function () {
-					    var selection = this.textArea.selectedText();
-					    var response = prompt('Enter link URL', '');  
-					    this.textArea.replaceSelection(
-							'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + '">' + 
+						var selection = this.textArea.selectedText();
+						var response = prompt('Enter link URL', '');
+						this.textArea.replaceSelection(
+							'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + '">' +
 							((selection === '') ? "Link text" : selection) + '</a>');
 					})
 					// Image tag
 					.addButton("Image", function () {
-					    var selection = this.textArea.selectedText();
+						var selection = this.textArea.selectedText();
 						if (selection === '') {
-						    var response = prompt('Enter image URL', ''); 
-						    if (response === null) { 
-								return; 
+							var response = prompt('Enter image URL', '');
+							if (response === null) {
+								return;
 							}
 							this.textArea.replaceSelection('<img src="' + response + '" alt="" />');
 						} else {
@@ -196,12 +196,12 @@ Sugar.Initializers = {
 					// MP3 Player
 					.addButton("MP3", function () {
 						var selection = this.textArea.selectedText();
-					    var response = prompt('Enter MP3 URL', '');  
+						var response = prompt('Enter MP3 URL', '');
 						if (selection === '') {
 							selection = prompt('Enter track title', '');
 						}
-					    this.textArea.replaceSelection(
-							'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + '" class="mp3player">' + 
+						this.textArea.replaceSelection(
+							'<a href="' + (response === '' ? 'http://link_url/' : response).replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + '" class="mp3player">' +
 							((selection === '') ? "Link text" : selection) + '</a>');
 					})
 					// Block Quote
@@ -210,17 +210,17 @@ Sugar.Initializers = {
 					})
 					// Escape HTML
 					.addButton("Escape HTML", function () {
-					    var selection = this.textArea.selectedText();
+						var selection = this.textArea.selectedText();
 						var response = prompt('Enter language (leave blank for no syntax highlighting)', '');
 						if (response) {
 							this.textArea.replaceSelection('<code language="' + response + '">' + selection + '</code>');
 						} else {
-						    this.textArea.replaceSelection('<code>' + selection + '</code>');
+							this.textArea.replaceSelection('<code>' + selection + '</code>');
 						}
 					})
 					//
-					.addButton("Spoiler", function () { 
-						this.textArea.wrapSelection('<div class="spoiler">', '</div>'); 
+					.addButton("Spoiler", function () {
+						this.textArea.wrapSelection('<div class="spoiler">', '</div>');
 					});
 			}
 		});
@@ -346,8 +346,8 @@ Sugar.Initializers = {
 				} else {
 					$.getJSON(updates_url, function (json) {
 						$(json).each(function () {
-							var linkified_text = this.text.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+/, function (m) { 
-								return m.link(m); 
+							var linkified_text = this.text.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+/, function (m) {
+								return m.link(m);
 							});
 							linkified_text = linkified_text.replace(/@[A-Za-z0-9_]+/, function (u) {
 								return u.link('http://twitter.com/' + u.replace(/^@/, ''));
@@ -365,7 +365,7 @@ Sugar.Initializers = {
 			$('#flickrProfileURL').each(function () {
 				var fuid = this.href.split("/");
 				fuid = fuid[(fuid.length - 1)];
-				jQuery(function () {   
+				jQuery(function () {
 					$('#flickrPhotos').hide();
 					jQuery("#flickrPhotos").flickr({
 						api_key:  Sugar.Configuration.FlickrAPI,
@@ -375,8 +375,8 @@ Sugar.Initializers = {
 						callback: function (list) {
 							$('#flickrPhotos').show();
 						}
-					}); 
-				});	
+					});
+				});
 			});
 		}
 	},
@@ -443,5 +443,4 @@ Sugar.Initializers = {
 		});
 	}
 
-
-};
+});

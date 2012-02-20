@@ -1,6 +1,3 @@
-/*jslint browser: true, devel: true, onevar: false, regexp: false, immed: false*/
-/*global window: false, jQuery: false, $: false, Sugar: false*/
-
 $.extend(Sugar.Initializers, {
 	applySubmitMagic: function () {
 		$("#replyText form").submit(function () {
@@ -16,7 +13,7 @@ $.extend(Sugar.Initializers, {
 });
 
 $.extend(Sugar, {
-	
+
 	previewPost: function () {
 		var postBody   = $('#compose-body').val();
 		var previewUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview";
@@ -96,7 +93,7 @@ $.extend(Sugar, {
 			Sugar.compose({add: quotedPost});
 		});
 	},
-	
+
 	addToReply: function () {
 		jQuery('#compose-body').val(jQuery('#compose-body').val());
 	},
@@ -128,7 +125,7 @@ $.extend(Sugar, {
 		// 	hiddenBlock.show();
 		// 	hiddenBlock.html(content);
 		// 	hiddenBlock.hide();
-		// 	
+		//
 		// 	// Remove line numbers
 		// 	$(hiddenBlock).find('.codeblock .line-numbers').remove();
 		// 	$(hiddenBlock).find('.codeblock').each(function () {
@@ -136,7 +133,7 @@ $.extend(Sugar, {
 		// 		var blockContent = $(this).children('pre').text().replace(/^[\s]*/, '').replace(/[\s]*$/, '');
 		// 		$(this).replaceWith('<code language="' + codeLanguage + '">' + blockContent + '</code>');
 		// 	});
-		// 	
+		//
 		// 	content = hiddenBlock.html();
 		// 	hiddenBlock.html('');
 		// 	content = content
@@ -150,7 +147,7 @@ $.extend(Sugar, {
 
 	// parseSubmit() reads the contents of the posting textarea and applies it to a hidden div.
 	// If there are any images, parseSubmit() will attempt to load them and update the post body
-	// with proper width/height attributes. 
+	// with proper width/height attributes.
 	parseSubmit : function (submitForm) {
 		var statusField = $('#button-container');
 		$('#button-container').each(function () {
@@ -161,7 +158,7 @@ $.extend(Sugar, {
 		var oldPostButton = statusField.html();
 
 		statusField.addClass('posting');
-		
+
 		if ($.browser.msie) {
 			statusField.html('Posting..');
 		} else {
@@ -179,7 +176,7 @@ $.extend(Sugar, {
 			postNotifier.show();
 			postNotifier.html(postBody);
 			postNotifier.hide();
-			
+
 			// Rewrite local links
 			var currentDomain = document.location.toString().match(/^(https?:\/\/[\w\d\-\.:]+)/)[1];
 			var postLinks = postNotifier.find('a');
@@ -245,7 +242,7 @@ $.extend(Sugar, {
 		}
 	},
 
-	// Submits post via AJAX if supported. 
+	// Submits post via AJAX if supported.
 	submitPost : function () {
 		$("#replyText form").each(function () {
 			var submitForm = this;

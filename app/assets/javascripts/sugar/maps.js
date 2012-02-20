@@ -1,6 +1,3 @@
-/*jslint browser: true, devel: true, onevar: false, regexp: false, immed: false*/
-/*global window: false, jQuery: false, $: false, Sugar: false, google: false*/
-
 (function ($S) {
 
 	$($S).bind('ready', function () {
@@ -15,7 +12,7 @@
 			$(selector).each(function () {
 				var defaultLocation = new google.maps.LatLng(30, -20);
 				var map = new google.maps.Map(this, {
-					center: defaultLocation, 
+					center: defaultLocation,
 					zoom: 2,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				});
@@ -26,8 +23,8 @@
 						if (user.latitude && user.longitude) {
 							var position = new google.maps.LatLng(user.latitude, user.longitude);
 							var marker = new google.maps.Marker({
-								position: position, 
-								map: map, 
+								position: position,
+								map: map,
 								title: user.username
 							});
 							var contentString = "<strong>" + user.username + "</strong><br />" +
@@ -54,7 +51,7 @@
 				var geocoder        = new google.maps.Geocoder();
 
 				var mapOptions = {
-					center:         defaultLocation, 
+					center:         defaultLocation,
 					zoom:           defaultZoom,
 					mapTypeId:      google.maps.MapTypeId.ROADMAP,
 					mapTypeControl: false
@@ -97,7 +94,7 @@
 						});
 					}
 				};
-			
+
 				var userMarker = false;
 
 				var createUserMarker = function (position) {
@@ -106,9 +103,9 @@
 						userMarker.setPosition(position);
 					} else {
 						userMarker = new google.maps.Marker({
-							position:  position, 
-							map:       map, 
-							draggable: true, 
+							position:  position,
+							map:       map,
+							draggable: true,
 							visible:   true
 						});
 						google.maps.event.addListener(userMarker, 'click', function () {

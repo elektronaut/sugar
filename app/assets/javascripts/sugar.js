@@ -1,14 +1,11 @@
-/*jslint browser: true, devel: true, onevar: false, regexp: false*/
-/*global window: false, jQuery: false, $: false, JRichTextArea: false, SugarTabs: false, swfobject: false, relativeTime: false*/
-
-var Sugar = {
+$.extend(window.Sugar, {
 	Configuration: {},
+	Initializers: {},
 	onLoadedPosts: {
 		syntaxHighlight: function () {
 			Sugar.Initializers.syntaxHighlight();
-		},
+		}
 	},
-	Initializers: {},
 
 	updateNewPostsCounter : function () {
 		var newPosts = $('#newPosts').get()[0];
@@ -108,7 +105,7 @@ var Sugar = {
 		}
 		return false;
 	},
-	
+
 	log: function () {
 		if (this.Configuration.debug) {
 			if (console) {
@@ -133,4 +130,4 @@ var Sugar = {
 		}
 		$(this).trigger('ready');
 	}
-};
+});

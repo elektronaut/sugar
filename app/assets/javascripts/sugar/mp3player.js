@@ -3,10 +3,6 @@
  * Copyright (c) 2009 Inge Jørgensen (elektronaut.no)
  */
 
-/*jslint browser: true, devel: true, onevar: false, regexp: false, immed: false*/
-/*global window: false, jQuery: false, $: false, Sugar: false, soundManager: false*/
-
-
 // Configure SoundManager2
 soundManager.debugMode = false;
 soundManager.url = '/flash/soundmanager2';
@@ -62,7 +58,7 @@ soundManager.url = '/flash/soundmanager2';
 				$S.MP3Player.stopSong(this);
 			});
 		},
-	
+
 		playNextSong: function () {
 			var index = false;
 			for (var a = 0; a < this.songs.length; a += 1) {
@@ -76,7 +72,7 @@ soundManager.url = '/flash/soundmanager2';
 			}
 			this.playSong(this.songs[index]);
 		},
-	
+
 		playSong: function (song) {
 			this.stopAllSongs();
 			$(song).addClass('mp3player_playing').removeClass('mp3player_stopped');
@@ -113,7 +109,7 @@ soundManager.url = '/flash/soundmanager2';
 				$S.log('MP3Player: Stopping song ' + song.href);
 			}
 		},
-	
+
 		toggleSong: function (song) {
 			if (this.playingSong && this.playingSong === song) {
 				this.stopSong(song);
@@ -121,5 +117,5 @@ soundManager.url = '/flash/soundmanager2';
 				this.playSong(song);
 			}
 		}
-	};	
+	};
 })(Sugar);
