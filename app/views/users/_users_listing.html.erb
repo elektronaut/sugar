@@ -28,9 +28,9 @@
 			when :location
 				h(user.location)
 			when :last_active
-				(user.online?) ? "<strong>Online now</strong>".html_safe : formatted_time(user.last_active)
+				(user.online?) ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative')
 			when :member_since
-				formatted_time user.created_at
+				time_tag user.created_at, :class => 'relative'
 			when :discussions_and_posts
 				user.discussions_count.to_s + "/" + user.posts_count.to_s
 			when :posts_count

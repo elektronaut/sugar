@@ -1,6 +1,6 @@
-<% 
+<%
 	add_body_class "user_profile"
-	@page_title = "#{@user.username}" 
+	@page_title = "#{@user.username}"
 %>
 
 <% if @current_user %>
@@ -8,7 +8,7 @@
 		<% if @user == @current_user %>
 			<%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
 		<% elsif @current_user.user_admin? %>
-			<%= link_to "Edit", edit_user_path(:id => @user.username) %> / 
+			<%= link_to "Edit", edit_user_path(:id => @user.username) %> /
 		<% end %>
 		<% unless @user == @current_user %>
 			<%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %>
@@ -48,7 +48,7 @@
 
 	<% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? && !@user.user_admin? %>
 		<p class="grant_invites">
-			<strong>Invites:</strong> <%= @user.available_invites %> &ndash; 
+			<strong>Invites:</strong> <%= @user.available_invites %> &ndash;
 			<%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
 			or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), :confirm => 'Are you sure you want to revoke all invites?' %>
 			<br />
@@ -69,12 +69,12 @@
 			<%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>
 		<% end %>
 	</p>
-	
+
 	<p>
 		<% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
-		<strong>Member since</strong>: <%= formatted_time(@user.created_at) %><br />
+		<strong>Member since</strong>: <%= time_tag @user.created_at, :class => 'relative' %><br />
 		<% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
-		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : formatted_time(@user.last_active) %><br />
+		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative') %><br />
 		<% if @user.banned? %>
 			<%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
 		<% elsif @user.admin? %>
@@ -121,7 +121,10 @@
 	<% if @user.invitees.count > 0 %><div class="invitees">
 		<h3><%= @user.username %> has invited <%= @user.invitees.count %> users:</h3>
 		<ul><% @user.invitees.each do |invitee| %>
-			<li><%= profile_link(invitee) %> (joined <%= formatted_time invitee.created_at %>)</li>
+			<li>
+				<%= profile_link(invitee) %>
+				(joined <%= time_tag invitee.created_at, :class => 'relative' %>)
+			</li>
 		<% end %></ul>
 	</div><% end %>
 

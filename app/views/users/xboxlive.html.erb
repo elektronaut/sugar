@@ -1,6 +1,6 @@
-<% 
+<%
 	add_body_class "users"
-	@page_title = "Xbox Live Users" 
+	@page_title = "Xbox Live Users"
 %>
 
 <div class="functions">
@@ -13,7 +13,7 @@
 
 <%= render :partial => 'list_navigation' %>
 
-<p>This page was updated <%= formatted_time XboxInfo.last_updated %>.</p>
+<p>This page was updated <%= time_tag XboxInfo.last_updated, :class => 'relative' %>.</p>
 
 <table class="list users_list">
 	<tr>

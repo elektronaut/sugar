@@ -29,7 +29,7 @@
 				<%= link_to post.discussion.title, paged_discussion_path(:id => post.discussion, :page => post.page, :anchor => "post-#{post.id}") %>
 				<small>
 					Started by <%= profile_link(post.discussion.poster) %>,
-					Last active <%= formatted_time post.discussion.last_post_at %>,
+					Last active <%= time_tag post.discussion.last_post_at, :class => 'relative' %>,
 					<%= post.discussion.posts_count %> posts
 				</small>
 			</div>
@@ -82,7 +82,7 @@
 					<%= post.user.html_disabled? ? h(post.body).gsub(/\n/,'<br />') : meify(post.body_html, post.user) %>
 				</div>
 				<% if post.edited? %><div class="edited">
-					Edited <%= formatted_time post.edited_at %>
+					Edited <%= time_tag post.edited_at, :class => 'relative' %>
 				</div><% end %>
 			</div>
 		<% end %>
