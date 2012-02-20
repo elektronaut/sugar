@@ -235,7 +235,7 @@
         // Quote post
         $(document).bind('keydown', 'q', function (event) {
           if (!event.metaKey && $S.Hotkeys.getTarget()) {
-            $S.quotePost($($S.Hotkeys.getTarget()).data('targetId'));
+            $S.quotePost($S.Hotkeys.getTarget());
             return false;
           }
         });

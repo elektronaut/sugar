@@ -253,15 +253,6 @@ $.extend(window.Sugar.Initializers, {
   },
 
   postFunctions: function () {
-    $('.quote_post').each(function () {
-      if (!this.functionalityApplied) {
-        $(this).click(function () {
-          var postId = this.id.match(/-([\d]+)$/)[1];
-          Sugar.quotePost(postId);
-        });
-        this.functionalityApplied = true;
-      }
-    });
     $('.edit_post').each(function () {
       if (!this.functionalityApplied) {
         $(this).click(function () {

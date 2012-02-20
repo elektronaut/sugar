@@ -41,7 +41,7 @@
         <%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %> |
       <% end %>
       <% if @current_user %>
-        <%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+        <%= link_to_function 'Quote', "return(false);", :class => 'quote_post' %>
       <% end %>
     </div>
     <% end %>

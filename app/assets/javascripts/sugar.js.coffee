@@ -9,6 +9,9 @@ $.extend window.Sugar,
     'this', 'to', 'was', 'what', 'when', 'where', 'who', 'will', 'with', 'the'
   ]
 
+  extend: (extension) ->
+    $.extend(Sugar, extension)
+
   log: ->
     if this.Configuration.debug && console?
       if arguments.length == 1
