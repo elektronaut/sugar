@@ -21,6 +21,8 @@ gem 'dynamic_form'
 gem 'jquery-rails'
 gem 'rails-backbone'
 
+gem 'memcache-client'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
