@@ -18,7 +18,9 @@
 			<div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> earlier&hellip;</div>
 		<% end %>
 	<% end %>
-	<div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>">
+
+	<div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user-id="<%= post.user.id %>">
+
 		<% if title %>
 			<div class="title">
 				<% if post.discussion.labels? %>
@@ -32,24 +34,31 @@
 				</small>
 			</div>
 		<% end %>
+
 		<% if functions %>
 		<div class="post_functions">
 			<% if post.editable_by?(@current_user) %>
 				<%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %> |
-			<% end %>			
+			<% end %>
 			<% if @current_user %>
 				<%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
 			<% end %>
 		</div>
 		<% end %>
+
 		<% if post.me_post? %>
 			<div class="me_post_content">
 				<div class="avatar"><%= avatar_image_tag(post.user) %></div>
 				<div class="body" id="postBody-<%= post.id %>">
 					<span class="content"><%= meify post.body, post.user %></span>
-					<span class="date">&ndash; <%= preview ? "Preview" : formatted_time(post.created_at) %></span>
+					<% if preview %>
+						<time class="relative date">Preview</time>
+					<% else %>
+						<%= time_tag post.created_at, :class => 'relative date' %>
+					<% end %>
 				</div>
 			</div>
+
 		<% else %>
 			<div class="post_info">
 				<a name="post-<%= post.id %>" class="anchor"></a>
@@ -57,11 +66,15 @@
 					<%= avatar_image_tag(post.user) %>
 				</span>
 				<span class="username"><%= profile_link(post.user) %></span>
-				<span class="date"><%= preview ? "Preview" : formatted_time(post.created_at) %></span>
+				<% if preview %>
+					<time class="relative date">Preview</time>
+				<% else %>
+					<%= time_tag post.created_at, :class => 'relative date' %>
+				<% end %>
 				<% if permalink %>
-				<span class="permalink">
-					<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
-				</span>
+					<span class="permalink">
+						<%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+					</span>
 				<% end %>
 			</div>
 			<div class="body" id="postBody-<%= post.id %>">
