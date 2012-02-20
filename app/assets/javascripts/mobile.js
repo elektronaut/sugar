@@ -1,10 +1,16 @@
-/*jslint browser: true, devel: true, onevar: false, regexp: false*/
-/*global window: false, jQuery: false, $: false*/
-
 //= require jquery
 //= require jquery_ujs
+//= require underscore
+//= require backbone
+//= require backbone_rails_sync
+//= require backbone_datalink
+
+//= require vendor/jquery.timeago
+
+//= require backbone/sugar
 //= require sugar
 //= require sugar/amazon_associates
+//= require sugar/timestamps
 
 function toggleNavigation() {
 	$('#navigation').toggle();
@@ -20,7 +26,7 @@ function resizeYoutube() {
 		}
 		var maxWidth = window.innerWidth - 20;
 		var maxHeight = window.innerHeight - 20;
-		
+
 		if (maxWidth > this.originalWidth) {
 			maxWidth = this.originalWidth;
 		}
@@ -30,12 +36,12 @@ function resizeYoutube() {
 
 		var newWidth = maxWidth;
 		var newHeight = Math.floor(this.originalHeight * (newWidth / this.originalWidth));
-		
+
 		if (newHeight > maxHeight) {
 			newHeight = maxHeight;
 			newWidth = Math.floor(this.originalWidth * (newHeight / this.originalHeight));
 		}
-		
+
 		this.width = newWidth;
 		this.height = newHeight;
 	});
@@ -60,7 +66,7 @@ window.quotePost = function (postId) {
 var currentWidth = 0;
 var currentHeight = 0;
 function checkWindowOrientation() {
-	if (window.innerWidth !== currentWidth) {   
+	if (window.innerWidth !== currentWidth) {
 		currentWidth  = window.innerWidth;
 		currentHeight = window.innerHeight;
 		var orient = (currentWidth < currentHeight) ? 'profile' : 'landscape';
@@ -95,7 +101,7 @@ function hideImagesInPosts() {
 		$(this).removeClass('imageloader');
 		this.image.src = this.image.originalSrc;
 	});
-	
+
 }
 
 $(document).ready(function () {
@@ -118,18 +124,18 @@ $(document).ready(function () {
 		// Scroll to top w/o location bar unless targeting an anchor
 		setTimeout(scrollTo, 100, 0, 1);
 	}
-	
+
 	jQuery('#search_mode').change(function () {
 		this.parentNode.action = this.value;
 	});
-	
+
 	// Post quoting
 	$('.post .functions a.quote_post').click(function () {
 		var postId = this.id.match(/-([\d]+)$/)[1];
 		window.quotePost(postId);
 		return false;
 	});
-	
+
 	// Spoiler tags
 	$('.spoiler').each(function () {
 		var container = this;
@@ -148,7 +154,9 @@ $(document).ready(function () {
 			container.spoilerApplied = true;
 		}
 	});
-	
+
 
 	resizeYoutube();
+
+	Sugar.init();
 });

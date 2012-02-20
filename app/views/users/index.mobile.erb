@@ -1,6 +1,6 @@
-<% 
+<%
 	add_body_class "users"
-	@page_title = "Users" 
+	@page_title = "Users"
 %>
 
 <table class="list users_list">
@@ -16,6 +16,8 @@
 				<%= profile_link(user) %>
 			<% end %>
 		</td>
-		<td class="last_active"><%= (user.online?) ? "<strong>Online now</strong>".html_safe : formatted_time(user.last_active) %></td>
+		<td class="last_active">
+			<%= (user.online?) ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative') %>
+		</td>
 	</tr><% end %>
 </table>

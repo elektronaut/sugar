@@ -71,11 +71,11 @@
 		</tr><% end %>
 		<tr>
 			<th>Joined</th>
-			<td><%= formatted_time(@user.created_at) %></td>
+			<td><%= time_tag @user.created_at, :class => 'relative' %></td>
 		</tr>
 		<tr>
 			<th>Last active</th>
-			<td><%= @user.online? ? "<strong>Online now</strong>" : formatted_time(@user.last_active) %></td>
+			<td><%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, :class => 'relative') %></td>
 		</tr>
 		<tr>
 			<th>Discussions</th>

@@ -16,7 +16,7 @@
 			</h2>
 			<p>
 				<% if d.kind_of?(Conversation) %>
-					<% 
+					<%
 						other_participants = d.participants.reject{|p| p == @current_user}
 					%>
 					<% if other_participants.length == 0 %>
@@ -30,7 +30,7 @@
 					By <%= d.poster.username %>,
 				<% end %>
 				<%= d.posts_count %> posts.
-				Last: <%= d.last_poster.username %> <%= formatted_time d.last_post_at %>
+				Last: <%= d.last_poster.username %> <%= time_tag d.last_post_at, :class => 'relative' %>
 			</p>
 		</div><% end %>
 	</div>

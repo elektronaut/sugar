@@ -1,6 +1,3 @@
-/*jslint browser: true, devel: true, onevar: false, regexp: false*/
-/*global window: false, jQuery: false, $: false, Sugar: false*/
-
 //= require jquery
 //= require jquery_ujs
 //= require underscore

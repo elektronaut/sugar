@@ -1,9 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
 	<% if @current_user && @current_user.mobile_stylesheet_url? %>
@@ -88,10 +86,10 @@
 		<%= yield %>
 	</div>
 	<div id="footer">
-		<%= link_to "Discussions", discussions_path %> | 
+		<%= link_to "Discussions", discussions_path %> |
 		<% if @current_user %>
-			<%= link_to "Following", following_discussions_path %> | 
-			<%= link_to "Favorites", favorites_discussions_path %> | 
+			<%= link_to "Following", following_discussions_path %> |
+			<%= link_to "Favorites", favorites_discussions_path %> |
 		<% end %>
 		<%= link_to "Regular site", :mobile_format => 'html' %>
 	</div>
