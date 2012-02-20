@@ -1,17 +1,5 @@
 
 $.extend(window.Sugar.Initializers, {
-	syntaxHighlight: function () {
-		// Transform the code blocks to work with SyntaxHighlighter
-		$('pre.code code').each(function(){
-			var code   = this;
-			var parent = $(this).closest('pre').get(0);
-			var language = code.className;
-			$(parent).html($(this).html());
-			parent.className = parent.className + ' brush: ' + language;
-			$(parent).closest('.body').addClass('syntax');
-		});
-		SyntaxHighlighter.all();
-	},
 
 	inviteParticipants : function () {
 		$('#invite_participant_form').each(function () {

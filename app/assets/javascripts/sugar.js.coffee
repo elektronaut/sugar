@@ -3,10 +3,6 @@ $.extend window.Sugar,
 	Configuration: {}
 	Initializers: {}
 
-	onLoadedPosts:
-		syntaxHighlight: ->
-			Sugar.Initializers.syntaxHighlight()
-
 	stopwords: [
 		'i', 'a', 'about', 'an', 'and', 'are', 'as', 'at', 'by', 'for', 'from', 'has', 'have',
 		'how', 'in', 'is', 'it', 'la', 'my', 'of', 'on', 'or', 'that', 'the',

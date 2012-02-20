@@ -83,11 +83,6 @@ $.extend(Sugar, {
 				Sugar.Initializers.postFunctions();
 				Sugar.loadingPosts = false;
 
-				for (var f in Sugar.onLoadedPosts) {
-					if (Sugar.onLoadedPosts.hasOwnProperty(f)) {
-						Sugar.onLoadedPosts[f]();
-					}
-				}
 				$(Sugar).trigger('postsloaded');
 			});
 		}
