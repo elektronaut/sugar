@@ -42,7 +42,6 @@ class Sugar.Views.Post extends Backbone.View
     event.preventDefault();
     this.$('.body').html '<span class="ticker">Loading...</span>'
     this.$('.body').load this.model.editUrl(), ->
-      Sugar.Initializers.richText();
       $(Sugar).trigger('modified')
 
   quote: (event) ->
