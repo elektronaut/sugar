@@ -74,7 +74,7 @@
 		<% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
 		<strong>Member since</strong>: <%= time_tag @user.created_at, :class => 'relative' %><br />
 		<% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
-		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative') %><br />
+		<strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, :class => 'relative') %><br />
 		<% if @user.banned? %>
 			<%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
 		<% elsif @user.admin? %>
