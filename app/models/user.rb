@@ -217,14 +217,13 @@ class User < ActiveRecord::Base
       :per_page    => options[:limit] || Post::POSTS_PER_PAGE,
       :page        => options[:page] || 1
     ) do |pagination|
-      Post.find(
-        :all,
-        :conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false],
-        :limit      => pagination.limit,
-        :offset     => pagination.offset,
-        :order      => 'created_at DESC',
-        :include    => [:user, :discussion]
-      )
+      (
+        options[:trusted] ?
+        Post.where('user_id = ? AND conversation = ?', self.id, false) :
+        Post.where('user_id = ? AND conversation = ? AND trusted = ?', self.id, false, false)
+      ).
+        limit(pagination.limit).offset(pagination.offset).
+        order('created_at DESC').includes(:user, :discussion)
     end
   end
 
@@ -379,6 +378,10 @@ class User < ActiveRecord::Base
     new_number = (self.available_invites + number)
     self.update_attribute(:available_invites, new_number)
     self.invites
+  end
+
+  def posts?
+    self.posts_count > 0
   end
 
   # Get account status

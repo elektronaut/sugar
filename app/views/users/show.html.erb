@@ -127,8 +127,10 @@
 
 </div>
 <div id="userPosts">
-  <% if @posts && @posts.length > 0 %>
-    <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+  <% if @user.posts? %>
+    <%= cache ["users/profile-#{@user.id}", 'posts', @user.posts_count, @user.updated_at.to_i, trusted_user?] do %>
+      <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+    <% end %>
   <% elsif @current_user && @user == @current_user %>
     <div class="welcome">
       <h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
