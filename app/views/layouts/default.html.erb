@@ -23,6 +23,7 @@
     <%= "Sugar.Configuration.workSafe           = true;" if @current_user && @current_user.work_safe_urls? %>
     <%= "Sugar.Configuration.FacebookAppId      = '#{Sugar.config(:facebook_app_id)}';" if Sugar.config(:facebook_app_id) %>
     <%= "Sugar.Configuration.AmazonAssociatesId = '#{Sugar.config(:amazon_associates_id)}';" if Sugar.config(:amazon_associates_id) %>
+    <%= "Sugar.Configuration.currentUser        = #{current_user_preload_json};".html_safe if @current_user %>
   </script>
 
   <%# Custom javascript %>

@@ -5,6 +5,12 @@ require 'digest/md5'
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def current_user_preload_json
+    if @current_user
+      @current_user.to_json(:only => [:id, :username, :admin, :user_admin, :moderator])
+    end
+  end
+
   def facebook_oauth_url(redirect_uri)
     "https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config(:facebook_app_id)}&redirect_uri=#{redirect_uri}&scope=email"
   end

@@ -80,7 +80,6 @@ $.extend(Sugar, {
         $('.shown_items_count').text(newPosts.postsCount);
         $('.total_items_count').text(newPosts.postsCount);
 
-        Sugar.Initializers.postFunctions();
         Sugar.loadingPosts = false;
 
         $(Sugar).trigger('postsloaded');

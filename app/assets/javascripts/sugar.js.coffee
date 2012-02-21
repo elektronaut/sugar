@@ -28,4 +28,4 @@ $.extend window.Sugar,
   init: ->
     for own name, initializer of this.Initializers
       initializer()
-    $(this).trigger('ready')
+    this.Application = new Sugar.Views.Application()

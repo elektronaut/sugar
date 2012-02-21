@@ -78,15 +78,6 @@ $.extend(window.Sugar.Initializers, {
     });
   },
 
-  styleButtons : function () {
-    // Wrap buttons in span
-    $('a.button, button').each(function () {
-      if ($(this).find('span').length === 0) {
-        $(this).wrapInner('<span />');
-      }
-    });
-  },
-
   loginForm : function () {
     $('body.login #login').each(function () {
       var container = this;
@@ -250,24 +241,6 @@ $.extend(window.Sugar.Initializers, {
       window.configTabs = new SugarTabs(this, {showFirstTab: true});
     });
 
-  },
-
-  postFunctions: function () {
-    $('.edit_post').each(function () {
-      if (!this.functionalityApplied) {
-        $(this).click(function () {
-          var postID = this.id.match(/-([\d]+)$/)[1];
-          var editURL = this.href;
-          $("#postBody-" + postID).html('<span class="ticker">Loading...</span>');
-          $("#postBody-" + postID).load(editURL, null, function () {
-            Sugar.Initializers.richText();
-            Sugar.Initializers.styleButtons();
-          });
-          return false;
-        });
-        this.functionalityApplied = true;
-      }
-    });
   },
 
   // Strip discussion and category names from links if workSafe is enabled.
