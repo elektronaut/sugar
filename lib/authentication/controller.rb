@@ -129,7 +129,7 @@ module Authentication
 
           # No need to update this on every request
           if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
-            @current_user.update_attribute(:last_active, Time.now) unless @current_user.temporary_banned?
+            @current_user.update_column(:last_active, Time.now) unless @current_user.temporary_banned?
           end
         else
           session[:user_id]         = nil
