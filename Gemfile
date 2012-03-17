@@ -38,6 +38,8 @@ gem 'hpricot', '0.8.4'
 gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
+gem 'sunspot_rails'
+
 gem 'delayed_job', '2.1.4'
 gem 'thinking-sphinx', '2.0.7'
 gem 'ts-delayed-delta', '1.1.2', :require => 'thinking_sphinx/deltas/delayed_delta'
@@ -47,6 +49,8 @@ group :development do
 end
 
 group :test, :development do
+	gem 'sunspot_solr'
+
 	# RSpec
 	gem 'rspec-rails'
 	gem 'shoulda-matchers'
