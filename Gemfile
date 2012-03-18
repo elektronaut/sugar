@@ -39,6 +39,7 @@ gem 'daemon-spawn', '0.2.0'
 gem 'newrelic_rpm'
 
 gem 'sunspot_rails'
+gem 'progress_bar'
 
 gem 'delayed_job', '2.1.4'
 gem 'thinking-sphinx', '2.0.7'

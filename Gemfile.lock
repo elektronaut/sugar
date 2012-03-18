@@ -89,6 +89,7 @@ GEM
     factory_girl_rails (1.3.0)
       factory_girl (~> 2.2.0)
       railties (>= 3.0.0)
+    fattr (2.2.1)
     ffi (1.0.11)
     gherkin (2.6.8)
       json (>= 1.4.6)
@@ -128,8 +129,13 @@ GEM
     newrelic_rpm (3.1.2)
     nokogiri (1.5.0)
     open4 (1.1.0)
+    options (2.3.0)
+      fattr
     polyglot (0.3.3)
     pr_geohash (1.0.0)
+    progress_bar (0.4.0)
+      highline (~> 1.6.1)
+      options (~> 2.3.0)
     rack (1.3.5)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -250,6 +256,7 @@ DEPENDENCIES
   json
   mysql2
   newrelic_rpm
+  progress_bar
   rails (= 3.1.3)
   rails-backbone
   rb-fsevent
