@@ -13,7 +13,8 @@
 //= require sugar/timestamps
 
 function toggleNavigation() {
-	$('#navigation').toggle();
+	$('#navigation').toggleClass('active');
+	return false;
 }
 
 function resizeYoutube() {
