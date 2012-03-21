@@ -27,7 +27,17 @@ class Post < ActiveRecord::Base
 		post.conversation = post.discussion.kind_of?(Conversation)
 		post.body_html    = PostParser.new(post.body).to_html unless post.skip_html
 	end
-	
+
+	searchable do
+		text    :body
+		text :username do
+			user.username
+		end
+		integer :user_id, :discussion_id
+		time    :created_at, :updated_at
+		boolean :trusted, :conversation
+	end
+
 	define_index do
 		indexes body
 		indexes user(:username), :as => :username
@@ -62,8 +72,8 @@ class Post < ActiveRecord::Base
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
 			search_options = {
-				:order      => :created_at, 
-				:sort_mode  => :desc, 
+				:order      => :created_at,
+				:sort_mode  => :desc,
 				:per_page   => POSTS_PER_PAGE,
 				:page       => page,
 				:include    => [:user, :discussion],
@@ -117,7 +127,7 @@ class Post < ActiveRecord::Base
 	def viewable_by?(user)
 		(user && !(self.discussion.trusted? && !(user.trusted? || user.admin?))) ? true : false
 	end
-	
+
 	def mentions_users?
 		(mentioned_users.length > 0) ? true : false
 	end

@@ -7,12 +7,12 @@ require 'pagination'
 # Exchange is the base class for all threads, which both Discussion and Conversation inherit from.
 #
 # == Pagination
-# 
-# The *_paginated methods returns a collection decorated with pagination info, 
-# see the Pagination module for more information. 
+#
+# The *_paginated methods returns a collection decorated with pagination info,
+# see the Pagination module for more information.
 
 class Exchange < ActiveRecord::Base
-	
+
 	set_table_name 'discussions'
 
 	# Default number of discussions per page
@@ -24,7 +24,7 @@ class Exchange < ActiveRecord::Base
 	# Virtual attribute for the body of the first post
 	attr_accessor :body
 
-	# Skips validation of @body if true 
+	# Skips validation of @body if true
 	attr_accessor :skip_body_validation
 
 	# User which is updating the exchange, required for closing exchanges
@@ -45,7 +45,7 @@ class Exchange < ActiveRecord::Base
 		# Validate and handle closing of discussions
 		if exchange.closed_changed?
 			if !exchange.closed? && (!exchange.updated_by || !exchange.closeable_by?(exchange.updated_by))
-				exchange.errors.add(:closed, "can't be changed!") 
+				exchange.errors.add(:closed, "can't be changed!")
 			elsif exchange.closed?
 				exchange.closer = exchange.updated_by
 			else
@@ -53,7 +53,7 @@ class Exchange < ActiveRecord::Base
 			end
 		end
 	end
-	
+
 	after_update do |exchange|
 		# Update the first post if @body has been changed
 		if exchange.body && !exchange.body.empty? && exchange.body != exchange.posts.first.body
@@ -66,6 +66,14 @@ class Exchange < ActiveRecord::Base
 		if exchange.body && !exchange.body.empty?
 			exchange.posts.create(:user => exchange.poster, :body => exchange.body)
 		end
+	end
+
+	searchable do
+		text    :title
+		string  :type
+		integer :poster_id, :last_poster_id, :category_id
+		boolean :trusted, :closed, :sticky
+		time    :created_at, :updated_at
 	end
 
 	define_index do
@@ -109,8 +117,8 @@ class Exchange < ActiveRecord::Base
 			search_options = {
 				#:sort_mode  => :expr,
 				#:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
-				:sort_mode  => :desc, 
-				:order      => :last_post_at, 
+				:sort_mode  => :desc,
+				:order      => :last_post_at,
 				:per_page   => DISCUSSIONS_PER_PAGE,
 				:page       => page,
 				:include    => [:poster, :last_poster, :category],
@@ -120,15 +128,15 @@ class Exchange < ActiveRecord::Base
 			search_options[:with] = {:trusted => false} unless options[:trusted]
 			exchanges = Discussion.search(options[:query], search_options)
 			Pagination.apply(
-				exchanges, 
+				exchanges,
 				Pagination::Paginater.new(
-					:total_count => exchanges.total_entries, 
-					:page        => page, 
+					:total_count => exchanges.total_entries,
+					:page        => page,
 					:per_page    => DISCUSSIONS_PER_PAGE
 				)
 			)
 		end
-		
+
 		# Find paginated exchanges, sorted by activity, with the sticky ones on top
 		#
 		# === Parameters
@@ -151,10 +159,10 @@ class Exchange < ActiveRecord::Base
 				:page        => options[:page]  || 1
 			) do |pagination|
 				Discussion.find(
-					:all, 
-					:conditions => conditions, 
-					:limit      => pagination.limit, 
-					:offset     => pagination.offset, 
+					:all,
+					:conditions => conditions,
+					:limit      => pagination.limit,
+					:offset     => pagination.offset,
 					:order      => 'sticky DESC, last_post_at DESC',
 					:include    => [:poster, :last_poster, :category]
 				)
@@ -169,7 +177,7 @@ class Exchange < ActiveRecord::Base
 			end
 			return safe_params
 		end
-		
+
 		# Counts total discussion for a user
 		def count_for(user)
 			if user && user.trusted?
@@ -180,7 +188,7 @@ class Exchange < ActiveRecord::Base
 		end
 
 	end
-	
+
 	# Finds paginated posts. See <tt>Post.find_paginated</tt> for more info.
 	def paginated_posts(options={})
 		Post.find_paginated({:discussion => self}.merge(options))
@@ -188,8 +196,8 @@ class Exchange < ActiveRecord::Base
 
 	# Finds posts created since offset
 	def posts_since_index(offset)
-		Post.find(:all, 
-			:conditions => ['discussion_id = ?', self.id], 
+		Post.find(:all,
+			:conditions => ['discussion_id = ?', self.id],
 			:order      => 'created_at ASC',
 			:limit      => 200,
 			:offset     => offset.to_i,
@@ -201,7 +209,7 @@ class Exchange < ActiveRecord::Base
 	def last_page(per_page=Post::POSTS_PER_PAGE)
 		(self.posts_count.to_f/per_page).ceil
 	end
-	
+
 	# Detects and fixes discrepancies in the counter cache
 	def fix_counter_cache!
 		if posts_count != posts.count
@@ -233,11 +241,11 @@ class Exchange < ActiveRecord::Base
 		slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
 		(self.class.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
 	end
-	
+
 	if ENV['RAILS_ENV'] == 'test'
 		def posts_count
 			self.posts.count
-		end 
+		end
 	end
-	
+
 end
