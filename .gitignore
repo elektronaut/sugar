@@ -1,6 +1,7 @@
 .DS_Store
 .bundle
 log/*.log
+log/*.lck
 log/*.pid
 tmp/**/*
 tmp/*
@@ -14,6 +15,7 @@ config/database.yml
 config/newrelic.yml
 db/schema.rb
 db/sphinx
+solr/*
 public/cache
 public/system
 public/doodles
