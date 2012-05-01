@@ -20,11 +20,7 @@
 
 <div id="userinfo">
 	<p class="avatar_and_name clearfix">
-		<% if @user.avatar_url? %>
-			<%= image_tag @user.avatar_url, :alt => @user.username, :size => '32x32', :class => :avatar %>
-		<% else %>
-			<%= image_tag gravatar_url(@user.email, :size => 32), :alt => @user.username, :size => '32x32', :class => :avatar %>
-		<% end %>
+		<%= avatar_image_tag @user, '32', :class => :avatar %>
 		<%= profile_link(@user, @user.username, :class => 'username') %>
 		<% if @user.realname? || @user.location? %>
 			<br />

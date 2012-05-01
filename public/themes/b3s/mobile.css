@@ -107,6 +107,10 @@ body[orient="landscape"] #header h1.page_title {
 	/*-webkit-box-shadow: #888 0px 4px 4px;*/
 
 	padding: 5px;
+	display: none;
+}
+#navigation.active {
+	display: block;
 }
 #navigation .search {
 	border-top: 1px solid #D0BBBB;
