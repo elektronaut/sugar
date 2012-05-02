@@ -10,6 +10,8 @@ development:
     hostname: localhost
     port: 8982
     log_level: INFO
+    min_memory: 128M
+    max_memory: 2G
 
 test:
   solr:

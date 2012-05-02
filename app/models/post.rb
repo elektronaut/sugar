@@ -33,18 +33,12 @@ class Post < ActiveRecord::Base
 		text :username do
 			user.username
 		end
-		integer :user_id, :discussion_id
-		time    :created_at, :updated_at
-		boolean :trusted, :conversation
-	end
-
-	define_index do
-		indexes body
-		indexes user(:username), :as => :username
-		has     user_id, discussion_id
-		has     created_at, updated_at
-		has     trusted, conversation
-		set_property :delta => :delayed
+		integer :user_id
+		integer :discussion_id
+		time    :created_at
+		time    :updated_at
+		boolean :trusted
+		boolean :conversation
 	end
 
 	class << self
@@ -71,21 +65,24 @@ class Post < ActiveRecord::Base
 		def search_paginated(options={})
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
-			search_options = {
-				:order      => :created_at,
-				:sort_mode  => :desc,
-				:per_page   => POSTS_PER_PAGE,
-				:page       => page,
-				:include    => [:user, :discussion],
-				:match_mode => :extended2,
-				:star       => true
-			}
-			search_options[:with] = {}
-			search_options[:with][:trusted] = false unless options[:trusted]
-			search_options[:with][:conversation] = options[:conversation] || false
-			search_options[:with][:discussion_id] = options[:discussion_id] if options[:discussion_id]
-			posts = Post.search(options[:query], search_options)
-			Pagination.apply(posts, Pagination::Paginater.new(:total_count => posts.total_entries, :page => page, :per_page => POSTS_PER_PAGE))
+
+			search = self.search do
+				fulltext options[:query]
+				with     :trusted, false unless options[:trusted]
+				with     :conversation, (options[:conversation] || false)
+				with     :discussion_id, options[:discussion_id] if options[:discussion_id]
+				order_by :created_at, :desc
+				paginate :page => page, :per_page => POSTS_PER_PAGE
+			end
+
+			Pagination.apply(
+				search.results,
+				Pagination::Paginater.new(
+					:total_count => search.total,
+					:page        => page,
+					:per_page    => POSTS_PER_PAGE
+				)
+			)
 		end
 	end
 

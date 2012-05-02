@@ -71,21 +71,15 @@ class Exchange < ActiveRecord::Base
 	searchable do
 		text    :title
 		string  :type
-		integer :poster_id, :last_poster_id, :category_id
-		boolean :trusted, :closed, :sticky
-		time    :created_at, :updated_at
-	end
-
-	define_index do
-		indexes title
-		has     type
-		has     poster_id, last_poster_id, category_id
-		has     trusted
-		has     closed
-		has     sticky
-		has     created_at, updated_at, last_post_at, posts_count
-		set_property :delta => :delayed
-		set_property :field_weights => {:title => 2}
+		integer :poster_id
+		integer :last_poster_id
+		integer :category_id
+		boolean :trusted
+		boolean :closed
+		boolean :sticky
+		time    :created_at
+		time    :updated_at
+		time    :last_post_at
 	end
 
 	class << self
@@ -111,26 +105,17 @@ class Exchange < ActiveRecord::Base
 			page  = (options[:page] || 1).to_i
 			page = 1 if page < 1
 
-			#max_posts_count = Discussion.find(:first, :order => 'posts_count DESC').posts_count
-			#first_post_date = Post.find(:first, :order => 'created_at ASC').created_at
+			search = self.search do
+				fulltext options[:query]
+				with     :trusted, false unless options[:trusted]
+				order_by :last_post_at, :desc
+				paginate :page => page, :per_page => DISCUSSIONS_PER_PAGE
+			end
 
-			search_options = {
-				#:sort_mode  => :expr,
-				#:sort_by    => "@weight + (posts_count / #{max_posts_count}) * (1 - ((now() - last_post_at) / (now() - #{first_post_date.to_i})))",
-				:sort_mode  => :desc,
-				:order      => :last_post_at,
-				:per_page   => DISCUSSIONS_PER_PAGE,
-				:page       => page,
-				:include    => [:poster, :last_poster, :category],
-				:match_mode => :extended2,
-				:star       => true
-			}
-			search_options[:with] = {:trusted => false} unless options[:trusted]
-			exchanges = Discussion.search(options[:query], search_options)
 			Pagination.apply(
-				exchanges,
+				search.results,
 				Pagination::Paginater.new(
-					:total_count => exchanges.total_entries,
+					:total_count => search.total,
 					:page        => page,
 					:per_page    => DISCUSSIONS_PER_PAGE
 				)
