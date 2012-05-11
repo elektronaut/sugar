@@ -1,15 +1,17 @@
 class ConvertMessages < ActiveRecord::Migration
 	def self.up
-		ThinkingSphinx.deltas_enabled = false
-		
+		if const_defined?('ThinkingSphinx')
+			ThinkingSphinx.deltas_enabled = false
+		end
+
 		partners = Message.find_by_sql("SELECT DISTINCT sender_id, recipient_id FROM messages")
 		partners = partners.map{|m| [m.sender_id, m.recipient_id].sort}.uniq
 		partners = partners.map{|p| p.map{|i| User.find(i)}}
-		
+
 		partners.each do |user1, user2|
 			puts "#{user1.username} -> #{user2.username}"
 			messages = Message.find(
-				:all, 
+				:all,
 				:conditions => ['(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)', user1.id, user2.id, user2.id, user1.id],
 				:order      => 'created_at ASC',
 				:include    => [:sender, :recipient]

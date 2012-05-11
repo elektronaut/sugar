@@ -94,7 +94,7 @@ class Exchange < ActiveRecord::Base
 			@@work_safe_urls ||= false
 		end
 
-		# Searches exchanges (with Sphinx)
+		# Searches exchanges
 		#
 		# === Parameters
 		# * :query    - The query string

@@ -42,8 +42,6 @@ gem 'sunspot_rails'
 gem 'progress_bar'
 
 #gem 'delayed_job', '2.1.4'
-#gem 'thinking-sphinx', '2.0.7'
-#gem 'ts-delayed-delta', '1.1.2', :require => 'thinking_sphinx/deltas/delayed_delta'
 
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'

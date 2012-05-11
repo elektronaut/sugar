@@ -32,9 +32,7 @@ Things you *WON'T* find in Sugar:
 
 Sugar is written for Ruby on Rails 3.1, and is Ruby 1.9 ready.
 
-First, make sure you have Sphinx (http://www.sphinxsearch.com) installed. 
-
-You'll also need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choise.
+You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choise.
 
 Finally, install Bundler (if you haven't) and use it to install the rest of the required gems:
 

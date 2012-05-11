@@ -11,7 +11,7 @@ require File.join(File.dirname(__FILE__), 'pagination/instance_methods')
 #
 #   class Discussion
 #     has_many :posts
-# 
+#
 #     # Finds paginated posts
 #     def paginated_posts(options={})
 #       Pagination.paginate(
@@ -30,10 +30,10 @@ require File.join(File.dirname(__FILE__), 'pagination/instance_methods')
 #     end
 #   end
 #
-# You can now load paginated posts by doing: 
+# You can now load paginated posts by doing:
 #   @posts = @discussion.paginated_posts(:page => params[:page])
 #
-# The posts array will have Pagination::InstanceMethods mixed in, which 
+# The posts array will have Pagination::InstanceMethods mixed in, which
 # means you can do:
 #
 #   @posts.total_count      # => 156
@@ -45,7 +45,7 @@ require File.join(File.dirname(__FILE__), 'pagination/instance_methods')
 #
 # === Wrapping incompatible pagination
 #
-# Some plugins (ie. thinking-sphinx) provide their own pagination. 
+# Some plugins provide their own pagination.
 # You can create a Paginater object and manually apply this to the collection
 # in order to reuse your pagination view code:
 #
@@ -63,7 +63,7 @@ module Pagination
 			collection = yield(paginater)
 			self.apply(collection, paginater)
 		end
-		
+
 		# Applies a paginater to a collection.
 		def apply(collection, paginater)
 			class << collection; include Pagination::InstanceMethods; end

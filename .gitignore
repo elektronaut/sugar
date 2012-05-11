@@ -10,12 +10,10 @@ doc/plugins
 doc/app
 config/deploy.rb
 config/session_key
-config/*.sphinx.conf
 config/database.yml
 config/newrelic.yml
 config/sunspot.yml
 db/schema.rb
-db/sphinx
 solr/*
 public/cache
 public/system
