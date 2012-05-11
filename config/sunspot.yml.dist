@@ -4,6 +4,7 @@ production:
     port: 8080
     log_level: WARNING
     path: /solr
+  auto_commit_after_request: false
 
 development:
   solr:
