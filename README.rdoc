@@ -42,7 +42,7 @@ Finally, install Bundler (if you haven't) and use it to install the rest of the 
 
 == Installation
 
-Copy database.yml.init to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
+Copy database.yml.dist to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
 
  sudo rake db:create
  sudo rake db:migrate
