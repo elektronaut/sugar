@@ -9,9 +9,7 @@
 (function ($S) {
 
 	$($S).bind('ready', function () {
-		if (this.Configuration.hotkeys) {
-			this.Hotkeys.apply();
-		}
+		this.Hotkeys.apply();
 	});
 
 	$S.Hotkeys = {

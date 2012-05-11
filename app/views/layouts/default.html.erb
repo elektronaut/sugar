@@ -20,7 +20,6 @@
 	<script>
 		<%= "Sugar.Configuration.debug              = true;" if Rails.env == 'development' %>
 		<%= "Sugar.Configuration.FlickrAPI          = '#{Sugar.config(:flickr_api)}';" if Sugar.config(:flickr_api) %>
-		<%= "Sugar.Configuration.hotkeys            = true;" if @current_user && @current_user.keyboard_navigation? %>
 		<%= "Sugar.Configuration.workSafe           = true;" if @current_user && @current_user.work_safe_urls? %>
 		<%= "Sugar.Configuration.FacebookAppId      = '#{Sugar.config(:facebook_app_id)}';" if Sugar.config(:facebook_app_id) %>
 		<%= "Sugar.Configuration.AmazonAssociatesId = '#{Sugar.config(:amazon_associates_id)}';" if Sugar.config(:amazon_associates_id) %>
