@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'spork'
+require 'sunspot/rails/spec_helper'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -24,6 +25,14 @@ Spork.prefork do
 
 		# Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
 		#config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+		# Stub Sunspot
+		config.before(:each) do
+			::Sunspot.session = ::Sunspot::Rails::StubSessionProxy.new(::Sunspot.session)
+		end
+		config.after(:each) do
+			::Sunspot.session = ::Sunspot.session.original_session
+		end
 
 		# Use FactoryGirl shorthand
 		config.include FactoryGirl::Syntax::Methods
