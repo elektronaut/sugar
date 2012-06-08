@@ -291,6 +291,7 @@ class UsersController < ApplicationController
 					user = User.find_by_username(params[:username])
 					if user && user.valid_password?(params[:password])
 						@current_user = user
+						user.hash_password!(params[:password]) if user.password_needs_rehash?
 						store_session_authentication
 						redirect_to discussions_url and return
 					end

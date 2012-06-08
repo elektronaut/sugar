@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
 
 	# Virtual attributes for clear text passwords
 	attr_accessor :password, :confirm_password
-	attr_accessor :password_changed
 
 	has_many   :discussions, :foreign_key => 'poster_id'
 	has_many   :closed_discussions, :foreign_key => 'closer_id'
@@ -53,12 +52,7 @@ class User < ActiveRecord::Base
 		# Has the password been changed?
 		if user.password && !user.password.blank?
 			if user.password == user.confirm_password
-				new_hashed_password = User.hash_string( user.password )
-				# Has the password changed?
-				if new_hashed_password != user.hashed_password
-					user.hashed_password = new_hashed_password
-					user.password_changed = true
-				end
+				user.hashed_password = User.encrypt_password(user.password)
 			else
 				user.errors.add(:password, "must be confirmed")
 			end
@@ -130,9 +124,9 @@ class User < ActiveRecord::Base
 			User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true, true])
 		end
 
-		# Hash a string for password usage.
-		def hash_string( string )
-			Digest::SHA1.hexdigest( string )
+		# Creates an encrypted password
+		def encrypt_password(password)
+			BCrypt::Password.create(password)
 		end
 
 		# Deletes attributes which normal users shouldn't be able to touch from a param hash.
@@ -284,7 +278,22 @@ class User < ActiveRecord::Base
 
 	# Is the password valid?
 	def valid_password?(pass)
-		(self.class.hash_string(pass) == self.hashed_password) ? true : false
+		if self.hashed_password.length <= 40
+			# Legacy SHA1
+			Digest::SHA1.hexdigest(pass) == self.hashed_password
+		else
+			BCrypt::Password.new(self.hashed_password) == pass
+		end
+	end
+
+	# Update the password hash
+	def hash_password!(password)
+		self.update_attribute(:hashed_password, User.encrypt_password(password))
+	end
+
+	# Does the password need rehashing?
+	def password_needs_rehash?
+		self.hashed_password.length <= 40
 	end
 
 	# Is the user online?

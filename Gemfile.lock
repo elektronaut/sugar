@@ -42,6 +42,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.7)
     arel (2.2.3)
+    bcrypt-ruby (3.0.1)
     builder (3.0.0)
     capistrano (2.12.0)
       highline
@@ -231,6 +232,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt-ruby
   capistrano
   capybara
   coffee-script
