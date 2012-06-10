@@ -130,10 +130,6 @@ $.extend(Sugar, {
     });
   },
 
-  addToReply: function () {
-    jQuery('#compose-body').val(jQuery('#compose-body').val());
-  },
-
   compose: function (options) {
     options = $.extend({}, options);
     if (window.replyTabs) {
