@@ -34,31 +34,6 @@ $.extend(window.Sugar.Initializers, {
     });
   },
 
-  spoilerTags : function () {
-    var apply = function () {
-      $('.spoiler').each(function () {
-        var container = this;
-        if (!container.spoilerApplied) {
-          if ($(container).find('.innerSpoiler').length < 1) {
-            $(container).wrapInner('<span class="innerSpoiler"></span>');
-          }
-          if ($(container).find('.spoilerLabel').length < 1) {
-            $(container).prepend('<span class="spoilerLabel">Spoiler!</span> ');
-          }
-          $(container).find('.innerSpoiler').css('visibility', 'hidden');
-          $(container).hover(function () {
-            $(container).find('.innerSpoiler').css('visibility', 'visible');
-          }, function () {
-            $(container).find('.innerSpoiler').css('visibility', 'hidden');
-          });
-          container.spoilerApplied = true;
-        }
-      });
-    };
-    $(Sugar).bind('postsloaded', apply);
-    apply();
-  },
-
   layout : function () {
     // Adjust min-width of #content to always contain table.discussions
     $('table.discussions').each(function () {
