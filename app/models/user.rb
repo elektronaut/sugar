@@ -217,22 +217,25 @@ class User < ActiveRecord::Base
       :per_page    => options[:limit] || Post::POSTS_PER_PAGE,
       :page        => options[:page] || 1
     ) do |pagination|
-      Post.find(
-        :all,
-        :conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false],
-        :limit      => pagination.limit,
-        :offset     => pagination.offset,
-        :order      => 'created_at DESC',
-        :include    => [:user, :discussion]
-      )
+      (
+        options[:trusted] ?
+        Post.where('user_id = ? AND conversation = ?', self.id, false) :
+        Post.where('user_id = ? AND conversation = ? AND trusted = ?', self.id, false, false)
+      ).
+        limit(pagination.limit).offset(pagination.offset).
+        order('created_at DESC').includes(:user, :discussion)
     end
   end
 
   # Marks a discussion as viewed
   def mark_discussion_viewed(discussion, post, index)
     if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-      discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
+      if discussion_view.post_index < index
+        post = post.last unless post.kind_of?(Post)
+        discussion_view.update_attributes(:post_index => index, :post_id => post.id)
+      end
     else
+      post = post.last unless post.kind_of?(Post)
       DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
     end
   end
@@ -375,6 +378,10 @@ class User < ActiveRecord::Base
     new_number = (self.available_invites + number)
     self.update_attribute(:available_invites, new_number)
     self.invites
+  end
+
+  def posts?
+    self.posts_count > 0
   end
 
   # Get account status

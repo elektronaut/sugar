@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
   POSTS_PER_PAGE  = 50
 
   belongs_to :user, :counter_cache => true
-  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => true, :foreign_key => 'discussion_id'
+  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => true, :foreign_key => 'discussion_id', :touch => true
   has_many   :discussion_views
 
   validates_presence_of :body, :user_id, :discussion_id
@@ -51,14 +51,9 @@ class Post < ActiveRecord::Base
         :page        => options[:page] || 1,
         :context     => options[:context] || 0
       ) do |pagination|
-        Post.find(
-          :all,
-          :conditions => ['discussion_id = ?', discussion.id],
-          :limit      => pagination.limit,
-          :offset     => pagination.offset,
-          :order      => 'created_at ASC',
-          :include    => [:user]
-        )
+        Post.where("discussion_id = ?", discussion.id).
+          limit(pagination.limit).offset(pagination.offset).
+          order('created_at ASC').includes(:user)
       end
     end
 

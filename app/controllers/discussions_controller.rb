@@ -158,7 +158,11 @@ class DiscussionsController < ApplicationController
       )
       # Mark discussion as viewed
       if @current_user
-        @current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset + @posts.length))
+        @current_user.mark_discussion_viewed(
+          @discussion,
+          @posts,
+          [(@posts.offset + @posts.per_page), @discussion.posts_count].min
+        )
       end
       if @discussion.kind_of?(Conversation)
         @section = :conversations
