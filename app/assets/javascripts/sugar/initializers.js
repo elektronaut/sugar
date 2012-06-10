@@ -1,39 +1,5 @@
 $.extend(window.Sugar.Initializers, {
 
-  inviteParticipants : function () {
-    $('#invite_participant_form').each(function () {
-      var form = this;
-      var inputField = $(this).find('.username').get(0);
-
-      $(inputField).autocomplete([], {autoFill: true, width: 200}).focus(function () {
-        if (!inputField.usernames) {
-          inputField.usernames = [];
-          $.getJSON('/users.json', function (results) {
-            for (var a = 0; a < results.length; a += 1) {
-              inputField.usernames[inputField.usernames.length] = results[a].user.username;
-            }
-            $(inputField).setOptions({data: inputField.usernames});
-          });
-          $(inputField).setOptions({data: inputField.usernames});
-        }
-      });
-
-      $(this).submit(function () {
-        var data = {
-          username:           $(inputField).val(),
-          authenticity_token: Sugar.authToken(form)
-        };
-        $('#sidebar .participants ul').fadeTo('fast', 0.8);
-        $.post(form.action, data, function (response) {
-          $('#sidebar .participants').html(response);
-          $('#sidebar .participants ul').fadeTo(0, 0.8).fadeTo('fast', 1.0);
-        });
-        $(inputField).val('');
-        return false;
-      });
-    });
-  },
-
   layout : function () {
     // Adjust min-width of #content to always contain table.discussions
     $('table.discussions').each(function () {
