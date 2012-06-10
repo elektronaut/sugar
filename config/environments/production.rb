@@ -19,8 +19,8 @@ Sugar::Application.configure do
   # Specify the default JavaScript compressor
   config.assets.js_compressor  = :uglifier
 
-	# Generate digests for assets URLs.
-	config.assets.digest = true
+  # Generate digests for assets URLs.
+  config.assets.digest = true
 
   # Specifies the header that your server uses for sending files
   # (comment out if your front-end server doesn't support this)
@@ -57,6 +57,6 @@ Sugar::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-	# Store all page caches in a subfolder of public
-	config.action_controller.page_cache_directory = File.join(File.dirname(__FILE__), '../../public/cache')
+  # Store all page caches in a subfolder of public
+  config.action_controller.page_cache_directory = File.join(File.dirname(__FILE__), '../../public/cache')
 end

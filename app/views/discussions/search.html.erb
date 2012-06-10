@@ -1,10 +1,10 @@
 <% 
-	@page_title = "Title Search" 
-	add_body_class "search", "search_discussions"
+  @page_title = "Title Search" 
+  add_body_class "search", "search_discussions"
 %>
 
 <%= content_for :sidebar do %>
-	<%= render :partial => 'discussions/sidebar'%>
+  <%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
 <h2 class="section">Searching discussions for <em><%= @search_query %></em></h2>
@@ -12,7 +12,7 @@
 <%= render :partial => 'search/tips' %>
 
 <% if @discussions && @discussions.length > 0 %>
-	<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions, :pagination_params => {:q => @search_query}} %>
+  <%= render :partial => 'discussions/table', :locals => {:discussions => @discussions, :pagination_params => {:q => @search_query}} %>
 <% else %>
-	<p>No discussions were found.</p>
+  <p>No discussions were found.</p>
 <% end %>

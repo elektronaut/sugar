@@ -55,20 +55,20 @@ require File.join(File.dirname(__FILE__), 'pagination/instance_methods')
 
 
 module Pagination
-	class << self
-		# Applies pagination to the result set returned from the given block.
-		# See the <tt>Pagination</tt> module for usage examples.
-		def paginate(options, &block)
-			paginater = Pagination::Paginater.new(options)
-			collection = yield(paginater)
-			self.apply(collection, paginater)
-		end
+  class << self
+    # Applies pagination to the result set returned from the given block.
+    # See the <tt>Pagination</tt> module for usage examples.
+    def paginate(options, &block)
+      paginater = Pagination::Paginater.new(options)
+      collection = yield(paginater)
+      self.apply(collection, paginater)
+    end
 
-		# Applies a paginater to a collection.
-		def apply(collection, paginater)
-			class << collection; include Pagination::InstanceMethods; end
-			collection.paginater = paginater
-			collection
-		end
-	end
+    # Applies a paginater to a collection.
+    def apply(collection, paginater)
+      class << collection; include Pagination::InstanceMethods; end
+      collection.paginater = paginater
+      collection
+    end
+  end
 end

@@ -14,8 +14,8 @@ class CreateDiscussions < ActiveRecord::Migration
         add_index :discussions, :last_post_at, :name => 'last_post_at_index'
         add_index :discussions, :sticky, :name => 'sticky_index'
         add_index :discussions, :trusted, :name => 'trusted_index'
-		add_index :discussions, :delta, :name => 'delta_index'
-		add_index :discussions, [:sticky, :last_post_at]
+    add_index :discussions, :delta, :name => 'delta_index'
+    add_index :discussions, [:sticky, :last_post_at]
     end
 
     def self.down

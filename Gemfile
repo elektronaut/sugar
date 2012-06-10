@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 source 'http://gems.github.com'
 
 def mac?
-	RUBY_PLATFORM.downcase.include?('darwin')
+  RUBY_PLATFORM.downcase.include?('darwin')
 end
 
 gem 'rails', '3.1.3'
@@ -47,28 +47,28 @@ group :development do
 end
 
 group :test, :development do
-	gem 'sunspot_solr'
+  gem 'sunspot_solr'
 
-	# RSpec
-	gem 'rspec-rails'
-	gem 'shoulda-matchers'
-	gem 'capybara'
+  # RSpec
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
 
-	# FactoryGirl
-	gem 'factory_girl_rails'
+  # FactoryGirl
+  gem 'factory_girl_rails'
 
-	# Cucumber
-	gem 'cucumber-rails'
-	gem 'database_cleaner'
+  # Cucumber
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
 
-	# Spork
-	gem 'spork', '~> 0.9.0.rc'
+  # Spork
+  gem 'spork', '~> 0.9.0.rc'
 
-	# Guard
-	gem 'rb-fsevent' #if mac?
-	gem 'ruby_gntp' #if mac?
-	gem 'guard'
-	gem 'guard-spork'
-	gem 'guard-rspec'
-	gem 'guard-cucumber'
+  # Guard
+  gem 'rb-fsevent' #if mac?
+  gem 'ruby_gntp' #if mac?
+  gem 'guard'
+  gem 'guard-spork'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
 end

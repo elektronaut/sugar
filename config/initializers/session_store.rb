@@ -3,9 +3,9 @@
 # Be sure to restart your server when you modify this file.
 
 Sugar::Application.config.session_store(
-	:cookie_store, 
-	:key          => (Sugar.config(:session_key) rescue '_sugar_session'), 
-	:expire_after => 3.years
+  :cookie_store, 
+  :key          => (Sugar.config(:session_key) rescue '_sugar_session'), 
+  :expire_after => 3.years
 )
 
 # Use the database for sessions instead of the cookie-based default,

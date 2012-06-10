@@ -1,23 +1,23 @@
 <%
-	add_body_class "users"
-	@page_title = "Users"
+  add_body_class "users"
+  @page_title = "Users"
 %>
 
 <table class="list users_list">
-	<tr>
-		<th>Username</th>
-		<th>Last active</th>
-	</tr>
-	<% @users.each do |user| %><tr>
-		<td class="username">
-			<% if @online_users.include?(user) %>
-				<strong><%= profile_link(user) %></strong>
-			<% else %>
-				<%= profile_link(user) %>
-			<% end %>
-		</td>
-		<td class="last_active">
-			<%= (user.online?) ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative') %>
-		</td>
-	</tr><% end %>
+  <tr>
+    <th>Username</th>
+    <th>Last active</th>
+  </tr>
+  <% @users.each do |user| %><tr>
+    <td class="username">
+      <% if @online_users.include?(user) %>
+        <strong><%= profile_link(user) %></strong>
+      <% else %>
+        <%= profile_link(user) %>
+      <% end %>
+    </td>
+    <td class="last_active">
+      <%= (user.online?) ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, :class => 'relative') %>
+    </td>
+  </tr><% end %>
 </table>

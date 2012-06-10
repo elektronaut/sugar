@@ -41,7 +41,7 @@ Someday/fun:
 
 Keyboard shortcuts:
 
-	Global:
+  Global:
 x	g then d - All discussions
 x	g then f - Followed discussions
 x	g then F - Favourite discussions
@@ -51,18 +51,18 @@ x	g then i - Invites
 x	g then m - Messages
 x	Shift+j/k or n/p - Next/previous page
 
-	Discussions or conversations list:
+  Discussions or conversations list:
 x	j/k and n/p - Next/previous item
 x	o/enter - Open discussion (Hold shift to open in new tab)
 x	m/y - Mark as read
-	r - Refresh list
+  r - Refresh list
 x	c - New discussion
-	
-	Viewing posts and messages:
+  
+  Viewing posts and messages:
 x	j/k and n/p - Next/previous post
 x	c - Go to compose reply
 x	u - Go back to list
 
-	Viewing posts:
+  Viewing posts:
 x	q - Quote post
 x	r - Load new posts

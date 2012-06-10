@@ -1,13 +1,12 @@
 <% 
-	add_body_class "discussions all_discussions"
-	@page_title = "All Discussions" 
+  add_body_class "discussions all_discussions"
+  @page_title = "All Discussions" 
 %>
 
 <%= content_for :sidebar do %>
-	<%= render :partial => 'discussions/sidebar'%>
+  <%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
 <h2 class="section"><%= link_to "All discussions", discussions_path %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
-

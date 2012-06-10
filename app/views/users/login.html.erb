@@ -1,46 +1,46 @@
 <%
-	add_body_class "login"
-	@page_title = "Login"
+  add_body_class "login"
+  @page_title = "Login"
 %>
 
 <h2 class="section">
-	<%= link_to "Login", login_users_path %>
+  <%= link_to "Login", login_users_path %>
 </h2>
 
 <div id="login">
 
-	<%= form_tag(login_users_path, :class => 'form username_and_password') do %>
-		<fieldset>
-			<label>Username</label>
-			<%= text_field_tag 'username', '', :class => :text %>
-		</fieldset>
-		<fieldset>
-			<label>Password</label>
-			<%= password_field_tag 'password', '', :class => :text %>
-		</fieldset>
-		<fieldset>
-			<button type="submit">Sign in</button>
-			<%= link_to("<strong>Help!</strong> I forgot my password!".html_safe, password_reset_users_path, :class => 'password_reset') %>
-		</fieldset>
-		<p>
-			<button class="openid_toggle" type="button">Sign in with OpenID</button>
-		</p>
-	<% end %>
+  <%= form_tag(login_users_path, :class => 'form username_and_password') do %>
+    <fieldset>
+      <label>Username</label>
+      <%= text_field_tag 'username', '', :class => :text %>
+    </fieldset>
+    <fieldset>
+      <label>Password</label>
+      <%= password_field_tag 'password', '', :class => :text %>
+    </fieldset>
+    <fieldset>
+      <button type="submit">Sign in</button>
+      <%= link_to("<strong>Help!</strong> I forgot my password!".html_safe, password_reset_users_path, :class => 'password_reset') %>
+    </fieldset>
+    <p>
+      <button class="openid_toggle" type="button">Sign in with OpenID</button>
+    </p>
+  <% end %>
 
-	<%= form_tag(openid_path, :class => 'form openid') do %>
-		<fieldset>
-			<label>OpenID URL</label>
-			<%= text_field_tag 'openid_url', '', :class => :text %>
-		</fieldset>
-		<fieldset>
-			<button type="submit">Sign in</button>
-			<%= link_to_function "Login with username/password", '#', :class => 'username_and_password_toggle' %>
-		</fieldset>
-	<% end %>
+  <%= form_tag(openid_path, :class => 'form openid') do %>
+    <fieldset>
+      <label>OpenID URL</label>
+      <%= text_field_tag 'openid_url', '', :class => :text %>
+    </fieldset>
+    <fieldset>
+      <button type="submit">Sign in</button>
+      <%= link_to_function "Login with username/password", '#', :class => 'username_and_password_toggle' %>
+    </fieldset>
+  <% end %>
 
-	<% if Sugar.config(:facebook_app_id) -%>
-		<div class="facebook">
-			<%= link_to 'Login with Facebook', facebook_oauth_url(login_facebook_url), :class => 'fb_button' %>
-		</div>
-	<% end %>
+  <% if Sugar.config(:facebook_app_id) -%>
+    <div class="facebook">
+      <%= link_to 'Login with Facebook', facebook_oauth_url(login_facebook_url), :class => 'fb_button' %>
+    </div>
+  <% end %>
 </div>

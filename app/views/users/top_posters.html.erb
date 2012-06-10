@@ -1,10 +1,10 @@
 <% 
-	add_body_class "users"
-	@page_title = "Top Posters" 
+  add_body_class "users"
+  @page_title = "Top Posters" 
 %>
 
 <div class="functions">
-	<%= render :partial => 'users_functions' %>
+  <%= render :partial => 'users_functions' %>
 </div>
 
 
@@ -13,7 +13,7 @@
 <%= render :partial => 'list_navigation' %>
 
 <% if @users.length > 0 %>
-	<%= render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :last_active, :member_since, :posts_count, :posts_per_day, :status]} %>
+  <%= render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :last_active, :member_since, :posts_count, :posts_per_day, :status]} %>
 <% else %>
-	<p>No users are online.</p>
+  <p>No users are online.</p>
 <% end %>

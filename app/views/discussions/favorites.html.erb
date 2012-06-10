@@ -1,16 +1,15 @@
 <% 
-	add_body_class "discussions favorite_discussions"
-	@page_title = "Favorite Discussions" 
+  add_body_class "discussions favorite_discussions"
+  @page_title = "Favorite Discussions" 
 %>
 
 <%= content_for :sidebar do %>
-	<%= render :partial => 'discussions/sidebar'%>
+  <%= render :partial => 'discussions/sidebar'%>
 <% end %>
 
 <h2 class="section"><%= link_to "Favorite Discussions", favorites_discussions_path %></h2>
 
 <%= render :partial => 'discussions/table', :locals => {
-	:discussions    => @discussions,
-	:no_discussions => "You haven't marked any discussions as a favorite."
+  :discussions    => @discussions,
+  :no_discussions => "You haven't marked any discussions as a favorite."
 } %>
-

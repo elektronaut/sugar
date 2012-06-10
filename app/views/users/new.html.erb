@@ -1,69 +1,69 @@
 <%
-	add_body_class "signup"
-	@page_title = "Signup"
+  add_body_class "signup"
+  @page_title = "Signup"
 %>
 
 <h2 class="section">
-	<% if @current_user || Sugar.config(:public_browsing) -%>
-		<%= link_to "Users", users_path %> &raquo;
-	<% end -%>
-	<%= link_to @page_title, new_user_path %>
+  <% if @current_user || Sugar.config(:public_browsing) -%>
+    <%= link_to "Users", users_path %> &raquo;
+  <% end -%>
+  <%= link_to @page_title, new_user_path %>
 </h2>
 
 <% if @user.facebook? %>
 
-	<%= form_for @user do |f| %>
-		<% if @invite %>
-			<%= hidden_field_tag 'token', @invite.token %>
-		<% end %>
-		<% unless @user.errors[:email].blank? %>
-			<%= labelled_field f.text_field(:email, :size => 50), "Email address", :errors => @user.errors[:email] %>
-		<% else %>
-			<%= f.hidden_field :email %>
-		<% end %>
-		<%= f.hidden_field :realname %>
-		<%= f.hidden_field :facebook_uid %>
-		<%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
+  <%= form_for @user do |f| %>
+    <% if @invite %>
+      <%= hidden_field_tag 'token', @invite.token %>
+    <% end %>
+    <% unless @user.errors[:email].blank? %>
+      <%= labelled_field f.text_field(:email, :size => 50), "Email address", :errors => @user.errors[:email] %>
+    <% else %>
+      <%= f.hidden_field :email %>
+    <% end %>
+    <%= f.hidden_field :realname %>
+    <%= f.hidden_field :facebook_uid %>
+    <%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
 
-		<% if Sugar.config(:signup_approval_required) %>
-			<p>Your account will have to be approved. Please provide some information about your application:</p>
-			<%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
-		<% end %>
+    <% if Sugar.config(:signup_approval_required) %>
+      <p>Your account will have to be approved. Please provide some information about your application:</p>
+      <%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
+    <% end %>
 
-		<p><button type="submit">Sign up</button></p>
-	<% end %>
+    <p><button type="submit">Sign up</button></p>
+  <% end %>
 
 <% else %>
 
-	<ul id="signup-tabs" class="topTabs">
-		<li class="tab" id="regular-tab"><a href="#password">Username and password</a></li>
-		<% if Sugar.config(:facebook_app_id) %>
-			<li class="tab" id="facebook-tab"><a href="#facebook">Facebook</a></li>
-		<% end %>
-		<li class="tab" id="openid-tab"><a href="#openid">OpenID</a></li>
-	</ul>
+  <ul id="signup-tabs" class="topTabs">
+    <li class="tab" id="regular-tab"><a href="#password">Username and password</a></li>
+    <% if Sugar.config(:facebook_app_id) %>
+      <li class="tab" id="facebook-tab"><a href="#facebook">Facebook</a></li>
+    <% end %>
+    <li class="tab" id="openid-tab"><a href="#openid">OpenID</a></li>
+  </ul>
 
-	<%# Normal signup %>
-	<div id="password">
-		<%= form_for @user do |f| %>
-			<%= render :partial => 'signup_form', :locals => {:f => f} %>
-			<p><button type="submit">Sign up</button></p>
-		<% end %>
-	</div>
+  <%# Normal signup %>
+  <div id="password">
+    <%= form_for @user do |f| %>
+      <%= render :partial => 'signup_form', :locals => {:f => f} %>
+      <p><button type="submit">Sign up</button></p>
+    <% end %>
+  </div>
 
-	<%# Facebook signup %>
-	<% if Sugar.config(:facebook_app_id) %>
-		<div id="facebook">
-			<%= link_to 'Sign up with Facebook', facebook_oauth_url(signup_facebook_url), :class => 'fb_button' %>
-		</div>
-	<% end %>
+  <%# Facebook signup %>
+  <% if Sugar.config(:facebook_app_id) %>
+    <div id="facebook">
+      <%= link_to 'Sign up with Facebook', facebook_oauth_url(signup_facebook_url), :class => 'fb_button' %>
+    </div>
+  <% end %>
 
-	<%# OpenID signup %>
-	<div id="openid">
-		<%= form_for @user do |f| %>
-			<%= render :partial => 'signup_form', :locals => {:f => f, :mode => :openid} %>
-			<p><button type="submit">Sign up</button></p>
-		<% end %>
-	</div>
+  <%# OpenID signup %>
+  <div id="openid">
+    <%= form_for @user do |f| %>
+      <%= render :partial => 'signup_form', :locals => {:f => f, :mode => :openid} %>
+      <p><button type="submit">Sign up</button></p>
+    <% end %>
+  </div>
 
 <% end %>

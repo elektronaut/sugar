@@ -1,10 +1,9 @@
 <% 
-	add_body_class "discussions popular_discussions"
-	@page_title = "Popular Discussions" 
+  add_body_class "discussions popular_discussions"
+  @page_title = "Popular Discussions" 
 %>
 
 <%= render :partial => 'discussions/table', :locals => {
-	:discussions    => @discussions,
-	:no_discussions => "No discussions in the last #{@days} days!"
+  :discussions    => @discussions,
+  :no_discussions => "No discussions in the last #{@days} days!"
 } %>
-
