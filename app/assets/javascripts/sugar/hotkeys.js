@@ -174,7 +174,9 @@
         // Add targets on postsloaded
         $($S).bind('postsloaded', function () {
           $('.posts .post').each(function () {
-            $S.Hotkeys.addTarget(this, this.id.match(/(post|message)\-([\d]+)/)[1]);
+            if (this.id.match(/(post|message)\-([\d]+)/)) {
+              $S.Hotkeys.addTarget(this, this.id.match(/(post|message)\-([\d]+)/)[1]);
+            }
           });
         });
 

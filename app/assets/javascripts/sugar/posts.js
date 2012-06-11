@@ -5,9 +5,6 @@ $(Sugar).bind('ready', function () {
     return Sugar.parseSubmit(this);
   });
 
-  // Handle previewing
-  Sugar.applyPostPreview();
-
   Sugar.napkin();
 });
 
@@ -33,55 +30,6 @@ $.extend(Sugar, {
         });
       });
     }
-  },
-
-  applyPostPreview : function () {
-    $('#replyText .preview').click(function () {
-      Sugar.previewPost();
-      return false;
-    });
-  },
-
-  previewPost: function () {
-    var postBody   = $('#compose-body').val();
-    var previewUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview";
-
-    var statusField = $('#button-container');
-    var oldPostButton = statusField.html();
-    statusField.addClass('posting');
-    statusField.html('Previewing post..');
-
-    $('.posts #previewPost').fadeOut();
-
-    $.ajax({
-      url:  previewUrl,
-      type: 'POST',
-      data: {
-        'post[body]': postBody,
-        authenticity_token: Sugar.authToken("#replyText form")
-      },
-      success: function (previewPost) {
-        if ($('.posts #ajaxPosts').length < 1) {
-          $('.posts').append('<div id="ajaxPosts"></div>');
-        }
-        if ($('.posts #previewPost').length < 1) {
-          $('.posts').append('<div id="previewPost"></div>');
-          $('.posts #previewPost').hide();
-        }
-        $('.posts #previewPost').html(previewPost).fadeIn();
-      },
-      error: function (xhr, textStatus, errorThrown) {
-        alert(textStatus);
-      },
-      complete: function () {
-        statusField.each(function () {
-          $(this).removeClass('posting');
-          $(this).html(oldPostButton);
-          $(this).find('.preview span').text('Update Preview');
-          Sugar.applyPostPreview();
-        });
-      }
-    });
   },
 
   compose: function (options) {
@@ -214,7 +162,7 @@ $.extend(Sugar, {
           },
           success: function () {
             $('#compose-body').val('');
-            $('.posts #previewPost').hide();
+            $('.posts #previewPost').remove();
             Sugar.loadNewPosts();
           },
           error: function (xhr, textStatus, errorThrown) {
