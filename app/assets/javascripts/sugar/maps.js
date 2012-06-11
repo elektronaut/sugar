@@ -1,45 +1,10 @@
 (function ($S) {
 
   $($S).bind('ready', function () {
-    this.Maps.users('#usersMap');
     this.Maps.editProfile('#editProfileMap');
   });
 
   $S.Maps = {
-
-    // All users map
-    users: function (selector) {
-      $(selector).each(function () {
-        var defaultLocation = new google.maps.LatLng(30, -20);
-        var map = new google.maps.Map(this, {
-          center: defaultLocation,
-          zoom: 2,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        var usersAPIurl = '/users.json';
-        $.getJSON(usersAPIurl, function (json) {
-          $(json).each(function () {
-            var user = this.user;
-            if (user.latitude && user.longitude) {
-              var position = new google.maps.LatLng(user.latitude, user.longitude);
-              var marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                title: user.username
-              });
-              var contentString = "<strong>" + user.username + "</strong><br />" +
-                ((user.realname) ? user.realname + "<br />" : "") +
-                "<a href=\"/users/profile/" + user.username + "\">View profile</a>";
-              var infowindow = new google.maps.InfoWindow({content: contentString});
-              google.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
-              });
-            }
-          });
-        });
-
-      });
-    },
 
     // Edit profile map
     editProfile: function (selector) {

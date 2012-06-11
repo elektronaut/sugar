@@ -1,18 +1,50 @@
-$.extend(Sugar.Initializers, {
-  applySubmitMagic: function () {
-    $("#replyText form").submit(function () {
-      return Sugar.parseSubmit(this);
-    });
+$(Sugar).bind('ready', function () {
+  // Handle new posts
+  if ($('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0) {
+    Sugar.updateNewPostsCounter();
+  }
+
+  // Handle posting
+  $("#replyText form").submit(function () {
+    return Sugar.parseSubmit(this);
+  });
+
+  // Handle previewing
+  Sugar.applyPostPreview();
+
+  Sugar.napkin();
+});
+
+$.extend(Sugar, {
+
+  napkin : function () {
+    if ($('#napkin').length > 0) {
+      // Setup callbacks
+      window.uploadDrawing = function () {
+        $('#napkin-submit').text("Posting, please wait...");
+        swfobject.getObjectById("napkin").uploadDrawing();
+      };
+      window.onDrawingUploaded = function (url) {
+        window.location.reload();
+      };
+
+      // Make napkins clickable
+      $('.drawing img').each(function () {
+        $(this).click(function () {
+          if (swfobject.getObjectById("napkin")) {
+            swfobject.getObjectById("napkin").setBackground(this.src);
+          }
+        });
+      });
+    }
   },
-  applyPostPreview: function () {
+
+  applyPostPreview : function () {
     $('#replyText .preview').click(function () {
       Sugar.previewPost();
       return false;
     });
-  }
-});
-
-$.extend(Sugar, {
+  },
 
   updateNewPostsCounter : function () {
     var newPosts = $('#newPosts').get()[0];
@@ -124,7 +156,7 @@ $.extend(Sugar, {
           $(this).removeClass('posting');
           $(this).html(oldPostButton);
           $(this).find('.preview span').text('Update Preview');
-          Sugar.Initializers.applyPostPreview();
+          Sugar.applyPostPreview();
         });
       }
     });

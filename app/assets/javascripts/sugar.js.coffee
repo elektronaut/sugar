@@ -1,7 +1,6 @@
 $.extend window.Sugar,
 
   Configuration: {}
-  Initializers: {}
 
   stopwords: [
     'i', 'a', 'about', 'an', 'and', 'are', 'as', 'at', 'by', 'for', 'from', 'has', 'have',
@@ -26,6 +25,4 @@ $.extend window.Sugar,
       $("input[name='authenticity_token']").val()
 
   init: ->
-    for own name, initializer of this.Initializers
-      initializer()
     this.Application = new Sugar.Views.Application()
