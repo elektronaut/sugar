@@ -1,8 +1,4 @@
 $(Sugar).bind('ready', function () {
-  // Handle new posts
-  if ($('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0) {
-    Sugar.updateNewPostsCounter();
-  }
 
   // Handle posting
   $("#replyText form").submit(function () {
@@ -44,80 +40,6 @@ $.extend(Sugar, {
       Sugar.previewPost();
       return false;
     });
-  },
-
-  updateNewPostsCounter : function () {
-    var newPosts = $('#newPosts').get()[0];
-    newPosts.postsCount = parseInt($('.total_items_count').eq(0).text(), 10);
-    if (!newPosts.originalCount) {
-      newPosts.originalCount = newPosts.postsCount;
-    }
-    newPosts.postsCountUrl = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js";
-    newPosts.documentTitle = document.title;
-
-    newPosts.refreshInterval = setInterval(function () {
-      if (!Sugar.loadingPosts) {
-        $.getJSON(newPosts.postsCountUrl, function (json) {
-          if (json.posts_count > newPosts.postsCount && !Sugar.loadingPosts) {
-            var newPostsSinceRefresh = json.posts_count - newPosts.postsCount;
-            $('.total_items_count').text(json.posts_count);
-            var newPostsString = "A new post has";
-            if (newPostsSinceRefresh === 1) {
-              document.title = "[" + newPostsSinceRefresh + " new post] " + newPosts.documentTitle;
-            } else {
-              newPostsString = newPostsSinceRefresh + " new posts have";
-              document.title = "[" + newPostsSinceRefresh + " new posts] " + newPosts.documentTitle;
-            }
-            if ($('body.last_page').length > 0) {
-              $(newPosts).html('<p>' + newPostsString + ' been made since this page was loaded, <a href="' + $('#discussionLink').get()[0].href + '" onclick="Sugar.loadNewPosts(); return false;">click here to load</a>.</p>');
-            } else {
-              $(newPosts).html('<p>' + newPostsString + ' been made since this page was loaded, move on to the last page to see them.</p>');
-            }
-            newPosts.serverPostsCount = json.posts_count;
-            if (!newPosts.shown) {
-              $(newPosts).addClass('new_posts_since_refresh').hide().slideDown();
-              newPosts.shown = true;
-            }
-          }
-        });
-      }
-    }, 5000);
-  },
-
-  loadNewPosts : function () {
-    if ($('#discussionLink').length > 0) {
-      var newPosts    = $('#newPosts').get()[0];
-      var newPostsURL = $('#discussionLink').get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/since/" + newPosts.postsCount;
-
-      Sugar.loadingPosts = true;
-      $(newPosts).html('Loading&hellip;');
-      $(newPosts).addClass('new_posts_since_refresh');
-
-      $.get(newPostsURL, function (data) {
-        $(newPosts).hide();
-
-        if ($('.posts #ajaxPosts').length < 1) {
-          $('.posts').append('<div id="ajaxPosts"></div>');
-        }
-
-        $('.posts #ajaxPosts').append(data);
-        $('.posts #ajaxPosts .post:not(.shown)').hide().slideDown().addClass('shown');
-
-        // Reset the notifier
-        document.title = newPosts.documentTitle;
-        newPosts.serverPostsCount = newPosts.originalCount + $('.posts #ajaxPosts').children('.post').size();
-        newPosts.postsCount = newPosts.serverPostsCount;
-        newPosts.shown = false;
-
-        $('.shown_items_count').text(newPosts.postsCount);
-        $('.total_items_count').text(newPosts.postsCount);
-
-        Sugar.loadingPosts = false;
-
-        $(Sugar).trigger('postsloaded');
-      });
-    }
-    return false;
   },
 
   previewPost: function () {
