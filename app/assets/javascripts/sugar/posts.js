@@ -51,22 +51,19 @@ $.extend(Sugar, {
   // If there are any images, parseSubmit() will attempt to load them and update the post body
   // with proper width/height attributes.
   parseSubmit : function (submitForm) {
-    var statusField = $('#button-container');
-    $('#button-container').each(function () {
-      if (!this.originalButton) {
-        this.originalButton = $(this).html();
-      }
-    });
-    var oldPostButton = statusField.html();
+    var postBody = $('#compose-body').val();
 
-    statusField.addClass('posting');
+    // Abort if the post is empty
+    if (postBody.replace(/\s+/, '') == '') {
+      return false;
+    }
 
     if ($.browser.msie) {
-      statusField.html('Posting..');
+      // Don't do anything fancy in IE, just submit the post
+      // without AJAX.
+      $(Sugar).trigger('posting-status', ['Posting&hellip;']);
     } else {
-      statusField.html('Validating post..');
-
-      var postBody = $('#compose-body').val();
+      $(Sugar).trigger('posting-status', ['Validating post&hellip;']);
 
       // Auto-link URLs
       postBody = postBody.replace(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/gi, "$1<a href=\"$2\">$2</a>");
@@ -105,7 +102,7 @@ $.extend(Sugar, {
         postNotifier.cycles = 0;
         postNotifier.loadInterval = setInterval(function () {
           postNotifier.cycles += 1;
-          statusField.html('Loading image ' + loadedImages.length + ' of ' + postImages.length + '..');
+          $(Sugar).trigger('posting-status', ['Loading image ' + loadedImages.length + ' of ' + postImages.length + '&hellip;']);
 
           // Load failed
           if (postNotifier.cycles >= 80) {
@@ -116,11 +113,9 @@ $.extend(Sugar, {
                 $(this).attr('width', this.width);
               });
               $('#compose-body').val(postNotifier.html());
-              statusField.html('Saving post...');
               Sugar.submitPost();
             } else {
-              statusField.html(oldPostButton);
-              statusField.removeClass('posting');
+              $(Sugar).trigger('posting-complete');
             }
           }
 
@@ -132,7 +127,6 @@ $.extend(Sugar, {
             });
             $('#compose-body').val(postNotifier.html());
             clearInterval(postNotifier.loadInterval);
-            statusField.html('Saving post...');
             Sugar.submitPost();
           }
         }, 100);
@@ -148,9 +142,7 @@ $.extend(Sugar, {
   submitPost : function () {
     $("#replyText form").each(function () {
       var submitForm = this;
-      var statusField = $('#button-container');
-      statusField.addClass('posting');
-      statusField.html('Posting, please wait..');
+      $(Sugar).trigger('posting-status', ['Posting, please wait&hellip;']);
       if ($(submitForm).hasClass('livePost')) {
         var postBody = $('#compose-body').val();
         $.ajax({
@@ -178,10 +170,7 @@ $.extend(Sugar, {
             }
           },
           complete: function () {
-            statusField.each(function () {
-              $(this).removeClass('posting');
-              $(this).html(this.originalButton);
-            });
+            $(Sugar).trigger('posting-complete');
           }
         });
       } else {

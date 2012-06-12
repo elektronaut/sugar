@@ -6,11 +6,8 @@ $(Sugar).bind 'ready', ->
 
     post_body      = $("#compose-body").val()
     preview_url    = $("#discussionLink").get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview"
-    status_field   = $("#button-container")
-    original_post_buttons ||= status_field.html()
 
-    status_field.addClass "posting"
-    status_field.html "Previewing post.."
+    $(Sugar).trigger 'posting-status', ['Loading preview&hellip;']
 
     $(".posts #previewPost").animate opacity: 0.1, 'fast'
     $.ajax
@@ -42,12 +39,7 @@ $(Sugar).bind 'ready', ->
         alert textStatus
 
       complete: ->
-        status_field.each ->
-          $(this).removeClass "posting"
-          $(this).html original_post_buttons
-          $(this).find(".preview span").text "Update Preview"
-          $('#replyText .preview').click ->
-            previewPost()
+        $(Sugar).trigger 'posting-complete'
 
   $('#replyText .preview').click ->
     previewPost()

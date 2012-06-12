@@ -56,6 +56,7 @@
       <%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
         <p><%= f.text_area(:body, :rows => 10, :cols => 80, :id => 'compose-body', :class => 'rich') %></p>
         <p id="button-container">
+          <span class="status"></span>
           <button type="submit">Post</button>
           <button type="button" class="preview">Preview</button>
         </p>
