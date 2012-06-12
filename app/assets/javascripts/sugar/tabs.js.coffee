@@ -36,3 +36,4 @@ Sugar.Tabs = (controls, options) ->
   controls.showTab controls.tabs[0]  if not tabShown and settings.showFirstTab
   @controls = controls
   @tabs = @controls.tabs
+  this

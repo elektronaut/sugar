@@ -1,5 +1,25 @@
 $(Sugar).bind 'ready', ->
 
+  relative_time = (timeString) ->
+    parsedDate = Date.parse(timeString)
+    delta = (Date.parse(Date()) - parsedDate) / 1000
+    r = ""
+    if delta < 60
+      r = "a moment ago"
+    else if delta < 120
+      r = "a couple of minutes ago"
+    else if delta < (45 * 60)
+      r = (parseInt(delta / 60, 10)).toString() + " minutes ago"
+    else if delta < (90 * 60)
+      r = "an hour ago"
+    else if delta < (24 * 60 * 60)
+      r = "" + (parseInt(delta / 3600, 10)).toString() + " hours ago"
+    else if delta < (48 * 60 * 60)
+      r = "a day ago"
+    else
+      r = (parseInt(delta / 86400, 10)).toString() + " days ago"
+    r
+
   # Show latest tweets
   $("#profileTweets").each ->
     tweetsDiv = this
@@ -23,7 +43,7 @@ $(Sugar).bind 'ready', ->
                                 "<p class=\"text\">" + linkified_text +
                                 " <a href=\"http://twitter.com/" + username +
                                 "/statuses/" + @id + "\" class=\"time\">" +
-                                relativeTime(@created_at) + "</a>" +
+                                relative_time(@created_at) + "</a>" +
                                 "</p>" + "</div>"
 
   # Show latest photos from Flickr
