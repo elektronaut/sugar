@@ -25,8 +25,6 @@ role :db,  "addsugar.me", :primary => true
 # via the :deploy_to variable:
 #set :deploy_to, "/var/www/#{application}"
 
-#set :flush_cache, true
-
 desc "Create shared directories"
 task :create_shared_dirs, :roles => [:web,:app] do
   run "mkdir #{deploy_to}/#{shared_dir}/cache"
