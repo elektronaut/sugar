@@ -19,7 +19,7 @@
     <% end %>
   <% end %>
 
-  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user-id="<%= post.user.id %>">
+  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user_id="<%= post.user.id %>" data-discussion_id="<%= post.discussion_id %>">
 
     <% if title %>
       <div class="title">
@@ -36,14 +36,9 @@
     <% end %>
 
     <% if functions %>
-    <div class="post_functions">
-      <% if post.editable_by?(@current_user) %>
-        <%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post', :id => "editPost-#{post.id}" %> |
-      <% end %>
-      <% if @current_user %>
-        <%= link_to_function 'Quote', "return(false);", :class => 'quote_post', :id => "quotePost-#{post.id}" %>
-      <% end %>
-    </div>
+      <div class="post_functions">
+        <%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post' %>
+      </div>
     <% end %>
 
     <% if post.me_post? %>
