@@ -36,9 +36,7 @@
     <% end %>
 
     <% if functions %>
-      <div class="post_functions">
-        <%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post), :class => 'edit_post' %>
-      </div>
+      <div class="post_functions"></div>
     <% end %>
 
     <% if post.me_post? %>
