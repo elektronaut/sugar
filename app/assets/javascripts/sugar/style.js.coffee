@@ -26,15 +26,15 @@ $(Sugar).bind 'ready', ->
 
   # Tabs on posting form
   $('#reply-tabs').each ->
-    window.replyTabs = new SugarTabs this, showFirstTab: false
+    window.replyTabs = new Sugar.Tabs this, showFirstTab: false
     if $('body.last_page').length > 0
       window.replyTabs.controls.showTab window.replyTabs.tabs[0]
 
   # Tabs on signup
   $('#signup-tabs').each ->
-    new SugarTabs this, showFirstTab: true
+    new Sugar.Tabs this, showFirstTab: true
 
   # Tabs on admin configuration
   $('.admin.configuration .tabs').each ->
-    new SugarTabs this, showFirstTab: true
+    new Sugar.Tabs this, showFirstTab: true
 

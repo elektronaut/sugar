@@ -35,61 +35,6 @@ window.relativeTime = function (timeString) {
   return r;
 };
 
-/* Dead simple tabs */
-function SugarTabs(controls, options) {
-  controls.tabs = [];
-
-  var settings = jQuery.extend({
-    showFirstTab: true
-  }, options);
-
-  controls.hideAllTabs = function () {
-    jQuery(this.tabs).each(function () {
-      jQuery(this.tabId).hide();
-      jQuery(this.parentNode).removeClass('active');
-    });
-  };
-
-  controls.showTab = function (tab) {
-    this.hideAllTabs();
-    jQuery(tab.tabId).show();
-    jQuery(tab.parentNode).addClass('active');
-  };
-
-  // Set up the links
-  jQuery(controls).find('a').each(function () {
-    this.container = controls;
-    this.tabId = this.href.match(/(#[\w\d\-_]+)$/)[1];
-    controls.tabs.push(this);
-    jQuery(this).click(function () {
-      this.container.showTab(this);
-      return false;
-    });
-  });
-
-  controls.hideAllTabs();
-
-  var anchorTab = false;
-  var tabShown  = false;
-  if (document.location.toString().match(/(#[\w\d\-_]+)$/)) {
-    anchorTab = document.location.toString().match(/(#[\w\d\-_]+)$/)[1];
-    for (var a = 0; a < controls.tabs.length; a += 1) {
-      if (controls.tabs[a].tabId === anchorTab) {
-        controls.showTab(controls.tabs[a]);
-        tabShown = true;
-      }
-    }
-  }
-
-  if (!tabShown && settings.showFirstTab) {
-    controls.showTab(controls.tabs[0]);
-  }
-
-  // Delegates
-  this.controls = controls;
-  this.tabs = this.controls.tabs;
-}
-
 /* Rich text editing */
 function JRichTextArea(textArea, options) {
   this.textArea = textArea;
