@@ -9,7 +9,7 @@
 
 //= require backbone/sugar
 //= require sugar
-//= require sugar/amazon_associates
+//= require sugar/posts/amazon_associates
 //= require sugar/timestamps
 
 function toggleNavigation() {
