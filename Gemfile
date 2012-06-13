@@ -5,7 +5,7 @@ def mac?
   RUBY_PLATFORM.downcase.include?('darwin')
 end
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.1.6'
 gem "bcrypt-ruby", :require => "bcrypt"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
