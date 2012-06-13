@@ -13,10 +13,10 @@ class Sugar.Views.Post extends Backbone.View
 
   modelFromExistingElement: ->
     new Sugar.Models.Post({
-      id: this.el.id.match(/([\d]+)$/)[1],
-      'user_id': $(this.el).data('user_id'),
-      'discussion_id': $(this.el).data('discussion_id'),
-      body: this.fromHtml(this.$('.body .content').html())
+      id:            this.el.id.match(/([\d]+)$/)[1],
+      user_id:       $(this.el).data('user_id'),
+      discussion_id: $(this.el).data('discussion_id'),
+      body:          this.fromHtml(this.$('.body .content').html())
     })
 
   fromHtml: (body) ->
@@ -33,10 +33,8 @@ class Sugar.Views.Post extends Backbone.View
         if view.model.editableBy(currentUser)
           links.push '<a href="#" class="edit_post">Edit</a>'
         links.push '<a href="#" class="quote_post">Quote</a>'
-
       $(this).html(links.join(' | '))
-
-    return this
+    this
 
   edit: (event) ->
     event.preventDefault();

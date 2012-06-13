@@ -1,25 +1,25 @@
 class Sugar.PostDetector
   @paused      = false
-  @endpoint    = null
+  @model       = null
   @interval    = null
   @total_posts = null
   @read_posts  = null
 
   @refresh: ->
-    unless @endpoint
-      @endpoint = $('#discussionLink').get()[0].href
-      @endpoint = @endpoint.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/count.js"
-
     unless @paused
       post_detector = this
-      $.getJSON @endpoint, (json) ->
+      $.getJSON @model.postsCountUrl(), (json) ->
         new_posts = json.posts_count - post_detector.total_posts
         if new_posts > 0
           post_detector.total_posts = json.posts_count
           $(Sugar).trigger('newposts', [post_detector.total_posts, new_posts, (post_detector.total_posts - post_detector.read_posts)])
 
-  @start: ->
-    @read_posts  ||= parseInt($('.total_items_count').eq(0).text(), 10)
+  @start: (container) ->
+    @paused = false
+    @model = new Sugar.Models.Discussion
+      id:          $(container).data('id')
+      posts_count: $(container).data('posts-count')
+    @read_posts  ||= @model.get('posts_count')
     @total_posts ||= @read_posts
     unless @interval
       @interval = setInterval ->
@@ -27,6 +27,7 @@ class Sugar.PostDetector
       , 5000
 
   @stop: ->
+    @paused = true
     clearInterval @interval
     @interval = null
 
@@ -71,8 +72,8 @@ Sugar.loadNewPosts = ->
 $(Sugar).bind 'ready', ->
 
   # Start the post detector
-  if $('.total_items_count').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0
-    Sugar.PostDetector.start()
+  if $('$discussion').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0
+    Sugar.PostDetector.start($('#discussion').get(0))
 
   # -- Window title --
 

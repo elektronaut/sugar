@@ -31,7 +31,9 @@
   <%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
 </h2>
 
-<%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true, :new_posts_notifier => true} %>
+<div id="discussion" data-id="<%= @discussion.id %>" data-posts-count="<%= @discussion.posts_count %>">
+  <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true, :new_posts_notifier => true} %>
+</div>
 
 <a name="bottom"></a>
 <div class="bottomlinks">
