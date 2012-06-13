@@ -55,7 +55,7 @@ Sugar.Hotkeys =
     110: "."
     111: "/"
 
-	# Apply functionality
+  # Apply functionality
   apply: ->
     if $("table.discussions").length > 0
       @setup.discussionsNavigation()
@@ -122,7 +122,7 @@ Sugar.Hotkeys =
 
   setup:
 
-  	# Global hotkeys
+    # Global hotkeys
     global: ->
       gotoPrevPage = (event) ->
         document.location = $(".prev_page_link").get(0).href  if not event.metaKey and $(".prev_page_link").length > 0
@@ -165,7 +165,7 @@ Sugar.Hotkeys =
 
     # Navigating posts
     postsNavigation: ->
-    	# Find targets
+      # Find targets
       $(".posts .post").each ->
         Sugar.Hotkeys.addTarget this, @id.match(/(post|message)\-([\d]+)/)[2]
 
@@ -201,7 +201,7 @@ Sugar.Hotkeys =
 
     # Post functions
     postsFunctions: ->
-    	# Load new posts
+      # Load new posts
       $(document).bind "keydown", "r", (event) ->
         Sugar.loadNewPosts()  unless event.metaKey
 
@@ -245,7 +245,7 @@ Sugar.Hotkeys =
 
     # Discussion functions
     discussionsFunctions: ->
-    	# Open target
+      # Open target
       openTarget = (openInNewTab) ->
         if Sugar.Hotkeys.currentTarget
           targetUrl = Sugar.Hotkeys.currentTarget.href

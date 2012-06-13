@@ -6,4 +6,3 @@ class Sugar.Views.Application extends Backbone.View
       this.view = new Sugar.Views.Posts({el: this})
 
     $(Sugar).trigger('ready')
-

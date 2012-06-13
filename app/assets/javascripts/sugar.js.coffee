@@ -39,4 +39,3 @@ $.extend window.Sugar,
       if options.add
         $(this).val $(this).val() + options.add
       $(this).focus()
-

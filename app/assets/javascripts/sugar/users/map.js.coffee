@@ -23,7 +23,7 @@ $(Sugar).bind 'ready', ->
             "<a href=\"/users/profile/" + user.username + "\">View profile</a>"
 
           infowindow = new google.maps.InfoWindow
-          	content: contentString
+            content: contentString
 
           google.maps.event.addListener marker, 'click', ->
             infowindow.open(map, marker);

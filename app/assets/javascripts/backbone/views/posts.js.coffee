@@ -11,5 +11,5 @@ class Sugar.Views.Posts extends Backbone.View
 
     # Render additional posts when loaded
     $(Sugar).bind 'postsloaded', (event, posts) ->
-    	posts.each ->
-	      view.postViews.push new Sugar.Views.Post({el: this}).render()
+      posts.each ->
+        view.postViews.push new Sugar.Views.Post({el: this}).render()

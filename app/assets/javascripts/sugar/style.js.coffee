@@ -2,7 +2,7 @@
 
 $(Sugar).bind 'ready modified', ->
 
-	# Wrap button content in a span
+  # Wrap button content in a span
   $('a.button, button').each ->
     if $(this).find('span').length == 0
         $(this).wrapInner('<span />')
@@ -37,4 +37,3 @@ $(Sugar).bind 'ready', ->
   # Tabs on admin configuration
   $('.admin.configuration .tabs').each ->
     new Sugar.Tabs this, showFirstTab: true
-

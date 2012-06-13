@@ -1,6 +1,6 @@
 $(Sugar).bind 'ready', ->
 
-	# Checkbox logic
+  # Checkbox logic
   $('.edit_user_profile').each ->
 
     checkTrusted = ->
