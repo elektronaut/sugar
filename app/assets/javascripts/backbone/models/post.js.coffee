@@ -20,8 +20,12 @@ class Sugar.Models.Post extends Backbone.Model
     else
       '/posts'
 
-  editUrl: ->
-    this.url() + '/edit'
+  editUrl: (options) ->
+    options ||= {}
+    if options.timestamp
+      this.url() + '/edit?' + new Date().getTime()
+    else
+      this.url() + '/edit'
 
 class Sugar.Collections.Posts extends Backbone.Collection
   model: Sugar.Models.Post
