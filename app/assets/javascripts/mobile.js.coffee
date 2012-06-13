@@ -32,14 +32,6 @@ resizeYoutube = ->
     @width = newWidth
     @height = newHeight
 
-checkWindowOrientation = ->
-  if window.innerWidth isnt currentWidth
-    currentWidth = window.innerWidth
-    currentHeight = window.innerHeight
-    orient = (if (currentWidth < currentHeight) then "profile" else "landscape")
-    document.body.setAttribute "orient", orient
-    resizeYoutube()
-
 # Hide images in posts by default
 hideImagesInPosts = ->
   $(".post .body img").each ->
@@ -75,10 +67,19 @@ window.quotePost = (postId) ->
     quotedPost = "<blockquote><cite>Posted by <a href=\"" + permalink + "\">" + username + "</a>:</cite>" + content + "</blockquote>"
     window.addToReply quotedPost
 
-currentWidth = 0
-currentHeight = 0
-setTimeout checkWindowOrientation, 0
-checkTimer = setInterval(checkWindowOrientation, 300)
+
+updateOrientation = ->
+  if window.orientation?
+    if window.orientation == 90 || window.orientation == -90
+      document.body.setAttribute "orient", "landscape"
+    else
+      document.body.setAttribute "orient", "portrait"
+    resizeYoutube()
+
+$(window).bind 'orientationchange', updateOrientation
+updateOrientation()
+
+
 $(document).ready ->
 
   hideImagesInPosts()
