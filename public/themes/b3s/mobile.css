@@ -29,20 +29,20 @@ strong {
 }
 
 body {
-    margin: 0;
-    font-family: Helvetica;
-    background: #FFFFFF;
-    color: #000000;
-    overflow-x: hidden;
-    -webkit-user-select: none;
-    -webkit-text-size-adjust: none;
+  margin: 0;
+  font-family: Helvetica;
+  background: #FFFFFF;
+  color: #000000;
+  overflow-x: hidden;
+  -webkit-user-select: none;
+  -webkit-text-size-adjust: none;
   font-size: 15px;
-    min-height: 415px;
+  min-height: 415px;
   line-height: 1.4;
 }
 
 body[orient="landscape"] {
-    min-height: 268px;
+  min-height: 268px;
 }
 
 #header {
@@ -69,15 +69,15 @@ body[orient="landscape"] {
   margin: 0 auto;
 }
 #header h1.page_title {
-    overflow: hidden;
+  overflow: hidden;
   padding-top: 11px;
-    padding-left: 55px;
-    width: 260px;
-    font-size: 17px;
-    font-weight: normal;
-    text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
-    white-space: nowrap;
-    color: #FFFFFF;
+  padding-left: 55px;
+  width: 260px;
+  font-size: 17px;
+  font-weight: normal;
+  text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
+  white-space: nowrap;
+  color: #FFFFFF;
 }
 body[orient="landscape"] #header h1.page_title {
     width: 420px;
@@ -188,7 +188,7 @@ input#openid_url, input#user_openid_url {
 }
 
 .login_box input#openid_url {
-  
+
 }
 
 .login_box label {
@@ -381,7 +381,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   font-size: 11px;
 }
 
-.post .functions { 
+.post .functions {
   float: right;
   font-size: 11px;
   padding-top: 5px;
@@ -392,19 +392,10 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 
 .posts .post .body {
-  max-width: 290px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: 700px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   clear: both;
-}
-body[orient="landscape"] .posts .post .body {
-  max-width: 450px;
-}
-.posts .post .body img {
-  max-width: 290px;
-}
-body[orient="landscape"] .posts .post .body img {
-  max-width: 450px;
 }
 
 .posts .post .body a, .posts .post .body a:visited {
@@ -416,11 +407,13 @@ body[orient="landscape"] .posts .post .body img {
   padding: 5px 15px;
 }
 .reply textarea {
-  width: 275px;
+  width: 98%;
+  max-width: 650px;
   height: 180px;
+  margin: 0 auto;
 }
 body[orient="landscape"] .reply textarea {
-  width: 435px;
+  /*width: 435px;*/
 }
 
 
@@ -494,15 +487,6 @@ blockquote cite {
 }
 
 
-
-.imageloader {
-  max-width: 290px;
-  height: 36px;
-  background: transparent url(images/mobile/imageloader.gif) no-repeat;
-}
-.imageloader img {
-  display: none;
-}
 
 .spoiler {
   border:              1px dotted #baa;

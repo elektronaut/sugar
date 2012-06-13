@@ -59,7 +59,6 @@ class ApplicationController < ActionController::Base
         session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
         request.format = :mobile if session[:mobile_format] == 'mobile'
       end
-      request.format = :mobile
     end
 
     # Sets @section to the current section.

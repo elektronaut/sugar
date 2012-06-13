@@ -18,41 +18,20 @@ window.toggleNavigation = ->
 
 resizeYoutube = ->
   $("embed[src*=\"youtube.com\"], iframe[src*=\"youtube.com\"], iframe[src*=\"vimeo.com\"]").each ->
-    @originalHeight = @height  unless @originalHeight
-    @originalWidth = @width  unless @originalWidth
-    maxWidth = window.innerWidth - 20
-    maxHeight = window.innerHeight - 20
-    maxWidth = @originalWidth  if maxWidth > @originalWidth
-    maxHeight = @originalHeight  if maxHeight > @originalHeight
-    newWidth = maxWidth
-    newHeight = Math.floor(@originalHeight * (newWidth / @originalWidth))
-    if newHeight > maxHeight
-      newHeight = maxHeight
-      newWidth = Math.floor(@originalWidth * (newHeight / @originalHeight))
-    @width = newWidth
-    @height = newHeight
+    maxWidth = $(this).closest('.body').width()
+    @proportions ||= $(this).width() / $(this).height()
+    @width = maxWidth
+    @height = maxWidth / @proportions
 
-# Hide images in posts by default
-hideImagesInPosts = ->
+resizeImages = ->
   $(".post .body img").each ->
-    @originalSrc = @src
-    @linkTarget = @src
-    @removeAttribute "height"
-    if @parentNode.tagName is "A"
-      @linkTarget = @parentNode.href
-      $(@parentNode).replaceWith this
-
-  $(".post .body img").wrap "<div class=\"imageloader\"></div>"
-  $(".post .body img").each ->
-    @parentNode.image = this
-    @parentNode.originalSrc = @src
-    @src = "/images/blank.gif"
-    $(this).click ->
-      window.location = @linkTarget
-
-  $(".post .body .imageloader").click ->
-    $(this).removeClass "imageloader"
-    @image.src = @image.originalSrc
+    maxWidth = $(this).parent().width()
+    @originalWidth ||= $(this).width()
+    @proportions ||= $(this).width() / $(this).height()
+    if @originalWidth > maxWidth
+      $(this).css
+        width: maxWidth + 'px'
+        height: (maxWidth / @proportions) + 'px'
 
 window.addToReply = (string) ->
   jQuery("#reply-body").val jQuery("#reply-body").val() + string
@@ -67,22 +46,27 @@ window.quotePost = (postId) ->
     quotedPost = "<blockquote><cite>Posted by <a href=\"" + permalink + "\">" + username + "</a>:</cite>" + content + "</blockquote>"
     window.addToReply quotedPost
 
-
-updateOrientation = ->
-  if window.orientation?
-    if window.orientation == 90 || window.orientation == -90
-      document.body.setAttribute "orient", "landscape"
-    else
-      document.body.setAttribute "orient", "portrait"
-    resizeYoutube()
-
-$(window).bind 'orientationchange', updateOrientation
-updateOrientation()
-
-
 $(document).ready ->
 
-  hideImagesInPosts()
+  updateLayout = ->
+    if window.orientation?
+      if window.orientation == 90 || window.orientation == -90
+        document.body.setAttribute "orient", "landscape"
+      else
+        document.body.setAttribute "orient", "portrait"
+    resizeYoutube()
+    resizeImages()
+
+  $(window).bind 'orientationchange', updateLayout
+  $(window).bind 'resize', updateLayout
+  updateLayout()
+
+  # Open images when clicked
+  $('.post .body img').click ->
+    document.location = this.src
+
+
+  #hideImagesInPosts()
 
   # Larger click targets on discussion overview
   $(".discussions .discussion h2 a").each ->
@@ -90,14 +74,7 @@ $(document).ready ->
     $(@parentNode.parentNode).click ->
       document.location = url
 
-  if document.location.toString().match(/\#/)
-    setTimeout (->
-      anchorName = document.location.toString().match(/\#([\w\d\-_]+)/)[1]
-      scrollPosition = $("#" + anchorName).offset().top
-      scrollTo 0, scrollPosition
-    ), 1000
-  else
-    # Scroll to top w/o location bar unless targeting an anchor
+  unless document.location.toString().match(/\#/)
     setTimeout scrollTo, 100, 0, 1
 
   jQuery("#search_mode").change ->
