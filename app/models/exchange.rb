@@ -13,7 +13,7 @@ require 'pagination'
 
 class Exchange < ActiveRecord::Base
 
-  set_table_name 'discussions'
+  self.table_name = 'discussions'
 
   # Default number of discussions per page
   DISCUSSIONS_PER_PAGE = 30

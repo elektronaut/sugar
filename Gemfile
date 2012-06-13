@@ -5,7 +5,7 @@ def mac?
   RUBY_PLATFORM.downcase.include?('darwin')
 end
 
-gem 'rails', '3.1.6'
+gem 'rails', '3.2.6'
 gem "bcrypt-ruby", :require => "bcrypt"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
@@ -14,7 +14,7 @@ gem 'mysql2'
 # Asset template engines
 gem 'json'
 gem 'sass-rails'
-gem 'coffee-script'
+gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
 
@@ -32,6 +32,8 @@ gem 'capistrano'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
+
+gem 'acts_as_list'
 
 gem 'hpricot', '0.8.4'
 gem 'daemon-spawn', '0.2.0'
