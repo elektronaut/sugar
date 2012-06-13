@@ -72,7 +72,7 @@ Sugar.loadNewPosts = ->
 $(Sugar).bind 'ready', ->
 
   # Start the post detector
-  if $('$discussion').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0
+  if $('#discussion').length > 0 && $('#newPosts').length > 0 && $('body.last_page').length > 0
     Sugar.PostDetector.start($('#discussion').get(0))
 
   # -- Window title --

@@ -7,14 +7,14 @@ class ApplicationController < ActionController::Base
   include Authentication
 
   layout 'default'
-  
+
   protect_from_forgery
 
   before_filter :set_time_zone
   before_filter :detect_mobile
   before_filter :set_section
   before_filter :set_theme
-  
+
   protected
 
     # Renders an error
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
       end
       render options
     end
-    
+
     # Finds DiscussionViews for the given discussion.
     def load_views_for(discussions)
       if @current_user && discussions && discussions.length > 0
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
     # Detects the mobile user agent string and sets request.format = :mobile
     def detect_mobile
       @mobile_user_agent = false
-      @mobile_user_agent ||= request.host =~ /^(iphone|m|mobile)\./ 
+      @mobile_user_agent ||= request.host =~ /^(iphone|m|mobile)\./
       @mobile_user_agent ||= request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android|IEMobile)/]
       if @mobile_user_agent
         session[:mobile_format] ||= 'mobile'
@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
         request.format = :mobile if session[:mobile_format] == 'mobile'
       end
     end
-    
+
     # Sets @section to the current section.
     def set_section
       case self.class.to_s
@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
         @section = :discussions
       end
     end
-    
+
     def set_theme
       respond_to do |format|
         format.mobile do
@@ -93,5 +93,5 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    
+
 end

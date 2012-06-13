@@ -12,7 +12,7 @@
 #= require sugar/posts/amazon_associates
 #= require sugar/timestamps
 
-toggleNavigation = ->
+window.toggleNavigation = ->
   $("#navigation").toggleClass "active"
   false
 
@@ -80,6 +80,8 @@ currentHeight = 0
 setTimeout checkWindowOrientation, 0
 checkTimer = setInterval(checkWindowOrientation, 300)
 $(document).ready ->
+
+  hideImagesInPosts()
 
   # Larger click targets on discussion overview
   $(".discussions .discussion h2 a").each ->
