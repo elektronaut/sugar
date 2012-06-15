@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'spork'
-require 'sunspot/rails/spec_helper'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -12,6 +11,7 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
+  require 'sunspot/rails/spec_helper'
 
   RSpec.configure do |config|
     # == Mock Framework

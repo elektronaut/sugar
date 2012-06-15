@@ -64,7 +64,7 @@ group :test, :development do
   gem 'database_cleaner'
 
   # Spork
-  gem 'spork', '~> 0.9.0.rc'
+  gem 'spork'
 
   # Guard
   gem 'rb-fsevent' #if mac?
