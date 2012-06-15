@@ -17,7 +17,7 @@ class Sugar.Models.Discussion extends Backbone.Model
     this.url() + '/edit'
 
   postsCountUrl: ->
-    this.url() + '/posts/count.js'
+    this.url() + '/posts/count.json'
 
 class Sugar.Collections.Discussions extends Backbone.Collection
   model: Sugar.Models.Discussion

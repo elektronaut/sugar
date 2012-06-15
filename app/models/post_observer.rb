@@ -5,7 +5,7 @@ class PostObserver < ActiveRecord::Observer
 
   def clean_cache_for(record)
     # Clean posts count cache
-    cache_file = Rails.root.join("public/cache/discussions/#{record.discussion_id}/posts/count.js")
+    cache_file = Rails.root.join("public/cache/discussions/#{record.discussion_id}/posts/count.json")
     if File.exists?(cache_file)
       File.unlink(cache_file)
     end

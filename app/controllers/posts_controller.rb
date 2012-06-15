@@ -30,7 +30,7 @@ class PostsController < ApplicationController
         redirect_to discussions_url and return
       end
     end
-    
+
     def verify_viewability
       unless @discussion && @discussion.viewable_by?(@current_user)
         flash[:notice] = "You don't have permission to view that discussion!"
@@ -58,8 +58,8 @@ class PostsController < ApplicationController
     def count
       @count = @discussion.posts_count
       respond_to do |format|
-        format.js do 
-          render :text => {:posts_count => @count}.to_json
+        format.json do
+          render :json => {:posts_count => @count}.to_json
         end
       end
     end
@@ -122,7 +122,7 @@ class PostsController < ApplicationController
         redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
       end
     end
-    
+
     def preview
       @post = @discussion.posts.new(params[:post])
       @post.user = @current_user
