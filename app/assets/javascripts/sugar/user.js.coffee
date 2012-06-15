@@ -10,6 +10,6 @@ Sugar.extend
 
   getCurrentUser: ->
     if this.Configuration.currentUser && !this._currentUser
-      this._currentUser = new Sugar.Models.User(this.Configuration.currentUser['user'])
+      this._currentUser = new Sugar.Models.User(this.Configuration.currentUser)
 
     return this._currentUser
