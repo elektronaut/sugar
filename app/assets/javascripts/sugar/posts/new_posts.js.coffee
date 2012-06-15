@@ -8,7 +8,7 @@ class Sugar.PostDetector
   @refresh: ->
     unless @paused
       post_detector = this
-      $.getJSON @model.postsCountUrl(), (json) ->
+      $.getJSON @model.postsCountUrl(timestamp: true), (json) ->
         new_posts = json.posts_count - post_detector.total_posts
         if new_posts > 0
           post_detector.total_posts = json.posts_count
