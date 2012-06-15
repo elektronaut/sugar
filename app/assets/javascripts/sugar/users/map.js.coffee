@@ -11,7 +11,7 @@ $(Sugar).bind 'ready', ->
 
     $.getJSON '/users.json', (json) ->
       $(json).each ->
-        user = this.user
+        user = this
         if user.latitude && user.longitude
           marker = new google.maps.Marker
             position: new google.maps.LatLng user.latitude, user.longitude
