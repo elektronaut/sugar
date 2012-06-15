@@ -20,6 +20,8 @@ class UsersController < ApplicationController
   before_filter :detect_admin_signup, :only => [:login, :new, :create]
   before_filter :detect_edit_page,    :only => [:edit, :update]
 
+  respond_to :html, :mobile, :xml, :json
+
   protected
 
     def load_user
@@ -51,20 +53,9 @@ class UsersController < ApplicationController
         :order => 'username ASC',
         :conditions => ['activated = ? AND banned = ?', true, false]
       )
-      respond_to do |format|
-        format.html {}
+      respond_with(@users) do |format|
         format.mobile {
           @online_users = @users.select{|u| u.online?}
-        }
-        format.json {
-          render :layout => false, :text => @users.to_json(
-            :only => [
-              :id, :username, :realname, :latitude, :longitude,
-              :last_active, :created_at, :description, :admin,
-              :moderator, :user_admin, :posts_count, :discussions_count,
-              :location, :gamertag, :avatar_url, :twitter, :flickr, :website
-            ]
-          )
         }
       end
     end
@@ -74,30 +65,37 @@ class UsersController < ApplicationController
         :order      => 'username ASC',
         :conditions => ['banned = ? OR banned_until > ?', true, Time.now]
       )
+      respond_with(@users)
     end
 
     def recently_joined
       @users = User.find_new
+      respond_with(@users)
     end
 
     def online
       @users = User.find_online
+      respond_with(@users)
     end
 
     def admins
       @users  = User.find_admins
+      respond_with(@users)
     end
 
     def xboxlive
       @users = XboxInfo.valid_users
+      respond_with(@users)
     end
 
     def social
       @users = User.find_social_users
+      respond_with(@users)
     end
 
     def top_posters
       @users = User.find_top_posters(:limit => 50)
+      respond_with(@users)
     end
 
     def map
@@ -108,10 +106,11 @@ class UsersController < ApplicationController
         flash[:notice] = "You need to be trusted to view this page!"
       end
       @users = User.find_trusted
+      respond_with(@users)
     end
 
     def show
-      respond_to do |format|
+      respond_with(@user) do |format|
         format.html do
           @posts = @user.paginated_posts(
             :page    => params[:page],
@@ -119,7 +118,6 @@ class UsersController < ApplicationController
             :limit   => 15
           )
         end
-        format.mobile {}
       end
     end
 

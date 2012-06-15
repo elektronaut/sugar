@@ -433,4 +433,28 @@ class User < ActiveRecord::Base
   def mobile_theme
     self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
   end
+
+  def as_json(options)
+    super({
+      :only => [
+        :id, :username, :realname, :latitude, :longitude, :inviter_id,
+        :last_active, :created_at, :description, :admin,
+        :moderator, :user_admin, :posts_count, :discussions_count,
+        :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
+        :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
+      ]
+    }.merge(options))
+  end
+
+  def to_xml(options)
+    super({
+      :only => [
+        :id, :username, :realname, :latitude, :longitude, :inviter_id,
+        :last_active, :created_at, :description, :admin,
+        :moderator, :user_admin, :posts_count, :discussions_count,
+        :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
+        :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
+      ]
+    }.merge(options))
+  end
 end
