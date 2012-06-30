@@ -46,39 +46,35 @@ module Sugar
   CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]
 
   class << self
-    attr_accessor :redis
+    attr_accessor :redis, :redis_prefix
 
     def redis
       @redis ||= Redis.new
     end
 
+    def redis_prefix
+      @redis_prefix ||= 'sugar'
+    end
+
     def load_config!
-      unless defined?(@@config)
-        @@config = DEFAULT_CONFIGURATION
-        Setting.find(:all).each do |setting|
-          key = setting.key.to_sym
-          value = setting.value
-          value = false if CONFIGURATION_BOOLEANS.include?(key) && value == '0'
-          value = true if CONFIGURATION_BOOLEANS.include?(key) && value == '1'
-          @@config[key] = value
-        end
+      @config = DEFAULT_CONFIGURATION
+      if saved_config = Sugar.redis.get("#{Sugar.redis_prefix}:configuration")
+        @config ||= @config.merge(JSON.parse(saved_config))
       end
     end
 
     def save_config!
-      @@config.each do |key, value|
-        Setting.set(key, value)
-      end
+      Sugar.redis.set("#{Sugar.redis_prefix}:configuration", @config.to_json)
     end
 
     def config(key=nil, value=nil)
-      load_config!
+      load_config! unless @config
       if key
         key = key.to_sym
-        @@config[key] = value if value != nil
-        @@config[key]
+        @config[key] = value if value != nil
+        @config[key]
       else
-        @@config
+        @config
       end
     end
 
@@ -102,7 +98,7 @@ module Sugar
           new_config[key] = value
         end
       end
-      @@config = new_config
+      @config = new_config
       save_config!
     end
   end
