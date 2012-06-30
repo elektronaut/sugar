@@ -46,6 +46,12 @@ module Sugar
   CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]
 
   class << self
+    attr_accessor :redis
+
+    def redis
+      @redis ||= Redis.new
+    end
+
     def load_config!
       unless defined?(@@config)
         @@config = DEFAULT_CONFIGURATION

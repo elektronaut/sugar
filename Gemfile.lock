@@ -105,6 +105,7 @@ GEM
       spork (>= 0.8.4)
     highline (1.6.12)
     hike (1.2.1)
+    hiredis (0.4.5)
     hpricot (0.8.4)
     i18n (0.6.0)
     journey (1.0.3)
@@ -176,6 +177,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
+    redis (3.0.1)
     rsolr (1.0.8)
       builder (>= 2.1.2)
     rspec (2.10.0)
@@ -191,6 +193,8 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.10.0)
+    rspec-redis_helper (0.1.2)
+      redis
     ruby_gntp (0.3.4)
     rubyzip (0.9.8)
     sass (3.1.19)
@@ -250,6 +254,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   guard-spork
+  hiredis (~> 0.4.5)
   hpricot (= 0.8.4)
   jquery-rails
   json
@@ -259,7 +264,9 @@ DEPENDENCIES
   rails (= 3.2.6)
   rails-backbone
   rb-fsevent
+  redis (~> 3.0.0.rc2)
   rspec-rails
+  rspec-redis_helper
   ruby-openid!
   ruby_gntp
   sass-rails

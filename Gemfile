@@ -10,6 +10,8 @@ gem "bcrypt-ruby", :require => "bcrypt"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
+gem "redis", "~> 3.0.0.rc2"
+gem "hiredis", "~> 0.4.5"
 
 # Asset template engines
 gem 'json'
@@ -53,6 +55,7 @@ group :test, :development do
 
   # RSpec
   gem 'rspec-rails'
+  gem 'rspec-redis_helper'
   gem 'shoulda-matchers'
   gem 'capybara'
 

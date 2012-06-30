@@ -34,6 +34,15 @@ Spork.prefork do
       ::Sunspot.session = ::Sunspot.session.original_session
     end
 
+    # Use Redis
+    config.include RSpec::RedisHelper, :redis => true
+    # Clean the Redis database around each run
+    config.around(:each, :redis => true) do |example|
+      with_clean_redis do
+        example.run
+      end
+    end
+
     # Use FactoryGirl shorthand
     config.include FactoryGirl::Syntax::Methods
 
