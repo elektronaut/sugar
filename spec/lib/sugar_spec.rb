@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe Sugar, :redis => true do
-  before do
-    # Reset Redis settings to default
-    Sugar.redis = redis
-    Sugar.redis_prefix = 'sugar'
-  end
+  # Reload config before each run
+  before { Sugar.load_config! }
 
   it "has access to redis" do
     Sugar.redis.should_not be_nil

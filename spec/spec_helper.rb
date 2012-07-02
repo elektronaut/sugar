@@ -36,9 +36,12 @@ Spork.prefork do
 
     # Use Redis
     config.include RSpec::RedisHelper, :redis => true
-    # Clean the Redis database around each run
+    # Clean the Redis database and reload the configuration
     config.around(:each, :redis => true) do |example|
       with_clean_redis do
+        # Reset Redis settings to default
+        Sugar.redis = redis
+        Sugar.redis_prefix = 'sugar'
         example.run
       end
     end
@@ -71,4 +74,5 @@ Spork.each_run do
     config.include LoginMacros, :type => :controller
     config.include Sugar::Exceptions
   end
+
 end

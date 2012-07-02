@@ -57,10 +57,11 @@ module Sugar
     end
 
     def load_config!
-      @config = DEFAULT_CONFIGURATION
+      @config = Hash[DEFAULT_CONFIGURATION]
       if saved_config = Sugar.redis.get("#{Sugar.redis_prefix}:configuration")
-        @config ||= @config.merge(JSON.parse(saved_config))
+        @config = @config.merge(JSON.parse(saved_config).symbolize_keys)
       end
+      @config
     end
 
     def save_config!
@@ -85,7 +86,7 @@ module Sugar
     end
 
     def update_configuration(config)
-      new_config = DEFAULT_CONFIGURATION
+      new_config = Hash[DEFAULT_CONFIGURATION]
       config_keys = config.keys.map{|k| k.to_sym}
       CONFIGURATION_BOOLEANS.each do |key|
         config[key] = false unless config_keys.include?(key)
