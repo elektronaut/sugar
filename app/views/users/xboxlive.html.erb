@@ -13,32 +13,15 @@
 
 <%= render :partial => 'list_navigation' %>
 
-<p>This page was updated <%= time_tag XboxInfo.last_updated, :class => 'relative' %>.</p>
-
 <table class="list users_list">
   <tr>
     <th></th>
     <th>Username</th>
     <th>Gamertag</th>
-    <th>Gamerscore</th>
-    <th>Reputation</th>
-    <th>Zone</th>
-    <th>Status</th>
-    <th>Info</th>
   </tr>
   <% @users.each do |user| %><tr>
-    <td class="xbox_tile"><%= image_tag(user.xbox_info.tile_url, :size => '24x24') if user.xbox_info.tile_url? %></td>
+    <td class="xbox_tile"><%= image_tag(user.gamertag_avatar_url, :size => '24x24') %></td>
     <td class="username"><%= profile_link(user) %></td>
-    <td class="xbox_gametag"><%= link_to user.gamertag, "http://live.xbox.com/member/"+user.gamertag.gsub(" ","+") %></td>
-    <td class="xbox_gamerscore"><%= user.xbox_info.gamerscore %></td>
-    <td class="xbox_gamerscore"><%= user.xbox_info.reputation.to_i %>%</td>
-    <td class="xbox_zone"><%= user.xbox_info.zone %></td>
-    <td class="xbox_status<%= " xbox_online" if user.xbox_info.online? %>"><%= ["Offline", "Away", "Online"][user.xbox_info.status] %>
-    </td>
-    <td class="xbox_info<%= " xbox_online" if user.xbox_info.online? %>">
-      <% if user.xbox_info.online? || user.xbox_info.info.to_s =~ /Last seen/ %>
-        <%= user.xbox_info.info %>
-      <% end %>
-    </td>
+    <td class="xbox_gamertag"><%= link_to user.gamertag, "http://live.xbox.com/en-us/Profile?Gamertag=" + CGI.escape(user.gamertag) %></td>
   </tr><% end %>
 </table>

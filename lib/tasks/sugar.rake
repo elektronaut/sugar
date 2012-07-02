@@ -45,14 +45,6 @@ namespace :sugar do
     File.unlink(maintenance_file) if File.exist?(maintenance_file)
   end
 
-  desc "Refresh Xbox Live"
-  task :refresh_xbox => :environment do
-    puts "Refreshing against Xbox API"
-    start_time = Time.now
-    XboxInfo.refresh!
-    puts "Refresh finished in " + (Time.now - start_time).to_s + " seconds"
-  end
-
   desc "Delete and reclaim expired invites"
   task :expire_invites => :environment do
     puts "Deleting expired invites"

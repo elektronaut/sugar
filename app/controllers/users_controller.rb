@@ -84,7 +84,7 @@ class UsersController < ApplicationController
     end
 
     def xboxlive
-      @users = XboxInfo.valid_users
+      @users = User.find_xbox_users
       respond_with(@users)
     end
 

@@ -17,7 +17,6 @@ Sugar aims for simplicity, and is first and foremost built for performance, espe
 * Google Reader/GMail style keyboard navigation
 * Syntax highlighting of code
 * Google Maps support
-* Xbox Live integration
 * Loads data from Twitter, Flickr, Last.fm
 * Custom stylesheets
 

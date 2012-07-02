@@ -39,8 +39,6 @@ class User < ActiveRecord::Base
   has_many   :conversation_relationships, :dependent => :destroy
   has_many   :conversations, :through => :conversation_relationships
 
-  has_one    :xbox_info, :dependent => :destroy
-
   # Automatically generate a password for Facebook and OpenID users
   before_validation(:on => :create) do |user|
     if (user.openid_url? || user.facebook?) && !user.hashed_password? && (!user.password || user.password.blank?)
@@ -100,6 +98,11 @@ class User < ActiveRecord::Base
       User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true])
     end
 
+    # Finds Xbox Live users
+    def find_xbox_users
+      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (gamertag IS NOT NULL AND gamertag != "")', true, false])
+    end
+
     # Finds Twitter users.
     def find_social_users
       User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND ((twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != ""))', true, false])
@@ -138,12 +141,6 @@ class User < ActiveRecord::Base
       return safe_params
     end
 
-    # Refreshes Xbox Live info for all users.
-    def refresh_xbox!(force=false)
-      self.find(:all, :conditions => ['activated = ?', true]).select{|u| u.gamertag?}.each do |u|
-        u.refresh_xbox! if force || !u.xbox_refreshed?
-      end
-    end
   end
 
   # Finds participated discussions.
@@ -432,6 +429,13 @@ class User < ActiveRecord::Base
   # Returns the chosen mobile theme or the default one
   def mobile_theme
     self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
+  end
+
+  # Avatar URL for Xbox Live
+  def gamertag_avatar_url
+    if self.gamertag?
+      "http://avatar.xboxlive.com/avatar/#{CGI.escape(self.gamertag)}/avatarpic-l.png"
+    end
   end
 
   def as_json(options)
