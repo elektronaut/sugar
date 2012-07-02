@@ -434,7 +434,7 @@ class User < ActiveRecord::Base
   # Avatar URL for Xbox Live
   def gamertag_avatar_url
     if self.gamertag?
-      "http://avatar.xboxlive.com/avatar/#{CGI.escape(self.gamertag)}/avatarpic-l.png"
+      "http://avatar.xboxlive.com/avatar/#{URI.escape(self.gamertag)}/avatarpic-l.png"
     end
   end
 

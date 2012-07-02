@@ -22,6 +22,6 @@
   <% @users.each do |user| %><tr>
     <td class="xbox_tile"><%= image_tag(user.gamertag_avatar_url, :size => '24x24') %></td>
     <td class="username"><%= profile_link(user) %></td>
-    <td class="xbox_gamertag"><%= link_to user.gamertag, "http://live.xbox.com/en-us/Profile?Gamertag=" + CGI.escape(user.gamertag) %></td>
+    <td class="xbox_gamertag"><%= link_to user.gamertag, "http://live.xbox.com/en-us/Profile?Gamertag=" + url_encode(user.gamertag) %></td>
   </tr><% end %>
 </table>
