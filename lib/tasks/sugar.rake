@@ -3,7 +3,7 @@
 namespace :sugar do
 
   desc "Generate new passwords for everyone and send welcome mail"
-  task :welcome => :environment do 
+  task :welcome => :environment do
     User.find_active.each do |user|
       user.generate_password!
       user.save
@@ -58,7 +58,7 @@ namespace :sugar do
     puts "Deleting expired invites"
     Invite.destroy_expired!
   end
-  
+
   desc "Routine maintenance"
   task :routine => [:expire_invites] do
   end
@@ -74,7 +74,7 @@ namespace :sugar do
       end
     end
   end
-  
+
   desc "Remove empty discussions"
   task :remove_empty_discussions => :environment do
     empty_discussions = Discussion.find(:all, :conditions => ['posts_count = 0'])
@@ -87,7 +87,7 @@ namespace :sugar do
     users.each{|u| u.fix_counter_cache!}
     categories.each{|c| c.fix_counter_cache!}
   end
-  
+
   desc "Converts Flickr usernames to user IDs"
   task :convert_flickr_usernames => :environment do
     require 'hpricot'
