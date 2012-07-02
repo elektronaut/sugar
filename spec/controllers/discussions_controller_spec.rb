@@ -2,10 +2,10 @@
 
 require 'spec_helper'
 
-describe DiscussionsController do
+describe DiscussionsController, :rspec => true do
 
   describe 'with public browsing off' do
-    before { Sugar.config(:public_browsing, false) }
+    before { Sugar.config(:public_browsing, false); Sugar.save_config! }
 
     it_requires_login_for :index, :search, :new, :create
     it_requires_login_for :favorites, :following
@@ -14,7 +14,7 @@ describe DiscussionsController do
   end
 
   describe 'with public browsing on' do
-    before { Sugar.config(:public_browsing, true) }
+    before { Sugar.config(:public_browsing, true); Sugar.save_config! }
 
     it_requires_login_for :new, :create, :favorites, :following
     it_requires_login_for :edit, :update, :follow, :unfollow, :favorite, :unfavorite

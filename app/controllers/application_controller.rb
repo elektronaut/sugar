@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :load_configuration
   before_filter :set_time_zone
   before_filter :detect_mobile
   before_filter :set_section
@@ -40,6 +41,11 @@ class ApplicationController < ActionController::Base
           :conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
         )
       end
+    end
+
+    # Load configuration
+    def load_configuration
+      Sugar.load_config!
     end
 
     # Set time zone for user
