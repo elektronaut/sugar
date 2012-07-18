@@ -2,13 +2,13 @@
 
 module Authentication
   module OpenID
-    
-    class << self
-      def included(base)
-        base.send(:before_filter, :load_openid_user)
-      end
+
+    extend ActiveSupport::Concern
+
+    included do
+      before_filter :load_openid_user
     end
-    
+
     protected
 
       # Tries to set @current_user based on session[:authenticated_openid_url]
@@ -17,11 +17,11 @@ module Authentication
           @current_user ||= User.find_by_openid_url(session[:authenticated_openid_url])
         end
       end
-    
+
       # Returns an OpenID consumer, creating it if necessary
       def openid_consumer
         require 'openid/store/filesystem'
-        @openid_consumer ||= ::OpenID::Consumer.new(session,      
+        @openid_consumer ||= ::OpenID::Consumer.new(session,
           ::OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
       end
 
@@ -31,13 +31,13 @@ module Authentication
         options[:fail]    ||= login_users_path
         session[:openid_redirect_success] = options[:success]
         session[:openid_redirect_fail]    = options[:fail]
-        
+
         begin
           response = openid_consumer.begin(identity_url)
         rescue ::OpenID::DiscoveryFailure
           response = false
         end
-        
+
         if response
           perform_openid_authentication(response, options)
           return true
@@ -55,6 +55,6 @@ module Authentication
         }.merge(options)
         redirect_to response.redirect_url(options[:base_url], options[:url], options[:immediate])
       end
-      
+
   end
 end

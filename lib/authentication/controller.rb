@@ -3,16 +3,13 @@
 module Authentication
   module Controller
 
+    extend  ActiveSupport::Concern
     include ActionView::Helpers::DateHelper
 
-    class << self
-
-      # Filters are automatically set up when the module is included in a controller.
-      def included(base)
-        base.send(:before_filter, :load_session_user)
-        base.send(:before_filter, :finalize_authentication)
-        base.send(:after_filter,  :store_session_authentication)
-      end
+    included do
+      before_filter :load_session_user
+      before_filter :finalize_authentication
+      after_filter  :store_session_authentication
     end
 
     protected
@@ -95,10 +92,13 @@ module Authentication
       # Finalizes authentication, checks that the @current_user is activated and not banned
       def finalize_authentication
         if @current_user
+          logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
           if !@current_user.activated? || @current_user.banned? || @current_user.temporary_banned?
             if @current_user.temporary_banned?
+              logging.info "Authorization failed, temporary ban"
               flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, @current_user.banned_until)}!"
             elsif @current_user.banned?
+              logging.info "Authorization failed, permanent ban"
               flash[:notice] = "You have been banned!"
             end
             @current_user = nil

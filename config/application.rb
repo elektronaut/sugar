@@ -40,7 +40,10 @@ module Sugar
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :drawing]
-    
+
+    # Tag log entries with uuid
+    config.log_tags = [:uuid]
+
     # Enable the asset pipeline
     config.assets.enabled = true
   end
