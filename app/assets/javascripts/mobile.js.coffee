@@ -23,15 +23,42 @@ resizeYoutube = ->
     @width = maxWidth
     @height = maxWidth / @proportions
 
+getImageSize = (img) ->
+  unless img.originalWidth
+    if $(img).attr('width')
+      img.originalWidth = parseInt($(img).attr('width'), 10)
+    else if $(img).width() > 0
+      img.originalWidth = $(img).width()
+
+  unless img.originalHeight
+    if $(img).attr('height')
+      img.originalHeight = parseInt($(img).attr('height'), 10)
+    else if $(img).height() > 0
+      img.originalHeight = $(img).height()
+
+  return (img.originalWidth && img.originalWidth > 0 && img.originalHeight && img.originalHeight > 0)
+
+resizeImage = (img) ->
+  maxWidth = $(document).width()
+  if $(img).parent().width() < maxWidth
+    maxWidth = $(img).parent().width()
+  img.proportions ||= img.originalWidth / img.originalHeight
+  if img.originalWidth > maxWidth
+    $(img).css
+      width:  maxWidth + 'px'
+      height: parseInt((maxWidth / img.proportions), 10) + 'px'
+
 resizeImages = ->
   $(".post .body img").each ->
-    maxWidth = $(this).parent().width()
-    @originalWidth ||= $(this).width()
-    @proportions ||= $(this).width() / $(this).height()
-    if @originalWidth > maxWidth
-      $(this).css
-        width: maxWidth + 'px'
-        height: (maxWidth / @proportions) + 'px'
+    img = this
+    if getImageSize(img)
+      resizeImage(img)
+    else
+      img.resizeInterval ||= setInterval ->
+        if getImageSize(img)
+          clearInterval(img.resizeInterval)
+          resizeImage(img)
+      , 500
 
 window.addToReply = (string) ->
   jQuery("#reply-body").val jQuery("#reply-body").val() + string
