@@ -73,6 +73,14 @@ window.quotePost = (postId) ->
     quotedPost = "<blockquote><cite>Posted by <a href=\"" + permalink + "\">" + username + "</a>:</cite>" + content + "</blockquote>"
     window.addToReply quotedPost
 
+parsePost = (body) ->
+  # Embed Instagram photos directly when a Share URL is pasted
+  body = body.replace(
+    /\b(https?:\/\/instagr\.am\/p\/[\w\d]+)\/?(\s|$)/g,
+    '<a href="\$1"><img width="612" height="612" src="\$1/media?size=l"></a>\$2'
+  )
+  return body
+
 $(document).ready ->
 
   updateLayout = ->
@@ -92,19 +100,18 @@ $(document).ready ->
   $('.post .body img').click ->
     document.location = this.src
 
-
-  #hideImagesInPosts()
-
   # Larger click targets on discussion overview
   $(".discussions .discussion h2 a").each ->
     url = @href
     $(@parentNode.parentNode).click ->
       document.location = url
 
+  # Scroll past the Safari chrome
   unless document.location.toString().match(/\#/)
     setTimeout scrollTo, 100, 0, 1
 
-  jQuery("#search_mode").change ->
+  # Search mode
+  $("#search_mode").change ->
     @parentNode.action = @value
 
   # Post quoting
@@ -112,6 +119,12 @@ $(document).ready ->
     postId = @id.match(/-([\d]+)$/)[1]
     window.quotePost postId
     false
+
+  # Posting
+  $('form.new_post').submit ->
+    $body = $(this).find('#reply-body')
+    $body.val(parsePost($body.val()))
+    true
 
   # Spoiler tags
   $(".spoiler").each ->
