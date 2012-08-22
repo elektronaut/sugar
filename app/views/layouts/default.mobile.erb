@@ -22,6 +22,11 @@
     <%= "Sugar.Configuration.AmazonAssociatesId = '#{Sugar.config(:amazon_associates_id)}';" if Sugar.config(:amazon_associates_id) %>
   </script>
 
+  <%# Embedded Tweets Renderer %>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <% end %>
+
   <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
   <% if @theme.mobile_icon? %>
     <link rel="<%= @theme.mobile_icon_precomposed? ? 'apple-touch-icon-precomposed' : 'apple-touch-icon'%>" href="<%= @theme.mobile_icon_path %>" />

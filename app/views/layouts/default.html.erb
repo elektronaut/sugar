@@ -33,7 +33,9 @@
   <% end %>
 
   <%# Embedded Tweets Renderer %>
-  <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <% end %>
 
   <%# Google Maps API %>
   <% if @google_maps_api %>
