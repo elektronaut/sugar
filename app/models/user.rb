@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
 
   validates_presence_of   :username
   validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
-  validates_format_of     :username, :with => /^[\w\d\-\s_#!]+$/
+  validates_format_of     :username, :with => /^[\p{Word}\d\-\s_#!]+$/
 
   validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook?}, :case_sensitive => false
   validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
