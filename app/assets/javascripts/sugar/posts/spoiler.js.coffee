@@ -1,4 +1,4 @@
-$(Sugar).bind 'ready postsloaded', ->
+$(Sugar).bind 'postsloaded', ->
 
   $('.spoiler').each ->
     if $(this).find('.innerSpoiler').length == 0

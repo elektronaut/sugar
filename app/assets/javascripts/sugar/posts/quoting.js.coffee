@@ -27,12 +27,3 @@ Sugar.extend
           quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
 
       Sugar.compose({add: quotedPost})
-
-#$(Sugar).bind 'ready postsloaded', ->
-#
-#  $('.quote_post').each ->
-#    unless this.functionalityApplied
-#      this.functionalityApplied = true
-#      $(this).click ->
-#        Sugar.quotePost($(this).closest('.post'))
-#        return false
