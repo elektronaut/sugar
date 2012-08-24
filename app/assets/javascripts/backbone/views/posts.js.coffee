@@ -10,4 +10,4 @@ class Sugar.Views.Posts extends Backbone.View
       posts.each ->
         view.postViews.push new Sugar.Views.Post({el: this}).render()
 
-    $(Sugar).trigger 'postsloaded', [$('.post')]
+    $(Sugar).trigger 'postsloaded', [$(this.el).find('.post')]
