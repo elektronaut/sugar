@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   include Authentication
 
-  layout 'default'
+  layout 'application'
 
   protect_from_forgery
 
