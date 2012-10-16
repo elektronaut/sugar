@@ -9,7 +9,6 @@ doc/api
 doc/plugins
 doc/app
 config/deploy.rb
-config/session_key
 config/database.yml
 config/newrelic.yml
 config/sunspot.yml
