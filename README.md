@@ -35,20 +35,25 @@ You'll need to have a database set up. Sugar was developed against MySQL. Postgr
 
 Finally, install Bundler (if you haven't) and use it to install the rest of the required gems:
 
- gem install bundler
- bundle install
-
+```
+gem install bundler
+bundle install
+```
 
 ## Installation
 
 Copy database.yml.dist to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
 
- sudo rake db:create
- sudo rake db:migrate
+```
+sudo rake db:create
+sudo rake db:migrate
+```
 
 You're now ready to start the development server:
 
- rails server
+```
+rails server
+```
 
 
 ## Credits
