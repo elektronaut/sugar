@@ -62,10 +62,6 @@ group :test, :development do
   # FactoryGirl
   gem 'factory_girl_rails'
 
-  # Cucumber
-  gem 'cucumber-rails'
-  gem 'database_cleaner'
-
   # Spork
   gem 'spork'
 
@@ -75,5 +71,4 @@ group :test, :development do
   gem 'guard'
   gem 'guard-spork'
   gem 'guard-rspec'
-  gem 'guard-cucumber'
 end
