@@ -35,7 +35,7 @@ describe Conversation do
     @conversation.remove_participant(@conversation.poster)
     expect {
       @conversation.remove_participant(user)
-    }.to raise_exception(RemoveParticipantError)
+    }.to raise_exception(Sugar::Exceptions::RemoveParticipantError)
   end
 
 end
