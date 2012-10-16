@@ -39,12 +39,15 @@ gem 'acts_as_list'
 
 gem 'hpricot', '0.8.4'
 gem 'daemon-spawn', '0.2.0'
-gem 'newrelic_rpm'
 
 gem 'sunspot_rails'
 gem 'progress_bar'
 
 #gem 'delayed_job', '2.1.4'
+
+group :production do
+  gem 'newrelic_rpm'
+end
 
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
