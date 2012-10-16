@@ -9,3 +9,4 @@ before_script:
   - mysql -e 'create database sugar_test;'
   - cp config/database.yml.dist config/database.yml
   - cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
+  - bundle exec rake db:test:prepare
