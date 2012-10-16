@@ -41,7 +41,7 @@ Spork.prefork do
       with_clean_redis do
         # Reset Redis settings to default
         Sugar.redis = redis
-        Sugar.redis_prefix = 'sugar'
+        Sugar.redis_prefix = "sugartest"
         example.run
       end
     end

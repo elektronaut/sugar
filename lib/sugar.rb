@@ -53,7 +53,10 @@ module Sugar
     end
 
     def redis_prefix
-      @redis_prefix ||= 'sugar'
+      unless @redis_prefix
+        raise "Sugar.redis_prefix has not been configured! Check that you've set up config/initializers/sugar.rb."
+      end
+      @redis_prefix
     end
 
     def load_config!

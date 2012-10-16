@@ -9,7 +9,7 @@ describe Sugar, :redis => true do
   end
 
   it "has a default redis prefix" do
-    Sugar.redis_prefix.should == 'sugar'
+    Sugar.redis_prefix.should == "sugartest"
   end
 
   describe 'configuration' do
