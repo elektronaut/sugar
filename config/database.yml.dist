@@ -9,8 +9,7 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  username: my_username
-  password: my_password
+  username: root
   database: sugar_test
   pool: 5
 
