@@ -29,9 +29,11 @@ Things you *WON'T* find in Sugar:
 
 ## Requirements, and how to install them
 
-Sugar is written for Ruby on Rails 3.1, and is Ruby 1.9 ready.
+Sugar is built using Ruby on Rails 3.2, and requires Ruby 1.9.
 
-You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choise.
+You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choice.
+
+You'll also need Redis installed. Sugar connects to localhost by default, which should be fine in most cases.
 
 Finally, install Bundler (if you haven't) and use it to install the rest of the required gems:
 
@@ -42,17 +44,24 @@ bundle install
 
 ## Installation
 
-Copy database.yml.dist to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
+Copy the sample configuration files, then edit them.
 
 ```
-sudo rake db:create
-sudo rake db:migrate
+cp config/database.yml.dist config/database.yml
+cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
+```
+
+Next, create and migrate the database:
+
+```
+bundle exec rake db:create
+bundle exec rake db:migrate
 ```
 
 You're now ready to start the development server:
 
 ```
-rails server
+bundle exec rails server
 ```
 
 
