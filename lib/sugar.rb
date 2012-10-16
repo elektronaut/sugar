@@ -71,6 +71,10 @@ module Sugar
       Sugar.redis.set("#{Sugar.redis_prefix}:configuration", @config.to_json)
     end
 
+    def reset_config!
+      update_configuration(DEFAULT_CONFIGURATION)
+    end
+
     def config(key=nil, value=nil)
       load_config! unless @config
       if key

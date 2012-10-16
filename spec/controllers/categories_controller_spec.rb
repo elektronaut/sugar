@@ -2,8 +2,11 @@
 
 require 'spec_helper'
 
-describe CategoriesController do
-  it_requires_login_for :new, :edit, :create, :update
+describe CategoriesController, :rspec => true do
+  describe 'with public browsing off' do
+    before { Sugar.config(:public_browsing, false); Sugar.save_config! }
+    it_requires_login_for :new, :edit, :create, :update
+  end
 
   before do
     @category = create(:category)
