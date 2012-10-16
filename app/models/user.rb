@@ -362,7 +362,7 @@ class User < ActiveRecord::Base
     number = self.available_invites if number == :all
     new_invites = self.available_invites - number
     new_invites = 0 if new_invites < 0
-    self.update_attribute(:available_invites, new_invites)
+    self.update_column(:available_invites, new_invites)
     self.available_invites
   end
 
@@ -370,7 +370,7 @@ class User < ActiveRecord::Base
   def grant_invite!(number=1)
     return self.available_invites if self.user_admin?
     new_number = (self.available_invites + number)
-    self.update_attribute(:available_invites, new_number)
+    self.update_column(:available_invites, new_number)
     self.invites
   end
 

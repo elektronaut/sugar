@@ -9,7 +9,7 @@ describe Exchange do
 
   it { should validate_presence_of(:title)}
   it { should validate_presence_of(:body)}
-  
+
   before { @exchange = create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
 
   it "can't have a title longer than 100 characters" do
@@ -25,17 +25,17 @@ describe Exchange do
   end
 
   it "updates the first post if body is changed" do
-    @exchange.update_attribute(:body, 'changed post')
+    @exchange.update_attributes(:body => 'changed post')
     @exchange.first_post.body.should == 'changed post'
   end
-  
+
   it 'creates a URL slug' do
     Exchange.work_safe_urls = false
     @exchange.to_param.should =~ /^[\d]+;This\-is\-my\-Discussion$/
     Exchange.work_safe_urls = true
     @exchange.to_param.should =~ /^[\d]+$/
   end
-  
+
   describe 'with no flags' do
     it "isn't NSFW" do
       @exchange.nsfw?.should be_false
@@ -46,17 +46,17 @@ describe Exchange do
       @exchange.labels.should == []
     end
   end
-  
+
   context 'with the NSFW flag' do
     before { @exchange = create(:exchange, :nsfw => true) }
 
     it 'is NSFW' do
       @exchange.nsfw?.should be_true
     end
-    
+
     it 'has the sticky label' do
       @exchange.labels.should include('NSFW')
     end
   end
-  
+
 end
