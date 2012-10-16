@@ -1,9 +1,9 @@
-= Sugar
+# Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.png)](https://travis-ci.org/elektronaut/sugar)
 
 Sugar is a free, open-source forum optimized for performance and usability, written in Ruby on Rails.
 
 
-== Features
+## Features
 
 Sugar aims for simplicity, and is first and foremost built for performance, especially with a high volume of posts. There's a few interesting bullet points, though:
 
@@ -27,7 +27,7 @@ Things you *WON'T* find in Sugar:
 * Emoticons and signatures
 
 
-== Requirements, and how to install them
+## Requirements, and how to install them
 
 Sugar is written for Ruby on Rails 3.1, and is Ruby 1.9 ready.
 
@@ -39,7 +39,7 @@ Finally, install Bundler (if you haven't) and use it to install the rest of the 
  bundle install
 
 
-== Installation
+## Installation
 
 Copy database.yml.dist to database.yml in the config directory, then edit it and fill in your database name, username and password. Next, create and migrate the database:
 
@@ -51,14 +51,14 @@ You're now ready to start the development server:
  rails server
 
 
-== Credits
+## Credits
 
-Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of Automata Studios (http://automatastudios.com).
+Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of [Automata Studios](http://automatastudios.com/).
 
 The name? It's what Butterscotch is made of, and it's totally sweet.
 
 
-== License
+## License
 
 Copyright (c) 2008 Inge Jørgensen
 
