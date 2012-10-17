@@ -10,7 +10,8 @@ describe Exchange do
   it { should validate_presence_of(:title)}
   it { should validate_presence_of(:body)}
 
-  before { @exchange = create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
+  let(:exchange) { create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
+  let(:nsfw_exchange) { create(:exchange, :nsfw => true) }
 
   it "can't have a title longer than 100 characters" do
     build(
@@ -20,42 +21,40 @@ describe Exchange do
   end
 
   it "creates a first post when created" do
-    @exchange.first_post.body.should == 'First post!'
-    @exchange.first_post.user.should == @exchange.poster
+    exchange.first_post.body.should == 'First post!'
+    exchange.first_post.user.should == exchange.poster
   end
 
   it "updates the first post if body is changed" do
-    @exchange.update_attributes(:body => 'changed post')
-    @exchange.first_post.body.should == 'changed post'
+    exchange.update_attributes(:body => 'changed post')
+    exchange.first_post.body.should == 'changed post'
   end
 
   it 'creates a URL slug' do
     Exchange.work_safe_urls = false
-    @exchange.to_param.should =~ /^[\d]+;This\-is\-my\-Discussion$/
+    exchange.to_param.should =~ /^[\d]+;This\-is\-my\-Discussion$/
     Exchange.work_safe_urls = true
-    @exchange.to_param.should =~ /^[\d]+$/
+    exchange.to_param.should =~ /^[\d]+$/
   end
 
   describe 'with no flags' do
     it "isn't NSFW" do
-      @exchange.nsfw?.should be_false
+      exchange.nsfw?.should be_false
     end
 
     it 'has no labels' do
-      @exchange.labels?.should be_false
-      @exchange.labels.should == []
+      exchange.labels?.should be_false
+      exchange.labels.should == []
     end
   end
 
   context 'with the NSFW flag' do
-    before { @exchange = create(:exchange, :nsfw => true) }
-
     it 'is NSFW' do
-      @exchange.nsfw?.should be_true
+      nsfw_exchange.nsfw?.should be_true
     end
 
-    it 'has the sticky label' do
-      @exchange.labels.should include('NSFW')
+    it 'has the NSFW label' do
+      nsfw_exchange.labels.should include('NSFW')
     end
   end
 
