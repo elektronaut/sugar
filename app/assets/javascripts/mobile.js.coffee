@@ -149,5 +149,9 @@ $(document).ready ->
         link.href += if link.href.match(/\?/) then '&' else '?'
         link.href += 'tag=' + referral_id
 
+  # Confirm regular site
+  $('a.regular_site').click ->
+    return confirm('Are you sure you want to navigate away from the mobile version?')
+
   resizeYoutube()
   Sugar.init()
