@@ -6,7 +6,7 @@ mysql: &mysql
   adapter: mysql2
   username: root
   password:
-  database: sugar2_<%= Rails.env %>
+  database: sugar_<%= Rails.env %>
 
 postgresql: &postgresql
   adapter: postgresql

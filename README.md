@@ -29,13 +29,11 @@ Things you *WON'T* find in Sugar:
 
 ## Requirements, and how to install them
 
-Sugar is built using Ruby on Rails 3.2, and requires Ruby 1.9.
+Sugar is built on Ruby on Rails 3.2, requires Ruby 1.9 and supports MySQL, Postgres and SQLite.
 
-You'll need to have a database set up. Sugar was developed against MySQL. PostgreSQL and SQLite hasn't been tested, but should work. Edit the Gemfile to reflect your DBM of choice.
+You'll need to have Redis installed. Sugar connects to localhost by default, which should be fine in most cases.
 
-You'll also need Redis installed. Sugar connects to localhost by default, which should be fine in most cases.
-
-Finally, install Bundler (if you haven't) and use it to install the rest of the required gems:
+Install Bundler (if you haven't) and use it to install the rest of the required gems:
 
 ```
 gem install bundler
