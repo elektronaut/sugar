@@ -102,9 +102,6 @@ module Authentication
               flash[:notice] = "You have been banned!"
             end
             @current_user = nil
-          else
-            Discussion.work_safe_urls = @current_user.work_safe_urls?
-            Category.work_safe_urls   = @current_user.work_safe_urls?
           end
         end
       end

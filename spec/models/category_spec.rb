@@ -11,10 +11,7 @@ describe Category do
   let(:trusted_user) { create(:trusted_user) }
 
   it 'creates a URL slug' do
-    Category.work_safe_urls = false
     category.to_param.should =~ /^[\d]+;This\-is\-my\-Category$/
-    Category.work_safe_urls = true
-    category.to_param.should =~ /^[\d]+$/
   end
 
   describe '#find_viewable_by' do

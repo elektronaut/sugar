@@ -84,16 +84,6 @@ class Exchange < ActiveRecord::Base
 
   class << self
 
-    # Sets the state of work safe URLs
-    def work_safe_urls=(state)
-      @@work_safe_urls = state
-    end
-
-    # Gets the state of work safe URLs
-    def work_safe_urls
-      @@work_safe_urls ||= false
-    end
-
     # Searches exchanges
     #
     # === Parameters
@@ -224,7 +214,7 @@ class Exchange < ActiveRecord::Base
     slug = slug.gsub(/[\[\{]/,'(')
     slug = slug.gsub(/[\]\}]/,')')
     slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-    (self.class.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
+    "#{self.id.to_s};" + slug
   end
 
   if ENV['RAILS_ENV'] == 'test'

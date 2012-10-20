@@ -37,16 +37,6 @@ class Category < ActiveRecord::Base
       self.all(:order => :position).select{|c| c.viewable_by?(user)}
     end
 
-    # Enable work safe URLs
-    def work_safe_urls=(state)
-      @@work_safe_urls = state
-    end
-
-    # Reports the state of the work_safe_urls flag.
-    def work_safe_urls
-      @@work_safe_urls ||= false
-    end
-
   end
 
   # Returns true if this category has any labels
@@ -76,7 +66,7 @@ class Category < ActiveRecord::Base
     slug = slug.gsub(/[\[\{]/,'(')
     slug = slug.gsub(/[\]\}]/,')')
     slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-    (Category.work_safe_urls) ? self.id.to_s : "#{self.id.to_s};" + slug
+    "#{self.id.to_s};" + slug
   end
 
   # Fixes any inconsistencies in the counter_cache columns.

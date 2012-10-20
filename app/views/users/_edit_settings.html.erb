@@ -9,7 +9,6 @@
 
 <fieldset>
   <h2>Settings</h2>
-  <%= labelled_field f.check_box(:work_safe_urls), "I'm at work", :description => "Disables thread titles in URLs", :errors => @user.errors[:work_safe_urls] %>
   <%= labelled_field f.check_box(:notify_on_message), "Notify me on messages", :description => "You'll be notified by email whenever someone sends you a message", :errors => @user.errors[:notify_on_message] %>
 </fieldset>
 

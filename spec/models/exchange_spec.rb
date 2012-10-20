@@ -31,10 +31,7 @@ describe Exchange do
   end
 
   it 'creates a URL slug' do
-    Exchange.work_safe_urls = false
     exchange.to_param.should =~ /^[\d]+;This\-is\-my\-Discussion$/
-    Exchange.work_safe_urls = true
-    exchange.to_param.should =~ /^[\d]+$/
   end
 
   describe 'with no flags' do
