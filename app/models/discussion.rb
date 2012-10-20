@@ -3,11 +3,10 @@
 class Discussion < Exchange
 
   has_many   :discussion_relationships, :dependent => :destroy
-
   belongs_to :category, :counter_cache => true
 
   validates_presence_of :category_id
-  
+
   # Flag for trusted status, which will update after save if it has been changed.
   attr_accessor :update_trusted
 
@@ -27,11 +26,11 @@ class Discussion < Exchange
       end
     end
   end
-  
+
   class << self
     # Finds popular discussions within a defined time range, sorted by popularity.
     # The collection is decorated with the Pagination module, which provides pagination info.
-    # Takes the following options: 
+    # Takes the following options:
     # * :page     - Page number, starting on 1 (default: first page)
     # * :since    - Since time
     # * :limit    - Number of posts per page (default: 20)
@@ -42,25 +41,25 @@ class Discussion < Exchange
       }.merge(options)
 
       conditions = [
-        'posts.discussion_id = discussions.id AND posts.created_at > ?', 
+        'posts.discussion_id = discussions.id AND posts.created_at > ?',
         options[:since]
       ]
 
       # Ignore trusted posts unless requested
       unless options[:trusted]
         conditions = [
-          ['discussions.trusted = ?', conditions.shift].compact.join(' AND '), 
+          ['discussions.trusted = ?', conditions.shift].compact.join(' AND '),
           false
         ] + conditions
       end
-      
+
       if options[:trusted]
         discussions_count = Discussion.count_by_sql([
           'SELECT COUNT(DISTINCT discussion_id) ' +
           'FROM posts, discussions ' +
           'WHERE posts.discussion_id = discussions.id ' +
-          'AND posts.created_at > ? AND discussions.type = ?', 
-          options[:since], 
+          'AND posts.created_at > ? AND discussions.type = ?',
+          options[:since],
           'Discussion'
         ])
       else
@@ -68,9 +67,9 @@ class Discussion < Exchange
           'SELECT COUNT(DISTINCT discussion_id) ' +
           'FROM posts, discussions ' +
           'WHERE posts.discussion_id = discussions.id ' +
-          'AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = ?', 
-          options[:since], 
-          'Discussion', 
+          'AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = ?',
+          options[:since],
+          'Discussion',
           false
         ])
       end
@@ -86,8 +85,8 @@ class Discussion < Exchange
           :from       => 'discussions, posts',
           :conditions => conditions,
           :group      => 'discussions.id',
-          :limit      => pagination.limit, 
-          :offset     => pagination.offset, 
+          :limit      => pagination.limit,
+          :offset     => pagination.offset,
           :order      => 'recent_posts_count DESC'
         )
       end
@@ -103,7 +102,7 @@ class Discussion < Exchange
       'ORDER BY MAX(p.created_at) DESC'
     )
   end
-  
+
   # Returns true if the user can view this discussion
   def viewable_by?(user)
     if self.trusted?

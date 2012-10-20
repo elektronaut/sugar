@@ -1,135 +1,236 @@
 require 'spec_helper'
 
 describe Discussion do
-  it { should belong_to :closer }
-  it { should belong_to :category }
-  it { should have_many :discussion_relationships }
+  let(:discussion) { create(:discussion) }
+  let(:closed_discussion) { create(:discussion, closed: true) }
+  let(:trusted_discussion) { create(:discussion, category: trusted_category) }
+  let(:category) { create(:category) }
+  let(:trusted_category) { create(:trusted_category) }
+  let(:user) { create(:user) }
+  let(:trusted_user) { create(:trusted_user) }
+  let(:moderator) { create(:moderator) }
+  let(:user_admin) { create(:user_admin) }
+  let(:admin) { create(:admin) }
 
+  it { should have_many(:discussion_relationships).dependent(:destroy) }
+  it { should belong_to(:category) }
   it { should validate_presence_of(:category_id) }
+  it { should be_kind_of(Exchange) }
 
-  before { @discussion = create(:discussion) }
-  
-  it 'inherits from Exchange' do
-    @discussion.should be_kind_of(Exchange)
-  end
-
-  it "can't be reopened if closed by someone else" do
-    @discussion.update_attributes(:closed => true, :updated_by => create(:moderator))
-
-    @discussion.update_attributes(:closed => false, :updated_by => @discussion.poster)
-    @discussion.should have(1).errors_on(:closed)
-  end
-  
-  it 'is only editable by the poster, moderators and admins' do
-    @discussion.editable_by?(@discussion.poster).should be_true
-    @discussion.editable_by?(create(:admin)).should be_true
-    @discussion.editable_by?(create(:moderator)).should be_true
-    @discussion.editable_by?(create(:user_admin)).should be_false
-    @discussion.editable_by?(create(:user)).should be_false
-  end
-  
-  it 'is postable by everyone' do
-    @discussion.postable_by?(create(:user)).should be_true
-  end
-  
-  context 'when closed' do
-    before do
-      @moderator = create(:moderator)
-      @discussion.update_attributes(:closed => true, :updated_by => @moderator)
+  describe 'save callbacks' do
+    context "created in a trusted category" do
+      subject { create(:discussion, category: trusted_category) }
+      its(:trusted) { should be_true }
     end
-
-    it "updates closer when closed" do
-      @discussion.closer.should == @moderator
+    context "created in a regular category" do
+      subject { create(:discussion, category: category) }
+      its(:trusted) { should be_false }
     end
-
-    it 'is only postable by admins and moderators' do
-      @discussion.update_attributes(:closed => true)
-      @discussion.postable_by?(create(:user)).should be_false
-      @discussion.postable_by?(@discussion.poster).should be_false
-      @discussion.postable_by?(create(:user_admin)).should be_false
-      @discussion.postable_by?(create(:admin)).should be_true
-      @discussion.postable_by?(create(:moderator)).should be_true
+    it "changes the trusted status on discussions" do
+      create(:post, discussion: discussion)
+      discussion.posts.first.trusted?.should == false
+      discussion.update_attributes(category: trusted_category)
+      discussion.posts.first.trusted?.should == true
+      discussion.update_attributes(category: category)
+      discussion.posts.first.trusted?.should == false
     end
   end
-  
-  context 'with the sticky flag' do
-    before { @discussion = create(:discussion, :sticky => true) }
 
-    it 'is sticky' do
-      @discussion.sticky?.should be_true
-    end
-    
-    it 'has the sticky label' do
-      @discussion.labels.should include('Sticky')
-    end
-  end
-  
-  context 'with more than one page of posts' do
-    before do
-      50.times { create(:post, :discussion => @discussion, :user => @discussion.poster) }
-    end
-    
-    it 'responds to last_page' do
-      @discussion.last_page.should == 2
-    end
-
-    describe '#paginated_posts' do
-      it 'paginates posts' do
-        posts = @discussion.paginated_posts(:page => 1)
-        posts.length.should == Post::POSTS_PER_PAGE
-        posts.should be_kind_of(Pagination::InstanceMethods)
-        posts.total_count.should == 51
-        posts.pages.should == 2
-        posts = @discussion.paginated_posts(:page => 2)
-        posts.length.should == 1
+  describe ".find_popular" do
+    subject { Discussion.find_popular }
+    it { should be_kind_of(Pagination::InstanceMethods) }
+    describe ":page option" do
+      before { 2.times { create(:discussion) } }
+      context "default" do
+        subject { Discussion.find_popular(:limit => 1) }
+        its(:page) { should == 1 }
+      end
+      context "specified" do
+        subject { Discussion.find_popular(:limit => 1, :page => 2) }
+        its(:page) { should == 2 }
+      end
+      context "out of bounds" do
+        subject { Discussion.find_popular(:limit => 1, :page => 3) }
+        its(:page) { should == 2 }
       end
     end
-    
-    describe '#posts_since_index' do
-      it 'finds posts with an offset' do
-        @discussion.posts_since_index(20).length.should == (@discussion.posts.count - 20)
+    describe ":since option" do
+      let(:discussion1) { create(:discussion) }
+      let(:discussion2) { create(:discussion) }
+      before do
+        discussion1.posts.first.update_attributes(created_at: 4.days.ago)
+        [13.days.ago, 12.days.ago].each do |t|
+          create(:post, discussion: discussion1, created_at: t)
+        end
+        [2.days.ago].each do |t|
+          create(:post, discussion: discussion2, created_at: t)
+        end
+      end
+      context "last 3 days" do
+        subject { Discussion.find_popular(since: 3.days.ago) }
+        it { should == [discussion2] }
+      end
+      context "last 7 days" do
+        subject { Discussion.find_popular(since: 7.days.ago) }
+        it { should == [discussion2, discussion1] }
+        its(:first) { should respond_to(:recent_posts_count) }
+        its(:first) { subject.recent_posts_count.should == 2 }
+      end
+      context "last 14 days" do
+        subject { Discussion.find_popular(since: 14.days.ago) }
+        it { should == [discussion1, discussion2] }
+      end
+    end
+    describe ":limit option" do
+      context "default" do
+        its(:per_page) { should == Exchange::DISCUSSIONS_PER_PAGE }
+      end
+      context "specified" do
+        subject { Discussion.find_popular(limit: 7) }
+        its(:per_page) { should == 7 }
+      end
+    end
+    describe ":trusted option" do
+      before { discussion; trusted_discussion }
+      context "default" do
+        it { should include(discussion) }
+        it { should_not include(trusted_discussion) }
+      end
+      context "true" do
+        subject { Discussion.find_popular(trusted: true) }
+        it { should include(discussion, trusted_discussion) }
+      end
+      context "false" do
+        subject { Discussion.find_popular(trusted: false) }
+        it { should include(discussion) }
+        it { should_not include(trusted_discussion) }
       end
     end
   end
-  
-  context 'in a trusted category' do
-    before { @discussion = create(:trusted_discussion)}
-    
-    it 'is trusted' do
-      @discussion.trusted?.should be_true
+
+  describe "#viewable_by?" do
+    context "trusted discussion" do
+      context "regular user" do
+        subject { trusted_discussion.viewable_by?(user) }
+        it { should be_false }
+      end
+      context "trusted user" do
+        subject { trusted_discussion.viewable_by?(trusted_user) }
+        it { should be_true }
+      end
     end
-    
-    it 'has the trusted label' do
-      @discussion.labels?.should be_true
-      @discussion.labels.should include('Trusted')
-    end
-    
-    it 'is not viewable by a regular user or user admin' do
-      @discussion.viewable_by?(create(:user)).should be_false
-    end
-    
-    it 'is viewable by trusted users and admins' do
-      @discussion.viewable_by?(create(:trusted_user)).should be_true
-      @discussion.viewable_by?(create(:admin)).should be_true
-      @discussion.viewable_by?(create(:moderator)).should be_true
-      @discussion.viewable_by?(create(:user_admin)).should be_true
-    end
-  end
-  
-  describe '#find_paginated' do
-    before do
-      create(:discussion, :category => create(:trusted_category))
-    end
-    
-    it 'does not include trusted discussions without :trusted' do
-      discussions = Discussion.find_paginated
-      discussions.map(&:trusted?).should_not include(true)
-    end
-    
-    it 'includes trusted discussions with :trusted' do
-      discussions = Discussion.find_paginated(:trusted => true)
-      discussions.map(&:trusted?).should include(true)
+    context "regular discussion" do
+      context "public browsing on" do
+        before { Sugar.config(:public_browsing, true) }
+        it { discussion.viewable_by?(nil).should be_true }
+      end
+      context "public browsing off" do
+        before { Sugar.config(:public_browsing, false) }
+        it { discussion.viewable_by?(nil).should be_false }
+        it { discussion.viewable_by?(user).should be_true }
+      end
     end
   end
-  
+
+  describe "#editable_by?" do
+    context "poster" do
+      subject { discussion.editable_by?(discussion.poster) }
+      it { should be_true }
+    end
+    context "other user" do
+      subject { discussion.editable_by?(user) }
+      it { should be_false }
+    end
+    context "moderator" do
+      subject { discussion.editable_by?(moderator) }
+      it { should be_true }
+    end
+    context "admin" do
+      subject { discussion.editable_by?(admin) }
+      it { should be_true }
+    end
+    context "user admin" do
+      subject { discussion.editable_by?(user_admin) }
+      it { should be_false }
+    end
+    context "no user" do
+      subject { discussion.editable_by?(nil) }
+      it { should be_false }
+    end
+  end
+
+  describe "#postable_by?" do
+    context "not closed" do
+      context "any user" do
+        subject { discussion.postable_by?(user) }
+        it { should be_true }
+      end
+      context "no user" do
+        subject { discussion.postable_by?(nil) }
+        it { should be_false }
+      end
+    end
+    context "closed" do
+      context "any user" do
+        subject { closed_discussion.postable_by?(user) }
+        it { should be_false }
+      end
+      context "poster" do
+        subject { closed_discussion.postable_by?(closed_discussion.poster) }
+        it { should be_false }
+      end
+      context "moderator" do
+        subject { closed_discussion.postable_by?(moderator) }
+        it { should be_true }
+      end
+      context "admin" do
+        subject { closed_discussion.postable_by?(admin) }
+        it { should be_true }
+      end
+    end
+  end
+
+  describe "#closeable_by?" do
+    context "other user" do
+      subject { discussion.closeable_by?(user) }
+      it { should be_false }
+    end
+    context "not closed" do
+      context "poster" do
+        subject { discussion.closeable_by?(discussion.poster) }
+        it { should be_true }
+      end
+      context "moderator" do
+        subject { discussion.closeable_by?(moderator) }
+        it { should be_true }
+      end
+    end
+    context "closed by self" do
+      before { discussion.update_attributes(closed: true, updated_by: discussion.poster) }
+      subject { discussion }
+      its(:closer) { should == discussion.poster }
+      context "poster" do
+        subject { discussion.closeable_by?(discussion.poster) }
+        it { should be_true }
+      end
+      context "moderator" do
+        subject { discussion.closeable_by?(moderator) }
+        it { should be_true }
+      end
+    end
+    context "closed by moderator" do
+      before { discussion.update_attributes(closed: true, updated_by: moderator) }
+      subject { discussion }
+      its(:closer) { should == moderator }
+      context "poster" do
+        subject { discussion.closeable_by?(discussion.poster) }
+        it { should be_false }
+      end
+      context "moderator" do
+        subject { discussion.closeable_by?(moderator) }
+        it { should be_true }
+      end
+    end
+  end
+
 end
