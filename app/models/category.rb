@@ -7,9 +7,9 @@
 # and categories can be set as only visible to trusted users.
 #
 # === Trusted categories
-# Categories can be flagged as <tt>trusted</tt>, only admins and users set 
-# as trusted can view discussions in these. Use <tt>viewable_by?</tt> to 
-# determine if a category is visible to a user. 
+# Categories can be flagged as <tt>trusted</tt>, only admins and users set
+# as trusted can view discussions in these. Use <tt>viewable_by?</tt> to
+# determine if a category is visible to a user.
 
 class Category < ActiveRecord::Base
 
@@ -26,20 +26,17 @@ class Category < ActiveRecord::Base
 
   after_save do |category|
     if category.update_trusted
-      Discussion.update_all(
-        "trusted = " + (category.trusted? ? '1' : '0'), 
-        "category_id = #{category.id}"
-      )
+      category.discussions.update_all(:trusted => category.trusted?)
     end
   end
 
   class << self
-    
+
     # Finds all categories viewable by the given user
     def find_viewable_by(user=nil)
       self.all(:order => :position).select{|c| c.viewable_by?(user)}
     end
-    
+
     # Enable work safe URLs
     def work_safe_urls=(state)
       @@work_safe_urls = state
@@ -87,16 +84,16 @@ class Category < ActiveRecord::Base
     if discussions_count != discussions.count
       logger.warn "counter_cache error detected on Category ##{self.id} (discussions)"
       Category.update_counters(
-        self.id, 
+        self.id,
         :discussions_count => (discussions.count - discussions_count)
       )
     end
   end
-  
+
   if ENV['RAILS_ENV'] == 'test'
     def discussions_count
       self.discussions.count
-    end 
+    end
   end
-  
+
 end
