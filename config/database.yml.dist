@@ -1,22 +1,31 @@
-development:
+sqlite: &sqlite
+  adapter: sqlite3
+  database: db/sugar_<%= Rails.env %>.sqlite3
+
+mysql: &mysql
   adapter: mysql2
-  encoding: utf8
-  username: my_username
-  password: my_password
-  database: sugar_dev
+  username: root
+  password:
+  database: sugar2_<%= Rails.env %>
+
+postgresql: &postgresql
+  adapter: postgresql
+  username: postgres
+  password:
+  database: sugar_<%= Rails.env %>
+  min_messages: ERROR
+
+defaults: &defaults
   pool: 5
+  timeout: 5000
+  host: localhost
+  <<: *<%= ENV['DB'] || "mysql" %>
+
+development:
+  <<: *defaults
 
 test:
-  adapter: mysql2
-  encoding: utf8
-  username: root
-  database: sugar_test
-  pool: 5
+  <<: *defaults
 
 production:
-  adapter: mysql2
-  encoding: utf8
-  username: my_username
-  password: my_password
-  database: sugar
-  pool: 5
+  <<: *defaults

@@ -5,6 +5,7 @@ log/*.lck
 log/*.pid
 tmp/**/*
 tmp/*
+db/*.sqlite3
 doc/api
 doc/plugins
 doc/app

@@ -4,10 +4,17 @@ services:
   - redis
 rvm:
   - "1.9.3"
-script: bundle exec rspec spec
+env:
+  - DB=sqlite
+  - DB=mysql
+  - DB=postgresql
+script:
+  - bundle exec rspec spec
 before_script:
-  - mysql -e 'create database sugar_test;'
   - cp config/database.yml.dist config/database.yml
   - cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
-  - bundle exec rake db:migrate
-  - bundle exec rake db:test:prepare
+  - mysql -e 'create database sugar_test;'
+  - psql -c 'create database sugar_test' -U postgres
+  - DB=mysql bundle exec rake db:migrate
+  - DB=postgresql bundle exec rake db:migrate
+  - DB=sqlite bundle exec rake db:create db:migrate

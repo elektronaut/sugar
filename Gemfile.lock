@@ -123,6 +123,7 @@ GEM
     open4 (1.3.0)
     options (2.3.0)
       fattr
+    pg (0.14.1)
     polyglot (0.3.3)
     pr_geohash (1.0.0)
     progress_bar (0.4.0)
@@ -200,6 +201,7 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    sqlite3 (1.3.6)
     sunspot (1.3.3)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
@@ -242,6 +244,7 @@ DEPENDENCIES
   json
   mysql2
   newrelic_rpm
+  pg
   progress_bar
   rails (= 3.2.7)
   rails-backbone
@@ -254,6 +257,7 @@ DEPENDENCIES
   sass-rails
   shoulda-matchers
   spork
+  sqlite3
   sunspot_rails
   sunspot_solr
   uglifier

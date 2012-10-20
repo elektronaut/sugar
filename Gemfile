@@ -9,7 +9,10 @@ gem 'rails', '3.2.7'
 gem "bcrypt-ruby", :require => "bcrypt"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'sqlite3'
 gem 'mysql2'
+gem 'pg'
+
 gem "redis", "~> 3.0.0.rc2"
 gem "hiredis", "~> 0.4.5"
 
