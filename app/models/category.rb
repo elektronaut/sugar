@@ -69,21 +69,4 @@ class Category < ActiveRecord::Base
     "#{self.id.to_s};" + slug
   end
 
-  # Fixes any inconsistencies in the counter_cache columns.
-  def fix_counter_cache!
-    if discussions_count != discussions.count
-      logger.warn "counter_cache error detected on Category ##{self.id} (discussions)"
-      Category.update_counters(
-        self.id,
-        :discussions_count => (discussions.count - discussions_count)
-      )
-    end
-  end
-
-  if ENV['RAILS_ENV'] == 'test'
-    def discussions_count
-      self.discussions.count
-    end
-  end
-
 end
