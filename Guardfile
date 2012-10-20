@@ -11,7 +11,7 @@ guard 'spork', :test_unit => false, :cucumber => false, :rspec_env => { 'RAILS_E
   watch('spec/spec_helper.rb')
 end
 
-guard 'rspec', :cli => '' do
+guard 'rspec', cli: '--drb --format Fuubar --color' do
   watch('spec/spec_helper.rb')                        { "spec" }
   watch('config/routes.rb')                           { "spec/routing" }
   watch('app/controllers/application_controller.rb')  { "spec/controllers" }

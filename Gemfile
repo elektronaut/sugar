@@ -64,6 +64,7 @@ group :test, :development do
   gem 'rspec-redis_helper'
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'fuubar'
 
   # FactoryGirl
   gem 'factory_girl_rails'
