@@ -14,7 +14,7 @@ end
 
 class RemoveSettings < ActiveRecord::Migration
   def up
-    results = ActiveRecord::Base.connection.select('SELECT * FROM settings')
+    results = ActiveRecord::Base.connection.select_rows('SELECT * FROM settings')
     configuration = results.inject({}) do |config, record|
       config[record['key'].to_sym] = record['value']
       config

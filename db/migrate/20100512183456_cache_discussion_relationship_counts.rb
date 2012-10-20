@@ -3,10 +3,10 @@ class CacheDiscussionRelationshipCounts < ActiveRecord::Migration
     [:participated_count, :favorites_count, :following_count].each do |c|
       add_column :users, c, :integer, :null => false, :default => 0
     end
-    execute "UPDATE users u SET 
-      u.following_count    = (SELECT COUNT(*) FROM discussion_relationships r WHERE r.user_id = u.id AND following = 1),
-      u.favorites_count    = (SELECT COUNT(*) FROM discussion_relationships r WHERE r.user_id = u.id AND favorite = 1),
-      u.participated_count = (SELECT COUNT(*) FROM discussion_relationships r WHERE r.user_id = u.id AND participated = 1)"
+    execute "UPDATE users SET
+      following_count    = (SELECT COUNT(*) FROM discussion_relationships WHERE discussion_relationships.user_id = users.id AND following = 1),
+      favorites_count    = (SELECT COUNT(*) FROM discussion_relationships WHERE discussion_relationships.user_id = users.id AND favorite = 1),
+      participated_count = (SELECT COUNT(*) FROM discussion_relationships WHERE discussion_relationships.user_id = users.id AND participated = 1)"
   end
 
   def self.down

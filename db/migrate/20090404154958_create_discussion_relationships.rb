@@ -7,12 +7,12 @@ class CreateDiscussionRelationships < ActiveRecord::Migration
       t.boolean :favorite,     :null => false, :default => false
       t.boolean :trusted,      :null => false, :default => false
     end
-    add_index :discussion_relationships, :user_id,       :name => 'user_id_index'
-    add_index :discussion_relationships, :discussion_id, :name => 'discussion_id_index'
-    add_index :discussion_relationships, :participated,  :name => 'participated_index'
-    add_index :discussion_relationships, :following,     :name => 'following_index'
-    add_index :discussion_relationships, :favorite,      :name => 'favorite_index'
-    add_index :discussion_relationships, :trusted,       :name => 'trusted_index'
+    add_index :discussion_relationships, :user_id
+    add_index :discussion_relationships, :discussion_id
+    add_index :discussion_relationships, :participated
+    add_index :discussion_relationships, :following
+    add_index :discussion_relationships, :favorite
+    add_index :discussion_relationships, :trusted
   end
 
   def self.down
