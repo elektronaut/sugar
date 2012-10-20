@@ -21,9 +21,8 @@ class Discussion < Exchange
   # Set trusted status on all posts and relationships on save
   after_save do |discussion|
     if discussion.update_trusted
-      [Post, DiscussionRelationship].each do |c|
-        c.update_all("trusted = " + (discussion.trusted? ? '1' : '0'), "discussion_id = #{discussion.id}")
-      end
+      discussion.posts.update_all(:trusted => discussion.trusted?)
+      discussion.discussion_relationships.update_all(:trusted => discussion.trusted?)
     end
   end
 

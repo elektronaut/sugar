@@ -74,7 +74,7 @@ describe Discussion do
         subject { Discussion.find_popular(since: 7.days.ago) }
         it { should == [discussion2, discussion1] }
         its(:first) { should respond_to(:recent_posts_count) }
-        its(:first) { subject.recent_posts_count.should == 2 }
+        its(:first) { subject.recent_posts_count.to_i.should == 2 }
       end
       context "last 14 days" do
         subject { Discussion.find_popular(since: 14.days.ago) }
