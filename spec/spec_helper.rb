@@ -11,7 +11,10 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
-  require 'sunspot/rails/spec_helper'
+  #require 'sunspot/rails/spec_helper'
+
+  $original_sunspot_session = Sunspot.session
+  Sunspot::Rails::Tester.start_original_sunspot_session
 
   RSpec.configure do |config|
     # == Mock Framework
@@ -27,11 +30,13 @@ Spork.prefork do
     #config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
     # Stub Sunspot
-    config.before(:each) do
-      ::Sunspot.session = ::Sunspot::Rails::StubSessionProxy.new(::Sunspot.session)
+    config.before do
+      Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
     end
-    config.after(:each) do
-      ::Sunspot.session = ::Sunspot.session.original_session
+    config.before :each, :solr => true do
+      Sunspot::Rails::Tester.start_original_sunspot_session
+      Sunspot.session = $original_sunspot_session
+      Sunspot.remove_all!
     end
 
     # Use Redis

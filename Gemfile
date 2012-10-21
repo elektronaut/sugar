@@ -54,10 +54,18 @@ end
 
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
+
+  # Guard
+  gem 'rb-fsevent' #if mac?
+  gem 'ruby_gntp' #if mac?
+  gem 'guard'
+  gem 'guard-spork'
+  gem 'guard-rspec'
 end
 
 group :test, :development do
   gem 'sunspot_solr'
+  gem 'sunspot-rails-tester'
 
   # RSpec
   gem 'rspec-rails'
@@ -71,11 +79,4 @@ group :test, :development do
 
   # Spork
   gem 'spork'
-
-  # Guard
-  gem 'rb-fsevent' #if mac?
-  gem 'ruby_gntp' #if mac?
-  gem 'guard'
-  gem 'guard-spork'
-  gem 'guard-rspec'
 end
