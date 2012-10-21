@@ -191,6 +191,10 @@ describe Discussion do
         end
 
         context "within the last 7 days" do
+          before do
+            discussion1
+            discussion2
+          end
 
           subject { Discussion.find_popular(since: 7.days.ago) }
           it { should == [discussion2, discussion1] }
