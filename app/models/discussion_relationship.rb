@@ -3,11 +3,11 @@
 class DiscussionRelationship < ActiveRecord::Base
   belongs_to :user
   belongs_to :discussion
-  
+
   after_save do |relationship|
     relationship.update_user_caches!
   end
-  
+
   after_destroy do |relationship|
     relationship.update_user_caches!
   end
@@ -19,13 +19,14 @@ class DiscussionRelationship < ActiveRecord::Base
       relationship ||= DiscussionRelationship.create(:user_id => user.id, :discussion_id => discussion.id)
       relationship.update_attributes(options.merge({:trusted => discussion.trusted}))
       relationship.save
+      relationship
     end
-    
+
     # Find participated discussions for a user
     def find_participated(user, options={})
       self.find_discussions(user, {:participated => true}.merge(options))
     end
-    
+
     # Find followed discussions for a user
     def find_following(user, options={})
       self.find_discussions(user, {:following => true}.merge(options))
@@ -35,15 +36,15 @@ class DiscussionRelationship < ActiveRecord::Base
     def find_favorite(user, options={})
       self.find_discussions(user, {:favorite => true}.merge(options))
     end
-    
+
     def find_discussions(user, options={})
       paginate = options.has_key?(:page)
-      
+
       find_conditions = [:participated, :following, :favorite].inject(Hash.new) do |cond, key|
         cond[key] = ((options[key]) ? true : false) if options.has_key?(key)
         cond
       end.merge({:user_id => user.id})
-      
+
       find_conditions[:trusted] = false unless options[:trusted]
       find_options = {}
 
@@ -56,16 +57,16 @@ class DiscussionRelationship < ActiveRecord::Base
         page      = num_pages if page > num_pages
         offset    = limit * (page - 1)
         offset    = 0 if offset < 0
-  
+
         find_options = {
           :limit => limit,
           :offset => offset
         }.merge(find_options)
       end
-      
+
       join_string = "INNER JOIN discussion_relationships ON discussion_relationships.discussion_id = discussions.id"
       join_string += " AND " + find_conditions.map{|k,v| "discussion_relationships.#{k.to_s} = #{v}"}.join(" AND ")
-      
+
       find_options = {
         :select     => 'discussions.*',
         #:conditions => find_conditions,
@@ -81,7 +82,7 @@ class DiscussionRelationship < ActiveRecord::Base
       discussions
     end
   end
-  
+
   def update_user_caches!
     self.user.update_attributes({
       :participated_count => DiscussionRelationship.count(:all, :conditions => ['user_id = ? AND participated = ?', self.user.id, true]),
