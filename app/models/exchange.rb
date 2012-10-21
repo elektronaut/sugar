@@ -169,17 +169,6 @@ class Exchange < ActiveRecord::Base
     Post.find_paginated({:discussion => self}.merge(options))
   end
 
-  # Finds posts created since offset
-  def posts_since_index(offset)
-    Post.find(:all,
-      :conditions => ['discussion_id = ?', self.id],
-      :order      => 'created_at ASC',
-      :limit      => 200,
-      :offset     => offset.to_i,
-      :include    => [:user]
-    )
-  end
-
   # Finds the number of the last page
   def last_page(per_page=Post::POSTS_PER_PAGE)
     (self.posts_count.to_f/per_page).ceil

@@ -68,7 +68,11 @@ class PostsController < ApplicationController
       unless @discussion.viewable_by?(@current_user)
         render :text => '', :status => 403 and return
       end
-      @posts = @discussion.posts_since_index(params[:index])
+      @posts = @discussion.posts
+        .includes(:user)
+        .limit(200)
+        .offset(params[:index])
+        .all
       if @current_user
         @current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
       end
