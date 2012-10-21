@@ -103,8 +103,11 @@ describe Discussion do
 
       describe :category do
 
-        let!(:discussion) { create(:discussion) }
-        let!(:another_discussion) { create(:discussion) }
+        let(:another_discussion) { create(:discussion) }
+        before do
+          discussion
+          another_discussion
+        end
 
         context "when not specified" do
           it { should == [discussion, another_discussion] }
