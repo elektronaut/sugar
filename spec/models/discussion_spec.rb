@@ -38,6 +38,30 @@ describe Discussion do
     end
   end
 
+  describe ".count_for" do
+
+    before do
+      discussion
+      trusted_discussion
+    end
+
+    context "when user is nil" do
+      subject { Discussion.count_for(nil) }
+      it { should == 1 }
+    end
+
+    context "when user is trusted" do
+      subject { Discussion.count_for(trusted_user) }
+      it { should == 2 }
+    end
+
+    context "when user isn't trusted" do
+      subject { Discussion.count_for(user) }
+      it { should == 1 }
+    end
+
+  end
+
   describe ".find_popular" do
 
     subject { Discussion.find_popular }

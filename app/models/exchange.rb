@@ -153,15 +153,6 @@ class Exchange < ActiveRecord::Base
       return safe_params
     end
 
-    # Counts total discussion for a user
-    def count_for(user)
-      if user && user.trusted?
-        Discussion.count(:all)
-      else
-        Discussion.count(:all, :conditions => {:trusted => false})
-      end
-    end
-
   end
 
   # Finds paginated posts. See <tt>Post.find_paginated</tt> for more info.

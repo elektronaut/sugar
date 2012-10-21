@@ -27,6 +27,15 @@ class Discussion < Exchange
   end
 
   class << self
+    # Counts total discussion for a user
+    def count_for(user)
+      if user && user.trusted?
+        self.count
+      else
+        self.where(:trusted => false).count
+      end
+    end
+
     # Finds popular discussions within a defined time range, sorted by popularity.
     # The collection is decorated with the Pagination module, which provides pagination info.
     # Takes the following options:
