@@ -38,19 +38,22 @@ class DiscussionRelationship < ActiveRecord::Base
     end
 
     def find_discussions(user, options={})
-      paginate = options.has_key?(:page)
+      conditions = options.select do |k, v|
+        [:participated, :following, :favorite].include?(k)
+      end
+      conditions[:user_id] = user.id
+      conditions[:trusted] = false unless options[:trusted]
 
-      find_conditions = [:participated, :following, :favorite].inject(Hash.new) do |cond, key|
-        cond[key] = ((options[key]) ? true : false) if options.has_key?(key)
-        cond
-      end.merge({:user_id => user.id})
+      discussions = Discussion
+        .select('discussions.*')
+        .order('sticky DESC, last_post_at DESC')
+        .includes(:poster, :last_poster, :category)
+        .joins(:discussion_relationships)
+        .where(:discussion_relationships => conditions)
 
-      find_conditions[:trusted] = false unless options[:trusted]
-      find_options = {}
-
-      if paginate
+      if options.has_key?(:page)
         limit     = options[:limit] || Discussion::DISCUSSIONS_PER_PAGE
-        discussions_count = self.count(:all, :conditions => find_conditions)
+        discussions_count = self.count(:all, :conditions => conditions)
         num_pages = (discussions_count.to_f/limit).ceil
         page      = (options[:page] || 1).to_i
         page      = 1 if page < 1
@@ -58,26 +61,22 @@ class DiscussionRelationship < ActiveRecord::Base
         offset    = limit * (page - 1)
         offset    = 0 if offset < 0
 
-        find_options = {
-          :limit => limit,
-          :offset => offset
-        }.merge(find_options)
+        discussions = discussions
+          .limit(limit)
+          .offset(offset)
       end
 
-      join_string = "INNER JOIN discussion_relationships ON discussion_relationships.discussion_id = discussions.id"
-      join_string += " AND " + find_conditions.map{|k,v| "discussion_relationships.#{k.to_s} = #{v}"}.join(" AND ")
+      discussions = discussions.all
 
-      find_options = {
-        :select     => 'discussions.*',
-        #:conditions => find_conditions,
-        :joins      => join_string,
-        :order      => 'discussions.sticky DESC, discussions.last_post_at DESC',
-        :include    => [:poster, :last_poster, :category]
-      }.merge(find_options)
-
-      discussions = Discussion.find(:all, find_options)
-      if paginate
-        Pagination.apply(discussions, Pagination::Paginater.new(:total_count => discussions_count, :page => page, :per_page => limit))
+      if options.has_key?(:page)
+        Pagination.apply(
+          discussions,
+          Pagination::Paginater.new(
+            :total_count => discussions_count,
+            :page => page,
+            :per_page => limit
+          )
+        )
       end
       discussions
     end
