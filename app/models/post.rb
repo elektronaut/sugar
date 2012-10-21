@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
   POSTS_PER_PAGE  = 50
 
   belongs_to :user, :counter_cache => true
-  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => true, :foreign_key => 'discussion_id'
+  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => :posts_count, :foreign_key => 'discussion_id'
   has_many   :discussion_views
 
   validates_presence_of :body, :user_id, :discussion_id

@@ -38,7 +38,7 @@ class Exchange < ActiveRecord::Base
   has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
 
   validates_presence_of :title
-  validates_length_of   :title, :maximum => 100, :too_long => 'is too long'
+  validates_length_of   :title, :maximum => 100
   validates_presence_of :body, :on => :create, :unless => :skip_body_validation
 
   validate do |exchange|
@@ -84,66 +84,6 @@ class Exchange < ActiveRecord::Base
 
   class << self
 
-    # Searches exchanges
-    #
-    # === Parameters
-    # * :query    - The query string
-    # * :page     - Page number, starting on 1 (default: first page)
-    # * :limit    - Number of posts per page (default: 20)
-    # * :trusted  - Boolean, get trusted posts as well (default: false)
-    def search_paginated(options={})
-      page  = (options[:page] || 1).to_i
-      page = 1 if page < 1
-
-      search = self.search do
-        fulltext options[:query]
-        with     :trusted, false unless options[:trusted]
-        order_by :last_post_at, :desc
-        paginate :page => page, :per_page => DISCUSSIONS_PER_PAGE
-      end
-
-      Pagination.apply(
-        search.results,
-        Pagination::Paginater.new(
-          :total_count => search.total,
-          :page        => page,
-          :per_page    => DISCUSSIONS_PER_PAGE
-        )
-      )
-    end
-
-    # Find paginated exchanges, sorted by activity, with the sticky ones on top
-    #
-    # === Parameters
-    # * :page     - Page number, starting on 1 (default: first page)
-    # * :limit    - Number of posts per page (default: 20)
-    # * :category - Only get exchanges in this category
-    # * :trusted  - Boolean, get trusted posts as well (default: false)
-    def find_paginated(options={})
-      conditions = {}
-      conditions[:category_id] = options[:category].id if options[:category]
-      conditions[:trusted]     = false unless options[:trusted]
-
-      # Utilize the counter cache on category if possible, if not do the query.
-      exchanges_count   = options[:category].discussions_count if options[:category]
-      exchanges_count ||= Discussion.count(:conditions => conditions)
-
-      Pagination.paginate(
-        :total_count => exchanges_count,
-        :per_page    => options[:limit] || DISCUSSIONS_PER_PAGE,
-        :page        => options[:page]  || 1
-      ) do |pagination|
-        Discussion.find(
-          :all,
-          :conditions => conditions,
-          :limit      => pagination.limit,
-          :offset     => pagination.offset,
-          :order      => 'sticky DESC, last_post_at DESC',
-          :include    => [:poster, :last_poster, :category]
-        )
-      end
-    end
-
     # Deletes attributes which normal users shouldn't be able to touch from a param hash
     def safe_attributes(params)
       safe_params = params.dup
@@ -153,11 +93,6 @@ class Exchange < ActiveRecord::Base
       return safe_params
     end
 
-  end
-
-  # Finds paginated posts. See <tt>Post.find_paginated</tt> for more info.
-  def paginated_posts(options={})
-    Post.find_paginated({:discussion => self}.merge(options))
   end
 
   # Finds the number of the last page
@@ -187,6 +122,12 @@ class Exchange < ActiveRecord::Base
     slug = slug.gsub(/[\]\}]/,')')
     slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
     "#{self.id.to_s};" + slug
+  end
+
+  # Returns true if the user can close this discussion
+  def closeable_by?(user)
+    return false unless user
+    (user.moderator? || (!self.closer && self.poster == user) || self.closer == user) ? true : false
   end
 
 end

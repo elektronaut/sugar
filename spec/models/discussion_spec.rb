@@ -228,31 +228,4 @@ describe Discussion do
 
   end
 
-  describe "#closeable_by?" do
-
-    specify { discussion.closeable_by?(user).should be_false }
-
-    context "when not closed" do
-      specify { discussion.closeable_by?(discussion.poster).should be_true }
-      specify { discussion.closeable_by?(moderator).should be_true }
-    end
-
-    context "when closed by the poster" do
-      subject { discussion }
-      before { discussion.update_attributes(closed: true, updated_by: discussion.poster) }
-      specify { discussion.closeable_by?(discussion.poster).should be_true }
-      specify { discussion.closeable_by?(moderator).should be_true }
-      its(:closer) { should == discussion.poster }
-    end
-
-    context "closed by moderator" do
-      subject { discussion }
-      before { discussion.update_attributes(closed: true, updated_by: moderator) }
-      specify { discussion.closeable_by?(discussion.poster).should be_false }
-      specify { discussion.closeable_by?(moderator).should be_true }
-      its(:closer) { should == moderator }
-    end
-
-  end
-
 end
