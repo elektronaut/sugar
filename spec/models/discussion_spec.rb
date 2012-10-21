@@ -62,6 +62,83 @@ describe Discussion do
 
   end
 
+  describe ".find_paginated" do
+
+    subject { Discussion.find_paginated }
+    it { should be_kind_of(Pagination::InstanceMethods) }
+
+    context "with options" do
+
+      describe :page do
+        before { 2.times { create(:discussion) } }
+
+        context "when not specified" do
+          subject { Discussion.find_paginated(:limit => 1) }
+          its(:page) { should == 1 }
+        end
+
+        context "when specified" do
+          subject { Discussion.find_paginated(:limit => 1, :page => 2) }
+          its(:page) { should == 2 }
+        end
+
+        context "when out of bounds" do
+          subject { Discussion.find_paginated(:limit => 1, :page => 3) }
+          its(:page) { should == 2 }
+        end
+      end
+
+      describe :limit do
+
+        context "when not specified" do
+          its(:per_page) { should == Exchange::DISCUSSIONS_PER_PAGE }
+        end
+
+        context "when specified" do
+          subject { Discussion.find_paginated(limit: 7) }
+          its(:per_page) { should == 7 }
+        end
+
+      end
+
+      describe :category do
+
+        let!(:discussion) { create(:discussion) }
+        let!(:another_discussion) { create(:discussion) }
+
+        context "when not specified" do
+          it { should == [discussion, another_discussion] }
+        end
+
+        context "when set to a category" do
+          subject { Discussion.find_paginated(category: discussion.category) }
+          it { should == [discussion] }
+        end
+
+      end
+
+      describe :trusted do
+        before { trusted_discussion }
+
+        context "when not specified" do
+          it { should_not include(trusted_discussion) }
+        end
+
+        context "when true" do
+          subject { Discussion.find_paginated(trusted: true) }
+          it { should include(trusted_discussion) }
+        end
+
+        context "when false" do
+          subject { Discussion.find_paginated(trusted: false) }
+          it { should_not include(trusted_discussion) }
+        end
+      end
+
+    end
+
+  end
+
   describe ".find_popular" do
 
     subject { Discussion.find_popular }
