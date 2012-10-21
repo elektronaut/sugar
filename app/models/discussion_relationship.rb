@@ -45,7 +45,7 @@ class DiscussionRelationship < ActiveRecord::Base
       conditions[:trusted] = false unless options[:trusted]
 
       discussions = Discussion
-        .select('discussions.*')
+        .select("#{Discussion.table_name}.*")
         .order('sticky DESC, last_post_at DESC')
         .includes(:poster, :last_poster, :category)
         .joins(:discussion_relationships)
