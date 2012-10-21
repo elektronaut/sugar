@@ -51,7 +51,7 @@ class Discussion < Exchange
         fulltext options[:query]
         with     :trusted, false unless options[:trusted]
         order_by :last_post_at, :desc
-        paginate :page => page, :per_page => Exchange::DISCUSSIONS_PER_PAGE
+        paginate :page => page, :per_page => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
       end
 
       Pagination.apply(
@@ -59,7 +59,7 @@ class Discussion < Exchange
         Pagination::Paginater.new(
           :total_count => search.total,
           :page        => page,
-          :per_page    => Exchange::DISCUSSIONS_PER_PAGE
+          :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
         )
       )
     end

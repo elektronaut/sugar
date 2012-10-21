@@ -62,6 +62,51 @@ describe Discussion do
 
   end
 
+  describe ".search_paginated" do
+
+    let(:search_results) { double(results: [discussion], total: 2) }
+
+    before do
+      Discussion.stub(:search).and_return(search_results)
+    end
+
+    subject { Discussion.search_paginated(query: "Bacon") }
+    it { should be_kind_of(Pagination::InstanceMethods) }
+    it { should include(discussion) }
+
+    context "with options" do
+
+      describe :page do
+
+        context "when not specified" do
+          subject { Discussion.search_paginated(query: "Bacon", limit: 1) }
+          its(:page) { should == 1 }
+        end
+
+        context "when specified" do
+          subject { Discussion.search_paginated(query: "Bacon", limit: 1, page: 2) }
+          its(:page) { should == 2 }
+        end
+
+      end
+
+      describe :limit do
+
+        context "when not specified" do
+          its(:per_page) { should == Exchange::DISCUSSIONS_PER_PAGE }
+        end
+
+        context "when specified" do
+          subject { Discussion.search_paginated(query: "Bacon", limit: 7) }
+          its(:per_page) { should == 7 }
+        end
+
+      end
+
+    end
+
+  end
+
   describe ".find_paginated" do
 
     subject { Discussion.find_paginated }
@@ -73,17 +118,17 @@ describe Discussion do
         before { 2.times { create(:discussion) } }
 
         context "when not specified" do
-          subject { Discussion.find_paginated(:limit => 1) }
+          subject { Discussion.find_paginated(limit: 1) }
           its(:page) { should == 1 }
         end
 
         context "when specified" do
-          subject { Discussion.find_paginated(:limit => 1, :page => 2) }
+          subject { Discussion.find_paginated(limit: 1, page: 2) }
           its(:page) { should == 2 }
         end
 
         context "when out of bounds" do
-          subject { Discussion.find_paginated(:limit => 1, :page => 3) }
+          subject { Discussion.find_paginated(limit: 1, page: 3) }
           its(:page) { should == 2 }
         end
       end
@@ -110,7 +155,7 @@ describe Discussion do
         end
 
         context "when not specified" do
-          it { should == [discussion, another_discussion] }
+          it { should =~ [discussion, another_discussion] }
         end
 
         context "when set to a category" do
@@ -154,17 +199,17 @@ describe Discussion do
         before { 2.times { create(:discussion) } }
 
         context "when not specified" do
-          subject { Discussion.find_popular(:limit => 1) }
+          subject { Discussion.find_popular(limit: 1) }
           its(:page) { should == 1 }
         end
 
         context "when specified" do
-          subject { Discussion.find_popular(:limit => 1, :page => 2) }
+          subject { Discussion.find_popular(limit: 1, page: 2) }
           its(:page) { should == 2 }
         end
 
         context "when out of bounds" do
-          subject { Discussion.find_popular(:limit => 1, :page => 3) }
+          subject { Discussion.find_popular(limit: 1, page: 3) }
           its(:page) { should == 2 }
         end
 
