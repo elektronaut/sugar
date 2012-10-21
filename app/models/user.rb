@@ -409,18 +409,6 @@ class User < ActiveRecord::Base
     labels
   end
 
-  # Fixes any inconsistencies in the counter_cache columns.
-  def fix_counter_cache!
-    if posts_count != posts.count
-      logger.warn "counter_cache error detected on User ##{self.id} (posts)"
-      User.update_counters(self.id, :posts_count => (posts.count - posts_count) )
-    end
-    if discussions_count != discussions.count
-      logger.warn "counter_cache error detected on User ##{self.id} (discussions)"
-      User.update_counters(self.id, :discussions_count => (discussions.count - discussions_count) )
-    end
-  end
-
   # Returns the chosen theme or the default one
   def theme
     self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)

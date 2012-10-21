@@ -95,7 +95,6 @@ class PostsController < ApplicationController
         @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
         if @post.valid?
           @discussion.reload
-          @discussion.fix_counter_cache!
           if @discussion.kind_of?(Conversation)
             @discussion.conversation_relationships.reject{|r| r.user == @current_user}.each{|r| r.update_attribute(:new_posts, true)}
           end

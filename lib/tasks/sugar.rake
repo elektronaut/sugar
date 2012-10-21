@@ -76,8 +76,6 @@ namespace :sugar do
     empty_discussions.each do |d|
       d.destroy
     end
-    users.each{|u| u.fix_counter_cache!}
-    categories.each{|c| c.fix_counter_cache!}
   end
 
   desc "Converts Flickr usernames to user IDs"

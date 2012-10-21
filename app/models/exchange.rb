@@ -185,14 +185,6 @@ class Exchange < ActiveRecord::Base
     (self.posts_count.to_f/per_page).ceil
   end
 
-  # Detects and fixes discrepancies in the counter cache
-  def fix_counter_cache!
-    if posts_count != posts.count
-      logger.warn "counter_cache error detected on Exchange ##{self.id}"
-      Exchange.update_counters(self.id, :posts_count => (posts.count - posts_count) )
-    end
-  end
-
   # Does this exchange have any labels?
   def labels?
     (self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
@@ -215,12 +207,6 @@ class Exchange < ActiveRecord::Base
     slug = slug.gsub(/[\]\}]/,')')
     slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
     "#{self.id.to_s};" + slug
-  end
-
-  if ENV['RAILS_ENV'] == 'test'
-    def posts_count
-      self.posts.count
-    end
   end
 
 end
