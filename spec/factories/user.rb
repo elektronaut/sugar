@@ -13,7 +13,7 @@ FactoryGirl.define do
     activated  true
     banned     false
     trusted    false
-    
+
     factory :admin do
       admin true
     end
@@ -21,11 +21,17 @@ FactoryGirl.define do
     factory :moderator do
       moderator true
     end
-    
+
+    factory :new_user do
+      password 'foobar'
+      confirm_password 'foobar'
+      hashed_password nil
+    end
+
     factory :user_admin do
       user_admin true
     end
-    
+
     factory :trusted_user do
       trusted true
     end
