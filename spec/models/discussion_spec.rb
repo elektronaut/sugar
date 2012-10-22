@@ -112,9 +112,10 @@ describe Discussion do
     subject { Discussion.find_paginated }
     it { should be_kind_of(Pagination::InstanceMethods) }
 
-    context "with options" do
+    context "with option" do
 
       describe :page do
+
         before { 2.times { create(:discussion) } }
 
         context "when not specified" do
@@ -131,6 +132,7 @@ describe Discussion do
           subject { Discussion.find_paginated(limit: 1, page: 3) }
           its(:page) { should == 2 }
         end
+
       end
 
       describe :limit do
@@ -149,6 +151,7 @@ describe Discussion do
       describe :category do
 
         let(:another_discussion) { create(:discussion) }
+
         before do
           discussion
           another_discussion

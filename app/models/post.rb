@@ -72,7 +72,7 @@ class Post < ActiveRecord::Base
         with     :conversation, (options[:conversation] || false)
         with     :discussion_id, options[:discussion_id] if options[:discussion_id]
         order_by :created_at, :desc
-        paginate :page => page, :per_page => POSTS_PER_PAGE
+        paginate :page => page, :per_page => (options[:limit] || POSTS_PER_PAGE)
       end
 
       Pagination.apply(
@@ -80,7 +80,7 @@ class Post < ActiveRecord::Base
         Pagination::Paginater.new(
           :total_count => search.total,
           :page        => page,
-          :per_page    => POSTS_PER_PAGE
+          :per_page    => (options[:limit] || POSTS_PER_PAGE)
         )
       )
     end
@@ -92,8 +92,7 @@ class Post < ActiveRecord::Base
 
   # Get this posts sequence number
   def post_number
-    #@post_number ||= ( Post.count_by_sql("SELECT COUNT(*) FROM posts WHERE discussion_id = #{self.discussion.id} AND created_at < '#{self.created_at.to_formatted_s(:db)}'") + 1)
-    @post_number ||= (Post.count(:conditions => ['discussion_id = ? AND created_at < ?', self.discussion_id, self.created_at]) + 1)
+    @post_number ||= (Post.count(:conditions => ['discussion_id = ? AND id < ?', self.discussion_id, self.id]) + 1)
   end
 
   def page(options={})
@@ -106,7 +105,7 @@ class Post < ActiveRecord::Base
       PostParser.new(self.body.dup).to_html
     else
       unless body_html?
-        self.update_attribute(:body_html, PostParser.new(self.body.dup).to_html)
+        self.update_column(:body_html, PostParser.new(self.body.dup).to_html)
       end
       self[:body_html].html_safe
     end
@@ -121,8 +120,13 @@ class Post < ActiveRecord::Base
     (user && (user.moderator? || user == self.user)) ? true : false
   end
 
+  # Returns true if the user can view this post
   def viewable_by?(user)
-    (user && !(self.discussion.trusted? && !(user.trusted? || user.admin?))) ? true : false
+    if self.trusted?
+      (user && user.trusted?) ? true : false
+    else
+      (Sugar.config(:public_browsing) || user) ? true : false
+    end
   end
 
   def mentions_users?
