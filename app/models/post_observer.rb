@@ -14,11 +14,9 @@ class PostObserver < ActiveRecord::Observer
   def after_create(record)
     clean_cache_for(record)
   end
-  def after_update(record)
-    #clean_cache_for(record)
-  end
+
   def after_destroy(record)
-    #clean_cache_for(record)
+    clean_cache_for(record)
   end
 
 end
