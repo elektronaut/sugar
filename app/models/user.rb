@@ -126,18 +126,6 @@ class User < ActiveRecord::Base
     (self[:moderator] || admin?)
   end
 
-  # Returns true if this user is following the given discussion.
-  def following?(discussion)
-    relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-    relationship && relationship.following?
-  end
-
-  # Returns true if this user has favorited the given discussion.
-  def favorite?(discussion)
-    relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-    relationship && relationship.favorite?
-  end
-
   # Returns admin flags as strings
   def admin_labels
     labels = []
