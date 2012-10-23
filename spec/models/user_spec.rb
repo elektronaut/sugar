@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe User do
 
+  it { should be_kind_of(Authenticable) }
+  it { should be_kind_of(Inviter) }
+  it { should be_kind_of(ExchangeParticipant) }
+
   it "should allow usernames with unicode characters" do
     user = build(:user, :username => 'Gustave Moíre')
     user.should be_valid
