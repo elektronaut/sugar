@@ -2,19 +2,6 @@
 
 namespace :sugar do
 
-  desc "Generate new passwords for everyone and send welcome mail"
-  task :welcome => :environment do
-    User.find_active.each do |user|
-      user.generate_password!
-      user.save
-      begin
-        Mailer.welcome(user).deliver
-      rescue
-        puts "Couldn't send message to: #{user.username} - #{user.full_email}"
-      end
-    end
-  end
-
   desc "Pack themes"
   task :pack_themes => :environment do
     themes_dir = File.join(File.dirname(__FILE__), "../../public/themes")

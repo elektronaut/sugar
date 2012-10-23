@@ -49,10 +49,7 @@ class UsersController < ApplicationController
   public
 
     def index
-      @users = User.all(
-        :order => 'username ASC',
-        :conditions => ['activated = ? AND banned = ?', true, false]
-      )
+      @users = User.active
       respond_with(@users) do |format|
         format.mobile {
           @online_users = @users.select{|u| u.online?}
@@ -61,40 +58,37 @@ class UsersController < ApplicationController
     end
 
     def banned
-      @users  = User.all(
-        :order      => 'username ASC',
-        :conditions => ['banned = ? OR banned_until > ?', true, Time.now]
-      )
+      @users  = User.banned
       respond_with(@users)
     end
 
     def recently_joined
-      @users = User.find_new
+      @users = User.recently_joined.limit(25)
       respond_with(@users)
     end
 
     def online
-      @users = User.find_online
+      @users = User.online
       respond_with(@users)
     end
 
     def admins
-      @users  = User.find_admins
+      @users  = User.admins
       respond_with(@users)
     end
 
     def xboxlive
-      @users = User.find_xbox_users
+      @users = User.xbox_users
       respond_with(@users)
     end
 
     def social
-      @users = User.find_social_users
+      @users = User.social
       respond_with(@users)
     end
 
     def top_posters
-      @users = User.find_top_posters(:limit => 50)
+      @users = User.top_posters.limit(50)
       respond_with(@users)
     end
 
@@ -105,7 +99,7 @@ class UsersController < ApplicationController
       unless @current_user && @current_user.trusted?
         flash[:notice] = "You need to be trusted to view this page!"
       end
-      @users = User.find_trusted
+      @users = User.trusted
       respond_with(@users)
     end
 

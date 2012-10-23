@@ -26,60 +26,26 @@ class User < ActiveRecord::Base
   end
 
   validates_presence_of   :username
-  validates_uniqueness_of :username, :message => 'is already registered.', :case_sensitive => false
-  validates_format_of     :username, :with => /^[\p{Word}\d\-\s_#!]+$/
+  validates_uniqueness_of :username, :case_sensitive => false, :message => "is already registered"
+  validates_format_of     :username, :with => /^[\p{Word}\d\-\s_#!]+$/, :message => "is not valid"
 
   validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook?}, :case_sensitive => false
   validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
 
   validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
 
+  scope :active,          where(:activated => true, :banned => false)
+  scope :by_username,     order('username ASC')
+  scope :banned,          lambda { where('banned = ? OR banned_until > ?', true, Time.now).by_username }
+  scope :online,          lambda { active.where("last_active > ?", 15.minutes.ago).by_username }
+  scope :admins,          active.where("admin = ? OR user_admin = ? OR moderator = ?", true, true, true).by_username
+  scope :xbox_users,      active.where('gamertag IS NOT NULL OR gamertag != ""').by_username
+  scope :social,          active.where('(twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != "")').by_username
+  scope :recently_joined, active.order('created_at DESC')
+  scope :top_posters,     active.order('posts_count DESC')
+  scope :trusted,         active.where('trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?', true, true, true, true).by_username
+
   class << self
-    # Finds active users.
-    def find_active
-      self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'username ASC')
-    end
-
-    # Finds users with activity within some_time. The last_active column is only
-    # updated every 10 minutes, smaller values won't work.
-    def find_online(some_time=15.minutes)
-      User.find(:all, :conditions => ['activated = ? AND last_active > ?', true, some_time.ago], :order => 'username ASC')
-    end
-
-    # Finds admins.
-    def find_admins
-      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true])
-    end
-
-    # Finds Xbox Live users
-    def find_xbox_users
-      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (gamertag IS NOT NULL AND gamertag != "")', true, false])
-    end
-
-    # Finds Twitter users.
-    def find_social_users
-      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND ((twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != ""))', true, false])
-    end
-
-    # Finds new users. Pass <tt>:limit</tt> as an option to control number
-    # of users fetched, this defaults to 25.
-    def find_new(options={})
-      options[:limit] ||= 25
-      self.find(:all, :conditions => ['activated = ? AND banned = ?', true, false], :order => 'created_at DESC', :limit => options[:limit])
-    end
-
-    # Finds top posters. Pass <tt>:limit</tt> as an option to control number
-    # of users fetched, this defaults to 50.
-    def find_top_posters(options={})
-      options[:limit] ||= 50
-      @users  = User.find(:all, :order => 'posts_count DESC', :conditions => ['activated = ? AND banned = ?', true, false], :limit => options[:limit])
-    end
-
-    # Find trusted users
-    def find_trusted
-      User.find(:all, :order => 'username ASC', :conditions => ['activated = ? AND banned = ? AND (trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?)', true, false, true, true, true, true])
-    end
-
     # Deletes attributes which normal users shouldn't be able to touch from a param hash.
     def safe_attributes(params)
       safe_params = params.dup
@@ -88,7 +54,6 @@ class User < ActiveRecord::Base
       end
       return safe_params
     end
-
   end
 
   # Returns the full email address with real name.
