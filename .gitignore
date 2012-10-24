@@ -1,5 +1,6 @@
 .DS_Store
 .bundle
+coverage/*
 log/*.log
 log/*.log.*
 log/*.lck

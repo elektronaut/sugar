@@ -63,6 +63,10 @@ group :development do
   gem 'guard-rspec'
 end
 
+group :test do
+  gem 'simplecov', :require => false
+end
+
 group :test, :development do
   gem 'sunspot_solr'
   gem 'sunspot-rails-tester'
