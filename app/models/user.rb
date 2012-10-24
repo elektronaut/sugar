@@ -16,34 +16,43 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   include Authenticable, Inviter, ExchangeParticipant
 
-  # The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt> for regular users.
-  UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned, :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at, :posts_count, :discussions_count, :inviter_id, :available_invites
+  # The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt>
+  # for regular users.
+  UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned,
+                      :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at,
+                      :posts_count, :discussions_count, :inviter_id, :available_invites
   STATUS_OPTIONS    = :inactive, :activated, :banned
 
-  validate do |user|
-    # Set trusted to true if applicable
-    user.trusted = true if user.moderator? && user.user_admin?
-  end
+  before_validation :ensure_last_active_is_set
 
-  validates_presence_of   :username
-  validates_uniqueness_of :username, :case_sensitive => false, :message => "is already registered"
-  validates_format_of     :username, :with => /^[\p{Word}\d\-\s_#!]+$/, :message => "is not valid"
+  validates :username,
+            :presence => true,
+            :uniqueness => { :case_sensitive => false, :message => "is already registered" },
+            :format => { :with => /^[\p{Word}\d\-\s_#!]+$/, :message => "is not valid" }
 
-  validates_presence_of   :email, :unless => Proc.new{|u| u.openid_url? || u.facebook?}, :case_sensitive => false
-  validates_uniqueness_of :email, :message => 'is already registered.', :case_sensitive => false, :allow_nil => true, :allow_blank => true
+  validates :email,
+            :email => true,
+            :uniqueness => { :case_sensitive => false, :message => 'is already registered' },
+            :if => :email?
 
-  validates_presence_of   :realname, :application, :if => Proc.new{|u| Sugar.config(:signup_approval_required)}
+  validates :email,
+            :presence => { :case_sensitive => false },
+            :unless => Proc.new { |u| u.openid_url? || u.facebook? }
+
+  validates :realname, :application,
+            :presence => true,
+            :if => Proc.new { |u| Sugar.config(:signup_approval_required) }
 
   scope :active,          where(:activated => true, :banned => false)
   scope :by_username,     order('username ASC')
-  scope :banned,          lambda { where('banned = ? OR banned_until > ?', true, Time.now).by_username }
-  scope :online,          lambda { active.where("last_active > ?", 15.minutes.ago).by_username }
-  scope :admins,          active.where("admin = ? OR user_admin = ? OR moderator = ?", true, true, true).by_username
-  scope :xbox_users,      active.where('gamertag IS NOT NULL OR gamertag != ""').by_username
-  scope :social,          active.where('(twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != "")').by_username
+  scope :banned,          lambda { where('banned = ? OR banned_until > ?', true, Time.now) }
+  scope :online,          lambda { active.where("last_active > ?", 15.minutes.ago) }
+  scope :admins,          active.where("admin = ? OR user_admin = ? OR moderator = ?", true, true, true)
+  scope :xbox_users,      active.where('gamertag IS NOT NULL OR gamertag != ""')
+  scope :social,          active.where('(twitter IS NOT NULL AND twitter != "") OR (instagram IS NOT NULL AND instagram != "") OR (flickr IS NOT NULL AND flickr != "")')
   scope :recently_joined, active.order('created_at DESC')
-  scope :top_posters,     active.order('posts_count DESC')
-  scope :trusted,         active.where('trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?', true, true, true, true).by_username
+  scope :top_posters,     active.where('posts_count > 0').order('posts_count DESC')
+  scope :trusted,         active.where('trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?', true, true, true, true)
 
   class << self
     # Deletes attributes which normal users shouldn't be able to touch from a param hash.
@@ -120,7 +129,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def as_json(options)
+  def as_json(options={})
     super({
       :only => [
         :id, :username, :realname, :latitude, :longitude, :inviter_id,
@@ -132,7 +141,7 @@ class User < ActiveRecord::Base
     }.merge(options))
   end
 
-  def to_xml(options)
+  def to_xml(options={})
     super({
       :only => [
         :id, :username, :realname, :latitude, :longitude, :inviter_id,
@@ -143,4 +152,11 @@ class User < ActiveRecord::Base
       ]
     }.merge(options))
   end
+
+  protected
+
+    def ensure_last_active_is_set
+      self.last_active ||= Time.now
+    end
+
 end

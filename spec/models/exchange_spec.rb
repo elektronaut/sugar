@@ -65,6 +65,7 @@ describe Exchange do
   end
 
   describe ".safe_attributes" do
+
     subject do
       Discussion.safe_attributes(
         # Invalid attributes
@@ -75,8 +76,9 @@ describe Exchange do
         # Valid attributes
         title: 'Test', body: 'Testing'
       )
-      it { should == { title: "Test", body: "Testing" } }
     end
+
+    it { should == { title: "Test", body: "Testing" } }
 
   end
 

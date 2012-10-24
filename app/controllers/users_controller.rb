@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     end
 
     def banned
-      @users  = User.banned
+      @users  = User.banned.by_username
       respond_with(@users)
     end
 
@@ -68,22 +68,22 @@ class UsersController < ApplicationController
     end
 
     def online
-      @users = User.online
+      @users = User.online.by_username
       respond_with(@users)
     end
 
     def admins
-      @users  = User.admins
+      @users  = User.admins.by_username
       respond_with(@users)
     end
 
     def xboxlive
-      @users = User.xbox_users
+      @users = User.xbox_users.by_username
       respond_with(@users)
     end
 
     def social
-      @users = User.social
+      @users = User.social.by_username
       respond_with(@users)
     end
 
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
       unless @current_user && @current_user.trusted?
         flash[:notice] = "You need to be trusted to view this page!"
       end
-      @users = User.trusted
+      @users = User.trusted.by_username
       respond_with(@users)
     end
 

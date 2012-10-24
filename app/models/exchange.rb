@@ -19,7 +19,8 @@ class Exchange < ActiveRecord::Base
   DISCUSSIONS_PER_PAGE = 30
 
   # These attributes should be filtered from params
-  UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count, :created_at, :last_post_at, :trusted
+  UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count,
+                      :created_at, :updated_at, :last_post_at, :trusted
 
   # Virtual attribute for the body of the first post
   attr_accessor :body
