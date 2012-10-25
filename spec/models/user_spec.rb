@@ -201,11 +201,6 @@ describe User do
 
   end
 
-  describe "#facebook?" do
-    specify { create(:user, facebook_uid: 123).facebook?.should be_true }
-    specify { create(:user, facebook_uid: nil).facebook?.should be_false }
-  end
-
   describe "#online?" do
     specify { create(:user, last_active: 2.minutes.ago).online?.should be_true }
     specify { create(:user, last_active: 2.days.ago).online?.should be_false }

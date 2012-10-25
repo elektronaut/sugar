@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
   UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned,
                       :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at,
                       :posts_count, :discussions_count, :inviter_id, :available_invites
-  STATUS_OPTIONS    = :inactive, :activated, :banned
 
   before_validation :ensure_last_active_is_set
 
@@ -73,11 +72,6 @@ class User < ActiveRecord::Base
   # Returns realname or username
   def realname_or_username
     self.realname? ? self.realname : self.username
-  end
-
-  # Is this a Facebook user?
-  def facebook?
-    self.facebook_uid?
   end
 
   # Is the user online?

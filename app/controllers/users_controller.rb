@@ -299,7 +299,7 @@ class UsersController < ApplicationController
         @user = User.find_by_email(params[:email])
         if @user
           if @user.activated? && !@user.banned?
-            @user.generate_password!
+            @user.generate_new_password!
             Mailer.password_reminder(@user, login_users_path(:only_path => false)).deliver
             @user.save
             flash[:notice] = "A new password has been mailed to you"
