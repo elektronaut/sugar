@@ -107,7 +107,7 @@ describe Invite do
     it "destroys all expired invites" do
       expect {
         Invite.destroy_expired!
-      }.should change{ Invite.count }.by(-1)
+      }.to change{ Invite.count }.by(-1)
     end
 
   end
