@@ -65,40 +65,48 @@ describe Discussion do
   describe ".search_paginated" do
 
     let(:search_results) { double(results: [discussion], total: 2) }
+    subject { Discussion.search_paginated(query: "Bacon") }
 
-    before do
-      Discussion.stub(:search).and_return(search_results)
+    context "with solr", solr: true do
+      it { should == [] }
     end
 
-    subject { Discussion.search_paginated(query: "Bacon") }
-    it { should be_kind_of(Pagination::InstanceMethods) }
-    it { should include(discussion) }
+    context "with stubbed search" do
 
-    context "with options" do
-
-      describe :page do
-
-        context "when not specified" do
-          subject { Discussion.search_paginated(query: "Bacon", limit: 1) }
-          its(:page) { should == 1 }
-        end
-
-        context "when specified" do
-          subject { Discussion.search_paginated(query: "Bacon", limit: 1, page: 2) }
-          its(:page) { should == 2 }
-        end
-
+      before do
+        Discussion.stub(:search).and_return(search_results)
       end
 
-      describe :limit do
+      it { should be_kind_of(Pagination::InstanceMethods) }
+      it { should include(discussion) }
 
-        context "when not specified" do
-          its(:per_page) { should == Exchange::DISCUSSIONS_PER_PAGE }
+      context "with options" do
+
+        describe :page do
+
+          context "when not specified" do
+            subject { Discussion.search_paginated(query: "Bacon", limit: 1) }
+            its(:page) { should == 1 }
+          end
+
+          context "when specified" do
+            subject { Discussion.search_paginated(query: "Bacon", limit: 1, page: 2) }
+            its(:page) { should == 2 }
+          end
+
         end
 
-        context "when specified" do
-          subject { Discussion.search_paginated(query: "Bacon", limit: 7) }
-          its(:per_page) { should == 7 }
+        describe :limit do
+
+          context "when not specified" do
+            its(:per_page) { should == Exchange::DISCUSSIONS_PER_PAGE }
+          end
+
+          context "when specified" do
+            subject { Discussion.search_paginated(query: "Bacon", limit: 7) }
+            its(:per_page) { should == 7 }
+          end
+
         end
 
       end
@@ -300,6 +308,12 @@ describe Discussion do
 
     end
 
+  end
+
+  describe "#participants" do
+    let!(:post) { create(:post, discussion: discussion) }
+    subject { discussion.participants }
+    it { should == [discussion.poster, post.user] }
   end
 
   describe "#viewable_by?" do

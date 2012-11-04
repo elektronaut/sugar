@@ -162,39 +162,48 @@ describe Post do
 
     let(:search_results) { double(results: [post], total: 2) }
 
-    before do
-      Post.stub(:search).and_return(search_results)
-    end
-
     subject { Post.search_paginated(query: "Bacon") }
     it { should be_kind_of(Pagination::InstanceMethods) }
-    it { should include(post) }
 
-    context "with option" do
+    context "with solr", solr: true do
+      it { should == [] }
+    end
 
-      describe :page do
+    context "with stubbed search engine" do
 
-        context "when not specified" do
-          subject { Post.search_paginated(query: "Bacon", limit: 1) }
-          its(:page) { should == 1 }
-        end
-
-        context "when specified" do
-          subject { Post.search_paginated(query: "Bacon", limit: 1, page: 2) }
-          its(:page) { should == 2 }
-        end
-
+      before do
+        Post.stub(:search).and_return(search_results)
       end
 
-      describe :limit do
+      it { should include(post) }
 
-        context "when not specified" do
-          its(:per_page) { should == Post::POSTS_PER_PAGE }
+      context "with option" do
+
+        describe :page do
+
+          context "when not specified" do
+            subject { Post.search_paginated(query: "Bacon", limit: 1) }
+            its(:page) { should == 1 }
+          end
+
+          context "when specified" do
+            subject { Post.search_paginated(query: "Bacon", limit: 1, page: 2) }
+            its(:page) { should == 2 }
+          end
+
         end
 
-        context "when specified" do
-          subject { Post.search_paginated(query: "Bacon", limit: 7) }
-          its(:per_page) { should == 7 }
+        describe :limit do
+
+          context "when not specified" do
+            its(:per_page) { should == Post::POSTS_PER_PAGE }
+          end
+
+          context "when specified" do
+            subject { Post.search_paginated(query: "Bacon", limit: 7) }
+            its(:per_page) { should == 7 }
+          end
+
         end
 
       end

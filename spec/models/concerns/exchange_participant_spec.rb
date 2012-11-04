@@ -17,7 +17,7 @@ describe ExchangeParticipant do
   it { should have_many(:conversation_relationships).dependent(:destroy) }
   it { should have_many(:conversations).through(:conversation_relationships) }
 
-  describe ".participated_discussions" do
+  describe "#participated_discussions" do
     it "delegates to DiscussionRelationship" do
       DiscussionRelationship.should_receive(:find_participated) do |u, opt|
         u.should == user
@@ -27,7 +27,7 @@ describe ExchangeParticipant do
     end
   end
 
-  describe ".following_discussions" do
+  describe "#following_discussions" do
     it "delegates to DiscussionRelationship" do
       DiscussionRelationship.should_receive(:find_following) do |u, opt|
         u.should == user
@@ -37,7 +37,7 @@ describe ExchangeParticipant do
     end
   end
 
-  describe ".favorite_discussions" do
+  describe "#favorite_discussions" do
     it "delegates to DiscussionRelationship" do
       DiscussionRelationship.should_receive(:find_favorite) do |u, opt|
         u.should == user
@@ -47,7 +47,7 @@ describe ExchangeParticipant do
     end
   end
 
-  describe ".mark_discussion_viewed" do
+  describe "#mark_discussion_viewed" do
     let(:post) { create(:post, discussion: discussion) }
 
     context "with existing discussion view" do
@@ -89,7 +89,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".paginated_discussions" do
+  describe "#paginated_discussions" do
 
     subject { user.paginated_discussions }
     it { should be_kind_of Pagination::InstanceMethods }
@@ -160,7 +160,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".paginated_conversations" do
+  describe "#paginated_conversations" do
 
     subject { user.paginated_conversations }
     it { should be_kind_of Pagination::InstanceMethods }
@@ -212,7 +212,7 @@ describe ExchangeParticipant do
     end
   end
 
-  describe ".paginated_posts" do
+  describe "#paginated_posts" do
 
     subject { user.paginated_posts }
     it { should be_kind_of Pagination::InstanceMethods }
@@ -283,7 +283,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".posts_per_day" do
+  describe "#posts_per_day" do
 
     let(:user) { create(:user, :created_at => 3.days.ago) }
 
@@ -305,7 +305,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".unread_conversations_count" do
+  describe "#unread_conversations_count" do
 
     subject { user.unread_conversations_count }
 
@@ -325,7 +325,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".unread_conversations?" do
+  describe "#unread_conversations?" do
 
     subject { user.unread_conversations? }
 
@@ -340,7 +340,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".following?" do
+  describe "#following?" do
 
     subject { user.following?(discussion) }
 
@@ -355,7 +355,7 @@ describe ExchangeParticipant do
 
   end
 
-  describe ".favorite?" do
+  describe "#favorite?" do
 
     subject { user.favorite?(discussion) }
 

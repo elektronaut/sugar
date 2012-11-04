@@ -30,9 +30,6 @@ class Post < ActiveRecord::Base
 
   searchable do
     text    :body
-    text :username do
-      user.username
-    end
     integer :user_id
     integer :discussion_id
     time    :created_at

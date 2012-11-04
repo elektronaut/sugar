@@ -12,7 +12,7 @@ describe Inviter do
   it { should have_many(:invitees).class_name('User') }
   it { should have_many(:invites).dependent(:destroy) }
 
-  describe ".invites.active" do
+  describe "active scope on invites" do
     it "returns only the user's active invites" do
       active_invite = create(:invite, user: user)
       expired_invite = create(:invite, user: user, expires_at: 2.days.ago)
@@ -21,7 +21,7 @@ describe Inviter do
     end
   end
 
-  describe ".invites?" do
+  describe "#invites?" do
 
     subject { user.invites? }
 
@@ -36,7 +36,7 @@ describe Inviter do
 
   end
 
-  describe ".invitees?" do
+  describe "#invitees?" do
 
     subject { user.invitees? }
 
@@ -51,7 +51,7 @@ describe Inviter do
 
   end
 
-  describe ".invites_or_invitees?" do
+  describe "#invites_or_invitees?" do
 
     subject { user.invites_or_invitees? }
 
@@ -71,20 +71,20 @@ describe Inviter do
 
   end
 
-  describe ".available_invites?" do
+  describe "#available_invites?" do
     specify { create(:user).available_invites?.should be_false }
     specify { create(:user_admin).available_invites?.should be_true }
     specify { create(:user, available_invites: 2).available_invites?.should be_true }
   end
 
-  describe ".available_invites" do
+  describe "#available_invites" do
     specify { create(:user).available_invites.should == 0 }
     specify { create(:user, available_invites: 2).available_invites.should == 2 }
     specify { create(:user_admin).available_invites.should == 1 }
     specify { create(:user_admin, available_invites: 99).available_invites.should == 1 }
   end
 
-  describe ".revoke_invite!" do
+  describe "#revoke_invite!" do
 
     subject { user.revoke_invite! }
 
@@ -128,7 +128,7 @@ describe Inviter do
 
   end
 
-  describe ".grant_invite!" do
+  describe "#grant_invite!" do
 
     let(:user) { create(:user, available_invites: 1) }
 
