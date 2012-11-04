@@ -26,14 +26,14 @@ class CategoriesController < ApplicationController
         render_error 404 and return
       end
     end
-    
+
     # Verifies that the category is viewable by @current_user
     def verify_viewable
       unless @category.viewable_by?(@current_user)
         render_error 403 and return
       end
     end
-    
+
   public
 
     # GET on /categories
@@ -46,8 +46,8 @@ class CategoriesController < ApplicationController
       respond_with(@category) do |format|
         format.any(:html, :mobile) do
           @discussions = Discussion.find_paginated(
-            :page     => params[:page], 
-            :category => @category, 
+            :page     => params[:page],
+            :category => @category,
             :trusted  => (@current_user && @current_user.trusted?)
           )
           load_views_for(@discussions)
@@ -91,5 +91,5 @@ class CategoriesController < ApplicationController
         end
       end
     end
-    
+
 end
