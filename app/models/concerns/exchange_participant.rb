@@ -3,7 +3,6 @@ module ExchangeParticipant
 
   included do
     has_many   :discussions, :foreign_key => 'poster_id'
-    has_many   :closed_discussions, :foreign_key => 'closer_id'
     has_many   :posts
     has_many   :discussion_posts, :class_name => 'Post', :conditions => {:conversation => false}
     has_many   :discussion_views, :dependent => :destroy
@@ -28,12 +27,21 @@ module ExchangeParticipant
     DiscussionRelationship.find_favorite(self, options)
   end
 
+  # Marks a discussion as viewed
+  def mark_discussion_viewed(discussion, post, index)
+    if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+      discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
+    else
+      DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
+    end
+  end
+
   # Finds and paginate discussions created by this user.
   # === Parameters
   # * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.
   # * <tt>:limit</tt>   - Number of discussions per page. Default: Exchange::DISCUSSIONS_PER_PAGE
   # * <tt>:page</tt>    - Page, defaults to 1.
-  def paginated_discussions(options)
+  def paginated_discussions(options={})
     Pagination.paginate(
       :total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => ['trusted = 0']),
       :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
@@ -50,16 +58,7 @@ module ExchangeParticipant
     end
   end
 
-  # Marks a discussion as viewed
-  def mark_discussion_viewed(discussion, post, index)
-    if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-      discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
-    else
-      DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
-    end
-  end
-
-  def paginated_conversations(options)
+  def paginated_conversations(options={})
     Pagination.paginate(
       :total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
       :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
@@ -84,7 +83,7 @@ module ExchangeParticipant
   # * <tt>:trusted</tt> - Boolean, includes posts in trusted categories.
   # * <tt>:limit</tt>   - Number of posts per page. Default: Post::POSTS_PER_PAGE
   # * <tt>:page</tt>    - Page, defaults to 1.
-  def paginated_posts(options)
+  def paginated_posts(options={})
     Pagination.paginate(
       :total_count => options[:trusted] ? self.discussion_posts.count(:all) : self.discussion_posts.count(:all, :conditions => {:conversation => false, :trusted => false}),
       :per_page    => options[:limit] || Post::POSTS_PER_PAGE,
@@ -105,12 +104,15 @@ module ExchangeParticipant
   def posts_per_day(precision=2)
     ppd = posts_count.to_f / ((Time.now - self.created_at).to_f / 60 / 60 / 24)
     number = ppd.to_s.split(".")[0]
-    scale = ppd.to_s.split(".")[1][0..(precision-1)]
+    scale = ppd.to_s.split(".")[1][0..(precision - 1)]
     "#{number}.#{scale}".to_f
   end
 
   def unread_conversations_count
-    @unread_conversations_count ||= self.conversation_relationships.count(:all, :conditions => {:new_posts => true, :notifications => true})
+    self.conversation_relationships.count(
+      :all,
+      :conditions => {:new_posts => true, :notifications => true}
+    )
   end
 
   def unread_conversations?
