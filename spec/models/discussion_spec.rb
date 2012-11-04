@@ -313,7 +313,7 @@ describe Discussion do
   describe "#participants" do
     let!(:post) { create(:post, discussion: discussion) }
     subject { discussion.participants }
-    it { should == [discussion.poster, post.user] }
+    it { should =~ [discussion.poster, post.user] }
   end
 
   describe "#viewable_by?" do

@@ -43,13 +43,13 @@ module ExchangeParticipant
   # * <tt>:page</tt>    - Page, defaults to 1.
   def paginated_discussions(options={})
     Pagination.paginate(
-      :total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => ['trusted = 0']),
+      :total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => {:trusted => false}),
       :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
       :page        => options[:page] || 1
     ) do |pagination|
       discussions = Discussion.find(
         :all,
-        :conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = 0', self.id],
+        :conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = ?', self.id, false],
         :limit      => pagination.limit,
         :offset     => pagination.offset,
         :order      => 'sticky DESC, last_post_at DESC',
