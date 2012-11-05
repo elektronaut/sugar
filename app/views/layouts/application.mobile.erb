@@ -45,7 +45,7 @@
       <% end %>
     </h1>
     </div>
-  <% if @current_user || Sugar.config(:public_browsing) %>
+  <% if @current_user || Sugar.public_browsing? %>
     <div id="navigation"><ul>
       <li><%= link_to "Discussions", discussions_path %></li>
       <li><%= link_to "Categories", categories_path %></li>

@@ -57,7 +57,7 @@
     <h1><%= Sugar.config(:forum_title).html_safe %></h1>
 
     <%# Search form %>
-    <% if @current_user || Sugar.config(:public_browsing) %>
+    <% if @current_user || Sugar.public_browsing? %>
       <div id="search">
         <%= form_tag((@search_path || search_path), :method => 'get') do %>
           <%= text_field_tag 'q', @search_query, :class => :query %>
@@ -85,7 +85,7 @@
     </div>
 
     <%# Navigation tabs %>
-    <% if @current_user || Sugar.config(:public_browsing) %>
+    <% if @current_user || Sugar.public_browsing? %>
       <ul id="navigation">
         <%= header_tab 'Discussions', discussions_path %>
         <% if @current_user %>

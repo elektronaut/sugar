@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe CategoriesController, :rspec => true do
+describe CategoriesController do
 
   let(:category)  { create(:category) }
   let(:user)      { create(:user) }

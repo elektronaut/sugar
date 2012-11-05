@@ -319,7 +319,7 @@ class UsersController < ApplicationController
     def logout
       deauthenticate!
       flash[:notice] = "You have been logged out."
-      redirect_to Sugar.config(:public_browsing) ? discussions_url : login_users_url
+      redirect_to Sugar.public_browsing? ? discussions_url : login_users_url
     end
 
     def grant_invite

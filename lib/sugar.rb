@@ -92,6 +92,10 @@ module Sugar
       end
     end
 
+    def public_browsing?
+      self.config(:public_browsing)
+    end
+
     def update_configuration(config)
       new_config = Hash[DEFAULT_CONFIGURATION]
       config_keys = config.keys.map{|k| k.to_sym}

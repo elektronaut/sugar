@@ -5,8 +5,8 @@ module Authentication
     # Requires a user unless public browsing is on
     def requires_authentication(*args)
       self.send(:before_filter, *args) do |controller|
-        unless Sugar.config(:public_browsing)
-          controller.send(:require_user_account) 
+        unless Sugar.public_browsing?
+          controller.send(:require_user_account)
         end
       end
     end
@@ -14,7 +14,7 @@ module Authentication
     # Requires a logged in user
     def requires_user(*args)
       self.send(:before_filter, *args) do |controller|
-        controller.send(:require_user_account) 
+        controller.send(:require_user_account)
       end
     end
 

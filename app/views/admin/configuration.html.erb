@@ -1,14 +1,14 @@
-<% 
+<%
   add_body_class "admin configuration"
-  @page_title = "Admin - Configuration" 
+  @page_title = "Admin - Configuration"
 %>
 
 <h2 class="section">
-  <%= link_to "Admin", admin_path %> &raquo; 
+  <%= link_to "Admin", admin_path %> &raquo;
   <%= link_to "Configuration", configuration_admin_path %>
 </h2>
 
-<ul class="tabs topTabs">  
+<ul class="tabs topTabs">
   <li class="tab"><a href="#general">General settings</a></li>
   <li class="tab"><a href="#themes">Themes</a></li>
   <li class="tab"><a href="#integration">Services and Integration</a></li>
@@ -22,44 +22,44 @@
     <fieldset>
       <h2>Forum name</h2>
       <%= labelled_field(
-          text_field_tag('config[forum_name]', Sugar.config(:forum_name), :size => 48), 
+          text_field_tag('config[forum_name]', Sugar.config(:forum_name), :size => 48),
           "Forum name"
       ) %>
       <%= labelled_field(
-          text_field_tag('config[forum_title]', 
-          Sugar.config(:forum_title), :size => 48), 
-          "Forum title", 
+          text_field_tag('config[forum_title]',
+          Sugar.config(:forum_title), :size => 48),
+          "Forum title",
           :description => 'HTML allowed'
       ) %>
       <%= labelled_field(
-          text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name), :size => 10), 
-          "Short version of forum name", 
-          :description => 'Will be used where applicable, ie. on the mobile version' 
+          text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name), :size => 10),
+          "Short version of forum name",
+          :description => 'Will be used where applicable, ie. on the mobile version'
       ) %>
     </fieldset>
     <fieldset>
       <h2>Domain and email</h2>
       <%= labelled_field(
-          "http://"+text_field_tag('config[default_domain]', Sugar.config(:default_domain), :size => 32), 
+          "http://"+text_field_tag('config[default_domain]', Sugar.config(:default_domain), :size => 32),
           "Default domain name"
       ) %>
       <%= labelled_field(
-          text_field_tag('config[mail_sender]', Sugar.config(:mail_sender), :size => 48), 
-          "Mail sender", 
+          text_field_tag('config[mail_sender]', Sugar.config(:mail_sender), :size => 48),
+          "Mail sender",
           :description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>'
       ) %>
     </fieldset>
     <fieldset>
       <h2>Login and signup</h2>
       <%= labelled_field(
-          radio_button_tag('config[public_browsing]', true, Sugar.config(:public_browsing)) +
+          radio_button_tag('config[public_browsing]', true, Sugar.public_browsing?) +
           " Anyone can browse<br />".html_safe +
-          radio_button_tag('config[public_browsing]', false, !Sugar.config(:public_browsing)) +
+          radio_button_tag('config[public_browsing]', false, !Sugar.public_browsing?) +
           " Browsing requires login",
           "Access control"
       ) %>
       <%= labelled_field(
-          radio_button_tag('config[signups_allowed]', true, Sugar.config(:public_browsing)) +
+          radio_button_tag('config[signups_allowed]', true, Sugar.public_browsing?) +
           " Users can sign up<br />".html_safe +
           radio_button_tag('config[signups_allowed]', false, !Sugar.config(:signups_allowed)) +
           " Users must be invited",
@@ -67,7 +67,7 @@
       ) %>
       <%= labelled_field(
           check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)) +
-          " User moderators must approve new users", 
+          " User moderators must approve new users",
           "Approval"
       ) %>
     </fieldset>
@@ -86,12 +86,12 @@
       <%= labelled_field(
           select_tag('config[default_theme]', options_for_select(Theme.all.map{|t| [t.full_name, t.id]}, Sugar.config(:default_theme))),
           "Default theme"
-        ) 
+        )
       %>
       <%= labelled_field(
           select_tag('config[default_mobile_theme]', options_for_select(Theme.mobile.map{|t| [t.full_name, t.id]}, Sugar.config(:default_mobile_theme))),
           "Default mobile theme"
-        ) 
+        )
       %>
     </fieldset>
   </div>
@@ -103,7 +103,7 @@
     <fieldset>
       <h2>Facebook</h2>
       <p class="info">
-        To enable this feature,  
+        To enable this feature,
         <%= link_to "set up an application on Facebook", "http://www.facebook.com/developers" %>
         and enter your Application ID and API keys here.
       </p>

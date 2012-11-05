@@ -18,13 +18,11 @@ module LoginMacros
     def it_requires_authentication_for(*actions)
       actions.each do |action|
         it "requires authentication for #{action}" do
-          previous_config = Sugar.config(:public_browsing)
-          Sugar.config(:public_browsing, false)
+          Sugar.stub(:public_browsing?).and_return(false)
           controller.should_receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
           get action, :id => 1
-          Sugar.config(:public_browsing, previous_config)
         end
       end
     end

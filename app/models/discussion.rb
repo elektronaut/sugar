@@ -175,7 +175,7 @@ class Discussion < Exchange
     if self.trusted?
       (user && user.trusted?) ? true : false
     else
-      (Sugar.config(:public_browsing) || user) ? true : false
+      (Sugar.public_browsing? || user) ? true : false
     end
   end
 

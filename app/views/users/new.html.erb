@@ -4,7 +4,7 @@
 %>
 
 <h2 class="section">
-  <% if @current_user || Sugar.config(:public_browsing) -%>
+  <% if @current_user || Sugar.public_browsing? -%>
     <%= link_to "Users", users_path %> &raquo;
   <% end -%>
   <%= link_to @page_title, new_user_path %>
