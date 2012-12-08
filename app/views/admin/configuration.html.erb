@@ -119,6 +119,7 @@
       </p>
       <%= labelled_field text_field_tag('config[amazon_aws_key]', Sugar.config(:amazon_aws_key), :size => '48'), "Access Key ID" %>
       <%= labelled_field text_field_tag('config[amazon_aws_secret]', Sugar.config(:amazon_aws_secret), :size => '48'), "Secret Access Key" %>
+      <%= labelled_field text_field_tag('config[amazon_s3_bucket]', Sugar.config(:amazon_s3_bucket), :size => '48'), "S3 Bucket" %>
     </fieldset>
     <fieldset>
       <h2>Amazon Associates</h2>
