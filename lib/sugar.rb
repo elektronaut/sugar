@@ -33,6 +33,8 @@ module Sugar
     :flickr_api               => nil,
     :google_analytics         => nil,
     :amazon_associates_id     => nil,
+    :amazon_aws_key            => nil,
+    :amazon_aws_secret         => nil,
 
     # Facebook integration
     :facebook_app_id          => nil,
