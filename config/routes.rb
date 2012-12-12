@@ -2,6 +2,8 @@
 
 Sugar::Application.routes.draw do
 
+  use_doorkeeper
+
   # OpenID
   resource :openid, :controller => 'openid' do
     member do

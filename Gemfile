@@ -35,6 +35,9 @@ gem 'capistrano'
 # To use debugger
 # gem 'ruby-debug'
 
+# OAuth
+gem 'doorkeeper', '~> 0.6.3'
+
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
 
