@@ -131,7 +131,8 @@ class User < ActiveRecord::Base
         :moderator, :user_admin, :posts_count, :discussions_count,
         :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
         :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
-      ]
+      ],
+      :methods => [:active, :banned]
     }.merge(options))
   end
 
@@ -143,7 +144,8 @@ class User < ActiveRecord::Base
         :moderator, :user_admin, :posts_count, :discussions_count,
         :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
         :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
-      ]
+      ],
+      :methods => [:active, :banned]
     }.merge(options))
   end
 

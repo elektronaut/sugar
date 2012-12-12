@@ -14,7 +14,7 @@ describe User do
     "discussions_count", "flickr", "gamertag", "gtalk", "id", "instagram",
     "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
     "moderator", "msn", "posts_count", "realname", "twitter", "user_admin",
-    "username", "website"
+    "username", "website", "active", "banned"
   ] }
 
   subject { user }
@@ -255,7 +255,7 @@ describe User do
 
   describe "#as_json" do
     it "only includes public information" do
-      user.as_json.keys.should =~ public_attributes
+      user.as_json.keys.map(&:to_s).should =~ public_attributes
     end
   end
 

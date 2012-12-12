@@ -43,6 +43,11 @@ module Authenticable
     self.facebook_uid?
   end
 
+  # Is this an active user?
+  def active
+    self.activated? && !self.banned?
+  end
+
   # Generates a new password for this user.
   def generate_new_password!
     new_password = ''

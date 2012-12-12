@@ -29,6 +29,12 @@ describe Authenticable do
     specify { create(:user, facebook_uid: nil).facebook?.should be_false }
   end
 
+  describe "#active" do
+    specify { user.active.should be_true }
+    specify { banned_user.active.should be_false }
+    specify { inactive_user.active.should be_false }
+  end
+
   describe "#generate_new_password!" do
     subject { user.generate_new_password! }
     it { should be_kind_of(String) }

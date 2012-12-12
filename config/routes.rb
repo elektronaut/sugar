@@ -4,6 +4,17 @@ Sugar::Application.routes.draw do
 
   use_doorkeeper
 
+  # API routes
+  namespace :api, :defaults => {:format => 'json'} do
+    scope :module => :v1 do
+      resources :users do
+        collection do
+          get 'me'
+        end
+      end
+    end
+  end
+
   # OpenID
   resource :openid, :controller => 'openid' do
     member do
