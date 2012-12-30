@@ -32,6 +32,9 @@ Sugar::Application.routes.draw do
     end
   end
 
+  # Uploads
+  resources :uploads
+
   # Search discussions
   get '/search/:query.:format' => 'discussions#search', as: :formatted_search_with_query
   get '/search/:query'         => 'discussions#search', as: :search_with_query
