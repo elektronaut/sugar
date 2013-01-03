@@ -79,10 +79,10 @@ module Authentication
 
       # Tries to set @current_user based on session data
       def load_session_user
-        if session[:user_id] && session[:hashed_password]
+        if session[:user_id] && session[:persistence_token]
           begin
             user = User.find(session[:user_id])
-            @current_user ||= user if user.hashed_password == session[:hashed_password]
+            @current_user ||= user if user.persistence_token == session[:persistence_token]
           rescue ActiveRecord::RecordNotFound
             # No need to do anything if the record does not exist
           end
@@ -109,15 +109,16 @@ module Authentication
       # Deauthenticates the current user
       def deauthenticate!
         @current_user = nil
-        session[:authenticated_openid_url] = nil
         store_session_authentication
       end
 
       # Stores authentication credentials in the session.
       def store_session_authentication
+        session.delete(:hashed_password) if session[:hashed_password]
         if @current_user
-          session[:user_id]         = @current_user.id
-          session[:hashed_password] = @current_user.hashed_password
+          session.delete(:authenticated_openid_url) if session[:authenticated_openid_url]
+          session[:user_id]           = @current_user.id
+          session[:persistence_token] = @current_user.persistence_token
 
           # Clean up banned_until
           if @current_user.banned_until? && !@current_user.temporary_banned?
@@ -129,8 +130,8 @@ module Authentication
             @current_user.update_column(:last_active, Time.now) unless @current_user.temporary_banned?
           end
         else
-          session[:user_id]         = nil
-          session[:hashed_password] = nil
+          session[:user_id]           = nil
+          session[:persistence_token] = nil
         end
       end
 

@@ -194,4 +194,28 @@ describe Authenticable do
     specify { create(:user, banned_until: (Time.now + 2.days)).banned_until.should be_kind_of(Time) }
   end
 
+  describe "#update_persistence_token" do
+    let!(:previous_token) { user.persistence_token }
+    subject { user.persistence_token }
+    it { should_not be_blank }
+
+    context "when password is changed" do
+      before do
+        user.password = user.confirm_password = "new password"
+        user.save
+      end
+
+      it { should_not == previous_token }
+    end
+
+    context "when password isn't changed" do
+      before do
+        user.realname = "New name"
+        user.save
+      end
+
+      it { should == previous_token }
+    end
+  end
+
 end

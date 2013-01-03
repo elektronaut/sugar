@@ -29,9 +29,15 @@ module Authenticable
               if: :facebook_uid?
 
     before_save :clear_banned_until
+    before_save :update_persistence_token
   end
 
   module ClassMethods
+    # Generates a token
+    def generate_token
+      Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s)
+    end
+
     # Creates an encrypted password
     def encrypt_password(password)
       BCrypt::Password.create(password)
@@ -142,6 +148,12 @@ module Authenticable
     def clear_banned_until
       if self.banned_until? && self.banned_until <= Time.now
         self.banned_until = nil
+      end
+    end
+
+    def update_persistence_token
+      if !self.persistence_token || self.hashed_password_changed?
+        self.persistence_token = self.class.generate_token
       end
     end
 

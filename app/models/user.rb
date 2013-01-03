@@ -20,7 +20,8 @@ class User < ActiveRecord::Base
   # for regular users.
   UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned,
                       :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at,
-                      :posts_count, :discussions_count, :inviter_id, :available_invites
+                      :posts_count, :discussions_count, :inviter_id, :available_invites,
+                      :persistence_token
 
   before_validation :ensure_last_active_is_set
 

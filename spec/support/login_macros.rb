@@ -91,13 +91,13 @@ module LoginMacros
   def login(user=nil)
     @current_user = user || create(:user)
     session[:user_id] = @current_user.id
-    session[:hashed_password] = @current_user.hashed_password
+    session[:persistence_token] = @current_user.persistence_token
     session[:ips] = ['0.0.0.0']
   end
 
   def logout
     session[:user_id] = nil
-    session[:hashed_password] = nil
+    session[:persistence_token] = nil
     session[:ips] = []
   end
 
