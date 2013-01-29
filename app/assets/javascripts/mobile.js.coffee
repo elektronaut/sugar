@@ -142,7 +142,7 @@ $(document).ready ->
   if referral_id = Sugar.Configuration.AmazonAssociatesId
     $('.post .body a').each ->
       link = this
-      if !$.data(link, 'amazon_associates_referral_id') && link.href.match /https?:\/\/([\w\d\-\.])*amazon\.com/
+      if !$.data(link, 'amazon_associates_referral_id') && link.href.match /https?:\/\/([\w\d\-\.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//
         $.data(link, 'amazon_associates_referral_id', referral_id)
         return if link.href.match /(\?|&)tag=/
 
