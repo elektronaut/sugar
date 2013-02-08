@@ -70,7 +70,7 @@ describe Post do
     context "when skip_html is false" do
       before { discussion }
       it "parses the post" do
-        PostParser.should_receive(:new).exactly(1).times
+        Sugar::PostRenderer.should_receive(:new).exactly(1).times
           .and_return { double(:to_html => "<p>Test</p>") }
         create(:post, discussion: discussion)
       end
@@ -79,7 +79,7 @@ describe Post do
     context "when skip_html is true" do
       before { discussion }
       it "parses the post" do
-        PostParser.should_receive(:new).exactly(0).times
+        Sugar::PostRenderer.should_receive(:new).exactly(0).times
         create(:post, skip_html: true, discussion: discussion)
       end
     end
@@ -271,14 +271,14 @@ describe Post do
     let!(:post) { create(:post, discussion: discussion) }
 
     subject { post.body_html }
-    it { should == PostParser.new(post.body).to_html }
+    it { should == Sugar::PostRenderer.new(post.body).to_html }
 
     context "when not saved" do
 
       let!(:post) { build(:post, discussion: discussion) }
 
       it "parses the post" do
-        PostParser.should_receive(:new).exactly(1).times
+        Sugar::PostRenderer.should_receive(:new).exactly(1).times
           .and_return { double(:to_html => "<p>Test</p>") }
         post.body_html
       end
@@ -290,7 +290,7 @@ describe Post do
       let!(:post) { create(:post, discussion: discussion, body_html: "<p>Test</p>") }
 
       it "uses the cached version" do
-        PostParser.should_receive(:new).exactly(0).times
+        Sugar::PostRenderer.should_receive(:new).exactly(0).times
         post.body_html
       end
     end
@@ -299,7 +299,7 @@ describe Post do
 
       it "parses the post" do
         post.body_html = nil
-        PostParser.should_receive(:new).exactly(1).times
+        Sugar::PostRenderer.should_receive(:new).exactly(1).times
           .and_return { double(:to_html => "<p>Test</p>") }
         post.body_html
       end

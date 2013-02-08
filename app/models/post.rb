@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'post_parser'
-
 class Post < ActiveRecord::Base
 
   POSTS_PER_PAGE  = 50
@@ -25,7 +23,7 @@ class Post < ActiveRecord::Base
     post.edited_at  ||= Time.now
     post.trusted      = post.discussion.trusted if post.discussion
     post.conversation = post.discussion.kind_of?(Conversation)
-    post.body_html    = PostParser.new(post.body).to_html unless post.skip_html
+    post.body_html    = Sugar::PostRenderer.new(post.body).to_html unless post.skip_html
   end
 
   searchable do
@@ -99,10 +97,10 @@ class Post < ActiveRecord::Base
 
   def body_html
     if self.new_record? || Rails.env == 'development'
-      PostParser.new(self.body.dup).to_html
+      Sugar::PostRenderer.new(self.body.dup).to_html
     else
       unless body_html?
-        self.update_column(:body_html, PostParser.new(self.body.dup).to_html)
+        self.update_column(:body_html, Sugar::PostRenderer.new(self.body.dup).to_html)
       end
       self[:body_html].html_safe
     end

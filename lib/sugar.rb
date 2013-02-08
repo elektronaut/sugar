@@ -3,6 +3,7 @@
 require 'yaml'
 
 require File.join(File.dirname(__FILE__), 'sugar/exceptions')
+require File.join(File.dirname(__FILE__), 'sugar/post_renderer')
 
 module Sugar
 

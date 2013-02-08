@@ -128,7 +128,7 @@ module ApplicationHelper
   end
 
   def format_post(string)
-    PostParser.new(string).to_html
+    Sugar::PostRenderer.new(string).to_html
   end
 
   def last_viewed_post(discussion)
