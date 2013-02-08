@@ -124,30 +124,26 @@ class User < ActiveRecord::Base
     end
   end
 
+  def serializable_params
+    [
+      :id, :username, :realname, :latitude, :longitude, :inviter_id,
+      :last_active, :created_at, :description, :admin,
+      :moderator, :user_admin, :posts_count, :discussions_count,
+      :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
+      :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
+    ]
+  end
+
+  def serializable_methods
+    [:active, :banned]
+  end
+
   def as_json(options={})
-    super({
-      :only => [
-        :id, :username, :realname, :latitude, :longitude, :inviter_id,
-        :last_active, :created_at, :description, :admin,
-        :moderator, :user_admin, :posts_count, :discussions_count,
-        :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
-        :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
-      ],
-      :methods => [:active, :banned]
-    }.merge(options))
+    super({:only => serializable_params, :methods => serializable_methods}.merge(options))
   end
 
   def to_xml(options={})
-    super({
-      :only => [
-        :id, :username, :realname, :latitude, :longitude, :inviter_id,
-        :last_active, :created_at, :description, :admin,
-        :moderator, :user_admin, :posts_count, :discussions_count,
-        :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
-        :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
-      ],
-      :methods => [:active, :banned]
-    }.merge(options))
+    super({:only => serializable_params, :methods => serializable_methods}.merge(options))
   end
 
   protected
