@@ -8,8 +8,13 @@ module Authentication
 
     included do
       before_filter :load_session_user
-      before_filter :finalize_authentication
-      after_filter  :store_session_authentication
+      before_filter :handle_temporary_ban
+      before_filter :handle_permanent_ban
+      before_filter :verify_activated_account
+      after_filter :cleanup_temporary_ban
+      after_filter :update_last_active
+      after_filter :cleanup_authenticated_openid_url
+      after_filter :store_session_authentication
     end
 
     protected
@@ -41,9 +46,7 @@ module Authentication
       #  verify_user(:user => @invite.user, :user_admin => true)
       #
       def verify_user(options={})
-        options[:redirect]   ||= discussions_url
-        options[:notice]     ||= "You don't have permission to do that!"
-        options[:api_notice] ||= options[:notice]
+        options = default_verify_user_options(options)
 
         verified = false
         if @current_user && @current_user.activated?
@@ -54,17 +57,28 @@ module Authentication
           verified ||= @current_user.user_admin?       if options[:user_admin]
         end
 
-        unless verified
-          respond_to do |format|
-            format.any(:html, :mobile) do
-              flash[:notice] = options[:notice]
-              redirect_to options[:redirect]
-            end
-            format.json { render :json => options[:api_notice], :status => 401 }
-            format.xml  { render :xml  => options[:api_notice], :status => 401 }
-          end
-        end
+        handle_unverified_user(options) unless verified
         return verified
+      end
+
+      # Default options for verify user.
+      def default_verify_user_options(options={})
+        options[:redirect]   ||= discussions_url
+        options[:notice]     ||= "You don't have permission to do that!"
+        options[:api_notice] ||= options[:notice]
+        options
+      end
+
+      # Handle an unverified user.
+      def handle_unverified_user(options)
+        respond_to do |format|
+          format.any(:html, :mobile) do
+            flash[:notice] = options[:notice]
+            redirect_to options[:redirect]
+          end
+          format.json { render :json => options[:api_notice], :status => 401 }
+          format.xml  { render :xml  => options[:api_notice], :status => 401 }
+        end
       end
 
       # Requires a user account
@@ -89,46 +103,68 @@ module Authentication
         end
       end
 
-      # Finalizes authentication, checks that the @current_user is activated and not banned
-      def finalize_authentication
+      # Handles temporary bans.
+      def handle_temporary_ban
+        if @current_user && @current_user.temporary_banned?
+          logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - temporary ban"
+          flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, @current_user.banned_until)}!"
+          @current_user = nil
+        end
+      end
+
+      # Handles permanent bans.
+      def handle_permanent_ban
+        if @current_user && @current_user.banned?
+          logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - permanent ban"
+          flash[:notice] = "You have been banned!"
+          @current_user = nil
+        end
+      end
+
+      # Verifies that the account is activated
+      def verify_activated_account
         if @current_user
-          logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
-          if !@current_user.activated? || @current_user.banned? || @current_user.temporary_banned?
-            if @current_user.temporary_banned?
-              logging.info "Authorization failed, temporary ban"
-              flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, @current_user.banned_until)}!"
-            elsif @current_user.banned?
-              logging.info "Authorization failed, permanent ban"
-              flash[:notice] = "You have been banned!"
-            end
+          if @current_user.activated?
+            logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
+          else
+            logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - not activated"
             @current_user = nil
           end
         end
       end
 
-      # Deauthenticates the current user
+      # Deauthenticates the current user.
       def deauthenticate!
         @current_user = nil
         store_session_authentication
       end
 
+      # Cleans up temporary bans.
+      def cleanup_temporary_ban
+        if @current_user && @current_user.banned_until? && !@current_user.temporary_banned?
+          @current_user.update_attributes(:banned_until => nil)
+        end
+      end
+
+      # Deletes session[:authenticated_openid_url] if user is authenticated
+      def cleanup_authenticated_openid_url
+        if @current_user && session[:authenticated_openid_url]
+          session.delete(:authenticated_openid_url)
+        end
+      end
+
+      # Updates the last_active timestamp
+      def update_last_active
+        if @current_user
+          @current_user.mark_active!
+        end
+      end
+
       # Stores authentication credentials in the session.
       def store_session_authentication
-        session.delete(:hashed_password) if session[:hashed_password]
         if @current_user
-          session.delete(:authenticated_openid_url) if session[:authenticated_openid_url]
           session[:user_id]           = @current_user.id
           session[:persistence_token] = @current_user.persistence_token
-
-          # Clean up banned_until
-          if @current_user.banned_until? && !@current_user.temporary_banned?
-            @current_user.update_attribute(:banned_until, nil)
-          end
-
-          # No need to update this on every request
-          if !@current_user.last_active || @current_user.last_active < 10.minutes.ago
-            @current_user.update_column(:last_active, Time.now) unless @current_user.temporary_banned?
-          end
         else
           session[:user_id]           = nil
           session[:persistence_token] = nil

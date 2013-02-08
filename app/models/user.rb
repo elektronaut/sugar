@@ -112,6 +112,13 @@ class User < ActiveRecord::Base
     self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)
   end
 
+  # Updates the last_active timestamp
+  def mark_active!
+    if !self.last_active || self.last_active < 10.minutes.ago
+      exself.update_column(:last_active, Time.now)
+    end
+  end
+
   # Returns the chosen mobile theme or the default one
   def mobile_theme
     self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
@@ -151,5 +158,7 @@ class User < ActiveRecord::Base
     def ensure_last_active_is_set
       self.last_active ||= Time.now
     end
+
+
 
 end
