@@ -119,16 +119,19 @@ module ExchangeParticipant
     unread_conversations_count > 0
   end
 
+  # Finds relationship with discussion
+  def discussion_relationship_with(discussion)
+    self.discussion_relationships.where(:discussion_id => discussion.id).first
+  end
+
   # Returns true if this user is following the given discussion.
   def following?(discussion)
-    relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-    relationship && relationship.following?
+    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).following?
   end
 
   # Returns true if this user has favorited the given discussion.
   def favorite?(discussion)
-    relationship = DiscussionRelationship.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
-    relationship && relationship.favorite?
+    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).favorite?
   end
 
 end
