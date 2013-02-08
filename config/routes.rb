@@ -48,10 +48,10 @@ Sugar::Application.routes.draw do
   resources :users do
     collection do
       get 'login'
-      post 'login'
+      post 'authenticate'
       get 'logout'
       get 'password_reset'
-      post 'password_reset'
+      post 'deliver_password'
       get 'connect_facebook'
       get 'disconnect_facebook'
 

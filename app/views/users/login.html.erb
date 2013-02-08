@@ -9,7 +9,7 @@
 
 <div id="login">
 
-  <%= form_tag(login_users_path, :class => 'form username_and_password') do %>
+  <%= form_tag(authenticate_users_path, :class => 'form username_and_password') do %>
     <fieldset>
       <label>Username</label>
       <%= text_field_tag 'username', '', :class => :text %>

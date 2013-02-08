@@ -4,7 +4,7 @@ require 'open-uri'
 
 class UsersController < ApplicationController
 
-  requires_authentication :except => [:login, :logout, :password_reset, :new, :create]
+  requires_authentication :except => [:login, :authenticate, :logout, :password_reset, :deliver_password, :new, :create]
   requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
 
   before_filter :load_user,
@@ -17,8 +17,9 @@ class UsersController < ApplicationController
                   :stats
                 ]
 
-  before_filter :detect_admin_signup, :only => [:login, :new, :create]
-  before_filter :detect_edit_page,    :only => [:edit, :update]
+  before_filter :detect_admin_signup,        :only => [:login, :new, :create]
+  before_filter :detect_edit_page,           :only => [:edit, :update]
+  before_filter :check_if_already_logged_in, :only => [:login, :authenticate]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -44,6 +45,11 @@ class UsersController < ApplicationController
       pages = %w{admin info location services settings temporary_ban}
       @page = params[:page] if pages.include?(params[:page])
       @page ||= 'info'
+    end
+
+    def check_if_already_logged_in
+      redirect_to new_user_path   and return if @admin_signup
+      redirect_to discussions_url and return if @current_user
     end
 
   public
@@ -275,44 +281,32 @@ class UsersController < ApplicationController
     end
 
     def login
-      redirect_to new_user_path   and return if @admin_signup
-      redirect_to discussions_url and return if @current_user
+    end
 
-      if request.post?
-        if !params[:username].blank? && !params[:password].blank?
-          user = User.find_by_username(params[:username])
-          if user && user.valid_password?(params[:password])
-            @current_user = user
-            user.hash_password!(params[:password]) if user.password_needs_rehash?
-            store_session_authentication
-            redirect_to discussions_url and return
-          end
-        end
-        unless @current_user
-          flash.now[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password."
-        end
+    def authenticate
+      if @current_user = User.find_and_authenticate_with_password(params[:username], params[:password])
+        store_session_authentication
+        redirect_to discussions_url and return
+      else
+        flash[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password."
+        redirect_to login_users_url
       end
     end
 
     def password_reset
-      if request.post? && params[:email]
-        @user = User.find_by_email(params[:email])
-        if @user
-          if @user.activated? && !@user.banned?
-            @user.generate_new_password!
-            Mailer.password_reminder(@user, login_users_path(:only_path => false)).deliver
-            @user.save
-            flash[:notice] = "A new password has been mailed to you"
-          else
-            flash[:notice] = "Your account isn't active, you can't do that yet"
-          end
-        else
-          flash[:notice] = "Could not find that email address"
-          redirect_to password_reset_users_url and return
-        end
+    end
+
+    def deliver_password
+      @user = User.find_by_email(params[:email])
+      if @user && @user.activated? && !@user.banned?
+        @user.generate_new_password!
+        Mailer.password_reminder(@user, login_users_path(:only_path => false)).deliver
+        @user.save
+        flash[:notice] = "A new password has been mailed to you"
         redirect_to login_users_url
       else
-        # Render form
+        flash[:notice] = "Could not reset your password. Did you provide the right email?"
+        redirect_to password_reset_users_url
       end
     end
 

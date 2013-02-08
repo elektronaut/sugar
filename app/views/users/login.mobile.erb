@@ -3,7 +3,7 @@
 %>
 
 <div id="login" class="login_box">
-  <%= form_tag(login_users_path, :class => 'form') do %>
+  <%= form_tag(authenticate_users_path, :class => 'form') do %>
     <p>
       <label>Username</label>
       <%= text_field_tag 'username', '', :class => :text %>
@@ -42,7 +42,7 @@
 
 <div id="login-functions">
   <p>
-    <%= link_to_function "Password reminder", "forgot_password();" %> 
+    <%= link_to_function "Password reminder", "forgot_password();" %>
     <span class="separator">|</span>
     <%= link_to "Regular site", :imobile_format => 'html' %>
   </p>
