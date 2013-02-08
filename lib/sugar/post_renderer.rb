@@ -72,12 +72,20 @@ module Sugar
       end
     end
 
+    def get_code_language_from(element)
+      if element.attributes && element.attributes['language']
+        language = element.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
+      end
+      if HIGHLIGHTER_SYNTAXES.include?(language)
+        language
+      else
+        'plain'
+      end
+    end
+
     def extract_code_tags!
-      document.search('code') do |code_tag|
-        if code_tag.attributes && code_tag.attributes['language']
-          code_language = code_tag.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
-        end
-        code_language = 'plain' unless HIGHLIGHTER_SYNTAXES.include?(code_language)
+      document.search('code') do |element|
+        code_language = get_code_language_from(element)
         code_tag.swap("<div id=\"replace_code_tag_#{code_tags.length}\"></div>")
         code_tags << {
           :language => code_language,
