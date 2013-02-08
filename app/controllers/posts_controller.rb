@@ -53,6 +53,16 @@ class PostsController < ApplicationController
       end
     end
 
+    def create_doodle(encoded_data)
+      data = Base64.decode64(encoded_data)
+      hash = Digest::SHA1.hexdigest(data)
+      doodle_file = Rails.root.join("public/doodles/#{hash}.jpg")
+      File.open(doodle_file, 'wb') do |fh|
+        fh.write data
+      end
+      hash
+    end
+
   public
 
     def count
@@ -136,11 +146,11 @@ class PostsController < ApplicationController
 
     def doodle
       if @discussion.postable_by?(@current_user)
-        doodle_hash = Digest::SHA1.hexdigest(Time.now.to_s + @current_user.username)
-        doodle_data = Base64.decode64(params[:drawing])
-        doodle_file = File.join(File.dirname(__FILE__), '../../public/doodles/'+doodle_hash+'.jpg')
-        File.open(doodle_file, 'wb'){ |fh| fh.write doodle_data }
-        @post = @discussion.posts.create(:user => @current_user, :body => '<div class="drawing"><img src="/doodles/'+doodle_hash+'.jpg" alt="doodle" /></div>')
+        hash = create_doodle(params[:drawing])
+        @post = @discussion.posts.create(
+          :user => @current_user,
+          :body => '<div class="drawing"><img src="/doodles/' + hash + '.jpg" alt="doodle" /></div>'
+        )
         render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}"), :layout => false
       else
         render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page), :layout => false
@@ -158,16 +168,15 @@ class PostsController < ApplicationController
     end
 
     def update
-      if params[:post] && params[:post][:body]
-        # No reason to update anything else, should be more secure
-        @post.update_attribute(:body, params[:post][:body])
-        @post.update_attribute(:edited_at, Time.now)
-      end
-      if @post.valid?
+      attributes = {
+        :body      => params[:post][:body],
+        :edited_at => Time.now
+      }
+      if @post.update_attributes(attributes)
         flash[:notice] = "Your changes were saved"
         redirect_to paged_discussion_url(:id => @discussion, :page => @post.page, :anchor => "post-#{@post.id}")
       else
-        flash.now[:notice] = "Couldn't save your post. Did you fill in a body?"
+        flash.now[:notice] = "Could not save your post."
         render :action => :edit
       end
     end
