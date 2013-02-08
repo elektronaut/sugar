@@ -12,6 +12,7 @@
 # determine if a category is visible to a user.
 
 class Category < ActiveRecord::Base
+  include HumanizableParam
 
   has_many :discussions
   validates_presence_of :name
@@ -62,11 +63,7 @@ class Category < ActiveRecord::Base
 
   # Humanized ID for URLs.
   def to_param
-    slug = self.name
-    slug = slug.gsub(/[\[\{]/,'(')
-    slug = slug.gsub(/[\]\}]/,')')
-    slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-    "#{self.id.to_s};" + slug
+    self.humanized_param(self.name)
   end
 
 end

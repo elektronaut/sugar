@@ -12,6 +12,7 @@ require 'pagination'
 # see the Pagination module for more information.
 
 class Exchange < ActiveRecord::Base
+  include HumanizableParam
 
   self.table_name = 'discussions'
 
@@ -118,11 +119,7 @@ class Exchange < ActiveRecord::Base
 
   # Humanized ID for URLs
   def to_param
-    slug = self.title
-    slug = slug.gsub(/[\[\{]/,'(')
-    slug = slug.gsub(/[\]\}]/,')')
-    slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-    "#{self.id.to_s};" + slug
+    self.humanized_param(self.title)
   end
 
   # Returns true if the user can close this discussion
