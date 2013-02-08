@@ -101,11 +101,8 @@ module ExchangeParticipant
   end
 
   # Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
-  def posts_per_day(precision=2)
-    ppd = posts_count.to_f / ((Time.now - self.created_at).to_f / 60 / 60 / 24)
-    number = ppd.to_s.split(".")[0]
-    scale = ppd.to_s.split(".")[1][0..(precision - 1)]
-    "#{number}.#{scale}".to_f
+  def posts_per_day
+    posts_count.to_f / ((Time.now - self.created_at).to_f / 1.day)
   end
 
   def unread_conversations_count

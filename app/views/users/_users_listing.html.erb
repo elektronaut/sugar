@@ -40,7 +40,7 @@
       when :posts_count
         user.posts_count
       when :posts_per_day
-        user.posts_per_day
+        number_with_precision(user.posts_per_day, :precision => 2)
       when :status
         if user.banned?
           '<span class="banned">Banned</span>'.html_safe

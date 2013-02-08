@@ -294,15 +294,7 @@ describe ExchangeParticipant do
 
     subject { user.posts_per_day }
 
-    context "with no arguments" do
-      it { should == 0.33 }
-    end
-
-    context "when precision is 5" do
-      subject { user.posts_per_day(5) }
-      it { should == 0.33333 }
-    end
-
+    it { should be_within(0.001).of(1.0/3.0) }
   end
 
   describe "#unread_conversations_count" do
