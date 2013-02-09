@@ -27,6 +27,37 @@ describe Authenticable do
     it { should == 'hashed password' }
   end
 
+  describe ".find_and_authenticate_with_password" do
+    let(:username) { 'user123' }
+    let(:password) { 'password123' }
+    let!(:user) { create(:user, username: 'user123', password: 'password123', confirm_password: 'password123') }
+    subject { User.find_and_authenticate_with_password(username, password) }
+
+    context "when username and password is correct" do
+      it { should == user }
+    end
+
+    context "when username is wrong" do
+      let(:username) { 'user456' }
+      it { should be_nil }
+    end
+
+    context "when username is blank" do
+      let(:username) { nil }
+      it { should be_nil }
+    end
+
+    context "when password is wrong" do
+      let(:password) { 'password456' }
+      it { should be_nil }
+    end
+
+    context "when password is blank" do
+      let(:password) { nil }
+      it { should be_nil }
+    end
+  end
+
   describe "#facebook?" do
     specify { create(:user, facebook_uid: 123).facebook?.should be_true }
     specify { create(:user, facebook_uid: nil).facebook?.should be_false }

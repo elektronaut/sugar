@@ -47,9 +47,9 @@ module Authenticable
     def find_and_authenticate_with_password(username, password)
       return nil if username.blank?
       return nil if password.blank?
-      user = User.find_by_username(params[:username])
-      if user && user.valid_password?(params[:password])
-        user.hash_password!(params[:password]) if user.password_needs_rehash?
+      user = User.find_by_username(username)
+      if user && user.valid_password?(password)
+        user.hash_password!(password) if user.password_needs_rehash?
         user
       else
         nil

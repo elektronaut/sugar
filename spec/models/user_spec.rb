@@ -142,6 +142,25 @@ describe User do
     specify { create(:user, theme: "mytheme").theme.should == "mytheme" }
   end
 
+  describe "#mark_active!" do
+    before { user.mark_active! }
+
+    context "when user hasn't signed in yet" do
+      let(:user) { create(:user, last_active: nil) }
+      specify { user.last_active.should be_within(0.1).of(Time.now) }
+    end
+
+    context "when user has been active" do
+      let(:user) { create(:user, last_active: 2.days.ago) }
+      specify { user.last_active.should be_within(0.1).of(Time.now) }
+    end
+
+    context "when user has been active in the last 10 minutes" do
+      let(:user) { create(:user, last_active: 5.minutes.ago) }
+      specify { user.last_active.should be_within(0.1).of(5.minutes.ago) }
+    end
+  end
+
   describe "#mobile_theme" do
     before { Sugar.config(:default_mobile_theme, "default_mobile") }
     specify { user.mobile_theme.should == "default_mobile" }
