@@ -3,6 +3,7 @@
 require 'open-uri'
 
 class UsersController < ApplicationController
+  include UsersListController, OpenidUserController, LoginUsersController
 
   requires_authentication :except => [:login, :authenticate, :logout, :password_reset, :deliver_password, :new, :create]
   requires_user           :only   => [:edit, :update, :update_openid]
@@ -89,37 +90,6 @@ class UsersController < ApplicationController
       invite_token ? true : false
     end
 
-    def initiate_openid_on_create
-      if params[:user][:openid_url]
-        success = start_openid_session(params[:user][:openid_url],
-          :success => update_openid_user_url(:id => @user.username),
-          :fail    => edit_user_page_url(:id => @user.username, :page => 'settings')
-        )
-        unless success
-          flash[:notice] = "WARNING: Your OpenID URL is invalid!"
-        end
-        success
-      else
-        false
-      end
-    end
-
-    def initiate_openid_on_update
-      if new_openid_url
-        success = start_openid_session(params[:user][:openid_url],
-          :success   => update_openid_user_url(:id => @user.username),
-          :fail      => edit_user_page_url(:id => @user.username, :page => @page)
-        )
-        unless success
-          flash.now[:notice] = "That's not a valid OpenID URL!"
-          render :action => :edit
-        end
-        true
-      else
-        false
-      end
-    end
-
     def finalize_successful_signup
       if @user.email?
         Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
@@ -166,61 +136,6 @@ class UsersController < ApplicationController
     end
 
   public
-
-    def index
-      @users = User.active
-      respond_with(@users) do |format|
-        format.mobile {
-          @online_users = @users.select{|u| u.online?}
-        }
-      end
-    end
-
-    def banned
-      @users  = User.banned.by_username
-      respond_with(@users)
-    end
-
-    def recently_joined
-      @users = User.recently_joined.limit(25)
-      respond_with(@users)
-    end
-
-    def online
-      @users = User.online.by_username
-      respond_with(@users)
-    end
-
-    def admins
-      @users  = User.admins.by_username
-      respond_with(@users)
-    end
-
-    def xboxlive
-      @users = User.xbox_users.by_username
-      respond_with(@users)
-    end
-
-    def social
-      @users = User.social.by_username
-      respond_with(@users)
-    end
-
-    def top_posters
-      @users = User.top_posters.limit(50)
-      respond_with(@users)
-    end
-
-    def map
-    end
-
-    def trusted
-      unless @current_user && @current_user.trusted?
-        flash[:notice] = "You need to be trusted to view this page!"
-      end
-      @users = User.trusted.by_username
-      respond_with(@users)
-    end
 
     def show
       respond_with(@user) do |format|
@@ -278,9 +193,6 @@ class UsersController < ApplicationController
       end
     end
 
-    def asfasf
-    end
-
     def create
       @user = User.new(new_user_params)
       @user.invite = @invite # This can be nil
@@ -300,16 +212,6 @@ class UsersController < ApplicationController
     def edit
     end
 
-    def update_openid
-      if session[:authenticated_openid_url] && @user.update_attribute(:openid_url, session[:authenticated_openid_url])
-        flash[:notice] = "Your OpenID URL was updated!"
-        redirect_to user_url(:id => @user.username) and return
-      else
-        flash[:notice] ||= 'OpenID verification failed!'
-        redirect_to edit_user_url(:id => @user.username)
-      end
-    end
-
     def update
       if @user.update_attributes(user_params)
 
@@ -327,42 +229,6 @@ class UsersController < ApplicationController
         flash.now[:notice] ||= "There were errors saving your changes"
         render :action => :edit
       end
-    end
-
-    def login
-    end
-
-    def authenticate
-      if @current_user = User.find_and_authenticate_with_password(params[:username], params[:password])
-        store_session_authentication
-        redirect_to discussions_url and return
-      else
-        flash[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password."
-        redirect_to login_users_url
-      end
-    end
-
-    def password_reset
-    end
-
-    def deliver_password
-      @user = User.find_by_email(params[:email])
-      if @user && @user.activated? && !@user.banned?
-        @user.generate_new_password!
-        Mailer.password_reminder(@user, login_users_path(:only_path => false)).deliver
-        @user.save
-        flash[:notice] = "A new password has been mailed to you"
-        redirect_to login_users_url
-      else
-        flash[:notice] = "Could not reset your password. Did you provide the right email?"
-        redirect_to password_reset_users_url
-      end
-    end
-
-    def logout
-      deauthenticate!
-      flash[:notice] = "You have been logged out."
-      redirect_to Sugar.public_browsing? ? discussions_url : login_users_url
     end
 
     def grant_invite
