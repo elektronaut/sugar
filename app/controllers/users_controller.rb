@@ -20,6 +20,9 @@ class UsersController < ApplicationController
   before_filter :detect_admin_signup,        :only => [:login, :new, :create]
   before_filter :detect_edit_page,           :only => [:edit, :update]
   before_filter :check_if_already_logged_in, :only => [:login, :authenticate]
+  before_filter :find_invite,                :only => [:new, :create]
+  before_filter :check_for_expired_invite,   :only => [:new, :create]
+  before_filter :check_for_signups_allowed,  :only => [:new, :create]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -50,6 +53,38 @@ class UsersController < ApplicationController
     def check_if_already_logged_in
       redirect_to new_user_path   and return if @admin_signup
       redirect_to discussions_url and return if @current_user
+    end
+
+    def invite_token
+      params[:token] || session[:invite_token]
+    end
+
+    def invite_token?
+      invite_token ? true : false
+    end
+
+    def new_user_params
+      session[:user_params] || {}
+    end
+
+    def find_invite
+      if invite_token?
+        @invite = Invite.find_by_token(invite_token)
+      end
+    end
+
+    def check_for_expired_invite
+      if @invite && @invite.expired?
+        flash[:notice] = "Your invite has expired"
+        redirect_to login_users_url and return
+      end
+    end
+
+    def check_for_signups_allowed
+      if !Sugar.config(:signups_allowed) && !@admin_signup && !@invite
+        flash[:notice] = "Signups are not allowed"
+        redirect_to login_users_url and return
+      end
     end
 
   public
@@ -156,39 +191,16 @@ class UsersController < ApplicationController
     end
 
     def new
-      user_params = session[:user_params] || {}
-
-      # New by invitation
-      if invite_token = (params[:token] || session[:invite_token])
-        @invite = Invite.first(:conditions => {:token => invite_token})
-        if @invite && !@invite.expired?
-          session[:invite_token] = @invite.token
-          @user = @invite.user.invitees.new(user_params)
-          @user.email = @invite.email
-        else
-          flash[:notice] = "That's not a valid invite!"
-          redirect_to login_users_url and return
-        end
-        # Signups allowed
-      elsif Sugar.config(:signups_allowed) || @admin_signup
-        @user = User.new(user_params)
+      if @invite
+        session[:invite_token] = @invite.token
+        @user = @invite.user.invitees.new(new_user_params)
+        @user.email = @invite.email
       else
-        flash[:notice] = "Signups are not allowed!"
-        redirect_to login_users_url and return
+        @user = User.new(new_user_params)
       end
     end
 
     def create
-      if params[:token]
-        @invite = Invite.first(:conditions => {:token => params[:token]})
-        @invite = nil if @invite.expired?
-      end
-
-      unless Sugar.config(:signups_allowed) || @invite || @admin_signup
-        flash[:notice] = "Signups are not allowed!"
-        redirect_to login_users_url and return
-      end
-
       # Secure and parse attributes
       attributes = User.safe_attributes(params[:user])
       if attributes[:openid_url] && !attributes[:openid_url].blank?

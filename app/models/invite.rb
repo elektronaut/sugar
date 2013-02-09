@@ -39,6 +39,10 @@ class Invite < ActiveRecord::Base
       token
     end
 
+    def find_by_token(token)
+      self.where(:token => token).first
+    end
+
     # Gets the default expiration time.
     def expiration_time
       DEFAULT_EXPIRATION
