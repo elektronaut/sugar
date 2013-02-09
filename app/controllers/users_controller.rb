@@ -3,7 +3,7 @@
 require 'open-uri'
 
 class UsersController < ApplicationController
-  include UsersListController, OpenidUserController, LoginUsersController
+  include CreateUserController, LoginUsersController, OpenidUserController, UsersListController
 
   requires_authentication :except => [:login, :authenticate, :logout, :password_reset, :deliver_password, :new, :create]
   requires_user           :only   => [:edit, :update, :update_openid]
@@ -19,13 +19,8 @@ class UsersController < ApplicationController
                   :stats
                 ]
 
-  before_filter :detect_admin_signup,        :only => [:login]
-  before_filter :detect_edit_page,           :only => [:edit, :update]
-  before_filter :check_if_already_logged_in, :only => [:login, :authenticate]
-  before_filter :find_invite,                :only => [:new, :create]
-  before_filter :check_for_expired_invite,   :only => [:new, :create]
-  before_filter :check_for_signups_allowed,  :only => [:new, :create]
-  before_filter :verify_editable,            :only => [:edit, :update, :update_openid]
+  before_filter :detect_edit_page, :only => [:edit, :update]
+  before_filter :verify_editable,  :only => [:edit, :update, :update_openid]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -49,59 +44,8 @@ class UsersController < ApplicationController
       @page ||= 'info'
     end
 
-    def detect_admin_signup
-      redirect_to new_user_path and return unless User.any?
-    end
-
-    def check_if_already_logged_in
-      redirect_to discussions_url and return if @current_user
-    end
-
-    def find_invite
-      if invite_token?
-        @invite = Invite.find_by_token(invite_token)
-      end
-    end
-
-    def check_for_expired_invite
-      if @invite && @invite.expired?
-        session.delete(:invite_token)
-        flash[:notice] = "Your invite has expired"
-        redirect_to login_users_url and return
-      end
-    end
-
-    def check_for_signups_allowed
-      if !Sugar.config(:signups_allowed) && User.any? && !@invite
-        flash[:notice] = "Signups are not allowed"
-        redirect_to login_users_url and return
-      end
-    end
-
     def verify_editable
       return unless verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
-    end
-
-    def invite_token
-      params[:token] || session[:invite_token]
-    end
-
-    def invite_token?
-      invite_token ? true : false
-    end
-
-    def finalize_successful_signup
-      if @user.email?
-        Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
-      end
-      session.delete(:facebook_user_params)
-      session.delete(:invite_token)
-      @current_user = @user
-      store_session_authentication
-    end
-
-    def facebook_user_params
-      session[:facebook_user_params] || {}
     end
 
     def allowed_params
@@ -181,32 +125,6 @@ class UsersController < ApplicationController
         "GROUP BY YEAR(created_at), WEEK(created_at);"
       )
       @max_posts_per_week = @posts_per_week.map{|p| p.post_count.to_i}.max
-    end
-
-    def new
-      if @invite
-        session[:invite_token] = @invite.token
-        @user = @invite.user.invitees.new(new_user_params)
-        @user.email = @invite.email
-      else
-        @user = User.new(new_user_params)
-      end
-    end
-
-    def create
-      @user = User.new(new_user_params)
-      @user.invite = @invite # This can be nil
-      @user.activated = true unless Sugar.config(:signup_approval_required)
-
-      if @user.save
-        finalize_successful_signup
-        unless initiate_openid_on_create
-          redirect_to user_url(:id => @user.username)
-        end
-      else
-        flash.now[:notice] = "Could not create your account, please fill in all required fields."
-        render :action => :new
-      end
     end
 
     def edit
