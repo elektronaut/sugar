@@ -120,6 +120,16 @@ class UsersController < ApplicationController
       end
     end
 
+    def finalize_successful_signup
+      if @user.email?
+        Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
+      end
+      session.delete(:facebook_user_params)
+      session.delete(:invite_token)
+      @current_user = @user
+      store_session_authentication
+    end
+
     def facebook_user_params
       session[:facebook_user_params] || {}
     end
@@ -150,6 +160,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(*allowed_params)
     end
+
     def new_user_params
       params.require(:user).permit(:username, *allowed_params).merge(facebook_user_params)
     end
@@ -267,24 +278,19 @@ class UsersController < ApplicationController
       end
     end
 
+    def asfasf
+    end
+
     def create
       @user = User.new(new_user_params)
-      @user.invite = @invite if @invite
+      @user.invite = @invite # This can be nil
       @user.activated = true unless Sugar.config(:signup_approval_required)
 
       if @user.save
-        if @user.email?
-          Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
-        end
-        session.delete(:facebook_user_params)
-        session.delete(:invite_token)
-        @current_user = @user
-        store_session_authentication
-
+        finalize_successful_signup
         unless initiate_openid_on_create
           redirect_to user_url(:id => @user.username)
         end
-
       else
         flash.now[:notice] = "Could not create your account, please fill in all required fields."
         render :action => :new
