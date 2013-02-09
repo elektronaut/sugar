@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe User do
 
+  # Create the first admin user
+  let!(:first_user) { create(:banned_user) }
+
   let(:user)         { create(:user) }
   let(:trusted_user) { create(:trusted_user) }
   let(:admin)        { create(:admin) }
@@ -77,6 +80,7 @@ describe User do
     end
 
     describe "by_username" do
+      before { first_user.destroy }
       let!(:user1) { create(:user, username: 'danz') }
       let!(:user2) { create(:user, username: 'adam') }
       subject { User.by_username }
@@ -84,6 +88,7 @@ describe User do
     end
 
     describe "banned" do
+      before { first_user.destroy }
       let!(:not_banned) { create(:user) }
       let!(:banned) { create(:user, banned: true) }
       let!(:temporarily_banned) { create(:user, banned_until: (Time.now + 2.days)) }
@@ -147,25 +152,6 @@ describe User do
       subject { User.trusted }
       it { should =~ [trusted, admin, moderator, user_admin] }
     end
-
-  end
-
-  describe ".safe_attributes" do
-    subject do
-      User.safe_attributes(
-        # Invalid attributes
-        id: 1, username: 'username', hashed_password: 'hash',
-        admin: true, activated: true, banned: true, trusted: true,
-        moderator: true, user_admin: true, last_active: Time.now,
-        created_at: Time.now, updated_at: Time.now, posts_count: 14,
-        discussions_count: 12, inviter_id: 1, available_invites: 13,
-
-        # Valid attributes
-        realname: 'Test', email: 'test@example.com'
-      )
-    end
-
-    it { should == { realname: 'Test', email: 'test@example.com' } }
 
   end
 

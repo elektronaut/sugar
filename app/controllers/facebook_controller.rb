@@ -76,7 +76,7 @@ class FacebookController < ApplicationController
 
     def signup
       if @user_info ||= get_user_info(:code => params[:code], :redirect_uri => signup_facebook_url)
-        session[:user_params] = {
+        session[:facebook_user_params] = {
           :facebook_uid => @user_info[:id],
           :email        => @user_info[:email],
           :realname     => @user_info[:name],

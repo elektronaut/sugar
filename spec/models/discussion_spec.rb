@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Discussion do
+
+  # Create the first admin user
+  before { create(:user) }
+
   let(:discussion)         { create(:discussion) }
   let(:closed_discussion)  { create(:discussion, closed: true) }
   let(:trusted_discussion) { create(:discussion, category: trusted_category) }

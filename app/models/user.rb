@@ -14,15 +14,10 @@ require 'digest/sha1'
 # discussions. Admin users also count as trusted.
 
 class User < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
   include Authenticable, Inviter, ExchangeParticipant
 
-  # The attributes in UNSAFE_ATTRIBUTES are blocked from <tt>update_attributes</tt>
-  # for regular users.
-  UNSAFE_ATTRIBUTES = :id, :username, :hashed_password, :admin, :activated, :banned,
-                      :trusted, :user_admin, :moderator, :last_active, :created_at, :updated_at,
-                      :posts_count, :discussions_count, :inviter_id, :available_invites,
-                      :persistence_token
-
+  before_create :check_for_first_user
   before_validation :ensure_last_active_is_set
 
   validates :username,
@@ -53,17 +48,6 @@ class User < ActiveRecord::Base
   scope :recently_joined, active.order("created_at DESC")
   scope :top_posters,     active.where("posts_count > 0").order("posts_count DESC")
   scope :trusted,         active.where("trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?", true, true, true, true)
-
-  class << self
-    # Deletes attributes which normal users shouldn't be able to touch from a param hash.
-    def safe_attributes(params)
-      safe_params = params.dup
-      UNSAFE_ATTRIBUTES.each do |r|
-        safe_params.delete(r)
-      end
-      return safe_params
-    end
-  end
 
   # Returns the full email address with real name.
   def full_email
@@ -159,6 +143,11 @@ class User < ActiveRecord::Base
       self.last_active ||= Time.now
     end
 
-
+    def check_for_first_user
+      unless User.any?
+        self.admin = true
+        self.activated = true
+      end
+    end
 
 end

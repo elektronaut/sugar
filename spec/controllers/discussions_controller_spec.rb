@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe DiscussionsController, :rspec => true do
 
+  # Create the first admin user
+  before { create(:user) }
+
   describe 'with public browsing off' do
     before { Sugar.config(:public_browsing, false); Sugar.save_config! }
 

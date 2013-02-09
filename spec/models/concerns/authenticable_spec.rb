@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe Authenticable do
 
+  # Create the first admin user
+  before { create(:user, openid_url: 'http://whatever.com', facebook_uid: 345 ) }
+
   let(:user)          { create(:user, facebook_uid: 123, openid_url: 'http://example.com') }
   let(:banned_user)   { create(:banned_user) }
   let(:inactive_user) { create(:user, activated: false) }

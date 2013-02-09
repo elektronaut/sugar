@@ -1,7 +1,12 @@
 module Inviter
   extend ActiveSupport::Concern
 
+  attr_accessor :invite
+
   included do
+    before_create :set_inviter
+    after_create :expire_invite
+
     belongs_to :inviter, :class_name => 'User'
     has_many   :invitees, :class_name => 'User', :foreign_key => 'inviter_id', :order => 'username ASC'
     has_many   :invites, :dependent => :destroy, :order => 'created_at DESC' do
@@ -54,5 +59,19 @@ module Inviter
     self.update_column(:available_invites, new_number)
     self.invites
   end
+
+  protected
+
+    def set_inviter
+      if self.invite
+        self.inviter = self.invite.user
+      end
+    end
+
+    def expire_invite
+      if self.invite
+        self.invite.expire!
+      end
+    end
 
 end

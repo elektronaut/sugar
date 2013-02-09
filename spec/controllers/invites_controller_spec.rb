@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe InvitesController do
 
+  # Create the first admin user
+  before { create(:user) }
+
   let(:invite)            { create(:invite) }
   let(:expired_invite)    { create(:invite, expires_at: 2.days.ago) }
   let(:user)              { create(:user) }

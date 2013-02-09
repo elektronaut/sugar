@@ -2,6 +2,9 @@ require "spec_helper"
 
 describe Exchange do
 
+  # Create the first admin user
+  before { create(:user) }
+
   let(:exchange)         { create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
   let(:trusted_exchange) { create(:exchange, :nsfw => true) }
   let(:nsfw_exchange)    { create(:exchange, :nsfw => true) }

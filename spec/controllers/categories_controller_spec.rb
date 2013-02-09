@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe CategoriesController do
 
+  # Create the first admin user
+  before { create(:user) }
+
   let(:category)  { create(:category) }
   let(:user)      { create(:user) }
   let(:moderator) { create(:moderator) }

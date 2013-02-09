@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe UsersController do
+
+  # Create the first admin user
+  before { create(:user) }
+
   describe 'POST create' do
     before do
       attributes = attributes_for(:user)

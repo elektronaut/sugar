@@ -51,6 +51,8 @@ gem 'progress_bar'
 
 #gem 'delayed_job', '2.1.4'
 
+gem 'strong_parameters'
+
 group :production do
   gem 'newrelic_rpm'
 end

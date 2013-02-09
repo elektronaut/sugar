@@ -5,7 +5,8 @@ require 'open-uri'
 class UsersController < ApplicationController
 
   requires_authentication :except => [:login, :authenticate, :logout, :password_reset, :deliver_password, :new, :create]
-  requires_user           :only   => [:edit, :update, :grant_invite, :revoke_invites]
+  requires_user           :only   => [:edit, :update, :update_openid]
+  requires_user_admin     :only   => [:grant_invite, :revoke_invites]
 
   before_filter :load_user,
                 :only => [
@@ -17,16 +18,17 @@ class UsersController < ApplicationController
                   :stats
                 ]
 
-  before_filter :detect_admin_signup,        :only => [:login, :new, :create]
+  before_filter :detect_admin_signup,        :only => [:login]
   before_filter :detect_edit_page,           :only => [:edit, :update]
   before_filter :check_if_already_logged_in, :only => [:login, :authenticate]
   before_filter :find_invite,                :only => [:new, :create]
   before_filter :check_for_expired_invite,   :only => [:new, :create]
   before_filter :check_for_signups_allowed,  :only => [:new, :create]
+  before_filter :verify_editable,            :only => [:edit, :update, :update_openid]
 
   respond_to :html, :mobile, :xml, :json
 
-  protected
+  private
 
     def load_user
       begin
@@ -40,31 +42,18 @@ class UsersController < ApplicationController
       end
     end
 
-    def detect_admin_signup
-      @admin_signup = true if User.count(:all) == 0
-    end
-
     def detect_edit_page
       pages = %w{admin info location services settings temporary_ban}
       @page = params[:page] if pages.include?(params[:page])
       @page ||= 'info'
     end
 
+    def detect_admin_signup
+      redirect_to new_user_path and return unless User.any?
+    end
+
     def check_if_already_logged_in
-      redirect_to new_user_path   and return if @admin_signup
       redirect_to discussions_url and return if @current_user
-    end
-
-    def invite_token
-      params[:token] || session[:invite_token]
-    end
-
-    def invite_token?
-      invite_token ? true : false
-    end
-
-    def new_user_params
-      session[:user_params] || {}
     end
 
     def find_invite
@@ -75,16 +64,94 @@ class UsersController < ApplicationController
 
     def check_for_expired_invite
       if @invite && @invite.expired?
+        session.delete(:invite_token)
         flash[:notice] = "Your invite has expired"
         redirect_to login_users_url and return
       end
     end
 
     def check_for_signups_allowed
-      if !Sugar.config(:signups_allowed) && !@admin_signup && !@invite
+      if !Sugar.config(:signups_allowed) && User.any? && !@invite
         flash[:notice] = "Signups are not allowed"
         redirect_to login_users_url and return
       end
+    end
+
+    def verify_editable
+      return unless verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
+    end
+
+    def invite_token
+      params[:token] || session[:invite_token]
+    end
+
+    def invite_token?
+      invite_token ? true : false
+    end
+
+    def initiate_openid_on_create
+      if params[:user][:openid_url]
+        success = start_openid_session(params[:user][:openid_url],
+          :success => update_openid_user_url(:id => @user.username),
+          :fail    => edit_user_page_url(:id => @user.username, :page => 'settings')
+        )
+        unless success
+          flash[:notice] = "WARNING: Your OpenID URL is invalid!"
+        end
+        success
+      else
+        false
+      end
+    end
+
+    def initiate_openid_on_update
+      if new_openid_url
+        success = start_openid_session(params[:user][:openid_url],
+          :success   => update_openid_user_url(:id => @user.username),
+          :fail      => edit_user_page_url(:id => @user.username, :page => @page)
+        )
+        unless success
+          flash.now[:notice] = "That's not a valid OpenID URL!"
+          render :action => :edit
+        end
+        true
+      else
+        false
+      end
+    end
+
+    def facebook_user_params
+      session[:facebook_user_params] || {}
+    end
+
+    def allowed_params
+      allowed = [
+        :aim, :application, :avatar_url, :birthday, :description, :email,
+        :facebook_uid, :flickr, :gamertag, :gtalk, :html_disabled, :instagram,
+        :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
+        :mobile_theme, :msn, :notify_on_message, :realname,
+        :stylesheet_url, :theme, :time_zone, :twitter, :website,
+        :password, :confirm_password
+      ]
+      if @current_user
+        if @current_user.user_admin?
+          allowed += [
+            :username, :banned, :activated, :user_admin, :moderator,
+            :trusted, :available_invites, :banned_until
+          ]
+        end
+        if @current_user.admin?
+          allowed += [:admin]
+        end
+      end
+      allowed
+    end
+
+    def user_params
+      params.require(:user).permit(*allowed_params)
+    end
+    def new_user_params
+      params.require(:user).permit(:username, *allowed_params).merge(facebook_user_params)
     end
 
   public
@@ -201,35 +268,23 @@ class UsersController < ApplicationController
     end
 
     def create
-      # Secure and parse attributes
-      attributes = User.safe_attributes(params[:user])
-      if attributes[:openid_url] && !attributes[:openid_url].blank?
-        new_openid_url = attributes[:openid_url]
-      end
-      attributes[:username]   = params[:user][:username]
-      attributes[:inviter_id] = @invite.user_id if @invite
-      attributes[:activated]  = (!Sugar.config(:signup_approval_required) || @admin_signup)
-      attributes[:admin]      = true if @admin_signup
+      @user = User.new(new_user_params)
+      @user.invite = @invite if @invite
+      @user.activated = true unless Sugar.config(:signup_approval_required)
 
-      @user = User.create(attributes)
-      if @user.valid?
-        session[:user_params] = nil
-        session[:invite_token] = nil
-        @invite.expire! if @invite
-        Mailer.new_user(@user, login_users_path(:only_path => false)).deliver if @user.email?
+      if @user.save
+        if @user.email?
+          Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
+        end
+        session.delete(:facebook_user_params)
+        session.delete(:invite_token)
         @current_user = @user
         store_session_authentication
 
-        # Verify the changed OpenID URL
-        if new_openid_url
-          unless start_openid_session(new_openid_url,
-            :success   => update_openid_user_url(:id => @user.username),
-            :fail      => edit_user_page_url(:id => @user.username, :page => 'settings')
-          )
-            flash[:notice] = "WARNING: Your OpenID URL is invalid!"
-          end
+        unless initiate_openid_on_create
+          redirect_to user_url(:id => @user.username)
         end
-        redirect_to user_url(:id => @user.username) and return
+
       else
         flash.now[:notice] = "Could not create your account, please fill in all required fields."
         render :action => :new
@@ -237,58 +292,34 @@ class UsersController < ApplicationController
     end
 
     def edit
-      verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
     end
 
     def update_openid
-      if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
-        if session[:authenticated_openid_url] && @user.update_attribute(:openid_url, session[:authenticated_openid_url])
-          flash[:notice] = "Your OpenID URL was updated!"
-          redirect_to user_url(:id => @user.username) and return
-        else
-          flash[:notice] ||= 'OpenID verification failed!'
-          redirect_to edit_user_url(:id => @user.username)
-        end
+      if session[:authenticated_openid_url] && @user.update_attribute(:openid_url, session[:authenticated_openid_url])
+        flash[:notice] = "Your OpenID URL was updated!"
+        redirect_to user_url(:id => @user.username) and return
+      else
+        flash[:notice] ||= 'OpenID verification failed!'
+        redirect_to edit_user_url(:id => @user.username)
       end
     end
 
     def update
-      if verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
+      if @user.update_attributes(user_params)
 
-        # Sanitize input
-        attributes = params[:user]
-        attributes = User.safe_attributes(attributes) unless @current_user.user_admin?
-        attributes.delete(:administrator) unless @current_user.admin?
-
-        if attributes[:openid_url] && attributes[:openid_url] != @user.openid_url
-          new_openid_url = attributes[:openid_url]
-          attributes.delete(:openid_url)
+        if @user == @current_user
+          @current_user.reload
+          store_session_authentication
         end
 
-        @user.update_attributes(attributes)
-        if @user.valid?
-          if @user == @current_user
-            # Make sure the session data is updated
-            @current_user.reload
-            store_session_authentication
-          end
-          # Verify the changed OpenID URL
-          if new_openid_url
-            unless start_openid_session(new_openid_url,
-              :success   => update_openid_user_url(:id => @user.username),
-              :fail      => edit_user_page_url(:id => @user.username, :page => @page)
-            )
-              flash.now[:notice] = "That's not a valid OpenID URL!"
-              render :action => :edit
-            end
-          else
-            flash[:notice] = "Your changes were saved!"
-            redirect_to edit_user_page_url(:id => @user.username, :page => @page) and return
-          end
-        else
-          flash.now[:notice] ||= "There were errors saving your changes"
-          render :action => :edit
+        unless initiate_openid_on_update
+          flash[:notice] = "Your changes were saved!"
+          redirect_to edit_user_page_url(:id => @user.username, :page => @page)
         end
+
+      else
+        flash.now[:notice] ||= "There were errors saving your changes"
+        render :action => :edit
       end
     end
 
@@ -329,22 +360,15 @@ class UsersController < ApplicationController
     end
 
     def grant_invite
-      unless @current_user.user_admin?
-        flash[:notice] = "You don't have permission to do that!"
-        redirect_to user_url(:id => @user.username) and return
-      end
       @user.grant_invite!
       flash[:notice] = "#{@user.username} has been granted one invite."
       redirect_to user_url(:id => @user.username) and return
     end
 
     def revoke_invites
-      unless @current_user.user_admin?
-        flash[:notice] = "You don't have permission to do that!"
-        redirect_to user_url(:id => @user.username) and return
-      end
       @user.revoke_invite!(:all)
       flash[:notice] = "#{@user.username} has been revoked of all invites."
       redirect_to user_url(:id => @user.username) and return
     end
+
 end

@@ -215,6 +215,10 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.6)
+    strong_parameters (0.1.6)
+      actionpack (~> 3.0)
+      activemodel (~> 3.0)
+      railties (~> 3.0)
     sunspot (1.3.3)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
@@ -276,6 +280,7 @@ DEPENDENCIES
   simplecov
   spork
   sqlite3
+  strong_parameters
   sunspot-rails-tester
   sunspot_rails
   sunspot_solr

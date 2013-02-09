@@ -4,6 +4,9 @@ require 'spec_helper'
 
 describe Inviter do
 
+  # Create the first admin user
+  before { create(:admin) }
+
   let(:user) { create(:user) }
 
   subject { user }

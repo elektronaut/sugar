@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe Category do
+
+  # Create the first admin user
+  before { create(:user) }
+
   let(:category) { create(:category, name: "This is my Category") }
   let(:trusted_category) { create(:trusted_category) }
   let(:user) { create(:user) }
