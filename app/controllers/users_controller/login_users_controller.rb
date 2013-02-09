@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         store_session_authentication
         redirect_to discussions_url and return
       else
-        flash[:notice] ||= "<strong>Oops!</strong> That’s not a valid username or password."
+        flash[:notice] ||= "That's not a valid username or password."
         redirect_to login_users_url
       end
     end
