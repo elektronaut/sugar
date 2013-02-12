@@ -1,4 +1,4 @@
-# Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.png)](https://travis-ci.org/elektronaut/sugar)
+# Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.png)](https://travis-ci.org/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar.png)](https://codeclimate.com/github/elektronaut/sugar)
 
 Sugar is a free, open-source forum optimized for performance and usability, written in Ruby on Rails.
 
