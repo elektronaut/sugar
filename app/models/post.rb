@@ -11,24 +11,16 @@ class Post < ActiveRecord::Base
 
   validates_presence_of :body, :user_id, :discussion_id
 
-  after_create do |post|
-    # Automatically update the discussion with last poster info
-    post.discussion.update_attributes(:last_poster_id => post.user.id, :last_post_at => post.created_at)
-    # Make sure the discussion is marked as participated for the user
-    DiscussionRelationship.define(post.user, post.discussion, :participated => true) unless post.conversation?
-  end
-
   attr_accessor :skip_html
 
-  before_save do |post|
-    post.edited_at  ||= Time.now
-    post.trusted      = post.discussion.trusted if post.discussion
-    post.conversation = post.discussion.kind_of?(Conversation)
-    post.body_html    = Sugar::PostRenderer.new(post.body).to_html unless post.skip_html
-  end
+  before_save :set_edit_timestamp
+  before_save :update_trusted_status
+  before_save :flag_conversation
+  before_save :render_html
+  after_create :update_exchange
+  after_create :define_relationship
 
   class << self
-
     def find_paginated(options={})
       discussion = options[:discussion]
       Pagination.paginate(
@@ -102,4 +94,41 @@ class Post < ActiveRecord::Base
       self.body.match(user_expression) ? true : false
     end
   end
+
+  private
+
+  def update_trusted_status
+    if self.discussion
+      self.trusted = self.discussion.trusted
+    end
+    true
+  end
+
+  def render_html
+    unless self.skip_html
+      self.body_html = Sugar::PostRenderer.new(self.body).to_html
+    end
+  end
+
+  def flag_conversation
+    self.conversation = self.discussion.kind_of?(Conversation)
+    true
+  end
+
+  def set_edit_timestamp
+    self.edited_at ||= Time.now
+  end
+
+  # Make sure the discussion is marked as participated for the user
+  def define_relationship
+    unless self.conversation?
+      DiscussionRelationship.define(self.user, self.discussion, :participated => true)
+    end
+  end
+
+  # Automatically update the discussion with last poster info
+  def update_exchange
+    self.discussion.update_attributes(:last_poster_id => self.user.id, :last_post_at => self.created_at)
+  end
+
 end
