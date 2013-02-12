@@ -36,56 +36,6 @@ describe Post do
 
   end
 
-  describe "before_save" do
-
-    subject { post }
-
-    context "when in a conversation" do
-      let(:post) { create(:post, discussion: conversation) }
-      its(:conversation?) { should be_true }
-    end
-
-    context "when in a regular discussion" do
-      let(:post) { create(:post, discussion: discussion) }
-      its(:trusted?) { should be_false }
-      its(:conversation?) { should be_false }
-    end
-
-    context "when in a trusted discussion" do
-      let(:post) { create(:post, discussion: trusted_discussion) }
-      its(:trusted?) { should be_true }
-    end
-
-    context "when edited_at is set" do
-      let(:timestamp) { 2.days.ago }
-      let(:post) { create(:post, edited_at: timestamp) }
-      its(:edited_at) { should == timestamp }
-    end
-
-    context "when edited_at isn't set" do
-      before { Time.stub!(:now).and_return(Time.parse("Oct 22 2012")) }
-      its(:edited_at) { should == Time.now }
-    end
-
-    context "when skip_html is false" do
-      before { discussion }
-      it "parses the post" do
-        Sugar::PostRenderer.should_receive(:new).exactly(1).times
-          .and_return { double(:to_html => "<p>Test</p>") }
-        create(:post, discussion: discussion)
-      end
-    end
-
-    context "when skip_html is true" do
-      before { discussion }
-      it "parses the post" do
-        Sugar::PostRenderer.should_receive(:new).exactly(0).times
-        create(:post, skip_html: true, discussion: discussion)
-      end
-    end
-
-  end
-
   describe ".find_paginated" do
 
     subject { Post.find_paginated(discussion: discussion) }
@@ -334,6 +284,95 @@ describe Post do
       it { should =~ mentioned_users }
     end
 
+  end
+
+  describe "#update_trusted_status" do
+    subject { post }
+
+    context "when in a regular discussion" do
+      let(:post) { create(:post, discussion: discussion) }
+      its(:trusted?) { should be_false }
+      its(:conversation?) { should be_false }
+    end
+
+    context "when in a trusted discussion" do
+      let(:post) { create(:post, discussion: trusted_discussion) }
+      its(:trusted?) { should be_true }
+    end
+  end
+
+  describe "#render_html" do
+    context "when skip_html is false" do
+      before { discussion }
+      it "parses the post" do
+        Sugar::PostRenderer.should_receive(:new).exactly(1).times
+          .and_return { double(:to_html => "<p>Test</p>") }
+        create(:post, discussion: discussion)
+      end
+    end
+
+    context "when skip_html is true" do
+      before { discussion }
+      it "parses the post" do
+        Sugar::PostRenderer.should_receive(:new).exactly(0).times
+        create(:post, skip_html: true, discussion: discussion)
+      end
+    end
+  end
+
+  describe "#flag_conversation" do
+    subject { post }
+
+    context "when in a conversation" do
+      let(:post) { create(:post, discussion: conversation) }
+      its(:conversation?) { should be_true }
+    end
+
+    context "when in a regular discussion" do
+      let(:post) { create(:post, discussion: discussion) }
+      its(:conversation?) { should be_false }
+    end
+  end
+
+  describe "#set_edit_timestamp" do
+    subject { post }
+
+    context "when edited_at is set" do
+      let(:timestamp) { 2.days.ago }
+      let(:post) { create(:post, edited_at: timestamp) }
+      its(:edited_at) { should == timestamp }
+    end
+
+    context "when edited_at isn't set" do
+      before { Time.stub!(:now).and_return(Time.parse("Oct 22 2012")) }
+      its(:edited_at) { should == Time.now }
+    end
+  end
+
+  describe "#define_relationship" do
+
+    context "when it belongs to a discussion" do
+      before { discussion }
+      it "defines a relationship between the discussion and the poster" do
+        DiscussionRelationship.should_receive(:define).exactly(1).times
+          .with(user, discussion, participated: true)
+        create(:post, user: user, discussion: discussion)
+      end
+    end
+
+    context "when it belongs to a conversation" do
+      before { conversation }
+      it "does not define a relationship" do
+        DiscussionRelationship.should_receive(:define).exactly(0).times
+        create(:post, discussion: conversation)
+      end
+    end
+  end
+
+  describe "#update_exchange" do
+    subject { post.discussion }
+    its(:last_poster_id) { should == post.user_id }
+    its(:last_post_at) { should == post.created_at }
   end
 
 end
