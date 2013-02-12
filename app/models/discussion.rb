@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Discussion < Exchange
+  include SearchableExchange
 
   has_many   :discussion_relationships, :dependent => :destroy
   belongs_to :category, :counter_cache => true
@@ -34,34 +35,6 @@ class Discussion < Exchange
       else
         self.where(:trusted => false).count
       end
-    end
-
-    # Searches exchanges
-    #
-    # === Parameters
-    # * :query    - The query string
-    # * :page     - Page number, starting on 1 (default: first page)
-    # * :limit    - Number of posts per page (default: 20)
-    # * :trusted  - Boolean, get trusted posts as well (default: false)
-    def search_paginated(options={})
-      page  = (options[:page] || 1).to_i
-      page = 1 if page < 1
-
-      search = self.search do
-        fulltext options[:query]
-        with     :trusted, false unless options[:trusted]
-        order_by :last_post_at, :desc
-        paginate :page => page, :per_page => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
-      end
-
-      Pagination.apply(
-        search.results,
-        Pagination::Paginater.new(
-          :total_count => search.total,
-          :page        => page,
-          :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
-        )
-      )
     end
 
     # Find paginated exchanges, sorted by activity, with the sticky ones on top

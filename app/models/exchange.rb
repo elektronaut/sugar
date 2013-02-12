@@ -70,20 +70,6 @@ class Exchange < ActiveRecord::Base
     end
   end
 
-  searchable do
-    text    :title
-    string  :type
-    integer :poster_id
-    integer :last_poster_id
-    integer :category_id
-    boolean :trusted
-    boolean :closed
-    boolean :sticky
-    time    :created_at
-    time    :updated_at
-    time    :last_post_at
-  end
-
   class << self
 
     # Deletes attributes which normal users shouldn't be able to touch from a param hash
