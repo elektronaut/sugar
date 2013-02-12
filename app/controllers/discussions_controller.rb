@@ -11,6 +11,7 @@ class DiscussionsController < ApplicationController
   before_filter :load_categories, :only => [:new, :create, :edit, :update]
   before_filter :set_exchange_params
   before_filter :require_and_set_search_query, :only => [:search, :search_posts]
+  before_filter :require_categories, :only => [:new, :create]
 
   protected
 
@@ -57,6 +58,23 @@ class DiscussionsController < ApplicationController
         flash[:notice] = "No query specified!"
         redirect_to discussions_path and return
       end
+    end
+
+    def exchange_class
+      params[:type] == 'conversation' ? Conversation : Discussion
+    end
+
+    def require_categories
+      unless @categories.length > 0
+        flash[:notice] = "Can't create a new discussion, no categories have been made!"
+        redirect_to categories_url and return
+      end
+    end
+
+    def exchange_params(options={})
+      (@current_user.moderator? ? params[:exchange] : Discussion.safe_attributes(params[:exchange])).merge(
+        :updated_by => @current_user
+      ).merge(options)
     end
 
   public
@@ -124,25 +142,13 @@ class DiscussionsController < ApplicationController
 
     # Creates a new discussion
     def new
-      exchange_class = params[:type] == 'conversation' ? Conversation : Discussion
-      create_options = {}
-      if exchange_class == Discussion
-        unless @categories.length > 0
-          flash[:notice] = "Can't create a new discussion, no categories have been made!"
-          redirect_to categories_url
-        end
-        @category = @categories.first
-        if params[:category_id] && category = Category.find(params[:category_id])
-          @category = category
-        end
-        create_options[:category => @category]
-        @discussion = exchange_class.new(:category => @category)
-      elsif exchange_class == Conversation
-        if params[:username]
-          @recipient = User.find_by_username(params[:username])
-        end
+      @discussion = exchange_class.new
+      case exchange_class
+      when Discussion
+        @discussion.category = Category.find(params[:category_id])
+      when Conversation
+        @recipient = User.find_by_username(params[:username]) if params[:username]
       end
-      @discussion = exchange_class.new(create_options)
     end
 
     # Show a discussion
@@ -171,19 +177,14 @@ class DiscussionsController < ApplicationController
 
     # Create a new discussion
     def create
-      safe_attributes = @current_user.moderator? ? params[:exchange] : Discussion.safe_attributes(params[:exchange])
-      exchange_class = params[:exchange][:type] == 'Conversation' ? Conversation : Discussion
-
-      if params[:recipient_id]
-        @recipient = User.find(params[:recipient_id]) rescue nil
-      end
-
-      @discussion = exchange_class.create(safe_attributes.merge({:poster_id => @current_user.id}))
-      @discussion.update_attributes(safe_attributes.merge(:updated_by => @current_user))
-
+      @discussion = exchange_class.create(exchange_params(:poster => @current_user))
       if @discussion.valid?
-        if @discussion.kind_of?(Conversation) && @recipient
-          ConversationRelationship.create(:user => @recipient, :conversation => @discussion, :new_posts => true)
+        if @discussion.kind_of?(Conversation) && params[:recipient_id]
+          ConversationRelationship.create(
+            :user         => User.find(params[:recipient_id]),
+            :conversation => @discussion,
+            :new_posts    => true
+          )
         end
         redirect_to discussion_path(@discussion) and return
       else
@@ -194,8 +195,7 @@ class DiscussionsController < ApplicationController
 
     # Update a discussion
     def update
-      safe_attributes = @current_user.moderator? ? params[:exchange] : Exchange.safe_attributes(params[:exchange])
-      @discussion.update_attributes(safe_attributes.merge(:updated_by => @current_user))
+      @discussion.update_attributes(exchange_params)
       if @discussion.valid?
         flash[:notice] = "Your changes were saved."
         redirect_to discussion_path(@discussion) and return
