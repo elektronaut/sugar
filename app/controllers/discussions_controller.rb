@@ -10,6 +10,7 @@ class DiscussionsController < ApplicationController
   before_filter :verify_editable, :only => [:edit, :update, :destroy]
   before_filter :load_categories, :only => [:new, :create, :edit, :update]
   before_filter :set_exchange_params
+  before_filter :require_and_set_search_query, :only => [:search, :search_posts]
 
   protected
 
@@ -47,6 +48,17 @@ class DiscussionsController < ApplicationController
       @categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user && @current_user.trusted?)}
     end
 
+    def search_query
+      params[:query] || params[:q]
+    end
+
+    def require_and_set_search_query
+      unless @search_query = search_query
+        flash[:notice] = "No query specified!"
+        redirect_to discussions_path and return
+      end
+    end
+
   public
 
     # Recent discussions
@@ -75,13 +87,6 @@ class DiscussionsController < ApplicationController
 
     # Searches discusion titles
     def search
-      # Check for missing query
-      params[:query] = params[:q] if params[:q]
-      unless @search_query = params[:query]
-        flash[:notice] = "No query specified!"
-        redirect_to discussions_path and return
-      end
-      # Search discussions
       @discussions = Discussion.search_paginated(
         :query   => @search_query,
         :page    => params[:page],
@@ -107,14 +112,6 @@ class DiscussionsController < ApplicationController
 
     # Searches posts within a discussion
     def search_posts
-      # Beautify URL
-      params[:query] = params[:q] if params[:q]
-      # Check for missing query
-      unless @search_query = params[:query]
-        flash[:notice] = "No query specified!"
-        redirect_to discussions_path and return
-      end
-      # Search posts
       @posts = Post.search_paginated(
         :discussion_id => @discussion.id,
         :page          => params[:page],
