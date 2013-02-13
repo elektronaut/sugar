@@ -78,7 +78,8 @@ module Paginatable
     end
 
     def total_count
-      except(:limit, :offset, :order, :includes).count
+      count = except(:limit, :offset, :order, :includes).count
+      count.is_a?(Hash) ? count.length : count
     end
 
     def per_page

@@ -28,68 +28,13 @@ class Discussion < Exchange
       end
     end
 
-    # Finds popular discussions within a defined time range, sorted by popularity.
-    # The collection is decorated with the Pagination module, which provides pagination info.
-    # Takes the following options:
-    # * :page     - Page number, starting on 1 (default: first page)
-    # * :since    - Since time
-    # * :limit    - Number of posts per page (default: 20)
-    # * :trusted  - Boolean, get trusted posts as well
-    def find_popular(options={})
-      options = {
-        :since => 7.days.ago
-      }.merge(options)
-
-      conditions = [
-        'posts.discussion_id = discussions.id AND posts.created_at > ?',
-        options[:since]
-      ]
-
-      # Ignore trusted posts unless requested
-      unless options[:trusted]
-        conditions = [
-          ['discussions.trusted = ?', conditions.shift].compact.join(' AND '),
-          false
-        ] + conditions
-      end
-
-      if options[:trusted]
-        discussions_count = Discussion.count_by_sql([
-          'SELECT COUNT(DISTINCT discussion_id) ' +
-          'FROM posts, discussions ' +
-          'WHERE posts.discussion_id = discussions.id ' +
-          'AND posts.created_at > ? AND discussions.type = ?',
-          options[:since],
-          'Discussion'
-        ])
-      else
-        discussions_count = Discussion.count_by_sql([
-          'SELECT COUNT(DISTINCT discussion_id) ' +
-          'FROM posts, discussions ' +
-          'WHERE posts.discussion_id = discussions.id ' +
-          'AND posts.created_at > ? AND discussions.type = ? AND discussions.trusted = ?',
-          options[:since],
-          'Discussion',
-          false
-        ])
-      end
-
-      Pagination.paginate(
-        :total_count => discussions_count,
-        :per_page    => options[:limit] || self.per_page,
-        :page        => options[:page]  || 1
-      ) do |pagination|
-        discussions = Discussion.find(
-          :all,
-          :select     => 'discussions.*, COUNT(posts.id) AS recent_posts_count',
-          :from       => 'discussions, posts',
-          :conditions => conditions,
-          :group      => 'discussions.id',
-          :limit      => pagination.limit,
-          :offset     => pagination.offset,
-          :order      => 'recent_posts_count DESC'
-        )
-      end
+    # Scopes discussions popular in the last n days
+    def popular_in_the_last(days=7.days)
+      select('discussions.*, COUNT(posts.id) AS recent_posts_count')
+        .joins(:posts)
+        .where('posts.created_at > ?', days.ago)
+        .group('discussions.id')
+        .order('recent_posts_count DESC')
     end
   end
 

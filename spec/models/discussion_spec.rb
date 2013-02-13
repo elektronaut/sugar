@@ -70,116 +70,46 @@ describe Discussion do
     pending
   end
 
-  describe ".find_popular" do
+  describe ".popular_in_the_last" do
+    let(:discussion1) { create(:discussion) }
+    let(:discussion2) { create(:discussion) }
 
-    subject { Discussion.find_popular }
-    it { should be_kind_of(Pagination::InstanceMethods) }
+    before do
+      discussion1.posts.first.update_attributes(created_at: 4.days.ago)
+      [13.days.ago, 12.days.ago].each do |t|
+        create(:post, discussion: discussion1, created_at: t)
+      end
+      [2.days.ago].each do |t|
+        create(:post, discussion: discussion2, created_at: t)
+      end
+    end
 
-    context "with options" do
+    context "within the last 3 days" do
+      subject { Discussion.popular_in_the_last(3.days) }
+      it { should == [discussion2] }
+    end
 
-      describe :page do
-
-        before { 2.times { create(:discussion) } }
-
-        context "when not specified" do
-          subject { Discussion.find_popular(limit: 1) }
-          its(:page) { should == 1 }
-        end
-
-        context "when specified" do
-          subject { Discussion.find_popular(limit: 1, page: 2) }
-          its(:page) { should == 2 }
-        end
-
-        context "when out of bounds" do
-          subject { Discussion.find_popular(limit: 1, page: 3) }
-          its(:page) { should == 2 }
-        end
-
+    context "within the last 7 days" do
+      before do
+        discussion1
+        discussion2
       end
 
-      describe :since do
+      subject { Discussion.popular_in_the_last(7.days) }
+      it { should == [discussion2, discussion1] }
 
-        let(:discussion1) { create(:discussion) }
-        let(:discussion2) { create(:discussion) }
-
-        before do
-          discussion1.posts.first.update_attributes(created_at: 4.days.ago)
-          [13.days.ago, 12.days.ago].each do |t|
-            create(:post, discussion: discussion1, created_at: t)
-          end
-          [2.days.ago].each do |t|
-            create(:post, discussion: discussion2, created_at: t)
-          end
-        end
-
-        context "within the last 3 days" do
-          subject { Discussion.find_popular(since: 3.days.ago) }
-          it { should == [discussion2] }
-        end
-
-        context "within the last 7 days" do
-          before do
-            discussion1
-            discussion2
-          end
-
-          subject { Discussion.find_popular(since: 7.days.ago) }
-          it { should == [discussion2, discussion1] }
-
-          describe "the first result" do
-            subject { Discussion.find_popular(since: 7.days.ago).first }
-            it { should respond_to(:recent_posts_count) }
-            specify { subject.recent_posts_count.to_i.should == 2 }
-          end
-
-        end
-
-        context "within the last 14 days" do
-          subject { Discussion.find_popular(since: 14.days.ago) }
-          it { should == [discussion1, discussion2] }
-        end
-
-      end
-
-      describe :limit do
-
-        context "when not specified" do
-          its(:per_page) { should == Exchange.per_page }
-        end
-
-        context "when specified" do
-          subject { Discussion.find_popular(limit: 7) }
-          its(:per_page) { should == 7 }
-        end
-
-      end
-
-      describe :trusted do
-
-        let!(:discussion) { create(:discussion) }
-        let!(:trusted_discussion) { create(:trusted_discussion) }
-
-        context "when not specified" do
-          it { should include(discussion) }
-          it { should_not include(trusted_discussion) }
-        end
-
-        context "when true" do
-          subject { Discussion.find_popular(trusted: true) }
-          it { should include(discussion, trusted_discussion) }
-        end
-
-        context "when false" do
-          subject { Discussion.find_popular(trusted: false) }
-          it { should include(discussion) }
-          it { should_not include(trusted_discussion) }
-        end
-
+      describe "the first result" do
+        subject { Discussion.popular_in_the_last(7.days).first }
+        it { should respond_to(:recent_posts_count) }
+        specify { subject.recent_posts_count.to_i.should == 2 }
       end
 
     end
 
+    context "within the last 14 days" do
+      subject { Discussion.popular_in_the_last(14.days) }
+      it { should == [discussion1, discussion2] }
+    end
   end
 
   describe "#participants" do
