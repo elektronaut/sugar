@@ -5,11 +5,6 @@ require 'pagination'
 # = Exchange
 #
 # Exchange is the base class for all threads, which both Discussion and Conversation inherit from.
-#
-# == Pagination
-#
-# The *_paginated methods returns a collection decorated with pagination info,
-# see the Pagination module for more information.
 
 class Exchange < ActiveRecord::Base
   include HumanizableParam, Paginatable

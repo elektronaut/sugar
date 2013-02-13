@@ -20,9 +20,9 @@ class Post < ActiveRecord::Base
   after_create :update_exchange
   after_create :define_relationship
 
-  scope :sorted,    order('created_at ASC')
-  scope :with_user, includes(:user)
-  scope :for_view,  sorted.with_user
+  scope :sorted,                    order('created_at ASC')
+  scope :for_view,                  sorted.includes(:user)
+  scope :for_view_with_discussion,  for_view.includes(:discussion)
 
   def me_post?
     @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/) ) ? true : false

@@ -36,28 +36,6 @@ module ExchangeParticipant
     end
   end
 
-  # Finds and paginate discussions created by this user.
-  # === Parameters
-  # * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.
-  # * <tt>:limit</tt>   - Number of discussions per page. Default: Exchange.per_page
-  # * <tt>:page</tt>    - Page, defaults to 1.
-  def paginated_discussions(options={})
-    Pagination.paginate(
-      :total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => {:trusted => false}),
-      :per_page    => options[:limit] || Exchange.per_page,
-      :page        => options[:page] || 1
-    ) do |pagination|
-      discussions = Discussion.find(
-        :all,
-        :conditions => options[:trusted] ? ['poster_id = ?', self.id] : ['poster_id = ? AND trusted = ?', self.id, false],
-        :limit      => pagination.limit,
-        :offset     => pagination.offset,
-        :order      => 'sticky DESC, last_post_at DESC',
-        :include    => [:poster, :last_poster, :category]
-      )
-    end
-  end
-
   def paginated_conversations(options={})
     Pagination.paginate(
       :total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
@@ -74,28 +52,6 @@ module ExchangeParticipant
         :offset     => pagination.offset,
         :order      => 'discussions.last_post_at DESC',
         :include    => [:poster, :last_poster]
-      )
-    end
-  end
-
-  # Finds and paginate posts created by this user.
-  # === Parameters
-  # * <tt>:trusted</tt> - Boolean, includes posts in trusted categories.
-  # * <tt>:limit</tt>   - Number of posts per page. Default: Post.per_page
-  # * <tt>:page</tt>    - Page, defaults to 1.
-  def paginated_posts(options={})
-    Pagination.paginate(
-      :total_count => options[:trusted] ? self.discussion_posts.count(:all) : self.discussion_posts.count(:all, :conditions => {:conversation => false, :trusted => false}),
-      :per_page    => options[:limit] || Post.per_page,
-      :page        => options[:page] || 1
-    ) do |pagination|
-      Post.find(
-        :all,
-        :conditions => options[:trusted] ? ['user_id = ? AND conversation = ?', self.id, false] : ['user_id = ? AND trusted = ? AND conversation = ?', self.id, false, false],
-        :limit      => pagination.limit,
-        :offset     => pagination.offset,
-        :order      => 'created_at DESC',
-        :include    => [:user, :discussion]
       )
     end
   end

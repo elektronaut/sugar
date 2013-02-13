@@ -84,20 +84,13 @@ class UsersController < ApplicationController
     def show
       respond_with(@user) do |format|
         format.html do
-          @posts = @user.paginated_posts(
-            :page    => params[:page],
-            :trusted => (@current_user && @current_user.trusted?),
-            :limit   => 15
-          )
+          @posts = @user.discussion_posts.viewable_by(@current_user).limit(15).page(params[:page]).for_view_with_discussion.reverse_order
         end
       end
     end
 
     def discussions
-      @discussions = @user.paginated_discussions(
-        :page    => params[:page],
-        :trusted => @current_user.trusted?
-      )
+      @discussions = @user.discussions.viewable_by(@current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
@@ -111,10 +104,7 @@ class UsersController < ApplicationController
     end
 
     def posts
-      @posts = @user.paginated_posts(
-        :page    => params[:page],
-        :trusted => (@current_user && @current_user.trusted?)
-      )
+      @posts = @user.discussion_posts.viewable_by(@current_user).page(params[:page]).for_view_with_discussion.reverse_order
     end
 
     def stats
