@@ -19,15 +19,6 @@ class Discussion < Exchange
   after_save    :update_trusted_status
 
   class << self
-    # Counts total discussion for a user
-    def count_for(user)
-      if user && user.trusted?
-        self.count
-      else
-        self.where(:trusted => false).count
-      end
-    end
-
     # Scopes discussions popular in the last n days
     def popular_in_the_last(days=7.days)
       select('discussions.*, COUNT(posts.id) AS recent_posts_count')

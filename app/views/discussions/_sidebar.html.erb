@@ -7,7 +7,7 @@
   <ul class="meta">
     <li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "index" %>">
       <%= link_to "All discussions", discussions_path %>
-      <span class="count"><%= Discussion.count_for(@current_user) %></span>
+      <span class="count"><%= Discussion.viewable_by(@current_user).count %></span>
     </li>
     <% if @current_user %>
       <% if @current_user.following_count > 0 %>
