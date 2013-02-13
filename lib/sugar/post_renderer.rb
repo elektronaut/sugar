@@ -86,10 +86,10 @@ module Sugar
     def extract_code_tags!
       document.search('code') do |element|
         code_language = get_code_language_from(element)
-        code_tag.swap("<div id=\"replace_code_tag_#{code_tags.length}\"></div>")
+        element.swap("<div id=\"replace_code_tag_#{code_tags.length}\"></div>")
         code_tags << {
           :language => code_language,
-          :body     => code_tag.children.first.content
+          :body     => element.children.first.content
         }
       end
     end
