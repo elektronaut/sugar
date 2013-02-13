@@ -5,7 +5,7 @@ FactoryGirl.define do
     association :poster, :factory => :user
 
     # Discussions
-    factory :discussion, :class => Discussion do
+    factory :discussion, :class => 'discussion' do
       sequence(:title)  {|n| "Discussion #{n}"}
       sequence(:body)   {|n| "First post of discussion #{n}"}
       category
@@ -22,7 +22,7 @@ FactoryGirl.define do
     end
 
     # Conversations
-    factory :conversation, :class => Conversation do
+    factory :conversation, :class => 'conversation' do
       sequence(:title)  {|n| "Conversation #{n}"}
       sequence(:body)   {|n| "First post of conversation #{n}"}
     end

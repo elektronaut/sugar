@@ -16,4 +16,4 @@ before_script:
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database sugar_test;'; fi"
   - sh -c "if [ '$DB' = 'postgresql' ]; then psql -c 'create database sugar_test' -U postgres; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then bundle exec rake db:create; fi"
-  - rake db:schema:load
+  - rake db:migrate
