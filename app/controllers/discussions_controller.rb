@@ -97,9 +97,10 @@ class DiscussionsController < ApplicationController
 
     # Searches discusion titles
     def search
+      current_user = @current_user
       search = Discussion.search do
         fulltext search_query
-        with     :trusted, false unless (@current_user && @current_user.trusted?)
+        with     :trusted, false unless (current_user && current_user.trusted?)
         order_by :last_post_at, :desc
         paginate :page => params[:page], :per_page => Exchange.per_page
       end
@@ -126,14 +127,21 @@ class DiscussionsController < ApplicationController
 
     # Searches posts within a discussion
     def search_posts
-      @posts = Post.search_paginated(
-        :discussion_id => @discussion.id,
-        :page          => params[:page],
-        :query         => @search_query,
-        :trusted       => (@current_user && @current_user.trusted?),
-        :conversation  => @discussion.kind_of?(Conversation)
-      )
       @search_path = search_posts_discussion_path(@discussion)
+
+      discussion = @discussion
+      current_user = @current_user
+
+      search = Post.search do
+        fulltext search_query
+        with     :trusted, false unless (current_user && current_user.trusted?)
+        with     :conversation,  discussion.kind_of?(Conversation)
+        with     :discussion_id, discussion.id
+        order_by :created_at, :desc
+        paginate :page => params[:page], :per_page => Post.per_page
+      end
+
+      @posts = search.results
     end
 
     # Creates a new discussion

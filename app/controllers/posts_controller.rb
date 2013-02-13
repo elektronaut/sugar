@@ -16,10 +16,11 @@ class PostsController < ApplicationController
   protect_from_forgery    :except => [:doodle]
 
   # Other filters
-  before_filter :load_discussion,    :except => [:search]
-  before_filter :verify_viewability, :except => [:search, :count]
-  before_filter :load_post,       :only => [:show, :edit, :update, :destroy, :quote]
-  before_filter :verify_editable, :only => [:edit, :update, :destroy]
+  before_filter :load_discussion,              :except => [:search]
+  before_filter :verify_viewability,           :except => [:search, :count]
+  before_filter :load_post,                    :only => [:show, :edit, :update, :destroy, :quote]
+  before_filter :verify_editable,              :only => [:edit, :update, :destroy]
+  before_filter :require_and_set_search_query, :only => [:search]
 
   protected
 
@@ -63,6 +64,17 @@ class PostsController < ApplicationController
       hash
     end
 
+    def search_query
+      params[:query] || params[:q]
+    end
+
+    def require_and_set_search_query
+      unless @search_query = search_query
+        flash[:notice] = "No query specified!"
+        redirect_to discussions_path and return
+      end
+    end
+
   public
 
     def count
@@ -95,13 +107,18 @@ class PostsController < ApplicationController
     end
 
     def search
-      params[:query] = params[:q] if params[:q]
-      unless @search_query = params[:query]
-        flash[:notice] = "No query specified!"
-        redirect_to discussions_path and return
-      end
-      @posts = Post.search_paginated(:page => params[:page], :trusted => @current_user.trusted?, :query => @search_query)
       @search_path = search_posts_path
+
+      current_user = @current_user
+
+      search = Post.search do
+        fulltext search_query
+        with     :trusted, false unless (current_user && current_user.trusted?)
+        order_by :created_at, :desc
+        paginate :page => params[:page], :per_page => Post.per_page
+      end
+
+      @posts = search.results
     end
 
     def create
