@@ -2,8 +2,8 @@
 
 module Pagination
 
-  # The InstanceMethods are mixed into the collection by 
-  # Pagination.apply, which means they can be used in your views. 
+  # The InstanceMethods are mixed into the collection by
+  # Pagination.apply, which means they can be used in your views.
   #
   # See the Pagination module documentation for more info and examples.
 
@@ -15,29 +15,31 @@ module Pagination
     def pages
       paginater.pages
     end
-    
+
     # Current page.
-    def page
+    def current_page
       paginater.page
     end
-    
+    alias :page :current_page
+
     # Total number of items.
     def total_count
       paginater.total_count
     end
-    
+
     # Number of items per page.
     def per_page
       paginater.per_page
     end
     alias :limit :per_page
-    
+
     # The start offset (number of items skipped).
-    def offset
+    def offset_value
       paginater.offset
     end
+    alias :offset :offset_value
 
-    # Number of the first page (which for obious reasons is always 1).
+    # Number of the first page (which for obvious reasons is always 1).
     def first_page
       1
     end
@@ -87,7 +89,7 @@ module Pagination
       paginater.context?
     end
 
-    # Get an array of nearby pages. 
+    # Get an array of nearby pages.
     def nearest_pages(number=5)
       first = page - (number/2)
       first = 1 if first < 1

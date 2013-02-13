@@ -7,7 +7,7 @@ module ExchangesHelper
     @_discussion_classes ||= {}
     @_discussion_classes[[discussions, discussion]] ||= [
       discussion.labels.map(&:downcase),
-      %w{odd even}[discussions.index(discussion)%2],
+      %w{odd even}[discussions.to_a.index(discussion)%2],
       (new_posts?(discussion) ? 'new_posts' : nil),
       "in_category#{discussion.category_id}",
       "by_user#{discussion.poster_id}",
