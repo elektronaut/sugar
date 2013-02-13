@@ -39,12 +39,12 @@ module ExchangeParticipant
   # Finds and paginate discussions created by this user.
   # === Parameters
   # * <tt>:trusted</tt> - Boolean, includes discussions in trusted categories.
-  # * <tt>:limit</tt>   - Number of discussions per page. Default: Exchange::DISCUSSIONS_PER_PAGE
+  # * <tt>:limit</tt>   - Number of discussions per page. Default: Exchange.per_page
   # * <tt>:page</tt>    - Page, defaults to 1.
   def paginated_discussions(options={})
     Pagination.paginate(
       :total_count => options[:trusted] ? self.discussions.count(:all) : self.discussions.count(:all, :conditions => {:trusted => false}),
-      :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
+      :per_page    => options[:limit] || Exchange.per_page,
       :page        => options[:page] || 1
     ) do |pagination|
       discussions = Discussion.find(
@@ -61,7 +61,7 @@ module ExchangeParticipant
   def paginated_conversations(options={})
     Pagination.paginate(
       :total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
-      :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
+      :per_page    => options[:limit] || Exchange.per_page,
       :page        => options[:page] || 1
     ) do |pagination|
       joins = "INNER JOIN conversation_relationships ON conversation_relationships.conversation_id = discussions.id"

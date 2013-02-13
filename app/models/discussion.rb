@@ -11,6 +11,9 @@ class Discussion < Exchange
   # Flag for trusted status, which will update after save if it has been changed.
   attr_accessor :update_trusted
 
+  scope :with_category, includes(:poster, :last_poster, :category)
+  scope :for_view,      sorted.with_posters.with_category
+
   validate do |discussion|
     discussion.trusted = discussion.category.trusted if discussion.category
   end
@@ -37,35 +40,11 @@ class Discussion < Exchange
       end
     end
 
-    # Find paginated exchanges, sorted by activity, with the sticky ones on top
-    #
-    # === Parameters
-    # * :page     - Page number, starting on 1 (default: first page)
-    # * :limit    - Number of posts per page (default: 20)
-    # * :category - Only get exchanges in this category
-    # * :trusted  - Boolean, get trusted posts as well (default: false)
-    def find_paginated(options={})
-      conditions = {}
-      conditions[:category_id] = options[:category].id if options[:category]
-      conditions[:trusted]     = false unless options[:trusted]
-
-      # Utilize the counter cache on category if possible, if not do the query.
-      exchanges_count   = options[:category].discussions_count if options[:category]
-      exchanges_count ||= Discussion.count(:conditions => conditions)
-
-      Pagination.paginate(
-        :total_count => exchanges_count,
-        :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
-        :page        => options[:page]  || 1
-      ) do |pagination|
-        Discussion.find(
-          :all,
-          :conditions => conditions,
-          :limit      => pagination.limit,
-          :offset     => pagination.offset,
-          :order      => 'sticky DESC, last_post_at DESC',
-          :include    => [:poster, :last_poster, :category]
-        )
+    def viewable_by(user)
+      if user && user.trusted?
+        scoped
+      else
+        where(:trusted => false)
       end
     end
 
@@ -117,7 +96,7 @@ class Discussion < Exchange
 
       Pagination.paginate(
         :total_count => discussions_count,
-        :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE,
+        :per_page    => options[:limit] || self.per_page,
         :page        => options[:page]  || 1
       ) do |pagination|
         discussions = Discussion.find(

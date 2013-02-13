@@ -33,7 +33,7 @@ module SearchableExchange
         fulltext options[:query]
         with     :trusted, false unless options[:trusted]
         order_by :last_post_at, :desc
-        paginate :page => page, :per_page => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
+        paginate :page => page, :per_page => options[:limit] || Exchange.per_page
       end
 
       Pagination.apply(
@@ -41,7 +41,7 @@ module SearchableExchange
         Pagination::Paginater.new(
           :total_count => search.total,
           :page        => page,
-          :per_page    => options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
+          :per_page    => options[:limit] || Exchange.per_page
         )
       )
     end

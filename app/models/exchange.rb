@@ -12,12 +12,12 @@ require 'pagination'
 # see the Pagination module for more information.
 
 class Exchange < ActiveRecord::Base
-  include HumanizableParam
+  include HumanizableParam, Paginatable
 
   self.table_name = 'discussions'
 
   # Default number of discussions per page
-  DISCUSSIONS_PER_PAGE = 30
+  self.per_page = 30
 
   # These attributes should be filtered from params
   UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count,
@@ -38,6 +38,10 @@ class Exchange < ActiveRecord::Base
   has_many   :posts,            :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
   has_one    :first_post,       :class_name => 'Post',   :order => ['created_at ASC'], :foreign_key => 'discussion_id'
   has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
+
+  scope :sorted,            order('sticky DESC, last_post_at DESC')
+  scope :with_posters,      includes(:poster, :last_poster)
+  scope :for_view,          sorted.with_posters
 
   validates_presence_of :title
   validates_length_of   :title, :maximum => 100

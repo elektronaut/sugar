@@ -45,11 +45,7 @@ class CategoriesController < ApplicationController
     def show
       respond_with(@category) do |format|
         format.any(:html, :mobile) do
-          @discussions = Discussion.find_paginated(
-            :page     => params[:page],
-            :category => @category,
-            :trusted  => (@current_user && @current_user.trusted?)
-          )
+          @discussions = @category.discussions.viewable_by(@current_user).page(params[:page]).for_view
           load_views_for(@discussions)
         end
       end

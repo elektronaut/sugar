@@ -78,7 +78,7 @@ describe CategoriesController do
   describe "GET show" do
     before { login; get :show, :id => category }
     it { should assign_to(:category).with_kind_of(Category) }
-    it { should assign_to(:discussions).with_kind_of(Pagination::InstanceMethods) }
+    it { should assign_to(:discussions) }
     it { should respond_with(:success) }
     it { should render_template(:show) }
     it { should_not set_the_flash }

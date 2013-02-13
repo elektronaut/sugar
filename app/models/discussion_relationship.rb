@@ -52,7 +52,7 @@ class DiscussionRelationship < ActiveRecord::Base
         .where(:discussion_relationships => conditions)
 
       if options.has_key?(:page)
-        limit     = options[:limit] || Exchange::DISCUSSIONS_PER_PAGE
+        limit     = options[:limit] || Exchange.per_page
         discussions_count = self.count(:all, :conditions => conditions)
         num_pages = (discussions_count.to_f/limit).ceil
         page      = (options[:page] || 1).to_i
