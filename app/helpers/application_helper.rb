@@ -4,6 +4,7 @@ module ApplicationHelper
   include AvatarsHelper
   include ExchangesHelper
   include LayoutHelper
+  include PaginationHelper
   include PostsHelper
 
   def facebook_oauth_url(redirect_uri)

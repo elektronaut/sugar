@@ -37,12 +37,12 @@ module Paginatable
       context != 0
     end
 
-    def pages
+    def total_pages
       (total_count.to_f / (pagination_limit - context)).ceil
     end
 
     def current_page
-      [(((scoped.offset_value || 0) + context) / (pagination_limit - context)) + 1, pages].min
+      [(((scoped.offset_value || 0) + context) / (pagination_limit - context)) + 1, total_pages].min
     end
 
     def first_page
@@ -50,7 +50,7 @@ module Paginatable
     end
 
     def last_page
-      pages
+      total_pages
     end
 
     def first_page?
@@ -70,7 +70,7 @@ module Paginatable
     end
 
     def next_page
-      if current_page < pages
+      if current_page < total_pages
         current_page + 1
       else
         nil
@@ -88,19 +88,6 @@ module Paginatable
 
     def per_page=(limit)
       @per_page = limit
-    end
-
-    # Get an array of nearby pages.
-    def nearest_pages(number=5)
-      first = current_page - (number / 2)
-      first = 1 if first < 1
-      last  = first + (number - 1)
-      last  = pages if last > pages
-      if (last - first) < number
-        first = last - (number - 1)
-        first = 1 if first < 1
-      end
-      (first..last).to_a
     end
 
     private

@@ -97,11 +97,15 @@ class DiscussionsController < ApplicationController
 
     # Searches discusion titles
     def search
-      @discussions = Discussion.search_paginated(
-        :query   => @search_query,
-        :page    => params[:page],
-        :trusted => (@current_user && @current_user.trusted?)
-      )
+      search = Discussion.search do
+        fulltext search_query
+        with     :trusted, false unless (@current_user && @current_user.trusted?)
+        order_by :last_post_at, :desc
+        paginate :page => params[:page], :per_page => Exchange.per_page
+      end
+
+      @discussions = search.results
+
       respond_to do |format|
         format.any(:html, :mobile) do
           load_views_for(@discussions)
@@ -110,7 +114,7 @@ class DiscussionsController < ApplicationController
         format.json do
           json = {
             :pages         => @discussions.pages,
-            :total_entries => @discussions.total_entries,
+            :total_entries => @discussions.total,
             # TODO: Fix when Rails bug is fixed
             #:discussions   => @discussions
             :discussions   => @discussions.map{|d| {:discussion => d.attributes}}
