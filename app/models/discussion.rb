@@ -14,21 +14,9 @@ class Discussion < Exchange
   scope :with_category, includes(:poster, :last_poster, :category)
   scope :for_view,      sorted.with_posters.with_category
 
-  validate do |discussion|
-    discussion.trusted = discussion.category.trusted if discussion.category
-  end
-
-  before_update do |discussion|
-    discussion.update_trusted = true if discussion.trusted_changed?
-  end
-
-  # Set trusted status on all posts and relationships on save
-  after_save do |discussion|
-    if discussion.update_trusted
-      discussion.posts.update_all(:trusted => discussion.trusted?)
-      discussion.discussion_relationships.update_all(:trusted => discussion.trusted?)
-    end
-  end
+  validate      :inherit_trusted_from_category
+  before_update :set_update_trusted_flag
+  after_save    :update_trusted_status
 
   class << self
     # Counts total discussion for a user
@@ -139,6 +127,26 @@ class Discussion < Exchange
   # Returns true if the user can post in this discussion
   def postable_by?(user)
     (user && (user.moderator? || !self.closed?)) ? true : false
+  end
+
+  private
+
+  def inherit_trusted_from_category
+    self.trusted = self.category.trusted if self.category
+    true
+  end
+
+  def set_update_trusted_flag
+    self.update_trusted = true if self.trusted_changed?
+    true
+  end
+
+  # Set trusted status on all posts and relationships on save
+  def update_trusted_status
+    if self.update_trusted
+      self.posts.update_all(:trusted => self.trusted?)
+      self.discussion_relationships.update_all(:trusted => self.trusted?)
+    end
   end
 
 end
