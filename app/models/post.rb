@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Post < ActiveRecord::Base
-  include SearchablePost
+  include SearchablePost, Viewable
 
   POSTS_PER_PAGE  = 50
 
@@ -73,15 +73,6 @@ class Post < ActiveRecord::Base
 
   def editable_by?(user)
     (user && (user.moderator? || user == self.user)) ? true : false
-  end
-
-  # Returns true if the user can view this post
-  def viewable_by?(user)
-    if self.trusted?
-      (user && user.trusted?) ? true : false
-    else
-      (Sugar.public_browsing? || user) ? true : false
-    end
   end
 
   def mentions_users?
