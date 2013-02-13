@@ -10,28 +10,39 @@ module Paginatable
       end
     end
 
+    module WithContext
+      attr_accessor :context
+      def context
+        @context || 0
+      end
+    end
+
     def self.extended(base)
       base.extend Inheritance if base.is_a?(Class)
     end
 
-    def page(page=nil)
-      scoped.limit(pagination_limit).offset(pagination_offset(page.to_i))
+    def page(page=nil, options={})
+      scope = scoped.extend(WithContext)
+      scope.context = page.to_i > 1 ? options[:context].to_i : 0
+      scope
+        .limit(pagination_limit + scope.context)
+        .offset(pagination_offset(page.to_i) - scope.context)
     end
 
-    def pagination_limit
-      scoped.limit_value || self.per_page
+    def context
+      scoped.context
     end
 
-    def pagination_offset(page=1)
-      [(pagination_limit * (page - 1)), 0].max
+    def context?
+      context != 0
     end
 
     def pages
-      (total_count.to_f / pagination_limit).ceil
+      (total_count.to_f / (pagination_limit - context)).ceil
     end
 
     def current_page
-      [((scoped.offset_value || 0) / pagination_limit) + 1, pages].min
+      [(((scoped.offset_value || 0) + context) / (pagination_limit - context)) + 1, pages].min
     end
 
     def first_page
@@ -40,6 +51,14 @@ module Paginatable
 
     def last_page
       pages
+    end
+
+    def first_page?
+      current_page = first_page
+    end
+
+    def last_page?
+      current_page == last_page
     end
 
     def previous_page
@@ -81,6 +100,20 @@ module Paginatable
         first = 1 if first < 1
       end
       (first..last).to_a
+    end
+
+    private
+
+    def pagination_limit
+      if scoped.limit_value
+        scoped.limit_value
+      else
+        self.per_page
+      end
+    end
+
+    def pagination_offset(page=1)
+      [(pagination_limit * (page - 1)), 0].max
     end
 
   end
