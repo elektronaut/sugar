@@ -89,58 +89,6 @@ describe ExchangeParticipant do
 
   end
 
-  describe "#paginated_conversations" do
-
-    subject { user.paginated_conversations }
-    it { should be_kind_of Pagination::InstanceMethods }
-
-    it "only finds the user's conversations" do
-      conversation = create(:conversation, poster: user)
-      other_conversation = create(:conversation)
-      subject.should == [conversation]
-    end
-
-    context "with options" do
-
-      describe :limit do
-
-        context "when not specified" do
-          its(:per_page) { should == Exchange.per_page }
-        end
-
-        context "when specified" do
-          subject { user.paginated_conversations(limit: 7) }
-          its(:per_page) { should == 7 }
-        end
-
-      end
-
-      describe :page do
-
-        before do
-          2.times { create(:conversation, poster: user) }
-        end
-
-        context "when not specified" do
-          subject { user.paginated_conversations(limit: 1) }
-          its(:page) { should == 1 }
-        end
-
-        context "when specified" do
-          subject { user.paginated_conversations(limit: 1, page: 2) }
-          its(:page) { should == 2 }
-        end
-
-        context "when out of bounds" do
-          subject { user.paginated_conversations(limit: 1, page: 3) }
-          its(:page) { should == 2 }
-        end
-
-      end
-
-    end
-  end
-
   describe "#posts_per_day" do
 
     let(:user) { create(:user, :created_at => 3.days.ago) }

@@ -197,7 +197,7 @@ class DiscussionsController < ApplicationController
     # List discussions marked as favorite
     def conversations
       @section = :conversations
-      @discussions = @current_user.paginated_conversations(:page => params[:page])
+      @discussions = @current_user.conversations.page(params[:page]).for_view
       load_views_for(@discussions)
     end
 

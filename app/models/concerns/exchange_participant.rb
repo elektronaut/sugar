@@ -36,26 +36,6 @@ module ExchangeParticipant
     end
   end
 
-  def paginated_conversations(options={})
-    Pagination.paginate(
-      :total_count => ConversationRelationship.count(:all, :conditions => {:user_id => self.id}),
-      :per_page    => options[:limit] || Exchange.per_page,
-      :page        => options[:page] || 1
-    ) do |pagination|
-      joins = "INNER JOIN conversation_relationships ON conversation_relationships.conversation_id = discussions.id"
-      joins += " AND conversation_relationships.user_id = #{self.id}"
-      conversations = Conversation.find(
-        :all,
-        :select     => 'discussions.*',
-        :joins      => joins,
-        :limit      => pagination.limit,
-        :offset     => pagination.offset,
-        :order      => 'discussions.last_post_at DESC',
-        :include    => [:poster, :last_poster]
-      )
-    end
-  end
-
   # Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
   def posts_per_day
     posts_count.to_f / ((Time.now - self.created_at).to_f / 1.day)
