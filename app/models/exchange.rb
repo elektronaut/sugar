@@ -47,32 +47,10 @@ class Exchange < ActiveRecord::Base
   validates_length_of   :title, :maximum => 100
   validates_presence_of :body, :on => :create, :unless => :skip_body_validation
 
-  validate do |exchange|
-    # Validate and handle closing of discussions
-    if exchange.closed_changed?
-      if !exchange.closed? && (!exchange.updated_by || !exchange.closeable_by?(exchange.updated_by))
-        exchange.errors.add(:closed, "can't be changed!")
-      elsif exchange.closed?
-        exchange.closer = exchange.updated_by
-      else
-        exchange.closer = nil
-      end
-    end
-  end
+  validate :validate_closed
 
-  after_update do |exchange|
-    # Update the first post if @body has been changed
-    if exchange.body && !exchange.body.empty? && exchange.body != exchange.posts.first.body
-      exchange.posts.first.update_attributes(:body => exchange.body, :edited_at => Time.now)
-    end
-  end
-
-  # Automatically create the first post
-  after_create do |exchange|
-    if exchange.body && !exchange.body.empty?
-      exchange.posts.create(:user => exchange.poster, :body => exchange.body)
-    end
-  end
+  after_create :create_first_post
+  after_update :update_post_body
 
   class << self
 
@@ -116,6 +94,35 @@ class Exchange < ActiveRecord::Base
   def closeable_by?(user)
     return false unless user
     (user.moderator? || (!self.closer && self.poster == user) || self.closer == user) ? true : false
+  end
+
+  private
+
+  # Validate and handle closing of discussions
+  def validate_closed
+    if self.closed_changed?
+      if !self.closed? && (!self.updated_by || !self.closeable_by?(self.updated_by))
+        self.errors.add(:closed, "can't be changed!")
+      elsif self.closed?
+        self.closer = self.updated_by
+      else
+        self.closer = nil
+      end
+    end
+  end
+
+  # Automatically create the first post
+  def create_first_post
+    if self.body && !self.body.empty?
+      self.posts.create(:user => self.poster, :body => self.body)
+    end
+  end
+
+  # Update the first post if @body has been changed
+  def update_post_body
+    if self.body && !self.body.empty? && self.body != self.posts.first.body
+      self.posts.first.update_attributes(:body => self.body, :edited_at => Time.now)
+    end
   end
 
 end

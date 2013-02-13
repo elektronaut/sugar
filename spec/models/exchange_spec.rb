@@ -27,46 +27,6 @@ describe Exchange do
   it { should ensure_length_of(:title).is_at_most(100) }
   it { should validate_presence_of(:body)}
 
-  describe "closed validation" do
-
-    before do
-      exchange.update_attributes(closed: true, updated_by: moderator)
-    end
-
-    subject { exchange }
-
-    context "with no updated_by" do
-      before { exchange.update_attributes(closed: false) }
-      it { should be_valid }
-      it { should have(0).errors_on(:closed) }
-    end
-
-    context "with updated_by poster" do
-      before { exchange.update_attributes(closed: false, updated_by: exchange.poster) }
-      it { should_not be_valid }
-      it { should have(1).errors_on(:closed) }
-    end
-
-    context "with updated_by moderator" do
-      before { exchange.update_attributes(closed: false, updated_by: moderator) }
-      it { should be_valid }
-      it { should have(0).errors_on(:closed) }
-    end
-
-  end
-
-  describe "after_create" do
-    subject { exchange.first_post }
-    its(:body) { should == "First post!" }
-    its(:user) { should == exchange.poster }
-  end
-
-  describe "after_update" do
-    before { exchange.update_attributes(:body => 'changed post') }
-    subject { exchange.first_post }
-    its(:body) { should == "changed post" }
-  end
-
   describe ".safe_attributes" do
 
     subject do
@@ -164,5 +124,44 @@ describe Exchange do
 
   end
 
+  describe "#validate_closed" do
+
+    before do
+      exchange.update_attributes(closed: true, updated_by: moderator)
+    end
+
+    subject { exchange }
+
+    context "with no updated_by" do
+      before { exchange.update_attributes(closed: false) }
+      it { should be_valid }
+      it { should have(0).errors_on(:closed) }
+    end
+
+    context "with updated_by poster" do
+      before { exchange.update_attributes(closed: false, updated_by: exchange.poster) }
+      it { should_not be_valid }
+      it { should have(1).errors_on(:closed) }
+    end
+
+    context "with updated_by moderator" do
+      before { exchange.update_attributes(closed: false, updated_by: moderator) }
+      it { should be_valid }
+      it { should have(0).errors_on(:closed) }
+    end
+
+  end
+
+  describe "#create_first_post" do
+    subject { exchange.first_post }
+    its(:body) { should == "First post!" }
+    its(:user) { should == exchange.poster }
+  end
+
+  describe "#update_post_body" do
+    before { exchange.update_attributes(:body => 'changed post') }
+    subject { exchange.first_post }
+    its(:body) { should == "changed post" }
+  end
 
 end
