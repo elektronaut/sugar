@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 class Post < ActiveRecord::Base
-  include SearchablePost, Viewable
+  include SearchablePost, Paginatable, Viewable
 
-  POSTS_PER_PAGE  = 50
+  self.per_page = 50
 
   belongs_to :user, :counter_cache => true
   belongs_to :discussion, :class_name => 'Exchange', :counter_cache => :posts_count, :foreign_key => 'discussion_id'
@@ -20,26 +20,9 @@ class Post < ActiveRecord::Base
   after_create :update_exchange
   after_create :define_relationship
 
-  class << self
-    def find_paginated(options={})
-      discussion = options[:discussion]
-      Pagination.paginate(
-        :total_count => discussion.posts_count,
-        :per_page    => options[:limit] || POSTS_PER_PAGE,
-        :page        => options[:page] || 1,
-        :context     => options[:context] || 0
-      ) do |pagination|
-        Post.find(
-          :all,
-          :conditions => ['discussion_id = ?', discussion.id],
-          :limit      => pagination.limit,
-          :offset     => pagination.offset,
-          :order      => 'created_at ASC',
-          :include    => [:user]
-        )
-      end
-    end
-  end
+  scope :sorted,    order('created_at ASC')
+  scope :with_user, includes(:user)
+  scope :for_view,  sorted.with_user
 
   def me_post?
     @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
@@ -51,7 +34,7 @@ class Post < ActiveRecord::Base
   end
 
   def page(options={})
-    limit = options[:limit] || POSTS_PER_PAGE
+    limit = options[:limit] || Post.per_page
     (post_number.to_f/limit).ceil
   end
 

@@ -246,7 +246,7 @@ describe ExchangeParticipant do
       describe :limit do
 
         context "when not specified" do
-          its(:per_page) { should == Post::POSTS_PER_PAGE }
+          its(:per_page) { should == Post.per_page }
         end
 
         context "when specified" do

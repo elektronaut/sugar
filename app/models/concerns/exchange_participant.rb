@@ -81,12 +81,12 @@ module ExchangeParticipant
   # Finds and paginate posts created by this user.
   # === Parameters
   # * <tt>:trusted</tt> - Boolean, includes posts in trusted categories.
-  # * <tt>:limit</tt>   - Number of posts per page. Default: Post::POSTS_PER_PAGE
+  # * <tt>:limit</tt>   - Number of posts per page. Default: Post.per_page
   # * <tt>:page</tt>    - Page, defaults to 1.
   def paginated_posts(options={})
     Pagination.paginate(
       :total_count => options[:trusted] ? self.discussion_posts.count(:all) : self.discussion_posts.count(:all, :conditions => {:conversation => false, :trusted => false}),
-      :per_page    => options[:limit] || Post::POSTS_PER_PAGE,
+      :per_page    => options[:limit] || Post.per_page,
       :page        => options[:page] || 1
     ) do |pagination|
       Post.find(

@@ -66,8 +66,8 @@ class Exchange < ActiveRecord::Base
   end
 
   # Finds the number of the last page
-  def last_page(per_page=Post::POSTS_PER_PAGE)
-    (self.posts_count.to_f/per_page).ceil
+  def last_page(per_page=Post.per_page)
+    (self.posts_count.to_f / per_page).ceil
   end
 
   # Does this exchange have any labels?

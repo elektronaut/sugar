@@ -24,7 +24,7 @@ module SearchablePost
         with     :conversation, (options[:conversation] || false)
         with     :discussion_id, options[:discussion_id] if options[:discussion_id]
         order_by :created_at, :desc
-        paginate :page => page, :per_page => (options[:limit] || Post::POSTS_PER_PAGE)
+        paginate :page => page, :per_page => (options[:limit] || Post.per_page)
       end
 
       Pagination.apply(
@@ -32,7 +32,7 @@ module SearchablePost
         Pagination::Paginater.new(
           :total_count => search.total,
           :page        => page,
-          :per_page    => (options[:limit] || Post::POSTS_PER_PAGE)
+          :per_page    => (options[:limit] || Post.per_page)
         )
       )
     end

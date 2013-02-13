@@ -151,14 +151,11 @@ class DiscussionsController < ApplicationController
     # Show a discussion
     def show
       context = (request.format == :mobile) ? 0 : 3
-      @posts = Post.find_paginated(
-        :discussion => @discussion,
-        :page       => params[:page],
-        :context    => context
-      )
+      @posts = @discussion.posts.page(params[:page], context: context).for_view
+
       # Mark discussion as viewed
       if @current_user
-        @current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset + @posts.length))
+        @current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset_value + @posts.count))
       end
       if @discussion.kind_of?(Conversation)
         @section = :conversations
