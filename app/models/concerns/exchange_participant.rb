@@ -2,29 +2,18 @@ module ExchangeParticipant
   extend ActiveSupport::Concern
 
   included do
-    has_many   :discussions, :foreign_key => 'poster_id'
-    has_many   :posts
-    has_many   :discussion_posts, :class_name => 'Post', :conditions => {:conversation => false}
-    has_many   :discussion_views, :dependent => :destroy
-    has_many   :discussion_relationships, :dependent => :destroy
+    has_many :discussions, :foreign_key => 'poster_id'
+    has_many :posts
+    has_many :discussion_posts, :class_name => 'Post', :conditions => {:conversation => false}
+    has_many :discussion_views, :dependent => :destroy
+    has_many :discussion_relationships, :dependent => :destroy
 
-    has_many   :conversation_relationships, :dependent => :destroy
-    has_many   :conversations, :through => :conversation_relationships
-  end
+    has_many :participated_discussions, :through => :discussion_relationships, :source => :discussion, :conditions => {:discussion_relationships => {:participated => true}}
+    has_many :followed_discussions,     :through => :discussion_relationships, :source => :discussion, :conditions => {:discussion_relationships => {:following => true}}
+    has_many :favorite_discussions,     :through => :discussion_relationships, :source => :discussion, :conditions => {:discussion_relationships => {:favorite => true}}
 
-  # Finds participated discussions.
-  def participated_discussions(options={})
-    DiscussionRelationship.find_participated(self, options)
-  end
-
-  # Finds followed discussions.
-  def following_discussions(options={})
-    DiscussionRelationship.find_following(self, options)
-  end
-
-  # Finds favorite discussions.
-  def favorite_discussions(options={})
-    DiscussionRelationship.find_favorite(self, options)
+    has_many :conversation_relationships, :dependent => :destroy
+    has_many :conversations, :through => :conversation_relationships
   end
 
   # Marks a discussion as viewed

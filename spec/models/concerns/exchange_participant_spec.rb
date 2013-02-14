@@ -17,36 +17,6 @@ describe ExchangeParticipant do
   it { should have_many(:conversation_relationships).dependent(:destroy) }
   it { should have_many(:conversations).through(:conversation_relationships) }
 
-  describe "#participated_discussions" do
-    it "delegates to DiscussionRelationship" do
-      DiscussionRelationship.should_receive(:find_participated) do |u, opt|
-        u.should == user
-        opt.should == {abc: 123}
-      end
-      user.participated_discussions(abc: 123)
-    end
-  end
-
-  describe "#following_discussions" do
-    it "delegates to DiscussionRelationship" do
-      DiscussionRelationship.should_receive(:find_following) do |u, opt|
-        u.should == user
-        opt.should == {abc: 123}
-      end
-      user.following_discussions(abc: 123)
-    end
-  end
-
-  describe "#favorite_discussions" do
-    it "delegates to DiscussionRelationship" do
-      DiscussionRelationship.should_receive(:find_favorite) do |u, opt|
-        u.should == user
-        opt.should == {abc: 123}
-      end
-      user.favorite_discussions(abc: 123)
-    end
-  end
-
   describe "#mark_discussion_viewed" do
     let(:post) { create(:post, discussion: discussion) }
 

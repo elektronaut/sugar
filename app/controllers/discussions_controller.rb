@@ -216,14 +216,14 @@ class DiscussionsController < ApplicationController
     # List discussions marked as favorite
     def favorites
       @section = :favorites
-      @discussions = @current_user.favorite_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+      @discussions = @current_user.favorite_discussions.viewable_by(@current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
     # List discussions marked as followed
     def following
       @section = :following
-      @discussions = @current_user.following_discussions(:page => params[:page], :trusted => @current_user.trusted?)
+      @discussions = @current_user.followed_discussions.viewable_by(@current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 

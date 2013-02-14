@@ -96,10 +96,7 @@ class UsersController < ApplicationController
 
     def participated
       @section = :participated if @user == @current_user
-      @discussions = @user.participated_discussions(
-        :page    => params[:page],
-        :trusted => @current_user.trusted?
-      )
+      @discussions = @user.participated_discussions.viewable_by(@current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
