@@ -147,17 +147,17 @@ describe User do
 
     context "when user hasn't signed in yet" do
       let(:user) { create(:user, last_active: nil) }
-      specify { user.last_active.should be_within(0.1).of(Time.now) }
+      specify { user.last_active.should be_within(1.0).of(Time.now) }
     end
 
     context "when user has been active" do
       let(:user) { create(:user, last_active: 2.days.ago) }
-      specify { user.last_active.should be_within(0.1).of(Time.now) }
+      specify { user.last_active.should be_within(1.0).of(Time.now) }
     end
 
     context "when user has been active in the last 10 minutes" do
       let(:user) { create(:user, last_active: 5.minutes.ago) }
-      specify { user.last_active.should be_within(0.1).of(5.minutes.ago) }
+      specify { user.last_active.should be_within(1.0).of(5.minutes.ago) }
     end
   end
 
