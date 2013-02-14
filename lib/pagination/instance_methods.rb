@@ -15,6 +15,7 @@ module Pagination
     def pages
       paginater.pages
     end
+    alias :total_pages :pages
 
     # Current page.
     def current_page
