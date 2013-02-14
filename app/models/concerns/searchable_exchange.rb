@@ -17,4 +17,16 @@ module SearchableExchange
     end
   end
 
+  module ClassMethods
+    def search_results(query, options={})
+      search = Discussion.search do
+        fulltext query
+        with     :trusted, false unless (options[:user] && options[:user].trusted?)
+        order_by :last_post_at, :desc
+        paginate :page => options[:page], :per_page => Exchange.per_page
+      end
+      search.results
+    end
+  end
+
 end

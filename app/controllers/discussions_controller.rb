@@ -97,15 +97,7 @@ class DiscussionsController < ApplicationController
 
     # Searches discusion titles
     def search
-      current_user = @current_user
-      search = Discussion.search do
-        fulltext search_query
-        with     :trusted, false unless (current_user && current_user.trusted?)
-        order_by :last_post_at, :desc
-        paginate :page => params[:page], :per_page => Exchange.per_page
-      end
-
-      @discussions = search.results
+      @discussions = Discussion.search_results(search_query, user: @current_user, page: params[:page])
 
       respond_to do |format|
         format.any(:html, :mobile) do
