@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'pagination'
-
 # = Exchange
 #
 # Exchange is the base class for all threads, which both Discussion and Conversation inherit from.
