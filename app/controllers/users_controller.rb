@@ -3,11 +3,14 @@
 require 'open-uri'
 
 class UsersController < ApplicationController
-  include CreateUserController, LoginUsersController, OpenidUserController, UsersListController
-
   requires_authentication :except => [:login, :authenticate, :logout, :password_reset, :deliver_password, :new, :create]
   requires_user           :only   => [:edit, :update, :update_openid]
   requires_user_admin     :only   => [:grant_invite, :revoke_invites]
+
+  include CreateUserController
+  include LoginUsersController
+  include OpenidUserController
+  include UsersListController
 
   before_filter :load_user,
                 :only => [

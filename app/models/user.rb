@@ -15,7 +15,10 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
-  include Authenticable, Inviter, ExchangeParticipant, UserScopes
+  include Authenticable
+  include Inviter
+  include ExchangeParticipant
+  include UserScopes
 
   before_create :check_for_first_user
   before_validation :ensure_last_active_is_set

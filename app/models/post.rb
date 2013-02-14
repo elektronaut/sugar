@@ -1,7 +1,9 @@
 # encoding: utf-8
 
 class Post < ActiveRecord::Base
-  include SearchablePost, Paginatable, Viewable
+  include SearchablePost
+  include Paginatable
+  include Viewable
 
   self.per_page = 50
 

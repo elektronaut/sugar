@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 class Discussion < Exchange
-  include SearchableExchange, Viewable
+  include SearchableExchange
+  include Viewable
 
   has_many   :discussion_relationships, :dependent => :destroy
   belongs_to :category, :counter_cache => true
