@@ -12,15 +12,19 @@ class Conversation < Exchange
   has_many :participants, :through => :conversation_relationships, :source => :user
 
   after_create do |conversation|
-    conversation.add_participant(conversation.poster)
+    conversation.add_participant(conversation.poster, new_posts: false)
   end
 
   # Adds a participant
-  def add_participant(user)
+  def add_participant(user, options={})
+    options = {
+      new_posts: true
+    }.merge(options)
     if user.kind_of?(User) && !self.participants.include?(user)
       ConversationRelationship.create(
-        :user         => user,
-        :conversation => self
+        user:         user,
+        conversation: self,
+        new_posts:    options[:new_posts]
       )
     end
   end

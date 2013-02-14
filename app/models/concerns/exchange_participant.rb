@@ -25,6 +25,10 @@ module ExchangeParticipant
     end
   end
 
+  def mark_conversation_viewed(conversation)
+    self.conversation_relationships.where(conversation: conversation).first.update_attributes(new_posts: false)
+  end
+
   # Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
   def posts_per_day
     posts_count.to_f / ((Time.now - self.created_at).to_f / 1.day)
