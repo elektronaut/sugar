@@ -10,26 +10,12 @@ class Invite < ActiveRecord::Base
 
   DEFAULT_EXPIRATION = 14.days
 
-  validate do |invite|
-    if User.exists?(:email => invite.email)
-      invite.errors.add(:email, 'is already registered!')
-    end
-    if Invite.find_active.select{|i| i != invite && i.email == invite.email }.length > 0
-      invite.errors.add(:email, 'has already been invited!')
-    end
-  end
+  validate :validate_email_registered
 
-  before_create do |invite|
-    invite.token ||= Invite.unique_token
-    invite.expires_at ||= Time.now + Invite.expiration_time
-    if invite.valid?
-      invite.user.revoke_invite!
-    end
-  end
-
-  before_destroy do |invite|
-    invite.user.grant_invite! unless invite.used
-  end
+  before_create :set_token
+  before_create :set_expires_at
+  after_create :revoke_invite
+  before_destroy :grant_invite
 
   class << self
     # Makes a unique random token.
@@ -75,5 +61,32 @@ class Invite < ActiveRecord::Base
   def expire!
     self.used = true
     self.destroy
+  end
+
+  private
+
+  def revoke_invite
+    self.user.revoke_invite!
+  end
+
+  def grant_invite
+    self.user.grant_invite! unless self.used
+  end
+
+  def set_token
+    self.token ||= Invite.unique_token
+  end
+
+  def set_expires_at
+    self.expires_at ||= Time.now + Invite.expiration_time
+  end
+
+  def validate_email_registered
+    if User.exists?(:email => self.email)
+      self.errors.add(:email, 'is already registered!')
+    end
+    if Invite.find_active.select{|i| i != self && i.email == self.email }.length > 0
+      self.errors.add(:email, 'has already been invited!')
+    end
   end
 end
