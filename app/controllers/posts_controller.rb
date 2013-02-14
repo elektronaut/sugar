@@ -17,10 +17,11 @@ class PostsController < ApplicationController
 
   # Other filters
   before_filter :load_discussion,              :except => [:search]
-  before_filter :verify_viewability,           :except => [:search, :count]
+  before_filter :verify_viewability,           :except => [:search, :count, :since]
   before_filter :load_post,                    :only => [:show, :edit, :update, :destroy, :quote]
   before_filter :verify_editable,              :only => [:edit, :update, :destroy]
   before_filter :require_and_set_search_query, :only => [:search]
+  before_filter :check_postable,               :only => [:create]
 
   protected
 
@@ -75,6 +76,13 @@ class PostsController < ApplicationController
       end
     end
 
+    def check_postable
+      unless @discussion.postable_by?(@current_user)
+        flash[:notice] = "This discussion is closed, you don't have permission to post here"
+        redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
+      end
+    end
+
   public
 
     def count
@@ -87,19 +95,12 @@ class PostsController < ApplicationController
     end
 
     def since
-      unless @discussion.viewable_by?(@current_user)
-        render :text => '', :status => 403 and return
-      end
-      @posts = @discussion.posts
-        .includes(:user)
-        .limit(200)
-        .offset(params[:index])
-        .all
+      @posts = @discussion.posts.limit(200).offset(params[:index]).for_view
       if @current_user
         @current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
       end
       if @discussion.kind_of?(Conversation)
-        ConversationRelationship.find(:first, :conditions => {:conversation_id => @discussion, :user_id => @current_user.id}).update_attribute(:new_posts, false)
+        ConversationRelationship.where(:conversation => @conversation, :user => @current_user).first.update_attributes(new_posts: false)
       end
       if request.xhr?
         render :layout => false
@@ -108,48 +109,29 @@ class PostsController < ApplicationController
 
     def search
       @search_path = search_posts_path
-
-      current_user = @current_user
-
-      search = Post.search do
-        fulltext search_query
-        with     :trusted, false unless (current_user && current_user.trusted?)
-        order_by :created_at, :desc
-        paginate :page => params[:page], :per_page => Post.per_page
-      end
-
-      @posts = search.results
+      @posts = Post.search_results(search_query, user: @current_user, page: params[:page])
     end
 
     def create
-      if @discussion.postable_by?(@current_user)
-        @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
-        if @post.valid?
-          @discussion.reload
-          if @discussion.kind_of?(Conversation)
-            @discussion.conversation_relationships.reject{|r| r.user == @current_user}.each{|r| r.update_attribute(:new_posts, true)}
-          end
-          # if @post.mentions_users?
-          # 	@post.mentioned_users.each do |mentioned_user|
-          # 		logger.info "Mentions: #{mentioned_user.username}"
-          # 	end
-          # end
-          if request.xhr?
-            render :status => 201, :text => 'Created'
-          else
-            flash[:notice] = "Your reply was saved"
-            redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
-          end
+      @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
+      if @post.valid?
+        @discussion.reload
+        # if @post.mentions_users?
+        # 	@post.mentioned_users.each do |mentioned_user|
+        # 		logger.info "Mentions: #{mentioned_user.username}"
+        # 	end
+        # end
+        if request.xhr?
+          render :status => 201, :text => 'Created'
         else
-          if request.xhr?
-            render :status => 400, :text => 'Invalid post'
-          else
-            render :action => :new
-          end
+          redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
         end
       else
-        flash[:notice] = "This discussion is closed, you don't have permission to post here"
-        redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
+        if request.xhr?
+          render :status => 400, :text => 'Invalid post'
+        else
+          render :action => :new
+        end
       end
     end
 
@@ -190,7 +172,6 @@ class PostsController < ApplicationController
         :edited_at => Time.now
       }
       if @post.update_attributes(attributes)
-        flash[:notice] = "Your changes were saved"
         redirect_to paged_discussion_url(:id => @discussion, :page => @post.page, :anchor => "post-#{@post.id}")
       else
         flash.now[:notice] = "Could not save your post."

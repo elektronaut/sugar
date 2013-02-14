@@ -13,4 +13,21 @@ module SearchablePost
     end
   end
 
+  module ClassMethods
+    def search_results(query, options={})
+      search = Post.search do
+        fulltext query
+        with     :trusted, false unless (options[:user] && options[:user].trusted?)
+        if options[:exchange]
+          with     :conversation,  options[:exchange].kind_of?(Conversation)
+          with     :discussion_id, options[:exchange].id
+        end
+        order_by :created_at, :desc
+        paginate :page => options[:page], :per_page => Post.per_page
+      end
+      search.results
+    end
+  end
+
+
 end

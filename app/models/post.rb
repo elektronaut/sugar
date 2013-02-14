@@ -19,6 +19,7 @@ class Post < ActiveRecord::Base
   before_save :render_html
   after_create :update_exchange
   after_create :define_relationship
+  after_create :notify_new_conversation_post
 
   scope :sorted,                    order('created_at ASC')
   scope :for_view,                  sorted.includes(:user)
@@ -103,6 +104,14 @@ class Post < ActiveRecord::Base
   # Automatically update the discussion with last poster info
   def update_exchange
     self.discussion.update_attributes(:last_poster_id => self.user.id, :last_post_at => self.created_at)
+  end
+
+  def notify_new_conversation_post
+    if self.conversation?
+      self.discussion.conversation_relationships.each do |relationship|
+        relationship.update_attributes(new_posts: true) unless relationship.user == self.user
+      end
+    end
   end
 
 end
