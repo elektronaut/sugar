@@ -53,6 +53,8 @@ gem 'progress_bar'
 
 gem 'strong_parameters'
 
+gem 'newrelic_rpm'
+
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
 
