@@ -15,9 +15,9 @@ describe Mailer do
 
     let(:mail) { Mailer.invite(invite, login_url) }
 
-    specify { mail.subject.should == "#{invite.user.realname} has invited you to #{Sugar.config(:forum_name)}!" }
+    specify { mail.subject.should == "#{invite.user.realname} has invited you to Sugar!" }
     specify { mail.to.should == [invite.email] }
-    specify { mail.from.should == [Sugar.config(:mail_sender)] }
+    specify { mail.from.should == ["no-reply@example.com"] }
 
     describe "its body" do
 
@@ -40,9 +40,9 @@ describe Mailer do
 
     let(:mail) { Mailer.new_user(user, login_url) }
 
-    specify { mail.subject.should == "Welcome to #{Sugar.config(:forum_name)}!" }
+    specify { mail.subject.should == "Welcome to Sugar!" }
     specify { mail.to.should == [user.email] }
-    specify { mail.from.should == [Sugar.config(:mail_sender)] }
+    specify { mail.from.should == ["no-reply@example.com"] }
 
     describe "its body" do
 
@@ -74,9 +74,9 @@ describe Mailer do
 
     let(:mail) { Mailer.password_reminder(user, login_url) }
 
-    specify { mail.subject.should == "Your login details at #{Sugar.config(:forum_name)}" }
+    specify { mail.subject.should == "Your login details at Sugar" }
     specify { mail.to.should == [user.email] }
-    specify { mail.from.should == [Sugar.config(:mail_sender)] }
+    specify { mail.from.should == ["no-reply@example.com"] }
 
     describe "its body" do
 
