@@ -2,7 +2,7 @@
 
 class Mailer < ActionMailer::Base
 
-  default :from => Proc.new { Sugar.config(:mail_sender) }
+  default :from => Proc.new { Sugar.config(:mail_sender) || 'no-reply@example.com' }
 
   # Send an invite
   def invite(invite, login_url)

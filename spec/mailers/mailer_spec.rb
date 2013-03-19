@@ -8,7 +8,7 @@ describe Mailer do
 
   before do
     Sugar.config(:forum_name, "Sugar")
-    Sugar.config(:mail_sender, "no-reply@example.com")
+    Sugar.config(:mail_sender, "test@example.com")
   end
 
   describe "invite" do
@@ -17,7 +17,7 @@ describe Mailer do
 
     specify { mail.subject.should == "#{invite.user.realname} has invited you to Sugar!" }
     specify { mail.to.should == [invite.email] }
-    specify { mail.from.should == ["no-reply@example.com"] }
+    specify { mail.from.should == ["test@example.com"] }
 
     describe "its body" do
 
@@ -42,7 +42,7 @@ describe Mailer do
 
     specify { mail.subject.should == "Welcome to Sugar!" }
     specify { mail.to.should == [user.email] }
-    specify { mail.from.should == ["no-reply@example.com"] }
+    specify { mail.from.should == ["test@example.com"] }
 
     describe "its body" do
 
@@ -76,7 +76,7 @@ describe Mailer do
 
     specify { mail.subject.should == "Your login details at Sugar" }
     specify { mail.to.should == [user.email] }
-    specify { mail.from.should == ["no-reply@example.com"] }
+    specify { mail.from.should == ["test@example.com"] }
 
     describe "its body" do
 
