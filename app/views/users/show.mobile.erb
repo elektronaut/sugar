@@ -75,15 +75,15 @@
     </tr>
     <tr>
       <th>Discussions</th>
-      <td><%= link_to @user.discussions_count, discussions_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.discussions.viewable_by(@current_user).count, discussions_user_path(:id => @user.username) %></td>
     </tr>
     <tr>
       <th>Participated</th>
-      <td><%= link_to @user.participated_count, participated_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.participated_discussions.viewable_by(@current_user).count, participated_user_path(:id => @user.username) %></td>
     </tr>
     <tr>
       <th>Posts</th>
-      <td><%= @user.posts_count %></td>
+      <td><%= @user.discussion_posts.viewable_by(@current_user).count %></td>
     </tr>
     <tr>
       <th>Users invited</th>
