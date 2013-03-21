@@ -51,7 +51,6 @@ describe Mailer do
       context "when signed up with password" do
 
         it { should match(user.username) }
-        it { should match(user.password) }
         it { should match(login_url) }
 
       end
@@ -62,7 +61,6 @@ describe Mailer do
 
         it { should match(user.openid_url) }
         it { should match(user.username) }
-        it { should match(user.password) }
 
       end
 
