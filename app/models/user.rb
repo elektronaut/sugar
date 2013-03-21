@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
     [
       :id, :username, :realname, :latitude, :longitude, :inviter_id,
       :last_active, :created_at, :description, :admin,
-      :moderator, :user_admin, :posts_count, :discussions_count,
+      :moderator, :user_admin,
       :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
       :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
     ]
