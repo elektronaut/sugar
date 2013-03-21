@@ -52,14 +52,17 @@
   <% end %>
 
   <p class="posts_and_discussions">
-    <% if @user.discussions_count > 0 %>
-      <%= link_to "View discussions", discussions_user_path(:id => @user.username) %> (<%= @user.discussions_count %>)<br />
+    <% if @user.discussions.viewable_by(@current_user).any? %>
+      <%= link_to "View discussions", discussions_user_path(:id => @user.username) %>
+      (<%= @user.discussions.viewable_by(@current_user).count %>)<br />
     <% end %>
-    <% if @user.participated_count > 0 %>
-      <%= link_to "View participated discussions", participated_user_path(:id => @user.username) %> (<%= @user.participated_count %>)<br />
+    <% if @user.participated_discussions.viewable_by(@current_user).any? %>
+      <%= link_to "View participated discussions", participated_user_path(:id => @user.username) %>
+      (<%= @user.participated_discussions.viewable_by(@current_user).count %>)<br />
     <% end %>
-    <% if @user.discussion_posts.count > 0 %>
-      <%= link_to "View posts", posts_user_path(:id => @user.username) %> (<%= @user.discussion_posts.count %>)<br />
+    <% if @user.discussion_posts.viewable_by(@current_user).any? %>
+      <%= link_to "View posts", posts_user_path(:id => @user.username) %>
+      (<%= @user.discussion_posts.viewable_by(@current_user).count %>)<br />
     <% end %>
     <% unless !@current_user || @user == @current_user %>
       <%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>

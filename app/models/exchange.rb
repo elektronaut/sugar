@@ -26,7 +26,7 @@ class Exchange < ActiveRecord::Base
   # User which is updating the exchange, required for closing exchanges
   attr_accessor :updated_by
 
-  belongs_to :poster,           :class_name => 'User', :counter_cache => :discussions_count
+  belongs_to :poster,           :class_name => 'User'
   belongs_to :closer,           :class_name => 'User'
   belongs_to :last_poster,      :class_name => 'User'
   has_many   :posts,            :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
