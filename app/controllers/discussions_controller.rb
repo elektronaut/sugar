@@ -56,7 +56,7 @@ class DiscussionsController < ApplicationController
     end
 
     def exchange_class
-      (params[:exchange] && params[:exchange][:type] == 'Conversation') ? Conversation : Discussion
+      (params[:type] == "conversation" || (params[:exchange] && params[:exchange][:type] == 'Conversation')) ? Conversation : Discussion
     end
 
     def exchange_params(options={})
