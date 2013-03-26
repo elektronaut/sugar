@@ -4,8 +4,9 @@ require 'spec_helper'
 
 describe ExchangeParticipant do
 
-  let(:user)       { create(:user) }
-  let(:discussion) { create(:discussion) }
+  let(:user)         { create(:user) }
+  let(:discussion)   { create(:discussion) }
+  let(:conversation) { create(:conversation) }
 
   subject { user }
 
@@ -57,6 +58,17 @@ describe ExchangeParticipant do
       end
     end
 
+  end
+
+  describe "#mark_conversation_viewed" do
+    let(:user)         { conversation.poster }
+    let(:conversation_relationship) {
+      user.conversation_relationships.where(conversation_id: conversation).first
+    }
+    before { conversation_relationship.update_attributes(new_posts: true) }
+    before { user.mark_conversation_viewed(conversation) }
+    subject { user.conversation_relationships.where(conversation_id: conversation).first }
+    its(:new_posts?) { should be_false }
   end
 
   describe "#posts_per_day" do

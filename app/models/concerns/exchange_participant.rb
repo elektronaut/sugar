@@ -26,7 +26,7 @@ module ExchangeParticipant
   end
 
   def mark_conversation_viewed(conversation)
-    self.conversation_relationships.where(conversation: conversation).first.update_attributes(new_posts: false)
+    self.conversation_relationships.where(conversation_id: conversation).first.update_attributes(new_posts: false)
   end
 
   # Calculates messages per day, rounded to a number of decimals determined by <tt>precision</tt>.
