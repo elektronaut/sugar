@@ -15,7 +15,7 @@
 <%= render(:partial => 'components/pagination', :locals => { :p => posts, :anchor => :start, :pagination_params => pagination_params }) unless no_pagination %>
 <% unless no_container %><div class="posts"><% end %>
 <% posts.each do |post| %>
-  <% if posts.respond_to?(:context) && posts.context? && posts.to_a.index(post) == 0 %><div class="context"><% end %>
+  <% if posts.kind_of?(Paginatable::ClassMethods::WithContext) && posts.context? && posts.to_a.index(post) == 0 %><div class="context"><% end %>
   <%= render :partial => 'posts/post', :locals => {
     :post => post,
     :post_distance => post_distance,
@@ -26,7 +26,7 @@
     :previous_post => previous_post
   } %>
   <% previous_post = post %>
-  <% if posts.respond_to?(:context) && posts.context? && posts.to_a.index(post) == (posts.context-1) %></div><a name="start" id="startAnchor"></a><% end %>
+  <% if posts.kind_of?(Paginatable::ClassMethods::WithContext) && posts.context? && posts.to_a.index(post) == (posts.context-1) %></div><a name="start" id="startAnchor"></a><% end %>
 <% end %>
 <% unless no_container %></div><% end %>
 <% if new_posts_notifier %><div id="newPosts"></div><% end %>
