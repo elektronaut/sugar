@@ -199,6 +199,10 @@ Sugar.Hotkeys =
       $(document).bind "keydown", "j", (event) ->
         Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
 
+      $(document).bind "keydown", "/", (event) ->
+        $('#q').focus()
+        event.preventDefault()
+
     # Post functions
     postsFunctions: ->
       # Load new posts
@@ -242,6 +246,10 @@ Sugar.Hotkeys =
 
       $(document).bind "keydown", "j", (event) ->
         Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
+
+      $(document).bind "keydown", "/", (event) ->
+        $('#q').focus()
+        event.preventDefault()
 
     # Discussion functions
     discussionsFunctions: ->
