@@ -136,13 +136,28 @@ describe InvitesController do
       specify { last_email.to.should == ['no-reply@example.com'] }
       specify { last_email.body.encoded.should match('testing message') }
 
-      it "redirects to the invites page" do
-        response.should redirect_to(invites_url)
-      end
+      it { should redirect_to(invites_url) }
     end
 
     context "when email is invalid" do
-      pending
+      before do
+        Mailer.stub(:invite) { raise Net::SMTPSyntaxError }
+        post :create, invite: {
+          email:   'totally@wrong.com',
+          message: 'testing message'
+        }
+      end
+
+      it { should set_the_flash.to("There was a problem sending your invite to totally@wrong.com, it has been cancelled.") }
+      it { should redirect_to(invites_url) }
+
+      it "should not send an email" do
+        last_email.should be_nil
+      end
+
+      it "should not create an invite" do
+        Invite.count.should == 0
+      end
     end
 
     context "with invalid params" do

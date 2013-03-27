@@ -42,10 +42,6 @@ describe Discussion do
     end
   end
 
-  describe ".viewable_by" do
-    pending
-  end
-
   describe ".popular_in_the_last" do
     let(:discussion1) { create(:discussion) }
     let(:discussion2) { create(:discussion) }
