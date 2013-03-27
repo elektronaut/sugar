@@ -14,6 +14,10 @@ class UsersController < ApplicationController
 
     private
 
+    def new_openid_url?
+      !params[:user][:openid_url].blank? && params[:user][:openid_url] != @user.openid_url
+    end
+
     def initiate_openid_on_create
       if params[:user][:openid_url]
         success = start_openid_session(params[:user][:openid_url],
@@ -30,7 +34,7 @@ class UsersController < ApplicationController
     end
 
     def initiate_openid_on_update
-      if new_openid_url
+      if new_openid_url?
         success = start_openid_session(params[:user][:openid_url],
           :success   => update_openid_user_url(:id => @user.username),
           :fail      => edit_user_page_url(:id => @user.username, :page => @page)
