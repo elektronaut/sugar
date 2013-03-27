@@ -1,6 +1,6 @@
-<% 
+<%
   add_body_class "users"
-  @page_title = "Online Users" 
+  @page_title = "Online Users"
 %>
 
 <div class="functions">
@@ -21,7 +21,8 @@
       <% end %>
     </p>
   </div>
-  <%= render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :member_since, :discussions_and_posts, :status]} %>
+  <%# render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :member_since, :discussions_and_posts, :status]} %>
+  <%= render :partial => 'users_listing', :locals => {:users => @users, :columns => [:username, :location, :member_since, :status]} %>
 <% else %>
   <div class="content">
     <p>No users are online.</p>
