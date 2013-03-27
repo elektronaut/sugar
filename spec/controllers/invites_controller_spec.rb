@@ -133,11 +133,8 @@ describe InvitesController do
       it { should assign_to(:invite).with_kind_of(Invite) }
       it { should set_the_flash.to(/Your invite has been sent to no\-reply@example\.com/) }
 
-      it "sends a welcome email" do
-        email = ActionMailer::Base.deliveries.first
-        email.to[0].should eq('no-reply@example.com')
-        email.body.to_s.should match(/testing message/)
-      end
+      specify { last_email.to.should == ['no-reply@example.com'] }
+      specify { last_email.body.encoded.should match('testing message') }
 
       it "redirects to the invites page" do
         response.should redirect_to(invites_url)

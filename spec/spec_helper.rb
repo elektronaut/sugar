@@ -88,6 +88,8 @@ Spork.each_run do
     # Macros
     config.include LoginMacros, :type => :controller
     config.include Sugar::Exceptions
+    config.include(MailerMacros)
+    config.before(:each) { reset_email }
   end
 
 end
