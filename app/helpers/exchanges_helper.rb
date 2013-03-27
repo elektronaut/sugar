@@ -72,7 +72,7 @@ module ExchangesHelper
   def post_page(post)
     if params[:controller] == 'discussions' && params[:action] == 'show' && @posts
       # Speed tweak
-      @posts.page
+      @posts.current_page
     else
       post.page
     end
