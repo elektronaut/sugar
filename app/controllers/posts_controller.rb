@@ -100,7 +100,7 @@ class PostsController < ApplicationController
         @current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
       end
       if @discussion.kind_of?(Conversation)
-        ConversationRelationship.where(:conversation => @conversation, :user => @current_user).first.update_attributes(new_posts: false)
+        @current_user.conversation_relationships.where(:conversation_id => @discussion.id).first.update_attributes(new_posts: false)
       end
       if request.xhr?
         render :layout => false
