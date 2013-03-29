@@ -78,10 +78,6 @@ class UsersController < ApplicationController
       params.require(:user).permit(*allowed_params)
     end
 
-    def new_user_params
-      params.require(:user).permit(:username, *allowed_params).merge(facebook_user_params)
-    end
-
   public
 
     def show

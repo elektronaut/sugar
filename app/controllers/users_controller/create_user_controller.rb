@@ -11,10 +11,10 @@ class UsersController < ApplicationController
     def new
       if @invite
         session[:invite_token] = @invite.token
-        @user = @invite.user.invitees.new(new_user_params)
+        @user = @invite.user.invitees.new(facebook_user_params)
         @user.email = @invite.email
       else
-        @user = User.new(new_user_params)
+        @user = User.new(facebook_user_params)
       end
     end
 
@@ -35,6 +35,10 @@ class UsersController < ApplicationController
     end
 
     private
+
+    def new_user_params
+      params.require(:user).permit(:username, *allowed_params)
+    end
 
     def find_invite
       if invite_token?
