@@ -6,7 +6,6 @@ describe Exchange do
   before { create(:user) }
 
   let(:exchange)         { create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
-  let(:trusted_exchange) { create(:exchange, :nsfw => true) }
   let(:nsfw_exchange)    { create(:exchange, :nsfw => true) }
   let(:user)             { create(:user) }
   let(:trusted_user)     { create(:trusted_user) }
