@@ -88,4 +88,14 @@ describe Mailer do
 
   end
 
+  describe "password_reset" do
+    let(:mail) { Mailer.password_reset("user@example.com", "http://example.com") }
+    subject { mail }
+
+    its(:subject) { should == "Password reset for Sugar" }
+    its(:to) { should == ["user@example.com"] }
+    its(:from) { should == ["test@example.com"] }
+    its("body.encoded") { should match("http://example.com") }
+  end
+
 end

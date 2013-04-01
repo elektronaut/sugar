@@ -34,4 +34,12 @@ class Mailer < ActionMailer::Base
     )
   end
 
+  def password_reset(email, url)
+    @url = url
+    mail(
+      to: email,
+      subject: "Password reset for #{Sugar.config(:forum_name)}"
+    )
+  end
+
 end
