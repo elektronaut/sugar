@@ -1,0 +1,21 @@
+<%
+  add_body_class "login"
+  @page_title = "Password Reset"
+%>
+
+<h2 class="section">
+  <%= link_to "Login", login_users_path %> &raquo;
+  <%= link_to "Password Reset", password_reset_users_path %>
+</h2>
+
+<div id="login">
+  <%= form_tag(password_resets_path, :class => 'form') do %>
+    <fieldset>
+      <label>Please enter your email address</label>
+      <%= text_field_tag 'email', '', :class => :text %>
+    </fieldset>
+    <fieldset>
+      <button type="submit">Send</button> or <%= link_to "Return to login screen", login_users_path %>
+    </fieldset>
+  <% end %>
+</div>
