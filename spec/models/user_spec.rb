@@ -32,7 +32,10 @@ describe User do
   it { should validate_format_of(:username).with("test").with_message("is not valid") }
 
   it { should allow_value("Gustave Moíre").for(:username) }
-  it { should_not allow_value(";Bobby Tables").for(:username) }
+  it { should allow_value("فاطمة").for(:username) }
+  it { should allow_value("王秀英").for(:username) }
+  it { should_not allow_value("").for(:username) }
+  it { should_not allow_value("elektronaut?admin=1").for(:username) }
 
   it { should validate_uniqueness_of(:email).case_insensitive.with_message(/is already registered/) }
 

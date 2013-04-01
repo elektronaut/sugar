@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   validates :username,
             :presence => true,
             :uniqueness => { :case_sensitive => false, :message => "is already registered" },
-            :format => { :with => /^[\p{Word}\d\-\s_#!]+$/, :message => "is not valid" }
+            :format => { :with => /\A[^\?]+\Z/, :message => "is not valid" }
 
   validates :email,
             :email => true,
