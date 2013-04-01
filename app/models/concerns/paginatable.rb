@@ -54,7 +54,7 @@ module Paginatable
     end
 
     def first_page?
-      current_page = first_page
+      current_page == first_page
     end
 
     def last_page?
