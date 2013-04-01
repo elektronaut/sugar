@@ -24,13 +24,12 @@ class Mailer < ActionMailer::Base
     )
   end
 
-  # Send a password reminder
-  def password_reminder(user, login_url)
-    @user      = user
-    @login_url = login_url
+  # Send a password reset request
+  def password_reset(email, url)
+    @url = url
     mail(
-      :to      => @user.email,
-      :subject => "Your login details at #{Sugar.config(:forum_name)}"
+      to: email,
+      subject: "Password reset for #{Sugar.config(:forum_name)}"
     )
   end
 

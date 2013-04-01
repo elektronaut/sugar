@@ -84,6 +84,11 @@ Sugar::Application.routes.draw do
     match '/users/new/:token'                     => :new,            :as => :new_user_by_token
   end
 
+  resources :password_resets, :only => [:new, :create, :show, :update]
+  controller :password_resets do
+    get '/password_resets/:id/:token' => :show, :as => :password_reset_with_token
+  end
+
   # Categories
   resources :categories
   match '/categories/:id/:page' => 'categories#show'
