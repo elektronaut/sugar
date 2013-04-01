@@ -17,6 +17,8 @@ describe Authenticable do
   it { should validate_uniqueness_of(:openid_url).with_message(/is already registered/) }
   it { should validate_uniqueness_of(:facebook_uid).with_message(/is already registered/) }
 
+  it { should have_many(:password_reset_tokens).dependent(:destroy) }
+
   specify { build(:user, password: 'new').should have(1).errors_on(:password) }
   specify { build(:user, password: 'new', confirm_password: 'wrong').should have(1).errors_on(:password) }
   specify { build(:user, password: 'new', confirm_password: 'new').should have(0).errors_on(:password) }
