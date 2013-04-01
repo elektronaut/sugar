@@ -68,26 +68,6 @@ describe Mailer do
 
   end
 
-  describe "password_reminder" do
-
-    let(:mail) { Mailer.password_reminder(user, login_url) }
-
-    specify { mail.subject.should == "Your login details at Sugar" }
-    specify { mail.to.should == [user.email] }
-    specify { mail.from.should == ["test@example.com"] }
-
-    describe "its body" do
-
-      subject { mail.body.encoded }
-
-      it { should match(user.username) }
-      it { should match(user.password) }
-      it { should match(login_url) }
-
-    end
-
-  end
-
   describe "password_reset" do
     let(:mail) { Mailer.password_reset("user@example.com", "http://example.com") }
     subject { mail }
