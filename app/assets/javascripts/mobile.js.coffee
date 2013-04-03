@@ -75,8 +75,8 @@ window.quotePost = (postId) ->
 parsePost = (body) ->
   # Embed Instagram photos directly when a share URL is pasted
   body = body.replace(
-    /\b(https?:\/\/instagr\.am\/p\/[^\/]+)\/?(\s|$)/g,
-    '<a href="\$1"><img width="612" height="612" src="\$1/media?size=l"></a>\$2'
+    /\b(https?:\/\/instagram\.com\/p\/[^\/]+\/)/g,
+    '<a href="\$1"><img width="612" height="612" src="\$1media?size=l"></a>'
   )
   return body
 
