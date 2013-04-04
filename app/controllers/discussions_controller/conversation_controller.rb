@@ -43,7 +43,7 @@ class DiscussionsController < ApplicationController
     def find_recipient
       if params[:recipient_id]
         begin
-          @recipient = User.find(params[:recipient])
+          @recipient = User.find(params[:recipient_id])
         rescue ActiveRecord::RecordNotFound
           @recipient = nil
         end

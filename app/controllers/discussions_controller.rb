@@ -76,10 +76,9 @@ class DiscussionsController < ApplicationController
     # Creates a new discussion
     def new
       @discussion = exchange_class.new
-      case exchange_class
-      when Discussion
-        @discussion.category = Category.find(params[:category_id])
-      when Conversation
+      if exchange_class == Discussion
+        @discussion.category = Category.find(params[:category_id]) if params[:category_id]
+      elsif exchange_class == Conversation
         @recipient = User.find_by_username(params[:username]) if params[:username]
       end
     end

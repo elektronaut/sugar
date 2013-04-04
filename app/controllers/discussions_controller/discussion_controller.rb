@@ -100,7 +100,7 @@ class DiscussionsController < ApplicationController
     end
 
     def require_categories
-      unless @categories.length > 0
+      if @categories.length == 0 && exchange_class == Discussion
         flash[:notice] = "Can't create a new discussion, no categories have been made!"
         redirect_to categories_url and return
       end
