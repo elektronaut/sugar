@@ -35,7 +35,7 @@
 <body>
     <div id="header">
     <div id="navigationToggle">
-      <%= link_to_function "", "toggleNavigation();" %>
+      <%= link_to_function "", "toggleNavigation();", :class => (@current_user && @current_user.unread_conversations? ? 'new' : '') %>
     </div>
         <h1 id="pageTitle" class="page_title">
       <% if @page_title %>
