@@ -829,6 +829,17 @@ table.discussions tr.targeted.nsfw {
   font-size:           0.9em;
   color:               #900;
 }
+.spoiler .innerSpoiler {
+  opacity: 0;
+  -webkit-transition: opacity 100ms linear;
+  -moz-transition: opacity 100ms linear;
+  -o-transition: opacity 100ms linear;
+  -ms-transition: opacity 100ms linear;
+  transition: opacity 100ms linear;
+}
+.spoiler:hover .innerSpoiler {
+  opacity: 1;
+}
 
 /* Targeted post (Keyboard navigation) */
 .posts .targeted {
