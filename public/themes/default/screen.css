@@ -382,7 +382,6 @@ h2.section, #sidebar h2 {
   left:                20px;
   font-size:           1.2em;
   line-height:         1;
-  padding-bottom:      0.7px; /* Yeah, that's right.. Fixes inconsistencies between FF/Safari */
 }
 #navigation li {
   display:             inline;
