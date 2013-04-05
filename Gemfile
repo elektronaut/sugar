@@ -1,10 +1,6 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
-def mac?
-  RUBY_PLATFORM.downcase.include?('darwin')
-end
-
 gem 'rails', '3.2.13'
 gem 'bcrypt-ruby', :require => 'bcrypt'
 gem 'strong_parameters'
@@ -43,6 +39,8 @@ gem 'daemon-spawn', '0.2.0'
 
 gem 'sunspot_rails'
 gem 'progress_bar'
+
+gem 'newrelic_rpm', :group => 'newrelic'
 
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'

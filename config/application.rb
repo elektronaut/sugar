@@ -7,7 +7,9 @@ require 'rails/all'
 if defined?(Bundler)
   Bundler.require(:default, Rails.env)
   Bundler.require([Rails.env, 'mac'].join('_')) if RUBY_PLATFORM =~ /darwin/
+  Bundler.require(:newrelic) if File.exists?(File.join(File.dirname(__FILE__), 'newrelic.yml'))
 end
+
 
 module Sugar
   class Application < Rails::Application

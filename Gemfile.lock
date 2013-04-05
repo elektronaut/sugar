@@ -127,6 +127,7 @@ GEM
     net-ssh (2.5.2)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
+    newrelic_rpm (3.5.6.55)
     nokogiri (1.5.9)
     open4 (1.3.0)
     options (2.3.0)
@@ -270,6 +271,7 @@ DEPENDENCIES
   jquery-rails
   json
   mysql2
+  newrelic_rpm
   pg
   progress_bar
   rails (= 3.2.13)
