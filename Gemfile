@@ -6,28 +6,23 @@ def mac?
 end
 
 gem 'rails', '3.2.13'
-gem "bcrypt-ruby", :require => "bcrypt"
+gem 'bcrypt-ruby', :require => 'bcrypt'
+gem 'strong_parameters'
 
-# gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'sqlite3'
 gem 'mysql2'
 gem 'pg'
 
-gem "redis", "~> 3.0.0.rc2"
-gem "hiredis", "~> 0.4.5"
+gem 'redis', '~> 3.0.0.rc2'
+gem 'hiredis', '~> 0.4.5'
 
-# Asset template engines
 gem 'json'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
-
 gem 'jquery-rails'
 gem 'rails-backbone'
-
-# Use unicorn as the web server
-# gem 'unicorn'
 
 # Deploy with Capistrano
 gem 'capistrano'
@@ -49,19 +44,16 @@ gem 'daemon-spawn', '0.2.0'
 gem 'sunspot_rails'
 gem 'progress_bar'
 
-#gem 'delayed_job', '2.1.4'
-
-gem 'strong_parameters'
-
 group :development do
   gem 'yui-compressor', :require => 'yui/compressor'
-
-  # Guard
-  gem 'rb-fsevent' #if mac?
-  gem 'ruby_gntp' #if mac?
   gem 'guard'
   gem 'guard-spork'
   gem 'guard-rspec'
+end
+
+group :development_mac do
+  gem 'rb-fsevent'
+  gem 'ruby_gntp'
 end
 
 group :test do

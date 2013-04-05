@@ -4,9 +4,10 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-# If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+if defined?(Bundler)
+  Bundler.require(:default, Rails.env)
+  Bundler.require([Rails.env, 'mac'].join('_')) if RUBY_PLATFORM =~ /darwin/
+end
 
 module Sugar
   class Application < Rails::Application
