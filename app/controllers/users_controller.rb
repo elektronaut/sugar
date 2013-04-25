@@ -58,13 +58,13 @@ class UsersController < ApplicationController
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
-        :password, :confirm_password
+        :password, :confirm_password, :banned_until
       ]
       if @current_user
         if @current_user.user_admin?
           allowed += [
             :username, :banned, :activated, :user_admin, :moderator,
-            :trusted, :available_invites, :banned_until
+            :trusted, :available_invites
           ]
         end
         if @current_user.admin?

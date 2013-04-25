@@ -72,6 +72,11 @@ describe UsersController do
       specify { user.reload.realname.should == "New name" }
     end
 
+    context "self banning" do
+      before { put :update, id: user.id, user: {banned_until: (Time.now + 2.days)} }
+      specify { user.temporary_banned?.should be_true }
+    end
+
     context "updating openid_url" do
       it "redirects to the OpenID URL" do
         ApplicationController.any_instance
