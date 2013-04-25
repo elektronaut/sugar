@@ -74,7 +74,7 @@ describe UsersController do
 
     context "self banning" do
       before { put :update, id: user.id, user: {banned_until: (Time.now + 2.days)} }
-      specify { user.temporary_banned?.should be_true }
+      specify { user.reload.temporary_banned?.should be_true }
     end
 
     context "updating openid_url" do
