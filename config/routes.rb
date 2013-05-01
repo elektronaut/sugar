@@ -33,19 +33,19 @@ Sugar::Application.routes.draw do
   end
 
   # Search discussions
-  match '/search/:query.:format' => 'discussions#search', :as => :formatted_search_with_query
-  match '/search/:query'         => 'discussions#search', :as => :search_with_query
-  match '/search'                => 'discussions#search', :as => :search
+  get '/search/:query.:format' => 'discussions#search', as: :formatted_search_with_query
+  get '/search/:query'         => 'discussions#search', as: :search_with_query
+  match '/search'              => 'discussions#search', as: :search, via: [:get, :post]
 
   # Search posts
-  match '/posts/search/:query' => 'posts#search'
-  match '/posts/search' => 'posts#search', :as => :search_posts
+  get '/posts/search/:query' => 'posts#search'
+  match '/posts/search' => 'posts#search', :as => :search_posts, via: [:get, :post]
 
   # Search posts in discussion
-  match '/discussions/:id/search_posts/:query' => 'discussions#search_posts'
+  match '/discussions/:id/search_posts/:query' => 'discussions#search_posts', via: [:get, :post]
 
   # Users
-  resources :users do
+  resources :users, except: [:edit, :show] do
     collection do
       get 'login'
       post 'authenticate'
@@ -68,20 +68,20 @@ Sugar::Application.routes.draw do
   end
 
   controller :users do
-    match '/users/profile/:id/grant_invite'       => :grant_invite,   :as => :grant_invite_user
-    match '/users/profile/:id/revoke_invites'     => :revoke_invites, :as => :revoke_invites_user
-    match '/users/profile/:id/update_openid'      => :update_openid,  :as => :update_openid_user
-    match '/users/profile/:id/edit'               => :edit,           :as => :edit_user
-    match '/users/profile/:id/edit/:page'         => :edit,           :as => :edit_user_page
-    match '/users/profile/:id'                    => :show,           :as => :user_profile
-    match '/users/profile/:id/discussions'        => :discussions,    :as => :discussions_user
-    match '/users/profile/:id/discussions/:page'  => :discussions
-    match '/users/profile/:id/participated'       => :participated,   :as => :participated_user
-    match '/users/profile/:id/participated/:page' => :participated
-    match '/users/profile/:id/posts'              => :posts,          :as => :posts_user
-    match '/users/profile/:id/posts/:page'        => :posts,          :as => :paged_user_posts
-    match '/users/profile/:id/stats'              => :stats,          :as => :stats_user
-    match '/users/new/:token'                     => :new,            :as => :new_user_by_token
+    post '/users/profile/:id/grant_invite'       => :grant_invite,   :as => :grant_invite_user
+    post '/users/profile/:id/revoke_invites'     => :revoke_invites, :as => :revoke_invites_user
+    get  '/users/profile/:id/update_openid'      => :update_openid,  :as => :update_openid_user
+    get  '/users/profile/:id/edit'               => :edit,           :as => :edit_user
+    get  '/users/profile/:id/edit/:page'         => :edit,           :as => :edit_user_page
+    get  '/users/profile/:id'                    => :show,           :as => :user_profile
+    get  '/users/profile/:id/discussions'        => :discussions,    :as => :discussions_user
+    get  '/users/profile/:id/discussions/:page'  => :discussions
+    get  '/users/profile/:id/participated'       => :participated,   :as => :participated_user
+    get  '/users/profile/:id/participated/:page' => :participated
+    get  '/users/profile/:id/posts'              => :posts,          :as => :posts_user
+    get  '/users/profile/:id/posts/:page'        => :posts,          :as => :paged_user_posts
+    get  '/users/profile/:id/stats'              => :stats,          :as => :stats_user
+    get  '/users/new/:token'                     => :new,            :as => :new_user_by_token
   end
 
   resources :password_resets, :only => [:new, :create, :show, :update]
@@ -91,16 +91,16 @@ Sugar::Application.routes.draw do
 
   # Categories
   resources :categories
-  match '/categories/:id/:page' => 'categories#show'
+  get '/categories/:id/:page' => 'categories#show'
 
   # Discussions
   controller :discussions do
-    match '/discussions/popular/:days/:page'  => :popular
-    match '/discussions/popular/:days'        => :popular
-    match '/discussions/archive/:page'        => :index,         :as => :paged_discussions
-    match '/conversations/new'                => :new,           :as => :new_conversation, :type => 'conversation'
-    match '/conversations/new/with/:username' => :new,           :as => :new_conversation_with, :type => 'conversation'
-    match '/conversations/archive/:page'      => :conversations, :as => :paged_conversations
+    get '/discussions/popular/:days/:page'  => :popular
+    get '/discussions/popular/:days'        => :popular
+    get '/discussions/archive/:page'        => :index,         :as => :paged_discussions
+    get '/conversations/new'                => :new,           :as => :new_conversation, :type => 'conversation'
+    get '/conversations/new/with/:username' => :new,           :as => :new_conversation_with, :type => 'conversation'
+    get '/conversations/archive/:page'      => :conversations, :as => :paged_conversations
   end
   resources :discussions do
     member do
@@ -135,9 +135,9 @@ Sugar::Application.routes.draw do
       end
     end
   end
-  match '/discussions/:id/:page' => 'discussions#show', :as => :paged_discussion
-  match '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
-  match '/conversations' => 'discussions#conversations', :as => :conversations
+  get '/discussions/:id/:page' => 'discussions#show', :as => :paged_discussion
+  get '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
+  get '/conversations' => 'discussions#conversations', :as => :conversations
 
 
   # Invites
@@ -157,20 +157,16 @@ Sugar::Application.routes.draw do
   end
 
   # Help pages
-  match 'help' => 'help#index', :as => :help
-  match 'help/:page' => 'help#show', :as => :help_page
+  get 'help' => 'help#index', :as => :help
+  get 'help/:page' => 'help#show', :as => :help_page
 
   # Vanilla redirects
   controller :vanilla do
-    match '/vanilla'              => :discussions
-    match '/vanilla/index.php'    => :discussions
-    match '/vanilla/comments.php' => :discussion
-    match '/vanilla/account.php'  => :user
+    get '/vanilla'              => :discussions
+    get '/vanilla/index.php'    => :discussions
+    get '/vanilla/comments.php' => :discussion
+    get '/vanilla/account.php'  => :user
   end
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  #match ':controller(/:action(/:id(.:format)))'
 
   # Root
   root :to => "discussions#index"
