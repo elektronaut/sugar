@@ -46,7 +46,7 @@ class InvitesController < ApplicationController
 
     # Show everyone's invites
     def all
-      respond_with(@invites = Invite.find_active)
+      respond_with(@invites = Invite.active)
     end
 
     # Accept an invite

@@ -19,7 +19,6 @@ describe Exchange do
   it { should belong_to(:closer).class_name("User") }
   it { should belong_to(:last_poster).class_name("User") }
   it { should have_many(:posts).dependent(:destroy) }
-  it { should have_one(:first_post).class_name("Post") }
   it { should have_many(:discussion_views).dependent(:destroy) }
 
   it { should validate_presence_of(:title)}
@@ -152,14 +151,14 @@ describe Exchange do
   end
 
   describe "#create_first_post" do
-    subject { exchange.first_post }
+    subject { exchange.posts.first }
     its(:body) { should == "First post!" }
     its(:user) { should == exchange.poster }
   end
 
   describe "#update_post_body" do
     before { exchange.update_attributes(:body => 'changed post') }
-    subject { exchange.first_post }
+    subject { exchange.posts.first }
     its(:body) { should == "changed post" }
   end
 

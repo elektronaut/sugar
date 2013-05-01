@@ -58,7 +58,7 @@ describe Post do
   end
 
   describe "#post_number" do
-    specify { discussion.first_post.post_number.should == 1 }
+    specify { discussion.posts.first.post_number.should == 1 }
     specify { create(:post, discussion: discussion).post_number.should == 2 }
   end
 

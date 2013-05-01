@@ -17,6 +17,9 @@ class Invite < ActiveRecord::Base
   after_create :revoke_invite
   before_destroy :grant_invite
 
+  scope :active, -> { where("expires_at >= ?", Time.now).include(:user) }
+  scope :expired, -> { where("expires_at < ?", Time.now) }
+
   class << self
     # Makes a unique random token.
     def unique_token
@@ -34,19 +37,9 @@ class Invite < ActiveRecord::Base
       DEFAULT_EXPIRATION
     end
 
-    # Finds valid invites
-    def find_active
-      self.find(:all, :conditions => ['expires_at >= ?', Time.now], :order => 'created_at DESC', :include => [:user])
-    end
-
-    # Finds expired invites
-    def find_expired
-      self.find(:all, :conditions => ['expires_at < ?', Time.now], :order => 'created_at DESC')
-    end
-
     # Deletes expired invites
     def destroy_expired!
-      self.find_expired.each do |invite|
+      self.expired.each do |invite|
         invite.destroy
       end
     end
@@ -85,7 +78,7 @@ class Invite < ActiveRecord::Base
     if User.exists?(:email => self.email)
       self.errors.add(:email, 'is already registered!')
     end
-    if Invite.find_active.select{|i| i != self && i.email == self.email }.length > 0
+    if Invite.active.select{|i| i != self && i.email == self.email }.length > 0
       self.errors.add(:email, 'has already been invited!')
     end
   end

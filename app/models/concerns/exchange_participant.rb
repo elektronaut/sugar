@@ -4,22 +4,22 @@ module ExchangeParticipant
   included do
     has_many :discussions, foreign_key: 'poster_id'
     has_many :posts
-    has_many :discussion_posts, class_name: 'Post', conditions: { conversation: false }
+    has_many :discussion_posts, -> { where conversation: false }, class_name: 'Post'
     has_many :discussion_views, dependent: :destroy
     has_many :discussion_relationships, dependent: :destroy
 
     has_many :participated_discussions,
+             -> { where discussion_relationships: { participated: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { participated: true } }
+             source: :discussion
     has_many :followed_discussions,
+             -> { where discussion_relationships: { following: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { following: true } }
+             source: :discussion
     has_many :favorite_discussions,
+             -> { where discussion_relationships: { favorite: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { favorite: true } }
+             source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships
