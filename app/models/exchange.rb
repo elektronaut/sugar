@@ -33,9 +33,9 @@ class Exchange < ActiveRecord::Base
   has_one    :first_post,       :class_name => 'Post',   :order => ['created_at ASC'], :foreign_key => 'discussion_id'
   has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
 
-  scope :sorted,            order('sticky DESC, last_post_at DESC')
-  scope :with_posters,      includes(:poster, :last_poster)
-  scope :for_view,          sorted.with_posters
+  scope :sorted,       -> { order('sticky DESC, last_post_at DESC') }
+  scope :with_posters, -> { includes(:poster, :last_poster) }
+  scope :for_view,     -> { sorted.with_posters }
 
   validates_presence_of :title
   validates_length_of   :title, :maximum => 100

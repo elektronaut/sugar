@@ -12,8 +12,8 @@ class Discussion < Exchange
   # Flag for trusted status, which will update after save if it has been changed.
   attr_accessor :update_trusted
 
-  scope :with_category, includes(:poster, :last_poster, :category)
-  scope :for_view,      sorted.with_posters.with_category
+  scope :with_category, -> { includes(:poster, :last_poster, :category) }
+  scope :for_view,      -> { sorted.with_posters.with_category }
 
   validate   :inherit_trusted_from_category
   after_save :update_trusted_status
