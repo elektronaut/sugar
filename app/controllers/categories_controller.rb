@@ -70,7 +70,7 @@ class CategoriesController < ApplicationController
 
   # Loads all categories
   def load_categories
-    @categories = Category.find_viewable_by(@current_user)
+    @categories = Category.viewable_by(@current_user)
   end
 
   # Finds the requested category

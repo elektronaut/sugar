@@ -17,7 +17,7 @@ class Invite < ActiveRecord::Base
   after_create :revoke_invite
   before_destroy :grant_invite
 
-  scope :active, -> { where("expires_at >= ?", Time.now).include(:user) }
+  scope :active, -> { where("expires_at >= ?", Time.now).includes(:user) }
   scope :expired, -> { where("expires_at < ?", Time.now) }
 
   class << self

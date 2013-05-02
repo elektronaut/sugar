@@ -76,7 +76,7 @@ describe DiscussionsController do
         response.should redirect_to(conversations_url)
       end
       it 'removes the user from the conversation' do
-        @conversation.participants.all.should_not include(@user)
+        @conversation.participants.to_a.should_not include(@user)
       end
     end
   end

@@ -35,7 +35,7 @@ class Post < ActiveRecord::Base
 
   # Get this posts sequence number
   def post_number
-    @post_number ||= (Post.count(:conditions => ['discussion_id = ? AND id < ?', self.discussion_id, self.id]) + 1)
+    @post_number ||= self.discussion.posts.where('id < ?', self.id).count + 1
   end
 
   def page(options={})
@@ -68,7 +68,7 @@ class Post < ActiveRecord::Base
   end
 
   def mentioned_users
-    @mentioned_users ||= User.find(:all).select do |user|
+    @mentioned_users ||= User.all.select do |user|
       user_expression = Regexp.new('@'+Regexp.quote(user.username), Regexp::IGNORECASE)
       self.body.match(user_expression) ? true : false
     end

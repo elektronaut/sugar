@@ -13,6 +13,7 @@
 
 class Category < ActiveRecord::Base
   include HumanizableParam
+  include Viewable
 
   has_many :discussions
   validates_presence_of :name
@@ -31,15 +32,6 @@ class Category < ActiveRecord::Base
     end
   end
 
-  class << self
-
-    # Finds all categories viewable by the given user
-    def find_viewable_by(user=nil)
-      self.all(:order => :position).select{|c| c.viewable_by?(user)}
-    end
-
-  end
-
   # Returns true if this category has any labels
   def labels?
     (self.trusted?) ? true : false
@@ -50,15 +42,6 @@ class Category < ActiveRecord::Base
     labels = []
     labels << "Trusted" if self.trusted?
     return labels
-  end
-
-  # Returns true if this category is viewable by the given <tt>user</tt>.
-  def viewable_by?(user)
-    if self.trusted?
-      (user && (user.trusted? || user.admin?)) ? true : false
-    else
-      (Sugar.public_browsing? || user) ? true : false
-    end
   end
 
   # Humanized ID for URLs.

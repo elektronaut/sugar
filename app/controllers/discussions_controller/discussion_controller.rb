@@ -96,7 +96,7 @@ class DiscussionsController < ApplicationController
     private
 
     def load_categories
-      @categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user && @current_user.trusted?)}
+      @categories = Category.viewable_by(@current_user)
     end
 
     def require_categories

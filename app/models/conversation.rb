@@ -8,7 +8,7 @@ class Conversation < Exchange
 
   include Sugar::Exceptions
 
-  has_many :conversation_relationships, :dependent => :destroy, :order => 'created_at ASC'
+  has_many :conversation_relationships, -> { order 'created_at ASC' }, dependent: :destroy
   has_many :participants, :through => :conversation_relationships, :source => :user
 
   after_create do |conversation|
