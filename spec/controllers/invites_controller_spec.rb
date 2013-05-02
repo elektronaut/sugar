@@ -24,12 +24,12 @@ describe InvitesController do
 
     context "when invite exists" do
       let(:invite_id) { invite.id }
-      it { should assign_to(:invite).with_kind_of(Invite) }
+      specify { assigns(:invite).should be_a(Invite) }
     end
 
     context "when invite doesn't exist" do
       let(:invite_id) { 1231115 }
-      it { should_not assign_to(:invite) }
+      specify { assigns(:invite).should be_nil }
       it { should respond_with(404) }
     end
   end
@@ -40,18 +40,18 @@ describe InvitesController do
     context "when user has invites" do
       let(:user) { create(:user, available_invites: 1) }
       it { should respond_with(:success) }
-      it { should_not set_the_flash.to(/You don't have any invites!/) }
+      specify { flash[:notice].should be_nil }
     end
 
     context "when user is user admin" do
       let(:user) { create(:user_admin) }
       it { should respond_with(:success) }
-      it { should_not set_the_flash.to(/You don't have any invites!/) }
+      specify { flash[:notice].should be_nil }
     end
 
     context "when user doesn't have any invites" do
       let(:user) { create(:user, available_invites: 0) }
-      it { should set_the_flash }
+      specify { flash[:notice].should match(/You don't have any invites!/) }
       it { should respond_with(:redirect) }
     end
   end
@@ -62,8 +62,7 @@ describe InvitesController do
 
     it { should respond_with(:success) }
     it { should render_template(:index) }
-    it { should_not set_the_flash }
-    it { should assign_to(:invites).with_kind_of(Enumerable) }
+    specify { flash[:notice].should be_nil }
     specify { assigns(:invites).should =~ [invites.first] }
   end
 
@@ -75,8 +74,6 @@ describe InvitesController do
 
     it { should respond_with(:success) }
     it { should render_template(:all) }
-    it { should_not set_the_flash }
-    it { should assign_to(:invites).with_kind_of(Enumerable) }
     specify { assigns(:invites).should =~ invites }
   end
 
@@ -85,7 +82,7 @@ describe InvitesController do
 
     context "when invite is valid" do
       let(:token) { invite.token }
-      it { should_not set_the_flash }
+      specify { flash[:notice].should be_nil }
       specify { session[:invite_token].should == invite.token }
       it "redirects to the signup page" do
         response.should redirect_to(new_user_by_token_url(:token => invite.token))
@@ -94,7 +91,7 @@ describe InvitesController do
 
     context "when invite is expired" do
       let(:token) { expired_invite.token }
-      it { should set_the_flash.to(/Your invite has expired!/) }
+      specify { flash[:notice].should match(/Your invite has expired!/) }
       specify { session[:invite_token].should be_nil }
       it "redirects to the login page" do
         response.should redirect_to(login_users_url)
@@ -103,7 +100,7 @@ describe InvitesController do
 
     context "when invite doesn't exist" do
       let(:token) { "invalid token" }
-      it { should set_the_flash.to(/That's not a valid invite!/) }
+      specify { flash[:notice].should match(/That's not a valid invite!/) }
       specify { session[:invite_token].should be_nil }
       it "redirects to the login page" do
         response.should redirect_to(login_users_url)
@@ -115,8 +112,7 @@ describe InvitesController do
     before { login(user_with_invites); get :new }
     it { should respond_with(:success) }
     it { should render_template(:new) }
-    it { should_not set_the_flash }
-    it { should assign_to(:invite).with_kind_of(Invite) }
+    specify { assigns(:invite).should be_a(Invite) }
   end
 
   describe "POST create" do
@@ -130,8 +126,8 @@ describe InvitesController do
         }
       end
 
-      it { should assign_to(:invite).with_kind_of(Invite) }
-      it { should set_the_flash.to(/Your invite has been sent to no\-reply@example\.com/) }
+      specify { assigns(:invite).should be_a(Invite) }
+      specify { flash[:notice].should match(/Your invite has been sent to no\-reply@example\.com/) }
 
       specify { last_email.to.should == ['no-reply@example.com'] }
       specify { last_email.body.encoded.should match('testing message') }
@@ -148,7 +144,7 @@ describe InvitesController do
         }
       end
 
-      it { should set_the_flash.to("There was a problem sending your invite to totally@wrong.com, it has been cancelled.") }
+      specify { flash[:notice].should match("There was a problem sending your invite to totally@wrong.com, it has been cancelled.") }
       it { should redirect_to(invites_url) }
 
       it "should not send an email" do
@@ -162,8 +158,7 @@ describe InvitesController do
 
     context "with invalid params" do
       before { post :create, :invite => {} }
-      it { should assign_to(:invite).with_kind_of(Invite) }
-      it { should_not set_the_flash }
+      specify { assigns(:invite).should be_a(Invite) }
       it { should respond_with(:success) }
       it { should render_template(:new) }
     end
@@ -173,7 +168,7 @@ describe InvitesController do
     context "when user owns the invite" do
       before { login(invite.user) and delete(:destroy, id: invite.id) }
 
-      it { should assign_to(:invite).with_kind_of(Invite) }
+      specify { assigns(:invite).should be_a(Invite) }
       specify { assigns(:invite).destroyed?.should be_true }
 
       it "redirects to the invites page" do
@@ -184,7 +179,7 @@ describe InvitesController do
     context "when user doesn't own the invite" do
       before { login(user) and delete(:destroy, id: invite.id) }
 
-      it { should assign_to(:invite).with_kind_of(Invite) }
+      specify { assigns(:invite).should be_a(Invite) }
       specify { assigns(:invite).destroyed?.should be_false }
 
       it "redirects to the discussions page" do

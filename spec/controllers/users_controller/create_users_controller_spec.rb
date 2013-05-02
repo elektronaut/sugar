@@ -12,8 +12,8 @@ describe UsersController, redis: true do
       end
       it { should respond_with(:success) }
       it { should render_template(:new) }
-      it { should assign_to(:invite) }
-      it { should assign_to(:user) }
+      specify { assigns(:invite).should be_a(Invite) }
+      specify { assigns(:user).should be_a(User) }
       specify { assigns(:user).email.should == invite.email }
     end
 
@@ -23,7 +23,7 @@ describe UsersController, redis: true do
         configure signups_allowed: false
         get :new
       end
-      it { should set_the_flash.to("Signups are not allowed") }
+      specify { flash[:notice].should match("Signups are not allowed") }
       it { should redirect_to(login_users_url) }
     end
   end
@@ -43,8 +43,8 @@ describe UsersController, redis: true do
     context 'with a valid invite token' do
       before { post :create, :token => invite.token, :user => params }
 
-      it { should assign_to(:invite) }
-      it { should assign_to(:user) }
+      specify { assigns(:invite).should be_a(Invite) }
+      specify { assigns(:user).should be_a(User) }
       it { should redirect_to(user_url(:id => assigns(:user).username)) }
     end
   end

@@ -14,8 +14,8 @@ describe UsersController do
       get :index
     end
 
-    it { should assign_to(:users) }
-    it { should_not set_the_flash }
+    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
+    specify { flash[:notice].should be_nil }
     it { should render_template(:index) }
   end
 
@@ -27,8 +27,8 @@ describe UsersController do
       @json = JSON.parse(response.body)
     end
 
-    it { should assign_to(:users) }
-    it { should_not set_the_flash }
+    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
+    specify { flash[:notice].should be_nil }
 
     it "renders JSON" do
       @json.should be_kind_of(Array)
@@ -42,8 +42,8 @@ describe UsersController do
       get :banned
     end
 
-    it { should assign_to(:users) }
-    it { should_not set_the_flash }
+    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
+    specify { flash[:notice].should be_nil }
     it { should render_template(:banned) }
   end
 
@@ -66,9 +66,9 @@ describe UsersController do
     context "regular update" do
       before { put :update, id: user.id, user: {realname: "New name"} }
 
-      it { should assign_to(:user) }
+      specify { assigns(:user).should be_a(User) }
+      specify { flash[:notice].should match("Your changes were saved!") }
       it { should redirect_to(edit_user_page_url(user.username, page: 'info')) }
-      it { should set_the_flash.to("Your changes were saved!") }
       specify { user.reload.realname.should == "New name" }
     end
 
@@ -116,7 +116,7 @@ describe UsersController do
         end
 
         it { should respond_with(:success) }
-        it { should assign_to(:user) }
+        specify { assigns(:user).should be_a(User) }
         it { should render_template(:edit) }
         specify { flash.now[:notice].should == "That's not a valid OpenID URL!"}
       end
