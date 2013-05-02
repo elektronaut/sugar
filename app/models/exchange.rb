@@ -13,10 +13,6 @@ class Exchange < ActiveRecord::Base
   # Default number of discussions per page
   self.per_page = 30
 
-  # These attributes should be filtered from params
-  UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count,
-                      :created_at, :updated_at, :last_post_at, :trusted
-
   # Virtual attribute for the body of the first post
   attr_accessor :body
 
@@ -44,19 +40,6 @@ class Exchange < ActiveRecord::Base
 
   after_create :create_first_post
   after_update :update_post_body
-
-  class << self
-
-    # Deletes attributes which normal users shouldn't be able to touch from a param hash
-    def safe_attributes(params)
-      safe_params = params.dup
-      Exchange::UNSAFE_ATTRIBUTES.each do |r|
-        safe_params.delete(r)
-      end
-      return safe_params
-    end
-
-  end
 
   # Finds the number of the last page
   def last_page(per_page=Post.per_page)

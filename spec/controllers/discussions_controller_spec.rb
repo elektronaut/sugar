@@ -121,7 +121,7 @@ describe DiscussionsController do
 
     context "with invalid params" do
       let!(:category) { create(:category) }
-      before { post :create, discussion: {} }
+      before { post :create, discussion: { foo: 'bar' } }
       it { should render_template(:new) }
       specify { flash.now[:notice].should match(/Could not save your discussion! Please make sure all required fields are filled in\./) }
     end

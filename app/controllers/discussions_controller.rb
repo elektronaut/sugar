@@ -60,9 +60,11 @@ class DiscussionsController < ApplicationController
     end
 
     def exchange_params(options={})
-      (@current_user.moderator? ? params[:exchange] : Discussion.safe_attributes(params[:exchange])).merge(
-        :updated_by => @current_user
-      ).merge(options)
+      if @current_user.moderator?
+        params.require(:exchange).permit(:recipient_id, :title, :body, :category_id, :nsfw, :closed, :sticky)
+      else
+        params.require(:exchange).permit(:recipient_id, :title, :body, :category_id, :nsfw, :closed)
+      end
     end
 
   public
@@ -106,7 +108,7 @@ class DiscussionsController < ApplicationController
 
     # Create a new discussion
     def create
-      @discussion = exchange_class.create(exchange_params(:poster => @current_user))
+      @discussion = exchange_class.create(exchange_params.merge(poster: @current_user))
       if @discussion.valid?
         @discussion.add_participant(@recipient) if @recipient
         redirect_to discussion_url(@discussion)
@@ -118,7 +120,7 @@ class DiscussionsController < ApplicationController
 
     # Update a discussion
     def update
-      @discussion.update_attributes(exchange_params)
+      @discussion.update_attributes(exchange_params.merge(updated_by: @current_user))
       if @discussion.valid?
         flash[:notice] = "Your changes were saved."
         redirect_to discussion_path(@discussion)

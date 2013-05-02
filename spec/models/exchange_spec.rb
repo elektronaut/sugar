@@ -25,24 +25,6 @@ describe Exchange do
   it { should ensure_length_of(:title).is_at_most(100) }
   it { should validate_presence_of(:body)}
 
-  describe ".safe_attributes" do
-
-    subject do
-      Discussion.safe_attributes(
-        # Invalid attributes
-        id: 1, sticky: true, user_id: 1, last_poster_id: 1,
-        posts_count: 12, created_at: 2.days.ago, updated_at: 2.days.ago,
-        last_post_at: 2.days.ago, trusted: true,
-
-        # Valid attributes
-        title: 'Test', body: 'Testing'
-      )
-    end
-
-    it { should == { title: "Test", body: "Testing" } }
-
-  end
-
   describe "#updated_by" do
     it 'changes closer when updating' do
       expect {
