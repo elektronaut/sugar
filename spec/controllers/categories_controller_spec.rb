@@ -110,7 +110,7 @@ describe CategoriesController do
     end
 
     describe "without valid params" do
-      before { post :create, :category => {} }
+      before { post :create, :category => {foo: 'bar'} }
       specify { assigns(:category).should be_a(Category) }
       specify { flash.now[:notice].should match(/Couldn't save your category/) }
       it { should respond_with(:success) }

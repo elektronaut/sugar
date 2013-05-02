@@ -157,7 +157,7 @@ describe InvitesController do
     end
 
     context "with invalid params" do
-      before { post :create, :invite => {} }
+      before { post :create, invite: { foo: 'bar' } }
       specify { assigns(:invite).should be_a(Invite) }
       it { should respond_with(:success) }
       it { should render_template(:new) }
