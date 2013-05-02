@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.2.13'
+gem 'rails', '4.0.0.rc1'
 gem 'bcrypt-ruby', :require => 'bcrypt'
-gem 'strong_parameters'
+gem 'rails-observers'
+#gem 'strong_parameters'
 
 gem 'sqlite3'
 gem 'mysql2'
@@ -13,7 +14,7 @@ gem 'redis', '~> 3.0.0.rc2'
 gem 'hiredis', '~> 0.4.5'
 
 gem 'json'
-gem 'sass-rails'
+#gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
@@ -27,7 +28,8 @@ gem 'capistrano'
 # gem 'ruby-debug'
 
 # OAuth
-gem 'doorkeeper', '~> 0.6.3'
+#gem 'doorkeeper', '~> 0.6.3'
+gem 'doorkeeper', git: 'git://github.com/applicake/doorkeeper.git'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
