@@ -12,7 +12,8 @@ describe CategoriesController do
   let(:moderator) { create(:moderator) }
 
   it_requires_authentication_for :index, :show, :new, :edit, :create, :update
-  it_requires_moderator_for :new, :edit, :create, :update
+  it_requires_moderator_for :new, :edit
+  it_requires_moderator_for :create, :update, { method: :post, params: { id: 1, category: { foo: 'bar' } } }
 
   describe "#load_categories" do
 
