@@ -1,10 +1,8 @@
 source 'http://rubygems.org'
-source 'http://gems.github.com'
 
 gem 'rails', '4.0.0.rc1'
 gem 'bcrypt-ruby', :require => 'bcrypt'
 gem 'rails-observers'
-#gem 'strong_parameters'
 
 gem 'sqlite3'
 gem 'mysql2'
@@ -14,7 +12,7 @@ gem 'redis', '~> 3.0.0.rc2'
 gem 'hiredis', '~> 0.4.5'
 
 gem 'json'
-#gem 'sass-rails'
+gem 'sass-rails', '~> 4.0.0.rc1'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
