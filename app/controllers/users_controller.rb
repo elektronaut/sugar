@@ -64,7 +64,7 @@ class UsersController < ApplicationController
         if @current_user.user_admin?
           allowed += [
             :username, :banned, :activated, :user_admin, :moderator,
-            :trusted, :available_invites
+            :trusted, :available_invites, :status
           ]
         end
         if @current_user.admin?

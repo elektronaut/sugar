@@ -77,6 +77,15 @@ describe UsersController do
       specify { user.reload.temporary_banned?.should be_true }
     end
 
+    context "banning a user" do
+      let!(:target_user) { create(:user) }
+      before { put :update, id: target_user.id, user: {status: 2} }
+      context "when user is a user admin" do
+        let(:user) { create(:user_admin) }
+        specify { target_user.reload.banned?.should be_true }
+      end
+    end
+
     context "updating openid_url" do
       it "redirects to the OpenID URL" do
         ApplicationController.any_instance
