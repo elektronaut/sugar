@@ -80,7 +80,7 @@ $(Sugar).bind 'ready', ->
   # Update the window title on new posts
   original_document_title = document.title
   $(Sugar).bind 'newposts', (event, total_posts, new_posts, unread_posts) ->
-    document.title = "[#{unread_posts} new posts] #{original_document_title}"
+    document.title = "(#{unread_posts}) #{original_document_title}"
 
   # Reset the document title when posts are loaded
   $(Sugar).bind 'postsloaded', ->
