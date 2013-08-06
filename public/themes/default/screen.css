@@ -822,6 +822,14 @@ table.discussions tr.targeted.nsfw {
   border:              1px dotted #baa;
   padding:             4px;
   background:          #fff8f0;
+  -webkit-transition: all 100ms linear;
+  -moz-transition: all 100ms linear;
+  -o-transition: all 100ms linear;
+  -ms-transition: all 100ms linear;
+  transition: all 100ms linear;
+}
+.spoiler.revealed {
+  background: transparent;
 }
 .spoiler .spoilerLabel {
   font-weight:         bold;
@@ -836,7 +844,7 @@ table.discussions tr.targeted.nsfw {
   -ms-transition: opacity 100ms linear;
   transition: opacity 100ms linear;
 }
-.spoiler:hover .innerSpoiler {
+.spoiler.revealed .innerSpoiler {
   opacity: 1;
 }
 
