@@ -75,8 +75,10 @@ class Sugar.Views.Post extends Backbone.View
 
         $(this).find('.innerSpoiler').css('visibility', 'hidden')
         $(this).click ->
-          $(this).addClass('revealed')
-          $(this).find('.innerSpoiler').css('visibility', 'visible')
+          if $(this).hasClass('revealed')
+            $(this).removeClass('revealed').find('.innerSpoiler').css('visibility', 'hidden')
+          else
+            $(this).addClass('revealed').find('.innerSpoiler').css('visibility', 'visible')
 
   # Apply referral code to Amazon links
   applyAmazonReferralCode: ->
