@@ -12,7 +12,7 @@ module UserScopes
     scope :xbox_users,      active.where("gamertag IS NOT NULL OR gamertag != ''")
     scope :social,          active.where("(twitter IS NOT NULL AND twitter != '') OR (instagram IS NOT NULL AND instagram != '') OR (flickr IS NOT NULL AND flickr != '')")
     scope :recently_joined, active.order("created_at DESC")
-    scope :top_posters,     active.where("posts_count > 0").order("posts_count DESC")
+    scope :top_posters,     active.where("public_posts_count > 0").order("public_posts_count DESC")
     scope :trusted,         active.where("trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?", true, true, true, true)
   end
 

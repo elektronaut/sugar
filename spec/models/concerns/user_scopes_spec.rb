@@ -72,9 +72,9 @@ describe UserScopes do
   end
 
   describe "top_posters" do
-    let!(:user1) { create(:user, posts_count: 1) }
-    let!(:user2) { create(:user, posts_count: 2) }
-    let!(:user3) { create(:user, posts_count: 0) }
+    let!(:user1) { create(:user, public_posts_count: 1) }
+    let!(:user2) { create(:user, public_posts_count: 2) }
+    let!(:user3) { create(:user, public_posts_count: 0) }
     subject { User.top_posters }
     it { should == [user2, user1] }
   end

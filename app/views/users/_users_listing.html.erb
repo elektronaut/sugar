@@ -38,8 +38,8 @@
         time_tag user.created_at, :class => 'relative'
       when :discussions_and_posts
         user.discussions.viewable_by(@current_user).count.to_s + "/" + user.discussion_posts.viewable_by(@current_user).count.to_s
-      when :posts_count
-        user.discussion_posts.viewable_by(@current_user).count
+      when :public_posts_count
+        user.public_posts_count
       when :posts_per_day
         number_with_precision(user.posts_per_day, :precision => 2)
       when :status

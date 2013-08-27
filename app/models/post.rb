@@ -22,6 +22,8 @@ class Post < ActiveRecord::Base
   after_create :update_exchange
   after_create :define_relationship
   after_create :notify_new_conversation_post
+  after_create :increment_public_posts_count
+  after_destroy :decrement_public_posts_count
 
   scope :sorted,                    order('created_at ASC')
   scope :for_view,                  sorted.includes(:user)
@@ -73,6 +75,18 @@ class Post < ActiveRecord::Base
   end
 
   private
+
+  def increment_public_posts_count
+    if !self.conversation? && !self.trusted?
+      self.user.update_column(:public_posts_count, self.user.public_posts_count + 1)
+    end
+  end
+
+  def decrement_public_posts_count
+    if !self.conversation? && !self.trusted?
+      self.user.update_column(:public_posts_count, self.user.public_posts_count - 1)
+    end
+  end
 
   def update_trusted_status
     if self.discussion

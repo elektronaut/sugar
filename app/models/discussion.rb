@@ -15,9 +15,8 @@ class Discussion < Exchange
   scope :with_category, includes(:poster, :last_poster, :category)
   scope :for_view,      sorted.with_posters.with_category
 
-  validate      :inherit_trusted_from_category
-  before_update :set_update_trusted_flag
-  after_save    :update_trusted_status
+  validate   :inherit_trusted_from_category
+  after_save :update_trusted_status
 
   class << self
     # Scopes discussions popular in the last n days
@@ -56,16 +55,14 @@ class Discussion < Exchange
     true
   end
 
-  def set_update_trusted_flag
-    self.update_trusted = true if self.trusted_changed?
-    true
-  end
-
   # Set trusted status on all posts and relationships on save
   def update_trusted_status
-    if self.update_trusted
+    if self.trusted_changed?
       self.posts.update_all(:trusted => self.trusted?)
       self.discussion_relationships.update_all(:trusted => self.trusted?)
+      self.participants.each do |user|
+        user.update_column(:public_posts_count, user.discussion_posts.where(trusted: false).count)
+      end
     end
   end
 
