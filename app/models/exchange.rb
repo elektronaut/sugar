@@ -13,10 +13,6 @@ class Exchange < ActiveRecord::Base
   # Default number of discussions per page
   self.per_page = 30
 
-  # These attributes should be filtered from params
-  UNSAFE_ATTRIBUTES = :id, :sticky, :user_id, :last_poster_id, :posts_count,
-                      :created_at, :updated_at, :last_post_at, :trusted
-
   # Virtual attribute for the body of the first post
   attr_accessor :body
 
@@ -26,16 +22,15 @@ class Exchange < ActiveRecord::Base
   # User which is updating the exchange, required for closing exchanges
   attr_accessor :updated_by
 
-  belongs_to :poster,           :class_name => 'User'
-  belongs_to :closer,           :class_name => 'User'
-  belongs_to :last_poster,      :class_name => 'User'
-  has_many   :posts,            :order => ['created_at ASC'], :dependent => :destroy, :foreign_key => 'discussion_id'
-  has_one    :first_post,       :class_name => 'Post',   :order => ['created_at ASC'], :foreign_key => 'discussion_id'
+  belongs_to :poster,           class_name: 'User'
+  belongs_to :closer,           class_name: 'User'
+  belongs_to :last_poster,      class_name: 'User'
+  has_many   :posts,            -> { order 'created_at ASC' }, dependent: :destroy, foreign_key: 'discussion_id'
   has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
 
-  scope :sorted,            order('sticky DESC, last_post_at DESC')
-  scope :with_posters,      includes(:poster, :last_poster)
-  scope :for_view,          sorted.with_posters
+  scope :sorted,       -> { order('sticky DESC, last_post_at DESC') }
+  scope :with_posters, -> { includes(:poster, :last_poster) }
+  scope :for_view,     -> { sorted.with_posters }
 
   validates_presence_of :title
   validates_length_of   :title, :maximum => 100
@@ -45,19 +40,6 @@ class Exchange < ActiveRecord::Base
 
   after_create :create_first_post
   after_update :update_post_body
-
-  class << self
-
-    # Deletes attributes which normal users shouldn't be able to touch from a param hash
-    def safe_attributes(params)
-      safe_params = params.dup
-      Exchange::UNSAFE_ATTRIBUTES.each do |r|
-        safe_params.delete(r)
-      end
-      return safe_params
-    end
-
-  end
 
   # Finds the number of the last page
   def last_page(per_page=Post.per_page)

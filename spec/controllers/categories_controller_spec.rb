@@ -12,7 +12,8 @@ describe CategoriesController do
   let(:moderator) { create(:moderator) }
 
   it_requires_authentication_for :index, :show, :new, :edit, :create, :update
-  it_requires_moderator_for :new, :edit, :create, :update
+  it_requires_moderator_for :new, :edit
+  it_requires_moderator_for :create, :update, { method: :post, params: { id: 1, category: { foo: 'bar' } } }
 
   describe "#load_categories" do
 
@@ -41,12 +42,12 @@ describe CategoriesController do
 
     context "when category exists" do
       let(:category_id) { category.id }
-      it { should assign_to(:category).with_kind_of(Category) }
+      specify { assigns(:category).should be_a(Category) }
     end
 
     context "when category doesn't exist" do
       let(:category_id) { 1231241 }
-      it { should_not assign_to(:category) }
+      specify { assigns(:category).should be_nil }
       it { should respond_with(404) }
     end
 
@@ -69,35 +70,31 @@ describe CategoriesController do
 
   describe "GET index" do
     before { login; get :index }
-    it { should assign_to(:categories).with_kind_of(Enumerable) }
+    specify { assigns(:categories).should be_a(ActiveRecord::Relation) }
     it { should respond_with(:success) }
     it { should render_template(:index) }
-    it { should_not set_the_flash }
   end
 
   describe "GET show" do
     before { login; get :show, :id => category }
-    it { should assign_to(:category).with_kind_of(Category) }
-    it { should assign_to(:discussions) }
+    specify { assigns(:category).should be_a(Category) }
+    specify { assigns(:discussions).should be_a(ActiveRecord::Relation) }
     it { should respond_with(:success) }
     it { should render_template(:show) }
-    it { should_not set_the_flash }
   end
 
   describe "GET new" do
     before { login(moderator); get :new }
-    it { should assign_to(:category).with_kind_of(Category) }
+    specify { assigns(:category).should be_a(Category) }
     it { should respond_with(:success) }
     it { should render_template(:new) }
-    it { should_not set_the_flash }
   end
 
   describe "GET edit" do
     before { login(moderator); get :edit, id: category }
-    it { should assign_to(:category).with_kind_of(Category) }
+    specify { assigns(:category).should be_a(Category) }
     it { should respond_with(:success) }
     it { should render_template(:edit) }
-    it { should_not set_the_flash }
   end
 
   describe "POST create" do
@@ -106,17 +103,17 @@ describe CategoriesController do
 
     context "with valid params" do
       before { post :create, :category => {:name => "Stuff"} }
-      it { should assign_to(:category).with_kind_of(Category) }
-      it { should set_the_flash.to(/The (.*) category was created/) }
+      specify { assigns(:category).should be_a(Category) }
+      specify { flash[:notice].should match(/The (.*) category was created/) }
       it 'redirects back to categories' do
         response.should redirect_to(categories_url)
       end
     end
 
     describe "without valid params" do
-      before { post :create, :category => {} }
-      it { should assign_to(:category).with_kind_of(Category) }
-      it { should set_the_flash.now.to(/Couldn't save your category/) }
+      before { post :create, :category => {foo: 'bar'} }
+      specify { assigns(:category).should be_a(Category) }
+      specify { flash.now[:notice].should match(/Couldn't save your category/) }
       it { should respond_with(:success) }
       it { should render_template(:new) }
     end
@@ -129,8 +126,8 @@ describe CategoriesController do
 
     context "with valid params" do
       before { put :update, :id => category, :category => {:name => "Stuff"} }
-      it { should assign_to(:category).with_kind_of(Category) }
-      it { should set_the_flash.to(/The (.*) category was saved/) }
+      specify { assigns(:category).should be_a(Category) }
+      specify { flash[:notice].should match(/The (.*) category was saved/) }
       it 'redirects back to categories' do
         response.should redirect_to(categories_url)
       end
@@ -141,8 +138,8 @@ describe CategoriesController do
 
     context "without valid params" do
       before { put :update, :id => category, :category => {:name => ""} }
-      it { should assign_to(:category).with_kind_of(Category) }
-      it { should set_the_flash.now.to(/Couldn't save your category/) }
+      specify { assigns(:category).should be_a(Category) }
+      specify { flash[:notice].should match(/Couldn't save your category/) }
       it { should respond_with(:success) }
       it { should render_template(:edit) }
     end

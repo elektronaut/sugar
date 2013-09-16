@@ -38,7 +38,7 @@ class CategoriesController < ApplicationController
 
   # POST on /categories
   def create
-    @category = Category.new(params[:category])
+    @category = Category.new(category_params)
     respond_with(@category) do |format|
       if @category.save
         format.any(:html, :mobile) { successful_update("The <em>#{@category.name}</em> category was created") }
@@ -52,7 +52,7 @@ class CategoriesController < ApplicationController
   # PUT on /categories/:id
   def update
     respond_with(@category) do |format|
-      if @category.update_attributes(params[:category])
+      if @category.update_attributes(category_params)
         format.any(:html, :mobile) { successful_update("The <em>#{@category.name}</em> category was saved") }
       else
         flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
@@ -63,6 +63,10 @@ class CategoriesController < ApplicationController
 
   private
 
+  def category_params
+    params.require(:category).permit(:name, :description)
+  end
+
   def successful_update(message)
     flash[:notice] = message
     redirect_to categories_url and return
@@ -70,7 +74,7 @@ class CategoriesController < ApplicationController
 
   # Loads all categories
   def load_categories
-    @categories = Category.find_viewable_by(@current_user)
+    @categories = Category.viewable_by(@current_user)
   end
 
   # Finds the requested category

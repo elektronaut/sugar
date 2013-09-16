@@ -8,4 +8,4 @@ Sugar::Application.config.session_store(
   :expire_after => 3.years
 )
 
-Sugar::Application.config.secret_token = 'your secret token here'
+Sugar::Application.config.secret_token = 'your own very special secret token here'

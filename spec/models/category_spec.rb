@@ -30,19 +30,19 @@ describe Category do
 
   end
 
-  describe ".find_viewable_by" do
+  describe ".viewable_by" do
 
     let!(:category) { create(:category) }
     let!(:trusted_category) { create(:trusted_category) }
 
     context "when logged in as regular user" do
-      subject { Category.find_viewable_by(user) }
+      subject { Category.viewable_by(user) }
       it { should include(category) }
       it { should_not include(trusted_category) }
     end
 
     context "when logged in as a trusted user" do
-      subject { Category.find_viewable_by(trusted_user) }
+      subject { Category.viewable_by(trusted_user) }
       it { should include(category) }
       it { should include(trusted_category) }
     end

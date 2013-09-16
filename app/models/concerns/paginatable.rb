@@ -22,7 +22,7 @@ module Paginatable
     end
 
     def page(page=nil, options={})
-      scope = scoped.extend(WithContext)
+      scope = all.extend(WithContext)
       scope.context = page.to_i > 1 ? options[:context].to_i : 0
       scope
         .limit(pagination_limit + scope.context)
@@ -30,7 +30,7 @@ module Paginatable
     end
 
     def context
-      scoped.context
+      all.context
     end
 
     def context?
@@ -42,7 +42,7 @@ module Paginatable
     end
 
     def current_page
-      [(((scoped.offset_value || 0) + context) / (pagination_limit - context)) + 1, total_pages].min
+      [(((all.offset_value || 0) + context) / (pagination_limit - context)) + 1, total_pages].min
     end
 
     def first_page
@@ -93,8 +93,8 @@ module Paginatable
     private
 
     def pagination_limit
-      if scoped.limit_value
-        scoped.limit_value
+      if all.limit_value
+        all.limit_value
       else
         self.per_page
       end

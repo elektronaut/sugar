@@ -4,22 +4,22 @@ module ExchangeParticipant
   included do
     has_many :discussions, foreign_key: 'poster_id'
     has_many :posts
-    has_many :discussion_posts, class_name: 'Post', conditions: { conversation: false }
+    has_many :discussion_posts, -> { where conversation: false }, class_name: 'Post'
     has_many :discussion_views, dependent: :destroy
     has_many :discussion_relationships, dependent: :destroy
 
     has_many :participated_discussions,
+             -> { where discussion_relationships: { participated: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { participated: true } }
+             source: :discussion
     has_many :followed_discussions,
+             -> { where discussion_relationships: { following: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { following: true } }
+             source: :discussion
     has_many :favorite_discussions,
+             -> { where discussion_relationships: { favorite: true } },
              through: :discussion_relationships,
-             source: :discussion,
-             conditions: { discussion_relationships: { favorite: true } }
+             source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships
@@ -27,7 +27,7 @@ module ExchangeParticipant
 
   # Marks a discussion as viewed
   def mark_discussion_viewed(discussion, post, index)
-    if discussion_view = DiscussionView.find(:first, :conditions => ['user_id = ? AND discussion_id = ?', self.id, discussion.id])
+    if discussion_view = DiscussionView.where(user_id: self.id, discussion_id: discussion.id).first
       discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
     else
       DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
@@ -44,10 +44,7 @@ module ExchangeParticipant
   end
 
   def unread_conversations_count
-    self.conversation_relationships.count(
-      :all,
-      :conditions => {:new_posts => true, :notifications => true}
-    )
+    self.conversation_relationships.where(new_posts: true, notifications: true).count
   end
 
   def unread_conversations?

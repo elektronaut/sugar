@@ -45,8 +45,8 @@
   <% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
       <strong>Invites:</strong> <%= @user.available_invites %> &ndash;
-      <%= link_to "Grant one", grant_invite_user_path(:id => @user.username) %>
-      or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), :confirm => 'Are you sure you want to revoke all invites?' %>
+      <%= link_to "Grant one", grant_invite_user_path(:id => @user.username), method: :post %>
+      or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), confirm: 'Are you sure you want to revoke all invites?', method: :post %>
       <br />
     </p>
   <% end %>
