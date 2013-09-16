@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '4.0.0'
-gem 'bcrypt-ruby', :require => 'bcrypt'
+gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
 
@@ -30,20 +30,20 @@ gem 'capistrano'
 gem 'doorkeeper', '~> 0.7.2'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
-gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
+gem 'ruby-openid', require: 'openid'
 
 gem 'acts_as_list'
 
-gem 'hpricot', '0.8.4'
-gem 'daemon-spawn', '0.2.0'
+gem 'hpricot'
+gem 'daemon-spawn'
 
 gem 'sunspot_rails'
 gem 'progress_bar'
 
-gem 'newrelic_rpm', :group => 'newrelic'
+gem 'newrelic_rpm', group: 'newrelic'
 
 group :development do
-  gem 'yui-compressor', :require => 'yui/compressor'
+  gem 'yui-compressor', require: 'yui/compressor'
   gem 'guard'
   gem 'guard-spork'
   gem 'guard-rspec'
@@ -55,7 +55,7 @@ group :development_mac do
 end
 
 group :test do
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
 end
 
 group :test, :development do
