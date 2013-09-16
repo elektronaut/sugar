@@ -85,9 +85,7 @@ class DiscussionsController < ApplicationController
 
     # Mark discussion as read
     def mark_as_read
-      last_index = @discussion.posts_count
-      last_post = Post.find(:first, :conditions => {:discussion_id => @discussion.id}, :order => 'created_at DESC')
-      @current_user.mark_discussion_viewed(@discussion, last_post, last_index)
+      @current_user.mark_discussion_viewed(@discussion, @discussion.posts.last, @discussion.posts_count)
       if request.xhr?
         render :layout => false, :text => 'OK'
       end
@@ -96,7 +94,7 @@ class DiscussionsController < ApplicationController
     private
 
     def load_categories
-      @categories = Category.find(:all).reject{|c| c.trusted? unless (@current_user && @current_user.trusted?)}
+      @categories = Category.viewable_by(@current_user)
     end
 
     def require_categories

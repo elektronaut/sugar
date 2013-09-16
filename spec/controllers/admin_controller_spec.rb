@@ -15,14 +15,14 @@ describe AdminController, redis: true do
       before { get :configuration }
       it { should respond_with(:success) }
       it { should render_template(:configuration) }
-      it { should_not set_the_flash }
+      specify { flash[:notice].should be_nil }
     end
 
     describe "POST configuration" do
       before { post :configuration, config: {forum_name: "New Forum Name"} }
       it { should respond_with(:success) }
       it { should render_template(:configuration) }
-      it { should_not set_the_flash }
+      specify { flash[:notice].should be_nil }
       it 'should update the forum configuration' do
         Sugar.config(:forum_name).should == "New Forum Name"
       end

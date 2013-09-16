@@ -7,8 +7,8 @@ class PasswordResetToken < ActiveRecord::Base
 
   DEFAULT_EXPIRATION = 48.hours
 
-  scope :active, where("expires_at >= ?", Time.now)
-  scope :expired, where("expires_at < ?", Time.now)
+  scope :active,  -> { where("expires_at >= ?", Time.now) }
+  scope :expired, -> { where("expires_at < ?", Time.now) }
 
   class << self
     def expire!

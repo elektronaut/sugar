@@ -6,39 +6,55 @@ module LoginMacros
   module ClassMethods
 
     def it_requires_login_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires login for #{action} action" do
           logout
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
           response.should redirect_to(login_users_url)
         end
       end
     end
 
     def it_requires_authentication_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires authentication for #{action}" do
           Sugar.stub(:public_browsing?).and_return(false)
           controller.should_receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
         end
       end
     end
 
     def it_requires_user_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires a user for #{action}" do
           controller.should_receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
         end
       end
     end
 
     def it_requires_admin_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires an admin for #{action}" do
           received_option = false
@@ -48,13 +64,17 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
           received_option.should be_true
         end
       end
     end
 
     def it_requires_moderator_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires a moderator for #{action}" do
           received_option = false
@@ -64,13 +84,17 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
           received_option.should be_true
         end
       end
     end
 
     def it_requires_user_admin_for(*actions)
+      options = { method: :get, params: { id: 1 } }
+      if actions.last.kind_of?(Hash)
+        options.merge!(actions.pop)
+      end
       actions.each do |action|
         it "requires a user admin for #{action}" do
           received_option = false
@@ -80,7 +104,7 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          get action, :id => 1
+          self.send options[:method], action, options[:params]
           received_option.should be_true
         end
       end

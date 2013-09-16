@@ -36,10 +36,7 @@ class ApplicationController < ActionController::Base
     # Finds DiscussionViews for the given discussion.
     def load_views_for(discussions)
       if @current_user && discussions && discussions.length > 0
-        @discussion_views = DiscussionView.find(
-          :all,
-          :conditions => {:user_id => @current_user.id, :discussion_id => discussions.map(&:id).uniq}
-        )
+        @discussion_views = DiscussionView.where(user_id: @current_user.id, discussion_id: discussions.map(&:id).uniq)
       end
     end
 

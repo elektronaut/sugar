@@ -29,7 +29,6 @@ describe User do
 
   it { should validate_presence_of(:username) }
   it { should validate_uniqueness_of(:username).case_insensitive.with_message(/is already registered/) }
-  it { should validate_format_of(:username).with("test").with_message("is not valid") }
 
   it { should allow_value("Gustave Moíre").for(:username) }
   it { should allow_value("فاطمة").for(:username) }

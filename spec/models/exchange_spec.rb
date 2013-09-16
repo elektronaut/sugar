@@ -19,30 +19,11 @@ describe Exchange do
   it { should belong_to(:closer).class_name("User") }
   it { should belong_to(:last_poster).class_name("User") }
   it { should have_many(:posts).dependent(:destroy) }
-  it { should have_one(:first_post).class_name("Post") }
   it { should have_many(:discussion_views).dependent(:destroy) }
 
   it { should validate_presence_of(:title)}
   it { should ensure_length_of(:title).is_at_most(100) }
   it { should validate_presence_of(:body)}
-
-  describe ".safe_attributes" do
-
-    subject do
-      Discussion.safe_attributes(
-        # Invalid attributes
-        id: 1, sticky: true, user_id: 1, last_poster_id: 1,
-        posts_count: 12, created_at: 2.days.ago, updated_at: 2.days.ago,
-        last_post_at: 2.days.ago, trusted: true,
-
-        # Valid attributes
-        title: 'Test', body: 'Testing'
-      )
-    end
-
-    it { should == { title: "Test", body: "Testing" } }
-
-  end
 
   describe "#updated_by" do
     it 'changes closer when updating' do
@@ -152,14 +133,14 @@ describe Exchange do
   end
 
   describe "#create_first_post" do
-    subject { exchange.first_post }
+    subject { exchange.posts.first }
     its(:body) { should == "First post!" }
     its(:user) { should == exchange.poster }
   end
 
   describe "#update_post_body" do
     before { exchange.update_attributes(:body => 'changed post') }
-    subject { exchange.first_post }
+    subject { exchange.posts.first }
     its(:body) { should == "changed post" }
   end
 

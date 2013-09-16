@@ -4,7 +4,7 @@ module Viewable
   module ClassMethods
     def viewable_by(user)
       if user && user.trusted?
-        scoped
+        all
       else
         where(:trusted => false)
       end

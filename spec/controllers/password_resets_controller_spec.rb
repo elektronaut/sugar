@@ -15,9 +15,9 @@ describe PasswordResetsController do
     context "with an existing user" do
       before { post :create, email: user.email }
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.to(/An email with further instructions has been sent/) }
-      it { should assign_to(:user) }
-      it { should assign_to(:password_reset_token) }
+      specify { flash[:notice].should match(/An email with further instructions has been sent/) }
+      specify { assigns(:user).should be_a(User) }
+      specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       specify { last_email.to.should == [user.email] }
       specify { last_email.body.encoded.should match(password_reset_with_token_url(
         assigns(:password_reset_token).id,
@@ -29,8 +29,8 @@ describe PasswordResetsController do
       before { post :create, email: "none@example.com" }
       it { should respond_with(:success) }
       it { should render_template(:new) }
-      it { should_not assign_to(:password_reset_token) }
-      it { should set_the_flash.now.to(/Couldn't find a user with that email address/) }
+      specify { assigns(:password_reset_token).should be_nil }
+      specify { flash.now[:notice].should match(/Couldn't find a user with that email address/) }
     end
   end
 
@@ -39,28 +39,28 @@ describe PasswordResetsController do
       before { get :show, id: password_reset_token.id, token: password_reset_token.token }
       it { should respond_with(:success) }
       it { should render_template(:show) }
-      it { should assign_to(:user) }
-      it { should assign_to(:password_reset_token) }
+      specify { assigns(:user).should be_a(User) }
+      specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
     end
 
     context "without a valid token" do
       before { get :show, id: password_reset_token.id }
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.now.to(/Invalid password reset request/) }
+      specify { flash.now[:notice].should match(/Invalid password reset request/) }
     end
 
     context "with an expired token" do
       before { get :show, id: expired_password_reset_token.id, token: expired_password_reset_token.token }
-      it { should assign_to(:password_reset_token) }
+      specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.now.to(/Your password reset link has expired/) }
+      specify { flash.now[:notice].should match(/Your password reset link has expired/) }
       specify { assigns(:password_reset_token).destroyed?.should be_true }
     end
 
     context "with a non-existant token" do
       before { get :show, id: 123, token: "456" }
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.now.to(/Invalid password reset request/) }
+      specify { flash.now[:notice].should match(/Invalid password reset request/) }
     end
   end
 
@@ -72,8 +72,8 @@ describe PasswordResetsController do
             token: password_reset_token.token,
             user: { password: 'new password', confirm_password: 'new password' }
       end
-      it { should set_the_flash.to(/Your password has been changed/) }
-      it { should assign_to(:current_user) }
+      specify { flash[:notice].should match(/Your password has been changed/) }
+      specify { assigns(:current_user).should be_a(User) }
       it { should redirect_to(root_url) }
       specify { session[:user_id].should == password_reset_token.user.id }
       specify { assigns(:password_reset_token).destroyed?.should be_true }
@@ -88,8 +88,8 @@ describe PasswordResetsController do
       end
       it { should respond_with(:success) }
       it { should render_template(:show) }
-      it { should assign_to(:user) }
-      it { should assign_to(:password_reset_token) }
+      specify { assigns(:user).should be_a(User) }
+      specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       specify { assigns(:password_reset_token).destroyed?.should be_false }
     end
 
@@ -100,7 +100,7 @@ describe PasswordResetsController do
             user: { password: 'new password', confirm_password: 'new password' }
       end
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.now.to(/Invalid password reset request/) }
+      specify { flash.now[:notice].should match(/Invalid password reset request/) }
     end
 
     context "with an expired token" do
@@ -110,9 +110,9 @@ describe PasswordResetsController do
             token: expired_password_reset_token.token,
             user: { password: 'new password', confirm_password: 'new password' }
       end
-      it { should assign_to(:password_reset_token) }
+      specify { assigns(:password_reset_token).should be_a(PasswordResetToken) }
       it { should redirect_to(login_users_url) }
-      it { should set_the_flash.now.to(/Your password reset link has expired/) }
+      specify { flash.now[:notice].should match(/Your password reset link has expired/) }
       specify { assigns(:password_reset_token).destroyed?.should be_true }
     end
   end

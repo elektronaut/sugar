@@ -76,26 +76,26 @@ describe Invite do
     it { should == 14.days }
   end
 
-  describe ".find_active" do
+  describe ".active" do
 
     before do
       invite
       expired_invite
     end
 
-    subject { Invite.find_active }
+    subject { Invite.active }
     it { should == [invite] }
 
   end
 
-  describe ".find_expired" do
+  describe ".expired" do
 
     before do
       invite
       expired_invite
     end
 
-    subject { Invite.find_expired }
+    subject { Invite.expired }
     it { should == [expired_invite] }
 
   end

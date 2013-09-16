@@ -14,7 +14,7 @@ describe Viewable do
       trusted_discussion
     end
 
-    subject { Discussion.viewable_by(user).all }
+    subject { Discussion.viewable_by(user) }
 
     context "when user is trusted" do
       let(:user) { create(:trusted_user) }
