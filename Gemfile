@@ -9,11 +9,11 @@ gem 'sqlite3'
 gem 'mysql2'
 gem 'pg'
 
-gem 'redis', '~> 3.0.0.rc2'
+gem 'redis', '~> 3.0.4'
 gem 'hiredis', '~> 0.4.5'
 
 gem 'json'
-gem 'sass-rails', '~> 4.0.0.rc1'
+gem 'sass-rails', '~> 4.0.0'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
@@ -27,8 +27,7 @@ gem 'capistrano'
 # gem 'ruby-debug'
 
 # OAuth
-#gem 'doorkeeper', '~> 0.6.3'
-gem 'doorkeeper', git: 'git://github.com/applicake/doorkeeper.git'
+gem 'doorkeeper', '~> 0.7.2'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', :git => 'git://github.com/xxx/ruby-openid.git', :require => 'openid'
