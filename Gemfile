@@ -12,6 +12,7 @@ gem 'pg'
 gem 'redis', '~> 3.0.4'
 gem 'hiredis', '~> 0.4.5'
 
+gem 'therubyracer'
 gem 'json'
 gem 'sass-rails', '~> 4.0.0'
 gem 'coffee-rails'
