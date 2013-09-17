@@ -136,7 +136,7 @@ class PostsController < ApplicationController
     end
 
     def preview
-      @post = @discussion.posts.new(params[:post])
+      @post = @discussion.posts.new(body: params[:post][:body])
       @post.user = @current_user
       if request.xhr?
         render :layout => false
