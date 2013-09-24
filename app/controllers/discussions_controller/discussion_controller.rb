@@ -9,7 +9,11 @@ class DiscussionsController < ApplicationController
 
     # Recent discussions
     def index
-      @discussions = Discussion.viewable_by(@current_user).page(params[:page]).for_view
+      if @current_user
+        @discussions = @current_user.unhidden_discussions.viewable_by(@current_user).page(params[:page]).for_view
+      else
+        @discussions = Discussion.viewable_by(nil).page(params[:page]).for_view
+      end
       load_views_for(@discussions)
     end
 
@@ -59,6 +63,11 @@ class DiscussionsController < ApplicationController
       load_views_for(@discussions)
     end
 
+    def hidden
+      @discussions = @current_user.hidden_discussions.viewable_by(@current_user).page(params[:page]).for_view
+      load_views_for(@discussions)
+    end
+
     # Follow a discussion
     def follow
       DiscussionRelationship.define(@current_user, @discussion, :following => true)
@@ -80,6 +89,18 @@ class DiscussionsController < ApplicationController
     # Unfavorite a discussion
     def unfavorite
       DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
+      redirect_to discussion_url(@discussion, :page => params[:page])
+    end
+
+    # Favorite a discussion
+    def hide
+      DiscussionRelationship.define(@current_user, @discussion, :hidden => true)
+      redirect_to discussion_url(@discussion, :page => params[:page])
+    end
+
+    # Unfavorite a discussion
+    def unhide
+      DiscussionRelationship.define(@current_user, @discussion, :hidden => false)
       redirect_to discussion_url(@discussion, :page => params[:page])
     end
 

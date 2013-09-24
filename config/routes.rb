@@ -108,6 +108,8 @@ Sugar::Application.routes.draw do
       get 'unfollow'
       get 'favorite'
       get 'unfavorite'
+      get 'hide'
+      get 'unhide'
       get 'search_posts'
       get 'mark_as_read'
       post 'invite_participant'
@@ -118,6 +120,7 @@ Sugar::Application.routes.draw do
       get 'search'
       get 'following'
       get 'favorites'
+      get 'hidden'
       get 'conversations'
       get 'popular'
     end

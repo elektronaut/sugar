@@ -20,9 +20,18 @@ module ExchangeParticipant
              -> { where discussion_relationships: { favorite: true } },
              through: :discussion_relationships,
              source: :discussion
+    has_many :hidden_discussions,
+             -> { where discussion_relationships: { hidden: true } },
+             through: :discussion_relationships,
+             source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships
+  end
+
+  # All discussions which haven't been hidden
+  def unhidden_discussions
+    Discussion.where(Discussion.arel_table[:id].in(self.hidden_discussions.map(&:id)).not)
   end
 
   # Marks a discussion as viewed
@@ -66,4 +75,8 @@ module ExchangeParticipant
     discussion_relationship_with(discussion) && discussion_relationship_with(discussion).favorite?
   end
 
+  # Returns true if this user has hidden the given discussion.
+  def hidden?(discussion)
+    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).hidden?
+  end
 end
