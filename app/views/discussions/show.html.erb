@@ -12,6 +12,11 @@
     <% if @discussion.editable_by?(@current_user) -%>
       <%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> /
     <% end -%>
+    <% if @current_user.hidden?(@discussion) -%>
+      <%= link_to "Unhide", unhide_discussion_path(@discussion, :page => @posts.page) %>
+    <% else -%>
+      <%= link_to "Hide", hide_discussion_path(@discussion, :page => @posts.page) %>
+    <% end -%> /
     <% if @current_user.following?(@discussion) -%>
       <%= link_to "Stop following", unfollow_discussion_path(@discussion, :page => @posts.page) %>
     <% else -%>

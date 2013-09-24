@@ -8,7 +8,7 @@ class DiscussionsController < ApplicationController
   include ConversationController
   include DiscussionController
 
-  before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
+  before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :hide, :unhide, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
   before_filter :verify_editable, :only => [:edit, :update, :destroy]
   before_filter :set_exchange_params
   before_filter :require_and_set_search_query, :only => [:search, :search_posts]

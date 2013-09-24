@@ -1,0 +1,9 @@
+<%
+  add_body_class "discussions hidden_discussions"
+  @page_title = "Hidden Discussions"
+%>
+
+<%= render :partial => 'discussions/table', :locals => {
+  :discussions    => @discussions,
+  :no_discussions => "You haven't hidden any discussions!"
+} %>

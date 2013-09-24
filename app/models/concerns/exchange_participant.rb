@@ -20,6 +20,10 @@ module ExchangeParticipant
              -> { where discussion_relationships: { favorite: true } },
              through: :discussion_relationships,
              source: :discussion
+    has_many :hidden_discussions,
+             -> { where discussion_relationships: { hidden: true } },
+             through: :discussion_relationships,
+             source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships
@@ -66,4 +70,8 @@ module ExchangeParticipant
     discussion_relationship_with(discussion) && discussion_relationship_with(discussion).favorite?
   end
 
+  # Returns true if this user has hidden the given discussion.
+  def hidden?(discussion)
+    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).hidden?
+  end
 end
