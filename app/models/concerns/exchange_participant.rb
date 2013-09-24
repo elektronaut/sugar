@@ -29,6 +29,11 @@ module ExchangeParticipant
     has_many :conversations, through: :conversation_relationships
   end
 
+  # All discussions which haven't been hidden
+  def unhidden_discussions
+    Discussion.where(Discussion.arel_table[:id].in(self.hidden_discussions.map(&:id)).not)
+  end
+
   # Marks a discussion as viewed
   def mark_discussion_viewed(discussion, post, index)
     if discussion_view = DiscussionView.where(user_id: self.id, discussion_id: discussion.id).first

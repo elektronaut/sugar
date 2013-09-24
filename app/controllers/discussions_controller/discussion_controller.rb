@@ -9,7 +9,11 @@ class DiscussionsController < ApplicationController
 
     # Recent discussions
     def index
-      @discussions = Discussion.viewable_by(@current_user).page(params[:page]).for_view
+      if @current_user
+        @discussions = @current_user.unhidden_discussions.viewable_by(@current_user).page(params[:page]).for_view
+      else
+        @discussions = Discussion.viewable_by(nil).page(params[:page]).for_view
+      end
       load_views_for(@discussions)
     end
 
