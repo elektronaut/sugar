@@ -9,18 +9,15 @@ Sugar.Facebook =
     @appId = Sugar.Configuration.FacebookAppId
     if $(".fb_button").length > 0
       $(".fb_button").addClass("fb_button_large").wrapInner "<span class=\"fb_button_text\" />"
-      @loadAsync()
+    @loadAsync() if @appId
 
   loadAsync: ->
-    facebook_lib = this
-    #$(this).bind "ready", ->
-
     window.fbAsyncInit = ->
       FB.init
         appId: Sugar.Facebook.appId
-        #status: true # Check login status
-        #cookie: true # Enable cookies to allow the server to access the session
-        #xfbml:  true # Parse XFBML
+        status: true # Check login status
+        cookie: true # Enable cookies to allow the server to access the session
+        xfbml:  true # Parse XFBML
 
     $("body").append "<div id=\"fb-root\" />"
     e = document.createElement("script")
