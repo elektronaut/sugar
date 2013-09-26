@@ -12,8 +12,13 @@ class Sugar.Views.Post extends Backbone.View
       this.model = new Sugar.Models.Post()
 
   modelFromExistingElement: ->
+    if this.el.id.match(/([\d]+)$/)
+      id = this.el.id.match(/([\d]+)$/)[1]
+    else
+      id = null
+
     new Sugar.Models.Post({
-      id:            this.el.id.match(/([\d]+)$/)[1],
+      id:            id,
       user_id:       $(this.el).data('user_id'),
       discussion_id: $(this.el).data('discussion_id'),
       body:          this.fromHtml(this.$('.body .content').html())

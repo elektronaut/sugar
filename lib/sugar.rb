@@ -36,7 +36,6 @@ module Sugar
 
     # Facebook integration
     :facebook_app_id          => nil,
-    :facebook_api_key         => nil,
     :facebook_api_secret      => nil,
 
     # Customization

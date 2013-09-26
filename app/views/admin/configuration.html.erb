@@ -105,11 +105,10 @@
       <p class="info">
         To enable this feature,
         <%= link_to "set up an application on Facebook", "http://www.facebook.com/developers" %>
-        and enter your Application ID and API keys here.
+        and enter your App ID and secret here.
       </p>
-      <%= labelled_field text_field_tag('config[facebook_api_key]', Sugar.config(:facebook_api_key), :size => '48'), "API Key" %>
-      <%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret), :size => '48'), "Application Secret" %>
       <%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id), :size => '48'), "Application ID" %>
+      <%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret), :size => '48'), "Application Secret" %>
     </fieldset>
     <fieldset>
       <h2>Amazon Associates</h2>
