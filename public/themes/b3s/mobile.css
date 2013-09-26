@@ -402,6 +402,12 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   text-overflow: ellipsis;
   clear: both;
 }
+.fb_iframe_widget {
+  max-width: 100%;
+}
+.fb_iframe_widget iframe {
+  width: 100%;
+}
 
 .posts .post .body a, .posts .post .body a:visited {
   color:           #364077;

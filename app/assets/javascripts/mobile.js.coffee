@@ -9,6 +9,7 @@
 
 #= require backbone/sugar
 #= require sugar
+#= require sugar/facebook
 #= require sugar/timestamps
 
 window.toggleNavigation = ->
