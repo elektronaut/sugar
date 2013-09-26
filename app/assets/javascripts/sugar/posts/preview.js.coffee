@@ -35,6 +35,8 @@ $(Sugar).bind 'ready', ->
         else
           $(".posts #previewPost").addClass('shown').hide().fadeIn()
 
+        $(Sugar).trigger 'postsloaded', [$(".posts #previewPost").find('.post')]
+
       error: (xhr, textStatus, errorThrown) ->
         alert textStatus
 
