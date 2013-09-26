@@ -9,7 +9,9 @@ Sugar.Facebook =
     @appId = Sugar.Configuration.FacebookAppId
     if $(".fb_button").length > 0
       $(".fb_button").addClass("fb_button_large").wrapInner "<span class=\"fb_button_text\" />"
-    @loadAsync() if @appId
+    @loadAsync()
+    $(Sugar).bind "postsloaded", (event, posts) ->
+      Sugar.Facebook.parsePosts(posts)
 
   loadAsync: ->
     window.fbAsyncInit = ->
@@ -24,3 +26,8 @@ Sugar.Facebook =
     e.src = document.location.protocol + "//connect.facebook.net/en_US/all.js"
     e.async = true
     document.getElementById("fb-root").appendChild e
+
+  parsePosts: (posts) ->
+    if @appId && FB
+      posts.each ->
+        FB.XFBML.parse(this)
