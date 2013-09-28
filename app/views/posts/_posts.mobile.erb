@@ -13,10 +13,10 @@
     <% if title %>
     <div class="discussion">
       <h2>
-        <% if post.discussion.labels? %>
-          <span class="labels">[<%= post.discussion.labels.join(',') %>]</span>
+        <% if post.exchange.labels? %>
+          <span class="labels">[<%= post.exchange.labels.join(',') %>]</span>
         <% end %>
-        <%= link_to post.discussion.title, last_discussion_page_path(post.discussion) %>
+        <%= link_to post.exchange.title, last_discussion_page_path(post.exchange) %>
       </h2>
     </div>
     <% end %>
@@ -37,14 +37,14 @@
             <%= time_tag post.created_at, :class => 'relative' %>
           </span>
           <span class="permalink">
-            <%= link_to "#", paged_discussion_path(:id => (discussion||post.discussion), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+            <%= link_to "#", paged_discussion_path(:id => (discussion||post.exchange), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
           </span>
         </div>
         <div class="functions">
           <% if post.editable_by?(@current_user) %>
-            <%= link_to "Edit", edit_discussion_post_path((discussion||post.discussion), post) %> /
+            <%= link_to "Edit", edit_discussion_post_path((discussion||post.exchange), post) %> /
           <% end %>
-          <%= link_to "Quote", discussion_post_path((discussion||post.discussion), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+          <%= link_to "Quote", discussion_post_path((discussion||post.exchange), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>
         </div>
         <div class="body">
           <%= post.user.html_disabled? ? post.body.gsub(/\n/,'<br />') : post.body_html %>

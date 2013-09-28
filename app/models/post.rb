@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
   self.per_page = 50
 
   belongs_to :user, :counter_cache => true
-  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => :posts_count, :foreign_key => 'exchange_id'
+  belongs_to :exchange, counter_cache: :posts_count
   has_many   :discussion_views
 
   validates_presence_of :body, :user_id, :exchange_id
@@ -35,7 +35,7 @@ class Post < ActiveRecord::Base
 
   # Get this posts sequence number
   def post_number
-    @post_number ||= self.discussion.posts.where('id < ?', self.id).count + 1
+    @post_number ||= self.exchange.posts.where('id < ?', self.id).count + 1
   end
 
   def page(options={})
@@ -89,8 +89,8 @@ class Post < ActiveRecord::Base
   end
 
   def update_trusted_status
-    if self.discussion
-      self.trusted = self.discussion.trusted
+    if self.exchange
+      self.trusted = self.exchange.trusted
     end
     true
   end
@@ -102,7 +102,7 @@ class Post < ActiveRecord::Base
   end
 
   def flag_conversation
-    self.conversation = self.discussion.kind_of?(Conversation)
+    self.conversation = self.exchange.kind_of?(Conversation)
     true
   end
 
@@ -110,21 +110,21 @@ class Post < ActiveRecord::Base
     self.edited_at ||= Time.now
   end
 
-  # Make sure the discussion is marked as participated for the user
+  # Make sure the exchange is marked as participated for the user
   def define_relationship
     unless self.conversation?
-      DiscussionRelationship.define(self.user, self.discussion, :participated => true)
+      DiscussionRelationship.define(self.user, self.exchange, :participated => true)
     end
   end
 
-  # Automatically update the discussion with last poster info
+  # Automatically update the exchange with last poster info
   def update_exchange
-    self.discussion.update_attributes(:last_poster_id => self.user.id, :last_post_at => self.created_at)
+    self.exchange.update_attributes(:last_poster_id => self.user.id, :last_post_at => self.created_at)
   end
 
   def notify_new_conversation_post
     if self.conversation?
-      self.discussion.conversation_relationships.each do |relationship|
+      self.exchange.conversation_relationships.each do |relationship|
         relationship.update_attributes(new_posts: true) unless relationship.user == self.user
       end
     end

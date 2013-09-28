@@ -19,7 +19,7 @@ describe ExchangeParticipant do
   it { should have_many(:conversations).through(:conversation_relationships) }
 
   describe "#mark_discussion_viewed" do
-    let(:post) { create(:post, discussion: discussion) }
+    let(:post) { create(:post, exchange: discussion) }
 
     context "with existing discussion view" do
       let!(:discussion_view) { create(:discussion_view, user: user, discussion: discussion) }

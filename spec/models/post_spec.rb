@@ -18,12 +18,12 @@ describe Post do
   let(:mentioning_post)    { create(:post, body: mentioned_users.map{|u| "@#{u.username.downcase}" }.join(" and ")) }
 
   it { should belong_to(:user) }
-  it { should belong_to(:discussion).class_name('Exchange') }
+  it { should belong_to(:exchange) }
   it { should have_many(:discussion_views) }
 
   describe "after_create" do
 
-    let(:post) { create(:post, discussion: discussion) }
+    let(:post) { create(:post, exchange: discussion) }
 
     specify { post.user.participated_discussions.should include(discussion) }
 
@@ -59,7 +59,7 @@ describe Post do
 
   describe "#post_number" do
     specify { discussion.posts.first.post_number.should == 1 }
-    specify { create(:post, discussion: discussion).post_number.should == 2 }
+    specify { create(:post, exchange: discussion).post_number.should == 2 }
   end
 
   describe "#page" do
@@ -92,14 +92,14 @@ describe Post do
   describe "#body_html" do
 
     let!(:discussion) { create(:discussion) }
-    let!(:post) { create(:post, discussion: discussion) }
+    let!(:post) { create(:post, exchange: discussion) }
 
     subject { post.body_html }
     it { should == Sugar::PostRenderer.new(post.body).to_html }
 
     context "when not saved" do
 
-      let!(:post) { build(:post, discussion: discussion) }
+      let!(:post) { build(:post, exchange: discussion) }
 
       it "parses the post" do
         Sugar::PostRenderer.should_receive(:new).exactly(1).times
@@ -111,7 +111,7 @@ describe Post do
 
     context "when body_html has been set" do
 
-      let!(:post) { create(:post, discussion: discussion, body_html: "<p>Test</p>") }
+      let!(:post) { create(:post, exchange: discussion, body_html: "<p>Test</p>") }
 
       it "uses the cached version" do
         Sugar::PostRenderer.should_receive(:new).exactly(0).times
@@ -218,13 +218,13 @@ describe Post do
     subject { post }
 
     context "when in a regular discussion" do
-      let(:post) { create(:post, discussion: discussion) }
+      let(:post) { create(:post, exchange: discussion) }
       its(:trusted?) { should be_false }
       its(:conversation?) { should be_false }
     end
 
     context "when in a trusted discussion" do
-      let(:post) { create(:post, discussion: trusted_discussion) }
+      let(:post) { create(:post, exchange: trusted_discussion) }
       its(:trusted?) { should be_true }
     end
   end
@@ -235,7 +235,7 @@ describe Post do
       it "parses the post" do
         Sugar::PostRenderer.should_receive(:new).exactly(1).times
           .and_return { double(:to_html => "<p>Test</p>") }
-        create(:post, discussion: discussion)
+        create(:post, exchange: discussion)
       end
     end
 
@@ -243,7 +243,7 @@ describe Post do
       before { discussion }
       it "parses the post" do
         Sugar::PostRenderer.should_receive(:new).exactly(0).times
-        create(:post, skip_html: true, discussion: discussion)
+        create(:post, skip_html: true, exchange: discussion)
       end
     end
   end
@@ -252,12 +252,12 @@ describe Post do
     subject { post }
 
     context "when in a conversation" do
-      let(:post) { create(:post, discussion: conversation) }
+      let(:post) { create(:post, exchange: conversation) }
       its(:conversation?) { should be_true }
     end
 
     context "when in a regular discussion" do
-      let(:post) { create(:post, discussion: discussion) }
+      let(:post) { create(:post, exchange: discussion) }
       its(:conversation?) { should be_false }
     end
   end
@@ -284,7 +284,7 @@ describe Post do
       it "defines a relationship between the discussion and the poster" do
         DiscussionRelationship.should_receive(:define).exactly(1).times
           .with(user, discussion, participated: true)
-        create(:post, user: user, discussion: discussion)
+        create(:post, user: user, exchange: discussion)
       end
     end
 
@@ -292,13 +292,13 @@ describe Post do
       before { conversation }
       it "does not define a relationship" do
         DiscussionRelationship.should_receive(:define).exactly(0).times
-        create(:post, discussion: conversation)
+        create(:post, exchange: conversation)
       end
     end
   end
 
   describe "#update_exchange" do
-    subject { post.discussion }
+    subject { post.exchange }
     its(:last_poster_id) { should == post.user_id }
     its(:last_post_at) { should == post.created_at }
   end

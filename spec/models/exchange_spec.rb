@@ -36,7 +36,7 @@ describe Exchange do
   describe "#last_page" do
 
     before do
-      3.times { create(:post, :discussion => exchange) }
+      3.times { create(:post, exchange: exchange) }
       exchange.reload
     end
 

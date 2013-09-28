@@ -33,7 +33,7 @@ describe Discussion do
 
   describe 'save callbacks' do
     it "changes the trusted status on discussions" do
-      create(:post, discussion: discussion)
+      create(:post, exchange: discussion)
       discussion.posts.first.trusted?.should == false
       discussion.update_attributes(category: trusted_category)
       discussion.posts.first.trusted?.should == true
@@ -49,10 +49,10 @@ describe Discussion do
     before do
       discussion1.posts.first.update_attributes(created_at: 4.days.ago)
       [13.days.ago, 12.days.ago].each do |t|
-        create(:post, discussion: discussion1, created_at: t)
+        create(:post, exchange: discussion1, created_at: t)
       end
       [2.days.ago].each do |t|
-        create(:post, discussion: discussion2, created_at: t)
+        create(:post, exchange: discussion2, created_at: t)
       end
     end
 
@@ -85,7 +85,7 @@ describe Discussion do
   end
 
   describe "#participants" do
-    let!(:post) { create(:post, discussion: discussion) }
+    let!(:post) { create(:post, exchange: discussion) }
     subject { discussion.participants }
     it { should =~ [discussion.poster, post.user] }
   end
