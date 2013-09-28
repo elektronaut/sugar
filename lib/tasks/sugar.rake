@@ -46,7 +46,7 @@ namespace :sugar do
   task :generate_participated_discussions => :environment do
     User.find(:all, :order => 'username ASC').each do |user|
       puts "Generating participated discussions for #{user.username}.."
-      discussions = Discussion.find_by_sql("SELECT DISTINCT discussion_id AS id, trusted FROM posts WHERE user_id = #{user.id}")
+      discussions = Discussion.find_by_sql("SELECT DISTINCT exchange_id AS id, trusted FROM posts WHERE user_id = #{user.id}")
       puts "  - #{discussions.length} discussions found, generating relationships"
       discussions.each do |d|
         DiscussionRelationship.define(user, d, :participated => true)

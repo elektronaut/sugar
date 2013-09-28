@@ -20,7 +20,7 @@ class Sugar.Views.Post extends Backbone.View
     new Sugar.Models.Post({
       id:            id,
       user_id:       $(this.el).data('user_id'),
-      discussion_id: $(this.el).data('discussion_id'),
+      exchange_id:   $(this.el).data('exchange_id'),
       body:          this.fromHtml(this.$('.body .content').html())
     })
 

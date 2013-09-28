@@ -33,7 +33,7 @@ class Discussion < Exchange
     User.find_by_sql(
       "SELECT u.*, MAX(p.created_at) AS last_post_at " +
       "FROM users u, posts p " +
-      "WHERE p.discussion_id = #{self.id} AND p.user_id = u.id " +
+      "WHERE p.exchange_id = #{self.id} AND p.user_id = u.id " +
       "GROUP BY u.id "
     )
   end

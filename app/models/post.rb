@@ -8,10 +8,10 @@ class Post < ActiveRecord::Base
   self.per_page = 50
 
   belongs_to :user, :counter_cache => true
-  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => :posts_count, :foreign_key => 'discussion_id'
+  belongs_to :discussion, :class_name => 'Exchange', :counter_cache => :posts_count, :foreign_key => 'exchange_id'
   has_many   :discussion_views
 
-  validates_presence_of :body, :user_id, :discussion_id
+  validates_presence_of :body, :user_id, :exchange_id
 
   attr_accessor :skip_html
 

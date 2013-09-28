@@ -4,7 +4,7 @@ describe PostObserver do
 
   let(:post)       { stub_model(Post) }
   let(:observer)   { PostObserver.instance }
-  let(:cache_path) { Rails.root.join("public/cache/discussions/#{post.discussion_id}/posts/count.json") }
+  let(:cache_path) { Rails.root.join("public/cache/discussions/#{post.exchange_id}/posts/count.json") }
 
   describe "#clean_cache_for" do
 

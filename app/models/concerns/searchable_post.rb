@@ -5,7 +5,7 @@ module SearchablePost
     searchable do
       text    :body
       integer :user_id
-      integer :discussion_id
+      integer :exchange_id
       time    :created_at
       time    :updated_at
       boolean :trusted
@@ -19,7 +19,7 @@ module SearchablePost
         fulltext query
         with :trusted, false unless (options[:user] && options[:user].trusted?)
         if options[:exchange]
-          with :discussion_id, options[:exchange].id
+          with :exchange_id, options[:exchange].id
         else
           with :conversation,  false
         end
