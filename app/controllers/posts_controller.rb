@@ -26,7 +26,7 @@ class PostsController < ApplicationController
   protected
 
     def load_discussion
-      @discussion = Exchange.find(params[:exchange_id]) rescue nil
+      @discussion = Exchange.find(params[:discussion_id]) rescue nil
       unless @discussion
         flash[:notice] = "Can't find that discussion!"
         redirect_to discussions_url and return
