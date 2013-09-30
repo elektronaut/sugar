@@ -139,7 +139,7 @@ Sugar::Application.routes.draw do
     end
   end
   get '/discussions/:id/:page' => 'discussions#show', :as => :paged_discussion
-  get '/discussions/:exchange_id/posts/since/:index' => 'posts#since'
+  get '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
   get '/conversations' => 'discussions#conversations', :as => :conversations
 
 
