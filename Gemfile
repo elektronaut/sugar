@@ -43,6 +43,8 @@ gem 'progress_bar'
 
 gem 'newrelic_rpm', group: 'newrelic'
 
+gem 'fastimage'
+
 group :development do
   gem 'yui-compressor', require: 'yui/compressor'
   gem 'guard'

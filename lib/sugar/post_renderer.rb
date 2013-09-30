@@ -37,6 +37,7 @@ module Sugar
       remove_unsafe_tags!
       strip_event_handlers!
       enforce_allowscriptaccess!
+      fetch_image_sizes!
       finalize!
     end
 
@@ -49,13 +50,15 @@ module Sugar
 
       # Normalize <script> tags so the parser will find them
       @post.gsub!(/<script[\s\/]*/i, '<script ')
+
+      # Convert image URLs to img tags
+      @post.gsub!(/(^|\s)(((ftp|https?):)?\/\/[^\s]+\.(png|jpg|jpeg|gif)\b?)/) do
+        "#{$1}<img src=\"#{$2}\">"
+      end
     end
 
     def finalize!
       @post = document.to_html
-
-      # Convert image URLs to img tags
-      @post.gsub!(/(^|\s)(((ftp|https?):)?\/\/[^\s]+\.(png|jpg|jpeg|gif)\b?)/){ "#{$1}<img src=\"#{$2}\">" }
 
       # Autolink URLs
       @post.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
@@ -64,6 +67,21 @@ module Sugar
       @post.gsub!(/\r?\n/,'<br />')
 
       replace_code_blocks!
+    end
+
+    def fetch_image_sizes!
+      document.search('img') do |element|
+        if element.attributes && !element.attributes['src'].blank?
+          url = element.attributes['src']
+          if element.attributes['width'].blank? || element.attributes['height'].blank?
+            if dimensions = FastImage.size(url, timeout: 2.0)
+              width, height = dimensions
+              element.set_attribute "width", width.to_s
+              element.set_attribute "height", height.to_s
+            end
+          end
+        end
+      end
     end
 
     def replace_code_blocks!
