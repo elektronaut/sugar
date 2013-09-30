@@ -54,6 +54,9 @@ module Sugar
     def finalize!
       @post = document.to_html
 
+      # Convert image URLs to img tags
+      @post.gsub!(/(^|\s)(((ftp|https?):)?\/\/[^\s]+\.(png|jpg|jpeg|gif)\b?)/){ "#{$1}<img src=\"#{$2}\">" }
+
       # Autolink URLs
       @post.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
 
