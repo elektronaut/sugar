@@ -6,6 +6,7 @@
 #= require backbone_datalink
 
 #= require vendor/jquery.timeago
+#= require vendor/to-markdown
 
 #= require backbone/sugar
 #= require sugar
@@ -67,10 +68,14 @@ window.addToReply = (string) ->
 window.quotePost = (postId) ->
   postDiv = "#post-" + postId
   if $(postDiv).length > 0
+    wrapInBlockquote = (string) ->
+      ("> " + line for line in string.split("\n")).join("\n")
+
     permalink = jQuery(postDiv + " .post_info .permalink a").get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, "")
     username = jQuery(postDiv + " .post_info .username a").text()
-    content = jQuery(postDiv + " .body").html().replace(/^[\s]*/, "").replace(/[\s]*$/, "").replace(/<br[\s\/]*>/g, "\n")
-    quotedPost = "<blockquote><cite>Posted by <a href=\"" + permalink + "\">" + username + "</a>:</cite>" + content + "</blockquote>"
+    content = jQuery(postDiv + " .body").html().replace(/^[\s]*/, "").replace(/[\s]*$/, "")
+    cite = "Posted by [#{username}](#{permalink}):"
+    quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}")
     window.addToReply quotedPost
 
 parsePost = (body) ->
