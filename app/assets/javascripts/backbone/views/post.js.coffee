@@ -48,8 +48,9 @@ class Sugar.Views.Post extends Backbone.View
 
   edit: (event) ->
     event.preventDefault();
-    this.$('.body').html '<span class="ticker">Loading...</span>'
-    this.$('.body').load this.model.editUrl(timestamp: true), ->
+    this.$('.body').hide()
+    $(this.el).append("<div class=\"edit\"><span class=\"ticker\">Loading...</span></div>")
+    this.$('.edit').load this.model.editUrl(timestamp: true), ->
       $(Sugar).trigger('modified')
 
   # Quote the post

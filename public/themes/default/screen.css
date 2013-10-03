@@ -778,7 +778,7 @@ table.discussions tr.targeted.nsfw {
   color:               #333;
 }
 
-.post .body {
+.post .body, .post .edit {
   clear:               both;
   font-size:           1.1em;
   max-width:           800px;
