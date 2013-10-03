@@ -53,22 +53,32 @@ class Sugar.Views.Post extends Backbone.View
   # Quote the post
   quote: (event) ->
     event.preventDefault();
+
+    blockquote = (string) ->
+      ("> " + line for line in string.split("\n")).join("\n")
+
     if window.getSelection? and window.getSelection().containsNode(this.el, true)
       content = window.getSelection().toString()
     content ||= this.model.get('body')
 
     if $(this.el).hasClass('me_post')
       username  = $(this.el).find('.body .poster').text()
-      quotedPost = '<blockquote><cite>Posted by ' + username + ':</cite>' + content + '</blockquote>'
     else
       permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
       username  = $(this.el).find('.post_info .username a').text()
-      quotedPost = '<blockquote><cite>Posted by <a href="' + permalink + '">' + username + '</a>:</cite>' + content + '</blockquote>'
-      # Trim empty blockquotes
-      while quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)
-        quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
 
-    Sugar.compose({add: quotedPost})
+    if permalink
+      cite = "Posted by [#{username}](#{permalink}):"
+    else
+      cite = "Posted by #{username}:"
+
+    quotedPost = "<cite>#{cite}</cite>\n\n#{content}"
+
+    # Trim empty blockquotes
+    while quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)
+      quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
+
+    Sugar.compose({add: blockquote(quotedPost)})
 
   # Apply functionality to spoiler tags
   applySpoiler: ->
