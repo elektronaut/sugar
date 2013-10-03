@@ -44,6 +44,7 @@ gem 'progress_bar'
 gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
+gem 'redcarpet', '~> 3.0'
 
 group :development do
   gem 'yui-compressor', require: 'yui/compressor'

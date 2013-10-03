@@ -3,14 +3,6 @@
 module Sugar
   class PostRenderer
 
-    HIGHLIGHTER_SYNTAXES = %w{
-      applescript as3 actionscript3 bash shell cf coldfusion c# c-sharp csharp
-      cpp c css diff delphi erl erlang groovy pascal pas patch js jscript
-      javascript java javafx jfx Perl perl pl php plain text py python
-      powershell ps rails ror ruby rb sass scss scala sql vb vbnet xml xhtml
-      xslt html xhtml
-    }
-
     def initialize(post)
       @post = post.dup
     end
@@ -22,31 +14,41 @@ module Sugar
 
     private
 
-    def code_tags
-      @code_tags ||= []
-    end
-
     def document
       @document ||= Hpricot(@post)
+    end
+
+    def markdown_renderer
+      @markdown_renderer ||= Redcarpet::Render::HTML.new(
+        hard_wrap: true
+      )
+    end
+
+    def markdown
+      @markdown ||= Redcarpet::Markdown.new(
+        markdown_renderer,
+        no_intra_emphasis:   true,
+        fenced_code_blocks:  true,
+        autolink:            true,
+        strikethrough:       true,
+        lax_spacing:         true,
+        space_after_headers: true
+      )
     end
 
     # Parses the post
     def parse!
       prepare!
-      extract_code_tags!
       remove_unsafe_tags!
       strip_event_handlers!
       enforce_allowscriptaccess!
       fetch_image_sizes!
+      update_code_blocks!
       finalize!
     end
 
     def prepare!
       @post = @post.strip
-
-      # Wrap <code> content in CDATA
-      @post.gsub!(/(<code[\s\w\d\"\'=\-_\+\.]*>)/i){"#{$1}<![CDATA["}
-      @post.gsub!(/(<\/code>)/i){"]]>#{$1}"}
 
       # Normalize <script> tags so the parser will find them
       @post.gsub!(/<script[\s\/]*/i, '<script ')
@@ -55,6 +57,8 @@ module Sugar
       @post.gsub!(/(^|\s)(((ftp|https?):)?\/\/[^\s]+\.(png|jpg|jpeg|gif)\b?)/) do
         "#{$1}<img src=\"#{$2}\">"
       end
+
+      @post = markdown.render(@post)
     end
 
     def finalize!
@@ -62,11 +66,19 @@ module Sugar
 
       # Autolink URLs
       @post.gsub!(/(^|\s)((ftp|https?):\/\/[^\s]+\b\/?)/){ "#{$1}<a href=\"#{$2}\">#{$2}</a>" }
+    end
 
-      # Replace line breaks
-      @post.gsub!(/\r?\n/,'<br />')
-
-      replace_code_blocks!
+    def update_code_blocks!
+      # Fix legacy code blocks
+      document.search('p > code') do |element|
+        if element.attributes && !element.attributes["language"].blank?
+          element.set_attribute "class", element.attributes["language"]
+          element.raw_attributes.delete("language")
+        else
+          element.set_attribute "class", "plain"
+        end
+        element.parent.swap("<pre>#{element.to_html}</pre>")
+      end
     end
 
     def fetch_image_sizes!
@@ -81,37 +93,6 @@ module Sugar
             end
           end
         end
-      end
-    end
-
-    def replace_code_blocks!
-      code_tags.each_with_index do |code_tag, index|
-        @post.gsub!(
-          "<div id=\"replace_code_tag_#{index}\"></div>",
-          '<pre class="code"><code class="' + code_tag[:language] + '">' + CGI::escapeHTML(code_tag[:body]) + '</code></pre>'
-        )
-      end
-    end
-
-    def get_code_language_from(element)
-      if element.attributes && element.attributes['language']
-        language = element.attributes['language'].downcase.gsub(/[^\w\d_\.\-\+]/, '')
-      end
-      if HIGHLIGHTER_SYNTAXES.include?(language)
-        language
-      else
-        'plain'
-      end
-    end
-
-    def extract_code_tags!
-      document.search('code') do |element|
-        code_language = get_code_language_from(element)
-        element.swap("<div id=\"replace_code_tag_#{code_tags.length}\"></div>")
-        code_tags << {
-          :language => code_language,
-          :body     => element.children.first.content
-        }
       end
     end
 

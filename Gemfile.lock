@@ -165,6 +165,7 @@ GEM
       ffi (>= 0.5.0)
     rb-kqueue (0.2.0)
       ffi (>= 0.5.0)
+    redcarpet (3.0.0)
     redis (3.0.4)
     ref (1.0.5)
     rsolr (1.0.9)
@@ -272,6 +273,7 @@ DEPENDENCIES
   rails-backbone
   rails-observers
   rb-fsevent
+  redcarpet (~> 3.0)
   redis (~> 3.0.4)
   rspec-rails
   rspec-redis_helper

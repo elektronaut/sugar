@@ -809,7 +809,14 @@ table.discussions tr.targeted.nsfw {
   margin-top:          1em;
 }
 .post .body p {
-  margin-bottom:       0.8em;
+  margin:              1.0em 0px;
+}
+/* Ugly, but works for now */
+.post .body p:first-child {
+  margin-top:          0px;
+}
+.post .body p:last-child {
+  margin-bottom:       0px;
 }
 
 .post .body a {
