@@ -760,8 +760,12 @@ table.discussions tr.targeted.nsfw {
 .post .body {
   clear:               both;
   font-size:           1.1em;
-  max-width:           600px;
+  max-width:           800px;
   margin-left:         45px;
+}
+.post .body img {
+  max-width: 100%;
+  height: auto;
 }
 .post .body ul {
   list-style-type:     disc;
