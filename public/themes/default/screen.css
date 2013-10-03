@@ -314,10 +314,10 @@ span.example {
 .richTextToolbar .UnorderedListButton { background-position: 0 -34px; }
 .richTextToolbar .OrderedListButton   { background-position: 0 -51px; }
 .richTextToolbar .BlockQuoteButton    { background-position: 0 -68px; }
-.richTextToolbar .CodeButton          { background-position: 0 -136px; }
+/*.richTextToolbar .CodeButton          { background-position: 0 -136px; }*/
 .richTextToolbar .HelpButton          { background-position: 0 -153px; }
 .richTextToolbar .HeadingButton       { background-position: 0 -85px; }
-.richTextToolbar .EscapeHTMLButton    { background-position: 0 -306px; }
+.richTextToolbar .CodeButton          { background-position: 0 -306px; }
 .richTextToolbar .MP3Button           { background-position: 0 -323px; }
 .richTextToolbar .SpoilerButton       { background-position: 0 -340px; }
 
@@ -809,7 +809,14 @@ table.discussions tr.targeted.nsfw {
   margin-top:          1em;
 }
 .post .body p {
-  margin-bottom:       0.8em;
+  margin:              1.0em 0px;
+}
+/* Ugly, but works for now */
+.post .body p:first-child {
+  margin-top:          0px;
+}
+.post .body p:last-child {
+  margin-bottom:       0px;
 }
 
 .post .body a {

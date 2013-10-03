@@ -57,19 +57,18 @@ $(Sugar).bind 'ready modified', ->
 
         # Bold
         .addButton "Bold", ->
-          this.textArea.wrapSelection('<strong>', '</strong>')
+          this.textArea.wrapSelection('**', '**')
 
         # Italic
         .addButton "Italics", ->
-          this.textArea.wrapSelection('<em>', '</em>')
+          this.textArea.wrapSelection('_', '_')
 
         # Link
         .addButton "Link", ->
           selection = this.textArea.selectedText()
           response = prompt('Enter link URL', '')
           this.textArea.replaceSelection(
-            '<a href="' + (response || 'http://link_url/').replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + '">' +
-            (selection || "Link text") + '</a>'
+            "[" + (selection || "Link text") + "](" + (response || 'http://link_url/').replace(/^(?!(f|ht)tps?:\/\/)/, 'http://') + ")"
           )
 
         # Image tag
@@ -79,9 +78,9 @@ $(Sugar).bind 'ready modified', ->
             response = prompt('Enter image URL', '')
             unless response
               return
-            this.textArea.replaceSelection('<img src="' + response + '" alt="" />')
+            this.textArea.replaceSelection("![](" + response + ")")
           else
-            this.textArea.replaceSelection('<img src="' + selection + '" alt="" />')
+            this.textArea.replaceSelection("![](" + selection + ")")
 
         # MP3 Player
         .addButton "MP3", ->
@@ -95,16 +94,18 @@ $(Sugar).bind 'ready modified', ->
 
         # Block Quote
         .addButton "Block Quote", ->
-          this.textArea.wrapSelection('<blockquote>', '</blockquote>')
+          selection = this.textArea.selectedText()
+          quotedText = ("> " + line for line in selection.split("\n")).join("\n")
+          this.textArea.replaceSelection(quotedText)
 
         # Escape HTML
-        .addButton "Escape HTML", ->
+        .addButton "Code", ->
           selection = this.textArea.selectedText()
           response = prompt('Enter language (leave blank for no syntax highlighting)', '')
           if response
-            this.textArea.replaceSelection('<code language="' + response + '">' + selection + '</code>')
+            this.textArea.replaceSelection("```" + response + "\n" + selection + "\n```")
           else
-            this.textArea.replaceSelection('<code>' + selection + '</code>')
+            this.textArea.replaceSelection("```\n" + selection + "\n```")
 
         # Spoiler
         .addButton "Spoiler", ->
