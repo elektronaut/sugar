@@ -72,7 +72,7 @@ class Sugar.Views.Post extends Backbone.View
     else
       cite = "Posted by #{username}:"
 
-    quotedPost = this.wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}") + "\n\n"
+    quotedPost = this.wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}")
 
     Sugar.compose({add: quotedPost})
 
