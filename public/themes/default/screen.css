@@ -29,9 +29,22 @@ html, body {
 }
 body {
   background:          #fff url(images/header_bg.png) top center repeat-x;
-  font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
   color:               #000000;
   line-height:         1.3;
+}
+body, input, textarea {
+  font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
+}
+input, textarea {
+  font-size: 1.2em;
+}
+textarea {
+  width:               100%;
+  max-width:           780px;
+  height:              300px;
+  padding:             10px;
+  border:              1px solid #d7d7d7;
+  box-shadow:          inset 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Set 1em == 10px */
@@ -285,19 +298,19 @@ span.example {
 }
 
 #compose-body {
-  width:               100%;
-  max-width:           600px;
 }
 .richTextToolbar {
   position:            relative;
   list-style:          none;
   border:              1px solid #d7d7d7;
-  background-color:    #F6F6F6;
+  border-bottom:       0px;
+  background-color:    #fafafa;
   margin:              0;
-  padding:             0;
-  height:              18px;
-  margin-bottom:       2px;
-  max-width:           600px;
+  padding:             0px 10px;
+  height:              30px;
+  margin-bottom:       0px;
+  width: 100%;
+  max-width:           780px;
 }
 .richTextToolbar li {
   list-style:          none;
@@ -305,35 +318,30 @@ span.example {
   padding:             0;
   float:               left;
 }
+.richTextToolbar li:first-child {
+  margin-left:         -10px;
+}
 .richTextToolbar li a {
-  width:               24px;
-  height:              16px;
+  width:               35px;
+  height:              30px;
+  line-height:         30px;
+  text-align:          center;
   float:               left;
   display:             block;
-  background-image:    url("images/textarea_controls.png");
-  border:              1px solid #fff;
-  border-right-color:  #d7d7d7;
+  border-left:         1px solid #fff;
+  border-right:        1px solid #d7d7d7;
+  cursor:              pointer;
+  color:               #555;
+  font-size:           14px;
+  background-color:    #F6F6F6;
 }
-.richTextToolbar li a:hover {
-  border-color:        #900;
+.richTextToolbar li a:hover, .richTextToolbar li a:focus {
+  color:               #000;
+  background:          #fdfdfd;
 }
 .richTextToolbar li span {
   display:             none;
 }
-.richTextToolbar .BoldButton          { background-position: 0 -102px; }
-.richTextToolbar .ItalicsButton       { background-position: 0 -119px; }
-.richTextToolbar .LinkButton          { background-position: 0 0; }
-.richTextToolbar .ImageButton         { background-position: 0 -170px; }
-.richTextToolbar .UnorderedListButton { background-position: 0 -34px; }
-.richTextToolbar .OrderedListButton   { background-position: 0 -51px; }
-.richTextToolbar .BlockQuoteButton    { background-position: 0 -68px; }
-/*.richTextToolbar .CodeButton          { background-position: 0 -136px; }*/
-.richTextToolbar .HelpButton          { background-position: 0 -153px; }
-.richTextToolbar .HeadingButton       { background-position: 0 -85px; }
-.richTextToolbar .CodeButton          { background-position: 0 -306px; }
-.richTextToolbar .MP3Button           { background-position: 0 -323px; }
-.richTextToolbar .SpoilerButton       { background-position: 0 -340px; }
-
 
 
 /* -----------------------------------------------------------------------
@@ -575,9 +583,9 @@ body.with_sidebar #content {
    NEW DISCUSSION
    ----------------------------------------------------------------------- */
 
-.new_discussion input.text, .new_discussion textarea, .edit_discussion input.text, .edit_discussion textarea {
+.new_discussion input.text, .edit_discussion input.text {
   width:               100%;
-  max-width:           600px;
+  max-width:           800px;
 }
 
 #new_discussion input.title, #edit_discussion input.title {

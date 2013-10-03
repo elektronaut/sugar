@@ -9,16 +9,16 @@ Sugar.RichTextArea = (textArea, options) ->
     textArea: textArea
     listElement: false
     buttons: []
-    addButton: (name, callback, options) ->
-      settings = jQuery.extend(
-        className: name.replace(/[\s]+/, "") + "Button"
-      , options)
+    addButton: (name, className, callback, options) ->
       li = document.createElement("li")
       a = document.createElement("a")
+      i = document.createElement("i")
       a.title = name
       a.textArea = @textArea
       jQuery(a).click callback
-      jQuery(a).addClass settings.className
+      jQuery(a).addClass className
+      jQuery(i).addClass "icon-#{className}"
+      jQuery(a).append(i)
       jQuery(li).append(a).appendTo @listElement
       @buttons.push li
       this
@@ -56,15 +56,15 @@ $(Sugar).bind 'ready modified', ->
       ta.toolbar
 
         # Bold
-        .addButton "Bold", ->
+        .addButton "Bold", "bold", ->
           this.textArea.wrapSelection('**', '**')
 
         # Italic
-        .addButton "Italics", ->
+        .addButton "Italics", "italic", ->
           this.textArea.wrapSelection('_', '_')
 
         # Link
-        .addButton "Link", ->
+        .addButton "Link", "link", ->
           selection = this.textArea.selectedText()
           response = prompt('Enter link URL', '')
           this.textArea.replaceSelection(
@@ -72,7 +72,7 @@ $(Sugar).bind 'ready modified', ->
           )
 
         # Image tag
-        .addButton "Image", ->
+        .addButton "Image", "picture", ->
           selection = this.textArea.selectedText()
           if selection == ''
             response = prompt('Enter image URL', '')
@@ -83,7 +83,7 @@ $(Sugar).bind 'ready modified', ->
             this.textArea.replaceSelection("![](" + selection + ")")
 
         # MP3 Player
-        .addButton "MP3", ->
+        .addButton "MP3", "music", ->
           selection = this.textArea.selectedText()
           response = prompt('Enter MP3 URL', '')
           unless selection
@@ -93,13 +93,13 @@ $(Sugar).bind 'ready modified', ->
             (selection || "Link text") + '</a>')
 
         # Block Quote
-        .addButton "Block Quote", ->
+        .addButton "Block Quote", "quote-left", ->
           selection = this.textArea.selectedText()
           quotedText = ("> " + line for line in selection.split("\n")).join("\n")
           this.textArea.replaceSelection(quotedText)
 
         # Escape HTML
-        .addButton "Code", ->
+        .addButton "Code", "code", ->
           selection = this.textArea.selectedText()
           response = prompt('Enter language (leave blank for no syntax highlighting)', '')
           if response
@@ -108,5 +108,5 @@ $(Sugar).bind 'ready modified', ->
             this.textArea.replaceSelection("```\n" + selection + "\n```")
 
         # Spoiler
-        .addButton "Spoiler", ->
+        .addButton "Spoiler", "warning-sign", ->
           this.textArea.wrapSelection('<div class="spoiler">', '</div>')
