@@ -65,18 +65,4 @@ namespace :sugar do
     end
   end
 
-  desc "Converts Flickr usernames to user IDs"
-  task :convert_flickr_usernames => :environment do
-    require 'hpricot'
-    require 'open-uri'
-    users = User.find(:all, :conditions => ['flickr IS NOT NULL AND flickr != ""']).reject{|u| u.flickr =~ /[\w\d]+@[\w\d]+/}
-    users.each do |u|
-      puts "Converting #{u.flickr}..."
-      url = "http://api.flickr.com/services/rest/?api_key=#{Sugar.config(:flickr_api)}&method=flickr.people.findByUsername&username=#{CGI.escape(u.flickr)}"
-      doc = Hpricot.parse(open(url))
-      user_id = (doc/'user').first.attributes['id'] rescue nil
-      u.update_attribute(:flickr, user_id)
-    end
-  end
-
 end

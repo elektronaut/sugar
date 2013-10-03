@@ -35,7 +35,7 @@ gem 'ruby-openid', require: 'openid'
 
 gem 'acts_as_list'
 
-gem 'hpricot'
+gem 'nokogiri'
 gem 'daemon-spawn'
 
 gem 'sunspot_rails'

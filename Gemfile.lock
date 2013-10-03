@@ -95,7 +95,6 @@ GEM
     highline (1.6.19)
     hike (1.2.3)
     hiredis (0.4.5)
-    hpricot (0.8.6)
     i18n (0.6.5)
     jquery-rails (2.1.4)
       railties (>= 3.0, < 5.0)
@@ -265,11 +264,11 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   hiredis (~> 0.4.5)
-  hpricot
   jquery-rails
   json
   mysql2
   newrelic_rpm
+  nokogiri
   pg
   progress_bar
   rails (= 4.0.0)
