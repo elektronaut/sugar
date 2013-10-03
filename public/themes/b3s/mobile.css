@@ -402,6 +402,81 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   text-overflow: ellipsis;
   clear: both;
 }
+
+.post .body h1,
+.post .body h2,
+.post .body h3,
+.post .body h4,
+.post .body h5,
+.post .body h6,
+.post .body p,
+.post .body ul,
+.post .body ol {
+  margin-bottom: 10px;
+}
+
+/* Ugly, but works for now */
+.post .body p:first-child {
+  margin-top: 0px;
+}
+.post .body p:last-child {
+  margin-bottom: 0px;
+}
+
+.post .body h1 {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.post .body h2 {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.post .body h3 {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.post .body h4 {
+  font-size: 1.3em;
+}
+.post .body h5 {
+  font-size: 1.2em;
+}
+.post .body h6 {
+  font-size: 1.1em;
+}
+.post .body ul, .post .body ol {
+  margin-left:         25px;
+}
+.post .body ul {
+  list-style-type:     disc;
+  list-style-position: outside;
+}
+.post .body ol {
+  list-style-type:     decimal;
+  list-style-position: outside;
+}
+.post .body ul p,
+.post .body ul ul,
+.post .body ul ol,
+.post .body ol p,
+.post .body ol ul,
+.post .body ol ol {
+  margin-bottom: 0px;
+}
+.post .body code {
+  font-family: Courier, monospace;
+  font-size: 12px;
+}
+.post .body pre {
+  margin: 8px 0px;
+}
+.post .body pre > code {
+  display: block;
+  background: #f4f2f0;
+  overflow: scroll;
+  padding: 8px;
+}
+
 .fb_iframe_widget {
   max-width: 100%;
 }
