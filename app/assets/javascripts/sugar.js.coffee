@@ -56,4 +56,5 @@ $.extend window.Sugar,
         else
           $(this).val(content + newContent)
 
+      this.scrollTop = this.scrollHeight
       $(this).focus()
