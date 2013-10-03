@@ -21,14 +21,16 @@ class Sugar.Views.Post extends Backbone.View
       id:            id,
       user_id:       $(this.el).data('user_id'),
       exchange_id:   $(this.el).data('exchange_id'),
-      body:          this.fromHtml(this.$('.body .content').html())
+      body:          this.stripWhitespace(this.$('.body .content').html())
     })
 
-  fromHtml: (body) ->
-    body
-      .replace(/^[\s]*/, '')          # Strip leading space
-      .replace(/[\s]*$/, '')          # Strip trailing space
-      .replace(/<br[\s\/]*>/g, "\n"); # Change <br /> to line breaks
+  stripWhitespace: (string) ->
+    string
+      .replace(/^[\s]*/, '') # Strip leading space
+      .replace(/[\s]*$/, '') # Strip trailing space
+
+  wrapInBlockquote: (string) ->
+    ("> " + line for line in string.split("\n")).join("\n")
 
   render: ->
     view = this
@@ -54,12 +56,10 @@ class Sugar.Views.Post extends Backbone.View
   quote: (event) ->
     event.preventDefault();
 
-    blockquote = (string) ->
-      ("> " + line for line in string.split("\n")).join("\n")
-
     if window.getSelection? and window.getSelection().containsNode(this.el, true)
       content = window.getSelection().toString()
-    content ||= this.model.get('body')
+    else
+      content = this.model.get('body')
 
     if $(this.el).hasClass('me_post')
       username  = $(this.el).find('.body .poster').text()
@@ -72,13 +72,9 @@ class Sugar.Views.Post extends Backbone.View
     else
       cite = "Posted by #{username}:"
 
-    quotedPost = "<cite>#{cite}</cite>\n\n#{content}"
+    quotedPost = this.wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}") + "\n\n"
 
-    # Trim empty blockquotes
-    while quotedPost.match(/<blockquote>[\s]*<\/blockquote>/)
-      quotedPost = quotedPost.replace(/<blockquote>[\s]*<\/blockquote>/, '')
-
-    Sugar.compose({add: blockquote(quotedPost)})
+    Sugar.compose({add: quotedPost})
 
   # Apply functionality to spoiler tags
   applySpoiler: ->
