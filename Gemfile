@@ -45,6 +45,7 @@ gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
 gem 'redcarpet', '~> 3.0'
+gem "font-awesome-rails"
 
 group :development do
   gem 'yui-compressor', require: 'yui/compressor'
