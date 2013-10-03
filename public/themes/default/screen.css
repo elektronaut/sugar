@@ -43,14 +43,27 @@ h2, h3, h4, h5, h6, p, ul, ol, pre {
   margin-bottom:       1em;
 }
 
+h1 {
+  font-size:           2.0em;
+  font-weight:         bold;
+}
 h2 {
   font-size:           1.5em;
   font-weight:         bold;
 }
 h3 {
-  font-size:           1.3em;
+  font-size:           1.4em;
   font-weight:         bold;
   margin-bottom:       0em;
+}
+h4 {
+  font-size:           1.3em;
+}
+h5 {
+  font-size:           1.2em;
+}
+h6 {
+  font-size:           1.1em;
 }
 h2 em {
   font-weight:         normal;
@@ -767,9 +780,24 @@ table.discussions tr.targeted.nsfw {
   max-width: 100%;
   height: auto;
 }
+.post .body ul, .post .body ol {
+  margin-left:         17px;
+}
 .post .body ul {
   list-style-type:     disc;
-  list-style-position: inside;
+  list-style-position: outside;
+}
+.post .body ol {
+  list-style-type:     decimal;
+  list-style-position: outside;
+}
+.post .body ul p,
+.post .body ul ul,
+.post .body ul ol,
+.post .body ol p,
+.post .body ol ul,
+.post .body ol ol {
+  margin-bottom: 0px;
 }
 .post .body .content {
   font-size:           1em;
@@ -807,6 +835,14 @@ table.discussions tr.targeted.nsfw {
   color:               #888;
   font-size:           0.9em;
   margin-top:          1em;
+}
+.post .body h1,
+.post .body h2,
+.post .body h3,
+.post .body h4,
+.post .body h5,
+.post .body h6 {
+  margin:              15px 0px;
 }
 .post .body p {
   margin:              1.0em 0px;
