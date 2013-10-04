@@ -15,7 +15,7 @@ module Sugar
       private
 
       def markdown_renderer
-        @markdown_renderer ||= Redcarpet::Render::HTML.new(
+        @markdown_renderer ||= Sugar::PostRenderer::MarkdownRenderer.new(
           hard_wrap: true
         )
       end
