@@ -15,10 +15,24 @@ Sugar.RichTextArea = (textArea, options) ->
       i = document.createElement("i")
       a.title = name
       a.textArea = @textArea
+
       jQuery(a).click ->
         selection = textArea.selectedText()
+
+        if typeof textArea.selectionStart != "undefined"
+          selectionStart = textArea.selectionStart
+          selectionEnd = textArea.selectionEnd
+
         [prefix, replacement, postfix] = callback(selection)
         textArea.replaceSelection(prefix + replacement + postfix)
+        $(textArea).focus()
+
+        if typeof textArea.setSelectionRange != "undefined"
+          textArea.setSelectionRange(
+            (selectionStart + prefix.length),
+            (selectionEnd + (replacement.length - selection.length) + prefix.length)
+          )
+
       jQuery(a).addClass className
       jQuery(i).addClass "icon-#{className}"
       jQuery(a).append(i)
