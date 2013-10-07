@@ -28,8 +28,40 @@ Sugar.RichTextArea = (textarea, options) ->
 
   decorator = markdownDecorator
 
-  formatButton = $("<li class=\"formatting\"><a href=\"#\">Markdown</a></li>")
+  if $(textarea).data('formats')
+    formats = $(textarea).data('formats').split(" ")
+  else
+    formats = ["markdown"]
+
+  if $(textarea).data("format-binding")
+    format = $(textarea).closest("form").find($(textarea).data("format-binding")).val()
+
+  format ||= formats[0]
+
+  setFormat = (newFormat) ->
+    format = newFormat
+    if format == "markdown"
+      label = "Markdown"
+      decorator = markdownDecorator
+    else if format == "html"
+      label = "HTML"
+      decorator = htmlDecorator
+
+    formatButton.find("a").html(label)
+    if $(textarea).data("format-binding")
+      $(textarea).closest("form").find($(textarea).data("format-binding")).val(format)
+
+  nextFormat = ->
+    setFormat formats[(formats.indexOf(format) + 1) % formats.length]
+
+  formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>")
   toolbar = $("<ul class=\"richTextToolbar\"></ul>").append(formatButton).insertBefore(textarea)
+
+  setFormat(format)
+
+  formatButton.find("a").click ->
+    nextFormat()
+    false
 
   addButton = (name, className, callback) ->
     link = $("<a title=\"#{name}\" class=\"#{className}\"><i class=\"icon-#{className}\"></i></a>")

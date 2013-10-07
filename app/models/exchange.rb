@@ -14,7 +14,7 @@ class Exchange < ActiveRecord::Base
   self.per_page = 30
 
   # Virtual attribute for the body of the first post
-  attr_accessor :body
+  attr_accessor :body, :format
 
   # Skips validation of @body if true
   attr_accessor :skip_body_validation
@@ -90,14 +90,24 @@ class Exchange < ActiveRecord::Base
   # Automatically create the first post
   def create_first_post
     if self.body && !self.body.empty?
-      self.posts.create(:user => self.poster, :body => self.body)
+      attributes = {
+        user: self.poster,
+        body: self.body
+      }
+      attributes[:format] = self.format unless self.format.blank?
+      self.posts.create(attributes)
     end
   end
 
   # Update the first post if @body has been changed
   def update_post_body
     if self.body && !self.body.empty? && self.body != self.posts.first.body
-      self.posts.first.update_attributes(:body => self.body, :edited_at => Time.now)
+      attributes = {
+        edited_at: Time.now,
+        body: self.body
+      }
+      attributes[:format] = self.format unless self.format.blank?
+      self.posts.first.update_attributes(attributes)
     end
   end
 

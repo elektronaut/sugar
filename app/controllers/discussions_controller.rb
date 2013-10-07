@@ -61,9 +61,9 @@ class DiscussionsController < ApplicationController
 
     def exchange_params(options={})
       if @current_user.moderator?
-        params.require(:exchange).permit(:recipient_id, :title, :body, :category_id, :nsfw, :closed, :sticky)
+        params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed, :sticky)
       else
-        params.require(:exchange).permit(:recipient_id, :title, :body, :category_id, :nsfw, :closed)
+        params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed)
       end
     end
 

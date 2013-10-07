@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
   has_many   :discussion_views
 
   validates_presence_of :body, :user_id, :exchange_id
+  validates :format, inclusion: %w{markdown html}
 
   attr_accessor :skip_html
 

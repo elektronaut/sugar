@@ -4,7 +4,8 @@
 <% end %>
 
 <%= labelled_field f.text_field(:title, :class => 'text title'), "Title", :errors => @discussion.errors[:title] %>
-<%= labelled_field f.text_area(:body, :rows => 10, :id => 'compose-body', :class => :rich), 'First post', :errors => @discussion.errors[:body] %>
+<%= f.hidden_field(:format, class: "format") %>
+<%= labelled_field f.text_area(:body, :id => 'compose-body', :class => :rich, "data-format-binding" => ".format", "data-formats" => "markdown html"), 'First post', :errors => @discussion.errors[:body] %>
 
 <% if @discussion.kind_of?(Discussion) %>
   <%= labelled_field f.select(:category_id, @categories.map{|c| [c.name, c.id] } ), "Category", :errors => @discussion.errors[:category_id] %>

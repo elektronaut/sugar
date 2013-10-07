@@ -332,13 +332,13 @@ span.example {
   line-height:         30px;
   text-align:          center;
   display:             block;
+  cursor:              pointer;
 }
 .richTextToolbar .button a {
   width:               35px;
   float:               left;
   border-left:         1px solid #fff;
   border-right:        1px solid #d7d7d7;
-  cursor:              pointer;
   color:               #555;
   font-size:           14px;
   background-color:    #F6F6F6;
