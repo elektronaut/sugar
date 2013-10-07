@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
   has_many   :discussion_views
 
   validates_presence_of :body, :user_id, :exchange_id
+  validates :format, inclusion: %w{markdown html}
 
   attr_accessor :skip_html
 
@@ -45,10 +46,10 @@ class Post < ActiveRecord::Base
 
   def body_html
     if self.new_record? || Rails.env == 'development'
-      Sugar::PostRenderer::Renderer.new(self.body.dup).to_html
+      Sugar::PostRenderer.render(self.body, format: self.format)
     else
       unless body_html?
-        self.update_column(:body_html, Sugar::PostRenderer::Renderer.new(self.body.dup).to_html)
+        self.update_column(:body_html, Sugar::PostRenderer.render(self.body, format: self.format))
       end
       self[:body_html].html_safe
     end
@@ -97,7 +98,7 @@ class Post < ActiveRecord::Base
 
   def render_html
     unless self.skip_html
-      self.body_html = Sugar::PostRenderer::Renderer.new(self.body).to_html
+      self.body_html = Sugar::PostRenderer.render(self.body, format: self.format)
     end
   end
 

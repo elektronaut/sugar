@@ -13,8 +13,15 @@
 <% end %>
 
 <%= form_for(@post, :url => discussion_post_path(@discussion,@post)) do |f| %>
+  <%= f.hidden_field(:format, class: "format") %>
   <p>
-    <%= f.text_area(:body, :cols => 80, :rows => 20, :id => "edit-post-body-#{@post.id}", :class => :rich) %>
+    <%= f.text_area(
+      :body,
+      :id                   => "edit-post-body-#{@post.id}",
+      :class                => "rich",
+      "data-format-binding" => ".format",
+      "data-formats"        => "markdown html"
+    ) %>
   </p>
   <p><button type="submit">Save</button></p>
 <% end %>

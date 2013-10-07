@@ -4,6 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
+  <%= stylesheet_link_tag "application" %>
   <% if @current_user && @current_user.mobile_stylesheet_url? %>
     <%= stylesheet_link_tag @current_user.mobile_stylesheet_url %>
   <% else %>

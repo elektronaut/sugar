@@ -113,7 +113,12 @@ class PostsController < ApplicationController
     end
 
     def create
-      @post = @discussion.posts.create(:user => @current_user, :body => params[:post][:body])
+      attributes = {
+        :user => @current_user,
+        :body => params[:post][:body]
+      }
+      attributes[:format] = params[:post][:format] if params[:post][:format]
+      @post = @discussion.posts.create(attributes)
       if @post.valid?
         @discussion.reload
         # if @post.mentions_users?
@@ -136,7 +141,7 @@ class PostsController < ApplicationController
     end
 
     def preview
-      @post = @discussion.posts.new(body: params[:post][:body])
+      @post = @discussion.posts.new(body: params[:post][:body], format: params[:post][:format])
       @post.user = @current_user
       if request.xhr?
         render :layout => false
@@ -171,6 +176,7 @@ class PostsController < ApplicationController
         :body      => params[:post][:body],
         :edited_at => Time.now
       }
+      attributes[:format] = params[:post][:format] if params[:post][:format]
       if @post.update_attributes(attributes)
         redirect_to paged_discussion_url(:id => @discussion, :page => @post.page, :anchor => "post-#{@post.id}")
       else

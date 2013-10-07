@@ -489,20 +489,6 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   text-decoration: underline;
 }
 
-.reply {
-  padding: 5px 15px;
-}
-.reply textarea {
-  width: 98%;
-  max-width: 650px;
-  height: 180px;
-  margin: 0 auto;
-}
-body[orient="landscape"] .reply textarea {
-  /*width: 435px;*/
-}
-
-
 .user_profile {
   margin-top: -10px;
 }
@@ -583,6 +569,77 @@ blockquote cite {
   font-weight:         bold;
   font-size:           0.9em;
   color:               #900;
+}
+
+/* -----------------------------------------------------------------------
+   RICH TEXT EDITOR
+   ----------------------------------------------------------------------- */
+
+.reply {
+  padding: 15px 10px 5px 10px;
+}
+textarea.rich {
+  width: 98%;
+  max-width: 650px;
+  height: 180px;
+  margin: 0 auto;
+  border:              1px solid #d7d7d7;
+  border-radius: 0px;
+  box-shadow:          inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none;
+}
+.richTextToolbar {
+  position:            relative;
+  list-style:          none;
+  border:              1px solid #d7d7d7;
+  border-bottom:       0px;
+  background-color:    #fafafa;
+  margin:              0;
+  padding:             0px 2px;
+  height:              30px;
+  margin-bottom:       0px;
+  width: 98%;
+  max-width:           650px;
+}
+.richTextToolbar li {
+  list-style:          none;
+  margin:              0;
+  padding:             0;
+}
+.richTextToolbar .formatting {
+  float:               right;
+}
+.richTextToolbar .button {
+  float:               left;
+}
+.richTextToolbar .button:first-child {
+  margin-left:         -2px;
+}
+.richTextToolbar .button a,
+.richTextToolbar .formatting a {
+  height:              30px;
+  line-height:         30px;
+  text-align:          center;
+  display:             block;
+  cursor:              pointer;
+}
+.richTextToolbar .button a {
+  width:               26px;
+  float:               left;
+  border-left:         1px solid #fff;
+  border-right:        1px solid #d7d7d7;
+  color:               #555;
+  font-size:           12px;
+  background-color:    #F6F6F6;
+}
+.richTextToolbar .formatting a {
+  font-size:           11px;
+  float:               right;
+  width:               60px;
+  text-align:          center;
+}
+.richTextToolbar .button span {
+  display:             none;
 }
 
 /* Retina display overrides */

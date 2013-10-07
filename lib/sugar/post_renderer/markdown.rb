@@ -1,15 +1,9 @@
-# encoding: utf-8
-
 module Sugar
   module PostRenderer
-    class Markdown
+    class Markdown < Sugar::PostRenderer::Filter
 
-      def initialize(post)
-        @post = post
-      end
-
-      def to_html
-        markdown.render(@post)
+      def process(post)
+        markdown.render(post)
       end
 
       private
@@ -25,7 +19,7 @@ module Sugar
           markdown_renderer,
           no_intra_emphasis:   true,
           fenced_code_blocks:  true,
-          autolink:            true,
+          autolink:            false,
           strikethrough:       true,
           lax_spacing:         true,
           space_after_headers: true

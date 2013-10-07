@@ -2,13 +2,10 @@
 
 module Sugar
   module PostRenderer
-    class Code
+    class Code < Sugar::PostRenderer::Filter
 
-      def initialize(post)
-        @post = post
-      end
-
-      def to_html
+      def process(post)
+        parser = Nokogiri::HTML::DocumentFragment.parse(post)
         parser.search('p > code').each do |element|
           if element.attributes && !element.attributes["language"].blank?
             element.set_attribute "class", element.attributes["language"]
@@ -19,12 +16,6 @@ module Sugar
           element.parent.swap("<pre>#{element.to_html}</pre>")
         end
         parser.to_html
-      end
-
-      private
-
-      def parser
-        @parser ||= Nokogiri::HTML::DocumentFragment.parse(@post)
       end
 
     end

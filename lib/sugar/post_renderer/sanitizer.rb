@@ -2,34 +2,29 @@
 
 module Sugar
   module PostRenderer
-    class Sanitizer
+    class Sanitizer < Sugar::PostRenderer::Filter
 
-      def initialize(post)
-        @post = post
-      end
-
-      def parser
-        @parser ||= Nokogiri::HTML::DocumentFragment.parse(@post)
-      end
-
-      def to_html
+      def process(post)
         # Normalize <script> tags so the parser will find them
-        @post.gsub!(/<script[\s\/]*/i, '<script ')
+        post = post.gsub(/<script[\s\/]*/i, '<script ')
 
-        remove_unsafe_tags!
-        strip_event_handlers!
-        enforce_allowscriptaccess!
+        parser = Nokogiri::HTML::DocumentFragment.parse(post)
+
+        remove_unsafe_tags(parser)
+        strip_event_handlers(parser)
+        enforce_allowscriptaccess(parser)
+
         parser.to_html
       end
 
       private
 
-      def remove_unsafe_tags!
+      def remove_unsafe_tags(parser)
         parser.search("script").remove
         parser.search("meta").remove
       end
 
-      def strip_event_handlers!
+      def strip_event_handlers(parser)
         parser.search("*").each do |elem|
           elem.attributes.each do |name, attr|
             # XSS fix
@@ -41,7 +36,7 @@ module Sugar
       end
 
       # Enforces allowScriptAccess = sameDomain on iframes and other embeds.
-      def enforce_allowscriptaccess!
+      def enforce_allowscriptaccess(parser)
         parser.search("*").each do |element|
           change_allowscriptaccess_attribute_on(element)
         end

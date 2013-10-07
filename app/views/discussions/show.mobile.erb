@@ -9,10 +9,17 @@
 <%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
 
 <%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+  <%= f.hidden_field(:format, class: "format") %>
   <div class="reply">
     <p>
-      <label>Reply</label>
-      <%= f.text_area(:body, :id => 'reply-body') %>
+      <%= f.text_area(
+        :body,
+        :id                    => "compose-body",
+        :class                 => "rich",
+        "data-format-binding"  => ".format",
+        "data-formats"         => "markdown html",
+        "data-remember-format" => "true"
+      ) %>
     </p>
     <p><%= submit_tag "Post" %></p>
   </div>

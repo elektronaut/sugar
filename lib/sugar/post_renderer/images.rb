@@ -2,13 +2,10 @@
 
 module Sugar
   module PostRenderer
-    class Images
+    class Images < Sugar::PostRenderer::Filter
 
-      def initialize(post)
-        @post = post
-      end
-
-      def to_html
+      def process(post)
+        parser = Nokogiri::HTML::DocumentFragment.parse(post)
         parser.css('img').each do |element|
           if element.attributes && !element.attributes['src'].blank?
             url = element.attributes['src']
@@ -22,12 +19,6 @@ module Sugar
           end
         end
         parser.to_html
-      end
-
-      private
-
-      def parser
-        @parser ||= Nokogiri::HTML::DocumentFragment.parse(@post)
       end
 
     end

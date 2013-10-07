@@ -5,11 +5,13 @@ $(Sugar).bind 'ready', ->
     $(Sugar).trigger "posting-status", [ "Posting, please wait&hellip;" ]
     if $(form).hasClass("livePost")
       body = $("#compose-body").val()
+      format = $("#compose-body").closest('form').find('.format').val()
       $.ajax
         url: form.action
         type: "POST"
         data:
           "post[body]": body
+          "post[format]": format
           authenticity_token: Sugar.authToken(this)
 
         success: ->
