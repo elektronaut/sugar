@@ -36,7 +36,8 @@ Sugar.RichTextArea = (textArea, options) ->
       jQuery(a).addClass className
       jQuery(i).addClass "icon-#{className}"
       jQuery(a).append(i)
-      jQuery(li).append(a).appendTo @listElement
+      jQuery(li).addClass("button")
+      jQuery(li).append(a).insertBefore jQuery(@listElement).find('.formatting')
       @buttons.push li
       this
 
@@ -44,6 +45,7 @@ Sugar.RichTextArea = (textArea, options) ->
       unless @listElement
         @listElement = document.createElement("ul")
         jQuery(@listElement).addClass @settings.className
+        jQuery(@listElement).append("<li class=\"formatting\"><a href=\"#\">Markdown</a></li>")
         jQuery(@listElement).insertBefore @textArea
 
   @textArea.selectedText = ->
