@@ -12,6 +12,16 @@ Sugar.RichTextArea = (textarea, options) ->
     code: (str, language) -> ["```#{language}\n", str, "\n```"]
     spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
 
+    quote: (text, html, username, permalink) ->
+      wrapInBlockquote = (str) ->
+        ("> " + line for line in str.split("\n")).join("\n")
+      cite = if permalink
+        "Posted by [#{username}](#{permalink}):"
+      else
+        "Posted by #{username}:"
+      quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown html}")
+      ["", quotedPost + "\n\n", ""]
+
   htmlDecorator =
     bold: (str)           -> ["<b>", str, "</b>"]
     emphasis: (str)       -> ["<i>", str, "</i>"]
@@ -22,9 +32,13 @@ Sugar.RichTextArea = (textarea, options) ->
     code: (str, language) -> ["<pre><code class=\"#{language}\">", str, "</code></pre>"]
     spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
 
-  settings = jQuery.extend(
-    className: "richTextToolbar"
-  , options)
+    quote: (text, html, username, permalink) ->
+      cite = if permalink
+        "Posted by <a href=\"#{permalink}\">#{username}</a>:"
+      else
+        "Posted by #{username}:"
+      quotedPost = "<blockquote><cite>#{cite}</cite>\n\n#{text}</blockquote>"
+      ["", quotedPost + "\n\n", ""]
 
   decorator = markdownDecorator
 
@@ -53,35 +67,46 @@ Sugar.RichTextArea = (textarea, options) ->
 
   nextFormat = ->
     setFormat formats[(formats.indexOf(format) + 1) % formats.length]
+    false
 
   formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>")
   toolbar = $("<ul class=\"richTextToolbar\"></ul>").append(formatButton).insertBefore(textarea)
 
   setFormat(format)
 
-  formatButton.find("a").click ->
-    nextFormat()
-    false
+  formatButton.find("a").click nextFormat
+
+  getSelection = ->
+    $(textarea).getSelection().text
+
+  replaceSelection = (prefix, replacement, postfix) ->
+    selection = getSelection()
+
+    if typeof textarea.selectionStart != "undefined"
+      selectionStart = textarea.selectionStart
+      selectionEnd = textarea.selectionEnd
+
+    $(textarea).replaceSelection(prefix + replacement + postfix)
+    $(textarea).focus()
+
+    # Modify selection
+    if typeof textarea.setSelectionRange != "undefined"
+      newSelectionStart = (selectionStart + prefix.length)
+      newSelectionEnd  = (selectionEnd + (replacement.length - selection.length) + prefix.length)
+
+      if selectionStart == selectionEnd
+        # No text was selected, move the cursor
+        textarea.setSelectionRange(newSelectionEnd, newSelectionEnd)
+      else
+        # Set the new selection range
+        textarea.setSelectionRange(newSelectionStart, newSelectionEnd)
 
   addButton = (name, className, callback) ->
     link = $("<a title=\"#{name}\" class=\"#{className}\"><i class=\"icon-#{className}\"></i></a>")
 
     link.click ->
-      selection = $(textarea).getSelection().text
-
-      if typeof textarea.selectionStart != "undefined"
-        selectionStart = textarea.selectionStart
-        selectionEnd = textarea.selectionEnd
-
-      [prefix, replacement, postfix] = callback(selection)
-      $(textarea).replaceSelection(prefix + replacement + postfix)
-      $(textarea).focus()
-
-      if typeof textarea.setSelectionRange != "undefined"
-        textarea.setSelectionRange(
-          (selectionStart + prefix.length),
-          (selectionEnd + (replacement.length - selection.length) + prefix.length)
-        )
+      [prefix, replacement, postfix] = callback(getSelection())
+      replaceSelection(prefix, replacement, postfix)
 
     $("<li class=\"button\"></li>").append(link).insertBefore(formatButton)
 
@@ -122,6 +147,16 @@ Sugar.RichTextArea = (textarea, options) ->
 
   # Spoiler button
   addButton "Spoiler", "warning-sign", (selection) -> decorator.spoiler(selection)
+
+  # Quoting
+  $(Sugar).on "quote", (event, data) ->
+    [prefix, replacement, postfix] = decorator.quote(
+      data.text,
+      data.html,
+      data.username,
+      data.permalink
+    )
+    replaceSelection(prefix, replacement, postfix)
 
   textarea.richtext = true
 

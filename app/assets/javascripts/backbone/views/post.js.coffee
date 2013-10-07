@@ -21,16 +21,13 @@ class Sugar.Views.Post extends Backbone.View
       id:            id,
       user_id:       $(this.el).data('user_id'),
       exchange_id:   $(this.el).data('exchange_id'),
-      body:          this.stripWhitespace(this.$('.body .content').html())
+      body:          this.stripWhitespace(this.$('.body .content').text())
     })
 
   stripWhitespace: (string) ->
     string
       .replace(/^[\s]*/, '') # Strip leading space
       .replace(/[\s]*$/, '') # Strip trailing space
-
-  wrapInBlockquote: (string) ->
-    ("> " + line for line in string.split("\n")).join("\n")
 
   render: ->
     view = this
@@ -47,7 +44,7 @@ class Sugar.Views.Post extends Backbone.View
     this
 
   edit: (event) ->
-    event.preventDefault();
+    event.preventDefault()
     this.$('.body').hide()
     $(this.el).append("<div class=\"edit\"><span class=\"ticker\">Loading...</span></div>")
     this.$('.edit').load this.model.editUrl(timestamp: true), ->
@@ -55,27 +52,27 @@ class Sugar.Views.Post extends Backbone.View
 
   # Quote the post
   quote: (event) ->
-    event.preventDefault();
+    event.preventDefault()
 
     if window.getSelection? and window.getSelection().containsNode(this.el, true)
-      content = window.getSelection().toString()
+      text = window.getSelection().toString()
+      html = text
     else
-      content = this.model.get('body')
+      text = @stripWhitespace(this.$('.body .content').text())
+      html = @stripWhitespace(this.$('.body .content').html())
 
     if $(this.el).hasClass('me_post')
       username  = $(this.el).find('.body .poster').text()
+      permalink = null
     else
-      permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
       username  = $(this.el).find('.post_info .username a').text()
+      permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
 
-    if permalink
-      cite = "Posted by [#{username}](#{permalink}):"
-    else
-      cite = "Posted by #{username}:"
-
-    quotedPost = this.wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}")
-
-    Sugar.compose({add: quotedPost})
+    $(Sugar).trigger "quote",
+      username: username
+      permalink: permalink
+      text: text
+      html: html
 
   # Apply functionality to spoiler tags
   applySpoiler: ->
