@@ -72,13 +72,15 @@
         <p>
           <%= f.text_area(
             :body,
-            :id                   => "compose-body",
-            :class                => "rich",
-            "data-format-binding" => ".format",
-            "data-formats"        => "markdown html"
+            :id                    => "compose-body",
+            :class                 => "rich",
+            "data-format-binding"  => ".format",
+            "data-formats"         => "markdown html",
+            "data-remember-format" => "true"
           ) %>
         </p>
         <p id="button-container">
+          <span class="status"></span>
           <button type="submit">Post</button>
           <button type="button" class="preview">Preview</button>
         </p>

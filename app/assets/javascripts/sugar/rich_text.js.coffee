@@ -50,6 +50,9 @@ Sugar.RichTextArea = (textarea, options) ->
   if $(textarea).data("format-binding")
     format = $(textarea).closest("form").find($(textarea).data("format-binding")).val()
 
+  if $(textarea).data("remember-format") && $.cookie("preferred-format")
+    format = $.cookie("preferred-format")
+
   format ||= formats[0]
 
   setFormat = (newFormat) ->
@@ -62,8 +65,16 @@ Sugar.RichTextArea = (textarea, options) ->
       decorator = htmlDecorator
 
     formatButton.find("a").html(label)
+
+    # Update the bound form field
     if $(textarea).data("format-binding")
       $(textarea).closest("form").find($(textarea).data("format-binding")).val(format)
+
+    # Store format preference in a cookie
+    if $(textarea).data("remember-format")
+      $.cookie "preferred-format", format,
+        expires: 365 * 3
+        path:    "/"
 
   nextFormat = ->
     setFormat formats[(formats.indexOf(format) + 1) % formats.length]
