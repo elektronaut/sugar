@@ -5,12 +5,14 @@
 #= require backbone_rails_sync
 #= require backbone_datalink
 
+#= require vendor/jquery.libraries
 #= require vendor/jquery.timeago
 #= require vendor/to-markdown
 
 #= require backbone/sugar
 #= require sugar
 #= require sugar/facebook
+#= require sugar/rich_text
 #= require sugar/timestamps
 
 window.toggleNavigation = ->
@@ -61,23 +63,6 @@ resizeImages = ->
           resizeImage(img)
       , 500
 
-window.addToReply = (string) ->
-  jQuery("#reply-body").val jQuery("#reply-body").val() + string
-
-# Post quoting
-window.quotePost = (postId) ->
-  postDiv = "#post-" + postId
-  if $(postDiv).length > 0
-    wrapInBlockquote = (string) ->
-      ("> " + line for line in string.split("\n")).join("\n")
-
-    permalink = jQuery(postDiv + " .post_info .permalink a").get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, "")
-    username = jQuery(postDiv + " .post_info .username a").text()
-    content = jQuery(postDiv + " .body").html().replace(/^[\s]*/, "").replace(/[\s]*$/, "")
-    cite = "Posted by [#{username}](#{permalink}):"
-    quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown content}")
-    window.addToReply quotedPost
-
 parsePost = (body) ->
   # Embed Instagram photos directly when a share URL is pasted
   body = body.replace(
@@ -121,13 +106,29 @@ $(document).ready ->
 
   # Post quoting
   $(".post .functions a.quote_post").click ->
-    postId = @id.match(/-([\d]+)$/)[1]
-    window.quotePost postId
+    post = $(this).closest(".post")
+
+    stripWhitespace = (string) ->
+      string
+        .replace(/^[\s]*/, '') # Strip leading space
+        .replace(/[\s]*$/, '') # Strip trailing space
+
+    text = stripWhitespace(post.find('.body').text())
+    html = stripWhitespace(post.find('.body').html())
+    permalink = post.find(".post_info .permalink a").get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, "")
+    username = post.find(".post_info .username a").text()
+
+    $(Sugar).trigger "quote",
+      username: username
+      permalink: permalink
+      text: text
+      html: html
+
     false
 
   # Posting
   $('form.new_post').submit ->
-    $body = $(this).find('#reply-body')
+    $body = $(this).find('#compose-body')
     $body.val(parsePost($body.val()))
     true
 

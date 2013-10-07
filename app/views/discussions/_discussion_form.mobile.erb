@@ -1,4 +1,5 @@
 <%= f.hidden_field :type %>
+<%= f.hidden_field(:format, class: "format") %>
 <% if @recipient %>
   <%= hidden_field_tag :recipient_id, @recipient.id %>
 <% end %>
@@ -6,7 +7,7 @@
 <% if @recipient %>
 <p>
   Conversation with: <%= profile_link @recipient %>
-</p>	
+</p>
 <% end %>
 
 <p>
@@ -19,9 +20,10 @@
     <%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
   </p>
 <% end %>
+
 <p>
   <label>Enter your first post</label>
-  <%= f.text_area(:body, :rows => 10, :id => 'compose-body') %>
+  <%= f.text_area(:body, :id => 'compose-body', :class => :rich, "data-format-binding" => ".format", "data-formats" => "markdown html", "data-remember-format" => @discussion.new_record?) %>
 </p>
 <p>
   <%= f.check_box(:nsfw) %> Mark as NSFW<br />
