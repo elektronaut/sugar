@@ -27,34 +27,11 @@ $.extend window.Sugar,
     else
       $("input[name='authenticity_token']").val()
 
-  # Focus the reply textarea, optionally adding content
-  compose: (options) ->
-    options = $.extend({}, options)
-
+  # Focus the reply textarea
+  compose: ->
     # Show the first tab
     if window.replyTabs
       window.replyTabs.controls.showTab window.replyTabs.tabs[0]
 
     $("#replyText textarea").each ->
-      if options.add
-        content = $(this).val()
-        newContent = options.add + "\n\n"
-
-        # Try to insert the content at the cursor
-        if typeof this.selectionStart != "undefined"
-          before = content[0...this.selectionStart]
-          after = content[this.selectionStart..]
-          lineBreak = if before.length > 0 then "\n\n" else ""
-          $(this).val(before + lineBreak + newContent + after)
-
-          # Move the cursor
-          if this.setSelectionRange
-            newPosition = this.selectionStart + (lineBreak + newContent).length
-            this.setSelectionRange newPosition, newPosition
-
-        # No support for selectionStart, just add it at the end
-        else
-          $(this).val(content + newContent)
-
-      this.scrollTop = this.scrollHeight
       $(this).focus()

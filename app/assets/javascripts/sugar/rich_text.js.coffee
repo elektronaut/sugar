@@ -158,6 +158,9 @@ Sugar.RichTextArea = (textarea, options) ->
     )
     replaceSelection(prefix, replacement, postfix)
 
+    # Scroll to the bottom of the textarea
+    textarea.scrollTop = textarea.scrollHeight
+
   textarea.richtext = true
 
 
