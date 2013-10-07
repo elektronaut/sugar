@@ -1,14 +1,8 @@
-# encoding: utf-8
-
 module Sugar
   module PostRenderer
-    class Markdown
+    class Markdown < Sugar::PostRenderer::Filter
 
-      def initialize(post)
-        @post = post
-      end
-
-      def to_html
+      def process(post)
         markdown.render(@post)
       end
 
