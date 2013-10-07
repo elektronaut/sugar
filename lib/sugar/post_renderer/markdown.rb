@@ -19,7 +19,7 @@ module Sugar
           markdown_renderer,
           no_intra_emphasis:   true,
           fenced_code_blocks:  true,
-          autolink:            true,
+          autolink:            false,
           strikethrough:       true,
           lax_spacing:         true,
           space_after_headers: true

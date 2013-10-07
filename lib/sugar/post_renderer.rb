@@ -1,4 +1,5 @@
 require_relative 'post_renderer/filter'
+require_relative 'post_renderer/autolink'
 require_relative 'post_renderer/code'
 require_relative 'post_renderer/images'
 require_relative 'post_renderer/markdown'
@@ -10,6 +11,7 @@ module Sugar
     class << self
       def filters
         [
+          Sugar::PostRenderer::Autolink,
           Sugar::PostRenderer::Markdown,
           Sugar::PostRenderer::Images,
           Sugar::PostRenderer::Code,
