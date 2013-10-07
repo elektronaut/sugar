@@ -33,11 +33,14 @@ Sugar.RichTextArea = (textarea, options) ->
     spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
 
     quote: (text, html, username, permalink) ->
+      stripParagraphs = (str) ->
+        ($.trim(line).replace(/^<p>/, '').replace(/<\/p>$/, '') for line in str.split(/\n[\n]+/)).join("\n\n")
       cite = if permalink
         "Posted by <a href=\"#{permalink}\">#{username}</a>:"
       else
         "Posted by #{username}:"
-      quotedPost = "<blockquote><cite>#{cite}</cite>\n\n#{text}</blockquote>"
+      content = stripParagraphs(html.replace(/<br[\s\/]*>/g, "\n"))
+      quotedPost = "<blockquote><cite>#{cite}</cite>#{content}</blockquote>"
       ["", quotedPost + "\n\n", ""]
 
   decorator = markdownDecorator

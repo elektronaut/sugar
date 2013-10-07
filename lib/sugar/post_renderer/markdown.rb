@@ -3,7 +3,7 @@ module Sugar
     class Markdown < Sugar::PostRenderer::Filter
 
       def process(post)
-        markdown.render(@post)
+        markdown.render(post)
       end
 
       private
