@@ -212,7 +212,7 @@ Sugar.Hotkeys =
       # Compose
       $(document).bind "keydown", "c", (event) ->
         unless event.metaKey
-          Sugar.compose()
+          $("#compose-body").focus()
           false
 
       # Quote post

@@ -26,12 +26,3 @@ $.extend window.Sugar,
       $(elem).find("input[name='authenticity_token']").val()
     else
       $("input[name='authenticity_token']").val()
-
-  # Focus the reply textarea
-  compose: ->
-    # Show the first tab
-    if window.replyTabs
-      window.replyTabs.controls.showTab window.replyTabs.tabs[0]
-
-    $("#replyText textarea").each ->
-      $(this).focus()
