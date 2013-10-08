@@ -6,21 +6,21 @@ module LoginMacros
   module ClassMethods
 
     def it_requires_login_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
       actions.each do |action|
         it "requires login for #{action} action" do
           logout
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
           response.should redirect_to(login_users_url)
         end
       end
     end
 
     def it_requires_authentication_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
@@ -30,13 +30,13 @@ module LoginMacros
           controller.should_receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
         end
       end
     end
 
     def it_requires_user_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
@@ -45,13 +45,13 @@ module LoginMacros
           controller.should_receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
         end
       end
     end
 
     def it_requires_admin_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
@@ -64,14 +64,14 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
           received_option.should be_true
         end
       end
     end
 
     def it_requires_moderator_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
@@ -84,14 +84,14 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
           received_option.should be_true
         end
       end
     end
 
     def it_requires_user_admin_for(*actions)
-      options = { method: :get, params: { id: 1 } }
+      options = { method: :get, params: { id: 1 }, format: :html }
       if actions.last.kind_of?(Hash)
         options.merge!(actions.pop)
       end
@@ -104,7 +104,7 @@ module LoginMacros
             end
             true
           }.at_least(:once)
-          self.send options[:method], action, options[:params]
+          self.send options[:method], action, options[:params].merge(format: options[:format])
           received_option.should be_true
         end
       end
