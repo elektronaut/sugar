@@ -30,6 +30,10 @@ $(Sugar).bind 'ready', ->
     if $('body.last_page').length > 0
       window.replyTabs.controls.showTab window.replyTabs.tabs[0]
 
+    # Automatically show the first tab when the input is focused
+    $('#replyText textarea').on "focus", ->
+      window.replyTabs.controls.showTab window.replyTabs.tabs[0]
+
   # Tabs on signup
   $('#signup-tabs').each ->
     new Sugar.Tabs this, showFirstTab: true
