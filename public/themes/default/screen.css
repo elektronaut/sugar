@@ -154,7 +154,7 @@ a.button, a.button:visited, button {
   font-size:           15px;
   font-weight:         bold;
   color:               #616161;
-  text-shadow:         #ffffff 1px -1px -1px;
+  text-shadow:         1px 1px 1px #ffffff;
 }
 a.button span, button span {
   padding:             5px 0 0 15px;
@@ -163,10 +163,10 @@ a.button span, button span {
   height:              24px;
 }
 a.button:hover, button:hover {
-  background-position: -29px right;
+  background-position: right -29px;
 }
 a.button:hover span, button:hover span {
-  background:          #fbfbfb url("images/button.png") -29px left no-repeat;
+  background-position: left -29px;
   color:               #444;
 }
 
@@ -1187,7 +1187,7 @@ a.mp3player_stopped, a.mp3player_stopped:visited {
   border:              1px solid #e5e7d8;
 }
 a.mp3player_playing, a.mp3player_playing:visited {
-  background:          #ecf6ec url(images/mp3player_playing.png) repeat-x 0 -1px;;
+  background:          #ecf6ec url(images/mp3player_playing.png) repeat-x 0 -1px;
   border:              1px solid #c3dfc3;
 }
 a.mp3player_playing .position {
