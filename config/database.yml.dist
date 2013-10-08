@@ -4,14 +4,14 @@ sqlite: &sqlite
 
 mysql: &mysql
   adapter: mysql2
-  username: root
+  username: rails
   password:
   database: sugar_<%= Rails.env %>
 
 postgresql: &postgresql
   adapter: postgresql
-  username: postgres
-  password:
+  username: rails
+  password: rails
   database: sugar_<%= Rails.env %>
   min_messages: ERROR
 
