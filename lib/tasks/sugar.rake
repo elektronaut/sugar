@@ -4,7 +4,6 @@ namespace :sugar do
 
   desc "Create config files"
   task :configure do
-    `cp -i config/database.yml.dist config/database.yml`
     `cp -i config/sunspot.yml.dist config/sunspot.yml`
   end
 
