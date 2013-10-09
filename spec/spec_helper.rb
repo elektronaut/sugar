@@ -10,8 +10,8 @@ Spork.prefork do
     require 'simplecov'
   end
 
-  # This file is copied to spec/ when you run 'rails generate rspec:install'
   ENV["RAILS_ENV"] = 'test'
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
@@ -43,19 +43,6 @@ Spork.prefork do
       Sunspot.remove_all!
     end
 
-    # Use Redis
-    config.include RSpec::RedisHelper, :redis => true
-    # Clean the Redis database and reload the configuration
-    config.around(:each, :redis => true) do |example|
-      with_clean_redis do
-        # Reset Redis settings to default
-        Sugar.redis = redis
-        Sugar.redis_prefix = "sugartest"
-        Sugar.reset_config!
-        example.run
-      end
-    end
-
     # Use FactoryGirl shorthand
     config.include FactoryGirl::Syntax::Methods
 
@@ -84,13 +71,25 @@ Spork.each_run do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}
 
+  Sugar.redis = Redis.connect(RedisHelper::CONFIG)
+  Sugar.redis_prefix = "sugartest"
+
   RSpec.configure do |config|
+    config.include RedisHelper, :redis => true
     config.include JsonSpec::Helpers
     config.include LoginMacros, :type => :controller
     config.include Sugar::Exceptions
     config.include MailerMacros
     config.include ConfigurationMacros
     config.before(:each) { reset_email }
+
+    # Clean the Redis database and reload the configuration
+    config.around(:each, :redis => true) do |example|
+      with_clean_redis do
+        Sugar.reset_config!
+        example.run
+      end
+    end
   end
 
 end

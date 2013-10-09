@@ -71,7 +71,6 @@ group :test, :development do
 
   # RSpec
   gem 'rspec-rails'
-  gem 'rspec-redis_helper'
   gem 'shoulda-matchers'
   gem 'json_spec'
   gem 'capybara'

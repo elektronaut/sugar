@@ -194,8 +194,6 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
-    rspec-redis_helper (0.1.2)
-      redis
     ruby-filemagic (0.4.2)
     ruby-openid (2.3.0)
     ruby-progressbar (1.2.0)
@@ -289,7 +287,6 @@ DEPENDENCIES
   redcarpet (~> 3.0)
   redis (~> 3.0.4)
   rspec-rails
-  rspec-redis_helper
   ruby-filemagic
   ruby-openid
   ruby_gntp
