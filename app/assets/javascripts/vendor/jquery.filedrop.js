@@ -34,6 +34,8 @@
       url: '',
       refresh: 1000,
       paramname: 'userfile',
+      requestType: 'POST',    // just in case you want to use another HTTP verb
+      allowedfileextensions:[],
       allowedfiletypes:[],
       maxfiles: 25,           // Ignored if queuefiles is set > 0
       maxfilesize: 1,         // MB file size limit
@@ -52,7 +54,7 @@
       beforeEach: empty,
       afterAll: empty,
       rename: empty,
-      error: function(err, file, i) {
+      error: function(err, file, i, status) {
         alert(err);
       },
       uploadStarted: empty,
@@ -61,17 +63,27 @@
       globalProgressUpdated: empty,
       speedUpdated: empty
       },
-      errors = ["BrowserNotSupported", "TooManyFiles", "FileTooLarge", "FileTypeNotAllowed", "NotFound", "NotReadable", "AbortError", "ReadError"],
-      doc_leave_timer, stop_loop = false,
-      files_count = 0,
-      files;
+      errors = ["BrowserNotSupported", "TooManyFiles", "FileTooLarge", "FileTypeNotAllowed", "NotFound", "NotReadable", "AbortError", "ReadError", "FileExtensionNotAllowed"];
 
   $.fn.filedrop = function(options) {
     var opts = $.extend({}, default_opts, options),
-        global_progress = [];
+        global_progress = [],
+        doc_leave_timer, stop_loop = false,
+        files_count = 0,
+        files;
+
+    $('#' + opts.fallback_id).css({
+      display: 'none',
+      width: 0,
+      height: 0
+    });
 
     this.on('drop', drop).on('dragstart', opts.dragStart).on('dragenter', dragEnter).on('dragover', dragOver).on('dragleave', dragLeave);
     $(document).on('drop', docDrop).on('dragenter', docEnter).on('dragover', docOver).on('dragleave', docLeave);
+
+    this.on('click', function(e){
+      $('#' + opts.fallback_id).trigger(e);
+    });
 
     $('#' + opts.fallback_id).change(function(e) {
       opts.drop(e);
@@ -81,7 +93,9 @@
     });
 
     function drop(e) {
-      opts.drop.call(this, e);
+      if( opts.drop.call(this, e) === false ) return false;
+      if(!e.dataTransfer)
+        return;
       files = e.dataTransfer.files;
       if (files === null || files === undefined || files.length === 0) {
         opts.error(errors[0]);
@@ -96,15 +110,20 @@
     function getBuilder(filename, filedata, mime, boundary) {
       var dashdash = '--',
           crlf = '\r\n',
-          builder = '';
+          builder = '',
+          paramname = opts.paramname;
 
       if (opts.data) {
-        var params = $.param(opts.data).split(/&/);
+        var params = $.param(opts.data).replace(/\+/g, '%20').split(/&/);
 
         $.each(params, function() {
           var pair = this.split("=", 2),
               name = decodeURIComponent(pair[0]),
               val  = decodeURIComponent(pair[1]);
+
+          if (pair.length !== 2) {
+              return;
+          }
 
           builder += dashdash;
           builder += boundary;
@@ -117,10 +136,14 @@
         });
       }
 
+      if (jQuery.isFunction(paramname)){
+        paramname = paramname(filename);
+      }
+
       builder += dashdash;
       builder += boundary;
       builder += crlf;
-      builder += 'Content-Disposition: form-data; name="' + opts.paramname + '"';
+      builder += 'Content-Disposition: form-data; name="' + (paramname||"") + '"';
       builder += '; filename="' + filename + '"';
       builder += crlf;
 
@@ -190,6 +213,21 @@
         for(var fileIndex = files.length;fileIndex--;) {
           if(!files[fileIndex].type || $.inArray(files[fileIndex].type, opts.allowedfiletypes) < 0) {
             opts.error(errors[3], files[fileIndex]);
+            return false;
+          }
+        }
+      }
+
+      if (opts.allowedfileextensions.push && opts.allowedfileextensions.length) {
+        for(var fileIndex = files.length;fileIndex--;) {
+          var allowedextension = false;
+          for (i=0;i<opts.allowedfileextensions.length;i++){
+            if (files[fileIndex].name.substr(files[fileIndex].name.length-opts.allowedfileextensions[i].length) == opts.allowedfileextensions[i]) {
+              allowedextension = true;
+            }
+          }
+          if (!allowedextension){
+            opts.error(errors[8], files[fileIndex]);
             return false;
           }
         }
@@ -280,10 +318,10 @@
             };
 
             reader.onloadend = !opts.beforeSend ? send : function (e) {
-              opts.beforeSend(files[fileIndex], fileIndex, function () { send(e); }, e);
+              opts.beforeSend(files[fileIndex], fileIndex, function () { send(e); });
             };
 
-            reader.readAsBinaryString(files[fileIndex]);
+            reader.readAsDataURL(files[fileIndex]);
 
           } else {
             filesRejected++;
@@ -307,7 +345,7 @@
 
       var send = function(e) {
 
-        var fileIndex = ((typeof(e.srcElement) === "undefined") ? e.target : e.srcElement).index;
+        var fileIndex = (e.srcElement || e.target).index;
 
         // Sometimes the index is not attached to the
         // event object. Find it by size. Hack for sure.
@@ -330,10 +368,11 @@
           xhr.withCredentials = opts.withCredentials;
         }
 
+        var data = atob(e.target.result.split(',')[1]);
         if (typeof newName === "string") {
-          builder = getBuilder(newName, e.target.result, mime, boundary);
+          builder = getBuilder(newName, data, mime, boundary);
         } else {
-          builder = getBuilder(file.name, e.target.result, mime, boundary);
+          builder = getBuilder(file.name, data, mime, boundary);
         }
 
         upload.index = index;
@@ -345,8 +384,15 @@
         upload.startData = 0;
         upload.addEventListener("progress", progress, false);
 
-        xhr.open("POST", opts.url, true);
+        // Allow url to be a method
+        if (jQuery.isFunction(opts.url)) {
+            xhr.open(opts.requestType, opts.url(), true);
+        } else {
+            xhr.open(opts.requestType, opts.url, true);
+        }
+
         xhr.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
         // Add headers
         $.each(opts.headers, function(k, v) {
@@ -400,8 +446,8 @@
 
 
           // Pass any errors to the error option
-          if (xhr.status < 200 && xhr.status > 299) {
-            opts.error(xhr.statusText);
+          if (xhr.status < 200 || xhr.status > 299) {
+            opts.error(xhr.statusText, file, fileIndex, xhr.status);
           }
         };
       };
@@ -494,7 +540,15 @@
       }
       var ords = Array.prototype.map.call(datastr, byteValue);
       var ui8a = new Uint8Array(ords);
-      this.send(ui8a.buffer);
+
+      // Not pretty: Chrome 22 deprecated sending ArrayBuffer, moving instead
+      // to sending ArrayBufferView.  Sadly, no proper way to detect this
+      // functionality has been discovered.  Happily, Chrome 22 also introduced
+      // the base ArrayBufferView class, not present in Chrome 21.
+      if ('ArrayBufferView' in window)
+        this.send(ui8a);
+      else
+        this.send(ui8a.buffer);
     };
   } catch (e) {}
 

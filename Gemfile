@@ -44,6 +44,8 @@ gem 'progress_bar'
 gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
+gem 'ruby-filemagic', require: 'filemagic'
+gem 'aws-s3', require: 'aws/s3'
 gem 'redcarpet', '~> 3.0'
 gem "font-awesome-rails"
 
@@ -71,6 +73,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'rspec-redis_helper'
   gem 'shoulda-matchers'
+  gem 'json_spec'
   gem 'capybara'
   gem 'fuubar'
 

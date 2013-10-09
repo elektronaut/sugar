@@ -51,6 +51,10 @@ module Sugar
   class << self
     attr_accessor :redis, :redis_prefix
 
+    def aws_s3?
+      (self.config(:amazon_aws_key) && self.config(:amazon_aws_secret) && self.config(:amazon_s3_bucket)) ? true : false
+    end
+
     def redis
       @redis ||= Redis.new
     end
