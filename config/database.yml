@@ -1,0 +1,31 @@
+sqlite: &sqlite
+  adapter: sqlite3
+  database: db/<%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>.sqlite3
+
+mysql: &mysql
+  adapter: mysql2
+  username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
+  password: <%= ENV['SUGAR_DB_PASSWORD'] || "" %>
+  database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
+
+postgresql: &postgresql
+  adapter: postgresql
+  username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
+  password: <%= ENV['SUGAR_DB_PASSWORD'] || "rails" %>
+  database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
+  min_messages: ERROR
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  username: <%= ENV['SUGAR_DB_HOST'] || "localhost" %>
+  <<: *<%= ENV['SUGAR_DB'] || "mysql" %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

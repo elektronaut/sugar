@@ -2,13 +2,6 @@
 
 namespace :sugar do
 
-  desc "Create config files"
-  task :configure do
-    `cp -i config/database.yml.dist config/database.yml`
-    `cp -i config/sunspot.yml.dist config/sunspot.yml`
-    `cp -i config/initializers/sugar.rb.dist config/initializers/sugar.rb`
-  end
-
   desc "Pack themes"
   task :pack_themes => :environment do
     themes_dir = File.join(File.dirname(__FILE__), "../../public/themes")

@@ -66,6 +66,8 @@ group :test do
 end
 
 group :test, :development do
+  gem 'dotenv-rails'
+
   gem 'sunspot_solr'
   gem 'sunspot-rails-tester'
 
