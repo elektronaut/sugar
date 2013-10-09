@@ -72,7 +72,6 @@ Spork.each_run do
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}
 
   Sugar.redis = Redis.connect(RedisHelper::CONFIG)
-  Sugar.redis_prefix = "sugartest"
 
   RSpec.configure do |config|
     config.include RedisHelper, :redis => true

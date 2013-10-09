@@ -49,7 +49,7 @@ module Sugar
   CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]
 
   class << self
-    attr_accessor :redis, :redis_prefix
+    attr_accessor :redis
 
     def aws_s3?
       (self.config(:amazon_aws_key) && self.config(:amazon_aws_secret) && self.config(:amazon_s3_bucket)) ? true : false
@@ -59,23 +59,16 @@ module Sugar
       @redis ||= Redis.new
     end
 
-    def redis_prefix
-      unless @redis_prefix
-        raise "Sugar.redis_prefix has not been configured! Check that you've set up config/initializers/sugar.rb."
-      end
-      @redis_prefix
-    end
-
     def load_config!
       @config = Hash[DEFAULT_CONFIGURATION]
-      if saved_config = Sugar.redis.get("#{Sugar.redis_prefix}:configuration")
+      if saved_config = Sugar.redis.get("configuration")
         @config = @config.merge(JSON.parse(saved_config).symbolize_keys)
       end
       @config
     end
 
     def save_config!
-      Sugar.redis.set("#{Sugar.redis_prefix}:configuration", @config.to_json)
+      Sugar.redis.set("configuration", @config.to_json)
     end
 
     def reset_config!

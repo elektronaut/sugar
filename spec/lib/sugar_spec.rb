@@ -8,10 +8,6 @@ describe Sugar, :redis => true do
     Sugar.redis.should_not be_nil
   end
 
-  it "has a default redis prefix" do
-    Sugar.redis_prefix.should == "sugartest"
-  end
-
   describe 'configuration' do
     it "has a default configuration" do
       Sugar.config(:forum_name).should == 'Sugar'

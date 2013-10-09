@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-Sugar.redis_prefix = "sugar"
-
 Sugar::Application.config.session_store(
   :cookie_store,
   :key          => '_sugar_session',
