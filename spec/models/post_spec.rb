@@ -272,7 +272,7 @@ describe Post do
     end
 
     context "when edited_at isn't set" do
-      before { Time.stub!(:now).and_return(Time.parse("Oct 22 2012")) }
+      before { Time.stub(:now).and_return(Time.parse("Oct 22 2012")) }
       its(:edited_at) { should == Time.now }
     end
   end
