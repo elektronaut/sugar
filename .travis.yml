@@ -11,6 +11,9 @@ env:
   - DB=postgresql
 script:
   - bundle exec rspec spec
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libmagic-dev
 before_script:
   - cp config/database.yml.dist config/database.yml
   - cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
