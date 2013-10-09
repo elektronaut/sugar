@@ -16,7 +16,6 @@ config/deploy.rb
 config/database.yml
 config/newrelic.yml
 config/sunspot.yml
-config/initializers/sugar.rb
 db/schema.rb
 solr/*
 public/cache
