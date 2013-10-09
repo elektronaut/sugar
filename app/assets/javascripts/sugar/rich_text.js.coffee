@@ -175,6 +175,29 @@ Sugar.RichTextArea = (textarea, options) ->
     # Scroll to the bottom of the textarea
     textarea.scrollTop = textarea.scrollHeight
 
+  uploadBanner = (file) -> "[Uploading \"#{file.name}\"...]"
+
+  startUpload = (file) ->
+    replaceSelection("", uploadBanner(file) + "\n", "")
+
+  finishUpload = (file, response) ->
+    replacedText = $(textarea).val().replace(uploadBanner(file), decorator.image(response.url).join(""))
+    $(textarea).val(replacedText)
+
+  if Sugar.Configuration.uploads
+    $(textarea).filedrop
+      allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif']
+      maxfiles: 25
+      maxfilesize: 2
+      paramname: "upload[file]"
+      url: "/uploads.json"
+      headers:
+        "X-CSRF-Token": Sugar.authToken($(textarea).closest("form"))
+      uploadStarted: (i, file, len) ->
+        startUpload file
+      uploadFinished: (i, file, response, time) ->
+        finishUpload file, response
+
   textarea.richtext = true
 
 

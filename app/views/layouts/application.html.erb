@@ -22,6 +22,8 @@
     <%= "Sugar.Configuration.FlickrAPI          = '#{Sugar.config(:flickr_api)}';".html_safe if Sugar.config(:flickr_api) %>
     <%= "Sugar.Configuration.FacebookAppId      = '#{Sugar.config(:facebook_app_id)}';".html_safe if Sugar.config(:facebook_app_id) %>
     <%= "Sugar.Configuration.AmazonAssociatesId = '#{Sugar.config(:amazon_associates_id)}';".html_safe if Sugar.config(:amazon_associates_id) %>
+    <%= "Sugar.Configuration.uploads            = true;" if Sugar.config(:amazon_s3_bucket) %>
+
     <%= "Sugar.Configuration.currentUser        = #{@current_user.to_json(:only => [:id, :username, :admin, :user_admin, :moderator])};".html_safe if @current_user %>
   </script>
 

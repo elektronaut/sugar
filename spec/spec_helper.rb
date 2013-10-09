@@ -85,11 +85,11 @@ Spork.each_run do
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}
 
   RSpec.configure do |config|
-    # Macros
+    config.include JsonSpec::Helpers
     config.include LoginMacros, :type => :controller
     config.include Sugar::Exceptions
-    config.include(MailerMacros)
-    config.include(ConfigurationMacros)
+    config.include MailerMacros
+    config.include ConfigurationMacros
     config.before(:each) { reset_email }
   end
 
