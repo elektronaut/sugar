@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :disable_xss_protection
   before_filter :load_configuration
   before_filter :set_time_zone
   before_filter :detect_mobile
@@ -17,6 +18,13 @@ class ApplicationController < ActionController::Base
   before_filter :set_theme
 
   protected
+
+    def disable_xss_protection
+      # Disabling this is probably not a good idea,
+      # but the header causes Chrome to choke when being
+      # redirected back after a submit and the page contains an iframe.
+      response.headers['X-XSS-Protection'] = "0"
+    end
 
     # Renders an error
     def render_error(error, options={})
