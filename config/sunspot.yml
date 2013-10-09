@@ -1,15 +1,15 @@
 production:
   solr:
-    hostname: 127.0.0.1
+    hostname: localhost
     port: 8080
     log_level: WARNING
     path: /solr
-  auto_commit_after_request: false
+    auto_commit_after_request: false
 
 development:
   solr:
     hostname: localhost
-    port: 8982
+    port: 8983
     log_level: INFO
     min_memory: 128M
     max_memory: 2G
