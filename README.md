@@ -1,73 +1,69 @@
 # Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.png)](https://travis-ci.org/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar.png)](https://codeclimate.com/github/elektronaut/sugar)
 
-Sugar is a free, open-source forum optimized for performance and usability, written in Ruby on Rails.
+Sugar is a modern open-source forum optimized for performance and usability, written in Ruby on Rails.
 
 
-## Features
+## Dependencies
 
-Sugar aims for simplicity, and is first and foremost built for performance, especially with a high volume of posts. There's a few interesting bullet points, though:
+* [Ruby 1.9+](https://www.ruby-lang.org/en/)
+* [Bundler](http://bundler.io/)
+* [Redis](http://redis.io/)
+* [Java](http://www.java.com/en/download/index.jsp)
+* libmagic
 
-* Publically browseable, signup required or invite-only
-* Realtime discussions (via AJAX)
-* iPhone version
-* OpenID support
-* Unread posts tracking
-* Following and favoriting discussions
-* Mouse drawing using Napkin
-* Google Reader/GMail style keyboard navigation
-* Syntax highlighting of code
-* Google Maps support
-* Loads data from Twitter, Flickr, Last.fm
-* Custom stylesheets
+SQLite is supported, but you probably want [PostgreSQL](http://www.postgresql.org/) or [MySQL](http://www.mysql.com/) for production use.
 
-Things you *WON'T* find in Sugar:
-
-* Threaded discussions
-* User groups and access control lists
-* Emoticons and signatures
-
-
-## Requirements, and how to install them
-
-Sugar is built on Ruby on Rails 4.0, and supports MySQL, Postgres and SQLite. Ruby 1.9 is required, Ruby 2.0 is supported.
-
-You'll need to have Redis installed. Sugar connects to localhost by default, which should be fine in most cases.
-
-Install Bundler (if you haven't) and use it to install the rest of the required gems:
-
-```
-gem install bundler
-bundle install
-```
 
 ## Installation
 
-Copy the sample configuration files, then edit them.
+If you want to hack on Sugar, the easiest way to get up and running is with [sugar-dev-box](https://github.com/elektronaut/sugar-dev-box). It provides a virtual development environment, and only requires VirtualBox and Vagrant.
 
-```
-cp config/database.yml.dist config/database.yml
-cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
-```
+Otherwise:
 
-Next, create and migrate the database:
+    $ git clone https://github.com/elektronaut/sugar.git
+    $ cd sugar
+    $ bundle
+    $ rake db:create
+    $ rake db:migrate
 
-```
-bundle exec rake db:create
-bundle exec rake db:migrate
-```
+This assumes you have MySQL running on localhost, with a user named `rails` with no password. See [Configuring Sugar](#configuration) if your setup differs.
 
-You're now ready to start the development server:
+Now you can start Solr and the development server:
 
-```
-bundle exec rails server
-```
+    $ sunspot-solr start
+    $ bundle exec rails server
+
+Sugar is now running on [localhost:3000](http://localhost:3000/).
+
+
+## Deploying Sugar
+
+Sugar is deployed like a regular Rails app, see the [official Rails site](http://rubyonrails.org/deploy). A sample Capistrano recipe is provided `config/deploy.rb.dist`.
+
+For production use, you'll want a full grown Solr setup. See the [Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how to get up and running.
+
+[Heroku](https://www.heroku.com/) is currently not supported, but will be soon.
+
+
+## <a id="configuration"></a> Configuring Sugar
+
+Most of Sugar is configured with a web interface. However, a few details must be sorted out before the app starts. The defaults should be fine for development, but you need tweak these settings for production use with environment variables.
+
+Environment variable  | Required | Info
+----------------------|----------|-----------------------------------------------------------------------
+SUGAR_SECRET_KEY_BASE | Yes      | Set to a long, random string
+SUGAR_SECRET_TOKEN    | -        | Use if you are upgrading from Rails 3
+SUGAR_SESSION_KEY     | -        | Default: `_sugar_session`
+SUGAR_DB              | -        | Database backend. Default: `mysql`, also valid: `postgresql`, `sqlite`
+SUGAR_DB_DATABASE     | -        | Default: `sugar_<%= Rails.env %>`
+SUGAR_DB_HOST         | -        | Default: `localhost`
+SUGAR_DB_USERNAME     | -        | Default: `rails`
+SUGAR_DB_PASSWORD     | -        | Default: `rails` for PostgreSQL, blank for MySQL
 
 
 ## Credits
 
-Although it's written from scratch, the look and feel of Sugar was inspired by Vanilla, an open-source forum by Lussumo. Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of [Automata Studios](http://automatastudios.com/).
-
-The name? It's what Butterscotch is made of, and it's totally sweet.
+Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of [Automata Studios](http://automatastudios.com/).
 
 
 ## License
