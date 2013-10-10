@@ -13,19 +13,19 @@
       <%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> /
     <% end -%>
     <% if @current_user.hidden?(@discussion) -%>
-      <%= link_to "Unhide", unhide_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Unhide", unhide_discussion_path(@discussion, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Hide", hide_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Hide", hide_discussion_path(@discussion, page: @posts.current_page) %>
     <% end -%> /
     <% if @current_user.following?(@discussion) -%>
-      <%= link_to "Stop following", unfollow_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Stop following", unfollow_discussion_path(@discussion, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Follow", follow_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Follow", follow_discussion_path(@discussion, page: @posts.current_page) %>
     <% end -%> /
     <% if @current_user.favorite?(@discussion) -%>
-      <%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Favorite", favorite_discussion_path(@discussion, :page => @posts.page) %>
+      <%= link_to "Favorite", favorite_discussion_path(@discussion, page: @posts.current_page) %>
     <% end -%>
   <% end %>
 </div>
