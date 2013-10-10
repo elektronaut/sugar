@@ -57,19 +57,6 @@ describe User do
       it { should_not validate_presence_of(:email) }
     end
 
-    context "when signup approval is required" do
-      subject { build(:user) }
-      before { Sugar.config(:signup_approval_required, true) }
-      it { should validate_presence_of(:realname) }
-      it { should validate_presence_of(:application) }
-    end
-
-    context "signup approval isn't required" do
-      before { Sugar.config(:signup_approval_required, false) }
-      it { should_not validate_presence_of(:realname) }
-      it { should_not validate_presence_of(:application) }
-    end
-
   end
 
   describe "#full_email" do

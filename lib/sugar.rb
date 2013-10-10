@@ -26,7 +26,6 @@ module Sugar
     # Options
     :public_browsing          => false,
     :signups_allowed          => true,
-    :signup_approval_required => false,
 
     # Integration
     :xbox_live_enabled        => false,
@@ -46,7 +45,7 @@ module Sugar
     :custom_footer            => nil,
     :custom_javascript        => nil,
   }
-  CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :signup_approval_required, :xbox_live_enabled]
+  CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :xbox_live_enabled]
 
   class << self
     attr_accessor :redis

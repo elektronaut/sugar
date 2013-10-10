@@ -3,12 +3,6 @@ Hi <%= @user.username %>,
 thanks for signing up! This email is just a note to let you know that
 your account has been successfully created.
 
-<% unless @user.activated? -%>
-Your account will have to be approved by a moderator before you'll be able
-to access the site. We'll drop you a new note once your approval
-status changes.
-
-<% end -%>
 <% if @user.openid_url? -%>
 You've signed up using your OpenID URL:
 

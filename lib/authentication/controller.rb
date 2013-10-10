@@ -49,7 +49,7 @@ module Authentication
         options = default_verify_user_options(options)
 
         verified = false
-        if @current_user && @current_user.activated?
+        if @current_user
           verified ||= options[:user] == :any          if options[:user]
           verified ||= options[:user] == @current_user if options[:user]
           verified ||= @current_user.admin?            if options[:admin]
@@ -124,12 +124,7 @@ module Authentication
       # Verifies that the account is activated
       def verify_activated_account
         if @current_user
-          if @current_user.activated?
-            logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
-          else
-            logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - not activated"
-            @current_user = nil
-          end
+          logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
         end
       end
 

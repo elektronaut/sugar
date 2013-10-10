@@ -25,11 +25,6 @@
     <%= f.hidden_field :facebook_uid %>
     <%= labelled_field f.text_field(:username), "Username", :errors => @user.errors[:username] %>
 
-    <% if Sugar.config(:signup_approval_required) %>
-      <p>Your account will have to be approved. Please provide some information about your application:</p>
-      <%= labelled_field f.text_area(:application, :size => '80x8'), "Application text" %>
-    <% end %>
-
     <p><button type="submit">Sign up</button></p>
   <% end %>
 

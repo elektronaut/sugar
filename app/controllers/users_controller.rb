@@ -53,8 +53,8 @@ class UsersController < ApplicationController
 
     def allowed_params
       allowed = [
-        :aim, :application, :avatar_url, :birthday, :description, :email,
-        :facebook_uid, :flickr, :gamertag, :gtalk, :html_disabled, :instagram,
+        :aim, :avatar_url, :birthday, :description, :email,
+        :facebook_uid, :flickr, :gamertag, :gtalk, :instagram,
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
       if @current_user
         if @current_user.user_admin?
           allowed += [
-            :username, :banned, :activated, :user_admin, :moderator,
+            :username, :banned, :user_admin, :moderator,
             :trusted, :available_invites, :status
           ]
         end

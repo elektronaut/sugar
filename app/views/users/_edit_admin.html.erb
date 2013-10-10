@@ -1,11 +1,6 @@
 <fieldset>
   <h2>Account status</h2>
-  <p class="field">
-    <%= f.radio_button(:status, 0) %> Inactive<br />
-    <%= f.radio_button(:status, 1) %> Activated<br />
-    <%= f.radio_button(:status, 2) %> Banned<br />
-  </p>
-  <%= labelled_field f.check_box(:html_disabled), "Disable HTML", :description => 'All posts by this user will be displayed as plain text' %>
+  <%= labelled_field f.check_box(:banned), "Banned" %>
   <%= labelled_field f.check_box(:trusted), "Trusted", :description => 'User will be able to see discussions in categories marked as trusted' %>
 </fieldset>
 

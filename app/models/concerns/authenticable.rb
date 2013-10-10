@@ -1,8 +1,6 @@
 module Authenticable
   extend ActiveSupport::Concern
 
-  STATUS_OPTIONS = :inactive, :activated, :banned
-
   # Virtual attributes for clear text passwords
   attr_accessor :password, :confirm_password
 
@@ -66,7 +64,7 @@ module Authenticable
 
   # Is this an active user?
   def active
-    self.activated? && !self.banned?
+    !self.banned?
   end
 
   # Generates a new password for this user.
@@ -110,29 +108,6 @@ module Authenticable
   # Returns true if this user is temporarily banned.
   def temporary_banned?
     self.banned_until? && self.banned_until > Time.now
-  end
-
-  # Get account status
-  def status
-    return 2 if banned?
-    return 1 if activated?
-    return 0
-  end
-
-  # Set account status
-  def status=(new_status)
-    new_status = STATUS_OPTIONS[new_status.to_i] unless new_status.kind_of?(Symbol)
-    case new_status
-    when :banned
-      self.banned    = true
-      self.activated = true
-    when :activated
-      self.banned    = false
-      self.activated = true
-    when :inactive
-      self.banned    = false
-      self.activated = false
-    end
   end
 
   protected

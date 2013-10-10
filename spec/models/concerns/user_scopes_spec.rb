@@ -8,7 +8,6 @@ describe UserScopes do
   let!(:first_user) { create(:banned_user) }
 
   describe "active" do
-    let!(:not_activated) { create(:user, activated: false) }
     let!(:banned) { create(:user, banned: true) }
     let!(:active) { create(:user) }
     subject { User.active }

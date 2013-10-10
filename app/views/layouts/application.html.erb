@@ -79,7 +79,7 @@
         (<%= link_to "Sign out", logout_users_path %>)
       <% else %>
         <% if Sugar.config(:signups_allowed) %>
-          <%= link_to((Sugar.config(:signup_approval_required) ? "Apply for membership" : "Sign up"), new_user_path) %>
+          <%= link_to("Sign up", new_user_path) %>
           or
         <% end %>
         <%= link_to "Log in", login_users_path %>

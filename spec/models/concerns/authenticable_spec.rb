@@ -9,7 +9,6 @@ describe Authenticable do
 
   let(:user)          { create(:user, facebook_uid: 123, openid_url: 'http://example.com') }
   let(:banned_user)   { create(:banned_user) }
-  let(:inactive_user) { create(:user, activated: false) }
 
   subject { user }
 
@@ -68,7 +67,6 @@ describe Authenticable do
   describe "#active" do
     specify { user.active.should be_true }
     specify { banned_user.active.should be_false }
-    specify { inactive_user.active.should be_false }
   end
 
   describe "#generate_new_password!" do
@@ -146,34 +144,6 @@ describe Authenticable do
     specify { user.temporary_banned?.should be_false }
     specify { create(:user, banned_until: 2.days.ago).temporary_banned?.should be_false }
     specify { create(:user, banned_until: (Time.now + 2.days)).temporary_banned?.should be_true }
-  end
-
-  describe "#status" do
-    specify { inactive_user.status.should == 0 }
-    specify { user.status.should == 1 }
-    specify { banned_user.status.should == 2 }
-  end
-
-  describe "#status=" do
-
-    context "when 0" do
-      before { user.status = 0 }
-      specify { user.banned?.should be_false }
-      specify { user.activated?.should be_false }
-    end
-
-    context "when 1" do
-      before { user.status = 1 }
-      specify { user.banned?.should be_false }
-      specify { user.activated?.should be_true }
-    end
-
-    context "when 2" do
-      before { user.status = 2 }
-      specify { user.banned?.should be_true }
-      specify { user.activated?.should be_true }
-    end
-
   end
 
   describe "#ensure_password" do

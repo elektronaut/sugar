@@ -21,7 +21,6 @@ class UsersController < ApplicationController
     def create
       @user = User.new(new_user_params)
       @user.invite = @invite # This can be nil
-      @user.activated = true unless Sugar.config(:signup_approval_required)
 
       if @user.save
         finalize_successful_signup

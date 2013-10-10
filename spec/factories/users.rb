@@ -6,12 +6,10 @@ FactoryGirl.define do
     hashed_password     { FactoryGirl.generate(:sha1hash) }
     description         { "Hi, I'm #{realname}!" }
     sequence(:location) { |n| "Location #{n}" }
-    application         { "This is my application" }
 
     admin      false
     user_admin false
     moderator  false
-    activated  true
     banned     false
     trusted    false
 

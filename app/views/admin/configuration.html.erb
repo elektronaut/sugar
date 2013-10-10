@@ -65,11 +65,6 @@
           " Users must be invited",
           "Signing up"
       ) %>
-      <%= labelled_field(
-          check_box_tag('config[signup_approval_required]', '1', Sugar.config(:signup_approval_required)) +
-          " User moderators must approve new users",
-          "Approval"
-      ) %>
     </fieldset>
 
 

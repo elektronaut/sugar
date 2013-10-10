@@ -4,11 +4,6 @@ require 'digest/sha1'
 
 # = User accounts
 #
-# === Users activation and banning
-# Users must have the <tt>activated</tt> flag to be able to log in. They will
-# automatically be activated unless manual approval is enabled in the
-# configuration. Non-active and banned users won't show up in the users lists.
-#
 # === Trusted users
 # Users with the <tt>trusted</tt> flag can see the trusted categories and
 # discussions. Admin users also count as trusted.
@@ -36,10 +31,6 @@ class User < ActiveRecord::Base
   validates :email,
             :presence => { :case_sensitive => false },
             :unless => Proc.new { |u| u.openid_url? || u.facebook? }
-
-  validates :realname, :application,
-            :presence => true,
-            :if => Proc.new { |u| Sugar.config(:signup_approval_required) }
 
   # Returns the full email address with real name.
   def full_email
@@ -138,7 +129,6 @@ class User < ActiveRecord::Base
     def check_for_first_user
       unless User.any?
         self.admin = true
-        self.activated = true
       end
     end
 

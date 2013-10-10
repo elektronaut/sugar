@@ -4,7 +4,7 @@ module UserScopes
   extend ActiveSupport::Concern
 
   included do
-    scope :active,          -> { where(:activated => true, :banned => false) }
+    scope :active,          -> { where(:banned => false) }
     scope :by_username,     -> { order("username ASC") }
     scope :banned,          -> { where("banned = ? OR banned_until > ?", true, Time.now) }
     scope :online,          -> { active.where("last_active > ?", 15.minutes.ago) }

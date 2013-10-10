@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration
             t.string     :stylesheet_url
             t.text       :description
             t.boolean    :banned, :activated, :admin, :trusted, :user_admin, :moderator, :work_safe_urls, :html_disabled, :null => false, :default => false
-      t.boolean    :notify_on_message, :keyboard_navigation, :null => false, :default => true
+            t.boolean    :notify_on_message, :keyboard_navigation, :null => false, :default => true
             t.datetime   :last_active
             t.date       :birthday
             t.integer    :posts_count, :discussions_count, :default => 0, :null => false
