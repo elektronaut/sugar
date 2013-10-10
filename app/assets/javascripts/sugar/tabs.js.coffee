@@ -9,7 +9,10 @@ Sugar.Tabs = (controls, options) ->
       jQuery(@parentNode).removeClass "active"
 
   controls.showTab = (tab) ->
-    @hideAllTabs()
+    jQuery(@tabs).each ->
+      unless this.tabId == tab.tabId
+        jQuery(@tabId).hide()
+        jQuery(@parentNode).removeClass "active"
     jQuery(tab.tabId).show()
     jQuery(tab.parentNode).addClass "active"
 
