@@ -1,6 +1,8 @@
 class Sugar.Views.Post extends Backbone.View
   el: $('div.post')
 
+  editing: false
+
   events:
     'click a.quote_post': 'quote'
     'click a.edit_post': 'edit'
@@ -45,10 +47,12 @@ class Sugar.Views.Post extends Backbone.View
 
   edit: (event) ->
     event.preventDefault()
-    this.$('.body').hide()
-    $(this.el).append("<div class=\"edit\"><span class=\"ticker\">Loading...</span></div>")
-    this.$('.edit').load this.model.editUrl(timestamp: true), ->
-      $(Sugar).trigger('modified')
+    unless @editing
+      this.$('.body').hide()
+      $(this.el).append("<div class=\"edit\"><span class=\"ticker\">Loading...</span></div>")
+      this.$('.edit').load this.model.editUrl(timestamp: true), ->
+        $(Sugar).trigger('modified')
+      @editing = true
 
   # Quote the post
   quote: (event) ->
