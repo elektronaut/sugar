@@ -89,13 +89,13 @@ class DiscussionsController < ApplicationController
     # Unfavorite a discussion
     def unfavorite
       DiscussionRelationship.define(@current_user, @discussion, :favorite => false)
-      redirect_to discussion_url(@discussion, :page => params[:page])
+      redirect_to discussions_url
     end
 
     # Favorite a discussion
     def hide
       DiscussionRelationship.define(@current_user, @discussion, :hidden => true)
-      redirect_to discussion_url(@discussion, :page => params[:page])
+      redirect_to discussions_url
     end
 
     # Unfavorite a discussion
