@@ -21,8 +21,6 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libmagic-dev
 before_script:
-  - cp config/database.yml.dist config/database.yml
-  - cp config/initializers/sugar.rb.dist config/initializers/sugar.rb
   - sh -c "if [ '$SUGAR_DB' = 'mysql' ]; then mysql -e 'create database sugar_test;'; fi"
   - sh -c "if [ '$SUGAR_DB' = 'postgresql' ]; then psql -c 'create database sugar_test' -U postgres; fi"
   - sh -c "if [ '$SUGAR_DB' = 'sqlite' ]; then bundle exec rake db:create; fi"
