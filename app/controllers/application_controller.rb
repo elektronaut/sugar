@@ -72,6 +72,13 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def require_s3
+      unless Sugar.aws_s3?
+        flash[:notice] = "Amazon Web Services not configured!"
+        redirect_to root_url and return
+      end
+    end
+
     # Sets @section to the current section.
     def set_section
       case self.class.to_s
