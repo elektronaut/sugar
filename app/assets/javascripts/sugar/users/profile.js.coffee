@@ -47,13 +47,13 @@ $(Sugar).bind 'ready', ->
                                 "</p>" + "</div>"
 
   # Show latest photos from Flickr
-  if Sugar.Configuration.FlickrAPI
+  if Sugar.Configuration.flickrApi
     $("#flickrProfileURL").each ->
       fuid = @href.split("/")
       fuid = fuid[(fuid.length - 1)]
       $("#flickrPhotos").hide()
       $("#flickrPhotos").flickr
-        api_key: Sugar.Configuration.FlickrAPI
+        api_key: Sugar.Configuration.flickrApi
         type: "search"
         user_id: fuid
         per_page: 15

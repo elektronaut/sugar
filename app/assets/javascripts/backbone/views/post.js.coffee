@@ -95,7 +95,7 @@ class Sugar.Views.Post extends Backbone.View
 
   # Apply referral code to Amazon links
   applyAmazonReferralCode: ->
-    if referral_id = Sugar.Configuration.AmazonAssociatesId
+    if referral_id = Sugar.Configuration.amazonAssociatesId
       $(this.el).find('.body a').each ->
         link = this
         if !$.data(link, 'amazon_associates_referral_id') && link.href.match /https?:\/\/([\w\d\-\.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//

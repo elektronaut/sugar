@@ -1,12 +1,12 @@
 # Listens for a ready event from the framework, trigger init()
 # if the application ID is configured.
 $(Sugar).bind "ready", ->
-  @Facebook.init()  if @Configuration.FacebookAppId
+  @Facebook.init()  if @Configuration.facebookAppId
 
 Sugar.Facebook =
   appId: false
   init: ->
-    @appId = Sugar.Configuration.FacebookAppId
+    @appId = Sugar.Configuration.facebookAppId
     if $(".fb_button").length > 0
       $(".fb_button").addClass("fb_button_large").wrapInner "<span class=\"fb_button_text\" />"
     @loadAsync()

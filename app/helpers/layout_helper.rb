@@ -13,6 +13,25 @@ module LayoutHelper
     @body_classes.uniq.join(' ')
   end
 
+  def frontend_configuration
+    {
+      debug:              (Rails.env == "development"),
+      flickrApi:          Sugar.config(:flickr_api),
+      facebookAppId:      Sugar.config(:facebook_app_id),
+      amazonAssociatesId: Sugar.config(:amazon_associates_id),
+      uploads:            Sugar.aws_s3?,
+      currentUser:        current_user.try(&:as_json)
+    }
+  end
+
+  def current_user
+    @current_user
+  end
+
+  def current_user?
+    current_user ? true : false
+  end
+
   def search_mode_options
     options = [['in discussions', search_path], ['in posts', search_posts_path]]
     options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion && @discussion.id

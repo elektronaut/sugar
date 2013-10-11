@@ -146,7 +146,7 @@ $(document).ready ->
       container.spoilerApplied = true
 
   # Amazon Associates referral code
-  if referral_id = Sugar.Configuration.AmazonAssociatesId
+  if referral_id = Sugar.Configuration.amazonAssociatesId
     $('.post .body a').each ->
       link = this
       if !$.data(link, 'amazon_associates_referral_id') && link.href.match /https?:\/\/([\w\d\-\.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//
