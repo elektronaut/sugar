@@ -14,7 +14,7 @@ class UploadsController < ApplicationController
     if upload.valid?
       upload.save
       response = {
-        name: upload.original_filename,
+        name: upload.name,
         type: upload.mime_type,
         url:  upload.url
       }

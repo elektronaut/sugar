@@ -11,17 +11,18 @@ class PostsController < ApplicationController
   #after_filter  :store_session_authentication, :except => [:count]
   caches_page   :count
 
-  requires_authentication :except => [:count]
-  requires_user           :except => [:count, :since, :search]
-  protect_from_forgery    :except => [:doodle]
+  requires_authentication except: [:count]
+  requires_user           except: [:count, :since, :search]
+  protect_from_forgery    except: [:drawing]
 
   # Other filters
-  before_filter :load_discussion,              :except => [:search]
-  before_filter :verify_viewability,           :except => [:search, :count, :since]
-  before_filter :load_post,                    :only => [:show, :edit, :update, :destroy, :quote]
-  before_filter :verify_editable,              :only => [:edit, :update, :destroy]
-  before_filter :require_and_set_search_query, :only => [:search]
-  before_filter :check_postable,               :only => [:create]
+  before_filter :load_discussion,              except: [:search]
+  before_filter :verify_viewability,           except: [:search, :count, :since]
+  before_filter :load_post,                    only: [:show, :edit, :update, :destroy, :quote]
+  before_filter :verify_editable,              only: [:edit, :update, :destroy]
+  before_filter :require_and_set_search_query, only: [:search]
+  before_filter :check_postable,               only: [:create]
+  before_filter :require_s3,                   only: [:drawing]
 
   protected
 
@@ -53,16 +54,6 @@ class PostsController < ApplicationController
         flash[:notice] = "You don't have permission to edit that post!"
         redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
       end
-    end
-
-    def create_doodle(encoded_data)
-      data = Base64.decode64(encoded_data)
-      hash = Digest::SHA1.hexdigest(data)
-      doodle_file = Rails.root.join("public/doodles/#{hash}.jpg")
-      File.open(doodle_file, 'wb') do |fh|
-        fh.write data
-      end
-      hash
     end
 
     def search_query
@@ -148,13 +139,24 @@ class PostsController < ApplicationController
       end
     end
 
-    def doodle
+    def drawing
       if @discussion.postable_by?(@current_user)
-        hash = create_doodle(params[:drawing])
-        @post = @discussion.posts.create(
-          :user => @current_user,
-          :body => '<div class="drawing"><img src="/doodles/' + hash + '.jpg" alt="doodle" /></div>'
-        )
+        Tempfile.open("drawing.jpg", :encoding => "ascii-8bit") do |file|
+          data = Base64.decode64(params[:drawing])
+          file.write(data)
+          file.rewind
+          upload = Upload.new(file, name: "drawing.jpg")
+          if upload.valid?
+            upload.save
+            @post = @discussion.posts.create(
+              user: @current_user,
+              body: "<div class=\"drawing\"><img src=\"#{upload.url}\" alt=\"Drawing\" /></div>"
+            )
+          end
+        end
+      end
+
+      if @post
         render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}"), :layout => false
       else
         render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page), :layout => false

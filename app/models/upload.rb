@@ -1,8 +1,9 @@
 class Upload
-  attr_accessor :file
+  attr_accessor :file, :options
 
-  def initialize(file)
+  def initialize(file, options={})
     @file = file
+    @options = options
   end
 
   def establish_connection!
@@ -12,8 +13,8 @@ class Upload
     )
   end
 
-  def original_filename
-    file.original_filename
+  def name
+    options[:name] || file.original_filename
   end
 
   def mime_type
@@ -21,7 +22,7 @@ class Upload
   end
 
   def filename
-    [hexdigest, original_filename.split(".").last].join(".")
+    [hexdigest, name.split(".").last].join(".")
   end
 
   def hexdigest

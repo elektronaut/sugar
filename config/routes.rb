@@ -134,7 +134,7 @@ Sugar::Application.routes.draw do
         get 'quote'
       end
       collection do
-        post 'doodle'
+        post 'drawing'
         get  'count'
         get  'since'
         post 'preview'
