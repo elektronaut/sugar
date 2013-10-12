@@ -114,10 +114,18 @@ blockquote cite {
   margin-top:          -5px;
 }
 
-pre {
-  font-family:         Monaco, Consolas, Courier, monospace;
+code {
+  font-family:         Menlo, Monaco, Consolas, Courier, monospace;
   font-size:           0.9em;
+  background:          #f8f4f1;
+  border:              1px solid #ddd;
+  padding:             0px 3px;
 }
+pre code {
+  display:             block;
+  padding:             5px;
+}
+
 label {
   display:             block;
   font-size:           1.1em;
@@ -244,11 +252,11 @@ fieldset p.info {
 }
 textarea.code {
   width:               100%;
-  font-family:         Monaco, Consolas, Courier New, Courier, monospace;
+  font-family:         Menlo, Monaco, Consolas, Courier New, Courier, monospace;
 }
 
 span.example {
-  font-family:         Monaco, Consolas, Courier, monospace;
+  font-family:         Menlo, Monaco, Consolas, Courier, monospace;
   font-size:           11px;
   background:          #F3F1E9;
   padding:             2px 4px;

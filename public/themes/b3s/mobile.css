@@ -466,6 +466,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .body code {
   font-family: Courier, monospace;
   font-size: 12px;
+  background: #f4f2f0;
 }
 .post .body pre {
   margin: 8px 0px;
