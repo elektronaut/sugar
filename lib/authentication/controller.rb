@@ -39,13 +39,13 @@ module Authentication
       # Examples:
       #
       #  # Require any user
-      #  verify_user(:user => :any, :redirect => login_users_url, :notice => 'You must be logged in!')
+      #  verify_user(user: :any, redirect: login_users_url, notice: 'You must be logged in!')
       #
       #  # Only accessible by a moderator
-      #  verify_user(:moderator => true, :notice => 'You must be a moderator!')
+      #  verify_user(moderator: true, notice: 'You must be a moderator!')
       #
       #  # Only accessible by a user admin or the user who owns the invite
-      #  verify_user(:user => @invite.user, :user_admin => true)
+      #  verify_user(user: @invite.user, user_admin: true)
       #
       def verify_user(options={})
         options = default_verify_user_options(options)
@@ -90,18 +90,18 @@ module Authentication
             flash[:notice] = options[:notice]
             redirect_to options[:redirect]
           end
-          format.json { render :json => options[:api_notice], :status => 401 }
-          format.xml  { render :xml  => options[:api_notice], :status => 401 }
+          format.json { render json: options[:api_notice], status: 401 }
+          format.xml  { render xml:  options[:api_notice], status: 401 }
         end
       end
 
       # Requires a user account
       def require_user_account
         verify_user(
-          :user       => :any,
-          :redirect   => login_users_url,
-          :notice     => 'You must be logged in to do that',
-          :api_notice => 'Authorization required'
+          user:       :any,
+          redirect:   login_users_url,
+          notice:     'You must be logged in to do that',
+          api_notice: 'Authorization required'
         )
       end
 
@@ -152,7 +152,7 @@ module Authentication
       # Cleans up temporary bans.
       def cleanup_temporary_ban
         if current_user? && current_user.banned_until? && !current_user.temporary_banned?
-          current_user.update_attributes(:banned_until => nil)
+          current_user.update_attributes(banned_until: nil)
         end
       end
 

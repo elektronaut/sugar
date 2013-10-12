@@ -23,7 +23,7 @@ module SearchableExchange
         fulltext query
         with     :trusted, false unless (options[:user] && options[:user].trusted?)
         order_by :last_post_at, :desc
-        paginate :page => options[:page], :per_page => Exchange.per_page
+        paginate page: options[:page], per_page: Exchange.per_page
       end
       search.results
     end

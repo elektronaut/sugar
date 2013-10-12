@@ -85,7 +85,7 @@ describe InvitesController do
       specify { flash[:notice].should be_nil }
       specify { session[:invite_token].should == invite.token }
       it "redirects to the signup page" do
-        response.should redirect_to(new_user_by_token_url(:token => invite.token))
+        response.should redirect_to(new_user_by_token_url(token: invite.token))
       end
     end
 

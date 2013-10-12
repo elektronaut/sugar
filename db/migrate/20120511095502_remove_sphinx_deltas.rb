@@ -5,7 +5,7 @@ class RemoveSphinxDeltas < ActiveRecord::Migration
   end
 
   def down
-    add_column :discussions, :delta, :boolean, :null => false, :default => true
-    add_column :posts, :delta, :boolean, :null => false, :default => true
+    add_column :discussions, :delta, :boolean, null: false, default: true
+    add_column :posts, :delta, :boolean, null: false, default: true
   end
 end

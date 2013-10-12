@@ -3,7 +3,7 @@ class DiscussionsController < ApplicationController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :find_recipient, :only => [:create]
+      before_filter :find_recipient, only: [:create]
     end
 
     def conversations
@@ -23,7 +23,7 @@ class DiscussionsController < ApplicationController
         end
       end
       if request.xhr?
-        render :template => 'discussions/participants', :layout => false
+        render template: 'discussions/participants', layout: false
       else
         redirect_to discussion_url(@discussion)
       end

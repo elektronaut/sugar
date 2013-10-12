@@ -27,7 +27,7 @@ describe DiscussionsController do
     it 'is open for browsing discussions and posts' do
       discussion = create(:discussion)
       [:index, :show].each do |action|
-        get action, :id => discussion
+        get action, id: discussion
         should respond_with(:success)
       end
     end
@@ -51,7 +51,7 @@ describe DiscussionsController do
   describe 'GET show' do
     before do
       @discussion = create(:discussion)
-      get :show, :id => @discussion
+      get :show, id: @discussion
     end
 
     specify { assigns(:discussion).should be_a(Discussion) }
@@ -68,7 +68,7 @@ describe DiscussionsController do
     end
 
     describe 'DELETE remove_participant' do
-      before { delete :remove_participant, :id => @conversation }
+      before { delete :remove_participant, id: @conversation }
       specify { flash[:notice].should match(/You have been removed from the conversation/) }
       it 'redirects back to conversations' do
         response.should redirect_to(conversations_url)

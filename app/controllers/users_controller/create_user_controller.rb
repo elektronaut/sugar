@@ -3,9 +3,9 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :find_invite,               :only => [:new, :create]
-      before_filter :check_for_expired_invite,  :only => [:new, :create]
-      before_filter :check_for_signups_allowed, :only => [:new, :create]
+      before_filter :find_invite,               only: [:new, :create]
+      before_filter :check_for_expired_invite,  only: [:new, :create]
+      before_filter :check_for_signups_allowed, only: [:new, :create]
     end
 
     def new
@@ -25,11 +25,11 @@ class UsersController < ApplicationController
       if @user.save
         finalize_successful_signup
         unless initiate_openid_on_create
-          redirect_to user_url(:id => @user.username)
+          redirect_to user_url(id: @user.username)
         end
       else
         flash.now[:notice] = "Could not create your account, please fill in all required fields."
-        render :action => :new
+        render action: :new
       end
     end
 
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
 
     def finalize_successful_signup
       if @user.email?
-        Mailer.new_user(@user, login_users_path(:only_path => false)).deliver
+        Mailer.new_user(@user, login_users_path(only_path: false)).deliver
       end
       session.delete(:facebook_user_params)
       session.delete(:invite_token)

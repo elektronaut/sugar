@@ -10,7 +10,7 @@
 <div class="functions">
   <% if current_user? %>
     <% if @discussion.editable_by?(current_user) -%>
-      <%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %> /
+      <%= link_to "Edit", edit_discussion_path(@discussion), class: :edit %> /
     <% end -%>
     <% if current_user.hidden?(@discussion) -%>
       <%= link_to "Unhide", unhide_discussion_path(@discussion, page: @posts.current_page) %>
@@ -33,16 +33,16 @@
 <h2 class="section">
   <%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
   <% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-  <%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
+  <%= link_to h(@discussion.title), discussion_path(@discussion), id: 'discussionLink'  %>
 </h2>
 
 <div id="discussion" data-id="<%= @discussion.id %>" data-posts-count="<%= @discussion.posts_count %>">
-  <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :discussion => @discussion, :functions => true, :permalink => true, :post_distance => true, :new_posts_notifier => true} %>
+  <%= render partial: 'posts/posts', locals: {posts: @posts, discussion: @discussion, functions: true, permalink: true, post_distance: true, new_posts_notifier: true} %>
 </div>
 
 <a name="bottom"></a>
 <div class="bottomlinks">
-  <%= link_to "Back to discussions", discussions_path, :id => 'back_link' %>,
+  <%= link_to "Back to discussions", discussions_path, id: 'back_link' %>,
   <% if current_user? && current_user.following?(@discussion) -%>
     <%= link_to "Back to followed", following_discussions_path %>,
   <% end %>
@@ -60,13 +60,13 @@
 
     <%# Text reply %>
     <div id="replyText">
-      <%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion), :html => {:class => (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+      <%= form_for(@discussion.posts.new, url: discussion_posts_path(@discussion), html: {class: (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
         <%= f.hidden_field(:format, class: "format") %>
         <p>
           <%= f.text_area(
             :body,
-            :id                    => "compose-body",
-            :class                 => "rich",
+            id:                    "compose-body",
+            class:                 "rich",
             "data-format-binding"  => ".format",
             "data-formats"         => "markdown html",
             "data-remember-format" => "true"

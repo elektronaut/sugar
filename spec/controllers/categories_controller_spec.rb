@@ -76,7 +76,7 @@ describe CategoriesController do
   end
 
   describe "GET show" do
-    before { login; get :show, :id => category }
+    before { login; get :show, id: category }
     specify { assigns(:category).should be_a(Category) }
     specify { assigns(:discussions).should be_a(ActiveRecord::Relation) }
     it { should respond_with(:success) }
@@ -102,7 +102,7 @@ describe CategoriesController do
     before { login(moderator) }
 
     context "with valid params" do
-      before { post :create, :category => {:name => "Stuff"} }
+      before { post :create, category: {name: "Stuff"} }
       specify { assigns(:category).should be_a(Category) }
       specify { flash[:notice].should match(/The (.*) category was created/) }
       it 'redirects back to categories' do
@@ -111,7 +111,7 @@ describe CategoriesController do
     end
 
     describe "without valid params" do
-      before { post :create, :category => {foo: 'bar'} }
+      before { post :create, category: {foo: 'bar'} }
       specify { assigns(:category).should be_a(Category) }
       specify { flash.now[:notice].should match(/Couldn't save your category/) }
       it { should respond_with(:success) }
@@ -125,7 +125,7 @@ describe CategoriesController do
     before { login(moderator) }
 
     context "with valid params" do
-      before { put :update, :id => category, :category => {:name => "Stuff"} }
+      before { put :update, id: category, category: {name: "Stuff"} }
       specify { assigns(:category).should be_a(Category) }
       specify { flash[:notice].should match(/The (.*) category was saved/) }
       it 'redirects back to categories' do
@@ -137,7 +137,7 @@ describe CategoriesController do
     end
 
     context "without valid params" do
-      before { put :update, :id => category, :category => {:name => ""} }
+      before { put :update, id: category, category: {name: ""} }
       specify { assigns(:category).should be_a(Category) }
       specify { flash[:notice].should match(/Couldn't save your category/) }
       it { should respond_with(:success) }

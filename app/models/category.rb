@@ -28,7 +28,7 @@ class Category < ActiveRecord::Base
 
   after_save do |category|
     if category.update_trusted
-      category.discussions.update_all(:trusted => category.trusted?)
+      category.discussions.update_all(trusted: category.trusted?)
     end
   end
 

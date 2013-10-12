@@ -5,10 +5,10 @@ require 'digest/sha1'
 class PostsController < ApplicationController
 
   # Disable sessions and filters for the posts count action, and cache it
-  #before_filter :authenticate_session,         :except => [:count]
-  #before_filter :detect_mobile,                :except => [:count]
-  #before_filter :set_section,                  :except => [:count]
-  #after_filter  :store_session_authentication, :except => [:count]
+  #before_filter :authenticate_session,         except: [:count]
+  #before_filter :detect_mobile,                except: [:count]
+  #before_filter :set_section,                  except: [:count]
+  #after_filter  :store_session_authentication, except: [:count]
   caches_page   :count
 
   requires_authentication except: [:count]
@@ -45,14 +45,14 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id]) rescue nil
       unless @post
         flash[:notice] = "Can't find that post"
-        redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
+        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page) and return
       end
     end
 
     def verify_editable
       unless @post.editable_by?(current_user)
         flash[:notice] = "You don't have permission to edit that post!"
-        redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
+        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page) and return
       end
     end
 
@@ -70,7 +70,7 @@ class PostsController < ApplicationController
     def check_postable
       unless @discussion.postable_by?(current_user)
         flash[:notice] = "This discussion is closed, you don't have permission to post here"
-        redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
+        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page)
       end
     end
 
@@ -80,7 +80,7 @@ class PostsController < ApplicationController
       @count = @discussion.posts_count
       respond_to do |format|
         format.json do
-          render :json => {:posts_count => @count}.to_json
+          render json: {posts_count: @count}.to_json
         end
       end
     end
@@ -91,10 +91,10 @@ class PostsController < ApplicationController
         current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
       end
       if @discussion.kind_of?(Conversation)
-        current_user.conversation_relationships.where(:conversation_id => @discussion.id).first.update_attributes(new_posts: false)
+        current_user.conversation_relationships.where(conversation_id: @discussion.id).first.update_attributes(new_posts: false)
       end
       if request.xhr?
-        render :layout => false
+        render layout: false
       end
     end
 
@@ -105,8 +105,8 @@ class PostsController < ApplicationController
 
     def create
       attributes = {
-        :user => current_user,
-        :body => params[:post][:body]
+        user: current_user,
+        body: params[:post][:body]
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
       @post = @discussion.posts.create(attributes)
@@ -118,15 +118,15 @@ class PostsController < ApplicationController
         # 	end
         # end
         if request.xhr?
-          render :status => 201, :text => 'Created'
+          render status: 201, text: 'Created'
         else
-          redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}")
+          redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page, anchor: "post-#{@post.id}")
         end
       else
         if request.xhr?
-          render :status => 400, :text => 'Invalid post'
+          render status: 400, text: 'Invalid post'
         else
-          render :action => :new
+          render action: :new
         end
       end
     end
@@ -135,13 +135,13 @@ class PostsController < ApplicationController
       @post = @discussion.posts.new(body: params[:post][:body], format: params[:post][:format])
       @post.user = current_user
       if request.xhr?
-        render :layout => false
+        render layout: false
       end
     end
 
     def drawing
       if @discussion.postable_by?(current_user)
-        Tempfile.open("drawing.jpg", :encoding => "ascii-8bit") do |file|
+        Tempfile.open("drawing.jpg", encoding: "ascii-8bit") do |file|
           data = Base64.decode64(params[:drawing])
           file.write(data)
           file.rewind
@@ -157,33 +157,33 @@ class PostsController < ApplicationController
       end
 
       if @post
-        render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page, :anchor => "post-#{@post.id}"), :layout => false
+        render text: paged_discussion_url(id: @discussion, page: @discussion.last_page, anchor: "post-#{@post.id}"), layout: false
       else
-        render :text => paged_discussion_url(:id => @discussion, :page => @discussion.last_page), :layout => false
+        render text: paged_discussion_url(id: @discussion, page: @discussion.last_page), layout: false
       end
     end
 
     def edit
       if request.xhr?
-        render :layout => false
+        render layout: false
       end
     end
 
     def quote
-      render :layout => false
+      render layout: false
     end
 
     def update
       attributes = {
-        :body      => params[:post][:body],
-        :edited_at => Time.now
+        body:      params[:post][:body],
+        edited_at: Time.now
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
       if @post.update_attributes(attributes)
-        redirect_to paged_discussion_url(:id => @discussion, :page => @post.page, :anchor => "post-#{@post.id}")
+        redirect_to paged_discussion_url(id: @discussion, page: @post.page, anchor: "post-#{@post.id}")
       else
         flash.now[:notice] = "Could not save your post."
-        render :action => :edit
+        render action: :edit
       end
     end
 

@@ -41,8 +41,8 @@ module LayoutHelper
 
     content_tag(
       :li,
-      link_to(name, url, :id => options[:id]),
-      :class => classes
+      link_to(name, url, id: options[:id]),
+      class: classes
     )
   end
 

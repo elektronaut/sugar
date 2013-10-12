@@ -55,13 +55,13 @@
     <%# Search form %>
     <% if current_user? || Sugar.public_browsing? %>
       <div id="search">
-        <%= form_tag((@search_path || search_path), :method => 'get') do %>
-          <%= text_field_tag 'q', @search_query, :class => :query %>
+        <%= form_tag((@search_path || search_path), method: 'get') do %>
+          <%= text_field_tag 'q', @search_query, class: :query %>
           <%= select_tag 'search_mode', options_for_select(
             search_mode_options,
             @search_path || search_path
           ) %>
-          <%= submit_tag "Search", :name => nil %>
+          <%= submit_tag "Search", name: nil %>
         <% end %>
       </div>
     <% end -%>
@@ -91,8 +91,8 @@
             <%= header_tab(
                 "Conversations (#{current_user.unread_conversations_count})",
                 conversations_path,
-                :section => :conversations,
-                :class   => 'new'
+                section: :conversations,
+                class:   'new'
               )
             %>
           <% else %>
@@ -105,7 +105,7 @@
             <%= header_tab(
                 "Invites (#{current_user.available_invites})",
                 invites_path,
-                :section => :invites
+                section: :invites
               )
             %>
           <% else %>
@@ -137,7 +137,7 @@
       <%= yield %>
       <% if @mobile_user_agent %>
         <div class="mobile_link">
-          <p><%= link_to "mobile version", :mobile_format => 'mobile' %></p>
+          <p><%= link_to "mobile version", mobile_format: 'mobile' %></p>
         </div>
       <% end %>
     </div>

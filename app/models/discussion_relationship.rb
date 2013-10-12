@@ -18,8 +18,8 @@ class DiscussionRelationship < ActiveRecord::Base
     # Define a relationship with a discussion
     def define(user, discussion, options={})
       relationship = self.where(user_id: user.id, discussion_id: discussion.id).first
-      relationship ||= DiscussionRelationship.create(:user_id => user.id, :discussion_id => discussion.id)
-      relationship.update_attributes(options.merge({:trusted => discussion.trusted}))
+      relationship ||= DiscussionRelationship.create(user_id: user.id, discussion_id: discussion.id)
+      relationship.update_attributes(options.merge({trusted: discussion.trusted}))
       relationship.save
       relationship
     end
@@ -27,10 +27,10 @@ class DiscussionRelationship < ActiveRecord::Base
 
   def update_user_caches!
     self.user.update_attributes({
-      :participated_count => DiscussionRelationship.where(user_id: self.user.id, participated: true).count,
-      :following_count    => DiscussionRelationship.where(user_id: self.user.id, following: true).count,
-      :favorites_count    => DiscussionRelationship.where(user_id: self.user.id, favorite: true).count,
-      :hidden_count       => DiscussionRelationship.where(user_id: self.user.id, hidden: true).count
+      participated_count: DiscussionRelationship.where(user_id: self.user.id, participated: true).count,
+      following_count:    DiscussionRelationship.where(user_id: self.user.id, following: true).count,
+      favorites_count:    DiscussionRelationship.where(user_id: self.user.id, favorite: true).count,
+      hidden_count:       DiscussionRelationship.where(user_id: self.user.id, hidden: true).count
     })
   end
 

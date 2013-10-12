@@ -7,7 +7,7 @@ class CreateInvites < ActiveRecord::Migration
       t.datetime   :expires_at
       t.timestamps
     end
-    add_column :users, :available_invites, :integer, :null => false, :default => 0
+    add_column :users, :available_invites, :integer, null: false, default: 0
   end
 
   def self.down

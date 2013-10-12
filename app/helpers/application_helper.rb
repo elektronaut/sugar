@@ -26,8 +26,8 @@ module ApplicationHelper
   # An example:
   #   <% form_for 'user', @user do |f| %>
   #     <%= labelled_field f.text_field( :username ), "Username",
-  #                        :description => "Choose your username, minimum 4 characters",
-  #                        :errors => @user.errors[:username] %>
+  #                        description: "Choose your username, minimum 4 characters",
+  #                        errors: @user.errors[:username] %>
   #     <%= submit_tag "Save" %>
   #   <% end %>
   #
@@ -59,7 +59,7 @@ module ApplicationHelper
   def profile_link(user, link_text=nil, options={})
     if user
       link_text ||= user.username
-      link_to link_text, user_profile_path(:id => user.username), {:title => "#{possessive(user.username)} profile"}.merge(options)
+      link_to link_text, user_profile_path(id: user.username), {title: "#{possessive(user.username)} profile"}.merge(options)
     else
       "Unknown"
     end

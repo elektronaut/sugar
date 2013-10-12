@@ -1,10 +1,10 @@
-<% 
+<%
   add_body_class "users"
-  @page_title = "Users" 
+  @page_title = "Users"
 %>
 
 <div class="functions">
-  <%= render :partial => 'users_functions' %>
+  <%= render partial: 'users_functions' %>
 </div>
 
 
@@ -14,6 +14,6 @@
   <%= link_to "Recently Joined", recently_joined_users_path %>
 </h2>
 
-<%= render :partial => 'list_navigation' %>
+<%= render partial: 'list_navigation' %>
 
-<%= render :partial => 'users_listing', :locals => {:users => @users} %>
+<%= render partial: 'users_listing', locals: {users: @users} %>

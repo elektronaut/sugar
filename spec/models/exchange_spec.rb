@@ -5,8 +5,8 @@ describe Exchange do
   # Create the first admin user
   before { create(:user) }
 
-  let(:exchange)         { create(:exchange, :title => 'This is my Discussion', :body => 'First post!') }
-  let(:nsfw_exchange)    { create(:exchange, :nsfw => true) }
+  let(:exchange)         { create(:exchange, title: 'This is my Discussion', body: 'First post!') }
+  let(:nsfw_exchange)    { create(:exchange, nsfw: true) }
   let(:user)             { create(:user) }
   let(:trusted_user)     { create(:trusted_user) }
   let(:moderator)        { create(:moderator) }
@@ -139,7 +139,7 @@ describe Exchange do
   end
 
   describe "#update_post_body" do
-    before { exchange.update_attributes(:body => 'changed post') }
+    before { exchange.update_attributes(body: 'changed post') }
     subject { exchange.posts.first }
     its(:body) { should == "changed post" }
   end

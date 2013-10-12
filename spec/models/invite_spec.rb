@@ -37,9 +37,9 @@ describe Invite do
     its("token.length") { should >= 40 }
 
     it "revokes an invite from the inviter" do
-      inviter = create(:user, :available_invites => 1)
+      inviter = create(:user, available_invites: 1)
       expect {
-        create(:invite, :user => inviter)
+        create(:invite, user: inviter)
       }.to change{inviter.available_invites}.by(-1)
     end
 

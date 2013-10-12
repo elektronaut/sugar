@@ -5,8 +5,8 @@ Sugar::Application.routes.draw do
   use_doorkeeper
 
   # API routes
-  namespace :api, :defaults => {:format => 'json'} do
-    scope :module => :v1 do
+  namespace :api, defaults: {format: 'json'} do
+    scope module: :v1 do
       resources :users do
         collection do
           get 'me'
@@ -16,14 +16,14 @@ Sugar::Application.routes.draw do
   end
 
   # OpenID
-  resource :openid, :controller => 'openid' do
+  resource :openid, controller: 'openid' do
     member do
       get 'complete'
     end
   end
 
   # Facebook
-  resource :facebook, :controller => 'facebook' do
+  resource :facebook, controller: 'facebook' do
     member do
       get 'login'
       get 'signup'
@@ -42,7 +42,7 @@ Sugar::Application.routes.draw do
 
   # Search posts
   get '/posts/search/:query' => 'posts#search'
-  match '/posts/search' => 'posts#search', :as => :search_posts, via: [:get, :post]
+  match '/posts/search' => 'posts#search', as: :search_posts, via: [:get, :post]
 
   # Search posts in discussion
   match '/discussions/:id/search_posts/:query' => 'discussions#search_posts', via: [:get, :post]
@@ -71,25 +71,25 @@ Sugar::Application.routes.draw do
   end
 
   controller :users do
-    post '/users/profile/:id/grant_invite'       => :grant_invite,   :as => :grant_invite_user
-    post '/users/profile/:id/revoke_invites'     => :revoke_invites, :as => :revoke_invites_user
-    get  '/users/profile/:id/update_openid'      => :update_openid,  :as => :update_openid_user
-    get  '/users/profile/:id/edit'               => :edit,           :as => :edit_user
-    get  '/users/profile/:id/edit/:page'         => :edit,           :as => :edit_user_page
-    get  '/users/profile/:id'                    => :show,           :as => :user_profile
-    get  '/users/profile/:id/discussions'        => :discussions,    :as => :discussions_user
+    post '/users/profile/:id/grant_invite'       => :grant_invite,   as: :grant_invite_user
+    post '/users/profile/:id/revoke_invites'     => :revoke_invites, as: :revoke_invites_user
+    get  '/users/profile/:id/update_openid'      => :update_openid,  as: :update_openid_user
+    get  '/users/profile/:id/edit'               => :edit,           as: :edit_user
+    get  '/users/profile/:id/edit/:page'         => :edit,           as: :edit_user_page
+    get  '/users/profile/:id'                    => :show,           as: :user_profile
+    get  '/users/profile/:id/discussions'        => :discussions,    as: :discussions_user
     get  '/users/profile/:id/discussions/:page'  => :discussions
-    get  '/users/profile/:id/participated'       => :participated,   :as => :participated_user
+    get  '/users/profile/:id/participated'       => :participated,   as: :participated_user
     get  '/users/profile/:id/participated/:page' => :participated
-    get  '/users/profile/:id/posts'              => :posts,          :as => :posts_user
-    get  '/users/profile/:id/posts/:page'        => :posts,          :as => :paged_user_posts
-    get  '/users/profile/:id/stats'              => :stats,          :as => :stats_user
-    get  '/users/new/:token'                     => :new,            :as => :new_user_by_token
+    get  '/users/profile/:id/posts'              => :posts,          as: :posts_user
+    get  '/users/profile/:id/posts/:page'        => :posts,          as: :paged_user_posts
+    get  '/users/profile/:id/stats'              => :stats,          as: :stats_user
+    get  '/users/new/:token'                     => :new,            as: :new_user_by_token
   end
 
-  resources :password_resets, :only => [:new, :create, :show, :update]
+  resources :password_resets, only: [:new, :create, :show, :update]
   controller :password_resets do
-    get '/password_resets/:id/:token' => :show, :as => :password_reset_with_token
+    get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
   end
 
   # Categories
@@ -100,10 +100,10 @@ Sugar::Application.routes.draw do
   controller :discussions do
     get '/discussions/popular/:days/:page'  => :popular
     get '/discussions/popular/:days'        => :popular
-    get '/discussions/archive/:page'        => :index,         :as => :paged_discussions
-    get '/conversations/new'                => :new,           :as => :new_conversation, :type => 'conversation'
-    get '/conversations/new/with/:username' => :new,           :as => :new_conversation_with, :type => 'conversation'
-    get '/conversations/archive/:page'      => :conversations, :as => :paged_conversations
+    get '/discussions/archive/:page'        => :index,         as: :paged_discussions
+    get '/conversations/new'                => :new,           as: :new_conversation, type: 'conversation'
+    get '/conversations/new/with/:username' => :new,           as: :new_conversation_with, type: 'conversation'
+    get '/conversations/archive/:page'      => :conversations, as: :paged_conversations
   end
   resources :discussions do
     member do
@@ -141,9 +141,9 @@ Sugar::Application.routes.draw do
       end
     end
   end
-  get '/discussions/:id/:page' => 'discussions#show', :as => :paged_discussion
+  get '/discussions/:id/:page' => 'discussions#show', as: :paged_discussion
   get '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
-  get '/conversations' => 'discussions#conversations', :as => :conversations
+  get '/conversations' => 'discussions#conversations', as: :conversations
 
 
   # Invites
@@ -157,14 +157,14 @@ Sugar::Application.routes.draw do
   end
 
   # Admin
-  resource :admin, :controller => 'admin' do
-    get 'configuration', :on => :member
-    post 'configuration', :on => :member
+  resource :admin, controller: 'admin' do
+    get 'configuration', on: :member
+    post 'configuration', on: :member
   end
 
   # Help pages
-  get 'help' => 'help#index', :as => :help
-  get 'help/:page' => 'help#show', :as => :help_page
+  get 'help' => 'help#index', as: :help
+  get 'help/:page' => 'help#show', as: :help_page
 
   # Vanilla redirects
   controller :vanilla do
@@ -175,6 +175,6 @@ Sugar::Application.routes.draw do
   end
 
   # Root
-  root :to => "discussions#index"
+  root to: "discussions#index"
 
 end

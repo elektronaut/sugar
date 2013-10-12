@@ -10,7 +10,7 @@
   <% if @discussion.kind_of?(Conversation) %>
     <%= link_to "Conversations", conversations_path %> &raquo;
     <% if @recipient %>
-      <%= link_to h("New conversation with #{@recipient.username}"), new_conversation_with_path(:username => @recipient.username) %>
+      <%= link_to h("New conversation with #{@recipient.username}"), new_conversation_with_path(username: @recipient.username) %>
     <% else %>
       <%= link_to "New", new_conversation_path %>
     <% end %>
@@ -19,7 +19,7 @@
   <% end %>
 </h2>
 
-<%= form_for(@discussion, :url => discussions_path) do |f| %>
-  <%= render :partial => 'discussion_form', :locals => {:f => f} %>
+<%= form_for(@discussion, url: discussions_path) do |f| %>
+  <%= render partial: 'discussion_form', locals: {f: f} %>
   <p><button type="submit">Create <%= @discussion.class.to_s.downcase %></button></p>
 <% end %>

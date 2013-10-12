@@ -1,6 +1,6 @@
-<% 
+<%
   add_body_class "participated discussions"
-  @page_title = "#{@user.username}'s Participated Discussions" 
+  @page_title = "#{@user.username}'s Participated Discussions"
 %>
 
-<%= render :partial => 'discussions/table', :locals => {:discussions => @discussions} %>
+<%= render partial: 'discussions/table', locals: {discussions: @discussions} %>

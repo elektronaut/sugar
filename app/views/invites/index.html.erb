@@ -47,11 +47,11 @@
     <% @invites.each do |invite| %><tr>
       <td class="email"><%= invite.email %></td>
       <td class="created_at">
-        <%= time_tag invite.created_at, :class => 'relative' %>
+        <%= time_tag invite.created_at, class: 'relative' %>
       </td>
       <td class="expires_at"><%= invite.expires_at.strftime("%b %d, %Y") %></td>
       <td class="actions">
-        <%= link_to "Cancel", invite_path(invite), :class => :delete, :method => :delete, :confirm => 'Are you sure that you want to cancel this invite?' %>
+        <%= link_to "Cancel", invite_path(invite), class: :delete, method: :delete, confirm: 'Are you sure that you want to cancel this invite?' %>
       </td>
     </tr><% end %>
   </table>

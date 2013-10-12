@@ -8,8 +8,8 @@ class Upload
 
   def establish_connection!
     AWS::S3::Base.establish_connection!(
-      :access_key_id     => Sugar.config(:amazon_aws_key),
-      :secret_access_key => Sugar.config(:amazon_aws_secret)
+      access_key_id:     Sugar.config(:amazon_aws_key),
+      secret_access_key: Sugar.config(:amazon_aws_secret)
     )
   end
 

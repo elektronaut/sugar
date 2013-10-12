@@ -1,15 +1,15 @@
-<% 
+<%
   add_body_class "discussions followed_discussions"
-  @page_title = "Followed Discussions" 
+  @page_title = "Followed Discussions"
 %>
 
 <%= content_for :sidebar do %>
-  <%= render :partial => 'discussions/sidebar'%>
+  <%= render partial: 'discussions/sidebar'%>
 <% end %>
 
 <h2 class="section"><%= link_to "Followed Discussions", following_discussions_path %></h2>
 
-<%= render :partial => 'discussions/table', :locals => {
-  :discussions    => @discussions,
-  :no_discussions => "You aren't following any discussions."
+<%= render partial: 'discussions/table', locals: {
+  discussions:    @discussions,
+  no_discussions: "You aren't following any discussions."
 } %>

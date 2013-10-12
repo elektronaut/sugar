@@ -31,7 +31,7 @@ module ExchangesHelper
       hash[[dv.discussion_id, dv.user_id]] = dv unless hash[[dv.discussion_id, dv.user_id]] && hash[[dv.discussion_id, dv.user_id]].post_index > dv.post_index
       hash
     end
-    @_discussion_view_lookup_table[[discussion.id, user.id]] ||= DiscussionView.new(:user_id => user.id, :discussion_id => discussion.id, :post_index => 0)
+    @_discussion_view_lookup_table[[discussion.id, user.id]] ||= DiscussionView.new(user_id: user.id, discussion_id: discussion.id, post_index: 0)
   end
 
   def new_posts_count(discussion)
@@ -56,15 +56,15 @@ module ExchangesHelper
   def last_discussion_page_path(d)
     if ((last_page = last_discussion_page(d)) > 1)
       if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
-        paged_discussion_path(:id => d.to_param, :page => last_page, :anchor => "post-#{last_post_id}")
+        paged_discussion_path(id: d.to_param, page: last_page, anchor: "post-#{last_post_id}")
       else
-        paged_discussion_path(:id => d.to_param, :page => last_page)
+        paged_discussion_path(id: d.to_param, page: last_page)
       end
     else
       if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
-        discussion_path(:id => d.to_param, :anchor => "post-#{last_post_id}")
+        discussion_path(id: d.to_param, anchor: "post-#{last_post_id}")
       else
-        discussion_path(:id => d.to_param)
+        discussion_path(id: d.to_param)
       end
     end
   end

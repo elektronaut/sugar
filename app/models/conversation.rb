@@ -9,7 +9,7 @@ class Conversation < Exchange
   include Sugar::Exceptions
 
   has_many :conversation_relationships, -> { order 'created_at ASC' }, dependent: :destroy
-  has_many :participants, :through => :conversation_relationships, :source => :user
+  has_many :participants, through: :conversation_relationships, source: :user
 
   after_create do |conversation|
     conversation.add_participant(conversation.poster, new_posts: false)
@@ -34,8 +34,8 @@ class Conversation < Exchange
     if user.kind_of?(User) && self.participants.include?(user)
       raise RemoveParticipantError unless self.removeable?(user)
       ConversationRelationship.where(
-        :user_id         => user.id,
-        :conversation_id => self.id
+        user_id:         user.id,
+        conversation_id: self.id
       ).destroy_all
     end
   end

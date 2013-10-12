@@ -7,7 +7,7 @@ module Inviter
     before_create :set_inviter
     after_create :expire_invite
 
-    belongs_to :inviter, :class_name => 'User'
+    belongs_to :inviter, class_name: 'User'
     has_many   :invitees, -> { order 'username ASC' }, class_name: 'User', foreign_key: 'inviter_id'
     has_many   :invites, -> { order 'created_at ASC' }, dependent: :destroy
   end

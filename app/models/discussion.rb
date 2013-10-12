@@ -4,8 +4,8 @@ class Discussion < Exchange
   include SearchableExchange
   include Viewable
 
-  has_many   :discussion_relationships, :dependent => :destroy
-  belongs_to :category, :counter_cache => true
+  has_many   :discussion_relationships, dependent: :destroy
+  belongs_to :category, counter_cache: true
 
   validates_presence_of :category_id
 
@@ -58,8 +58,8 @@ class Discussion < Exchange
   # Set trusted status on all posts and relationships on save
   def update_trusted_status
     if self.trusted_changed?
-      self.posts.update_all(:trusted => self.trusted?)
-      self.discussion_relationships.update_all(:trusted => self.trusted?)
+      self.posts.update_all(trusted: self.trusted?)
+      self.discussion_relationships.update_all(trusted: self.trusted?)
       self.participants.each do |user|
         user.update_column(:public_posts_count, user.discussion_posts.where(trusted: false).count)
       end

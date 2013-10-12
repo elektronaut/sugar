@@ -4,18 +4,18 @@
 %>
 
 <div class="posts">
-  <%= render :partial => 'posts/posts', :locals => { :posts => @posts, :post_distance => true } %>
+  <%= render partial: 'posts/posts', locals: { posts: @posts, post_distance: true } %>
 </div>
-<%= render :partial => 'components/pagination', :locals => { :p => @posts } %>
+<%= render partial: 'components/pagination', locals: { p: @posts } %>
 
-<%= form_for(@discussion.posts.new, :url => discussion_posts_path(@discussion)) do |f| %>
+<%= form_for(@discussion.posts.new, url: discussion_posts_path(@discussion)) do |f| %>
   <%= f.hidden_field(:format, class: "format") %>
   <div class="reply">
     <p>
       <%= f.text_area(
         :body,
-        :id                    => "compose-body",
-        :class                 => "rich",
+        id:                    "compose-body",
+        class:                 "rich",
         "data-format-binding"  => ".format",
         "data-formats"         => "markdown html",
         "data-remember-format" => "true"

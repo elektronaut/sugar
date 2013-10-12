@@ -8,6 +8,6 @@ class HelpController < ApplicationController
 
   def show
     @page = params[:page].gsub(/[^\w\d_\-]/, '')
-    render :template => "help/#{@page}"
+    render template: "help/#{@page}"
   end
 end

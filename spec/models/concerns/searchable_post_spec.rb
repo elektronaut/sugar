@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe SearchablePost, :solr => true do
+describe SearchablePost, solr: true do
 
   let(:discussion)         { create(:discussion, body: 'testing discussion') }
   let(:conversation)       { create(:conversation, body: 'testing conversation') }

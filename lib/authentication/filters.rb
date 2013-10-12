@@ -21,21 +21,21 @@ module Authentication
     # Requires a logged in admin
     def requires_admin(*args)
       self.send(:before_filter, *args) do |controller|
-        controller.send(:verify_user, :admin => true)
+        controller.send(:verify_user, admin: true)
       end
     end
 
     # Requires a logged in moderator
     def requires_moderator(*args)
       self.send(:before_filter, *args) do |controller|
-        controller.send(:verify_user, :moderator => true)
+        controller.send(:verify_user, moderator: true)
       end
     end
 
     # Requires a logged in user admin
     def requires_user_admin(*args)
       self.send(:before_filter, *args) do |controller|
-        controller.send(:verify_user, :user_admin => true)
+        controller.send(:verify_user, user_admin: true)
       end
     end
   end

@@ -37,9 +37,9 @@ module ExchangeParticipant
   # Marks a discussion as viewed
   def mark_discussion_viewed(discussion, post, index)
     if discussion_view = DiscussionView.where(user_id: self.id, discussion_id: discussion.id).first
-      discussion_view.update_attributes(:post_index => index, :post_id => post.id) if discussion_view.post_index < index
+      discussion_view.update_attributes(post_index: index, post_id: post.id) if discussion_view.post_index < index
     else
-      DiscussionView.create(:discussion_id => discussion.id, :user_id => self.id, :post_index => index, :post_id => post.id)
+      DiscussionView.create(discussion_id: discussion.id, user_id: self.id, post_index: index, post_id: post.id)
     end
   end
 
@@ -62,7 +62,7 @@ module ExchangeParticipant
 
   # Finds relationship with discussion
   def discussion_relationship_with(discussion)
-    self.discussion_relationships.where(:discussion_id => discussion.id).first
+    self.discussion_relationships.where(discussion_id: discussion.id).first
   end
 
   # Returns true if this user is following the given discussion.

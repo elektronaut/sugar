@@ -9,15 +9,15 @@
     <%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
   <% end %>
   <% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-  <%= link_to h(@discussion.title), discussion_path(@discussion), :id => 'discussionLink'  %>
+  <%= link_to h(@discussion.title), discussion_path(@discussion), id: 'discussionLink'  %>
   &raquo;
   Search: <em><%= @search_query %></em>
 </h2>
 
-<%= render :partial => 'search/tips' %>
+<%= render partial: 'search/tips' %>
 
 <% if @posts && @posts.length > 0 %>
-  <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => false, :permalink => true, :pagination_params => {:q => @search_query}} %>
+  <%= render partial: 'posts/posts', locals: {posts: @posts, title: false, permalink: true, pagination_params: {q: @search_query}} %>
 <% else %>
   <p>No posts were found.</p>
 <% end %>

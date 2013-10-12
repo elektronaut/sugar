@@ -2,15 +2,15 @@
 
 class Mailer < ActionMailer::Base
 
-  default :from => Proc.new { Sugar.config(:mail_sender) || 'no-reply@example.com' }
+  default from: Proc.new { Sugar.config(:mail_sender) || 'no-reply@example.com' }
 
   # Send an invite
   def invite(invite, login_url)
     @invite    = invite
     @login_url = login_url
     mail(
-      :to      => @invite.email,
-      :subject => "#{@invite.user.realname_or_username} has invited you to #{Sugar.config(:forum_name)}!"
+      to:      @invite.email,
+      subject: "#{@invite.user.realname_or_username} has invited you to #{Sugar.config(:forum_name)}!"
     )
   end
 
@@ -19,8 +19,8 @@ class Mailer < ActionMailer::Base
     @user      = user
     @login_url = login_url
     mail(
-      :to      => @user.email,
-      :subject => "Welcome to #{Sugar.config(:forum_name)}!"
+      to:      @user.email,
+      subject: "Welcome to #{Sugar.config(:forum_name)}!"
     )
   end
 

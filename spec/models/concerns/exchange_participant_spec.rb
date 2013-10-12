@@ -73,7 +73,7 @@ describe ExchangeParticipant do
 
   describe "#posts_per_day" do
 
-    let(:user) { create(:user, :created_at => 3.days.ago) }
+    let(:user) { create(:user, created_at: 3.days.ago) }
 
     before do
       create(:post, user: user)

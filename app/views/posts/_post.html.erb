@@ -26,10 +26,10 @@
         <% if post.exchange.labels? %>
           <span class="labels">[<%= post.exchange.labels.join(',') %>]</span>
         <% end %>
-        <%= link_to post.exchange.title, paged_discussion_path(:id => post.exchange, :page => post.page, :anchor => "post-#{post.id}") %>
+        <%= link_to post.exchange.title, paged_discussion_path(id: post.exchange, page: post.page, anchor: "post-#{post.id}") %>
         <small>
           Started by <%= profile_link(post.exchange.poster) %>,
-          Last active <%= time_tag post.exchange.last_post_at, :class => 'relative' %>,
+          Last active <%= time_tag post.exchange.last_post_at, class: 'relative' %>,
           <%= post.exchange.posts_count %> posts
         </small>
       </div>
@@ -47,7 +47,7 @@
           <% if preview %>
             <time class="relative date">Preview</time>
           <% else %>
-            <%= time_tag post.created_at, :class => 'relative date' %>
+            <%= time_tag post.created_at, class: 'relative date' %>
           <% end %>
         </div>
       </div>
@@ -62,11 +62,11 @@
         <% if preview %>
           <time class="relative date">Preview</time>
         <% else %>
-          <%= time_tag post.created_at, :class => 'relative date' %>
+          <%= time_tag post.created_at, class: 'relative date' %>
         <% end %>
         <% if permalink %>
           <span class="permalink">
-            <%= link_to "#", paged_discussion_path(:id => (discussion||post.exchange), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+            <%= link_to "#", paged_discussion_path(id: (discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
           </span>
         <% end %>
       </div>
@@ -75,7 +75,7 @@
           <%= meify(post.body_html, post.user) %>
         </div>
         <% if post.edited? %><div class="edited">
-          Edited <%= time_tag post.edited_at, :class => 'relative' %>
+          Edited <%= time_tag post.edited_at, class: 'relative' %>
         </div><% end %>
       </div>
     <% end %>

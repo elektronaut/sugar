@@ -4,6 +4,6 @@ class RemoveWorkSafeUrls < ActiveRecord::Migration
   end
 
   def down
-    add_column :users, :work_safe_urls, :boolean, :null => false, :default => false
+    add_column :users, :work_safe_urls, :boolean, null: false, default: false
   end
 end

@@ -4,7 +4,7 @@ class CreateXboxInfos < ActiveRecord::Migration
             t.belongs_to :user
             t.integer    :status, :gamerscore
             t.string     :info, :info2, :status_text, :reputation, :tile_url, :zone
-            t.boolean    :valid_xml, :null => false, :default => false
+            t.boolean    :valid_xml, null: false, default: false
             t.text       :xml_data
             t.timestamps
         end

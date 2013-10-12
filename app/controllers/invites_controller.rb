@@ -2,14 +2,14 @@
 
 class InvitesController < ApplicationController
 
-  requires_authentication :except => [:accept]
-  requires_user           :except => [:accept]
-  requires_user_admin     :only   => [:all]
+  requires_authentication except: [:accept]
+  requires_user           except: [:accept]
+  requires_user_admin     only:   [:all]
 
   respond_to :html, :mobile, :xml, :json
 
-  before_filter :find_invite,    :only => [:show, :edit, :update, :destroy]
-  before_filter :verify_invites, :only => [:new, :create]
+  before_filter :find_invite,    only: [:show, :edit, :update, :destroy]
+  before_filter :verify_invites, only: [:new, :create]
 
   # Show active invites
   def index
@@ -30,7 +30,7 @@ class InvitesController < ApplicationController
       flash[:notice] ||= "Your invite has expired!"
     elsif @invite
       session[:invite_token] = @invite.token
-      redirect_to new_user_by_token_url(:token => @invite.token) and return
+      redirect_to new_user_by_token_url(token: @invite.token) and return
     else
       flash[:notice] ||= "That's not a valid invite!"
     end
@@ -47,7 +47,7 @@ class InvitesController < ApplicationController
     @invite = current_user.invites.create(invite_params)
     if @invite.valid?
       begin
-        Mailer.invite(@invite, accept_invite_url(:id => @invite.token)).deliver
+        Mailer.invite(@invite, accept_invite_url(id: @invite.token)).deliver
         flash[:notice] = "Your invite has been sent to #{@invite.email}"
       rescue Net::SMTPFatalError, Net::SMTPSyntaxError
         flash[:notice] = "There was a problem sending your invite to #{@invite.email}, it has been cancelled."
@@ -55,34 +55,34 @@ class InvitesController < ApplicationController
       end
       redirect_to invites_url and return
     else
-      render :action => :new
+      render action: :new
     end
   end
 
   # def show
-  # 	if verify_user(:user => @invite.user, :user_admin => true)
-  # 		render :action => :edit
+  # 	if verify_user(user: @invite.user, user_admin: true)
+  # 		render action: :edit
   # 	end
   # end
   #
   # def edit
-  # 	verify_user(:user => @invite.user, :user_admin => true)
+  # 	verify_user(user: @invite.user, user_admin: true)
   # end
   #
   # def update
-  # 	if verify_user(:user => @invite.user, :user_admin => true)
+  # 	if verify_user(user: @invite.user, user_admin: true)
   # 		if @invite.update_attributes(params[:invite])
   # 			flash[:notice] = "Invite was updated"
   # 			redirect_to invites_url and return
   # 		else
-  # 			render :action => :edit
+  # 			render action: :edit
   # 		end
   # 	end
   # end
 
   # Delete an invite
   def destroy
-    if verify_user(:user => @invite.user, :user_admin => true)
+    if verify_user(user: @invite.user, user_admin: true)
       @invite.destroy
       flash[:notice] = "Your invite has been cancelled."
       redirect_to invites_url and return
@@ -113,7 +113,7 @@ class InvitesController < ApplicationController
           redirect_to online_users_url and return
         end
         format.any(:xml, :json) do
-          render :text => "You don't have any invites!", :status => :method_not_allowed
+          render text: "You don't have any invites!", status: :method_not_allowed
         end
       end
     end

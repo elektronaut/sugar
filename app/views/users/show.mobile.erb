@@ -6,7 +6,7 @@
     <h2><%= @user.username %></h2>
 
     <% unless !current_user? || @user == current_user %>
-      <p><%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %></p>
+      <p><%= link_to "Start a conversation", new_conversation_with_path(username: @user.username) %></p>
     <% end %>
   </div>
 
@@ -67,19 +67,19 @@
     </tr><% end %>
     <tr>
       <th>Joined</th>
-      <td><%= time_tag @user.created_at, :class => 'relative' %></td>
+      <td><%= time_tag @user.created_at, class: 'relative' %></td>
     </tr>
     <tr>
       <th>Last active</th>
-      <td><%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, :class => 'relative') %></td>
+      <td><%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, class: 'relative') %></td>
     </tr>
     <tr>
       <th>Discussions</th>
-      <td><%= link_to @user.discussions.viewable_by(current_user).count, discussions_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.discussions.viewable_by(current_user).count, discussions_user_path(id: @user.username) %></td>
     </tr>
     <tr>
       <th>Participated</th>
-      <td><%= link_to @user.participated_discussions.viewable_by(current_user).count, participated_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.participated_discussions.viewable_by(current_user).count, participated_user_path(id: @user.username) %></td>
     </tr>
     <tr>
       <th>Posts</th>

@@ -2,16 +2,16 @@
 
 class DiscussionsController < ApplicationController
   requires_authentication
-  requires_user           :except => [:index, :search, :search_posts, :show]
-  protect_from_forgery    :except => :mark_as_read
+  requires_user           except: [:index, :search, :search_posts, :show]
+  protect_from_forgery    except: :mark_as_read
 
   include ConversationController
   include DiscussionController
 
-  before_filter :load_discussion, :only => [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :hide, :unhide, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
-  before_filter :verify_editable, :only => [:edit, :update, :destroy]
+  before_filter :load_discussion, only: [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :hide, :unhide, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
+  before_filter :verify_editable, only: [:edit, :update, :destroy]
   before_filter :set_exchange_params
-  before_filter :require_and_set_search_query, :only => [:search, :search_posts]
+  before_filter :require_and_set_search_query, only: [:search, :search_posts]
 
   protected
 
@@ -97,7 +97,7 @@ class DiscussionsController < ApplicationController
       if @discussion.kind_of?(Conversation)
         @section = :conversations
         current_user.mark_conversation_viewed(@discussion)
-        render :template => 'discussions/show_conversation'
+        render template: 'discussions/show_conversation'
       end
     end
 
@@ -114,7 +114,7 @@ class DiscussionsController < ApplicationController
         redirect_to discussion_url(@discussion)
       else
         flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
-        render :action => :new
+        render action: :new
       end
     end
 
@@ -126,7 +126,7 @@ class DiscussionsController < ApplicationController
         redirect_to discussion_path(@discussion)
       else
         flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
-        render :action => :edit
+        render action: :edit
       end
     end
 

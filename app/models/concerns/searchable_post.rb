@@ -24,7 +24,7 @@ module SearchablePost
           with :conversation,  false
         end
         order_by :created_at, :desc
-        paginate :page => options[:page], :per_page => Post.per_page
+        paginate page: options[:page], per_page: Post.per_page
       end
       search.results
     end

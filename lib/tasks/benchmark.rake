@@ -3,15 +3,15 @@
 namespace :benchmark do
 
     desc "Create random users"
-    task :create_users => :environment do
+    task create_users: :environment do
         count = User.count
         100.times do |i|
-            User.create(:username => "random user #{count + i}", :password => "loser", :confirm_password => "loser", :email => "email@email.com", :last_active => Time.now)
+            User.create(username: "random user #{count + i}", password: "loser", confirm_password: "loser", email: "email@email.com", last_active: Time.now)
         end
     end
 
     desc "Generate 500 random discussions"
-    task :create_discussions => :environment do
+    task create_discussions: :environment do
         users = User.find(:all)
         categories = Category.find(:all)
         randlimit = rand(12000)
@@ -20,16 +20,16 @@ namespace :benchmark do
         1.times do |i|
             u = users[rand(users.length - 1)]
             d = u.discussions.create(
-                :title  => "Hugeass PS3 thread",
-                :category => categories[rand(categories.length - 1)],
-                :nsfw => (rand > 0.7) ? true : false,
-                :sticky => (rand > 0.999) ? true : false,
-                :closed => (rand > 0.9) ? true : false,
-                :body => lorem
+                title:  "Hugeass PS3 thread",
+                category: categories[rand(categories.length - 1)],
+                nsfw: (rand > 0.7) ? true : false,
+                sticky: (rand > 0.999) ? true : false,
+                closed: (rand > 0.9) ? true : false,
+                body: lorem
             )
             #d.create_first_post!
             9000.times do |i|
-               d.posts.create(:body => lorem, :user => users[rand(users.length - 1)])
+               d.posts.create(body: lorem, user: users[rand(users.length - 1)])
             end
             puts "#{d.title}: #{d.posts.count} posts"
         end

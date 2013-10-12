@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
 
   self.per_page = 50
 
-  belongs_to :user, :counter_cache => true
+  belongs_to :user, counter_cache: true
   belongs_to :exchange, counter_cache: :posts_count
   has_many   :discussion_views
 
@@ -114,13 +114,13 @@ class Post < ActiveRecord::Base
   # Make sure the exchange is marked as participated for the user
   def define_relationship
     unless self.conversation?
-      DiscussionRelationship.define(self.user, self.exchange, :participated => true)
+      DiscussionRelationship.define(self.user, self.exchange, participated: true)
     end
   end
 
   # Automatically update the exchange with last poster info
   def update_exchange
-    self.exchange.update_attributes(:last_poster_id => self.user.id, :last_post_at => self.created_at)
+    self.exchange.update_attributes(last_poster_id: self.user.id, last_post_at: self.created_at)
   end
 
   def notify_new_conversation_post

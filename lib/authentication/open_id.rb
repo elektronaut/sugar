@@ -49,9 +49,9 @@ module Authentication
       # Performs the OpenID authentication
       def perform_openid_authentication(response, options={})
         options = {
-          :url       => complete_openid_url,
-          :base_url  => root_url,
-          :immediate => false
+          url:       complete_openid_url,
+          base_url:  root_url,
+          immediate: false
         }.merge(options)
         redirect_to response.redirect_url(options[:base_url], options[:url], options[:immediate])
       end

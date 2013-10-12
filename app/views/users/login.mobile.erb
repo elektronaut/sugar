@@ -3,23 +3,23 @@
 %>
 
 <div id="login" class="login_box">
-  <%= form_tag(authenticate_users_path, :class => 'form') do %>
+  <%= form_tag(authenticate_users_path, class: 'form') do %>
     <p>
       <label>Username</label>
-      <%= text_field_tag 'username', '', :class => :text %>
+      <%= text_field_tag 'username', '', class: :text %>
     </p>
     <p>
       <label>Password</label>
-      <%= password_field_tag 'password', '', :class => :text %>
+      <%= password_field_tag 'password', '', class: :text %>
     </p>
     <p>
       <%= submit_tag "Login" %>
     </p>
   <% end %>
-  <%= form_tag(openid_path, :class => 'form') do %>
+  <%= form_tag(openid_path, class: 'form') do %>
     <p>
       <label>..or log in using OpenID</label>
-      <%= text_field_tag 'openid_url', '', :class => :text %>
+      <%= text_field_tag 'openid_url', '', class: :text %>
     </p>
     <p>
       <%= submit_tag "Login" %>
@@ -28,11 +28,11 @@
 </div>
 
 <div id="password-reminder" class="login_box">
-  <%= form_tag(password_resets_path, :class => 'form') do %>
+  <%= form_tag(password_resets_path, class: 'form') do %>
     <p>Enter your email address, and we'll send you a new password.</p>
     <p>
       <label>Email</label>
-      <%= text_field_tag 'email', '', :class => :text %>
+      <%= text_field_tag 'email', '', class: :text %>
     </p>
     <p>
       <%= submit_tag "Send" %>
@@ -44,7 +44,7 @@
   <p>
     <%= link_to_function "Password reminder", "forgot_password();" %>
     <span class="separator">|</span>
-    <%= link_to "Regular site", :imobile_format => 'html' %>
+    <%= link_to "Regular site", imobile_format: 'html' %>
   </p>
 </div>
 

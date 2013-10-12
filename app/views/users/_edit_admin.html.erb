@@ -1,14 +1,14 @@
 <fieldset>
   <h2>Account status</h2>
   <%= labelled_field f.check_box(:banned), "Banned" %>
-  <%= labelled_field f.check_box(:trusted), "Trusted", :description => 'User will be able to see discussions in categories marked as trusted' %>
+  <%= labelled_field f.check_box(:trusted), "Trusted", description: 'User will be able to see discussions in categories marked as trusted' %>
 </fieldset>
 
 <% if !Sugar.config(:signups_allowed) && !@user.user_admin? %>
   <fieldset>
     <h2>Invites</h2>
     <p class="field">
-      <%= f.text_field(:available_invites, :size => 4) %> invites
+      <%= f.text_field(:available_invites, size: 4) %> invites
     </p>
   </fieldset>
 <% end %>
@@ -16,7 +16,7 @@
 <% if current_user.user_admin? %>
   <fieldset>
     <h2>Temporary ban</h2>
-    <%= labelled_field f.datetime_select(:banned_until, :minute_step => 15, :default => 1.minute.ago), 'Banned until' %>
+    <%= labelled_field f.datetime_select(:banned_until, minute_step: 15, default: 1.minute.ago), 'Banned until' %>
   </fieldset>
 
   <fieldset>

@@ -4,7 +4,7 @@
   @google_maps_api = true
 %>
 
-<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(:id => @user.username) %> </h2>
+<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(id: @user.username) %> </h2>
 
 <ul class="topTabs">
   <li class="tab<%= ' active' if @page == 'info' %>"><%= link_to "Personal Info", edit_user_page_path(@user.username, 'info') %></li>
@@ -21,6 +21,6 @@
 
 <%= form_for(@user) do |f| %>
   <%= hidden_field_tag :page, @page %>
-  <%= render :partial => "edit_#{@page}", :locals => {:f => f} %>
+  <%= render partial: "edit_#{@page}", locals: {f: f} %>
   <p><button type="submit">Save</button></p>
 <% end %>

@@ -5,7 +5,7 @@
 
 <% if current_user.try(&:admin?) %>
   <div class="functions">
-    <%= link_to "New Category +", new_category_path, :class => :create %>
+    <%= link_to "New Category +", new_category_path, class: :create %>
   </div>
 <% end %>
 

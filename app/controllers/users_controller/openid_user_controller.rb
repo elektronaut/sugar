@@ -5,10 +5,10 @@ class UsersController < ApplicationController
     def update_openid
       if session[:authenticated_openid_url] && @user.update_attribute(:openid_url, session[:authenticated_openid_url])
         flash[:notice] = "Your OpenID URL was updated!"
-        redirect_to user_url(:id => @user.username) and return
+        redirect_to user_url(id: @user.username) and return
       else
         flash[:notice] ||= 'OpenID verification failed!'
-        redirect_to edit_user_url(:id => @user.username)
+        redirect_to edit_user_url(id: @user.username)
       end
     end
 
@@ -21,8 +21,8 @@ class UsersController < ApplicationController
     def initiate_openid_on_create
       if params[:user][:openid_url]
         success = start_openid_session(params[:user][:openid_url],
-          :success => update_openid_user_url(:id => @user.username),
-          :fail    => edit_user_page_url(:id => @user.username, :page => 'settings')
+          success: update_openid_user_url(id: @user.username),
+          fail:    edit_user_page_url(id: @user.username, page: 'settings')
         )
         unless success
           flash[:notice] = "WARNING: Your OpenID URL is invalid!"
@@ -36,12 +36,12 @@ class UsersController < ApplicationController
     def initiate_openid_on_update
       if new_openid_url?
         success = start_openid_session(params[:user][:openid_url],
-          :success   => update_openid_user_url(:id => @user.username),
-          :fail      => edit_user_page_url(:id => @user.username, :page => @page)
+          success:   update_openid_user_url(id: @user.username),
+          fail:      edit_user_page_url(id: @user.username, page: @page)
         )
         unless success
           flash.now[:notice] = "That's not a valid OpenID URL!"
-          render :action => :edit
+          render action: :edit
         end
         true
       else

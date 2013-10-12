@@ -24,12 +24,12 @@ class Invite < ActiveRecord::Base
     # Makes a unique random token.
     def unique_token
       token = nil
-      token = Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s) until token && !self.exists?(:token => token)
+      token = Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s) until token && !self.exists?(token: token)
       token
     end
 
     def find_by_token(token)
-      self.where(:token => token).first
+      self.where(token: token).first
     end
 
     # Gets the default expiration time.
@@ -75,7 +75,7 @@ class Invite < ActiveRecord::Base
   end
 
   def validate_email_registered
-    if User.exists?(:email => self.email)
+    if User.exists?(email: self.email)
       self.errors.add(:email, 'is already registered!')
     end
     if Invite.active.select{|i| i != self && i.email == self.email }.length > 0

@@ -12,9 +12,9 @@ class ConvertMessages < ActiveRecord::Migration
       puts "#{user1.username} -> #{user2.username}"
       messages = Message.find(
         :all,
-        :conditions => ['(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)', user1.id, user2.id, user2.id, user1.id],
-        :order      => 'created_at ASC',
-        :include    => [:sender, :recipient]
+        conditions: ['(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)', user1.id, user2.id, user2.id, user1.id],
+        order:      'created_at ASC',
+        include:    [:sender, :recipient]
       )
 
       threaded_messages = {}
@@ -28,11 +28,11 @@ class ConvertMessages < ActiveRecord::Migration
         end
       end
       threaded_messages.each do |title, messages|
-        conversation = Conversation.create({:skip_body_validation => true, :title => title, :poster => messages.first.sender, :created_at => messages.first.created_at})
+        conversation = Conversation.create({skip_body_validation: true, title: title, poster: messages.first.sender, created_at: messages.first.created_at})
         last_read = {}
         messages.each do |message|
           #begin
-            post = conversation.posts.create(:user => message.sender, :body => message.body, :created_at => message.created_at, :updated_at => message.updated_at, :skip_html => true)
+            post = conversation.posts.create(user: message.sender, body: message.body, created_at: message.created_at, updated_at: message.updated_at, skip_html: true)
             last_read[message.sender] = post
             if message.read?
               last_read[message.recipient] = post
@@ -44,9 +44,9 @@ class ConvertMessages < ActiveRecord::Migration
         # Create relationships
         [user1, user2].each do |user|
           ConversationRelationship.create(
-            :conversation => conversation,
-            :user         => user,
-            :new_posts    => ((messages.select{|m| m.recipient_id == user.id && !m.read?}.length > 0) ? true : false)
+            conversation: conversation,
+            user:         user,
+            new_posts:    ((messages.select{|m| m.recipient_id == user.id && !m.read?}.length > 0) ? true : false)
           )
         end
         # Mark as viewed
@@ -66,6 +66,6 @@ class ConvertMessages < ActiveRecord::Migration
 end
 
 class Message < ActiveRecord::Base
-    belongs_to :recipient, :class_name => 'User'
-    belongs_to :sender, :class_name => 'User'
+    belongs_to :recipient, class_name: 'User'
+    belongs_to :sender, class_name: 'User'
 end

@@ -30,11 +30,11 @@
           By <%= d.poster.username %>,
         <% end %>
         <%= d.posts_count %> posts.
-        Last: <%= d.last_poster.username %> <%= time_tag d.last_post_at, :class => 'relative' %>
+        Last: <%= d.last_poster.username %> <%= time_tag d.last_post_at, class: 'relative' %>
       </p>
     </div><% end %>
   </div>
-  <%= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
+  <%= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
 <% else %>
   <p><%= no_discussions %></p>
 <% end %>

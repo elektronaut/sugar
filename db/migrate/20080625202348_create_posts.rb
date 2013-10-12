@@ -3,7 +3,7 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.text :body, :body_html
       t.belongs_to :user, :discussion
-      t.boolean :trusted, :delta, :null => false, :default => false
+      t.boolean :trusted, :delta, null: false, default: false
       t.datetime :edited_at
       t.timestamps
     end

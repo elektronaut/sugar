@@ -12,7 +12,7 @@
 
 <p>
   <label>Enter title</label>
-  <%= f.text_field(:title, :class => :text) %>
+  <%= f.text_field(:title, class: :text) %>
 </p>
 <% if @discussion.kind_of?(Discussion) %>
   <p>
@@ -23,7 +23,7 @@
 
 <p>
   <label>Enter your first post</label>
-  <%= f.text_area(:body, :id => 'compose-body', :class => :rich, "data-format-binding" => ".format", "data-formats" => "markdown html", "data-remember-format" => @discussion.new_record?) %>
+  <%= f.text_area(:body, id: 'compose-body', class: :rich, "data-format-binding" => ".format", "data-formats" => "markdown html", "data-remember-format" => @discussion.new_record?) %>
 </p>
 <p>
   <%= f.check_box(:nsfw) %> Mark as NSFW<br />

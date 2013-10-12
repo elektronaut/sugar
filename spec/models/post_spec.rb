@@ -83,7 +83,7 @@ describe Post do
 
     context "with :limit set" do
       before { post.stub(:post_number).and_return(70) }
-      subject { post.page(:limit => 10) }
+      subject { post.page(limit: 10) }
       it { should == 7 }
     end
 
@@ -103,7 +103,7 @@ describe Post do
 
       it "parses the post" do
         Sugar::PostRenderer.should_receive(:render).exactly(1).times
-          .and_return { double(:to_html => "<p>Test</p>") }
+          .and_return { double(to_html: "<p>Test</p>") }
         post.body_html
       end
 

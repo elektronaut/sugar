@@ -33,7 +33,7 @@
 <body>
     <div id="header">
     <div id="navigationToggle">
-      <%= link_to_function "", "toggleNavigation();", :class => (current_user? && current_user.unread_conversations? ? 'new' : '') %>
+      <%= link_to_function "", "toggleNavigation();", class: (current_user? && current_user.unread_conversations? ? 'new' : '') %>
     </div>
         <h1 id="pageTitle" class="page_title">
       <% if @page_title %>
@@ -62,17 +62,17 @@
         <% if @discussion && !@discussion.new_record? && @discussion.editable_by?(current_user) %>
           <li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>
         <% end %>
-        <li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
+        <li><%= link_to "Log out", logout_users_path, confirm: "Are you sure you want to log out?" %></li>
       <% end %>
       <li class="search">
-        <%= form_tag((@search_path || search_path), :method => 'get') do %>
+        <%= form_tag((@search_path || search_path), method: 'get') do %>
           Search for
-          <%= text_field_tag 'q', @search_query, :class => :query %>
+          <%= text_field_tag 'q', @search_query, class: :query %>
           <%= select_tag 'search_mode', options_for_select(
             search_mode_options,
             @search_path || search_path
           ) %>
-          <%= submit_tag "Go", :name => nil %>
+          <%= submit_tag "Go", name: nil %>
         <% end %>
       </li>
     </ul></div>
@@ -89,7 +89,7 @@
       <%= link_to "Following", following_discussions_path %> |
       <%= link_to "Favorites", favorites_discussions_path %> |
     <% end %>
-    <%= link_to "Regular site", {:mobile_format => 'html'}, :class => 'regular_site' %>
+    <%= link_to "Regular site", {mobile_format: 'html'}, class: 'regular_site' %>
   </div>
   <% if Sugar.config(:google_analytics) -%>
   <script type="text/javascript">

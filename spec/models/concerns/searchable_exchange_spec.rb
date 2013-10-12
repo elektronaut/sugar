@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe SearchableExchange, :solr => true do
+describe SearchableExchange, solr: true do
 
   let!(:discussion)         { create(:discussion, title: 'testing discussion') }
   let!(:trusted_discussion) { create(:trusted_discussion, title: 'testing trusted discussion') }

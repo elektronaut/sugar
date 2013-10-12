@@ -19,18 +19,18 @@ class User < ActiveRecord::Base
   before_validation :ensure_last_active_is_set
 
   validates :username,
-            :presence => true,
-            :uniqueness => { :case_sensitive => false, :message => "is already registered" },
-            :format => { :with => /\A[^\?]+\Z/, :message => "is not valid" }
+            presence: true,
+            uniqueness: { case_sensitive: false, message: "is already registered" },
+            format: { with: /\A[^\?]+\Z/, message: "is not valid" }
 
   validates :email,
-            :email => true,
-            :uniqueness => { :case_sensitive => false, :message => 'is already registered' },
-            :if => :email?
+            email: true,
+            uniqueness: { case_sensitive: false, message: 'is already registered' },
+            if: :email?
 
   validates :email,
-            :presence => { :case_sensitive => false },
-            :unless => Proc.new { |u| u.openid_url? || u.facebook? }
+            presence: { case_sensitive: false },
+            unless: Proc.new { |u| u.openid_url? || u.facebook? }
 
   # Returns the full email address with real name.
   def full_email
@@ -113,11 +113,11 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super({:only => serializable_params, :methods => serializable_methods}.merge(options))
+    super({only: serializable_params, methods: serializable_methods}.merge(options))
   end
 
   def to_xml(options={})
-    super({:only => serializable_params, :methods => serializable_methods}.merge(options))
+    super({only: serializable_params, methods: serializable_methods}.merge(options))
   end
 
   protected

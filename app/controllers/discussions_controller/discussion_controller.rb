@@ -3,8 +3,8 @@ class DiscussionsController < ApplicationController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :load_categories,    :only => [:new, :create, :edit, :update]
-      before_filter :require_categories, :only => [:new, :create]
+      before_filter :load_categories,    only: [:new, :create, :edit, :update]
+      before_filter :require_categories, only: [:new, :create]
     end
 
     # Recent discussions
@@ -21,7 +21,7 @@ class DiscussionsController < ApplicationController
     def popular
       @days = params[:days].to_i
       unless (1..180).include?(@days)
-        redirect_to params.merge({:days => 7}) and return
+        redirect_to params.merge({days: 7}) and return
       end
       @discussions = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
       load_views_for(@discussions)
@@ -38,13 +38,13 @@ class DiscussionsController < ApplicationController
         end
         format.json do
           json = {
-            :pages         => @discussions.pages,
-            :total_entries => @discussions.total,
+            pages:         @discussions.pages,
+            total_entries: @discussions.total,
             # TODO: Fix when Rails bug is fixed
-            #:discussions   => @discussions
-            :discussions   => @discussions.map{|d| {:discussion => d.attributes}}
-          }.to_json(:except => [:delta])
-          render :text => json
+            #discussions:   @discussions
+            discussions:   @discussions.map{|d| {discussion: d.attributes}}
+          }.to_json(except: [:delta])
+          render text: json
         end
       end
     end
@@ -70,45 +70,45 @@ class DiscussionsController < ApplicationController
 
     # Follow a discussion
     def follow
-      DiscussionRelationship.define(current_user, @discussion, :following => true)
-      redirect_to discussion_url(@discussion, :page => params[:page])
+      DiscussionRelationship.define(current_user, @discussion, following: true)
+      redirect_to discussion_url(@discussion, page: params[:page])
     end
 
     # Unfollow a discussion
     def unfollow
-      DiscussionRelationship.define(current_user, @discussion, :following => false)
+      DiscussionRelationship.define(current_user, @discussion, following: false)
       redirect_to discussions_url
     end
 
     # Favorite a discussion
     def favorite
-      DiscussionRelationship.define(current_user, @discussion, :favorite => true)
-      redirect_to discussion_url(@discussion, :page => params[:page])
+      DiscussionRelationship.define(current_user, @discussion, favorite: true)
+      redirect_to discussion_url(@discussion, page: params[:page])
     end
 
     # Unfavorite a discussion
     def unfavorite
-      DiscussionRelationship.define(current_user, @discussion, :favorite => false)
+      DiscussionRelationship.define(current_user, @discussion, favorite: false)
       redirect_to discussions_url
     end
 
     # Favorite a discussion
     def hide
-      DiscussionRelationship.define(current_user, @discussion, :hidden => true)
+      DiscussionRelationship.define(current_user, @discussion, hidden: true)
       redirect_to discussions_url
     end
 
     # Unfavorite a discussion
     def unhide
-      DiscussionRelationship.define(current_user, @discussion, :hidden => false)
-      redirect_to discussion_url(@discussion, :page => params[:page])
+      DiscussionRelationship.define(current_user, @discussion, hidden: false)
+      redirect_to discussion_url(@discussion, page: params[:page])
     end
 
     # Mark discussion as read
     def mark_as_read
       current_user.mark_discussion_viewed(@discussion, @discussion.posts.last, @discussion.posts_count)
       if request.xhr?
-        render :layout => false, :text => 'OK'
+        render layout: false, text: 'OK'
       end
     end
 

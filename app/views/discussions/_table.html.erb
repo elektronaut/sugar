@@ -3,7 +3,7 @@
   pagination_params ||= {}
 %>
 <% if discussions && discussions.length > 0 %>
-  <%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
+  <%= pagination ||= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
   <table class="discussions">
     <% discussions.each do |d| %>
       <tr class="<%= discussion_classes(discussions, d) %>">
@@ -31,7 +31,7 @@
           <td class="started_by">Started by <%= profile_link(d.poster) %></td>
         <% end %>
         <td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>
-        <td class="last_active">Last active <strong><%= time_tag d.last_post_at, :class => 'relative' %></strong></td>
+        <td class="last_active">Last active <strong><%= time_tag d.last_post_at, class: 'relative' %></strong></td>
         <td class="post_count">
           <strong><%= d.posts_count %></strong>
           <%= d.posts_count > 1 ? 'posts' : 'post' %><% if @days && d.respond_to?(:recent_posts_count) %>,
@@ -46,7 +46,7 @@
       </tr>
     <% end %>
   </table>
-  <%= pagination ||= render :partial => 'components/pagination', :locals => { :p => discussions, :pagination_params => pagination_params } %>
+  <%= pagination ||= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
 <% else %>
   <div class="content">
     <p><%= no_discussions.html_safe %></p>

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sugar, :redis => true do
+describe Sugar, redis: true do
   # Reload config before each run
   before { Sugar.load_config! }
 

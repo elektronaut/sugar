@@ -4,6 +4,6 @@ class RemoveKeyboardNavigationSetting < ActiveRecord::Migration
   end
 
   def down
-    add_column :users, :keyboard_navigation, :boolean, :null => false, :default => true
+    add_column :users, :keyboard_navigation, :boolean, null: false, default: true
   end
 end

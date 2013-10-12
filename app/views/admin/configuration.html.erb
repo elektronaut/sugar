@@ -22,31 +22,31 @@
     <fieldset>
       <h2>Forum name</h2>
       <%= labelled_field(
-          text_field_tag('config[forum_name]', Sugar.config(:forum_name), :size => 48),
+          text_field_tag('config[forum_name]', Sugar.config(:forum_name), size: 48),
           "Forum name"
       ) %>
       <%= labelled_field(
           text_field_tag('config[forum_title]',
-          Sugar.config(:forum_title), :size => 48),
+          Sugar.config(:forum_title), size: 48),
           "Forum title",
-          :description => 'HTML allowed'
+          description: 'HTML allowed'
       ) %>
       <%= labelled_field(
-          text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name), :size => 10),
+          text_field_tag('config[forum_short_name]', Sugar.config(:forum_short_name), size: 10),
           "Short version of forum name",
-          :description => 'Will be used where applicable, ie. on the mobile version'
+          description: 'Will be used where applicable, ie. on the mobile version'
       ) %>
     </fieldset>
     <fieldset>
       <h2>Domain and email</h2>
       <%= labelled_field(
-          "http://"+text_field_tag('config[default_domain]', Sugar.config(:default_domain), :size => 32),
+          "http://"+text_field_tag('config[default_domain]', Sugar.config(:default_domain), size: 32),
           "Default domain name"
       ) %>
       <%= labelled_field(
-          text_field_tag('config[mail_sender]', Sugar.config(:mail_sender), :size => 48),
+          text_field_tag('config[mail_sender]', Sugar.config(:mail_sender), size: 48),
           "Mail sender",
-          :description => 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>'
+          description: 'Example: <em>My Forum &lt;no-reply@mydomain.com&gt;</em>'
       ) %>
     </fieldset>
     <fieldset>
@@ -69,7 +69,7 @@
 
 
     <!--
-    <%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", :description => 'Example: <em>http://assets%d.mydomain.com</em>' %>
+    <%= labelled_field text_field_tag('config[asset_host]', Sugar.config(:asset_host)), "Hostname for assets", description: 'Example: <em>http://assets%d.mydomain.com</em>' %>
     <%= labelled_field text_field_tag('config[session_key]', Sugar.config(:session_key)), "Session cookie name" %>
     -->
 
@@ -93,7 +93,7 @@
   <div id="integration">
     <fieldset>
       <h2>Google Analytics</h2>
-      <%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Tracking code", :description => 'Enter to enable tracking' %>
+      <%= labelled_field text_field_tag('config[google_analytics]', Sugar.config(:google_analytics)), "Tracking code", description: 'Enter to enable tracking' %>
     </fieldset>
     <fieldset>
       <h2>Facebook</h2>
@@ -102,8 +102,8 @@
         <%= link_to "set up an application on Facebook", "http://www.facebook.com/developers" %>
         and enter your App ID and secret here.
       </p>
-      <%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id), :size => '48'), "Application ID" %>
-      <%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret), :size => '48'), "Application Secret" %>
+      <%= labelled_field text_field_tag('config[facebook_app_id]', Sugar.config(:facebook_app_id), size: '48'), "Application ID" %>
+      <%= labelled_field text_field_tag('config[facebook_api_secret]', Sugar.config(:facebook_api_secret), size: '48'), "Application Secret" %>
     </fieldset>
     <fieldset>
       <h2>Amazon AWS</h2>
@@ -112,17 +112,17 @@
         <%= link_to "sign up for Amazon S3", "http://aws.amazon.com/s3/" %>
         and enter your access key and secret here.
       </p>
-      <%= labelled_field text_field_tag('config[amazon_aws_key]', Sugar.config(:amazon_aws_key), :size => '48'), "Access Key ID" %>
-      <%= labelled_field text_field_tag('config[amazon_aws_secret]', Sugar.config(:amazon_aws_secret), :size => '48'), "Secret Access Key" %>
-      <%= labelled_field text_field_tag('config[amazon_s3_bucket]', Sugar.config(:amazon_s3_bucket), :size => '48'), "S3 Bucket" %>
+      <%= labelled_field text_field_tag('config[amazon_aws_key]', Sugar.config(:amazon_aws_key), size: '48'), "Access Key ID" %>
+      <%= labelled_field text_field_tag('config[amazon_aws_secret]', Sugar.config(:amazon_aws_secret), size: '48'), "Secret Access Key" %>
+      <%= labelled_field text_field_tag('config[amazon_s3_bucket]', Sugar.config(:amazon_s3_bucket), size: '48'), "S3 Bucket" %>
     </fieldset>
     <fieldset>
       <h2>Amazon Associates</h2>
-      <%= labelled_field text_field_tag('config[amazon_associates_id]', Sugar.config(:amazon_associates_id)), "Tracking ID", :description => 'Enter to enable referrals' %>
+      <%= labelled_field text_field_tag('config[amazon_associates_id]', Sugar.config(:amazon_associates_id)), "Tracking ID", description: 'Enter to enable referrals' %>
     </fieldset>
     <fieldset>
       <h2>Flickr</h2>
-      <%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api), :size => '48'), "API key", :description => 'Enter to enable Flickr integration' %>
+      <%= labelled_field text_field_tag('config[flickr_api]', Sugar.config(:flickr_api), size: '48'), "API key", description: 'Enter to enable Flickr integration' %>
     </fieldset>
     <fieldset>
       <h2>Xbox Live</h2>
@@ -134,8 +134,8 @@
   <div id="customization">
     <fieldset>
       <h2>Custom HTML</h2>
-      <%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), :size => '40x15', :class => 'code'), "Header", :description => 'Included right after &lt;body&gt;' %>
-      <%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), :size => '40x15', :class => 'code'), "Footer", :description => 'Included just before &lt;/body&gt;'  %>
+      <%= labelled_field text_area_tag('config[custom_header]', Sugar.config(:custom_header), size: '40x15', class: 'code'), "Header", description: 'Included right after &lt;body&gt;' %>
+      <%= labelled_field text_area_tag('config[custom_footer]', Sugar.config(:custom_footer), size: '40x15', class: 'code'), "Footer", description: 'Included just before &lt;/body&gt;'  %>
     </fieldset>
     <fieldset>
       <h2>Custom JavaScript</h2>
@@ -143,7 +143,7 @@
         Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with
         <span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.
       </p>
-      <%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), :size => '40x15', :class => 'code'), "Javascript" %>
+      <%= labelled_field text_area_tag('config[custom_javascript]', Sugar.config(:custom_javascript), size: '40x15', class: 'code'), "Javascript" %>
     </fieldset>
   </div>
 

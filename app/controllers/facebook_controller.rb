@@ -1,7 +1,7 @@
 class FacebookController < ApplicationController
 
-  requires_user :only => [:connect, :disconnect]
-  before_filter :detect_admin_signup, :only => [:signup]
+  requires_user only: [:connect, :disconnect]
+  before_filter :detect_admin_signup, only: [:signup]
 
   protected
 
@@ -52,7 +52,7 @@ class FacebookController < ApplicationController
   public
 
     def login
-      if @user_info ||= get_user_info(:code => params[:code])
+      if @user_info ||= get_user_info(code: params[:code])
 
         # User exists
         if set_current_user(User.find_by_facebook_uid(@user_info[:id]))
@@ -73,12 +73,12 @@ class FacebookController < ApplicationController
     end
 
     def signup
-      if @user_info ||= get_user_info(:code => params[:code], :redirect_uri => signup_facebook_url)
+      if @user_info ||= get_user_info(code: params[:code], redirect_uri: signup_facebook_url)
         session[:facebook_user_params] = {
-          :facebook_uid => @user_info[:id],
-          :email        => @user_info[:email],
-          :realname     => @user_info[:name],
-          :username     => (@user_info[:username] || @user_info[:name])
+          facebook_uid: @user_info[:id],
+          email:        @user_info[:email],
+          realname:     @user_info[:name],
+          username:     (@user_info[:username] || @user_info[:name])
         }
       else
         flash[:error] = "Failed to verify your Facebook account"
@@ -87,14 +87,14 @@ class FacebookController < ApplicationController
     end
 
     def connect
-      if @user_info ||= get_user_info(:code => params[:code], :redirect_uri => connect_facebook_url)
+      if @user_info ||= get_user_info(code: params[:code], redirect_uri: connect_facebook_url)
         current_user.update_attribute(:facebook_uid, @user_info[:id]) if @user_info[:id]
       else
         flash[:error] = "Failed to verify your Facebook account"
       end
       redirect_to edit_user_page_url(
-        :id   => current_user.username,
-        :page => 'services'
+        id:   current_user.username,
+        page: 'services'
       ) and return
     end
 
@@ -102,8 +102,8 @@ class FacebookController < ApplicationController
       current_user.update_attribute(:facebook_uid, nil)
       flash[:notice] = "You have disconnected your Facebook account"
       redirect_to edit_user_page_url(
-        :id   => current_user.username,
-        :page => 'services'
+        id:   current_user.username,
+        page: 'services'
       ) and return
     end
 end

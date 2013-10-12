@@ -6,12 +6,12 @@
 <% if current_user? %>
   <div class="functions">
     <% if @user == current_user %>
-      <%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
+      <%= link_to "Edit your profile", edit_user_path(id: @user.username) %>
     <% elsif current_user.user_admin? %>
-      <%= link_to "Edit", edit_user_path(:id => @user.username) %> /
+      <%= link_to "Edit", edit_user_path(id: @user.username) %> /
     <% end %>
     <% unless @user == current_user %>
-      <%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %>
+      <%= link_to "Start a conversation", new_conversation_with_path(username: @user.username) %>
     <% end %>
   </div>
 <% end %>
@@ -20,8 +20,8 @@
 
 <div id="userinfo">
   <p class="avatar_and_name clearfix">
-    <%= avatar_image_tag @user, '32', :class => :avatar %>
-    <%= profile_link(@user, @user.username, :class => 'username') %>
+    <%= avatar_image_tag @user, '32', class: :avatar %>
+    <%= profile_link(@user, @user.username, class: 'username') %>
     <% if @user.realname? || @user.location? %>
       <br />
       <% if @user.realname? %>
@@ -45,35 +45,35 @@
   <% if !Sugar.config(:signups_allowed) && current_user? && current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
       <strong>Invites:</strong> <%= @user.available_invites %> &ndash;
-      <%= link_to "Grant one", grant_invite_user_path(:id => @user.username), method: :post %>
-      or <%= link_to "revoke all", revoke_invites_user_path(:id => @user.username), confirm: 'Are you sure you want to revoke all invites?', method: :post %>
+      <%= link_to "Grant one", grant_invite_user_path(id: @user.username), method: :post %>
+      or <%= link_to "revoke all", revoke_invites_user_path(id: @user.username), confirm: 'Are you sure you want to revoke all invites?', method: :post %>
       <br />
     </p>
   <% end %>
 
   <p class="posts_and_discussions">
     <% if @user.discussions.viewable_by(current_user).any? %>
-      <%= link_to "View discussions", discussions_user_path(:id => @user.username) %>
+      <%= link_to "View discussions", discussions_user_path(id: @user.username) %>
       (<%= @user.discussions.viewable_by(current_user).count %>)<br />
     <% end %>
     <% if @user.participated_discussions.viewable_by(current_user).any? %>
-      <%= link_to "View participated discussions", participated_user_path(:id => @user.username) %>
+      <%= link_to "View participated discussions", participated_user_path(id: @user.username) %>
       (<%= @user.participated_discussions.viewable_by(current_user).count %>)<br />
     <% end %>
     <% if @user.discussion_posts.viewable_by(current_user).any? %>
-      <%= link_to "View posts", posts_user_path(:id => @user.username) %>
+      <%= link_to "View posts", posts_user_path(id: @user.username) %>
       (<%= @user.discussion_posts.viewable_by(current_user).count %>)<br />
     <% end %>
     <% unless !current_user? || @user == current_user %>
-      <%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>
+      <%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(username: @user.username) %>
     <% end %>
   </p>
 
   <p>
     <% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
-    <strong>Member since</strong>: <%= time_tag @user.created_at, :class => 'relative' %><br />
+    <strong>Member since</strong>: <%= time_tag @user.created_at, class: 'relative' %><br />
     <% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
-    <strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, :class => 'relative') %><br />
+    <strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, class: 'relative') %><br />
     <% if @user.banned? %>
       <%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
     <% elsif @user.admin? %>
@@ -89,7 +89,7 @@
   </p>
 
   <% if @user.twitter? %><div class="social twitter">
-    <h3>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", :class => 'username' %></h3>
+    <h3>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", class: 'username' %></h3>
     <div id="profileTweets">
       <ul id="twitter_update_list"></ul>
     </div>
@@ -100,7 +100,7 @@
   </div><% end %>
 
   <% if @user.flickr? %><div class="social flickr clearfix">
-    <h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", :id => 'flickrProfileURL' %></h3>
+    <h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %></h3>
     <div id="flickrPhotos"></div>
   </div><% end %>
 
@@ -114,7 +114,7 @@
     <ul><% @user.invitees.each do |invitee| %>
       <li>
         <%= profile_link(invitee) %>
-        (joined <%= time_tag invitee.created_at, :class => 'relative' %>)
+        (joined <%= time_tag invitee.created_at, class: 'relative' %>)
       </li>
     <% end %></ul>
   </div><% end %>
@@ -122,7 +122,7 @@
 </div>
 <div id="userPosts">
   <% if @posts && @posts.length > 0 %>
-    <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
+    <%= render partial: 'posts/posts', locals: {posts: @posts, title: true, no_pagination: true} %>
   <% elsif current_user? && @user == current_user %>
     <div class="welcome">
       <h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
@@ -131,7 +131,7 @@
       </p>
       <p>
         Why don't you go <%= link_to "check out some discussions", discussions_path %>, and maybe introduce yourself?<br />
-        Or maybe <%= link_to "edit your profile", edit_user_path(:id => @user.username) %> and add some more info about yourself?
+        Or maybe <%= link_to "edit your profile", edit_user_path(id: @user.username) %> and add some more info about yourself?
       </p>
     </div>
   <% end %>

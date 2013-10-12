@@ -8,23 +8,23 @@
 %>
 <div class="pagination">
   <% if p.total_pages > 1 %><div class="links">
-    <%= link_to_if p.previous_page, "&lt; Prev".html_safe, {:page => p.previous_page, :anchor => anchor}.merge(pagination_params), :class => :prev_page_link %>
+    <%= link_to_if p.previous_page, "&lt; Prev".html_safe, {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: :prev_page_link %>
 
     <% if np = nearest_pages(p) %>
       <% if np.first > 1 %>
-        <%= link_to_unless((p.current_page == 1), "1", {:page => 1, :anchor => anchor}.merge(pagination_params)) %>
+        <%= link_to_unless((p.current_page == 1), "1", {page: 1, anchor: anchor}.merge(pagination_params)) %>
       <% end %>
       <% if np.first > 2 %>&hellip;<% end %>
       <% np.each do |np| %>
-        <%= link_to_unless((p.current_page == np), np, {:page => np, :anchor => anchor}.merge(pagination_params)) %>
+        <%= link_to_unless((p.current_page == np), np, {page: np, anchor: anchor}.merge(pagination_params)) %>
       <% end %>
       <% if np.last < (p.total_pages - 1) %>&hellip;<% end %>
       <% if np.last < p.total_pages %>
-        <%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {:page => p.total_pages, :anchor => anchor}.merge(pagination_params)) %>
+        <%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {page: p.total_pages, anchor: anchor}.merge(pagination_params)) %>
       <% end %>
     <% end %>
 
-    <%= link_to_if p.next_page,     "Next &gt;".html_safe, {:page => p.next_page, :anchor => anchor}.merge(pagination_params), :class => :next_page_link %>
+    <%= link_to_if p.next_page,     "Next &gt;".html_safe, {page: p.next_page, anchor: anchor}.merge(pagination_params), class: :next_page_link %>
   </div><% end %>
   <%= offset + 1 %> to <span class="shown_items_count"><%= offset + p.length %></span> of <span class="total_items_count"><%= p.total_count %></span>
 </div>

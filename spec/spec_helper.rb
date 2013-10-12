@@ -37,7 +37,7 @@ Spork.prefork do
     config.before do
       Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
     end
-    config.before :each, :solr => true do
+    config.before :each, solr: true do
       Sunspot::Rails::Tester.start_original_sunspot_session
       Sunspot.session = $original_sunspot_session
       Sunspot.remove_all!
@@ -74,16 +74,16 @@ Spork.each_run do
   Sugar.redis = Redis.connect(RedisHelper::CONFIG)
 
   RSpec.configure do |config|
-    config.include RedisHelper, :redis => true
+    config.include RedisHelper, redis: true
     config.include JsonSpec::Helpers
-    config.include LoginMacros, :type => :controller
+    config.include LoginMacros, type: :controller
     config.include Sugar::Exceptions
     config.include MailerMacros
     config.include ConfigurationMacros
     config.before(:each) { reset_email }
 
     # Clean the Redis database and reload the configuration
-    config.around(:each, :redis => true) do |example|
+    config.around(:each, redis: true) do |example|
       with_clean_redis do
         Sugar.reset_config!
         example.run

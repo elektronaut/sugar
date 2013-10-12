@@ -8,42 +8,42 @@ require File.join(File.dirname(__FILE__), 'sugar/post_renderer')
 module Sugar
 
   DEFAULT_CONFIGURATION = {
-    :forum_name               => 'Sugar',
-    :forum_short_name         => 'Sugar',
-    :forum_title              => 'Sugar',
+    forum_name:               'Sugar',
+    forum_short_name:         'Sugar',
+    forum_title:              'Sugar',
 
     # Hosts etc
-    :default_domain           => nil,
-    :asset_host               => nil,
-    :mail_sender              => nil,
-    :session_key              => '_sugar_session',
+    default_domain:           nil,
+    asset_host:               nil,
+    mail_sender:              nil,
+    session_key:              '_sugar_session',
 
     # Themes
-    :default_theme            => 'default',
-    :default_theme            => 'default',
-    :default_mobile_theme     => 'default',
+    default_theme:            'default',
+    default_theme:            'default',
+    default_mobile_theme:     'default',
 
     # Options
-    :public_browsing          => false,
-    :signups_allowed          => true,
+    public_browsing:          false,
+    signups_allowed:          true,
 
     # Integration
-    :xbox_live_enabled        => false,
-    :flickr_api               => nil,
-    :google_analytics         => nil,
-    :amazon_associates_id     => nil,
-    :amazon_aws_key           => nil,
-    :amazon_aws_secret        => nil,
-    :amazon_s3_bucket         => nil,
+    xbox_live_enabled:        false,
+    flickr_api:               nil,
+    google_analytics:         nil,
+    amazon_associates_id:     nil,
+    amazon_aws_key:           nil,
+    amazon_aws_secret:        nil,
+    amazon_s3_bucket:         nil,
 
     # Facebook integration
-    :facebook_app_id          => nil,
-    :facebook_api_secret      => nil,
+    facebook_app_id:          nil,
+    facebook_api_secret:      nil,
 
     # Customization
-    :custom_header            => nil,
-    :custom_footer            => nil,
-    :custom_javascript        => nil,
+    custom_header:            nil,
+    custom_footer:            nil,
+    custom_javascript:        nil,
   }
   CONFIGURATION_BOOLEANS = [:public_browsing, :signups_allowed, :xbox_live_enabled]
 

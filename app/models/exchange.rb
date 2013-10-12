@@ -26,15 +26,15 @@ class Exchange < ActiveRecord::Base
   belongs_to :closer,           class_name: 'User'
   belongs_to :last_poster,      class_name: 'User'
   has_many   :posts,            -> { order 'created_at ASC' }, dependent: :destroy, foreign_key: 'exchange_id'
-  has_many   :discussion_views, :dependent => :destroy, :foreign_key => 'discussion_id'
+  has_many   :discussion_views, dependent: :destroy, foreign_key: 'discussion_id'
 
   scope :sorted,       -> { order('sticky DESC, last_post_at DESC') }
   scope :with_posters, -> { includes(:poster, :last_poster) }
   scope :for_view,     -> { sorted.with_posters }
 
   validates_presence_of :title
-  validates_length_of   :title, :maximum => 100
-  validates_presence_of :body, :on => :create, :unless => :skip_body_validation
+  validates_length_of   :title, maximum: 100
+  validates_presence_of :body, on: :create, unless: :skip_body_validation
 
   validate :validate_closed
 

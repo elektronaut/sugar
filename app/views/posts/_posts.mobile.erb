@@ -27,30 +27,30 @@
       <% if post.me_post? %>
         <div class="body">
           <%= meify post.body, post.user %>
-          <span class="date">&ndash; <%= time_tag post.created_at, :class => 'relative' %></span>
+          <span class="date">&ndash; <%= time_tag post.created_at, class: 'relative' %></span>
         </div>
       <% else %>
         <div class="post_info">
           <a name="post-<%= post.id %>" class="anchor"></a>
           <span class="username"><%= profile_link(post.user) %></span>
           <span class="date">
-            <%= time_tag post.created_at, :class => 'relative' %>
+            <%= time_tag post.created_at, class: 'relative' %>
           </span>
           <span class="permalink">
-            <%= link_to "#", paged_discussion_path(:id => (discussion||post.exchange), :page => post_page(post), :anchor => "post-#{post.id}"), :title => "Permalink to this post" %>
+            <%= link_to "#", paged_discussion_path(id: (discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
           </span>
         </div>
         <div class="functions">
           <% if post.editable_by?(current_user) %>
             <%= link_to "Edit", edit_discussion_post_path((discussion||post.exchange), post) %> /
           <% end %>
-          <%= link_to "Quote", discussion_post_path((discussion||post.exchange), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>
+          <%= link_to "Quote", discussion_post_path((discussion||post.exchange), post), class: 'quote_post', id: "quotePost-#{post.id}" %>
         </div>
         <div class="body">
           <%= post.body_html %>
         </div>
         <% if post.edited? %>
-          <div class="post_edited">Edited <%= time_tag post.edited_at, :class => 'relative' %></div>
+          <div class="post_edited">Edited <%= time_tag post.edited_at, class: 'relative' %></div>
         <% end %>
       <% end %>
     </div>

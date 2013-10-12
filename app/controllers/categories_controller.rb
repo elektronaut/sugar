@@ -3,13 +3,13 @@
 class CategoriesController < ApplicationController
 
   requires_authentication
-  requires_moderator :except => [:index, :show]
+  requires_moderator except: [:index, :show]
 
   respond_to :html, :mobile, :xml, :json
 
-  before_filter :load_categories, :only => [:index]
-  before_filter :load_category,   :only => [:show, :edit, :update, :destroy]
-  before_filter :verify_viewable, :only => [:show, :edit, :update, :destroy]
+  before_filter :load_categories, only: [:index]
+  before_filter :load_category,   only: [:show, :edit, :update, :destroy]
+  before_filter :verify_viewable, only: [:show, :edit, :update, :destroy]
 
   # GET on /categories
   def index
@@ -44,7 +44,7 @@ class CategoriesController < ApplicationController
         format.any(:html, :mobile) { successful_update("The <em>#{@category.name}</em> category was created") }
       else
         flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
-        format.any(:html, :mobile) { render :action => :new }
+        format.any(:html, :mobile) { render action: :new }
       end
     end
   end
@@ -56,7 +56,7 @@ class CategoriesController < ApplicationController
         format.any(:html, :mobile) { successful_update("The <em>#{@category.name}</em> category was saved") }
       else
         flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
-        format.any(:html, :mobile) { render :action => :edit }
+        format.any(:html, :mobile) { render action: :edit }
       end
     end
   end

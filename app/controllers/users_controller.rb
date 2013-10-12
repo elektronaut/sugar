@@ -3,9 +3,9 @@
 require 'open-uri'
 
 class UsersController < ApplicationController
-  requires_authentication :except => [:login, :authenticate, :logout, :new, :create]
-  requires_user           :only   => [:edit, :update, :update_openid]
-  requires_user_admin     :only   => [:grant_invite, :revoke_invites]
+  requires_authentication except: [:login, :authenticate, :logout, :new, :create]
+  requires_user           only:   [:edit, :update, :update_openid]
+  requires_user_admin     only:   [:grant_invite, :revoke_invites]
 
   include CreateUserController
   include LoginUsersController
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   include UsersListController
 
   before_filter :load_user,
-                :only => [
+                only: [
                   :show, :edit,
                   :update, :destroy,
                   :participated, :discussions,
@@ -22,8 +22,8 @@ class UsersController < ApplicationController
                   :stats
                 ]
 
-  before_filter :detect_edit_page, :only => [:edit, :update]
-  before_filter :verify_editable,  :only => [:edit, :update, :update_openid]
+  before_filter :detect_edit_page, only: [:edit, :update]
+  before_filter :verify_editable,  only: [:edit, :update, :update_openid]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     end
 
     def verify_editable
-      return unless verify_user(:user => @user, :user_admin => true, :redirect => user_url(@user))
+      return unless verify_user(user: @user, user_admin: true, redirect: user_url(@user))
     end
 
     def allowed_params
@@ -125,25 +125,25 @@ class UsersController < ApplicationController
 
         unless initiate_openid_on_update
           flash[:notice] = "Your changes were saved!"
-          redirect_to edit_user_page_url(:id => @user.username, :page => @page)
+          redirect_to edit_user_page_url(id: @user.username, page: @page)
         end
 
       else
         flash.now[:notice] ||= "There were errors saving your changes"
-        render :action => :edit
+        render action: :edit
       end
     end
 
     def grant_invite
       @user.grant_invite!
       flash[:notice] = "#{@user.username} has been granted one invite."
-      redirect_to user_url(:id => @user.username) and return
+      redirect_to user_url(id: @user.username) and return
     end
 
     def revoke_invites
       @user.revoke_invite!(:all)
       flash[:notice] = "#{@user.username} has been revoked of all invites."
-      redirect_to user_url(:id => @user.username) and return
+      redirect_to user_url(id: @user.username) and return
     end
 
 end

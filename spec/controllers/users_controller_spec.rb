@@ -23,7 +23,7 @@ describe UsersController do
     before do
       login
       @user = create(:user)
-      get :index, :format => :json
+      get :index, format: :json
       @json = JSON.parse(response.body)
     end
 
@@ -38,7 +38,7 @@ describe UsersController do
   describe '#banned' do
     before do
       login
-      @user = create(:user, :banned => true)
+      @user = create(:user, banned: true)
       get :banned
     end
 
@@ -50,8 +50,8 @@ describe UsersController do
   describe '#banned.json' do
     before do
       login
-      @user = create(:user, :banned => true)
-      get :banned, :format => :json
+      @user = create(:user, banned: true)
+      get :banned, format: :json
       @json = JSON.parse(response.body)
     end
 
@@ -91,8 +91,8 @@ describe UsersController do
         ApplicationController.any_instance
           .should_receive(:start_openid_session)
           .with("http://example.com/", {
-            success: update_openid_user_url(:id => user.username),
-            fail:    edit_user_page_url(:id => user.username, :page => 'settings')
+            success: update_openid_user_url(id: user.username),
+            fail:    edit_user_page_url(id: user.username, page: 'settings')
           })
           .and_return(false)
         put :update, id: user.id, user: {openid_url: "http://example.com/"}, page: 'settings'

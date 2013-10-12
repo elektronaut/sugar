@@ -6,9 +6,9 @@ class OpenidController < ApplicationController
   def create
     unless start_openid_session(
       params[:openid_url],
-      :immediate => false,
-      :success   => params[:openid_success],
-      :fail      => params[:openid_success]
+      immediate: false,
+      success:   params[:openid_success],
+      fail:      params[:openid_success]
     )
       fail_authentication('Not a valid OpenID URL') and return
     end

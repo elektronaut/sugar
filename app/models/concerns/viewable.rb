@@ -6,7 +6,7 @@ module Viewable
       if user && user.trusted?
         all
       else
-        where(:trusted => false)
+        where(trusted: false)
       end
     end
   end

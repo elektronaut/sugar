@@ -6,7 +6,7 @@ class Setting < ActiveRecord::Base
       value = 1 if value === true
       value = nil if value === ''
       setting = Setting.find_by_key(key)
-      setting ||= Setting.create(:key => key)
+      setting ||= Setting.create(key: key)
       setting.update_attribute(:value, value)
     end
   end
@@ -25,7 +25,7 @@ class RemoveSettings < ActiveRecord::Migration
 
   def down
     create_table :settings do |t|
-      t.string :key, :null => false
+      t.string :key, null: false
       t.text :value
     end
     Sugar.config.each do |key, value|
