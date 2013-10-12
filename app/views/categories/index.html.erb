@@ -3,7 +3,7 @@
   @page_name = "Categories"
 %>
 
-<% if @current_user && @current_user.admin? %>
+<% if current_user.try(&:admin?) %>
   <div class="functions">
     <%= link_to "New Category +", new_category_path, :class => :create %>
   </div>
@@ -20,7 +20,7 @@
       </h3>
       <p class="description">
         <%= category.description %>
-        <% if @current_user && @current_user.moderator? %>
+        <% if current_user.try(&:moderator?) %>
           <%= link_to "[edit]", edit_category_path(category) %>
         <% end %>
       </p>

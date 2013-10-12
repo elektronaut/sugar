@@ -17,7 +17,7 @@
       <p>
         <% if d.kind_of?(Conversation) %>
           <%
-            other_participants = d.participants.reject{|p| p == @current_user}
+            other_participants = d.participants.reject{|p| p == current_user}
           %>
           <% if other_participants.length == 0 %>
             With nobody,

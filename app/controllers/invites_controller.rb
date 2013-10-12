@@ -13,7 +13,7 @@ class InvitesController < ApplicationController
 
   # Show active invites
   def index
-    respond_with(@invites = @current_user.invites.active)
+    respond_with(@invites = current_user.invites.active)
   end
 
   # Show everyone's invites
@@ -39,12 +39,12 @@ class InvitesController < ApplicationController
 
   # Create a new invite
   def new
-    respond_with(@invite = @current_user.invites.new)
+    respond_with(@invite = current_user.invites.new)
   end
 
   # Create a new invite
   def create
-    @invite = @current_user.invites.create(invite_params)
+    @invite = current_user.invites.create(invite_params)
     if @invite.valid?
       begin
         Mailer.invite(@invite, accept_invite_url(:id => @invite.token)).deliver
@@ -106,7 +106,7 @@ class InvitesController < ApplicationController
 
   # Verifies that the user has available invites
   def verify_invites
-    unless @current_user && @current_user.available_invites?
+    unless current_user? && current_user.available_invites?
       respond_to do |format|
         format.any(:html, :mobile) do
           flash[:notice] = "You don't have any invites!"

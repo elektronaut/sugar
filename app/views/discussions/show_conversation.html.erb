@@ -21,14 +21,14 @@
 <a name="top" class="anchor"></a>
 
 <div class="functions">
-  <% if @current_user %>
-    <% if @discussion.editable_by?(@current_user) -%>
+  <% if current_user? %>
+    <% if @discussion.editable_by?(current_user) -%>
       <%= link_to "Edit", edit_discussion_path(@discussion), :class => :edit %>
     <% end -%>
-    <% if @discussion.editable_by?(@current_user) && @discussion.removeable?(@current_user) %>
+    <% if @discussion.editable_by?(current_user) && @discussion.removeable?(current_user) %>
       /
     <% end %>
-    <% if @discussion.removeable?(@current_user) %>
+    <% if @discussion.removeable?(current_user) %>
       <%= link_to 'Remove conversation',
           remove_participant_discussion_path(@discussion),
           :method => :delete,
@@ -50,13 +50,13 @@
 <a name="bottom"></a>
 <div class="bottomlinks">
   <%= link_to "Back to discussions", discussions_path, :id => 'back_link' %>,
-  <% if @current_user && @current_user.following?(@discussion) -%>
+  <% if current_user? && current_user.following?(@discussion) -%>
     <%= link_to "Back to followed", following_discussions_path %>,
   <% end %>
   <%= link_to "Top of page", "#top" %>
 </div>
 
-<% if @discussion.postable_by?(@current_user) %>
+<% if @discussion.postable_by?(current_user) %>
 
   <div class="compose" id="compose">
 

@@ -55,9 +55,7 @@ class FacebookController < ApplicationController
       if @user_info ||= get_user_info(:code => params[:code])
 
         # User exists
-        if user = User.find_by_facebook_uid(@user_info[:id])
-          @current_user = user
-          store_session_authentication
+        if set_current_user(User.find_by_facebook_uid(@user_info[:id]))
           redirect_to discussions_url and return
 
         # Go to signup if allowed
@@ -90,21 +88,21 @@ class FacebookController < ApplicationController
 
     def connect
       if @user_info ||= get_user_info(:code => params[:code], :redirect_uri => connect_facebook_url)
-        @current_user.update_attribute(:facebook_uid, @user_info[:id]) if @user_info[:id]
+        current_user.update_attribute(:facebook_uid, @user_info[:id]) if @user_info[:id]
       else
         flash[:error] = "Failed to verify your Facebook account"
       end
       redirect_to edit_user_page_url(
-        :id   => @current_user.username,
+        :id   => current_user.username,
         :page => 'services'
       ) and return
     end
 
     def disconnect
-      @current_user.update_attribute(:facebook_uid, nil)
+      current_user.update_attribute(:facebook_uid, nil)
       flash[:notice] = "You have disconnected your Facebook account"
       redirect_to edit_user_page_url(
-        :id   => @current_user.username,
+        :id   => current_user.username,
         :page => 'services'
       ) and return
     end

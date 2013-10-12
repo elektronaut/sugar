@@ -13,7 +13,7 @@
   </fieldset>
 <% end %>
 
-<% if @current_user.user_admin? %>
+<% if current_user.user_admin? %>
   <fieldset>
     <h2>Temporary ban</h2>
     <%= labelled_field f.datetime_select(:banned_until, :minute_step => 15, :default => 1.minute.ago), 'Banned until' %>
@@ -24,7 +24,7 @@
     <p>
       <%= f.check_box(:moderator) %> <strong>Moderator</strong> (Can edit all categories, discussions and posts)<br />
       <%= f.check_box(:user_admin) %> <strong>User administrator</strong> (Can edit other users and handle invites or approvals)<br />
-      <% if @current_user.admin? %>
+      <% if current_user.admin? %>
         <%= f.check_box(:admin) %> <strong>Administrator</strong> (Same as the two above, plus access to forum configuration)<br />
       <% end %>
     </p>

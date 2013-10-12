@@ -11,10 +11,10 @@ module Authentication
 
     protected
 
-      # Tries to set @current_user based on session[:authenticated_openid_url]
+      # Tries to set current_user based on session[:authenticated_openid_url]
       def load_openid_user
-        if session[:authenticated_openid_url]
-          @current_user ||= User.find_by_openid_url(session[:authenticated_openid_url])
+        if session[:authenticated_openid_url] && !current_user?
+          set_current_user(User.find_by_openid_url(session[:authenticated_openid_url]))
         end
       end
 

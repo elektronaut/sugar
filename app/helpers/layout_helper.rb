@@ -24,14 +24,6 @@ module LayoutHelper
     }
   end
 
-  def current_user
-    @current_user
-  end
-
-  def current_user?
-    current_user ? true : false
-  end
-
   def search_mode_options
     options = [['in discussions', search_path], ['in posts', search_posts_path]]
     options << ['in this discussion', search_posts_discussion_path(@discussion)] if @discussion && @discussion.id

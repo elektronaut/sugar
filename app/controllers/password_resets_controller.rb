@@ -30,8 +30,7 @@ class PasswordResetsController < ApplicationController
     @user = @password_reset_token.user
     if !user_params[:password].blank? && @user.update_attributes(user_params)
       @password_reset_token.destroy
-      @current_user = @user
-      store_session_authentication
+      set_current_user(@user)
       flash[:notice] = "Your password has been changed"
       redirect_to root_url
     else

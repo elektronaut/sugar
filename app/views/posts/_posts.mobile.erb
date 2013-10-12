@@ -41,7 +41,7 @@
           </span>
         </div>
         <div class="functions">
-          <% if post.editable_by?(@current_user) %>
+          <% if post.editable_by?(current_user) %>
             <%= link_to "Edit", edit_discussion_post_path((discussion||post.exchange), post) %> /
           <% end %>
           <%= link_to "Quote", discussion_post_path((discussion||post.exchange), post), :class => 'quote_post', :id => "quotePost-#{post.id}" %>

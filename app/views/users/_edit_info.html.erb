@@ -1,4 +1,4 @@
-<%= labelled_field f.text_field(:username, :disabled => !@current_user.user_admin?), "Username", :errors => @user.errors[:username] %>
+<%= labelled_field f.text_field(:username, :disabled => !current_user.user_admin?), "Username", :errors => @user.errors[:username] %>
 <%= labelled_field f.text_field(:realname, :size => 50), "Real name", :errors => @user.errors[:realname] %>
 
 <%= labelled_field(

@@ -5,7 +5,7 @@
     <%= avatar_image_tag @user, '48' %>
     <h2><%= @user.username %></h2>
 
-    <% unless !@current_user || @user == @current_user %>
+    <% unless !current_user? || @user == current_user %>
       <p><%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %></p>
     <% end %>
   </div>
@@ -75,15 +75,15 @@
     </tr>
     <tr>
       <th>Discussions</th>
-      <td><%= link_to @user.discussions.viewable_by(@current_user).count, discussions_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.discussions.viewable_by(current_user).count, discussions_user_path(:id => @user.username) %></td>
     </tr>
     <tr>
       <th>Participated</th>
-      <td><%= link_to @user.participated_discussions.viewable_by(@current_user).count, participated_user_path(:id => @user.username) %></td>
+      <td><%= link_to @user.participated_discussions.viewable_by(current_user).count, participated_user_path(:id => @user.username) %></td>
     </tr>
     <tr>
       <th>Posts</th>
-      <td><%= @user.discussion_posts.viewable_by(@current_user).count %></td>
+      <td><%= @user.discussion_posts.viewable_by(current_user).count %></td>
     </tr>
     <tr>
       <th>Users invited</th>

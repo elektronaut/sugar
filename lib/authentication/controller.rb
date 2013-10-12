@@ -15,19 +15,21 @@ module Authentication
       after_filter :update_last_active
       after_filter :cleanup_authenticated_openid_url
       after_filter :store_session_authentication
+
+      helper_method :current_user, :current_user?
     end
 
     protected
 
-      # Verifies the @current_user. The user is considered verified if one or more
+      # Verifies the current_user. The user is considered verified if one or more
       # criteria are met. If not, a redirect is performed.
       #
       # Criteria:
       #
-      #  :user       - Checks that @current_user matches the given user or :any
-      #  :admin      - Checks that @current_user is an admin
-      #  :moderator  - Checks that @current_user is a moderator
-      #  :user_admin - Checks that @current_user is a user admin
+      #  :user       - Checks that current_user matches the given user or :any
+      #  :admin      - Checks that current_user is an admin
+      #  :moderator  - Checks that current_user is a moderator
+      #  :user_admin - Checks that current_user is a user admin
       #
       # Other options:
       #
@@ -49,16 +51,28 @@ module Authentication
         options = default_verify_user_options(options)
 
         verified = false
-        if @current_user
-          verified ||= options[:user] == :any          if options[:user]
-          verified ||= options[:user] == @current_user if options[:user]
-          verified ||= @current_user.admin?            if options[:admin]
-          verified ||= @current_user.moderator?        if options[:moderator]
-          verified ||= @current_user.user_admin?       if options[:user_admin]
+        if current_user?
+          verified ||= options[:user] == :any         if options[:user]
+          verified ||= options[:user] == current_user if options[:user]
+          verified ||= current_user.admin?            if options[:admin]
+          verified ||= current_user.moderator?        if options[:moderator]
+          verified ||= current_user.user_admin?       if options[:user_admin]
         end
 
         handle_unverified_user(options) unless verified
         return verified
+      end
+
+      def current_user
+        @current_user
+      end
+
+      def current_user?
+        current_user ? true : false
+      end
+
+      def set_current_user(user)
+        @current_user = user
       end
 
       # Default options for verify user.
@@ -91,12 +105,14 @@ module Authentication
         )
       end
 
-      # Tries to set @current_user based on session data
+      # Tries to set current_user based on session data
       def load_session_user
-        if session[:user_id] && session[:persistence_token]
+        if session[:user_id] && session[:persistence_token] && !current_user?
           begin
             user = User.find(session[:user_id])
-            @current_user ||= user if user.persistence_token == session[:persistence_token]
+            if user.persistence_token == session[:persistence_token]
+              set_current_user(user)
+            end
           rescue ActiveRecord::RecordNotFound
             # No need to do anything if the record does not exist
           end
@@ -105,61 +121,60 @@ module Authentication
 
       # Handles temporary bans.
       def handle_temporary_ban
-        if @current_user && @current_user.temporary_banned?
-          logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - temporary ban"
-          flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, @current_user.banned_until)}!"
-          @current_user = nil
+        if current_user? && current_user.temporary_banned?
+          logger.info "Authentication failed for user:#{current_user.id} (#{current_user.username}) - temporary ban"
+          flash[:notice] = "You have been banned for #{distance_of_time_in_words(Time.now, current_user.banned_until)}!"
+          deauthenticate!
         end
       end
 
       # Handles permanent bans.
       def handle_permanent_ban
-        if @current_user && @current_user.banned?
-          logger.info "Authentication failed for user:#{@current_user.id} (#{@current_user.username}) - permanent ban"
+        if current_user && current_user.banned?
+          logger.info "Authentication failed for user:#{current_user.id} (#{current_user.username}) - permanent ban"
           flash[:notice] = "You have been banned!"
-          @current_user = nil
+          deauthenticate!
         end
       end
 
       # Verifies that the account is activated
       def verify_activated_account
-        if @current_user
-          logger.info "Authenticated as user:#{@current_user.id} (#{@current_user.username})"
+        if current_user?
+          logger.info "Authenticated as user:#{current_user.id} (#{current_user.username})"
         end
       end
 
       # Deauthenticates the current user.
       def deauthenticate!
-        @current_user = nil
-        store_session_authentication
+        set_current_user(nil)
       end
 
       # Cleans up temporary bans.
       def cleanup_temporary_ban
-        if @current_user && @current_user.banned_until? && !@current_user.temporary_banned?
-          @current_user.update_attributes(:banned_until => nil)
+        if current_user? && current_user.banned_until? && !current_user.temporary_banned?
+          current_user.update_attributes(:banned_until => nil)
         end
       end
 
       # Deletes session[:authenticated_openid_url] if user is authenticated
       def cleanup_authenticated_openid_url
-        if @current_user && session[:authenticated_openid_url]
+        if current_user && session[:authenticated_openid_url]
           session.delete(:authenticated_openid_url)
         end
       end
 
       # Updates the last_active timestamp
       def update_last_active
-        if @current_user
-          @current_user.mark_active!
+        if current_user?
+          current_user.mark_active!
         end
       end
 
       # Stores authentication credentials in the session.
       def store_session_authentication
-        if @current_user
-          session[:user_id]           = @current_user.id
-          session[:persistence_token] = @current_user.persistence_token
+        if current_user
+          session[:user_id]           = current_user.id
+          session[:persistence_token] = current_user.persistence_token
         else
           session[:user_id]           = nil
           session[:persistence_token] = nil

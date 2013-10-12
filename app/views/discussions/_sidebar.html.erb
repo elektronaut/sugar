@@ -1,5 +1,5 @@
 <%
-  @categories = Category.find(:all, :order => :position).reject{ |c| !c.viewable_by?(@current_user) }
+  @categories = Category.find(:all, :order => :position).reject{ |c| !c.viewable_by?(current_user) }
 %>
 
 <div class="categories">
@@ -7,25 +7,25 @@
   <ul class="meta">
     <li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "index" %>">
       <%= link_to "All discussions", discussions_path %>
-      <span class="count"><%= Discussion.viewable_by(@current_user).count %></span>
+      <span class="count"><%= Discussion.viewable_by(current_user).count %></span>
     </li>
-    <% if @current_user %>
-      <% if @current_user.following_count > 0 %>
+    <% if current_user? %>
+      <% if current_user.following_count > 0 %>
         <li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "following" %>">
           <%= link_to "Following", following_discussions_path %>
-          <span class="count"><%= @current_user.following_count %></span>
+          <span class="count"><%= current_user.following_count %></span>
         </li>
       <% end %>
-      <% if @current_user.favorites_count > 0 %>
+      <% if current_user.favorites_count > 0 %>
         <li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "favorites" %>">
           <%= link_to "Favorites", favorites_discussions_path %>
-          <span class="count"><%= @current_user.favorites_count %></span>
+          <span class="count"><%= current_user.favorites_count %></span>
         </li>
       <% end %>
-      <% if @current_user.hidden_count > 0 %>
+      <% if current_user.hidden_count > 0 %>
         <li class="<%= 'current' if params[:controller] == 'discussions' && params[:action] == "hidden" %>">
           <%= link_to "Hidden", hidden_discussions_path %>
-          <span class="count"><%= @current_user.hidden_count %></span>
+          <span class="count"><%= current_user.hidden_count %></span>
         </li>
       <% end %>
     <% end %>
@@ -43,16 +43,16 @@
   </ul>
 </div>
 
-<% if @current_user %>
+<% if current_user? %>
   <div class="buttons">
     <p><%= link_to "Start a new discussion", new_discussion_path(:category_id => (@category ? @category : nil)), :class => 'create button' %></p>
   </div>
 <% end %>
 
-<% if @current_user && (@current_user.admin? || @current_user.moderator?) %>
+<% if current_user? && (current_user.admin? || current_user.moderator?) %>
   <h2>Admin</h2>
   <p>
-    <% if @current_user.admin? %>
+    <% if current_user.admin? %>
       <%= link_to "Forum configuration", configuration_admin_path %><br />
     <% end %>
     <%= link_to "Edit categories", categories_path %><br />

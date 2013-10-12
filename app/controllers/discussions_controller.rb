@@ -23,14 +23,14 @@ class DiscussionsController < ApplicationController
         render_error 404 and return
       end
 
-      unless @discussion.viewable_by?(@current_user)
+      unless @discussion.viewable_by?(current_user)
         render_error 403 and return
       end
     end
 
     # Deflects the request unless the discussion is editable by the logged in user.
     def verify_editable
-      unless @discussion.editable_by?(@current_user)
+      unless @discussion.editable_by?(current_user)
         render_error 403 and return
       end
     end
@@ -60,7 +60,7 @@ class DiscussionsController < ApplicationController
     end
 
     def exchange_params(options={})
-      if @current_user.moderator?
+      if current_user.moderator?
         params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed, :sticky)
       else
         params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed)
@@ -72,7 +72,7 @@ class DiscussionsController < ApplicationController
     # Searches posts within a discussion
     def search_posts
       @search_path = search_posts_discussion_path(@discussion)
-      @posts = Post.search_results(search_query, user: @current_user, exchange: @discussion, page: params[:page])
+      @posts = Post.search_results(search_query, user: current_user, exchange: @discussion, page: params[:page])
     end
 
     # Creates a new discussion
@@ -91,12 +91,12 @@ class DiscussionsController < ApplicationController
       @posts = @discussion.posts.page(params[:page], context: context).for_view
 
       # Mark discussion as viewed
-      if @current_user
-        @current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset_value + @posts.count))
+      if current_user?
+        current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset_value + @posts.count))
       end
       if @discussion.kind_of?(Conversation)
         @section = :conversations
-        @current_user.mark_conversation_viewed(@discussion)
+        current_user.mark_conversation_viewed(@discussion)
         render :template => 'discussions/show_conversation'
       end
     end
@@ -108,7 +108,7 @@ class DiscussionsController < ApplicationController
 
     # Create a new discussion
     def create
-      @discussion = exchange_class.create(exchange_params.merge(poster: @current_user))
+      @discussion = exchange_class.create(exchange_params.merge(poster: current_user))
       if @discussion.valid?
         @discussion.add_participant(@recipient) if @recipient
         redirect_to discussion_url(@discussion)
@@ -120,7 +120,7 @@ class DiscussionsController < ApplicationController
 
     # Update a discussion
     def update
-      @discussion.update_attributes(exchange_params.merge(updated_by: @current_user))
+      @discussion.update_attributes(exchange_params.merge(updated_by: current_user))
       if @discussion.valid?
         flash[:notice] = "Your changes were saved."
         redirect_to discussion_path(@discussion)

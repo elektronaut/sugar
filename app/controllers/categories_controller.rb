@@ -20,7 +20,7 @@ class CategoriesController < ApplicationController
   def show
     respond_with(@category) do |format|
       format.any(:html, :mobile) do
-        @discussions = @category.discussions.viewable_by(@current_user).page(params[:page]).for_view
+        @discussions = @category.discussions.viewable_by(current_user).page(params[:page]).for_view
         load_views_for(@discussions)
       end
     end
@@ -74,7 +74,7 @@ class CategoriesController < ApplicationController
 
   # Loads all categories
   def load_categories
-    @categories = Category.viewable_by(@current_user)
+    @categories = Category.viewable_by(current_user)
   end
 
   # Finds the requested category
@@ -86,9 +86,9 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # Verifies that the category is viewable by @current_user
+  # Verifies that the category is viewable by current_user
   def verify_viewable
-    unless @category.viewable_by?(@current_user)
+    unless @category.viewable_by?(current_user)
       render_error 403 and return
     end
   end

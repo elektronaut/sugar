@@ -1,5 +1,5 @@
 <%
-  no_discussions ||= "No discussions here yet. " + (@current_user ? link_to("Create the first!", new_discussion_path) : '')
+  no_discussions ||= "No discussions here yet. " + (current_user? ? link_to("Create the first!", new_discussion_path) : '')
   pagination_params ||= {}
 %>
 <% if discussions && discussions.length > 0 %>
@@ -17,7 +17,7 @@
       <tr class="<%= discussion_classes(discussions, d) %>">
         <% if d.kind_of?(Conversation) %>
           <%
-            other_participants = d.participants.reject{|p| p == @current_user}
+            other_participants = d.participants.reject{|p| p == current_user}
           %>
           <% if other_participants.length == 0 %>
             <td class="participants">Conversation with nobody</td>

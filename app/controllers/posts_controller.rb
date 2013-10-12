@@ -35,7 +35,7 @@ class PostsController < ApplicationController
     end
 
     def verify_viewability
-      unless @discussion && @discussion.viewable_by?(@current_user)
+      unless @discussion && @discussion.viewable_by?(current_user)
         flash[:notice] = "You don't have permission to view that discussion!"
         redirect_to discussions_url and return
       end
@@ -50,7 +50,7 @@ class PostsController < ApplicationController
     end
 
     def verify_editable
-      unless @post.editable_by?(@current_user)
+      unless @post.editable_by?(current_user)
         flash[:notice] = "You don't have permission to edit that post!"
         redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page) and return
       end
@@ -68,7 +68,7 @@ class PostsController < ApplicationController
     end
 
     def check_postable
-      unless @discussion.postable_by?(@current_user)
+      unless @discussion.postable_by?(current_user)
         flash[:notice] = "This discussion is closed, you don't have permission to post here"
         redirect_to paged_discussion_url(:id => @discussion, :page => @discussion.last_page)
       end
@@ -87,11 +87,11 @@ class PostsController < ApplicationController
 
     def since
       @posts = @discussion.posts.limit(200).offset(params[:index]).for_view
-      if @current_user
-        @current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
+      if current_user?
+        current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
       end
       if @discussion.kind_of?(Conversation)
-        @current_user.conversation_relationships.where(:conversation_id => @discussion.id).first.update_attributes(new_posts: false)
+        current_user.conversation_relationships.where(:conversation_id => @discussion.id).first.update_attributes(new_posts: false)
       end
       if request.xhr?
         render :layout => false
@@ -100,12 +100,12 @@ class PostsController < ApplicationController
 
     def search
       @search_path = search_posts_path
-      @posts = Post.search_results(search_query, user: @current_user, page: params[:page])
+      @posts = Post.search_results(search_query, user: current_user, page: params[:page])
     end
 
     def create
       attributes = {
-        :user => @current_user,
+        :user => current_user,
         :body => params[:post][:body]
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
@@ -133,14 +133,14 @@ class PostsController < ApplicationController
 
     def preview
       @post = @discussion.posts.new(body: params[:post][:body], format: params[:post][:format])
-      @post.user = @current_user
+      @post.user = current_user
       if request.xhr?
         render :layout => false
       end
     end
 
     def drawing
-      if @discussion.postable_by?(@current_user)
+      if @discussion.postable_by?(current_user)
         Tempfile.open("drawing.jpg", :encoding => "ascii-8bit") do |file|
           data = Base64.decode64(params[:drawing])
           file.write(data)
@@ -149,7 +149,7 @@ class PostsController < ApplicationController
           if upload.valid?
             upload.save
             @post = @discussion.posts.create(
-              user: @current_user,
+              user: current_user,
               body: "<div class=\"drawing\"><img src=\"#{upload.url}\" alt=\"Drawing\" /></div>"
             )
           end

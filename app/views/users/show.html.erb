@@ -3,14 +3,14 @@
   @page_title = "#{@user.username}"
 %>
 
-<% if @current_user %>
+<% if current_user? %>
   <div class="functions">
-    <% if @user == @current_user %>
+    <% if @user == current_user %>
       <%= link_to "Edit your profile", edit_user_path(:id => @user.username) %>
-    <% elsif @current_user.user_admin? %>
+    <% elsif current_user.user_admin? %>
       <%= link_to "Edit", edit_user_path(:id => @user.username) %> /
     <% end %>
-    <% unless @user == @current_user %>
+    <% unless @user == current_user %>
       <%= link_to "Start a conversation", new_conversation_with_path(:username => @user.username) %>
     <% end %>
   </div>
@@ -42,7 +42,7 @@
   </div>
   <% end %>
 
-  <% if !Sugar.config(:signups_allowed) && @current_user && @current_user.user_admin? && !@user.user_admin? %>
+  <% if !Sugar.config(:signups_allowed) && current_user? && current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
       <strong>Invites:</strong> <%= @user.available_invites %> &ndash;
       <%= link_to "Grant one", grant_invite_user_path(:id => @user.username), method: :post %>
@@ -52,19 +52,19 @@
   <% end %>
 
   <p class="posts_and_discussions">
-    <% if @user.discussions.viewable_by(@current_user).any? %>
+    <% if @user.discussions.viewable_by(current_user).any? %>
       <%= link_to "View discussions", discussions_user_path(:id => @user.username) %>
-      (<%= @user.discussions.viewable_by(@current_user).count %>)<br />
+      (<%= @user.discussions.viewable_by(current_user).count %>)<br />
     <% end %>
-    <% if @user.participated_discussions.viewable_by(@current_user).any? %>
+    <% if @user.participated_discussions.viewable_by(current_user).any? %>
       <%= link_to "View participated discussions", participated_user_path(:id => @user.username) %>
-      (<%= @user.participated_discussions.viewable_by(@current_user).count %>)<br />
+      (<%= @user.participated_discussions.viewable_by(current_user).count %>)<br />
     <% end %>
-    <% if @user.discussion_posts.viewable_by(@current_user).any? %>
+    <% if @user.discussion_posts.viewable_by(current_user).any? %>
       <%= link_to "View posts", posts_user_path(:id => @user.username) %>
-      (<%= @user.discussion_posts.viewable_by(@current_user).count %>)<br />
+      (<%= @user.discussion_posts.viewable_by(current_user).count %>)<br />
     <% end %>
-    <% unless !@current_user || @user == @current_user %>
+    <% unless !current_user? || @user == current_user %>
       <%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(:username => @user.username) %>
     <% end %>
   </p>
@@ -123,7 +123,7 @@
 <div id="userPosts">
   <% if @posts && @posts.length > 0 %>
     <%= render :partial => 'posts/posts', :locals => {:posts => @posts, :title => true, :no_pagination => true} %>
-  <% elsif @current_user && @user == @current_user %>
+  <% elsif current_user? && @user == current_user %>
     <div class="welcome">
       <h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
       <p>

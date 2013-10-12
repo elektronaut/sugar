@@ -18,7 +18,7 @@ module ExchangesHelper
 
   # Class names for conversation
   def conversation_classes(users, user)
-    [%w{odd even}[users.index(user)%2], (@current_user.unread_messages_from?(user) ? 'new_posts' : nil), "by_user#{user.id}", "conversation#{user.id}", "conversation"].flatten.compact.join(' ')
+    [%w{odd even}[users.index(user)%2], (current_user.unread_messages_from?(user) ? 'new_posts' : nil), "by_user#{user.id}", "conversation#{user.id}", "conversation"].flatten.compact.join(' ')
   end
 
   def last_viewed_post(discussion)
@@ -36,7 +36,7 @@ module ExchangesHelper
 
   def new_posts_count(discussion)
     return 0 unless @discussion_views
-    discussion.posts_count - discussion_view(discussion, @current_user).post_index
+    discussion.posts_count - discussion_view(discussion, current_user).post_index
   end
 
   def new_posts?(discussion)
@@ -46,22 +46,22 @@ module ExchangesHelper
   end
 
   def last_discussion_page(discussion)
-    return 1 unless @current_user
+    return 1 unless current_user?
     return discussion.last_page unless @discussion_views && new_posts?(discussion)
-    page = (discussion_view(discussion, @current_user)[:post_index].to_f / Post.per_page).ceil
+    page = (discussion_view(discussion, current_user)[:post_index].to_f / Post.per_page).ceil
     page = 1 if page < 1
     page
   end
 
   def last_discussion_page_path(d)
     if ((last_page = last_discussion_page(d)) > 1)
-      if @discussion_views && last_post_id = discussion_view(d, @current_user).post_id
+      if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
         paged_discussion_path(:id => d.to_param, :page => last_page, :anchor => "post-#{last_post_id}")
       else
         paged_discussion_path(:id => d.to_param, :page => last_page)
       end
     else
-      if @discussion_views && last_post_id = discussion_view(d, @current_user).post_id
+      if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
         discussion_path(:id => d.to_param, :anchor => "post-#{last_post_id}")
       else
         discussion_path(:id => d.to_param)

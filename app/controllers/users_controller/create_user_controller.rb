@@ -59,8 +59,7 @@ class UsersController < ApplicationController
       end
       session.delete(:facebook_user_params)
       session.delete(:invite_token)
-      @current_user = @user
-      store_session_authentication
+      set_current_user(@user)
     end
 
     def check_for_expired_invite

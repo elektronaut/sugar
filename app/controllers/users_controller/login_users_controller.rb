@@ -11,8 +11,7 @@ class UsersController < ApplicationController
     end
 
     def authenticate
-      if @current_user = User.find_and_authenticate_with_password(params[:username], params[:password])
-        store_session_authentication
+      if set_current_user(User.find_and_authenticate_with_password(params[:username], params[:password]))
         redirect_to discussions_url and return
       else
         flash[:notice] ||= "That's not a valid username or password."
@@ -33,7 +32,7 @@ class UsersController < ApplicationController
     end
 
     def check_if_already_logged_in
-      redirect_to discussions_url and return if @current_user
+      redirect_to discussions_url and return if current_user?
     end
 
   end

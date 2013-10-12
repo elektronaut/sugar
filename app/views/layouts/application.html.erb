@@ -6,8 +6,8 @@
 
   <%# Stylesheet %>
   <%= stylesheet_link_tag "application" %>
-  <% if @current_user && @current_user.stylesheet_url? %>
-    <%= stylesheet_link_tag @current_user.stylesheet_url %>
+  <% if current_user? && current_user.stylesheet_url? %>
+    <%= stylesheet_link_tag current_user.stylesheet_url %>
   <% else %>
     <%= stylesheet_link_tag @theme.stylesheet_path %>
   <% end %>
@@ -53,7 +53,7 @@
     <h1><%= Sugar.config(:forum_title).html_safe %></h1>
 
     <%# Search form %>
-    <% if @current_user || Sugar.public_browsing? %>
+    <% if current_user? || Sugar.public_browsing? %>
       <div id="search">
         <%= form_tag((@search_path || search_path), :method => 'get') do %>
           <%= text_field_tag 'q', @search_query, :class => :query %>
@@ -68,8 +68,8 @@
 
     <%# Account info %>
     <div id="account">
-      <% if @current_user %>
-        Hello, <%= profile_link(@current_user) %>!
+      <% if current_user? %>
+        Hello, <%= profile_link(current_user) %>!
         (<%= link_to "Sign out", logout_users_path %>)
       <% else %>
         <% if Sugar.config(:signups_allowed) %>
@@ -81,15 +81,15 @@
     </div>
 
     <%# Navigation tabs %>
-    <% if @current_user || Sugar.public_browsing? %>
+    <% if current_user? || Sugar.public_browsing? %>
       <ul id="navigation">
         <%= header_tab 'Discussions', discussions_path %>
-        <% if @current_user %>
+        <% if current_user? %>
           <%= header_tab 'Following', following_discussions_path %>
           <%= header_tab 'Favorites', favorites_discussions_path %>
-          <% if @current_user.unread_conversations? %>
+          <% if current_user.unread_conversations? %>
             <%= header_tab(
-                "Conversations (#{@current_user.unread_conversations_count})",
+                "Conversations (#{current_user.unread_conversations_count})",
                 conversations_path,
                 :section => :conversations,
                 :class   => 'new'
@@ -100,10 +100,10 @@
           <% end %>
         <% end %>
         <%= header_tab 'Users', online_users_path %>
-        <% if @current_user && (@current_user.invites? || @current_user.available_invites?) %>
-          <% if !@current_user.user_admin? && @current_user.available_invites? %>
+        <% if current_user? && (current_user.invites? || current_user.available_invites?) %>
+          <% if !current_user.user_admin? && current_user.available_invites? %>
             <%= header_tab(
-                "Invites (#{@current_user.available_invites})",
+                "Invites (#{current_user.available_invites})",
                 invites_path,
                 :section => :invites
               )

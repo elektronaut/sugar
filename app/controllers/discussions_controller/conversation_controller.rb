@@ -8,7 +8,7 @@ class DiscussionsController < ApplicationController
 
     def conversations
       @section = :conversations
-      @discussions = @current_user.conversations.page(params[:page]).for_view
+      @discussions = current_user.conversations.page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
@@ -32,7 +32,7 @@ class DiscussionsController < ApplicationController
     # Remove participant from discussion
     def remove_participant
       if @discussion.kind_of?(Conversation)
-        @discussion.remove_participant(@current_user)
+        @discussion.remove_participant(current_user)
         flash[:notice] = 'You have been removed from the conversation'
         redirect_to conversations_url and return
       end

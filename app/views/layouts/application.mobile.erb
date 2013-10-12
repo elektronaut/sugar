@@ -5,8 +5,8 @@
   <title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
 
   <%= stylesheet_link_tag "application" %>
-  <% if @current_user && @current_user.mobile_stylesheet_url? %>
-    <%= stylesheet_link_tag @current_user.mobile_stylesheet_url %>
+  <% if current_user? && current_user.mobile_stylesheet_url? %>
+    <%= stylesheet_link_tag current_user.mobile_stylesheet_url %>
   <% else %>
     <%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
   <% end %>
@@ -33,7 +33,7 @@
 <body>
     <div id="header">
     <div id="navigationToggle">
-      <%= link_to_function "", "toggleNavigation();", :class => (@current_user && @current_user.unread_conversations? ? 'new' : '') %>
+      <%= link_to_function "", "toggleNavigation();", :class => (current_user? && current_user.unread_conversations? ? 'new' : '') %>
     </div>
         <h1 id="pageTitle" class="page_title">
       <% if @page_title %>
@@ -43,23 +43,23 @@
       <% end %>
     </h1>
     </div>
-  <% if @current_user || Sugar.public_browsing? %>
+  <% if current_user? || Sugar.public_browsing? %>
     <div id="navigation"><ul>
       <li><%= link_to "Discussions", discussions_path %></li>
       <li><%= link_to "Categories", categories_path %></li>
-      <% if @current_user %>
+      <% if current_user? %>
         <li><%= link_to "Following", following_discussions_path %></li>
         <li><%= link_to "Favorites", favorites_discussions_path %></li>
-        <% if @current_user.unread_conversations? %>
+        <% if current_user.unread_conversations? %>
           <li><strong><%= link_to "Conversations", conversations_path %></strong></li>
         <% else %>
           <li><%= link_to "Conversations", conversations_path %></li>
         <% end %>
       <% end %>
       <li><%= link_to "Users", users_path %></li>
-      <% if @current_user %>
+      <% if current_user? %>
         <li><%= link_to "New discussion", new_discussion_path %></li>
-        <% if @discussion && !@discussion.new_record? && @discussion.editable_by?(@current_user) %>
+        <% if @discussion && !@discussion.new_record? && @discussion.editable_by?(current_user) %>
           <li><%= link_to "Edit discussion", edit_discussion_path(@discussion) %></li>
         <% end %>
         <li><%= link_to "Log out", logout_users_path, :confirm => "Are you sure you want to log out?" %></li>
@@ -85,7 +85,7 @@
   </div>
   <div id="footer">
     <%= link_to "Discussions", discussions_path %> |
-    <% if @current_user %>
+    <% if current_user? %>
       <%= link_to "Following", following_discussions_path %> |
       <%= link_to "Favorites", favorites_discussions_path %> |
     <% end %>

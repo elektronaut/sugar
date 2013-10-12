@@ -43,8 +43,8 @@ class ApplicationController < ActionController::Base
 
     # Finds DiscussionViews for the given discussion.
     def load_views_for(discussions)
-      if @current_user && discussions && discussions.length > 0
-        @discussion_views = DiscussionView.where(user_id: @current_user.id, discussion_id: discussions.map(&:id).uniq)
+      if current_user? && discussions && discussions.length > 0
+        @discussion_views = DiscussionView.where(user_id: current_user.id, discussion_id: discussions.map(&:id).uniq)
       end
     end
 
@@ -55,8 +55,8 @@ class ApplicationController < ActionController::Base
 
     # Set time zone for user
     def set_time_zone
-      if @current_user && @current_user.time_zone
-        Time.zone = @current_user.time_zone
+      if current_user.try(&:time_zone)
+        Time.zone = current_user.time_zone
       end
     end
 
@@ -96,15 +96,15 @@ class ApplicationController < ActionController::Base
     def set_theme
       respond_to do |format|
         format.mobile do
-          if @current_user
-            @theme = Theme.find(@current_user.mobile_theme)
+          if current_user?
+            @theme = Theme.find(current_user.mobile_theme)
           else
             @theme = Theme.find(Sugar.config(:default_mobile_theme))
           end
         end
         format.any do
-          if @current_user
-            @theme = Theme.find(@current_user.theme)
+          if current_user?
+            @theme = Theme.find(current_user.theme)
           else
             @theme = Theme.find(Sugar.config(:default_theme))
           end

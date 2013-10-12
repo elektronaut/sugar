@@ -60,14 +60,14 @@ class UsersController < ApplicationController
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
         :password, :confirm_password, :banned_until
       ]
-      if @current_user
-        if @current_user.user_admin?
+      if current_user?
+        if current_user.user_admin?
           allowed += [
             :username, :banned, :user_admin, :moderator,
             :trusted, :available_invites, :status
           ]
         end
-        if @current_user.admin?
+        if current_user.admin?
           allowed += [:admin]
         end
       end
@@ -83,24 +83,24 @@ class UsersController < ApplicationController
     def show
       respond_with(@user) do |format|
         format.html do
-          @posts = @user.discussion_posts.viewable_by(@current_user).limit(15).page(params[:page]).for_view_with_exchange.reverse_order
+          @posts = @user.discussion_posts.viewable_by(current_user).limit(15).page(params[:page]).for_view_with_exchange.reverse_order
         end
       end
     end
 
     def discussions
-      @discussions = @user.discussions.viewable_by(@current_user).page(params[:page]).for_view
+      @discussions = @user.discussions.viewable_by(current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
     def participated
-      @section = :participated if @user == @current_user
-      @discussions = @user.participated_discussions.viewable_by(@current_user).page(params[:page]).for_view
+      @section = :participated if @user == current_user
+      @discussions = @user.participated_discussions.viewable_by(current_user).page(params[:page]).for_view
       load_views_for(@discussions)
     end
 
     def posts
-      @posts = @user.discussion_posts.viewable_by(@current_user).page(params[:page]).for_view_with_exchange.reverse_order
+      @posts = @user.discussion_posts.viewable_by(current_user).page(params[:page]).for_view_with_exchange.reverse_order
     end
 
     def stats
@@ -119,9 +119,8 @@ class UsersController < ApplicationController
     def update
       if @user.update_attributes(user_params)
 
-        if @user == @current_user
-          @current_user.reload
-          store_session_authentication
+        if @user == current_user
+          current_user.reload
         end
 
         unless initiate_openid_on_update

@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     end
 
     def trusted
-      unless @current_user && @current_user.trusted?
+      unless current_user.try(&:trusted?)
         flash[:notice] = "You need to be trusted to view this page!"
       end
       @users = User.trusted.by_username
