@@ -46,10 +46,10 @@ class Post < ActiveRecord::Base
 
   def body_html
     if self.new_record? || Rails.env == 'development'
-      Sugar::PostRenderer.render(self.body, format: self.format)
+      Renderer.render(self.body, format: self.format)
     else
       unless body_html?
-        self.update_column(:body_html, Sugar::PostRenderer.render(self.body, format: self.format))
+        self.update_column(:body_html, Renderer.render(self.body, format: self.format))
       end
       self[:body_html].html_safe
     end
@@ -98,7 +98,7 @@ class Post < ActiveRecord::Base
 
   def render_html
     unless self.skip_html
-      self.body_html = Sugar::PostRenderer.render(self.body, format: self.format)
+      self.body_html = Renderer.render(self.body, format: self.format)
     end
   end
 

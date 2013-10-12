@@ -7,7 +7,7 @@ module PostsHelper
   end
 
   def format_post(string)
-    Sugar::PostRenderer.render(string)
+    Renderer.render(string)
   end
 
 end
