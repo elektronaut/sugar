@@ -770,12 +770,14 @@ table.discussions tr.targeted.nsfw {
   color:               #888;
   float:               right;
   margin-right:        10px;
+  font-size:           13px;
 }
 
 .post .post_info {
   line-height:         1;
   color:               #888;
   margin-bottom:       -8px;
+  font-size:           13px;
 }
 .post .post_info .avatar {
   width:               32px;
@@ -786,7 +788,7 @@ table.discussions tr.targeted.nsfw {
   vertical-align:      top;
 }
 .post .post_info .username {
-  font-size:           1.3em;
+  font-size:           16px;
   font-weight:         bold;
   margin-right:        5px;
 }
@@ -799,7 +801,8 @@ table.discussions tr.targeted.nsfw {
 
 .post .body, .post .edit {
   clear:               both;
-  font-size:           1.1em;
+  font-size:           14px;
+  line-height:         1.35;
   max-width:           800px;
   margin-left:         45px;
 }
