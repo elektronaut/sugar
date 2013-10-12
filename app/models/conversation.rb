@@ -5,8 +5,7 @@
 # A conversation is a private Exchange only accessible to a subset of users.
 
 class Conversation < Exchange
-
-  include Sugar::Exceptions
+  class RemoveParticipantError < StandardError; end
 
   has_many :conversation_relationships, -> { order 'created_at ASC' }, dependent: :destroy
   has_many :participants, through: :conversation_relationships, source: :user

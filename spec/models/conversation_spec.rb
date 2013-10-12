@@ -46,7 +46,7 @@ describe Conversation do
       it "can't be removed" do
         expect {
           conversation.remove_participant(conversation.poster)
-        }.to raise_exception(Sugar::Exceptions::RemoveParticipantError)
+        }.to raise_exception(Conversation::RemoveParticipantError)
       end
     end
 

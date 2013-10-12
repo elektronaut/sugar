@@ -2,8 +2,6 @@
 
 require 'yaml'
 
-require File.join(File.dirname(__FILE__), 'sugar/exceptions')
-
 module Sugar
 
   DEFAULT_CONFIGURATION = {

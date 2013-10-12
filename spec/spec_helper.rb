@@ -77,7 +77,6 @@ Spork.each_run do
     config.include RedisHelper, redis: true
     config.include JsonSpec::Helpers
     config.include LoginMacros, type: :controller
-    config.include Sugar::Exceptions
     config.include MailerMacros
     config.include ConfigurationMacros
     config.before(:each) { reset_email }
