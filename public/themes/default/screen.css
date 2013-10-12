@@ -871,7 +871,8 @@ table.discussions tr.targeted.nsfw {
 .post .body h3,
 .post .body h4,
 .post .body h5,
-.post .body h6 {
+.post .body h6,
+.post .body blockquote {
   margin:              15px 0px;
 }
 .post .body p {
