@@ -3,7 +3,7 @@
 class SimpleFilter < Filter
 
   def process(post)
-    escape_angle_brackets(strip(post)).gsub(/\r?\n/, "<br>")
+    escape_angle_brackets(strip(post)).gsub(/\r?\n/, "<br>\n")
   end
 
   private

@@ -7,7 +7,7 @@ describe SimpleFilter do
   end
 
   it "converts line breaks to <br>" do
-    SimpleFilter.new("foo\n\nbar").to_html.should == "foo<br><br>bar"
+    SimpleFilter.new("foo\n\nbar").to_html.should == "foo<br>\n<br>\nbar"
   end
 
   it "should escape left angle brackets" do
