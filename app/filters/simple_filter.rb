@@ -3,10 +3,14 @@
 class SimpleFilter < Filter
 
   def process(post)
-    escape_angle_brackets(strip(post)).gsub(/\r?\n/, "<br>\n")
+    convert_line_breaks(escape_angle_brackets(strip(post)))
   end
 
   private
+
+  def convert_line_breaks(str)
+    str.gsub(Regexp.new("(?<!</)(?<!" + block_level_tags.join("|") + ")(?<!>)\n"), "<br>\n")
+  end
 
   def escape_angle_brackets(str)
     str
@@ -29,6 +33,14 @@ class SimpleFilter < Filter
       p param pre progress q rp rt ruby s samp section select small source
       span strong style sub summary svg table tbody td textarea tfoot th
       thead time title tr track u ul var video wbr
+    }
+  end
+
+  def block_level_tags
+    %w{
+      address article aside audio blockquote canvas dd div dl fieldset
+      figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr
+      noscript ol output p pre section table tfoot ul video
     }
   end
 

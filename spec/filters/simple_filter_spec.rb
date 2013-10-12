@@ -10,15 +10,21 @@ describe SimpleFilter do
     SimpleFilter.new("foo\n\nbar").to_html.should == "foo<br>\n<br>\nbar"
   end
 
-  it "should escape left angle brackets" do
+  it "doesn't insert <br> after block level elements" do
+    input = "<blockquote>foo</blockquote>\n\nbar"
+    output = "<blockquote>foo</blockquote>\n<br>\nbar"
+    SimpleFilter.new(input).to_html.should == output
+  end
+
+  it "escapes left angle brackets" do
     SimpleFilter.new("<3").to_html.should == "&lt;3"
   end
 
-  it "should escape right angle brackets" do
+  it "escapes right angle brackets" do
     SimpleFilter.new(">:/").to_html.should == "&gt;:/"
   end
 
-  it "should not escape tags" do
+  it "doesn't escape tags" do
     SimpleFilter.new("<a href=\"#\">link</a>").to_html.should == "<a href=\"#\">link</a>"
   end
 
