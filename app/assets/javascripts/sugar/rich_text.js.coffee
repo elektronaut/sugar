@@ -3,14 +3,16 @@ Sugar.RichTextArea = (textarea, options) ->
   return this if textarea.richtext
 
   markdownDecorator =
-    bold: (str)           -> ["**", str, "**"]
-    emphasis: (str)       -> ["_", str, "_"]
-    link: (url, name)     -> ["[", name, "](#{url})"]
-    image: (url)          -> ["![](", url, ")"]
-    mp3: (url, name)      -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
-    blockquote: (str)     -> ["", ("> " + line for line in str.split("\n")).join("\n"), ""]
-    code: (str, language) -> ["```#{language}\n", str, "\n```"]
-    spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
+    bold: (str)       -> ["**", str, "**"]
+    emphasis: (str)   -> ["_", str, "_"]
+    link: (url, name) -> ["[", name, "](#{url})"]
+    image: (url)      -> ["![](", url, ")"]
+    mp3: (url, name)  -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
+    blockquote: (str) -> ["", ("> " + line for line in str.split("\n")).join("\n"), ""]
+    spoiler: (str)    -> ["<div class=\"spoiler\">", str, "</div>"]
+
+    code: (str, language) ->
+      ["```#{language}\n", str, "\n```"]
 
     quote: (text, html, username, permalink) ->
       wrapInBlockquote = (str) ->
@@ -23,14 +25,21 @@ Sugar.RichTextArea = (textarea, options) ->
       ["", quotedPost + "\n\n", ""]
 
   htmlDecorator =
-    bold: (str)           -> ["<b>", str, "</b>"]
-    emphasis: (str)       -> ["<i>", str, "</i>"]
-    link: (url, name)     -> ["<a href=\"#{url}\">", name, "</a>"]
-    image: (url)          -> ["<img src=\"", url, "\">"]
-    mp3: (url, name)      -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
-    blockquote: (str)     -> ["<blockquote>", str, "</blockquote>"]
-    code: (str, language) -> ["<pre><code class=\"#{language}\">", str, "</code></pre>"]
-    spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
+    bold: (str)       -> ["<b>", str, "</b>"]
+    emphasis: (str)   -> ["<i>", str, "</i>"]
+    link: (url, name) -> ["<a href=\"#{url}\">", name, "</a>"]
+    image: (url)      -> ["<img src=\"", url, "\">"]
+    mp3: (url, name)  -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
+    blockquote: (str) -> ["<blockquote>", str, "</blockquote>"]
+    spoiler: (str)    -> ["<div class=\"spoiler\">", str, "</div>"]
+
+    code: (str, language) ->
+      escapeEntities = (str) ->
+        str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
+      codeTag = if language then "<code class=\"#{language}\">" else "<code>"
+
+      ["<pre>#{codeTag}", escapeEntities(str), "</code></pre>"]
 
     quote: (text, html, username, permalink) ->
       stripParagraphs = (str) ->
