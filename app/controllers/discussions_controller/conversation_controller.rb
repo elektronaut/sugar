@@ -1,4 +1,4 @@
-class DiscussionsController < ApplicationController
+class DiscussionsController < ExchangesController
   module ConversationController
     extend ActiveSupport::Concern
 

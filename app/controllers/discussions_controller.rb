@@ -1,136 +1,108 @@
 # encoding: utf-8
 
-class DiscussionsController < ApplicationController
-  requires_authentication
-  requires_user           except: [:index, :search, :search_posts, :show]
-  protect_from_forgery    except: :mark_as_read
-
+class DiscussionsController < ExchangesController
   include ConversationController
-  include DiscussionController
 
-  before_filter :load_discussion, only: [:show, :edit, :update, :destroy, :follow, :unfollow, :favorite, :unfavorite, :hide, :unhide, :search_posts, :mark_as_read, :invite_participant, :remove_participant]
-  before_filter :verify_editable, only: [:edit, :update, :destroy]
-  before_filter :set_exchange_params
-  before_filter :require_and_set_search_query, only: [:search, :search_posts]
+  before_filter :load_categories,    only: [:new, :create, :edit, :update]
+  before_filter :require_categories, only: [:new, :create]
 
-  protected
-
-    # Loads discussion by params[:id] and checks permissions.
-    def load_discussion
-      begin
-        @exchange = Exchange.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render_error 404 and return
-      end
-
-      unless @exchange.viewable_by?(current_user)
-        render_error 403 and return
-      end
+  def index
+    if current_user?
+      @exchanges = current_user.unhidden_discussions.viewable_by(current_user).page(params[:page]).for_view
+    else
+      @exchanges = Discussion.viewable_by(nil).page(params[:page]).for_view
     end
+    load_views_for(@exchanges)
+  end
 
-    # Deflects the request unless the discussion is editable by the logged in user.
-    def verify_editable
-      unless @exchange.editable_by?(current_user)
-        render_error 403 and return
+  def popular
+    @days = params[:days].to_i
+    unless (1..180).include?(@days)
+      redirect_to params.merge({days: 7}) and return
+    end
+    @exchanges = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
+    load_views_for(@exchanges)
+  end
+
+  def search
+    @exchanges = Discussion.search_results(search_query, user: current_user, page: params[:page])
+
+    respond_to do |format|
+      format.any(:html, :mobile) do
+        load_views_for(@exchanges)
+        @search_path = search_path
       end
-    end
-
-    # This is pretty silly and needs rewriting.
-    def set_exchange_params
-      if params[:conversation]
-        params[:exchange] = params[:conversation]
-      elsif params[:discussion]
-        params[:exchange] = params[:discussion]
-      end
-    end
-
-    def search_query
-      params[:query] || params[:q]
-    end
-
-    def require_and_set_search_query
-      unless @search_query = search_query
-        flash[:notice] = "No query specified!"
-        redirect_to discussions_path and return
+      format.json do
+        json = {
+          pages:         @exchanges.pages,
+          total_entries: @exchanges.total,
+          # TODO: Fix when Rails bug is fixed
+          #discussions:   @exchanges
+          discussions:   @exchanges.map{|d| {discussion: d.attributes}}
+        }.to_json(except: [:delta])
+        render text: json
       end
     end
+  end
 
-    def exchange_class
-      (params[:type] == "conversation" || (params[:exchange] && params[:exchange][:type] == 'Conversation')) ? Conversation : Discussion
+  def favorites
+    @section = :favorites
+    @exchanges = current_user.favorite_discussions.viewable_by(current_user).page(params[:page]).for_view
+    load_views_for(@exchanges)
+  end
+
+  def following
+    @section = :following
+    @exchanges = current_user.followed_discussions.viewable_by(current_user).page(params[:page]).for_view
+    load_views_for(@exchanges)
+  end
+
+  def hidden
+    @exchanges = current_user.hidden_discussions.viewable_by(current_user).page(params[:page]).for_view
+    load_views_for(@exchanges)
+  end
+
+  def follow
+    DiscussionRelationship.define(current_user, @exchange, following: true)
+    redirect_to discussion_url(@exchange, page: params[:page])
+  end
+
+  def unfollow
+    DiscussionRelationship.define(current_user, @exchange, following: false)
+    redirect_to discussions_url
+  end
+
+  def favorite
+    DiscussionRelationship.define(current_user, @exchange, favorite: true)
+    redirect_to discussion_url(@exchange, page: params[:page])
+  end
+
+  def unfavorite
+    DiscussionRelationship.define(current_user, @exchange, favorite: false)
+    redirect_to discussions_url
+  end
+
+  def hide
+    DiscussionRelationship.define(current_user, @exchange, hidden: true)
+    redirect_to discussions_url
+  end
+
+  def unhide
+    DiscussionRelationship.define(current_user, @exchange, hidden: false)
+    redirect_to discussion_url(@exchange, page: params[:page])
+  end
+
+  private
+
+  def load_categories
+    @categories = Category.viewable_by(current_user)
+  end
+
+  def require_categories
+    if @categories.length == 0 && exchange_class == Discussion
+      flash[:notice] = "Can't create a new discussion, no categories have been made!"
+      redirect_to categories_url and return
     end
-
-    def exchange_params(options={})
-      if current_user.moderator?
-        params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed, :sticky)
-      else
-        params.require(:exchange).permit(:recipient_id, :title, :body, :format, :category_id, :nsfw, :closed)
-      end
-    end
-
-  public
-
-    # Searches posts within a discussion
-    def search_posts
-      @search_path = search_posts_discussion_path(@exchange)
-      @posts = Post.search_results(search_query, user: current_user, exchange: @exchange, page: params[:page])
-      render template: "exchanges/search_posts"
-    end
-
-    # Creates a new discussion
-    def new
-      @exchange = exchange_class.new
-      if exchange_class == Discussion
-        @exchange.category = Category.find(params[:category_id]) if params[:category_id]
-      elsif exchange_class == Conversation
-        @recipient = User.find_by_username(params[:username]) if params[:username]
-      end
-      render template: "exchanges/new"
-    end
-
-    # Show a discussion
-    def show
-      context = (request.format == :mobile) ? 0 : 3
-      @posts = @exchange.posts.page(params[:page], context: context).for_view
-
-      # Mark discussion as viewed
-      if current_user?
-        current_user.mark_discussion_viewed(@exchange, @posts.last, (@posts.offset_value + @posts.count))
-      end
-      if @exchange.kind_of?(Conversation)
-        @section = :conversations
-        current_user.mark_conversation_viewed(@exchange)
-        render template: 'conversations/show'
-      end
-    end
-
-    # Edit a discussion
-    def edit
-      @exchange.body = @exchange.posts.first.body
-      render template: "exchanges/edit"
-    end
-
-    # Create a new discussion
-    def create
-      @exchange = exchange_class.create(exchange_params.merge(poster: current_user))
-      if @exchange.valid?
-        @exchange.add_participant(@recipient) if @recipient
-        redirect_to discussion_url(@exchange)
-      else
-        flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
-        render template: "exchanges/new"
-      end
-    end
-
-    # Update a discussion
-    def update
-      @exchange.update_attributes(exchange_params.merge(updated_by: current_user))
-      if @exchange.valid?
-        flash[:notice] = "Your changes were saved."
-        redirect_to discussion_path(@exchange)
-      else
-        flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
-        render action: :edit
-      end
-    end
+  end
 
 end
