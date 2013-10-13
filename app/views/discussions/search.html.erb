@@ -11,8 +11,8 @@
 
 <%= render partial: 'search/tips' %>
 
-<% if @discussions && @discussions.length > 0 %>
-  <%= render partial: 'discussions/table', locals: {discussions: @discussions, pagination_params: {q: @search_query}} %>
+<% if @exchanges && @exchanges.length > 0 %>
+  <%= render partial: 'discussions/table', locals: {discussions: @exchanges, pagination_params: {q: @search_query}} %>
 <% else %>
   <p>No discussions were found.</p>
 <% end %>

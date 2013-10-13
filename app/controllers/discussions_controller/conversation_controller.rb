@@ -8,8 +8,8 @@ class DiscussionsController < ApplicationController
 
     def conversations
       @section = :conversations
-      @discussions = current_user.conversations.page(params[:page]).for_view
-      load_views_for(@discussions)
+      @exchanges = current_user.conversations.page(params[:page]).for_view
+      load_views_for(@exchanges)
       render template: "conversations/index"
     end
 

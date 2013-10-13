@@ -4,7 +4,7 @@
 %>
 <% if discussions && discussions.length > 0 %>
   <div class="discussions">
-    <% @discussions.each do |d| %><div class="discussion <%= discussion_classes(discussions, d) %>">
+    <% @exchanges.each do |d| %><div class="discussion <%= discussion_classes(discussions, d) %>">
       <% if new_posts?(d) %>
         <div class="new_posts_count"><%= new_posts_count(d) %></div>
       <% end %>

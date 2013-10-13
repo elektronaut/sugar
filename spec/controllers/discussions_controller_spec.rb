@@ -39,7 +39,7 @@ describe DiscussionsController do
       get :index
     end
 
-    specify { assigns(:discussions).should be_a(ActiveRecord::Relation) }
+    specify { assigns(:exchanges).should be_a(ActiveRecord::Relation) }
     it { should respond_with(:success) }
     it { should render_template(:index) }
 

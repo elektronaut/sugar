@@ -10,11 +10,11 @@ class DiscussionsController < ApplicationController
     # Recent discussions
     def index
       if current_user?
-        @discussions = current_user.unhidden_discussions.viewable_by(current_user).page(params[:page]).for_view
+        @exchanges = current_user.unhidden_discussions.viewable_by(current_user).page(params[:page]).for_view
       else
-        @discussions = Discussion.viewable_by(nil).page(params[:page]).for_view
+        @exchanges = Discussion.viewable_by(nil).page(params[:page]).for_view
       end
-      load_views_for(@discussions)
+      load_views_for(@exchanges)
     end
 
     # Popular discussions
@@ -23,26 +23,26 @@ class DiscussionsController < ApplicationController
       unless (1..180).include?(@days)
         redirect_to params.merge({days: 7}) and return
       end
-      @discussions = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
-      load_views_for(@discussions)
+      @exchanges = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
+      load_views_for(@exchanges)
     end
 
     # Searches discusion titles
     def search
-      @discussions = Discussion.search_results(search_query, user: current_user, page: params[:page])
+      @exchanges = Discussion.search_results(search_query, user: current_user, page: params[:page])
 
       respond_to do |format|
         format.any(:html, :mobile) do
-          load_views_for(@discussions)
+          load_views_for(@exchanges)
           @search_path = search_path
         end
         format.json do
           json = {
-            pages:         @discussions.pages,
-            total_entries: @discussions.total,
+            pages:         @exchanges.pages,
+            total_entries: @exchanges.total,
             # TODO: Fix when Rails bug is fixed
-            #discussions:   @discussions
-            discussions:   @discussions.map{|d| {discussion: d.attributes}}
+            #discussions:   @exchanges
+            discussions:   @exchanges.map{|d| {discussion: d.attributes}}
           }.to_json(except: [:delta])
           render text: json
         end
@@ -52,20 +52,20 @@ class DiscussionsController < ApplicationController
     # List discussions marked as favorite
     def favorites
       @section = :favorites
-      @discussions = current_user.favorite_discussions.viewable_by(current_user).page(params[:page]).for_view
-      load_views_for(@discussions)
+      @exchanges = current_user.favorite_discussions.viewable_by(current_user).page(params[:page]).for_view
+      load_views_for(@exchanges)
     end
 
     # List discussions marked as followed
     def following
       @section = :following
-      @discussions = current_user.followed_discussions.viewable_by(current_user).page(params[:page]).for_view
-      load_views_for(@discussions)
+      @exchanges = current_user.followed_discussions.viewable_by(current_user).page(params[:page]).for_view
+      load_views_for(@exchanges)
     end
 
     def hidden
-      @discussions = current_user.hidden_discussions.viewable_by(current_user).page(params[:page]).for_view
-      load_views_for(@discussions)
+      @exchanges = current_user.hidden_discussions.viewable_by(current_user).page(params[:page]).for_view
+      load_views_for(@exchanges)
     end
 
     # Follow a discussion
