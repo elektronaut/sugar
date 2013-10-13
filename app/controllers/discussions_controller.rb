@@ -73,6 +73,7 @@ class DiscussionsController < ApplicationController
     def search_posts
       @search_path = search_posts_discussion_path(@discussion)
       @posts = Post.search_results(search_query, user: current_user, exchange: @discussion, page: params[:page])
+      render template: "exchanges/search_posts"
     end
 
     # Creates a new discussion
@@ -83,6 +84,7 @@ class DiscussionsController < ApplicationController
       elsif exchange_class == Conversation
         @recipient = User.find_by_username(params[:username]) if params[:username]
       end
+      render template: "exchanges/new"
     end
 
     # Show a discussion
@@ -97,13 +99,14 @@ class DiscussionsController < ApplicationController
       if @discussion.kind_of?(Conversation)
         @section = :conversations
         current_user.mark_conversation_viewed(@discussion)
-        render template: 'discussions/show_conversation'
+        render template: 'conversations/show'
       end
     end
 
     # Edit a discussion
     def edit
       @discussion.body = @discussion.posts.first.body
+      render template: "exchanges/edit"
     end
 
     # Create a new discussion
@@ -114,7 +117,7 @@ class DiscussionsController < ApplicationController
         redirect_to discussion_url(@discussion)
       else
         flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
-        render action: :new
+        render template: "exchanges/new"
       end
     end
 

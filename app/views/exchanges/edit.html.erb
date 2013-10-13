@@ -12,6 +12,6 @@
 </h2>
 
 <%= form_for(@discussion, url: discussion_path(@discussion)) do |f| %>
-  <%= render partial: 'discussion_form', locals: {f: f} %>
+  <%= render partial: "exchanges/form", locals: {f: f} %>
   <p><button type="submit">Save</button></p>
 <% end %>

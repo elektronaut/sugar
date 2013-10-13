@@ -10,6 +10,7 @@ class DiscussionsController < ApplicationController
       @section = :conversations
       @discussions = current_user.conversations.page(params[:page]).for_view
       load_views_for(@discussions)
+      render template: "conversations/index"
     end
 
     # Invite a participant
@@ -23,7 +24,7 @@ class DiscussionsController < ApplicationController
         end
       end
       if request.xhr?
-        render template: 'discussions/participants', layout: false
+        render template: 'conversations/participants', layout: false
       else
         redirect_to discussion_url(@discussion)
       end
