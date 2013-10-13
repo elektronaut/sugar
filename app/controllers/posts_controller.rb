@@ -27,15 +27,15 @@ class PostsController < ApplicationController
   protected
 
     def load_discussion
-      @discussion = Exchange.find(params[:discussion_id]) rescue nil
-      unless @discussion
+      @exchange = Exchange.find(params[:discussion_id]) rescue nil
+      unless @exchange
         flash[:notice] = "Can't find that discussion!"
         redirect_to discussions_url and return
       end
     end
 
     def verify_viewability
-      unless @discussion && @discussion.viewable_by?(current_user)
+      unless @exchange && @exchange.viewable_by?(current_user)
         flash[:notice] = "You don't have permission to view that discussion!"
         redirect_to discussions_url and return
       end
@@ -45,14 +45,14 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id]) rescue nil
       unless @post
         flash[:notice] = "Can't find that post"
-        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page) and return
+        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page) and return
       end
     end
 
     def verify_editable
       unless @post.editable_by?(current_user)
         flash[:notice] = "You don't have permission to edit that post!"
-        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page) and return
+        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page) and return
       end
     end
 
@@ -68,16 +68,16 @@ class PostsController < ApplicationController
     end
 
     def check_postable
-      unless @discussion.postable_by?(current_user)
+      unless @exchange.postable_by?(current_user)
         flash[:notice] = "This discussion is closed, you don't have permission to post here"
-        redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page)
+        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page)
       end
     end
 
   public
 
     def count
-      @count = @discussion.posts_count
+      @count = @exchange.posts_count
       respond_to do |format|
         format.json do
           render json: {posts_count: @count}.to_json
@@ -86,12 +86,12 @@ class PostsController < ApplicationController
     end
 
     def since
-      @posts = @discussion.posts.limit(200).offset(params[:index]).for_view
+      @posts = @exchange.posts.limit(200).offset(params[:index]).for_view
       if current_user?
-        current_user.mark_discussion_viewed(@discussion, @posts.last, (params[:index].to_i + @posts.length))
+        current_user.mark_discussion_viewed(@exchange, @posts.last, (params[:index].to_i + @posts.length))
       end
-      if @discussion.kind_of?(Conversation)
-        current_user.conversation_relationships.where(conversation_id: @discussion.id).first.update_attributes(new_posts: false)
+      if @exchange.kind_of?(Conversation)
+        current_user.conversation_relationships.where(conversation_id: @exchange.id).first.update_attributes(new_posts: false)
       end
       if request.xhr?
         render layout: false
@@ -109,9 +109,9 @@ class PostsController < ApplicationController
         body: params[:post][:body]
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
-      @post = @discussion.posts.create(attributes)
+      @post = @exchange.posts.create(attributes)
       if @post.valid?
-        @discussion.reload
+        @exchange.reload
         # if @post.mentions_users?
         # 	@post.mentioned_users.each do |mentioned_user|
         # 		logger.info "Mentions: #{mentioned_user.username}"
@@ -120,7 +120,7 @@ class PostsController < ApplicationController
         if request.xhr?
           render status: 201, text: 'Created'
         else
-          redirect_to paged_discussion_url(id: @discussion, page: @discussion.last_page, anchor: "post-#{@post.id}")
+          redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
         end
       else
         if request.xhr?
@@ -132,7 +132,7 @@ class PostsController < ApplicationController
     end
 
     def preview
-      @post = @discussion.posts.new(body: params[:post][:body], format: params[:post][:format])
+      @post = @exchange.posts.new(body: params[:post][:body], format: params[:post][:format])
       @post.user = current_user
       if request.xhr?
         render layout: false
@@ -140,7 +140,7 @@ class PostsController < ApplicationController
     end
 
     def drawing
-      if @discussion.postable_by?(current_user)
+      if @exchange.postable_by?(current_user)
         Tempfile.open("drawing.jpg", encoding: "ascii-8bit") do |file|
           data = Base64.decode64(params[:drawing])
           file.write(data)
@@ -148,7 +148,7 @@ class PostsController < ApplicationController
           upload = Upload.new(file, name: "drawing.jpg")
           if upload.valid?
             upload.save
-            @post = @discussion.posts.create(
+            @post = @exchange.posts.create(
               user: current_user,
               body: "<div class=\"drawing\"><img src=\"#{upload.url}\" alt=\"Drawing\" /></div>"
             )
@@ -157,9 +157,9 @@ class PostsController < ApplicationController
       end
 
       if @post
-        render text: paged_discussion_url(id: @discussion, page: @discussion.last_page, anchor: "post-#{@post.id}"), layout: false
+        render text: paged_discussion_url(id: @exchange, page: @exchange.last_page, anchor: "post-#{@post.id}"), layout: false
       else
-        render text: paged_discussion_url(id: @discussion, page: @discussion.last_page), layout: false
+        render text: paged_discussion_url(id: @exchange, page: @exchange.last_page), layout: false
       end
     end
 
@@ -180,7 +180,7 @@ class PostsController < ApplicationController
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
       if @post.update_attributes(attributes)
-        redirect_to paged_discussion_url(id: @discussion, page: @post.page, anchor: "post-#{@post.id}")
+        redirect_to paged_discussion_url(id: @exchange, page: @post.page, anchor: "post-#{@post.id}")
       else
         flash.now[:notice] = "Could not save your post."
         render action: :edit

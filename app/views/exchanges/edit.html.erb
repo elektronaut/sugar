@@ -1,17 +1,17 @@
 <%
   add_body_class "edit_discussion discussion_form"
-  @page_title = @discussion.title
+  @page_title = @exchange.title
 %>
 
 <h2 class="section">
-  <% if @discussion.kind_of?(Discussion) %>
-    <%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
+  <% if @exchange.kind_of?(Discussion) %>
+    <%= link_to h(@exchange.category.name), category_path(@exchange.category) %> &raquo;
   <% end %>
-  <%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
-  <%= link_to "Edit", edit_discussion_path(@discussion) %>
+  <%= link_to h(@exchange.title), discussion_path(@exchange) %> &raquo;
+  <%= link_to "Edit", edit_discussion_path(@exchange) %>
 </h2>
 
-<%= form_for(@discussion, url: discussion_path(@discussion)) do |f| %>
+<%= form_for(@exchange, url: discussion_path(@exchange)) do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
   <p><button type="submit">Save</button></p>
 <% end %>

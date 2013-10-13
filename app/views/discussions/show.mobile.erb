@@ -1,5 +1,5 @@
 <%
-  @page_title = @discussion.title
+  @page_title = @exchange.title
   previous_post = nil
 %>
 
@@ -8,7 +8,7 @@
 </div>
 <%= render partial: 'components/pagination', locals: { p: @posts } %>
 
-<%= form_for(@discussion.posts.new, url: discussion_posts_path(@discussion)) do |f| %>
+<%= form_for(@exchange.posts.new, url: discussion_posts_path(@exchange)) do |f| %>
   <%= f.hidden_field(:format, class: "format") %>
   <div class="reply">
     <p>

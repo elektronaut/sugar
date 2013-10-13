@@ -15,25 +15,25 @@ class DiscussionsController < ApplicationController
 
     # Invite a participant
     def invite_participant
-      if @discussion.kind_of?(Conversation) && params[:username]
+      if @exchange.kind_of?(Conversation) && params[:username]
         usernames = params[:username].split(/\s*,\s*/)
         usernames.each do |username|
           if user = User.find_by_username(username)
-            @discussion.add_participant(user)
+            @exchange.add_participant(user)
           end
         end
       end
       if request.xhr?
         render template: 'conversations/participants', layout: false
       else
-        redirect_to discussion_url(@discussion)
+        redirect_to discussion_url(@exchange)
       end
     end
 
     # Remove participant from discussion
     def remove_participant
-      if @discussion.kind_of?(Conversation)
-        @discussion.remove_participant(current_user)
+      if @exchange.kind_of?(Conversation)
+        @exchange.remove_participant(current_user)
         flash[:notice] = 'You have been removed from the conversation'
         redirect_to conversations_url and return
       end

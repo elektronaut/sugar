@@ -18,19 +18,19 @@ class DiscussionsController < ApplicationController
     # Loads discussion by params[:id] and checks permissions.
     def load_discussion
       begin
-        @discussion = Exchange.find(params[:id])
+        @exchange = Exchange.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render_error 404 and return
       end
 
-      unless @discussion.viewable_by?(current_user)
+      unless @exchange.viewable_by?(current_user)
         render_error 403 and return
       end
     end
 
     # Deflects the request unless the discussion is editable by the logged in user.
     def verify_editable
-      unless @discussion.editable_by?(current_user)
+      unless @exchange.editable_by?(current_user)
         render_error 403 and return
       end
     end
@@ -71,16 +71,16 @@ class DiscussionsController < ApplicationController
 
     # Searches posts within a discussion
     def search_posts
-      @search_path = search_posts_discussion_path(@discussion)
-      @posts = Post.search_results(search_query, user: current_user, exchange: @discussion, page: params[:page])
+      @search_path = search_posts_discussion_path(@exchange)
+      @posts = Post.search_results(search_query, user: current_user, exchange: @exchange, page: params[:page])
       render template: "exchanges/search_posts"
     end
 
     # Creates a new discussion
     def new
-      @discussion = exchange_class.new
+      @exchange = exchange_class.new
       if exchange_class == Discussion
-        @discussion.category = Category.find(params[:category_id]) if params[:category_id]
+        @exchange.category = Category.find(params[:category_id]) if params[:category_id]
       elsif exchange_class == Conversation
         @recipient = User.find_by_username(params[:username]) if params[:username]
       end
@@ -90,31 +90,31 @@ class DiscussionsController < ApplicationController
     # Show a discussion
     def show
       context = (request.format == :mobile) ? 0 : 3
-      @posts = @discussion.posts.page(params[:page], context: context).for_view
+      @posts = @exchange.posts.page(params[:page], context: context).for_view
 
       # Mark discussion as viewed
       if current_user?
-        current_user.mark_discussion_viewed(@discussion, @posts.last, (@posts.offset_value + @posts.count))
+        current_user.mark_discussion_viewed(@exchange, @posts.last, (@posts.offset_value + @posts.count))
       end
-      if @discussion.kind_of?(Conversation)
+      if @exchange.kind_of?(Conversation)
         @section = :conversations
-        current_user.mark_conversation_viewed(@discussion)
+        current_user.mark_conversation_viewed(@exchange)
         render template: 'conversations/show'
       end
     end
 
     # Edit a discussion
     def edit
-      @discussion.body = @discussion.posts.first.body
+      @exchange.body = @exchange.posts.first.body
       render template: "exchanges/edit"
     end
 
     # Create a new discussion
     def create
-      @discussion = exchange_class.create(exchange_params.merge(poster: current_user))
-      if @discussion.valid?
-        @discussion.add_participant(@recipient) if @recipient
-        redirect_to discussion_url(@discussion)
+      @exchange = exchange_class.create(exchange_params.merge(poster: current_user))
+      if @exchange.valid?
+        @exchange.add_participant(@recipient) if @recipient
+        redirect_to discussion_url(@exchange)
       else
         flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
         render template: "exchanges/new"
@@ -123,10 +123,10 @@ class DiscussionsController < ApplicationController
 
     # Update a discussion
     def update
-      @discussion.update_attributes(exchange_params.merge(updated_by: current_user))
-      if @discussion.valid?
+      @exchange.update_attributes(exchange_params.merge(updated_by: current_user))
+      if @exchange.valid?
         flash[:notice] = "Your changes were saved."
-        redirect_to discussion_path(@discussion)
+        redirect_to discussion_path(@exchange)
       else
         flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
         render action: :edit

@@ -1,13 +1,13 @@
 <%
   add_body_class "new_discussion discussion_form"
-  @page_title = "New #{@discussion.class.to_s.downcase}"
+  @page_title = "New #{@exchange.class.to_s.downcase}"
   if @recipient
     @page_title += " with #{@recipient.username}"
   end
 %>
 
 <h2 class="section">
-  <% if @discussion.kind_of?(Conversation) %>
+  <% if @exchange.kind_of?(Conversation) %>
     <%= link_to "Conversations", conversations_path %> &raquo;
     <% if @recipient %>
       <%= link_to h("New conversation with #{@recipient.username}"), new_conversation_with_path(username: @recipient.username) %>
@@ -19,7 +19,7 @@
   <% end %>
 </h2>
 
-<%= form_for(@discussion, url: discussions_path) do |f| %>
+<%= form_for(@exchange, url: discussions_path) do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
-  <p><button type="submit">Create <%= @discussion.class.to_s.downcase %></button></p>
+  <p><button type="submit">Create <%= @exchange.class.to_s.downcase %></button></p>
 <% end %>

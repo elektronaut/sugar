@@ -70,43 +70,43 @@ class DiscussionsController < ApplicationController
 
     # Follow a discussion
     def follow
-      DiscussionRelationship.define(current_user, @discussion, following: true)
-      redirect_to discussion_url(@discussion, page: params[:page])
+      DiscussionRelationship.define(current_user, @exchange, following: true)
+      redirect_to discussion_url(@exchange, page: params[:page])
     end
 
     # Unfollow a discussion
     def unfollow
-      DiscussionRelationship.define(current_user, @discussion, following: false)
+      DiscussionRelationship.define(current_user, @exchange, following: false)
       redirect_to discussions_url
     end
 
     # Favorite a discussion
     def favorite
-      DiscussionRelationship.define(current_user, @discussion, favorite: true)
-      redirect_to discussion_url(@discussion, page: params[:page])
+      DiscussionRelationship.define(current_user, @exchange, favorite: true)
+      redirect_to discussion_url(@exchange, page: params[:page])
     end
 
     # Unfavorite a discussion
     def unfavorite
-      DiscussionRelationship.define(current_user, @discussion, favorite: false)
+      DiscussionRelationship.define(current_user, @exchange, favorite: false)
       redirect_to discussions_url
     end
 
     # Favorite a discussion
     def hide
-      DiscussionRelationship.define(current_user, @discussion, hidden: true)
+      DiscussionRelationship.define(current_user, @exchange, hidden: true)
       redirect_to discussions_url
     end
 
     # Unfavorite a discussion
     def unhide
-      DiscussionRelationship.define(current_user, @discussion, hidden: false)
-      redirect_to discussion_url(@discussion, page: params[:page])
+      DiscussionRelationship.define(current_user, @exchange, hidden: false)
+      redirect_to discussion_url(@exchange, page: params[:page])
     end
 
     # Mark discussion as read
     def mark_as_read
-      current_user.mark_discussion_viewed(@discussion, @discussion.posts.last, @discussion.posts_count)
+      current_user.mark_discussion_viewed(@exchange, @exchange.posts.last, @exchange.posts_count)
       if request.xhr?
         render layout: false, text: 'OK'
       end

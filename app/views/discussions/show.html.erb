@@ -1,7 +1,7 @@
 <%
-  add_body_class "discussion", "category#{@discussion.category_id}", "discussion_by_user#{@discussion.poster_id}"
+  add_body_class "discussion", "category#{@exchange.category_id}", "discussion_by_user#{@exchange.poster_id}"
   add_body_class 'last_page' if @posts.last_page?
-  @page_title = @discussion.title
+  @page_title = @exchange.title
   previous_post = nil
 -%>
 
@@ -9,47 +9,47 @@
 
 <div class="functions">
   <% if current_user? %>
-    <% if @discussion.editable_by?(current_user) -%>
-      <%= link_to "Edit", edit_discussion_path(@discussion), class: :edit %> /
+    <% if @exchange.editable_by?(current_user) -%>
+      <%= link_to "Edit", edit_discussion_path(@exchange), class: :edit %> /
     <% end -%>
-    <% if current_user.hidden?(@discussion) -%>
-      <%= link_to "Unhide", unhide_discussion_path(@discussion, page: @posts.current_page) %>
+    <% if current_user.hidden?(@exchange) -%>
+      <%= link_to "Unhide", unhide_discussion_path(@exchange, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Hide", hide_discussion_path(@discussion, page: @posts.current_page) %>
+      <%= link_to "Hide", hide_discussion_path(@exchange, page: @posts.current_page) %>
     <% end -%> /
-    <% if current_user.following?(@discussion) -%>
-      <%= link_to "Stop following", unfollow_discussion_path(@discussion, page: @posts.current_page) %>
+    <% if current_user.following?(@exchange) -%>
+      <%= link_to "Stop following", unfollow_discussion_path(@exchange, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Follow", follow_discussion_path(@discussion, page: @posts.current_page) %>
+      <%= link_to "Follow", follow_discussion_path(@exchange, page: @posts.current_page) %>
     <% end -%> /
-    <% if current_user.favorite?(@discussion) -%>
-      <%= link_to "Remove Favorite", unfavorite_discussion_path(@discussion, page: @posts.current_page) %>
+    <% if current_user.favorite?(@exchange) -%>
+      <%= link_to "Remove Favorite", unfavorite_discussion_path(@exchange, page: @posts.current_page) %>
     <% else -%>
-      <%= link_to "Favorite", favorite_discussion_path(@discussion, page: @posts.current_page) %>
+      <%= link_to "Favorite", favorite_discussion_path(@exchange, page: @posts.current_page) %>
     <% end -%>
   <% end %>
 </div>
 
 <h2 class="section">
-  <%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
-  <% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-  <%= link_to h(@discussion.title), discussion_path(@discussion), id: 'discussionLink'  %>
+  <%= link_to h(@exchange.category.name), category_path(@exchange.category) %> &raquo;
+  <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
+  <%= link_to h(@exchange.title), discussion_path(@exchange), id: 'discussionLink'  %>
 </h2>
 
-<div id="discussion" data-id="<%= @discussion.id %>" data-posts-count="<%= @discussion.posts_count %>">
-  <%= render partial: 'posts/posts', locals: {posts: @posts, discussion: @discussion, functions: true, permalink: true, post_distance: true, new_posts_notifier: true} %>
+<div id="discussion" data-id="<%= @exchange.id %>" data-posts-count="<%= @exchange.posts_count %>">
+  <%= render partial: 'posts/posts', locals: {posts: @posts, discussion: @exchange, functions: true, permalink: true, post_distance: true, new_posts_notifier: true} %>
 </div>
 
 <a name="bottom"></a>
 <div class="bottomlinks">
   <%= link_to "Back to discussions", discussions_path, id: 'back_link' %>,
-  <% if current_user? && current_user.following?(@discussion) -%>
+  <% if current_user? && current_user.following?(@exchange) -%>
     <%= link_to "Back to followed", following_discussions_path %>,
   <% end %>
   <%= link_to "Top of page", "#top" %>
 </div>
 
-<% if @discussion.postable_by?(current_user) %>
+<% if @exchange.postable_by?(current_user) %>
 
   <div class="compose" id="compose">
 
@@ -60,7 +60,7 @@
 
     <%# Text reply %>
     <div id="replyText">
-      <%= form_for(@discussion.posts.new, url: discussion_posts_path(@discussion), html: {class: (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
+      <%= form_for(@exchange.posts.new, url: discussion_posts_path(@exchange), html: {class: (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
         <%= f.hidden_field(:format, class: "format") %>
         <p>
           <%= f.text_area(
@@ -85,7 +85,7 @@
       <script type="text/javascript">swfobject.registerObject("napkin", "9.0.31");</script>
       <div class="napkin">
         <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="400" id="napkin">
-          <% napkin_vars = "service=" + drawing_discussion_posts_path(@discussion) -%>
+          <% napkin_vars = "service=" + drawing_discussion_posts_path(@exchange) -%>
           <param name="movie" value="/flash/napkin.swf" />
           <param name="flashvars" value="<%= napkin_vars %>" />
           <param name="allowScriptAccess" value="always" />
