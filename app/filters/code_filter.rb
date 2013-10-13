@@ -34,7 +34,7 @@ class CodeFilter < Filter
   end
 
   def syntax_formatter
-    Rouge::Formatters::HTML.new(:css_class => 'highlight')
+    Rouge::Formatters::HTML.new(css_class: "highlight")
   end
 
   def syntax_highlight(element)
