@@ -114,11 +114,18 @@ blockquote cite {
   margin-top:          -5px;
 }
 
-code {
+code, pre.highlight {
   font-family:         Menlo, Monaco, Consolas, Courier, monospace;
-  font-size:           0.9em;
-  background:          #f8f4f1;
-  border:              1px solid #ddd;
+  font-size:           12px;
+}
+pre.highlight {
+  padding:             10px;
+  border-radius:       5px;
+  line-height:         1.5;
+}
+code {
+  background:          #f8f8f8;
+  border:              1px solid #eee;
   padding:             0px 3px;
 }
 pre code {

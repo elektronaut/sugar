@@ -463,9 +463,11 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .body ol ol {
   margin-bottom: 0px;
 }
-.post .body code {
+.post .body code, .post .body pre.highlight {
   font-family: Courier, monospace;
   font-size: 12px;
+}
+.post .body code {
   background: #f4f2f0;
 }
 .post .body pre {
@@ -476,6 +478,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   background: #f4f2f0;
   overflow: scroll;
   padding: 8px;
+}
+.post .body pre.highlight {
+  overflow: scroll;
 }
 
 .fb_iframe_widget {

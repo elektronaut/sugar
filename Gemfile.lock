@@ -179,6 +179,7 @@ GEM
     redcarpet (3.0.0)
     redis (3.0.4)
     ref (1.0.5)
+    rouge (1.0.0)
     rsolr (1.0.9)
       builder (>= 2.1.2)
     rspec (2.14.1)
@@ -290,6 +291,7 @@ DEPENDENCIES
   rb-fsevent
   redcarpet (~> 3.0)
   redis (~> 3.0.4)
+  rouge
   rspec-rails
   ruby-filemagic
   ruby-openid
