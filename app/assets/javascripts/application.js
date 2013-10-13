@@ -6,8 +6,6 @@
 //= require backbone_datalink
 
 //= require_tree ./vendor
-//= require ./syntaxhighlighter/shCore
-//= require_tree ./syntaxhighlighter/brushes
 
 //= require backbone/sugar
 //= require sugar
