@@ -99,7 +99,7 @@ Sugar::Application.routes.draw do
 
   # Discussions
   controller :discussions do
-    get '/discussion/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d[^\/]*/, page: /\d+/ }
+    get '/discussions/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d[^\/]*/, page: /\d+/ }
     get '/discussions/popular/:days/:page' => :popular
     get '/discussions/popular/:days'       => :popular
     get '/discussions/archive/:page'       => :index, as: :paged_discussions

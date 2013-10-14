@@ -52,8 +52,11 @@ Sugar.loadNewPosts = ->
     Sugar.PostDetector.pause()
     $(Sugar).trigger 'postsloading'
 
-    endpoint = $("#discussionLink").get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/(discussions|conversations)\/[\d]+)/)[1]
-    endpoint += "/posts/since/" + Sugar.PostDetector.read_posts
+    exchangeUrl = $("#discussionLink").get()[0].href
+    exchangeType = exchangeUrl.match(/\/\/[\w\d\.:]+\/(discussions|conversations)\/([\d]+)/)[1]
+    exchangeId   = exchangeUrl.match(/\/\/[\w\d\.:]+\/(discussions|conversations)\/([\d]+)/)[2]
+
+    endpoint = "/#{exchangeType}/#{exchangeId}/posts/since/#{Sugar.PostDetector.read_posts}"
 
     $.get endpoint, (data) ->
       # Create the container if necessary
