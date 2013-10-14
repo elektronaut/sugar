@@ -99,7 +99,7 @@ Sugar::Application.routes.draw do
 
   # Discussions
   controller :discussions do
-    get '/discussion/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d.*/, page: /\d+/ }
+    get '/discussion/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d[^\/]*/, page: /\d+/ }
     get '/discussions/popular/:days/:page' => :popular
     get '/discussions/popular/:days'       => :popular
     get '/discussions/archive/:page'       => :index, as: :paged_discussions
@@ -107,7 +107,7 @@ Sugar::Application.routes.draw do
 
   # Conversations
   controller :conversations do
-    get '/conversations/:id(/:page)'        => :show, as: :conversation, constraints: { id: /\d.*/, page: /\d+/ }
+    get '/conversations/:id(/:page)'        => :show, as: :conversation, constraints: { id: /\d[^\/]*/, page: /\d+/ }
     get '/conversations/new/with/:username' => :new, as: :new_conversation_with
     get '/conversations/archive/:page'      => :index, as: :paged_conversations
   end

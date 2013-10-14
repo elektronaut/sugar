@@ -4,11 +4,6 @@ require 'digest/sha1'
 
 class PostsController < ApplicationController
 
-  # Disable sessions and filters for the posts count action, and cache it
-  #before_filter :authenticate_session,         except: [:count]
-  #before_filter :detect_mobile,                except: [:count]
-  #before_filter :set_section,                  except: [:count]
-  #after_filter  :store_session_authentication, except: [:count]
   caches_page   :count
 
   requires_authentication except: [:count]
@@ -28,12 +23,13 @@ class PostsController < ApplicationController
 
     def load_discussion
       begin
-        if params[:discussion_id]
-          @exchange = Discussion.find(params[:discussion_id])
-        elsif params[:conversation_id]
-          @exchange = Conversation.find(params[:conversation_id])
-        elsif params[:exchange_id]
-          @exchange = Exchange.find(params[:exchange_id])
+        @exchange = case
+        when params[:discussion_id]
+          Discussion.find(params[:discussion_id])
+        when params[:conversation_id]
+          Conversation.find(params[:conversation_id])
+        when params[:exchange_id]
+          Exchange.find(params[:exchange_id])
         end
       rescue ActiveRecord::RecordNotFound
         @exchange = nil
@@ -123,9 +119,9 @@ class PostsController < ApplicationController
       if @post.valid?
         @exchange.reload
         # if @post.mentions_users?
-        # 	@post.mentioned_users.each do |mentioned_user|
-        # 		logger.info "Mentions: #{mentioned_user.username}"
-        # 	end
+        #   @post.mentioned_users.each do |mentioned_user|
+        #     logger.info "Mentions: #{mentioned_user.username}"
+        #   end
         # end
         if request.xhr?
           render status: 201, text: 'Created'
