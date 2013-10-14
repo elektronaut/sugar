@@ -3,6 +3,7 @@
 require 'digest/sha1'
 
 class PostsController < ApplicationController
+  include DrawingsController
 
   caches_page   :count
 
@@ -16,7 +17,6 @@ class PostsController < ApplicationController
   before_filter :verify_editable,              only: [:edit, :update, :destroy]
   before_filter :require_and_set_search_query, only: [:search]
   before_filter :verify_postable,              only: [:create, :drawing]
-  before_filter :require_s3,                   only: [:drawing]
 
   after_filter :mark_discussion_viewed,   only: [:since]
   after_filter :mark_conversation_viewed, only: [:since]
@@ -46,11 +46,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = @exchange.posts.create(post_params.merge(user: current_user))
-    respond_with(
-      @post,
-      location: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
-    )
+    create_post(post_params.merge(user: current_user))
   end
 
   def update
@@ -62,19 +58,10 @@ class PostsController < ApplicationController
   end
 
   def preview
-    @post = @exchange.posts.new(body: params[:post][:body], format: params[:post][:format])
-    @post.user = current_user
+    @post = @exchange.posts.new(post_params.merge(user: current_user))
     if request.xhr?
       render layout: false
     end
-  end
-
-  def drawing
-    @post = @exchange.posts.create(drawing_params.merge(user: current_user))
-    respond_with(
-      @post,
-      location: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
-    )
   end
 
   def edit
@@ -85,24 +72,12 @@ class PostsController < ApplicationController
 
   private
 
-  def drawing_file(&block)
-    Tempfile.open("drawing.jpg", encoding: "ascii-8bit") do |file|
-      data = Base64.decode64(params[:drawing])
-      file.write(data)
-      file.rewind
-      block.call(file)
-    end
-  end
-
-  def drawing_params
-    drawing_file do |file|
-      upload = Upload.create(file, name: "drawing.jpg")
-      if upload.valid?
-        {body: "<div class=\"drawing\"><img src=\"#{upload.url}\" alt=\"Drawing\" /></div>"}
-      else
-        {}
-      end
-    end
+  def create_post(create_params)
+    @post = @exchange.posts.create(create_params)
+    respond_with(
+      @post,
+      location: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
+    )
   end
 
   def find_discussion
