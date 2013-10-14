@@ -2,6 +2,8 @@
 
 require 'yaml'
 
+require_relative "sugar/responder"
+
 module Sugar
 
   DEFAULT_CONFIGURATION = {

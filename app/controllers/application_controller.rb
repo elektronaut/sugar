@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   include Authentication
 
+  self.responder = Sugar::Responder
+
   layout 'application'
 
   protect_from_forgery

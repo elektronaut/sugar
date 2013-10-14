@@ -25,6 +25,13 @@ describe PostsController do
         end
       end
 
+      context "mobile format" do
+        before { post :create, discussion_id: discussion.id, post: post_params, format: :mobile }
+        it "redirects back to the discussion" do
+          response.should redirect_to(discussion_url(discussion, page: 1, anchor: "post-#{assigns(:post).id}"))
+        end
+      end
+
       context "JSON format" do
         before { post :create, discussion_id: discussion.id, post: post_params, format: :json }
         specify { assigns(:post).should be_valid }
