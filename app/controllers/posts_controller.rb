@@ -12,7 +12,7 @@ class PostsController < ApplicationController
 
   before_filter :find_discussion,              except: [:search]
   before_filter :verify_viewable,              except: [:search, :count, :since]
-  before_filter :find_post,                    only: [:show, :edit, :update, :destroy, :quote]
+  before_filter :find_post,                    only: [:show, :edit, :update, :destroy]
   before_filter :verify_editable,              only: [:edit, :update, :destroy]
   before_filter :require_and_set_search_query, only: [:search]
   before_filter :verify_postable,              only: [:create, :drawing]
@@ -81,10 +81,6 @@ class PostsController < ApplicationController
     if request.xhr?
       render layout: false
     end
-  end
-
-  def quote
-    render layout: false
   end
 
   private

@@ -1,1 +1,0 @@
-<blockquote><cite>Posted by <%= link_to h(@post.user.username), polymorphic_path(@post.exchange, page: @post.page, anchor: "post-#{@post.id}") %>:</cite><%= meify(@post.body, @post.user) %></blockquote>

@@ -145,9 +145,6 @@ Sugar::Application.routes.draw do
 
       # Posts
       resources :posts do
-        member do
-          get 'quote'
-        end
         collection do
           post 'drawing'
           get  'count'
