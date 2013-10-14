@@ -16,14 +16,16 @@ class Post < ActiveRecord::Base
 
   attr_accessor :skip_html
 
-  before_save :set_edit_timestamp
-  before_save :update_trusted_status
-  before_save :flag_conversation
-  before_save :render_html
-  after_create :update_exchange
-  after_create :define_relationship
-  after_create :notify_new_conversation_post
-  after_create :increment_public_posts_count
+  before_save :set_edit_timestamp,
+              :update_trusted_status,
+              :flag_conversation,
+              :render_html
+
+  after_create :update_exchange,
+               :define_relationship,
+               :notify_new_conversation_post,
+               :increment_public_posts_count
+
   after_destroy :decrement_public_posts_count
 
   scope :sorted,                 -> { order('created_at ASC') }
@@ -77,16 +79,18 @@ class Post < ActiveRecord::Base
 
   private
 
-  def increment_public_posts_count
+  def update_public_posts_count(delta)
     if !self.conversation? && !self.trusted?
-      self.user.update_column(:public_posts_count, self.user.public_posts_count + 1)
+      self.user.update_column(:public_posts_count, self.user.public_posts_count + delta)
     end
   end
 
+  def increment_public_posts_count
+    update_public_posts_count(+1)
+  end
+
   def decrement_public_posts_count
-    if !self.conversation? && !self.trusted?
-      self.user.update_column(:public_posts_count, self.user.public_posts_count - 1)
-    end
+    update_public_posts_count(-1)
   end
 
   def update_trusted_status
