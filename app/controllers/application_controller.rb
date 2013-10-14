@@ -88,6 +88,8 @@ class ApplicationController < ActionController::Base
         @section = :messages
       when 'InvitesController'
         @section = :invites
+      when 'ConversationsController'
+        @section = :conversations
       else
         @section = :discussions
       end

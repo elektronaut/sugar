@@ -1,12 +1,14 @@
 # encoding: utf-8
 
-class DiscussionsController < ExchangesController
+class DiscussionsController < ApplicationController
+  include ExchangesController
+
   requires_authentication
   requires_user  except: [:index, :search, :search_posts, :show]
 
-  before_filter :find_exchange,      except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
-  before_filter :verify_editable,    only: [:edit, :update, :destroy]
-  before_filter :load_categories,    only: [:new, :create, :edit, :update]
+  before_filter :find_exchange, except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
+  before_filter :verify_editable, only: [:edit, :update, :destroy]
+  before_filter :load_categories, only: [:new, :create, :edit, :update]
   before_filter :require_categories, only: [:new, :create]
   before_filter :require_and_set_search_query, only: [:search, :search_posts]
 
@@ -66,6 +68,10 @@ class DiscussionsController < ExchangesController
     load_views_for(@exchanges)
   end
 
+  def show
+    super
+  end
+
   def new
     @exchange = Discussion.new
     @exchange.category = Category.find(params[:category_id]) if params[:category_id]
@@ -80,6 +86,14 @@ class DiscussionsController < ExchangesController
       flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
+  end
+
+  def edit
+    super
+  end
+
+  def update
+    super
   end
 
   def follow

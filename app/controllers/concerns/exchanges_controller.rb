@@ -1,7 +1,11 @@
 # encoding: utf-8
 
-class ExchangesController < ApplicationController
-  protect_from_forgery except: [:mark_as_read]
+module ExchangesController
+  extend ActiveSupport::Concern
+
+  included do
+    protect_from_forgery except: [:mark_as_read]
+  end
 
   def search_posts
     @search_path = polymorphic_path([:search_posts, @exchange])

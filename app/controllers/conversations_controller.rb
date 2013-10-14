@@ -1,23 +1,23 @@
 # encoding: utf-8
 
-class ConversationsController < ExchangesController
+class ConversationsController < ApplicationController
+  include ExchangesController
+
   requires_authentication
   requires_user
 
-  before_filter :find_exchange,   except: [:index, :new, :create]
+  before_filter :find_exchange, except: [:index, :new, :create]
   before_filter :verify_editable, only: [:edit, :update, :destroy]
-  before_filter :find_recipient,  only: [:create]
+  before_filter :find_recipient, only: [:create]
   before_filter :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
-    @section = :conversations
     @exchanges = current_user.conversations.page(params[:page]).for_view
     load_views_for(@exchanges)
   end
 
   def show
     super
-    @section = :conversations
     current_user.mark_conversation_viewed(@exchange)
   end
 
@@ -36,6 +36,14 @@ class ConversationsController < ExchangesController
       flash.now[:notice] = "Could not save your conversation! Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
+  end
+
+  def edit
+    super
+  end
+
+  def update
+    super
   end
 
   def invite_participant
