@@ -5,13 +5,13 @@
 
 <h2 class="section">
   <% if @exchange.kind_of?(Discussion) %>
-    <%= link_to h(@exchange.category.name), category_path(@exchange.category) %> &raquo;
+    <%= link_to @exchange.category.name, @exchange.category %> &raquo;
   <% end %>
-  <%= link_to h(@exchange.title), discussion_path(@exchange) %> &raquo;
-  <%= link_to "Edit", edit_discussion_path(@exchange) %>
+  <%= link_to @exchange.title, @exchange %> &raquo;
+  <%= link_to "Edit", [:edit, @exchange] %>
 </h2>
 
-<%= form_for(@exchange, url: discussion_path(@exchange)) do |f| %>
+<%= form_for @exchange do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
   <p><button type="submit">Save</button></p>
 <% end %>

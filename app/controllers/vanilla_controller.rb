@@ -17,7 +17,7 @@ class VanillaController < ApplicationController
   # /vanilla/comments.php?DiscussionID=13892&page=6
   def discussion
     headers["Status"] = "301 Moved Permanently"
-    redirect_to paged_discussion_url(id: params[:DiscussionID], page: params[:page])
+    redirect_to polymorphic_url(Exchange.find(params[:DiscussionID]), page: params[:page])
   end
 
   # /vanilla/account.php?u=4

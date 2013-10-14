@@ -10,7 +10,7 @@
   <% if @exchange.kind_of?(Conversation) %>
     <%= link_to "Conversations", conversations_path %> &raquo;
     <% if @recipient %>
-      <%= link_to h("New conversation with #{@recipient.username}"), new_conversation_with_path(username: @recipient.username) %>
+      <%= link_to "New conversation with #{@recipient.username}", new_conversation_with_path(username: @recipient.username) %>
     <% else %>
       <%= link_to "New", new_conversation_path %>
     <% end %>
@@ -19,7 +19,7 @@
   <% end %>
 </h2>
 
-<%= form_for(@exchange, url: discussions_path) do |f| %>
+<%= form_for(@exchange) do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
   <p><button type="submit">Create <%= @exchange.class.to_s.downcase %></button></p>
 <% end %>

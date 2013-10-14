@@ -45,28 +45,22 @@ module ExchangesHelper
     @_new_posts[discussion] ||= (new_posts_count(discussion) > 0) ? true : false
   end
 
-  def last_discussion_page(discussion)
+  def last_viewed_page(exchange)
     return 1 unless current_user?
-    return discussion.last_page unless @discussion_views && new_posts?(discussion)
-    page = (discussion_view(discussion, current_user)[:post_index].to_f / Post.per_page).ceil
+    return exchange.last_page unless @discussion_views && new_posts?(exchange)
+    page = (discussion_view(exchange, current_user)[:post_index].to_f / Post.per_page).ceil
     page = 1 if page < 1
     page
   end
 
-  def last_discussion_page_path(d)
-    if ((last_page = last_discussion_page(d)) > 1)
-      if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
-        paged_discussion_path(id: d.to_param, page: last_page, anchor: "post-#{last_post_id}")
-      else
-        paged_discussion_path(id: d.to_param, page: last_page)
-      end
-    else
-      if @discussion_views && last_post_id = discussion_view(d, current_user).post_id
-        discussion_path(id: d.to_param, anchor: "post-#{last_post_id}")
-      else
-        discussion_path(id: d.to_param)
-      end
-    end
+  def last_viewed_page_path(exchange)
+    last_page    = last_viewed_page(exchange)
+    last_post_id = discussion_view(exchange, current_user).try(&:post_id)
+    options = {}
+    options[:page]   = last_page if last_page > 1
+    options[:anchor] = "post-#{last_post_id}" if last_post_id
+
+    polymorphic_path(exchange, options)
   end
 
   def post_page(post)

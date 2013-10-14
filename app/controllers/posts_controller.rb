@@ -27,7 +27,17 @@ class PostsController < ApplicationController
   protected
 
     def load_discussion
-      @exchange = Exchange.find(params[:discussion_id]) rescue nil
+      begin
+        if params[:discussion_id]
+          @exchange = Discussion.find(params[:discussion_id])
+        elsif params[:conversation_id]
+          @exchange = Conversation.find(params[:conversation_id])
+        elsif params[:exchange_id]
+          @exchange = Exchange.find(params[:exchange_id])
+        end
+      rescue ActiveRecord::RecordNotFound
+        @exchange = nil
+      end
       unless @exchange
         flash[:notice] = "Can't find that discussion!"
         redirect_to discussions_url and return
@@ -45,14 +55,14 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id]) rescue nil
       unless @post
         flash[:notice] = "Can't find that post"
-        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page) and return
+        redirect_to polymorphic_url(@exchange, page: @exchange.last_page) and return
       end
     end
 
     def verify_editable
       unless @post.editable_by?(current_user)
         flash[:notice] = "You don't have permission to edit that post!"
-        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page) and return
+        redirect_to polymorphic_url(@exchange, page: @exchange.last_page) and return
       end
     end
 
@@ -70,7 +80,7 @@ class PostsController < ApplicationController
     def check_postable
       unless @exchange.postable_by?(current_user)
         flash[:notice] = "This discussion is closed, you don't have permission to post here"
-        redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page)
+        redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
       end
     end
 
@@ -120,7 +130,7 @@ class PostsController < ApplicationController
         if request.xhr?
           render status: 201, text: 'Created'
         else
-          redirect_to paged_discussion_url(id: @exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
+          redirect_to polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
         end
       else
         if request.xhr?
@@ -157,9 +167,9 @@ class PostsController < ApplicationController
       end
 
       if @post
-        render text: paged_discussion_url(id: @exchange, page: @exchange.last_page, anchor: "post-#{@post.id}"), layout: false
+        render text: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}"), layout: false
       else
-        render text: paged_discussion_url(id: @exchange, page: @exchange.last_page), layout: false
+        render text: polymorphic_url(@exchange, page: @exchange.last_page), layout: false
       end
     end
 
@@ -180,7 +190,7 @@ class PostsController < ApplicationController
       }
       attributes[:format] = params[:post][:format] if params[:post][:format]
       if @post.update_attributes(attributes)
-        redirect_to paged_discussion_url(id: @exchange, page: @post.page, anchor: "post-#{@post.id}")
+        redirect_to polymorphic_url(@exchange, page: @post.page, anchor: "post-#{@post.id}")
       else
         flash.now[:notice] = "Could not save your post."
         render action: :edit

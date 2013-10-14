@@ -8,19 +8,6 @@
 </div>
 <%= render partial: 'components/pagination', locals: { p: @posts } %>
 
-<%= form_for(@exchange.posts.new, url: discussion_posts_path(@exchange)) do |f| %>
-  <%= f.hidden_field(:format, class: "format") %>
-  <div class="reply">
-    <p>
-      <%= f.text_area(
-        :body,
-        id:                    "compose-body",
-        class:                 "rich",
-        "data-format-binding"  => ".format",
-        "data-formats"         => "markdown html",
-        "data-remember-format" => "true"
-      ) %>
-    </p>
-    <p><%= submit_tag "Post" %></p>
-  </div>
+<% if @exchange.postable_by?(current_user) %>
+  <%= render partial: "exchanges/post_form", locals: {exchange: @exchange} %>
 <% end %>

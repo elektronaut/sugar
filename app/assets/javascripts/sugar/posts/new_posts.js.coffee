@@ -16,7 +16,12 @@ class Sugar.PostDetector
 
   @start: (container) ->
     @paused = false
-    @model = new Sugar.Models.Discussion
+    if $(container).data("type") == "Conversation"
+      modelClass = Sugar.Models.Conversation
+    else
+      modelClass = Sugar.Models.Discussion
+
+    @model = new modelClass
       id:          $(container).data('id')
       posts_count: $(container).data('posts-count')
     @read_posts  ||= @model.get('posts_count')
@@ -47,7 +52,7 @@ Sugar.loadNewPosts = ->
     Sugar.PostDetector.pause()
     $(Sugar).trigger 'postsloading'
 
-    endpoint = $("#discussionLink").get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1]
+    endpoint = $("#discussionLink").get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/(discussions|conversations)\/[\d]+)/)[1]
     endpoint += "/posts/since/" + Sugar.PostDetector.read_posts
 
     $.get endpoint, (data) ->

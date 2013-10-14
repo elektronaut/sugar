@@ -7,6 +7,7 @@ class Sugar.Models.Post extends Backbone.Model
     body: ''
     'user_id': false
     'exchange_id': false
+    'exchange_type': "Exchange"
 
   editableBy: (user) ->
     if user and (user.id == this.get('user_id') or user.isModerator())
@@ -15,8 +16,8 @@ class Sugar.Models.Post extends Backbone.Model
       false
 
   urlRoot: ->
-    if this.get('exchange_id')
-      '/discussions/' + this.get('exchange_id') + '/posts'
+    if this.get('exchange_id') && this.get('exchange_type')
+      "/" + this.get('exchange_type').toLowerCase() + 's/' + this.get('exchange_id') + '/posts'
     else
       '/posts'
 

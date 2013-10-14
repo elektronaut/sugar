@@ -1,19 +1,16 @@
-<%
-  @page_title = "Edit post"
-%>
-
-<div class="page_content">
-  <%= form_for([@exchange, @post]) do |f| %>
-    <%= f.hidden_field(:format, class: "format") %>
+<%= form_for([exchange, exchange.posts.new]) do |f| %>
+  <%= f.hidden_field(:format, class: "format") %>
+  <div class="reply">
     <p>
       <%= f.text_area(
         :body,
         id:                    "compose-body",
         class:                 "rich",
         "data-format-binding"  => ".format",
-        "data-formats"         => "markdown html"
+        "data-formats"         => "markdown html",
+        "data-remember-format" => "true"
       ) %>
     </p>
     <p><%= submit_tag "Post" %></p>
+  </div>
 <% end %>
-</div>

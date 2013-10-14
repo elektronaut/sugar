@@ -6,7 +6,7 @@ $(Sugar).bind 'ready', ->
 
     post_body      = $("#compose-body").val()
     format         = $("#compose-body").closest('form').find('.format').val()
-    preview_url    = $("#discussionLink").get()[0].href.match(/^(https?:\/\/[\w\d\.:]+\/discussions\/[\d]+)/)[1] + "/posts/preview"
+    preview_url    = $("#compose-body").closest('form').data('preview-url')
 
     $(Sugar).trigger 'posting-status', ['Loading preview&hellip;']
 

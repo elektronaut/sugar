@@ -23,6 +23,7 @@ class Sugar.Views.Post extends Backbone.View
       id:            id,
       user_id:       $(this.el).data('user_id'),
       exchange_id:   $(this.el).data('exchange_id'),
+      exchange_type: $(this.el).data('exchange_type'),
       body:          this.stripWhitespace(this.$('.body .content').text())
     })
 

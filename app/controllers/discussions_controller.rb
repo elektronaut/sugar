@@ -1,10 +1,14 @@
 # encoding: utf-8
 
 class DiscussionsController < ExchangesController
-  include ConversationController
+  requires_authentication
+  requires_user  except: [:index, :search, :search_posts, :show]
 
+  before_filter :find_exchange,      except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
+  before_filter :verify_editable,    only: [:edit, :update, :destroy]
   before_filter :load_categories,    only: [:new, :create, :edit, :update]
   before_filter :require_categories, only: [:new, :create]
+  before_filter :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
     if current_user?
@@ -62,6 +66,22 @@ class DiscussionsController < ExchangesController
     load_views_for(@exchanges)
   end
 
+  def new
+    @exchange = Discussion.new
+    @exchange.category = Category.find(params[:category_id]) if params[:category_id]
+    render template: "exchanges/new"
+  end
+
+  def create
+    @exchange = Discussion.create(exchange_params.merge(poster: current_user))
+    if @exchange.valid?
+      redirect_to @exchange
+    else
+      flash.now[:notice] = "Could not save your discussion! Please make sure all required fields are filled in."
+      render template: "exchanges/new"
+    end
+  end
+
   def follow
     DiscussionRelationship.define(current_user, @exchange, following: true)
     redirect_to discussion_url(@exchange, page: params[:page])
@@ -94,12 +114,36 @@ class DiscussionsController < ExchangesController
 
   private
 
+  def exchange_params
+    if current_user.moderator?
+      params.require(:discussion).permit(:title, :body, :format, :category_id, :nsfw, :closed, :sticky)
+    else
+      params.require(:discussion).permit(:title, :body, :format, :category_id, :nsfw, :closed)
+    end
+  end
+
+  def find_exchange
+    begin
+      @exchange = Exchange.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render_error 404 and return
+    end
+
+    unless @exchange.kind_of?(Discussion)
+      redirect_to @exchange and return
+    end
+
+    unless @exchange.viewable_by?(current_user)
+      render_error 403 and return
+    end
+  end
+
   def load_categories
     @categories = Category.viewable_by(current_user)
   end
 
   def require_categories
-    if @categories.length == 0 && exchange_class == Discussion
+    if @categories.length == 0
       flash[:notice] = "Can't create a new discussion, no categories have been made!"
       redirect_to categories_url and return
     end

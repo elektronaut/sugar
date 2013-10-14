@@ -59,26 +59,6 @@ describe DiscussionsController do
     it { should render_template(:show) }
   end
 
-  describe 'when part of a conversation' do
-    before do
-      @user = create(:user)
-      @conversation = create(:conversation)
-      @conversation.add_participant(@user)
-      login @user
-    end
-
-    describe 'DELETE remove_participant' do
-      before { delete :remove_participant, id: @conversation }
-      specify { flash[:notice].should match(/You have been removed from the conversation/) }
-      it 'redirects back to conversations' do
-        response.should redirect_to(conversations_url)
-      end
-      it 'removes the user from the conversation' do
-        @conversation.participants.to_a.should_not include(@user)
-      end
-    end
-  end
-
   describe "GET new" do
     before { login }
 
@@ -99,14 +79,6 @@ describe DiscussionsController do
       let!(:category) { create(:category) }
       before { get :new, category_id: category.id }
       specify { assigns(:exchange).category.should == category }
-    end
-
-    context "when starting a conversation with someone" do
-      let(:recipient) { create(:user) }
-      before { get :new, type: 'conversation', username: recipient.username }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { assigns(:recipient).should == recipient }
-      it { should render_template(:new) }
     end
   end
 
@@ -132,23 +104,6 @@ describe DiscussionsController do
       specify { assigns(:exchange).should be_a(Discussion) }
       it { should redirect_to(discussion_url(assigns(:exchange))) }
     end
-
-    context "when creating a conversation" do
-      let(:recipient) { create(:user) }
-
-      before do
-        post :create,
-             type: 'conversation',
-             recipient_id: recipient.id,
-             conversation: { title: 'Test', body: 'Test' }
-      end
-
-      specify { assigns(:recipient).should be_a(User) }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { should redirect_to(discussion_url(assigns(:exchange))) }
-      specify { assigns(:exchange).participants.should include(recipient) }
-    end
-
   end
 
 end

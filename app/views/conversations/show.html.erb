@@ -11,7 +11,7 @@
   </div>
   <div class="invite">
     <h2>Invite someone</h2>
-    <%= form_for @exchange, url: invite_participant_discussion_path(@exchange), html: {id: 'invite_participant_form'} do |f| %>
+    <%= form_for [:invite_participant, @exchange], html: {id: 'invite_participant_form'} do |f| %>
       <%= text_field_tag 'username', '', class: :username %>
       <%= submit_tag 'Invite' %>
     <% end %>
@@ -23,14 +23,14 @@
 <div class="functions">
   <% if current_user? %>
     <% if @exchange.editable_by?(current_user) -%>
-      <%= link_to "Edit", edit_discussion_path(@exchange), class: :edit %>
+      <%= link_to "Edit", [:edit, @exchange], class: :edit %>
     <% end -%>
     <% if @exchange.editable_by?(current_user) && @exchange.removeable?(current_user) %>
       /
     <% end %>
     <% if @exchange.removeable?(current_user) %>
       <%= link_to 'Remove conversation',
-          remove_participant_discussion_path(@exchange),
+          [:remove_participant, @exchange],
           method: :delete,
           confirm: "Are you sure? You'll have to ask one of the other participants to invite you back if you regret it."
       %>
@@ -40,10 +40,10 @@
 
 <h2 class="section">
   <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
-  <%= link_to h(@exchange.title), discussion_path(@exchange), id: 'discussionLink'  %>
+  <%= link_to @exchange.title, @exchange, id: 'discussionLink'  %>
 </h2>
 
-<div id="discussion" data-id="<%= @exchange.id %>" data-posts-count="<%= @exchange.posts_count %>">
+<div id="discussion" data-id="<%= @exchange.id %>" data-posts-count="<%= @exchange.posts_count %>" data-type="<%= @exchange.class %>">
   <%= render partial: 'posts/posts', locals: {posts: @posts, discussion: @exchange, functions: true, permalink: true, post_distance: true, new_posts_notifier: true} %>
 </div>
 
@@ -57,58 +57,5 @@
 </div>
 
 <% if @exchange.postable_by?(current_user) %>
-
-  <div class="compose" id="compose">
-
-    <ul id="reply-tabs" class="tabs">
-      <li class="tab" id="write-tab"><a href="#replyText">Write</a></li>
-      <li class="tab" id="draw-tab"><a href="#replyImage">Draw</a></li>
-    </ul>
-
-    <%# Text reply %>
-    <div id="replyText">
-      <%= form_for(@exchange.posts.new, url: discussion_posts_path(@exchange), html: {class: (@posts.last_page? ? 'livePost' : nil)}) do |f| %>
-        <%= f.hidden_field(:format, class: "format") %>
-        <p>
-          <%= f.text_area(
-            :body,
-            id:                    "compose-body",
-            class:                 "rich",
-            "data-format-binding"  => ".format",
-            "data-formats"         => "markdown html",
-            "data-remember-format" => "true"
-          ) %>
-        </p>
-        <p id="button-container">
-          <span class="status"></span>
-          <button type="submit">Post</button>
-          <button type="button" class="preview">Preview</button>
-        </p>
-      <% end %>
-    </div>
-
-    <%# Napkin reply %>
-    <div id="replyImage">
-      <script type="text/javascript">swfobject.registerObject("napkin", "9.0.31");</script>
-      <div class="napkin">
-        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="400" id="napkin">
-          <% napkin_vars = "service=" + drawing_discussion_posts_path(@exchange) -%>
-          <param name="movie" value="/flash/napkin.swf" />
-          <param name="flashvars" value="<%= napkin_vars %>" />
-          <param name="allowScriptAccess" value="always" />
-          <!--[if !IE]>-->
-          <object type="application/x-shockwave-flash" data="/flash/napkin.swf?<%= napkin_vars %>" width="100%" height="400">
-          <!--<![endif]-->
-          <a href="http://www.adobe.com/go/getflashplayer">Get Adobe Flash player</a>
-          <!--[if !IE]>-->
-          </object>
-          <!--<![endif]-->
-        </object>
-      </div>
-      <p id="napkin-submit">
-        <span class="status"></span>
-        <button type="button">Post drawing</button>
-      </p>
-    </div>
-  </div>
+  <%= render partial: "exchanges/post_form", locals: {exchange: @exchange, posts: @posts} %>
 <% end %>

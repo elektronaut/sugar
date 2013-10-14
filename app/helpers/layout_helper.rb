@@ -26,7 +26,7 @@ module LayoutHelper
 
   def search_mode_options
     options = [['in discussions', search_path], ['in posts', search_posts_path]]
-    options << ['in this discussion', search_posts_discussion_path(@exchange)] if @exchange && @exchange.id
+    options << ["in this #{@exchange.type.downcase}", polymorphic_path([:search_posts, @exchange])] if @exchange && @exchange.id
     options
   end
 
