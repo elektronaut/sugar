@@ -5,6 +5,7 @@ module ExchangesController
 
   included do
     protect_from_forgery except: [:mark_as_read]
+    respond_to :html, :mobile, :json
   end
 
   def search_posts
@@ -21,6 +22,8 @@ module ExchangesController
     if current_user?
       current_user.mark_discussion_viewed(@exchange, @posts.last, (@posts.offset_value + @posts.count))
     end
+
+    respond_with(@exchange)
   end
 
   def edit

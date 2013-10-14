@@ -14,6 +14,7 @@ class ConversationsController < ApplicationController
   def index
     @exchanges = current_user.conversations.page(params[:page]).for_view
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def show

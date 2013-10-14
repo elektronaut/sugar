@@ -99,17 +99,17 @@ Sugar::Application.routes.draw do
 
   # Discussions
   controller :discussions do
-    get '/discussions/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d[^\/]*/, page: /\d+/ }
-    get '/discussions/popular/:days/:page' => :popular
-    get '/discussions/popular/:days'       => :popular
-    get '/discussions/archive/:page'       => :index, as: :paged_discussions
+    get '/discussions/:id(/:page)(.:format)' => :show, as: :discussion, constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+    get '/discussions/popular/:days/:page'   => :popular
+    get '/discussions/popular/:days'         => :popular
+    get '/discussions/archive/:page'         => :index, as: :paged_discussions
   end
 
   # Conversations
   controller :conversations do
-    get '/conversations/:id(/:page)'        => :show, as: :conversation, constraints: { id: /\d[^\/]*/, page: /\d+/ }
-    get '/conversations/new/with/:username' => :new, as: :new_conversation_with
-    get '/conversations/archive/:page'      => :index, as: :paged_conversations
+    get '/conversations/:id(/:page)(.:format)' => :show, as: :conversation, constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+    get '/conversations/new/with/:username'    => :new, as: :new_conversation_with
+    get '/conversations/archive/:page'         => :index, as: :paged_conversations
   end
 
   [:discussions, :conversations].each do |resource_type|

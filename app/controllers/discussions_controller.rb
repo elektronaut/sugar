@@ -19,6 +19,7 @@ class DiscussionsController < ApplicationController
       @exchanges = Discussion.viewable_by(nil).page(params[:page]).for_view
     end
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def popular
@@ -28,6 +29,7 @@ class DiscussionsController < ApplicationController
     end
     @exchanges = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def search
@@ -55,17 +57,20 @@ class DiscussionsController < ApplicationController
     @section = :favorites
     @exchanges = current_user.favorite_discussions.viewable_by(current_user).page(params[:page]).for_view
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def following
     @section = :following
     @exchanges = current_user.followed_discussions.viewable_by(current_user).page(params[:page]).for_view
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def hidden
     @exchanges = current_user.hidden_discussions.viewable_by(current_user).page(params[:page]).for_view
     load_views_for(@exchanges)
+    respond_with(@exchanges)
   end
 
   def show
