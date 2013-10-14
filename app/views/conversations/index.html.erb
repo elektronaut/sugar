@@ -13,7 +13,7 @@
 
 <h2 class="section"><%= link_to "Conversations", conversations_path %></h2>
 
-<%= render partial: 'discussions/table', locals: {
-  discussions:    @exchanges,
-  no_discussions: "You aren't part of any conversations."
+<%= render partial: 'exchanges/table', locals: {
+  exchanges:    @exchanges,
+  no_exchanges: "You aren't part of any conversations."
 } %>

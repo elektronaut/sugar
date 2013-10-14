@@ -1,12 +1,12 @@
 <%
-  no_discussions ||= "No discussions here yet. " + (current_user? ? link_to("Create the first!", new_discussion_path) : '')
+  no_exchanges ||= "No discussions here yet. " + (current_user? ? link_to("Create the first!", new_discussion_path) : '')
   pagination_params ||= {}
 %>
-<% if discussions && discussions.length > 0 %>
-  <%= pagination ||= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
+<% if exchanges.any? %>
+  <%= pagination ||= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
   <table class="discussions">
-    <% discussions.each do |d| %>
-      <tr class="<%= discussion_classes(discussions, d) %>">
+    <% exchanges.each do |d| %>
+      <tr class="<%= discussion_classes(exchanges, d) %>">
         <td class="name" colspan="<%= d.kind_of?(Conversation) ? 5 : 6 %>"><span class="title">
           <% if d.labels? %>
             <span class="labels">[<%= d.labels.join(',') %>]</span>
@@ -14,7 +14,7 @@
           <%= link_to h(d.title), last_viewed_page_path(d) %>
         </span></td>
       </tr>
-      <tr class="<%= discussion_classes(discussions, d) %>">
+      <tr class="<%= discussion_classes(exchanges, d) %>">
         <% if d.kind_of?(Conversation) %>
           <%
             other_participants = d.participants.reject{|p| p == current_user}
@@ -46,9 +46,9 @@
       </tr>
     <% end %>
   </table>
-  <%= pagination ||= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
+  <%= pagination ||= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
 <% else %>
   <div class="content">
-    <p><%= no_discussions.html_safe %></p>
+    <p><%= no_exchanges.html_safe %></p>
   </div>
 <% end %>

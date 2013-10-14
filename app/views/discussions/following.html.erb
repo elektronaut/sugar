@@ -9,7 +9,7 @@
 
 <h2 class="section"><%= link_to "Followed Discussions", following_discussions_path %></h2>
 
-<%= render partial: 'discussions/table', locals: {
-  discussions:    @exchanges,
-  no_discussions: "You aren't following any discussions."
+<%= render partial: "exchanges/table", locals: {
+  exchanges:    @exchanges,
+  no_exchanges: "You aren't following any discussions."
 } %>
