@@ -1,13 +1,15 @@
 <% @page_title = "Edit post" %>
 
 <h2 class="section">
-  <%= link_to h(@discussion.category.name), category_path(@discussion.category) %> &raquo;
-  <% if @discussion.labels? %>[<%= @discussion.labels.join(",") %>]<% end %>
-  <%= link_to h(@discussion.title), discussion_path(@discussion) %> &raquo;
-  <%= link_to "New post", new_discussion_post_path(@discussion) %>
+  <% if @exchange.kind_of?(Conversation) %>
+    <%= link_to @exchange.category.name, @exchange.category %> &raquo;
+  <% end %>
+  <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
+  <%= link_to @exchange.title, @exchange %> &raquo;
+  <%= link_to "New post", [:new, @exchange, :posts] %>
 </h2>
 
-<%= form_for(@post, url: discussion_posts_path(@discussion)) do |f| %>
+<%= form_for([@exchange, @post]) do |f| %>
   <p>
     <%= f.text_area(:body, cols: 80, rows: 20) %>
   </p>

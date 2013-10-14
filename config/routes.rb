@@ -44,8 +44,8 @@ Sugar::Application.routes.draw do
   get '/posts/search/:query' => 'posts#search'
   match '/posts/search' => 'posts#search', as: :search_posts, via: [:get, :post]
 
-  # Search posts in discussion
   match '/discussions/:id/search_posts/:query' => 'discussions#search_posts', via: [:get, :post]
+  match '/conversations/:id/search_posts/:query' => 'conversations#search_posts', via: [:get, :post]
 
   # Users
   resources :users, except: [:edit, :show] do
@@ -96,55 +96,72 @@ Sugar::Application.routes.draw do
   resources :categories
   get '/categories/:id/:page' => 'categories#show'
 
+
   # Discussions
   controller :discussions do
-    get '/discussions/popular/:days/:page'  => :popular
-    get '/discussions/popular/:days'        => :popular
-    get '/discussions/archive/:page'        => :index,         as: :paged_discussions
-    get '/conversations/new'                => :new,           as: :new_conversation, type: 'conversation'
-    get '/conversations/new/with/:username' => :new,           as: :new_conversation_with, type: 'conversation'
-    get '/conversations/archive/:page'      => :conversations, as: :paged_conversations
+    get '/discussion/:id(/:page)'          => :show, as: :discussion, constraints: { id: /\d.*/, page: /\d+/ }
+    get '/discussions/popular/:days/:page' => :popular
+    get '/discussions/popular/:days'       => :popular
+    get '/discussions/archive/:page'       => :index, as: :paged_discussions
   end
-  resources :discussions do
-    member do
-      get 'follow'
-      get 'unfollow'
-      get 'favorite'
-      get 'unfavorite'
-      get 'hide'
-      get 'unhide'
-      get 'search_posts'
-      get 'mark_as_read'
-      post 'invite_participant'
-      delete 'remove_participant'
-    end
-    collection do
-      get 'participated'
-      get 'search'
-      get 'following'
-      get 'favorites'
-      get 'hidden'
-      get 'conversations'
-      get 'popular'
-    end
 
-    # Posts
-    resources :posts do
+  # Conversations
+  controller :conversations do
+    get '/conversations/:id(/:page)'        => :show, as: :conversation, constraints: { id: /\d.*/, page: /\d+/ }
+    get '/conversations/new/with/:username' => :new, as: :new_conversation_with
+    get '/conversations/archive/:page'      => :index, as: :paged_conversations
+  end
+
+  [:discussions, :conversations].each do |resource_type|
+    resources resource_type, except: [:show] do
+
       member do
-        get 'quote'
+        get 'search_posts'
+        get 'mark_as_read'
+        if resource_type == :discussions
+          get 'follow'
+          get 'unfollow'
+          get 'favorite'
+          get 'unfavorite'
+          get 'hide'
+          get 'unhide'
+        end
+        if resource_type == :conversations
+          post 'invite_participant'
+          delete 'remove_participant'
+        end
       end
+
       collection do
-        post 'drawing'
-        get  'count'
-        get  'since'
-        post 'preview'
+        if resource_type == :discussions
+          get 'participated'
+          get 'search'
+          get 'following'
+          get 'favorites'
+          get 'hidden'
+          get 'popular'
+        end
+      end
+
+      # Posts
+      resources :posts do
+        member do
+          get 'quote'
+        end
+        collection do
+          post 'drawing'
+          get  'count'
+          get  'since'
+          post 'preview'
+        end
       end
     end
   end
-  get '/discussions/:id/:page' => 'discussions#show', as: :paged_discussion
-  get '/discussions/:discussion_id/posts/since/:index' => 'posts#since'
-  get '/conversations' => 'discussions#conversations', as: :conversations
 
+  controller :posts do
+    get '/discussions/:discussion_id/posts/since/:index'     => :since
+    get '/conversations/:conversation_id/posts/since/:index' => :since
+  end
 
   # Invites
   resources :invites do

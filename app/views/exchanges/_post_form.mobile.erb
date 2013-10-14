@@ -1,14 +1,4 @@
-<%
-  @page_title = @discussion.title
-  previous_post = nil
-%>
-
-<div class="posts">
-  <%= render partial: 'posts/posts', locals: { posts: @posts, post_distance: true } %>
-</div>
-<%= render partial: 'components/pagination', locals: { p: @posts } %>
-
-<%= form_for(@discussion.posts.new, url: discussion_posts_path(@discussion)) do |f| %>
+<%= form_for([exchange, exchange.posts.new]) do |f| %>
   <%= f.hidden_field(:format, class: "format") %>
   <div class="reply">
     <p>

@@ -1,10 +1,10 @@
 <%
-  no_discussions ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
+  no_exchanges ||= "No discussions here yet. " + link_to("Create the first!", new_discussion_path)
   pagination_params ||= {}
 %>
-<% if discussions && discussions.length > 0 %>
+<% if exchanges.any? %>
   <div class="discussions">
-    <% @discussions.each do |d| %><div class="discussion <%= discussion_classes(discussions, d) %>">
+    <% @exchanges.each do |d| %><div class="discussion <%= discussion_classes(exchanges, d) %>">
       <% if new_posts?(d) %>
         <div class="new_posts_count"><%= new_posts_count(d) %></div>
       <% end %>
@@ -12,7 +12,7 @@
         <% if d.labels? %>
           <span class="labels">[<%= d.labels.join(',') %>]</span>
         <% end %>
-        <%= link_to d.title, last_discussion_page_path(d) %>
+        <%= link_to d.title, last_viewed_page_path(d) %>
       </h2>
       <p>
         <% if d.kind_of?(Conversation) %>
@@ -34,7 +34,7 @@
       </p>
     </div><% end %>
   </div>
-  <%= render partial: 'components/pagination', locals: { p: discussions, pagination_params: pagination_params } %>
+  <%= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
 <% else %>
-  <p><%= no_discussions %></p>
+  <p><%= no_exchanges %></p>
 <% end %>

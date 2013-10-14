@@ -19,14 +19,14 @@
     <% end %>
   <% end %>
 
-  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user_id="<%= post.user.id %>" data-exchange_id="<%= post.exchange_id %>">
+  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user_id="<%= post.user.id %>" data-exchange_id="<%= post.exchange_id %>" data-exchange_type="<%= post.exchange.type %>">
 
     <% if title %>
       <div class="title">
         <% if post.exchange.labels? %>
           <span class="labels">[<%= post.exchange.labels.join(',') %>]</span>
         <% end %>
-        <%= link_to post.exchange.title, paged_discussion_path(id: post.exchange, page: post.page, anchor: "post-#{post.id}") %>
+        <%= link_to post.exchange.title, polymorphic_path(post.exchange, page: post.page, anchor: "post-#{post.id}") %>
         <small>
           Started by <%= profile_link(post.exchange.poster) %>,
           Last active <%= time_tag post.exchange.last_post_at, class: 'relative' %>,
@@ -66,7 +66,7 @@
         <% end %>
         <% if permalink %>
           <span class="permalink">
-            <%= link_to "#", paged_discussion_path(id: (discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
+            <%= link_to "#", polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
           </span>
         <% end %>
       </div>

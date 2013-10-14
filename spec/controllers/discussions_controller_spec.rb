@@ -39,7 +39,7 @@ describe DiscussionsController do
       get :index
     end
 
-    specify { assigns(:discussions).should be_a(ActiveRecord::Relation) }
+    specify { assigns(:exchanges).should be_a(ActiveRecord::Relation) }
     it { should respond_with(:success) }
     it { should render_template(:index) }
 
@@ -54,29 +54,9 @@ describe DiscussionsController do
       get :show, id: @discussion
     end
 
-    specify { assigns(:discussion).should be_a(Discussion) }
+    specify { assigns(:exchange).should be_a(Discussion) }
     it { should respond_with(:success) }
     it { should render_template(:show) }
-  end
-
-  describe 'when part of a conversation' do
-    before do
-      @user = create(:user)
-      @conversation = create(:conversation)
-      @conversation.add_participant(@user)
-      login @user
-    end
-
-    describe 'DELETE remove_participant' do
-      before { delete :remove_participant, id: @conversation }
-      specify { flash[:notice].should match(/You have been removed from the conversation/) }
-      it 'redirects back to conversations' do
-        response.should redirect_to(conversations_url)
-      end
-      it 'removes the user from the conversation' do
-        @conversation.participants.to_a.should_not include(@user)
-      end
-    end
   end
 
   describe "GET new" do
@@ -91,22 +71,14 @@ describe DiscussionsController do
     context "Starting a new discussion" do
       let!(:category) { create(:category) }
       before { get :new }
-      specify { assigns(:discussion).should be_a(Discussion) }
+      specify { assigns(:exchange).should be_a(Discussion) }
       it { should render_template(:new) }
     end
 
     context "Starting a new discussion in a category" do
       let!(:category) { create(:category) }
       before { get :new, category_id: category.id }
-      specify { assigns(:discussion).category.should == category }
-    end
-
-    context "when starting a conversation with someone" do
-      let(:recipient) { create(:user) }
-      before { get :new, type: 'conversation', username: recipient.username }
-      specify { assigns(:discussion).should be_a(Conversation) }
-      it { assigns(:recipient).should == recipient }
-      it { should render_template(:new) }
+      specify { assigns(:exchange).category.should == category }
     end
   end
 
@@ -129,26 +101,9 @@ describe DiscussionsController do
     context "when creating a discussion" do
       let!(:category) { create(:category) }
       before { post :create, discussion: { title: 'Test', body: 'Test', category_id: category.id } }
-      specify { assigns(:discussion).should be_a(Discussion) }
-      it { should redirect_to(discussion_url(assigns(:discussion))) }
+      specify { assigns(:exchange).should be_a(Discussion) }
+      it { should redirect_to(discussion_url(assigns(:exchange))) }
     end
-
-    context "when creating a conversation" do
-      let(:recipient) { create(:user) }
-
-      before do
-        post :create,
-             type: 'conversation',
-             recipient_id: recipient.id,
-             conversation: { title: 'Test', body: 'Test' }
-      end
-
-      specify { assigns(:recipient).should be_a(User) }
-      specify { assigns(:discussion).should be_a(Conversation) }
-      it { should redirect_to(discussion_url(assigns(:discussion))) }
-      specify { assigns(:discussion).participants.should include(recipient) }
-    end
-
   end
 
 end

@@ -1,37 +1,44 @@
 <%
-  add_body_class "discussion", "category#{@exchange.category_id}", "discussion_by_user#{@exchange.poster_id}"
+  add_body_class "discussion", "conversation", "discussion_by_user#{@exchange.poster_id}"
   add_body_class 'last_page' if @posts.last_page?
-  @page_title = @exchange.title
+  @page_title = h(@exchange.title)
   previous_post = nil
 -%>
+
+<%= content_for :sidebar do %>
+  <div class="participants">
+    <%= render partial: "conversations/participants", locals: {participants: @exchange.participants} %>
+  </div>
+  <div class="invite">
+    <h2>Invite someone</h2>
+    <%= form_for [:invite_participant, @exchange], html: {id: 'invite_participant_form'} do |f| %>
+      <%= text_field_tag 'username', '', class: :username %>
+      <%= submit_tag 'Invite' %>
+    <% end %>
+  </div>
+<% end %>
 
 <a name="top" class="anchor"></a>
 
 <div class="functions">
   <% if current_user? %>
     <% if @exchange.editable_by?(current_user) -%>
-      <%= link_to "Edit", [:edit, @exchange], class: :edit %> /
+      <%= link_to "Edit", [:edit, @exchange], class: :edit %>
     <% end -%>
-    <% if current_user.hidden?(@exchange) -%>
-      <%= link_to "Unhide", unhide_discussion_path(@exchange, page: @posts.current_page) %>
-    <% else -%>
-      <%= link_to "Hide", hide_discussion_path(@exchange, page: @posts.current_page) %>
-    <% end -%> /
-    <% if current_user.following?(@exchange) -%>
-      <%= link_to "Stop following", unfollow_discussion_path(@exchange, page: @posts.current_page) %>
-    <% else -%>
-      <%= link_to "Follow", follow_discussion_path(@exchange, page: @posts.current_page) %>
-    <% end -%> /
-    <% if current_user.favorite?(@exchange) -%>
-      <%= link_to "Remove Favorite", unfavorite_discussion_path(@exchange, page: @posts.current_page) %>
-    <% else -%>
-      <%= link_to "Favorite", favorite_discussion_path(@exchange, page: @posts.current_page) %>
-    <% end -%>
+    <% if @exchange.editable_by?(current_user) && @exchange.removeable?(current_user) %>
+      /
+    <% end %>
+    <% if @exchange.removeable?(current_user) %>
+      <%= link_to 'Remove conversation',
+          [:remove_participant, @exchange],
+          method: :delete,
+          confirm: "Are you sure? You'll have to ask one of the other participants to invite you back if you regret it."
+      %>
+    <% end %>
   <% end %>
 </div>
 
 <h2 class="section">
-  <%= link_to @exchange.category.name, @exchange.category %> &raquo;
   <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
   <%= link_to @exchange.title, @exchange, id: 'discussionLink'  %>
 </h2>

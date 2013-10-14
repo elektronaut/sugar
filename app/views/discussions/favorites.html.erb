@@ -9,7 +9,7 @@
 
 <h2 class="section"><%= link_to "Favorite Discussions", favorites_discussions_path %></h2>
 
-<%= render partial: 'discussions/table', locals: {
-  discussions:    @discussions,
-  no_discussions: "You haven't marked any discussions as a favorite."
+<%= render partial: "exchanges/table", locals: {
+  exchanges:    @exchanges,
+  no_exchanges: "You haven't marked any discussions as a favorite."
 } %>
