@@ -13,6 +13,7 @@ $(Sugar).bind 'ready', ->
           "post[body]": body
           "post[format]": format
           authenticity_token: Sugar.authToken(this)
+          format: "json"
 
         success: ->
           $("#compose-body").val ""

@@ -1,6 +1,16 @@
 class Upload
   attr_accessor :file, :options
 
+  class << self
+    def create(file, options={})
+      upload = self.new(file, options)
+      if upload.valid?
+        upload.save
+      end
+      upload
+    end
+  end
+
   def initialize(file, options={})
     @file = file
     @options = options
