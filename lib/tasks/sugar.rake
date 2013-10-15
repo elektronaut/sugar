@@ -2,6 +2,29 @@
 
 namespace :sugar do
 
+  desc "Move napkin drawings to S3"
+  task upload_drawings: :environment do
+    base_path = Rails.root.join("public/doodles")
+    files = Dir.entries(base_path).select{ |f| f =~ /\.jpg/ }
+    posts = Post.find_by_sql('SELECT * FROM posts WHERE body LIKE "%src=\"/doodles%"')
+    puts "Updating #{files.length} drawings in #{posts.length} posts..."
+
+    files.each_with_index do |filename, i|
+      path = base_path.join(filename)
+      File.open(path) do |file|
+        upload = Upload.create(file, name: filename)
+        if upload.valid?
+          pattern = "/doodles/#{filename}"
+          posts.select{ |p| p.body.match(pattern) }.each do |post|
+            post.update_attributes(body: post.body.gsub(pattern, upload.url))
+          end
+          File.unlink(path)
+        end
+      end
+      puts "Uploaded #{i}/#{files.length}..." if i > 20 && i % 20 == 0
+    end
+  end
+
   desc "Pack themes"
   task pack_themes: :environment do
     themes_dir = File.join(File.dirname(__FILE__), "../../public/themes")
