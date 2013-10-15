@@ -28,8 +28,6 @@ set :deploy_to, "/var/www/#{application}"
 desc "Create shared directories"
 task :create_shared_dirs, roles: [:web,:app] do
   run "mkdir #{deploy_to}/#{shared_dir}/public_cache"
-  run "mkdir #{deploy_to}/#{shared_dir}/doodles"
-  #run "mkdir #{deploy_to}/#{shared_dir}/solr"
   run "mkdir #{deploy_to}/#{shared_dir}/config"
   run "mkdir #{deploy_to}/#{shared_dir}/config/initializers"
   run "touch #{deploy_to}/#{shared_dir}/config/newrelic.yml"
@@ -39,7 +37,6 @@ end
 desc "Create symlinks"
 task :create_symlinks, roles: [:web,:app] do
   run "ln -s #{deploy_to}/#{shared_dir}/public_cache #{deploy_to}/#{current_dir}/public/cache"
-  run "ln -s #{deploy_to}/#{shared_dir}/doodles      #{deploy_to}/#{current_dir}/public/doodles"
 end
 
 desc "Symlink configs"
