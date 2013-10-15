@@ -51,6 +51,11 @@ module ExchangesController
 
   protected
 
+  def load_views_and_respond_with(exchanges)
+    load_views_for(exchanges)
+    respond_with(exchanges)
+  end
+
   def verify_editable
     unless @exchange.editable_by?(current_user)
       render_error 403 and return
