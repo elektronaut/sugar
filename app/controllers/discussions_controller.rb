@@ -18,7 +18,7 @@ class DiscussionsController < ApplicationController
     else
       @exchanges = Discussion.viewable_by(nil).page(params[:page]).for_view
     end
-    load_views_and_respond_with(@exchanges)
+    respond_with_exchanges(@exchanges)
   end
 
   def popular
@@ -27,7 +27,7 @@ class DiscussionsController < ApplicationController
       redirect_to params.merge({days: 7}) and return
     end
     @exchanges = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
-    load_views_and_respond_with(@exchanges)
+    respond_with_exchanges(@exchanges)
   end
 
   def search
@@ -35,8 +35,8 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       format.any(:html, :mobile) do
-        load_views_for(@exchanges)
         @search_path = search_path
+        respond_with_exchanges(@exchanges)
       end
       format.json do
         json = {
@@ -54,18 +54,18 @@ class DiscussionsController < ApplicationController
   def favorites
     @section = :favorites
     @exchanges = current_user.favorite_discussions.viewable_by(current_user).page(params[:page]).for_view
-    load_views_and_respond_with(@exchanges)
+    respond_with_exchanges(@exchanges)
   end
 
   def following
     @section = :following
     @exchanges = current_user.followed_discussions.viewable_by(current_user).page(params[:page]).for_view
-    load_views_and_respond_with(@exchanges)
+    respond_with_exchanges(@exchanges)
   end
 
   def hidden
     @exchanges = current_user.hidden_discussions.viewable_by(current_user).page(params[:page]).for_view
-    load_views_and_respond_with(@exchanges)
+    respond_with_exchanges(@exchanges)
   end
 
   def show

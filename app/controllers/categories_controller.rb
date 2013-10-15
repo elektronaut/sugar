@@ -21,7 +21,7 @@ class CategoriesController < ApplicationController
     respond_with(@category) do |format|
       format.any(:html, :mobile) do
         @discussions = @category.discussions.viewable_by(current_user).page(params[:page]).for_view
-        load_views_for(@discussions)
+        respond_with_exchanges(@discussions)
       end
     end
   end

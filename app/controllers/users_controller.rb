@@ -90,13 +90,13 @@ class UsersController < ApplicationController
 
     def discussions
       @discussions = @user.discussions.viewable_by(current_user).page(params[:page]).for_view
-      load_views_for(@discussions)
+      respond_with_exchanges(@discussions)
     end
 
     def participated
       @section = :participated if @user == current_user
       @discussions = @user.participated_discussions.viewable_by(current_user).page(params[:page]).for_view
-      load_views_for(@discussions)
+      respond_with_exchanges(@discussions)
     end
 
     def posts

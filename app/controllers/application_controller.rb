@@ -43,11 +43,11 @@ class ApplicationController < ActionController::Base
       render options
     end
 
-    # Finds DiscussionViews for the given discussion.
-    def load_views_for(discussions)
-      if current_user? && discussions && discussions.length > 0
-        @discussion_views = DiscussionView.where(user_id: current_user.id, discussion_id: discussions.map(&:id).uniq)
+    def respond_with_exchanges(exchanges)
+      if current_user? && exchanges && exchanges.length > 0
+        @discussion_views = DiscussionView.where(user_id: current_user.id, discussion_id: exchanges.map(&:id).uniq)
       end
+      respond_with(exchanges)
     end
 
     # Load configuration
