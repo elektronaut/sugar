@@ -4,7 +4,7 @@
 %>
 <% if exchanges.any? %>
   <div class="discussions">
-    <% @exchanges.each do |d| %><div class="discussion <%= discussion_classes(exchanges, d) %>">
+    <% @exchanges.each do |d| %><div class="discussion <%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
       <% if new_posts?(d) %>
         <div class="new_posts_count"><%= new_posts_count(d) %></div>
       <% end %>
