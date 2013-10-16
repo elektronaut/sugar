@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_section
   before_filter :set_theme
 
+  helper_method :viewed_tracker
+
   protected
 
     def disable_xss_protection
@@ -43,10 +45,12 @@ class ApplicationController < ActionController::Base
       render options
     end
 
+    def viewed_tracker
+      @viewed_tracker ||= ViewedTracker.new(current_user)
+    end
+
     def respond_with_exchanges(exchanges)
-      if current_user? && exchanges && exchanges.length > 0
-        @discussion_views = DiscussionView.where(user_id: current_user.id, discussion_id: exchanges.map(&:id).uniq)
-      end
+      viewed_tracker.exchanges = exchanges
       respond_with(exchanges)
     end
 
