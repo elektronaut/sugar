@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class DiscussionView < ActiveRecord::Base
+class ExchangeView < ActiveRecord::Base
   belongs_to :user
-  belongs_to :discussion
+  belongs_to :exchange
   belongs_to :post
 
   self.table_name = "exchange_views"

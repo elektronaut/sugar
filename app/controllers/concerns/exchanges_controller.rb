@@ -20,7 +20,7 @@ module ExchangesController
 
     # Mark discussion as viewed
     if current_user?
-      current_user.mark_discussion_viewed(@exchange, @posts.last, (@posts.offset_value + @posts.count))
+      current_user.mark_exchange_viewed(@exchange, @posts.last, (@posts.offset_value + @posts.count))
     end
 
     respond_with(@exchange)
@@ -43,7 +43,7 @@ module ExchangesController
   end
 
   def mark_as_read
-    current_user.mark_discussion_viewed(@exchange, @exchange.posts.last, @exchange.posts_count)
+    current_user.mark_exchange_viewed(@exchange, @exchange.posts.last, @exchange.posts_count)
     if request.xhr?
       render layout: false, text: 'OK'
     end

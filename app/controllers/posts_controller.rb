@@ -18,7 +18,7 @@ class PostsController < ApplicationController
   before_filter :require_and_set_search_query, only: [:search]
   before_filter :verify_postable,              only: [:create, :drawing]
 
-  after_filter :mark_discussion_viewed,   only: [:since]
+  after_filter :mark_exchange_viewed,   only: [:since]
   after_filter :mark_conversation_viewed, only: [:since]
   #after_filter :notify_mentioned,         only: [:create]
 
@@ -111,9 +111,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def mark_discussion_viewed
+  def mark_exchange_viewed
     if current_user? && @posts.any?
-      current_user.mark_discussion_viewed(@exchange, @posts.last, (params[:index].to_i + @posts.length))
+      current_user.mark_exchange_viewed(@exchange, @posts.last, (params[:index].to_i + @posts.length))
     end
   end
 

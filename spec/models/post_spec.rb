@@ -19,7 +19,7 @@ describe Post do
 
   it { should belong_to(:user) }
   it { should belong_to(:exchange) }
-  it { should have_many(:discussion_views) }
+  it { should have_many(:exchange_views) }
 
   describe "after_create" do
 

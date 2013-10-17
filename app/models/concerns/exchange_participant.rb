@@ -5,7 +5,7 @@ module ExchangeParticipant
     has_many :discussions, foreign_key: 'poster_id'
     has_many :posts
     has_many :discussion_posts, -> { where conversation: false }, class_name: 'Post'
-    has_many :discussion_views, dependent: :destroy
+    has_many :exchange_views, dependent: :destroy
     has_many :discussion_relationships, dependent: :destroy
 
     has_many :participated_discussions,
@@ -34,12 +34,12 @@ module ExchangeParticipant
     Discussion.where(Discussion.arel_table[:id].in(self.hidden_discussions.map(&:id)).not)
   end
 
-  # Marks a discussion as viewed
-  def mark_discussion_viewed(discussion, post, index)
-    if discussion_view = DiscussionView.where(user_id: self.id, exchange_id: discussion.id).first
-      discussion_view.update_attributes(post_index: index, post_id: post.id) if discussion_view.post_index < index
+  # Marks a exchange as viewed
+  def mark_exchange_viewed(exchange, post, index)
+    if exchange_view = ExchangeView.where(user_id: self.id, exchange_id: exchange.id).first
+      exchange_view.update_attributes(post_index: index, post_id: post.id) if exchange_view.post_index < index
     else
-      DiscussionView.create(exchange_id: discussion.id, user_id: self.id, post_index: index, post_id: post.id)
+      ExchangeView.create(exchange_id: exchange.id, user_id: self.id, post_index: index, post_id: post.id)
     end
   end
 

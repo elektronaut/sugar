@@ -9,7 +9,7 @@ class Post < ActiveRecord::Base
 
   belongs_to :user, counter_cache: true
   belongs_to :exchange, counter_cache: :posts_count
-  has_many   :discussion_views
+  has_many   :exchange_views
 
   validates_presence_of :body, :user_id, :exchange_id
   validates :format, inclusion: %w{markdown html}

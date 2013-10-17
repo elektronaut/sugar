@@ -13,13 +13,11 @@ describe Exchange do
   let(:user_admin)       { create(:user_admin) }
   let(:admin)            { create(:admin) }
 
-  specify { Exchange.table_name.should == "discussions" }
-
   it { should belong_to(:poster).class_name("User") }
   it { should belong_to(:closer).class_name("User") }
   it { should belong_to(:last_poster).class_name("User") }
   it { should have_many(:posts).dependent(:destroy) }
-  it { should have_many(:discussion_views).dependent(:destroy) }
+  it { should have_many(:exchange_views).dependent(:destroy) }
 
   it { should validate_presence_of(:title)}
   it { should ensure_length_of(:title).is_at_most(100) }

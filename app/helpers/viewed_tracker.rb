@@ -56,7 +56,7 @@ class ViewedTracker
   end
 
   def empty_view(exchange)
-    DiscussionView.new(
+    ExchangeView.new(
       user_id:     user.id,
       exchange_id: exchange.id,
       post_index:  0
@@ -68,7 +68,7 @@ class ViewedTracker
   end
 
   def views
-    @views ||= DiscussionView.where(
+    @views ||= ExchangeView.where(
       user_id:     user.id,
       exchange_id: exchanges.map(&:id).uniq
     ).to_a
