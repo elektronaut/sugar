@@ -11,12 +11,10 @@ class CategoriesController < ApplicationController
   before_filter :load_category,   only: [:show, :edit, :update, :destroy]
   before_filter :verify_viewable, only: [:show, :edit, :update, :destroy]
 
-  # GET on /categories
   def index
     respond_with(@categories)
   end
 
-  # GET on /categories/:id
   def show
     respond_with(@category) do |format|
       format.any(:html, :mobile) do
@@ -26,17 +24,14 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET on /categories/new
   def new
     respond_with(@category = Category.new)
   end
 
-  # GET on /categories/:id/edit
   def edit
     respond_with(@category)
   end
 
-  # POST on /categories
   def create
     @category = Category.new(category_params)
     respond_with(@category) do |format|
@@ -49,7 +44,6 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # PUT on /categories/:id
   def update
     respond_with(@category) do |format|
       if @category.update_attributes(category_params)
@@ -72,12 +66,10 @@ class CategoriesController < ApplicationController
     redirect_to categories_url and return
   end
 
-  # Loads all categories
   def load_categories
     @categories = Category.viewable_by(current_user)
   end
 
-  # Finds the requested category
   def load_category
     begin
       @category = Category.find(params[:id])
@@ -86,7 +78,6 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # Verifies that the category is viewable by current_user
   def verify_viewable
     unless @category.viewable_by?(current_user)
       render_error 403 and return

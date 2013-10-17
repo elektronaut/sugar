@@ -36,7 +36,6 @@ class Post < ActiveRecord::Base
     @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
   end
 
-  # Get this posts sequence number
   def post_number
     @post_number ||= self.exchange.posts.where('id < ?', self.id).count + 1
   end
@@ -115,14 +114,12 @@ class Post < ActiveRecord::Base
     self.edited_at ||= Time.now
   end
 
-  # Make sure the exchange is marked as participated for the user
   def define_relationship
     unless self.conversation?
       DiscussionRelationship.define(self.user, self.exchange, participated: true)
     end
   end
 
-  # Automatically update the exchange with last poster info
   def update_exchange
     self.exchange.update_attributes(last_poster_id: self.user.id, last_post_at: self.created_at)
   end

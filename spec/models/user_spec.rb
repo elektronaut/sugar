@@ -59,9 +59,9 @@ describe User do
 
   end
 
-  describe "#full_email" do
+  describe "#name_and_email" do
 
-    subject { user.full_email }
+    subject { user.name_and_email }
 
     context "when realname is set" do
       let(:user) { create(:user, realname: 'John') }

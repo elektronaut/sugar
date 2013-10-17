@@ -2,7 +2,6 @@
 
 class OpenidController < ApplicationController
 
-  # Start an authentication session
   def create
     unless start_openid_session(
       params[:openid_url],
@@ -14,7 +13,6 @@ class OpenidController < ApplicationController
     end
   end
 
-  # Complete the OpenID authentication
   def complete
     case response = openid_complete_response
 

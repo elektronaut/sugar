@@ -32,19 +32,16 @@ class Category < ActiveRecord::Base
     end
   end
 
-  # Returns true if this category has any labels
   def labels?
     (self.trusted?) ? true : false
   end
 
-  # Returns an array of labels (for use in the thread title)
   def labels
     labels = []
     labels << "Trusted" if self.trusted?
     return labels
   end
 
-  # Humanized ID for URLs.
   def to_param
     self.humanized_param(self.name)
   end

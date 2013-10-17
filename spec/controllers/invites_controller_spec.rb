@@ -34,7 +34,7 @@ describe InvitesController do
     end
   end
 
-  describe "#verify_invites" do
+  describe "#verify_available_invites" do
     before { login(user); get :new }
 
     context "when user has invites" do

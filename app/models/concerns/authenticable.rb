@@ -33,17 +33,14 @@ module Authenticable
   end
 
   module ClassMethods
-    # Generates a token
     def generate_token
       Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s)
     end
 
-    # Creates an encrypted password
     def encrypt_password(password)
       BCrypt::Password.create(password)
     end
 
-    # Finds and authenticates user
     def find_and_authenticate_with_password(username, password)
       return nil if username.blank?
       return nil if password.blank?
@@ -57,17 +54,14 @@ module Authenticable
     end
   end
 
-  # Is this a Facebook user?
   def facebook?
     self.facebook_uid?
   end
 
-  # Is this an active user?
   def active
     !self.banned?
   end
 
-  # Generates a new password for this user.
   def generate_new_password!
     new_password = ''
     seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
@@ -75,7 +69,6 @@ module Authenticable
     self.password = self.confirm_password = new_password
   end
 
-  # Is the password valid?
   def valid_password?(pass)
     if self.hashed_password.length <= 40
       # Legacy SHA1
@@ -85,27 +78,22 @@ module Authenticable
     end
   end
 
-  # Update the password hash
   def hash_password!(password)
     self.update_attributes(hashed_password: User.encrypt_password(password))
   end
 
-  # Has a new password been set?
   def new_password?
     self.password && !self.password.blank?
   end
 
-  # Has the new password been confirmed?
   def new_password_confirmed?
     self.new_password? && self.password == self.confirm_password
   end
 
-  # Does the password need rehashing?
   def password_needs_rehash?
     self.hashed_password.length <= 40
   end
 
-  # Returns true if this user is temporarily banned.
   def temporary_banned?
     self.banned_until? && self.banned_until > Time.now
   end

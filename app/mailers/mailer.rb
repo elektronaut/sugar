@@ -4,7 +4,6 @@ class Mailer < ActionMailer::Base
 
   default from: Proc.new { Sugar.config(:mail_sender) || 'no-reply@example.com' }
 
-  # Send an invite
   def invite(invite, login_url)
     @invite    = invite
     @login_url = login_url
@@ -14,7 +13,6 @@ class Mailer < ActionMailer::Base
     )
   end
 
-  # Send a welcome mail to a new user
   def new_user(user, login_url)
     @user      = user
     @login_url = login_url
@@ -24,7 +22,6 @@ class Mailer < ActionMailer::Base
     )
   end
 
-  # Send a password reset request
   def password_reset(email, url)
     @url = url
     mail(

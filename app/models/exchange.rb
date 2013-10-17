@@ -39,17 +39,14 @@ class Exchange < ActiveRecord::Base
   after_create :create_first_post
   after_update :update_post_body
 
-  # Finds the number of the last page
   def last_page(per_page=Post.per_page)
     (self.posts_count.to_f / per_page).ceil
   end
 
-  # Does this exchange have any labels?
   def labels?
     (self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
   end
 
-  # Returns an array of labels (for use in the thread title)
   def labels
     labels = []
     labels << "Trusted" if self.trusted?
@@ -59,12 +56,10 @@ class Exchange < ActiveRecord::Base
     return labels
   end
 
-  # Humanized ID for URLs
   def to_param
     self.humanized_param(self.title)
   end
 
-  # Returns true if the user can close this discussion
   def closeable_by?(user)
     return false unless user
     (user.moderator? || (!self.closer && self.poster == user) || self.closer == user) ? true : false
@@ -72,7 +67,6 @@ class Exchange < ActiveRecord::Base
 
   private
 
-  # Validate and handle closing of discussions
   def validate_closed
     if self.closed_changed?
       if !self.closed? && (!self.updated_by || !self.closeable_by?(self.updated_by))
@@ -85,7 +79,6 @@ class Exchange < ActiveRecord::Base
     end
   end
 
-  # Automatically create the first post
   def create_first_post
     if self.body && !self.body.empty?
       attributes = {
@@ -97,7 +90,6 @@ class Exchange < ActiveRecord::Base
     end
   end
 
-  # Update the first post if @body has been changed
   def update_post_body
     if self.body && !self.body.empty? && self.body != self.posts.first.body
       attributes = {

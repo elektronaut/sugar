@@ -19,7 +19,6 @@ class Discussion < Exchange
   after_save :update_trusted_status
 
   class << self
-    # Scopes discussions popular in the last n days
     def popular_in_the_last(days=7.days)
       select('exchanges.*, COUNT(posts.id) AS recent_posts_count')
         .joins(:posts)
@@ -38,12 +37,10 @@ class Discussion < Exchange
     )
   end
 
-  # Returns true if the user can edit this discussion
   def editable_by?(user)
     (user && (user.moderator? || user == self.poster)) ? true : false
   end
 
-  # Returns true if the user can post in this discussion
   def postable_by?(user)
     (user && (user.moderator? || !self.closed?)) ? true : false
   end
@@ -55,7 +52,6 @@ class Discussion < Exchange
     true
   end
 
-  # Set trusted status on all posts and relationships on save
   def update_trusted_status
     if self.trusted_changed?
       self.posts.update_all(trusted: self.trusted?)

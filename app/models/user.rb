@@ -32,32 +32,26 @@ class User < ActiveRecord::Base
             presence: { case_sensitive: false },
             unless: Proc.new { |u| u.openid_url? || u.facebook? }
 
-  # Returns the full email address with real name.
-  def full_email
+  def name_and_email
     self.realname? ? "#{self.realname} <#{self.email}>" : self.email
   end
 
-  # Returns realname or username
   def realname_or_username
     self.realname? ? self.realname : self.username
   end
 
-  # Is the user online?
   def online?
     (self.last_active && self.last_active > 15.minutes.ago) ? true : false
   end
 
-  # Returns true if this user is trusted or an admin.
   def trusted?
     (self[:trusted] || admin? || user_admin? || moderator?)
   end
 
-  # Returns true if this user is a user admin.
   def user_admin?
     (self[:user_admin] || admin?)
   end
 
-  # Returns true if this user is a moderator.
   def moderator?
     (self[:moderator] || admin?)
   end
@@ -74,24 +68,20 @@ class User < ActiveRecord::Base
     labels
   end
 
-  # Returns the chosen theme or the default one
   def theme
     self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)
   end
 
-  # Updates the last_active timestamp
   def mark_active!
     if !self.last_active || self.last_active < 10.minutes.ago
       self.update_column(:last_active, Time.now)
     end
   end
 
-  # Returns the chosen mobile theme or the default one
   def mobile_theme
     self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
   end
 
-  # Avatar URL for Xbox Live
   def gamertag_avatar_url
     if self.gamertag?
       "http://avatar.xboxlive.com/avatar/#{URI.escape(self.gamertag)}/avatarpic-l.png"

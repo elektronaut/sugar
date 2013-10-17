@@ -11,21 +11,18 @@ module Authentication
 
     protected
 
-      # Tries to set current_user based on session[:authenticated_openid_url]
       def load_openid_user
         if session[:authenticated_openid_url] && !current_user?
           set_current_user(User.find_by_openid_url(session[:authenticated_openid_url]))
         end
       end
 
-      # Returns an OpenID consumer, creating it if necessary
       def openid_consumer
         require 'openid/store/filesystem'
         @openid_consumer ||= ::OpenID::Consumer.new(session,
           ::OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
       end
 
-      # Starts an OpenID session
       def start_openid_session(identity_url, options={})
         options[:success] ||= root_path
         options[:fail]    ||= login_users_path
@@ -46,7 +43,6 @@ module Authentication
         end
       end
 
-      # Performs the OpenID authentication
       def perform_openid_authentication(response, options={})
         options = {
           url:       complete_openid_url,

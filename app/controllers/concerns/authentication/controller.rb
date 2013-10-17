@@ -75,7 +75,6 @@ module Authentication
         @current_user = user
       end
 
-      # Default options for verify user.
       def default_verify_user_options(options={})
         options[:redirect]   ||= discussions_url
         options[:notice]     ||= "You don't have permission to do that!"
@@ -83,7 +82,6 @@ module Authentication
         options
       end
 
-      # Handle an unverified user.
       def handle_unverified_user(options)
         respond_to do |format|
           format.any(:html, :mobile) do
@@ -95,7 +93,6 @@ module Authentication
         end
       end
 
-      # Requires a user account
       def require_user_account
         verify_user(
           user:       :any,
@@ -105,7 +102,6 @@ module Authentication
         )
       end
 
-      # Tries to set current_user based on session data
       def load_session_user
         if session[:user_id] && session[:persistence_token] && !current_user?
           begin
@@ -119,7 +115,6 @@ module Authentication
         end
       end
 
-      # Handles temporary bans.
       def handle_temporary_ban
         if current_user? && current_user.temporary_banned?
           logger.info "Authentication failed for user:#{current_user.id} (#{current_user.username}) - temporary ban"
@@ -128,7 +123,6 @@ module Authentication
         end
       end
 
-      # Handles permanent bans.
       def handle_permanent_ban
         if current_user && current_user.banned?
           logger.info "Authentication failed for user:#{current_user.id} (#{current_user.username}) - permanent ban"
@@ -137,40 +131,34 @@ module Authentication
         end
       end
 
-      # Verifies that the account is activated
       def verify_activated_account
         if current_user?
           logger.info "Authenticated as user:#{current_user.id} (#{current_user.username})"
         end
       end
 
-      # Deauthenticates the current user.
       def deauthenticate!
         set_current_user(nil)
       end
 
-      # Cleans up temporary bans.
       def cleanup_temporary_ban
         if current_user? && current_user.banned_until? && !current_user.temporary_banned?
           current_user.update_attributes(banned_until: nil)
         end
       end
 
-      # Deletes session[:authenticated_openid_url] if user is authenticated
       def cleanup_authenticated_openid_url
         if current_user && session[:authenticated_openid_url]
           session.delete(:authenticated_openid_url)
         end
       end
 
-      # Updates the last_active timestamp
       def update_last_active
         if current_user?
           current_user.mark_active!
         end
       end
 
-      # Stores authentication credentials in the session.
       def store_session_authentication
         if current_user
           session[:user_id]           = current_user.id

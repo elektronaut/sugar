@@ -13,7 +13,6 @@ module AvatarsHelper
     "#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
   end
 
-  # Generates avatar image tag for a user
   def avatar_image_tag(user, size='32', html_options={})
     html_options = {
       size: "#{size}x#{size}",

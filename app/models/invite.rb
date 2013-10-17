@@ -32,12 +32,10 @@ class Invite < ActiveRecord::Base
       self.where(token: token).first
     end
 
-    # Gets the default expiration time.
     def expiration_time
       DEFAULT_EXPIRATION
     end
 
-    # Deletes expired invites
     def destroy_expired!
       self.expired.each do |invite|
         invite.destroy
@@ -45,12 +43,10 @@ class Invite < ActiveRecord::Base
     end
   end
 
-  # Has this invite expired?
   def expired?
     (Time.now <= self.expires_at) ? false : true
   end
 
-  # Expire this invite
   def expire!
     self.used = true
     self.destroy

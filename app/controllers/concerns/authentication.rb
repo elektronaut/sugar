@@ -1,12 +1,5 @@
 # encoding: utf-8
 
-# To include the authentication subsystem, all you have to do is
-# include it in your ApplicationController:
-#
-#  class ApplicationController < ActionController::Base
-#    include Authentication
-#  end
-
 module Authentication
   class << self
     # Applies the functionality to a controller

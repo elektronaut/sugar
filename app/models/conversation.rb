@@ -14,7 +14,6 @@ class Conversation < Exchange
     conversation.add_participant(conversation.poster, new_posts: false)
   end
 
-  # Adds a participant
   def add_participant(user, options={})
     options = {
       new_posts: true
@@ -28,7 +27,6 @@ class Conversation < Exchange
     end
   end
 
-  # Removes a participant
   def remove_participant(user)
     if user.kind_of?(User) && self.participants.include?(user)
       raise RemoveParticipantError unless self.removeable?(user)
@@ -39,27 +37,22 @@ class Conversation < Exchange
     end
   end
 
-  # Can this participant be removed?
   def removeable?(user)
     user && self.participants.include?(user) && self.participants.count > 1
   end
 
-  # Returns true if the user can view this conversation
   def viewable_by?(user)
     user && self.participants.include?(user)
   end
 
-  # Returns true if the user can edit this conversation
   def editable_by?(user)
     user && user == self.poster
   end
 
-  # Returns true if the user can post in this conversation
   def postable_by?(user)
     user && self.participants.include?(user)
   end
 
-  # Returns true if the user can close this conversation
   def closeable_by?(user)
     false
   end

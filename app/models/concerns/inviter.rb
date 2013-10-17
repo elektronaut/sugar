@@ -12,22 +12,18 @@ module Inviter
     has_many   :invites, -> { order 'created_at ASC' }, dependent: :destroy
   end
 
-  # Returns true if this user has invited someone.
   def invites?
     self.invites.count > 0
   end
 
-  # Returns true if this user has invitees.
   def invitees?
     self.invitees.count > 0
   end
 
-  # Returns true if this user has invited someone or has invitees.
   def invites_or_invitees?
     self.invites? || self.invitees?
   end
 
-  # Returns true if this user can invite someone.
   def available_invites?
     self.user_admin? || self.available_invites > 0
   end
@@ -48,7 +44,6 @@ module Inviter
     self.available_invites
   end
 
-  # Grants a number of invites to a user.
   def grant_invite!(number=1)
     return self.available_invites if self.user_admin?
     new_number = (self.available_invites + number)

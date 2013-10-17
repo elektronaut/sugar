@@ -8,20 +8,17 @@ class InvitesController < ApplicationController
 
   respond_to :html, :mobile, :xml, :json
 
-  before_filter :find_invite,    only: [:show, :edit, :update, :destroy]
-  before_filter :verify_invites, only: [:new, :create]
+  before_filter :find_invite,              only: [:show, :edit, :update, :destroy]
+  before_filter :verify_available_invites, only: [:new, :create]
 
-  # Show active invites
   def index
     respond_with(@invites = current_user.invites.active)
   end
 
-  # Show everyone's invites
   def all
     respond_with(@invites = Invite.active)
   end
 
-  # Accept an invite
   def accept
     @invite = Invite.find_by_token(params[:id])
     session[:invite_token] = nil
@@ -37,12 +34,10 @@ class InvitesController < ApplicationController
     redirect_to login_users_url and return
   end
 
-  # Create a new invite
   def new
     respond_with(@invite = current_user.invites.new)
   end
 
-  # Create a new invite
   def create
     @invite = current_user.invites.create(invite_params)
     if @invite.valid?
@@ -80,7 +75,6 @@ class InvitesController < ApplicationController
   # 	end
   # end
 
-  # Delete an invite
   def destroy
     if verify_user(user: @invite.user, user_admin: true)
       @invite.destroy
@@ -104,8 +98,7 @@ class InvitesController < ApplicationController
     end
   end
 
-  # Verifies that the user has available invites
-  def verify_invites
+  def verify_available_invites
     unless current_user? && current_user.available_invites?
       respond_to do |format|
         format.any(:html, :mobile) do

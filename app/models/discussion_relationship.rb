@@ -15,7 +15,6 @@ class DiscussionRelationship < ActiveRecord::Base
   end
 
   class << self
-    # Define a relationship with a discussion
     def define(user, discussion, options={})
       relationship = self.where(user_id: user.id, discussion_id: discussion.id).first
       relationship ||= DiscussionRelationship.create(user_id: user.id, discussion_id: discussion.id)
