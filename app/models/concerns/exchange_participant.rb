@@ -36,10 +36,10 @@ module ExchangeParticipant
 
   # Marks a discussion as viewed
   def mark_discussion_viewed(discussion, post, index)
-    if discussion_view = DiscussionView.where(user_id: self.id, discussion_id: discussion.id).first
+    if discussion_view = DiscussionView.where(user_id: self.id, exchange_id: discussion.id).first
       discussion_view.update_attributes(post_index: index, post_id: post.id) if discussion_view.post_index < index
     else
-      DiscussionView.create(discussion_id: discussion.id, user_id: self.id, post_index: index, post_id: post.id)
+      DiscussionView.create(exchange_id: discussion.id, user_id: self.id, post_index: index, post_id: post.id)
     end
   end
 

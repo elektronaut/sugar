@@ -8,8 +8,6 @@ class Exchange < ActiveRecord::Base
   include HumanizableParam
   include Paginatable
 
-  self.table_name = 'discussions'
-
   # Default number of discussions per page
   self.per_page = 30
 
@@ -26,7 +24,7 @@ class Exchange < ActiveRecord::Base
   belongs_to :closer,           class_name: 'User'
   belongs_to :last_poster,      class_name: 'User'
   has_many   :posts,            -> { order 'created_at ASC' }, dependent: :destroy, foreign_key: 'exchange_id'
-  has_many   :discussion_views, dependent: :destroy, foreign_key: 'discussion_id'
+  has_many   :discussion_views, dependent: :destroy, foreign_key: 'exchange_id'
 
   scope :sorted,       -> { order('sticky DESC, last_post_at DESC') }
   scope :with_posters, -> { includes(:poster, :last_poster) }
