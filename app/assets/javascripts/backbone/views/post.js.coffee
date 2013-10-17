@@ -62,7 +62,8 @@ class Sugar.Views.Post extends Backbone.View
     if window.getSelection? and window.getSelection().containsNode(this.el, true)
       text = window.getSelection().toString()
       html = text
-    else
+
+    if !text? || text.trim() == ""
       text = @stripWhitespace(this.$('.body .content').text())
       html = @stripWhitespace(this.$('.body .content').html())
 
