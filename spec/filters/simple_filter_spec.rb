@@ -28,4 +28,9 @@ describe SimpleFilter do
     SimpleFilter.new("<a href=\"#\">link</a>").to_html.should == "<a href=\"#\">link</a>"
   end
 
+  it "doesn't escape right angle brackets after an empty attribute" do
+    input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe>\nfoo"
+    SimpleFilter.new(input).to_html.should == input
+  end
+
 end
