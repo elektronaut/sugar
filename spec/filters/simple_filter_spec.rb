@@ -10,12 +10,6 @@ describe SimpleFilter do
     SimpleFilter.new("foo\n\nbar").to_html.should == "foo<br>\n<br>\nbar"
   end
 
-  it "doesn't insert <br> after block level elements" do
-    input = "<blockquote>foo</blockquote>\n\nbar"
-    output = "<blockquote>foo</blockquote>\n<br>\nbar"
-    SimpleFilter.new(input).to_html.should == output
-  end
-
   it "escapes left angle brackets" do
     SimpleFilter.new("<3").to_html.should == "&lt;3"
   end
@@ -30,7 +24,8 @@ describe SimpleFilter do
 
   it "doesn't escape right angle brackets after an empty attribute" do
     input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe>\nfoo"
-    SimpleFilter.new(input).to_html.should == input
+    output = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe><br>\nfoo"
+    SimpleFilter.new(input).to_html.should == output
   end
 
 end
