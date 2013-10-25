@@ -35,7 +35,7 @@ module ExchangesHelper
   end
 
   def post_page(post)
-    if params[:controller] == 'discussions' && params[:action] == 'show' && @posts
+    if controller.kind_of?(ExchangesController) && params[:action] == 'show' && @posts
       # Speed tweak
       @posts.current_page
     else
