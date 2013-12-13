@@ -70,7 +70,7 @@ Sugar::Application.routes.draw do
     end
   end
 
-  controller :users do
+  controller :users, constraints: { id: /[^\?\/]+/ } do
     post '/users/profile/:id/grant_invite'       => :grant_invite,   as: :grant_invite_user
     post '/users/profile/:id/revoke_invites'     => :revoke_invites, as: :revoke_invites_user
     get  '/users/profile/:id/update_openid'      => :update_openid,  as: :update_openid_user
