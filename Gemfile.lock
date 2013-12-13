@@ -229,17 +229,16 @@ GEM
       activesupport (>= 3.0)
       sprockets (~> 2.8)
     sqlite3 (1.3.8)
-    sunspot (2.1.0)
+    sunspot (2.0.0)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
     sunspot-rails-tester (1.0.0)
       sunspot_rails (>= 1.2)
       sunspot_solr (>= 1.2)
-    sunspot_rails (2.1.0)
+    sunspot_rails (2.0.0)
       nokogiri
-      rails (>= 3)
-      sunspot (= 2.1.0)
-    sunspot_solr (2.1.0)
+      sunspot (= 2.0.0)
+    sunspot_solr (2.0.0)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
@@ -308,8 +307,8 @@ DEPENDENCIES
   spork
   sqlite3
   sunspot-rails-tester
-  sunspot_rails
-  sunspot_solr
+  sunspot_rails (= 2.0.0)
+  sunspot_solr (= 2.0.0)
   therubyracer
   uglifier
   yui-compressor

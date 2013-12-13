@@ -38,7 +38,7 @@ gem 'acts_as_list'
 gem 'nokogiri'
 gem 'daemon-spawn'
 
-gem 'sunspot_rails'
+gem 'sunspot_rails', '2.0.0'
 gem 'progress_bar'
 
 gem 'newrelic_rpm', group: 'newrelic'
@@ -69,7 +69,7 @@ end
 group :test, :development do
   gem 'dotenv-rails'
 
-  gem 'sunspot_solr'
+  gem 'sunspot_solr', '2.0.0'
   gem 'sunspot-rails-tester'
 
   # RSpec
