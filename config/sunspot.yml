@@ -8,6 +8,7 @@ production:
 
 development:
   solr:
+    solr_home: solr
     hostname: localhost
     port: 8983
     log_level: INFO
@@ -16,6 +17,7 @@ development:
 
 test:
   solr:
+    solr_home: solr
     hostname: localhost
     port: 8981
     log_level: WARNING

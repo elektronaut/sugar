@@ -22,13 +22,13 @@ gem 'jquery-rails'
 gem 'rails-backbone'
 
 # Deploy with Capistrano
-gem 'capistrano'
+gem 'capistrano', '~> 2.15.4'
 
 # To use debugger
 # gem 'ruby-debug'
 
 # OAuth
-gem 'doorkeeper', '~> 0.7.2'
+gem 'doorkeeper'#, '~> 0.7.2'
 
 # OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
 gem 'ruby-openid', require: 'openid'
