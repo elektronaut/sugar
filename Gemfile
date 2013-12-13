@@ -48,7 +48,7 @@ gem 'ruby-filemagic', require: 'filemagic'
 gem 'aws-s3', require: 'aws/s3'
 gem 'redcarpet', '~> 3.0'
 gem 'rouge'
-gem "font-awesome-rails"
+gem "font-awesome-rails", "~> 3.2.1"
 
 group :development do
   gem 'yui-compressor', require: 'yui/compressor'
