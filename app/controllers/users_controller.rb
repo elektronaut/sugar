@@ -58,7 +58,7 @@ class UsersController < ApplicationController
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
-        :password, :confirm_password, :banned_until
+        :password, :confirm_password, :banned_until, :preferred_format
       ]
       if current_user?
         if current_user.user_admin?
