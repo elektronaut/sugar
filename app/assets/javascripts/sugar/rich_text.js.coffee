@@ -60,12 +60,13 @@ Sugar.RichTextArea = (textarea, options) ->
   if $(textarea).data("format-binding")
     format = $(textarea).closest("form").find($(textarea).data("format-binding")).val()
 
-  if $(textarea).data("remember-format") && $.cookie("preferred-format")
-    format = $.cookie("preferred-format")
+  if $(textarea).data("remember-format")
+    if Sugar.Configuration.preferredFormat
+      format = Sugar.Configuration.preferredFormat
 
   format ||= formats[0]
 
-  setFormat = (newFormat) ->
+  setFormat = (newFormat, skipUpdate) ->
     format = newFormat
     if format == "markdown"
       label = "Markdown"
@@ -80,11 +81,10 @@ Sugar.RichTextArea = (textarea, options) ->
     if $(textarea).data("format-binding")
       $(textarea).closest("form").find($(textarea).data("format-binding")).val(format)
 
-    # Store format preference in a cookie
-    if $(textarea).data("remember-format")
-      $.cookie "preferred-format", format,
-        expires: 365 * 3
-        path:    "/"
+    # Update the user preferences
+    if $(textarea).data("remember-format") && !skipUpdate
+      if currentUser = Sugar.getCurrentUser()
+        currentUser.save("preferred_format", format, {patch: true})
 
   nextFormat = ->
     setFormat formats[(formats.indexOf(format) + 1) % formats.length]
@@ -93,7 +93,7 @@ Sugar.RichTextArea = (textarea, options) ->
   formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>")
   toolbar = $("<ul class=\"richTextToolbar\"></ul>").append(formatButton).insertBefore(textarea)
 
-  setFormat(format)
+  setFormat(format, true)
 
   formatButton.find("a").click nextFormat
 

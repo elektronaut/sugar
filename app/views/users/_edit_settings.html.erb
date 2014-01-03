@@ -10,6 +10,7 @@
 <fieldset>
   <h2>Settings</h2>
   <%= labelled_field f.check_box(:notify_on_message), "Notify me on messages", description: "You'll be notified by email whenever someone sends you a message", errors: @user.errors[:notify_on_message] %>
+  <%= labelled_field f.select(:preferred_format, [['Markdown', 'markdown'], ['HTML', 'html']]), "Preferred format", errors: @user.errors[:preferred_format] %>
 </fieldset>
 
 <fieldset>

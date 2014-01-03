@@ -19,7 +19,7 @@ gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
 gem 'jquery-rails'
-gem 'rails-backbone'
+gem 'backbone-on-rails'
 
 # Deploy with Capistrano
 gem 'capistrano', '~> 2.15.4'

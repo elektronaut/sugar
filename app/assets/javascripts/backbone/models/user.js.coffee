@@ -3,6 +3,9 @@ class Sugar.Models.User extends Backbone.Model
 
   idAttribute: "id"
 
+  urlRoot: ->
+    '/users'
+
   defaults:
     username: ''
     admin: false
