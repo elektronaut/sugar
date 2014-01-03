@@ -21,7 +21,7 @@ Sugar.RichTextArea = (textarea, options) ->
         "Posted by [#{username}](#{permalink}):"
       else
         "Posted by #{username}:"
-      quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{toMarkdown html}")
+      quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{html}")
       ["", quotedPost + "\n\n", ""]
 
   htmlDecorator =
