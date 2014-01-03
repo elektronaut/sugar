@@ -117,20 +117,21 @@ class UsersController < ApplicationController
     end
 
     def update
-      if @user.update_attributes(user_params)
-
-        if @user == current_user
-          current_user.reload
+      respond_with(@user) do |format|
+        if @user.update_attributes(user_params)
+          if @user == current_user
+            current_user.reload
+          end
+          format.any(:html, :mobile) do
+            unless initiate_openid_on_update
+              flash[:notice] = "Your changes were saved!"
+              redirect_to edit_user_page_url(id: @user.username, page: @page)
+            end
+          end
+        else
+          flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
+          format.any(:html, :mobile) { render action: :edit }
         end
-
-        unless initiate_openid_on_update
-          flash[:notice] = "Your changes were saved!"
-          redirect_to edit_user_page_url(id: @user.username, page: @page)
-        end
-
-      else
-        flash.now[:notice] ||= "There were errors saving your changes"
-        render action: :edit
       end
     end
 
