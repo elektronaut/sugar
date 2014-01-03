@@ -2,8 +2,6 @@
 #= require jquery_ujs
 #= require underscore
 #= require backbone
-#= require backbone_rails_sync
-#= require backbone_datalink
 
 #= require vendor/jquery.libraries
 #= require vendor/jquery.timeago
