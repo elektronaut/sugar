@@ -63,8 +63,6 @@ Sugar.RichTextArea = (textarea, options) ->
   if $(textarea).data("remember-format")
     if Sugar.Configuration.preferredFormat
       format = Sugar.Configuration.preferredFormat
-    else if $.cookie("preferred-format")
-      format = $.cookie("preferred-format")
 
   format ||= formats[0]
 
@@ -83,15 +81,10 @@ Sugar.RichTextArea = (textarea, options) ->
     if $(textarea).data("format-binding")
       $(textarea).closest("form").find($(textarea).data("format-binding")).val(format)
 
+    # Update the user preferences
     if $(textarea).data("remember-format") && !skipUpdate
-      # Update the user preferences
       if currentUser = Sugar.getCurrentUser()
         currentUser.save("preferred_format", format, {patch: true})
-
-      # Update the cookie
-      $.cookie "preferred-format", format,
-        expires: 365 * 3
-        path:    "/"
 
   nextFormat = ->
     setFormat formats[(formats.indexOf(format) + 1) % formats.length]
