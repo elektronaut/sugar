@@ -6,7 +6,6 @@
 #= require vendor/jquery.libraries
 #= require vendor/jquery.timeago
 #= require vendor/jquery.filedrop
-#= require vendor/to-markdown
 
 #= require backbone/sugar
 #= require sugar
