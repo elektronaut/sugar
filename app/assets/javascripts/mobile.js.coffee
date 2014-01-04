@@ -12,6 +12,7 @@
 #= require sugar/facebook
 #= require sugar/rich_text
 #= require sugar/timestamps
+#= require sugar/user
 
 window.toggleNavigation = ->
   $("#navigation").toggleClass "active"
