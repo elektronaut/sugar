@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
       if @mobile_user_agent
         session[:mobile_format] ||= 'mobile'
         session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
-        request.format = :mobile if session[:mobile_format] == 'mobile'
+        request.format = :mobile if session[:mobile_format] == 'mobile' && request.format == "text/html"
       end
     end
 
