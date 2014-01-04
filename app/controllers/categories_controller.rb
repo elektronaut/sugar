@@ -7,9 +7,9 @@ class CategoriesController < ApplicationController
 
   respond_to :html, :mobile, :xml, :json
 
-  before_filter :load_categories, only: [:index]
-  before_filter :load_category,   only: [:show, :edit, :update, :destroy]
-  before_filter :verify_viewable, only: [:show, :edit, :update, :destroy]
+  before_action :load_categories, only: [:index]
+  before_action :load_category,   only: [:show, :edit, :update, :destroy]
+  before_action :verify_viewable, only: [:show, :edit, :update, :destroy]
 
   def index
     respond_with(@categories)

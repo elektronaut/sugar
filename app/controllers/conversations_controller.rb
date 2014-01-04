@@ -6,10 +6,10 @@ class ConversationsController < ApplicationController
   requires_authentication
   requires_user
 
-  before_filter :find_exchange, except: [:index, :new, :create]
-  before_filter :verify_editable, only: [:edit, :update, :destroy]
-  before_filter :find_recipient, only: [:create]
-  before_filter :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :find_exchange, except: [:index, :new, :create]
+  before_action :verify_editable, only: [:edit, :update, :destroy]
+  before_action :find_recipient, only: [:create]
+  before_action :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
     @exchanges = current_user.conversations.page(params[:page]).for_view

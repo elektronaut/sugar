@@ -11,16 +11,16 @@ class PostsController < ApplicationController
   requires_user           except: [:count, :since, :search]
   protect_from_forgery    except: [:drawing]
 
-  before_filter :find_discussion,              except: [:search]
-  before_filter :verify_viewable,              except: [:search, :count, :since]
-  before_filter :find_post,                    only: [:show, :edit, :update, :destroy]
-  before_filter :verify_editable,              only: [:edit, :update, :destroy]
-  before_filter :require_and_set_search_query, only: [:search]
-  before_filter :verify_postable,              only: [:create, :drawing]
+  before_action :find_discussion,              except: [:search]
+  before_action :verify_viewable,              except: [:search, :count, :since]
+  before_action :find_post,                    only: [:show, :edit, :update, :destroy]
+  before_action :verify_editable,              only: [:edit, :update, :destroy]
+  before_action :require_and_set_search_query, only: [:search]
+  before_action :verify_postable,              only: [:create, :drawing]
 
-  after_filter :mark_exchange_viewed,   only: [:since]
-  after_filter :mark_conversation_viewed, only: [:since]
-  #after_filter :notify_mentioned,         only: [:create]
+  after_action :mark_exchange_viewed,   only: [:since]
+  after_action :mark_conversation_viewed, only: [:since]
+  #after_action :notify_mentioned,         only: [:create]
 
   respond_to :html, :mobile, :json
 

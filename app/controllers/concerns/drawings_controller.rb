@@ -2,7 +2,7 @@ module DrawingsController
   extend ActiveSupport::Concern
 
   included do
-    before_filter :require_s3, only: [:drawing]
+    before_action :require_s3, only: [:drawing]
   end
 
   def drawing

@@ -7,14 +7,14 @@ module Authentication
     include ActionView::Helpers::DateHelper
 
     included do
-      before_filter :load_session_user
-      before_filter :handle_temporary_ban
-      before_filter :handle_permanent_ban
-      before_filter :verify_activated_account
-      after_filter :cleanup_temporary_ban
-      after_filter :update_last_active
-      after_filter :cleanup_authenticated_openid_url
-      after_filter :store_session_authentication
+      before_action :load_session_user
+      before_action :handle_temporary_ban
+      before_action :handle_permanent_ban
+      before_action :verify_activated_account
+      after_action :cleanup_temporary_ban
+      after_action :update_last_active
+      after_action :cleanup_authenticated_openid_url
+      after_action :store_session_authentication
 
       helper_method :current_user, :current_user?
     end

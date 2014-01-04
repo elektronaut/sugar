@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   include OpenidUserController
   include UsersListController
 
-  before_filter :load_user,
+  before_action :load_user,
                 only: [
                   :show, :edit,
                   :update, :destroy,
@@ -22,8 +22,8 @@ class UsersController < ApplicationController
                   :stats
                 ]
 
-  before_filter :detect_edit_page, only: [:edit, :update]
-  before_filter :verify_editable,  only: [:edit, :update, :update_openid]
+  before_action :detect_edit_page, only: [:edit, :update]
+  before_action :verify_editable,  only: [:edit, :update, :update_openid]
 
   respond_to :html, :mobile, :xml, :json
 

@@ -3,7 +3,7 @@ class UploadsController < ApplicationController
   requires_authentication
   requires_user
 
-  before_filter :require_s3
+  before_action :require_s3
 
   respond_to :xml, :json
 

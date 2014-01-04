@@ -12,13 +12,13 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  before_filter :upgrade_preferred_format_cookie
-  before_filter :disable_xss_protection
-  before_filter :load_configuration
-  before_filter :set_time_zone
-  before_filter :detect_mobile
-  before_filter :set_section
-  before_filter :set_theme
+  before_action :upgrade_preferred_format_cookie
+  before_action :disable_xss_protection
+  before_action :load_configuration
+  before_action :set_time_zone
+  before_action :detect_mobile
+  before_action :set_section
+  before_action :set_theme
 
   helper_method :viewed_tracker
 

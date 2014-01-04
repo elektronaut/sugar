@@ -1,6 +1,6 @@
 class PasswordResetsController < ApplicationController
-  before_filter :find_password_reset_token, only: [:show, :update]
-  before_filter :check_for_expired_token, only: [:show, :update]
+  before_action :find_password_reset_token, only: [:show, :update]
+  before_action :check_for_expired_token, only: [:show, :update]
 
   def new
   end

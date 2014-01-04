@@ -6,11 +6,11 @@ class DiscussionsController < ApplicationController
   requires_authentication
   requires_user  except: [:index, :search, :search_posts, :show]
 
-  before_filter :find_exchange, except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
-  before_filter :verify_editable, only: [:edit, :update, :destroy]
-  before_filter :load_categories, only: [:new, :create, :edit, :update]
-  before_filter :require_categories, only: [:new, :create]
-  before_filter :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :find_exchange, except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
+  before_action :verify_editable, only: [:edit, :update, :destroy]
+  before_action :load_categories, only: [:new, :create, :edit, :update]
+  before_action :require_categories, only: [:new, :create]
+  before_action :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
     if current_user?

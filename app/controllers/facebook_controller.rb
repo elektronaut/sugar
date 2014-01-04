@@ -1,7 +1,7 @@
 class FacebookController < ApplicationController
 
   requires_user only: [:connect, :disconnect]
-  before_filter :detect_admin_signup, only: [:signup]
+  before_action :detect_admin_signup, only: [:signup]
 
   protected
 

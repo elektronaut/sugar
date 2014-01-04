@@ -3,9 +3,9 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :find_invite,               only: [:new, :create]
-      before_filter :check_for_expired_invite,  only: [:new, :create]
-      before_filter :check_for_signups_allowed, only: [:new, :create]
+      before_action :find_invite,               only: [:new, :create]
+      before_action :check_for_expired_invite,  only: [:new, :create]
+      before_action :check_for_signups_allowed, only: [:new, :create]
     end
 
     def new

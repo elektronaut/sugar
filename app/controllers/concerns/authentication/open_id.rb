@@ -6,7 +6,7 @@ module Authentication
     extend ActiveSupport::Concern
 
     included do
-      before_filter :load_openid_user
+      before_action :load_openid_user
     end
 
     protected

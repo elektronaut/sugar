@@ -3,8 +3,8 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     included do
-      before_filter :detect_admin_signup,        only: [:login]
-      before_filter :check_if_already_logged_in, only: [:login, :authenticate]
+      before_action :detect_admin_signup,        only: [:login]
+      before_action :check_if_already_logged_in, only: [:login, :authenticate]
     end
 
     def login

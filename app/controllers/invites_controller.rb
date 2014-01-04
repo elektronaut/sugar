@@ -8,8 +8,8 @@ class InvitesController < ApplicationController
 
   respond_to :html, :mobile, :xml, :json
 
-  before_filter :find_invite,              only: [:show, :edit, :update, :destroy]
-  before_filter :verify_available_invites, only: [:new, :create]
+  before_action :find_invite,              only: [:show, :edit, :update, :destroy]
+  before_action :verify_available_invites, only: [:new, :create]
 
   def index
     respond_with(@invites = current_user.invites.active)
