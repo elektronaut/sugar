@@ -84,6 +84,18 @@ describe Discussion do
     end
   end
 
+  describe "#convert_to_conversation!" do
+    let!(:post) { create(:post, exchange: discussion) }
+    let(:conversation) { Conversation.find(discussion.id) }
+    before { discussion.convert_to_conversation! }
+    specify { discussion.type.should == "Conversation" }
+    specify { post.reload.conversation?.should be_true }
+    specify { DiscussionRelationship.where(discussion_id: discussion.id).count.should == 0 }
+    specify { ConversationRelationship.where(conversation_id: discussion.id).count.should == 2 }
+    specify { conversation.participants.should =~ [discussion.poster, post.user] }
+    specify { conversation.category_id.should == nil }
+  end
+
   describe "#participants" do
     let!(:post) { create(:post, exchange: discussion) }
     subject { discussion.participants }

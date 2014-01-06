@@ -28,6 +28,23 @@ class Discussion < Exchange
     end
   end
 
+  # Converts a discussion to a conversation
+  def convert_to_conversation!
+    if self.valid?
+      self.transaction do
+        self.update_attributes(type: "Conversation")
+        self.becomes(Conversation).tap do |conversation|
+          conversation.update_attributes(category_id: nil, trusted: false, sticky: false, closed: false, nsfw: false)
+          self.posts.update_all(conversation: true, trusted: false)
+          self.participants.each do |participant|
+            conversation.add_participant(participant)
+          end
+          self.discussion_relationships.destroy_all
+        end
+      end
+    end
+  end
+
   def participants
     User.find_by_sql(
       "SELECT u.*, MAX(p.created_at) AS last_post_at " +
