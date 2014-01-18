@@ -5,6 +5,7 @@ services:
 rvm:
   - 1.9.3
   - 2.0.0
+  - 2.1.0
 env:
   - SUGAR_DB=sqlite
   - SUGAR_DB=mysql
@@ -14,6 +15,10 @@ matrix:
     - rvm: 1.9.3
       env: SUGAR_DB=sqlite
     - rvm: 1.9.3
+      env: SUGAR_DB=postgresql
+    - rvm: 2.0.0
+      env: SUGAR_DB=sqlite
+    - rvm: 2.0.0
       env: SUGAR_DB=postgresql
 script:
   - bundle exec rspec spec
