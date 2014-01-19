@@ -22,7 +22,12 @@ gem 'jquery-rails'
 gem 'backbone-on-rails'
 
 # Deploy with Capistrano
-gem 'capistrano', '~> 2.15.4'
+group :development do
+  gem 'capistrano', '~> 3.1.0'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+end
 
 # To use debugger
 # gem 'ruby-debug'
