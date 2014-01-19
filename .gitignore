@@ -1,23 +1,33 @@
-.DS_Store
-.bundle
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/log/sunspot-solr*
+/public/cache
+/tmp
+
+# Ignore local Ruby version
 .ruby-version
+
+# Ignore generated documentation
 coverage/*
-log/*.log
-log/*.log.*
-log/*.lck
-log/*.pid
-tmp/**/*
-tmp/*
-db/*.sqlite3
-doc/api
-doc/plugins
-doc/app
-config/deploy.rb
-config/newrelic.yml
-db/schema.rb
-solr/*
-public/cache
-public/system
-public/doodles
-public/themes/*.zip
+doc
+
+# Ignore Sunspot/Solr files
 sunspot-solr.pid
+solr
+
+# Ignore Capistrano configuration
+config/deploy.rb
+config/deploy/*.rb
+
+# Ignore NewRelic configuration
+config/newrelic.yml
+
+# Ignore zipped themes
+public/themes/*.zip
