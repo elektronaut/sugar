@@ -817,6 +817,20 @@ table.discussions tr.targeted.nsfw {
   max-width: 100%;
   height: auto;
 }
+.post .body .instagram-wrapper {
+  width: 100%;
+  padding-top: 98px;
+  padding-bottom: 100%;
+  max-width: 612px;
+  min-width: 300px;
+  position: relative;
+}
+.post .body .instagram-wrapper iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+}
 .post .body ul, .post .body ol {
   margin-left:         17px;
 }

@@ -44,6 +44,7 @@ class Sugar.Views.Post extends Backbone.View
 
     this.applyAmazonReferralCode()
     this.applySpoiler()
+    this.wrapInstagramEmbeds()
     this
 
   edit: (event) ->
@@ -106,4 +107,9 @@ class Sugar.Views.Post extends Backbone.View
 
           link.href += if link.href.match(/\?/) then '&' else '?'
           link.href += 'tag=' + referral_id
+
+  wrapInstagramEmbeds: ->
+    $(this.el).find("iframe[src*='//instagram.com/']").each ->
+      unless $(this).parent().hasClass("instagram-wrapper")
+        $(this).wrap('<div class="instagram-wrapper">')
 

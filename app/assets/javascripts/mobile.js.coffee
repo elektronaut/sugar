@@ -25,6 +25,11 @@ resizeYoutube = ->
     @width = maxWidth
     @height = maxWidth / @proportions
 
+wrapInstagramEmbeds = ->
+  $(".post .body iframe[src*='//instagram.com/']").each ->
+    unless $(this).parent().hasClass("instagram-wrapper")
+      $(this).wrap('<div class="instagram-wrapper">')
+
 getImageSize = (img) ->
   unless img.originalWidth
     if $(img).attr('width')
@@ -159,5 +164,6 @@ $(document).ready ->
   $('a.regular_site').click ->
     return confirm('Are you sure you want to navigate away from the mobile version?')
 
+  wrapInstagramEmbeds()
   resizeYoutube()
   Sugar.init()

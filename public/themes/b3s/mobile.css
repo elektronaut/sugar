@@ -490,6 +490,21 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   width: 100%;
 }
 
+.post .body .instagram-wrapper {
+  width: 100%;
+  padding-top: 98px;
+  padding-bottom: 100%;
+  max-width: 612px;
+  min-width: 300px;
+  position: relative;
+}
+.post .body .instagram-wrapper iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+}
+
 .posts .post .body a, .posts .post .body a:visited {
   color:           #364077;
   text-decoration: underline;
