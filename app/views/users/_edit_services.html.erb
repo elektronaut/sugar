@@ -1,19 +1,20 @@
-<%= labelled_field f.text_field(:website, size: 50), "Web site", errors: @user.errors[:website] %>
+<%= f.labelled_text_field :website, size: 50 %>
 <% if current_user == @user && Sugar.config(:facebook_app_id) %>
   <p class="field">
     <label>Facebook</label>
     <% if @user.facebook_uid? %>
-      You have connected your Facebook account. <%= link_to 'Remove?', disconnect_facebook_path, method: :post %>
+      <%= t('user.edit.facebook_connected') %> <%= link_to t('user.edit.remove?'), disconnect_facebook_path, method: :post %>
     <% else %>
-      <%= link_to 'Connect with Facebook', facebook_oauth_url(connect_facebook_url), class: 'fb_button' %>
+      <%= link_to t('user.edit.connect_with_facebook'), facebook_oauth_url(connect_facebook_url), class: 'fb_button' %>
     <% end %>
   </p>
 <% end %>
-<%= labelled_field f.text_field(:gtalk), "Google Talk", errors: @user.errors[:gtalk] %>
-<%= labelled_field f.text_field(:msn), "MSN Messenger", errors: @user.errors[:msn] %>
-<%= labelled_field f.text_field(:aim), "AIM", errors: @user.errors[:aim] %>
-<%= labelled_field f.text_field(:gamertag), "Xbox Live Gamertag", errors: @user.errors[:gamertag] %>
-<%= labelled_field f.text_field(:twitter), "Twitter username", errors: @user.errors[:twitter] %>
-<%= labelled_field f.text_field(:flickr), "Flickr user ID", errors: @user.errors[:flickr], description: "Note: This is not your username" %>
-<%= labelled_field f.text_field(:last_fm), "Last.fm username", errors: @user.errors[:last_fm] %>
-<%= labelled_field f.text_field(:instagram), "Instagram username", errors: @user.errors[:instagram] %>
+
+<%= f.labelled_text_field :gtalk %>
+<%= f.labelled_text_field :msn %>
+<%= f.labelled_text_field :aim %>
+<%= f.labelled_text_field :gamertag %>
+<%= f.labelled_text_field :twitter %>
+<%= f.labelled_text_field :flickr, description: t('user.edit.flickr_description') %>
+<%= f.labelled_text_field :last_fm %>
+<%= f.labelled_text_field :instagram %>

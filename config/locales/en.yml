@@ -2,4 +2,65 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      user:
+        realname: Real name
+        avatar_url: Avatar URL
+        description: Profile text
+        moderator: Moderator
+        user_admin: User administrator
+        admin: Administrator
+        website: Web site
+        gtalk: Google Talk
+        msn: MSN Messenger
+        aim: AIM
+        gamertag: Xbox Live Gamertag
+        twitter: Twitter username
+        flickr: Flickr user ID
+        last_fm: Last.fm username
+        instagram: Instagram username
+        openid_url: OpenID Identity URL
+        email: Email address
+        password: Password
+        confirm_password: Confirm password
+        stylesheet_url: Custom stylesheet URL
+        mobile_stylesheet_url: Custom mobile stylesheet URL
+        banned_until: Ban me until
+  user:
+    edit:
+      tabs:
+        info: Personal Info
+        services: Links and Services
+        location: Location
+        settings: Settings
+        temporary_ban: Temporary ban
+        admin: Admin
+      edit_profile: Edit profile
+      account_status: Account status
+      invites: Invites
+      invites_count: invites
+      administator_privileges: Administator privileges
+      birthday_description: "Your age won't be shown, but your birthday will"
+      gravatar_link: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
+      trusted_description: 'User will be able to see discussions in categories marked as trusted'
+      temporary_ban: Temporary ban
+      moderator_description: 'Can edit all categories, discussions and posts'
+      user_admin_description: 'Can edit other users and handle invites or approvals'
+      admin_description: 'Same as the two above, plus access to forum configuration'
+      map: Map
+      map_description: Click to place yourself on the map.
+      clear_location: Clear location
+      connect_with_facebook: Connect with Facebook
+      facebook_connected: You have connected your Facebook account.
+      remove?: 'Remove?'
+      flickr_description: 'Note: This is not your username'
+      account_info: Account info
+      settings: Settings
+      theme: Theme
+      stylesheet_url_description: Enter a URL here to override the theme
+      mobile_stylesheet_url_description: Enter a URL here to override the mobile theme
+      warning: Warning
+      missing_time_zone_link: "You haven't %{link} yet!"
+      chosen_a_time_zone: chosen a time zone
+  save: Save

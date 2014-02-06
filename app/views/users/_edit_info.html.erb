@@ -1,15 +1,5 @@
-<%= labelled_field f.text_field(:username, disabled: !current_user.user_admin?), "Username", errors: @user.errors[:username] %>
-<%= labelled_field f.text_field(:realname, size: 50), "Real name", errors: @user.errors[:realname] %>
-
-<%= labelled_field(
-  f.date_select(:birthday, end_year: 1900, start_year: Time.now.year, include_blank: true),
-  "Birthday",
-  description: "Your age won't be shown, but your birthday will",
-  errors:      @user.errors[:birthday]
-)%>
-
-<%= labelled_field f.text_field(:avatar_url, size: 80), "Avatar URL", description: "Enter a link to a 32x32px image", errors: @user.errors[:avatar_url] do %>
-  Alternatively, upload a picture to <%= link_to "Gravatar", "http://www.gravatar.com/" %>
-  using your registered email to get an avatar.
-<% end %>
-<%= labelled_field f.text_area(:description, rows: 12, cols: 80, class: :rich, "data-formats" => "markdown"), "Profile text", errors: @user.errors[:description] %>
+<%= f.labelled_text_field :username, disabled: !current_user.user_admin? %>
+<%= f.labelled_text_field :realname, size: 50 %>
+<%= f.labelled_date_select :birthday, end_year: 1900, start_year: Time.now.year, include_blank: true, description: t('user.edit.birthday_description') %>
+<%= f.labelled_text_field :avatar_url, size: 80, description: "Enter a link to a 32x32px image", note: t('user.edit.gravatar_link') %>
+<%= f.labelled_text_area :description, rows: 12, cols: 80, class: "rich", "data-formats" => "markdown" %>
