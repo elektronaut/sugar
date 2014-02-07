@@ -24,7 +24,7 @@ describe AdminController, redis: true do
       it { should render_template(:configuration) }
       specify { flash[:notice].should be_nil }
       it 'should update the forum configuration' do
-        Sugar.config(:forum_name).should == "New Forum Name"
+        Sugar.config.forum_name.should == "New Forum Name"
       end
     end
 

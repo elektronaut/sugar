@@ -7,8 +7,8 @@ describe Mailer do
   let(:login_url) { "http://example.com/login" }
 
   before do
-    Sugar.config(:forum_name, "Sugar")
-    Sugar.config(:mail_sender, "test@example.com")
+    Sugar.config.forum_name = "Sugar"
+    Sugar.config.mail_sender = "test@example.com"
   end
 
   describe "invite" do
@@ -23,7 +23,7 @@ describe Mailer do
 
       subject { mail.body.encoded }
 
-      it { should match(Sugar.config(:forum_name)) }
+      it { should match(Sugar.config.forum_name) }
       it { should match(invite.user.realname) }
       it { should match(login_url) }
 

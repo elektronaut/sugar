@@ -8,7 +8,7 @@ module ApplicationHelper
   include PostsHelper
 
   def facebook_oauth_url(redirect_uri)
-    "https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config(:facebook_app_id)}&redirect_uri=#{redirect_uri}&scope=email"
+    "https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config.facebook_app_id}&redirect_uri=#{redirect_uri}&scope=email"
   end
 
   def pretty_link(url)

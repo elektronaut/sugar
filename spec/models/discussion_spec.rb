@@ -121,12 +121,12 @@ describe Discussion do
     context "when discussion isn't trusted" do
 
       context "when public browsing is on" do
-        before { Sugar.config(:public_browsing, true) }
+        before { Sugar.config.public_browsing = true }
         specify { discussion.viewable_by?(nil).should be_true }
       end
 
       context "when public browsing is off" do
-        before { Sugar.config(:public_browsing, false) }
+        before { Sugar.config.public_browsing = false }
         specify { discussion.viewable_by?(nil).should be_false }
         specify { discussion.viewable_by?(user).should be_true }
       end

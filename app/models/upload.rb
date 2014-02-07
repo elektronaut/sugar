@@ -18,8 +18,8 @@ class Upload
 
   def establish_connection!
     AWS::S3::Base.establish_connection!(
-      access_key_id:     Sugar.config(:amazon_aws_key),
-      secret_access_key: Sugar.config(:amazon_aws_secret)
+      access_key_id:     Sugar.config.amazon_aws_key,
+      secret_access_key: Sugar.config.amazon_aws_secret
     )
   end
 
@@ -45,21 +45,21 @@ class Upload
       AWS::S3::S3Object.store(
         filename,
         open(file),
-        Sugar.config(:amazon_s3_bucket),
+        Sugar.config.amazon_s3_bucket,
         access: :public_read
       )
     end
   end
 
   def exists?
-    AWS::S3::S3Object.exists?(filename, Sugar.config(:amazon_s3_bucket))
+    AWS::S3::S3Object.exists?(filename, Sugar.config.amazon_s3_bucket)
   end
 
   def url
     establish_connection!
     AWS::S3::S3Object.url_for(
       filename,
-      Sugar.config(:amazon_s3_bucket),
+      Sugar.config.amazon_s3_bucket,
       authenticated: false,
       use_ssl: true
     )

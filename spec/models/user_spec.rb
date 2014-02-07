@@ -126,7 +126,7 @@ describe User do
   end
 
   describe "#theme" do
-    before { Sugar.config(:default_theme, "default") }
+    before { Sugar.config.default_theme = "default" }
     specify { user.theme.should == "default" }
     specify { create(:user, theme: "mytheme").theme.should == "mytheme" }
   end
@@ -151,7 +151,7 @@ describe User do
   end
 
   describe "#mobile_theme" do
-    before { Sugar.config(:default_mobile_theme, "default_mobile") }
+    before { Sugar.config.default_mobile_theme = "default_mobile" }
     specify { user.mobile_theme.should == "default_mobile" }
     specify { create(:user, mobile_theme: "mytheme_mobile").mobile_theme.should == "mytheme_mobile" }
   end

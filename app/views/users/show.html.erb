@@ -42,7 +42,7 @@
   </div>
   <% end %>
 
-  <% if !Sugar.config(:signups_allowed) && current_user? && current_user.user_admin? && !@user.user_admin? %>
+  <% if !Sugar.config.signups_allowed && current_user? && current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
       <strong>Invites:</strong> <%= @user.available_invites %> &ndash;
       <%= link_to "Grant one", grant_invite_user_path(id: @user.username), method: :post %>
@@ -125,7 +125,7 @@
     <%= render partial: 'posts/posts', locals: {posts: @posts, title: true, no_pagination: true} %>
   <% elsif current_user? && @user == current_user %>
     <div class="welcome">
-      <h2>Welcome to <%= Sugar.config(:forum_name) %>!</h2>
+      <h2>Welcome to <%= Sugar.config.forum_name %>!</h2>
       <p>
         This is your user profile. Normally your posts will show up in this space, but you haven't posted anything yet.
       </p>

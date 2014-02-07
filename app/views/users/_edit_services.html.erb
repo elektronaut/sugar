@@ -1,5 +1,5 @@
 <%= f.labelled_text_field :website, size: 50 %>
-<% if current_user == @user && Sugar.config(:facebook_app_id) %>
+<% if current_user == @user && Sugar.config.facebook_app_id %>
   <p class="field">
     <label>Facebook</label>
     <% if @user.facebook_uid? %>

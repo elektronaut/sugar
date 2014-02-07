@@ -96,12 +96,12 @@ describe Category do
     end
 
     context "when public browsing is on" do
-      before { Sugar.config(:public_browsing, true) }
+      before { Sugar.config.public_browsing = true }
       specify { category.viewable_by?(nil).should be_true }
     end
 
     context "when public browsing is off" do
-      before { Sugar.config(:public_browsing, false) }
+      before { Sugar.config.public_browsing = false }
       specify { category.viewable_by?(nil).should be_false }
     end
 

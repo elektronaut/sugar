@@ -36,7 +36,7 @@
 
   <ul id="signup-tabs" class="topTabs">
     <li class="tab" id="regular-tab"><a href="#password">Username and password</a></li>
-    <% if Sugar.config(:facebook_app_id) %>
+    <% if Sugar.config.facebook_app_id %>
       <li class="tab" id="facebook-tab"><a href="#facebook">Facebook</a></li>
     <% end %>
     <li class="tab" id="openid-tab"><a href="#openid">OpenID</a></li>
@@ -55,7 +55,7 @@
   </div>
 
   <%# Facebook signup %>
-  <% if Sugar.config(:facebook_app_id) %>
+  <% if Sugar.config.facebook_app_id %>
     <div id="facebook">
       <%= link_to t('user.sign_up_with_facebook'), facebook_oauth_url(signup_facebook_url), class: 'fb_button' %>
     </div>
