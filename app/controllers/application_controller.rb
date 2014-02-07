@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
 
     # Load configuration
     def load_configuration
-      Sugar.load_config!
+      Sugar.config.load
     end
 
     # Set time zone for user
@@ -116,14 +116,14 @@ class ApplicationController < ActionController::Base
           if current_user?
             @theme = Theme.find(current_user.mobile_theme)
           else
-            @theme = Theme.find(Sugar.config(:default_mobile_theme))
+            @theme = Theme.find(Sugar.config.default_mobile_theme)
           end
         end
         format.any do
           if current_user?
             @theme = Theme.find(current_user.theme)
           else
-            @theme = Theme.find(Sugar.config(:default_theme))
+            @theme = Theme.find(Sugar.config.default_theme)
           end
         end
       end

@@ -173,12 +173,12 @@ describe Post do
     end
 
     context "and public browsing is on" do
-      before { Sugar.config(:public_browsing, true) }
+      before { Sugar.config.public_browsing = true }
       specify { post.viewable_by?(nil).should be_true }
     end
 
     context "and public browsing is of" do
-      before { Sugar.config(:public_browsing, false) }
+      before { Sugar.config.public_browsing = false }
       specify { post.viewable_by?(nil).should be_false }
     end
 

@@ -84,7 +84,7 @@ Spork.each_run do
     # Clean the Redis database and reload the configuration
     config.around(:each, redis: true) do |example|
       with_clean_redis do
-        Sugar.reset_config!
+        Sugar.config.reset!
         example.run
       end
     end

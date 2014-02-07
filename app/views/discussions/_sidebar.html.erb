@@ -53,7 +53,7 @@
   <h2>Admin</h2>
   <p>
     <% if current_user.admin? %>
-      <%= link_to "Forum configuration", configuration_admin_path %><br />
+      <%= link_to "Forum configuration", admin_configuration_path %><br />
     <% end %>
     <%= link_to "Edit categories", categories_path %><br />
   </p>

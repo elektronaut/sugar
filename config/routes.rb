@@ -170,11 +170,10 @@ Sugar::Application.routes.draw do
     end
   end
 
-  # Admin
-  resource :admin, controller: 'admin' do
-    get 'configuration', on: :member
-    post 'configuration', on: :member
+  namespace :admin do
+    resource :configuration
   end
+  get 'admin' => 'admin/configurations#show', as: :admin
 
   # Help pages
   get 'help' => 'help#index', as: :help

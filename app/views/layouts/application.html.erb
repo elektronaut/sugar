@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title><%= [@page_title, Sugar.config(:forum_name)].compact.join(' - ') %></title>
+  <title><%= [@page_title, Sugar.config.forum_name].compact.join(' - ') %></title>
 
   <%# Stylesheet %>
   <%= stylesheet_link_tag "application" %>
@@ -22,9 +22,9 @@
   </script>
 
   <%# Custom javascript %>
-  <% unless Sugar.config(:custom_javascript).blank? %>
+  <% unless Sugar.config.custom_javascript.blank? %>
     <script>
-      <%= raw Sugar.config(:custom_javascript) %>
+      <%= raw Sugar.config.custom_javascript %>
     </script>
   <% end %>
 
@@ -45,12 +45,12 @@
 <body class="<%= body_classes %>">
 
   <%# Custom header %>
-  <% if Sugar.config(:custom_header) %>
-    <%= raw Sugar.config(:custom_header) %>
+  <% if Sugar.config.custom_header %>
+    <%= raw Sugar.config.custom_header %>
   <% end %>
 
   <div id="header">
-    <h1><%= Sugar.config(:forum_title).html_safe %></h1>
+    <h1><%= Sugar.config.forum_title.html_safe %></h1>
 
     <%# Search form %>
     <% if current_user? || Sugar.public_browsing? %>
@@ -72,7 +72,7 @@
         Hello, <%= profile_link(current_user) %>!
         (<%= link_to "Sign out", logout_users_path %>)
       <% else %>
-        <% if Sugar.config(:signups_allowed) %>
+        <% if Sugar.config.signups_allowed %>
           <%= link_to("Sign up", new_user_path) %>
           or
         <% end %>
@@ -144,15 +144,15 @@
   </div>
 
   <%# Custom footer %>
-  <% if Sugar.config(:custom_footer) %>
-    <%= raw Sugar.config(:custom_footer) %>
+  <% if Sugar.config.custom_footer %>
+    <%= raw Sugar.config.custom_footer %>
   <% end %>
 
   <%# Google Analytics %>
-  <% if Sugar.config(:google_analytics) %>
+  <% if Sugar.config.google_analytics %>
     <script>
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '<%= Sugar.config(:google_analytics) %>']);
+      _gaq.push(['_setAccount', '<%= Sugar.config.google_analytics %>']);
       _gaq.push(['_trackPageview']);
       (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

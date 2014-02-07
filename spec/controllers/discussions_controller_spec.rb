@@ -10,7 +10,7 @@ describe DiscussionsController do
   before { create(:user) }
 
   describe 'with public browsing off' do
-    before { Sugar.config(:public_browsing, false); Sugar.save_config! }
+    before { Sugar.config.update(public_browsing: false) }
 
     it_requires_login_for :index, :search, :new, :create
     it_requires_login_for :favorites, :following
@@ -19,7 +19,7 @@ describe DiscussionsController do
   end
 
   describe 'with public browsing on' do
-    before { Sugar.config(:public_browsing, true); Sugar.save_config! }
+    before { Sugar.config.update(public_browsing: true) }
 
     it_requires_login_for :new, :create, :favorites, :following
     it_requires_login_for :edit, :update, :follow, :unfollow, :favorite, :unfavorite

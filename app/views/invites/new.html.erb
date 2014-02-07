@@ -1,12 +1,20 @@
 <%
   add_body_class "new_invite"
-  @page_title = "New Invite"
+  @page_title = t('invite.new_invite')
 %>
 
-<h2 class="section"><%= link_to "Invites", invites_path %> &raquo; <%= link_to "New", new_invite_path %></h2>
+<h2 class="section">
+  <%= link_to t('invites.invites'), invites_path %>
+  &raquo;
+  <%= link_to t('new'), new_invite_path %>
+</h2>
 
-<%= form_for @invite do |f| %>
-  <%= labelled_field f.text_field(:email, size: 60), "Email", errors: @invite.errors[:email] %>
-  <%= labelled_field f.text_area(:message, cols: 60, rows: 10), "Message", errors: @invite.errors[:message], description: 'Optional, will appear in the welcoming email' %>
-  <p><button type="submit">Send invite</button></p>
+<%= form_for @invite, builder: Sugar::FormBuilder do |f| %>
+  <%= f.labelled_text_field :email, size: 60 %>
+  <%= f.labelled_text_area :message, cols: 60, rows: 10, description: t('invite.message_description') %>
+  <p>
+    <button type="submit">
+      <%= t('invite.send_invite') %>
+    </button>
+  </p>
 <% end %>

@@ -10,10 +10,11 @@ describe UploadsController, redis: true do
     create(:user)
 
     # Configure S3
-    Sugar.config(:amazon_aws_key,    "foo")
-    Sugar.config(:amazon_aws_secret, "bar")
-    Sugar.config(:amazon_s3_bucket,  "sugar")
-    Sugar.save_config!
+    Sugar.config.update(
+      amazon_aws_key:    "foo",
+      amazon_aws_secret: "bar",
+      amazon_s3_bucket:  "sugar"
+    )
   end
 
   specify { Sugar.aws_s3?.should == true }

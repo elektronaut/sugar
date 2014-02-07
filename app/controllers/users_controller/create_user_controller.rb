@@ -71,7 +71,7 @@ class UsersController < ApplicationController
     end
 
     def check_for_signups_allowed
-      if !Sugar.config(:signups_allowed) && User.any? && !@invite
+      if !Sugar.config.signups_allowed && User.any? && !@invite
         flash[:notice] = "Signups are not allowed"
         redirect_to login_users_url and return
       end

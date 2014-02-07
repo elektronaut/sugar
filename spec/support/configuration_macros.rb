@@ -1,6 +1,5 @@
 module ConfigurationMacros
   def configure(configuration={})
-    Sugar.configure(configuration)
-    Sugar.save_config!
+    Sugar.config.update(configuration)
   end
 end

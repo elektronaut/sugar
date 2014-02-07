@@ -1,32 +1,36 @@
 <fieldset>
-  <h2>Account status</h2>
-  <%= labelled_field f.check_box(:banned), "Banned" %>
-  <%= labelled_field f.check_box(:trusted), "Trusted", description: 'User will be able to see discussions in categories marked as trusted' %>
+  <h2>
+    <%= t('user.edit.account_status') %>
+  </h2>
+  <%= f.labelled_check_box :banned %>
+  <%= f.labelled_check_box :trusted, description: t('user.edit.trusted_description') %>
 </fieldset>
 
-<% if !Sugar.config(:signups_allowed) && !@user.user_admin? %>
+<% if !Sugar.config.signups_allowed && !@user.user_admin? %>
   <fieldset>
-    <h2>Invites</h2>
+    <h2>
+      <%= t('user.edit.invites') %>
+    </h2>
     <p class="field">
-      <%= f.text_field(:available_invites, size: 4) %> invites
+      <%= f.text_field(:available_invites, size: 4) %> <%= t('user.edit.invites_count') %>
     </p>
   </fieldset>
 <% end %>
 
 <% if current_user.user_admin? %>
   <fieldset>
-    <h2>Temporary ban</h2>
-    <%= labelled_field f.datetime_select(:banned_until, minute_step: 15, default: 1.minute.ago), 'Banned until' %>
+    <h2>
+      <%= t('user.edit.temporary_ban') %>
+    </h2>
+    <%= f.labelled_datetime_select :banned_until, minute_step: 15, default: 1.minute.ago %>
   </fieldset>
 
   <fieldset>
-    <h2>Administrator privileges</h2>
-    <p>
-      <%= f.check_box(:moderator) %> <strong>Moderator</strong> (Can edit all categories, discussions and posts)<br />
-      <%= f.check_box(:user_admin) %> <strong>User administrator</strong> (Can edit other users and handle invites or approvals)<br />
-      <% if current_user.admin? %>
-        <%= f.check_box(:admin) %> <strong>Administrator</strong> (Same as the two above, plus access to forum configuration)<br />
-      <% end %>
-    </p>
+    <h2>
+      <%= t('user.edit.administator_privileges') %>
+    </h2>
+    <%= f.labelled_check_box :moderator, description: t('user.edit.moderator_description') %>
+    <%= f.labelled_check_box :user_admin, description: t('user.edit.user_admin_description') %>
+    <%= f.labelled_check_box :admin, description: t('user.edit.admin_description') %>
   </fieldset>
 <% end %>

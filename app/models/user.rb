@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
   end
 
   def theme
-    self.theme? ? self.attributes['theme'] : Sugar.config(:default_theme)
+    self.theme? ? self.attributes['theme'] : Sugar.config.default_theme
   end
 
   def mark_active!
@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
   end
 
   def mobile_theme
-    self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config(:default_mobile_theme)
+    self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config.default_mobile_theme
   end
 
   def gamertag_avatar_url

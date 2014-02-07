@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title><%= [@page_title,Sugar.config(:forum_name)].compact.join(' - ') %></title>
+  <title><%= [@page_title,Sugar.config.forum_name].compact.join(' - ') %></title>
 
   <%= stylesheet_link_tag "application" %>
   <% if current_user? && current_user.mobile_stylesheet_url? %>
@@ -37,9 +37,9 @@
     </div>
         <h1 id="pageTitle" class="page_title">
       <% if @page_title %>
-        <span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}:", discussions_path %></span> <%= @page_title %>
+        <span class="site_name"><%= link_to "#{Sugar.config.forum_short_name}:", discussions_path %></span> <%= @page_title %>
       <% else %>
-        <span class="site_name"><%= link_to "#{Sugar.config(:forum_short_name)}", discussions_path %></span>
+        <span class="site_name"><%= link_to "#{Sugar.config.forum_short_name}", discussions_path %></span>
       <% end %>
     </h1>
     </div>
@@ -91,12 +91,12 @@
     <% end %>
     <%= link_to "Regular site", {mobile_format: 'html'}, class: 'regular_site' %>
   </div>
-  <% if Sugar.config(:google_analytics) -%>
+  <% if Sugar.config.google_analytics -%>
   <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
   </script>
-  <script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config(:google_analytics) %>"); pageTracker._trackPageview(); } catch(err) {}</script>
+  <script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config.google_analytics %>"); pageTracker._trackPageview(); } catch(err) {}</script>
   <% end -%>
 </body>
 </html>

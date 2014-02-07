@@ -15,9 +15,9 @@ class FacebookController < ApplicationController
       options[:redirect_uri] ||= login_facebook_url
 
       access_token_url = "https://graph.facebook.com/oauth/access_token" +
-                          "?client_id=#{Sugar.config(:facebook_app_id)}" +
+                          "?client_id=#{Sugar.config.facebook_app_id}" +
                           "&redirect_uri=#{options[:redirect_uri]}" +
-                          "&client_secret=#{Sugar.config(:facebook_api_secret)}" +
+                          "&client_secret=#{Sugar.config.facebook_api_secret}" +
                           "&code=#{code}"
       begin
         response = open(access_token_url).read
@@ -59,7 +59,7 @@ class FacebookController < ApplicationController
           redirect_to discussions_url and return
 
         # Go to signup if allowed
-        elsif Sugar.config(:signups_allowed)
+        elsif Sugar.config.signups_allowed
           signup and return
 
         else
