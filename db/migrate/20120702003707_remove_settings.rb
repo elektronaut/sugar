@@ -19,7 +19,7 @@ class RemoveSettings < ActiveRecord::Migration
       config[record['key'].to_sym] = record['value']
       config
     end
-    Sugar.update_configuration(configuration)
+    Sugar.config.update(configuration)
     drop_table :settings
   end
 
