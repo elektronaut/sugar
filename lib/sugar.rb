@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require_relative "sugar/responder"
-require_relative "sugar/configuration"
 
 module Sugar
 
@@ -17,7 +16,7 @@ module Sugar
     end
 
     def config(key=nil, *args)
-      @config ||= Sugar::Configuration.new.tap{ |c| c.load }
+      @config ||= Configuration.new.tap{ |c| c.load }
     end
 
     def public_browsing?
