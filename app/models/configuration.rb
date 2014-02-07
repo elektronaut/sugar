@@ -81,7 +81,7 @@ class Configuration
     end
     value = parse_value(key, value)
     unless valid_type?(key, value)
-      raise ArgumentError, "expected #{self.class.settings[key].type}, got #{value.class}"
+      raise ArgumentError, "expected #{self.class.settings[key].type}, got #{value.class} (#{value.inspect})"
     end
     configuration[key] = value
   end
@@ -130,6 +130,10 @@ class Configuration
 
   def parse_value(key, value)
     if type_for(key) == :boolean
+      value = true  if value == "1"
+      value = false if value == "0"
+      value = true  if value == "true"
+      value = false if value == "false"
       value = true  if value == :enabled
       value = false if value == :disabled
     end
