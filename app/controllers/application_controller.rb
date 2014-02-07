@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
 
     # Load configuration
     def load_configuration
-      Sugar.load_config!
+      Sugar.config.load
     end
 
     # Set time zone for user

@@ -6,7 +6,7 @@ class AdminController < ApplicationController
 
   def configuration
     if request.post? && params[:config]
-      Sugar.update_configuration(params[:config])
+      Sugar.config.update(params[:config])
     end
   end
 end
