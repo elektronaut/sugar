@@ -20,7 +20,8 @@ doc
 
 # Ignore Sunspot/Solr files
 sunspot-solr.pid
-solr
+solr/data
+solr/pids
 
 # Ignore Capistrano configuration
 config/deploy.rb
