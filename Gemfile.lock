@@ -30,7 +30,7 @@ GEM
     acts_as_list (0.3.0)
       activerecord (>= 3.0)
     addressable (2.3.5)
-    arel (4.0.1)
+    arel (4.0.2)
     atomic (1.1.14)
     aws-s3 (0.6.3)
       builder
@@ -239,16 +239,17 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
-    sunspot (2.0.0)
+    sunspot (2.1.0)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
     sunspot-rails-tester (1.0.0)
       sunspot_rails (>= 1.2)
       sunspot_solr (>= 1.2)
-    sunspot_rails (2.0.0)
+    sunspot_rails (2.1.0)
       nokogiri
-      sunspot (= 2.0.0)
-    sunspot_solr (2.0.0)
+      rails (>= 3)
+      sunspot (= 2.1.0)
+    sunspot_solr (2.1.0)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     therubyracer (0.12.0)
@@ -323,8 +324,8 @@ DEPENDENCIES
   spork
   sqlite3
   sunspot-rails-tester
-  sunspot_rails (= 2.0.0)
-  sunspot_solr (= 2.0.0)
+  sunspot_rails (= 2.1.0)
+  sunspot_solr (= 2.1.0)
   therubyracer
   uglifier
   yui-compressor
