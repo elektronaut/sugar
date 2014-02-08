@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.0.3'
+gem 'rails', '~> 4.1.0.beta1'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
