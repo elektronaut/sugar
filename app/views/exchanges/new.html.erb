@@ -19,7 +19,7 @@
   <% end %>
 </h2>
 
-<%= form_for(@exchange), builder: Sugar::FormBuilder do |f| %>
+<%= form_for @exchange, builder: Sugar::FormBuilder do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
   <p><button type="submit">Create <%= @exchange.class.to_s.downcase %></button></p>
 <% end %>
