@@ -58,6 +58,8 @@ gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
 
 group :development do
+  gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
   gem 'guard'
   gem 'guard-spork'
