@@ -62,7 +62,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
   gem 'guard'
-  gem 'guard-spork'
+  gem 'guard-spring'
   gem 'guard-rspec'
 end
 
@@ -91,6 +91,4 @@ group :test, :development do
   # FactoryGirl
   gem 'factory_girl_rails'
 
-  # Spork
-  gem 'spork'
 end
