@@ -52,7 +52,7 @@ gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
 gem 'ruby-filemagic', require: 'filemagic'
-gem 'aws-s3', require: 'aws/s3'
+gem 'aws-sdk'
 gem 'redcarpet', '~> 3.0'
 gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
