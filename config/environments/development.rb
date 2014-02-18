@@ -9,6 +9,9 @@ Sugar::Application.configure do
   config.cache_classes = false
   config.eager_load = false
 
+  # Use Redis for the cache store
+  config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 90.minutes }
+
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
