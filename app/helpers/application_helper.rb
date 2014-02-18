@@ -2,6 +2,7 @@
 
 module ApplicationHelper
   include AvatarsHelper
+  include CacheHelper
   include ExchangesHelper
   include LayoutHelper
   include PaginationHelper

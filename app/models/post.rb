@@ -7,8 +7,8 @@ class Post < ActiveRecord::Base
 
   self.per_page = 50
 
-  belongs_to :user, counter_cache: true
-  belongs_to :exchange, counter_cache: :posts_count
+  belongs_to :user, counter_cache: true, touch: true
+  belongs_to :exchange, counter_cache: :posts_count, touch: true
   has_many   :exchange_views
 
   validates_presence_of :body, :user_id, :exchange_id

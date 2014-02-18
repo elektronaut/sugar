@@ -16,7 +16,8 @@ module ExchangesController
 
   def show
     context = (request.format == :mobile) ? 0 : 3
-    @posts = @exchange.posts.page(params[:page], context: context).for_view
+    @page = params[:page] || 1
+    @posts = @exchange.posts.page(@page, context: context).for_view
 
     # Mark discussion as viewed
     if current_user?
