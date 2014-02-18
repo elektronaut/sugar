@@ -12,7 +12,7 @@ module Sugar
     end
 
     def redis
-      @redis ||= Redis.new
+      @redis ||= Redis.new(driver: :hiredis)
     end
 
     def config(key=nil, *args)
