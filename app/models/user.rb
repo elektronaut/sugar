@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
 
   def mark_active!
     if !self.last_active || self.last_active < 10.minutes.ago
-      self.update_column(:last_active, Time.now)
+      self.update_columns(last_active: Time.now)
     end
   end
 
