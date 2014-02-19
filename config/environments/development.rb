@@ -26,7 +26,7 @@ Sugar::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   # Enable caching
-  config.action_controller.perform_caching = true
+  #config.action_controller.perform_caching = true
 
   # Store all page caches in a subfolder of public
   config.action_controller.page_cache_directory = Rails.root.join('public/cache')
