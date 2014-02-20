@@ -46,7 +46,7 @@ class LinkFilter < Filter
       http.start do |http|
         http.head(uri.request_uri).code =~ /^(2|3)\d\d$/
       end
-    rescue SocketError, Net::OpenTimeout
+    rescue SocketError, Net::OpenTimeout, OpenSSL::SSL::SSLError
       false
     end
   end
