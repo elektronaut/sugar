@@ -2,12 +2,12 @@
 
 class LinkFilter < Filter
 
-  HTTPS_WHITELIST = [
-    /\Ahttps?:\/\/([\w\d\-]+\.)?youtube\.(com|com\.br|fr|jp|nl|pl|es|ie|co\.uk)\//,
-    /\Ahttps?:\/\/youtu\.be\//,
-    /\Ahttps?:\/\/vimeo\.com\//,
-    /\Ahttps?:\/\/soundcloud\.com\//
-  ]
+  HTTPS_WHITELIST = %w{
+    youtube.com
+    *.youtube.com
+    vimeo.com
+    soundcloud.com
+  }
 
   def process(post)
     @post = post
@@ -40,7 +40,8 @@ class LinkFilter < Filter
   def rewrite_for_https_support!
     parser.search("iframe").each do |iframe|
       if src = iframe.try(:attributes).try(:[], 'src').try(:value)
-        if HTTPS_WHITELIST.find { |expr| src =~ expr }
+        host = URI.parse(src).host
+        if HTTPS_WHITELIST.find { |domain| File.fnmatch(domain, host) }
           iframe.set_attribute 'src', src.gsub(/\Ahttps?:\/\//, "//")
         end
       end
