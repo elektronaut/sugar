@@ -34,7 +34,7 @@ class Configuration
   setting :forum_title,          :string, 'Sugar'
 
   # Hosts etc
-  setting :default_domain,       :string
+  setting :domain_names,         :string
   setting :asset_host,           :string
   setting :mail_sender,          :string
   setting :session_key,          :string, '_sugar_session'

@@ -48,6 +48,7 @@ en:
     login_and_signup: Login and signup
     access_control: Access control
     signing_up: Signing up
+    domain_names_description: "Comma separated"
     forum_title_description: HTML allowed
     forum_short_name_description: "Will be used where applicable, ie. on the mobile version"
     mail_sender_description: "Example: My Forum &lt;no-reply@mydomain.com&gt;"

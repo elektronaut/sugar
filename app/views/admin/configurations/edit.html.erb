@@ -39,7 +39,7 @@
       <h2>
         <%= t('configuration.domain_and_email') %>
       </h2>
-      <%= f.labelled_text_field :default_domain, size: 48 %>
+      <%= f.labelled_text_field :domain_names, size: 48, description: t('configuration.domain_names_description') %>
       <%= f.labelled_text_field :mail_sender, size: 48, description: t('configuration.mail_sender_description') %>
     </fieldset>
     <fieldset>

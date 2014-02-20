@@ -5,7 +5,7 @@ class Renderer
         AutolinkFilter,
         (format == "markdown" ? MarkdownFilter : SimpleFilter),
         ImageFilter,
-        IframeFilter,
+        LinkFilter,
         CodeFilter,
         SanitizeFilter
       ]
