@@ -2,9 +2,9 @@
 
 class LinkFilter < Filter
 
-  #  *.youtube.com
   HTTPS_WHITELIST = %w{
     youtube.com
+    *.youtube.com
     vimeo.com
     soundcloud.com
     i.imgur.com
