@@ -7,6 +7,9 @@ class LinkFilter < Filter
     *.youtube.com
     vimeo.com
     soundcloud.com
+    i.imgur.com
+    *.cloudfront.net
+    *.s3.amazonaws.com
   }
 
   def process(post)
@@ -38,7 +41,7 @@ class LinkFilter < Filter
   end
 
   def rewrite_for_https_support!
-    parser.search("iframe").each do |iframe|
+    parser.css("iframe,img").each do |iframe|
       if src = iframe.try(:attributes).try(:[], 'src').try(:value)
         host = URI.parse(src).host
         if HTTPS_WHITELIST.find { |domain| File.fnmatch(domain, host) }
