@@ -83,18 +83,8 @@ class Sugar.Views.Post extends Backbone.View
 
   # Apply functionality to spoiler tags
   applySpoiler: ->
-    $(this.el).find('.spoiler').each ->
-      if $(this).find('.innerSpoiler').length == 0
-        $(this)
-          .wrapInner('<span class="innerSpoiler"></span>')
-          .prepend('<span class="spoilerLabel">Spoiler!</span> ')
-
-        $(this).find('.innerSpoiler').css('visibility', 'hidden')
-        $(this).click ->
-          if $(this).hasClass('revealed')
-            $(this).removeClass('revealed').find('.innerSpoiler').css('visibility', 'hidden')
-          else
-            $(this).addClass('revealed').find('.innerSpoiler').css('visibility', 'visible')
+    $(this.el).find('.spoiler').click ->
+      $(this).toggleClass 'revealed'
 
   # Apply referral code to Amazon links
   applyAmazonReferralCode: ->
