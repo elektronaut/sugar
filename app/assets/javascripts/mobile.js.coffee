@@ -122,6 +122,10 @@ $(document).ready ->
     permalink = post.find(".post_info .permalink a").get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, "")
     username = post.find(".post_info .username a").text()
 
+    # Hide spoilers
+    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"')
+    html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"')
+
     $(Sugar).trigger "quote",
       username: username
       permalink: permalink

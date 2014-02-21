@@ -75,6 +75,10 @@ class Sugar.Views.Post extends Backbone.View
       username  = $(this.el).find('.post_info .username a').text()
       permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
 
+    # Hide spoilers
+    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"')
+    html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"')
+
     $(Sugar).trigger "quote",
       username: username
       permalink: permalink
