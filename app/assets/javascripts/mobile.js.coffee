@@ -137,17 +137,8 @@ $(document).ready ->
     true
 
   # Spoiler tags
-  $(".spoiler").each ->
-    container = this
-    unless container.spoilerApplied
-      $(container).wrapInner "<span class=\"innerSpoiler\"></span>"  if $(container).find(".innerSpoiler").length < 1
-      $(container).prepend "<span class=\"spoilerLabel\">Spoiler!</span> "  if $(container).find(".spoilerLabel").length < 1
-      $(container).find(".innerSpoiler").hide()
-      $(container).click ->
-        $(container).find(".innerSpoiler").show()
-        $(container).find(".spoilerLabel").hide()
-
-      container.spoilerApplied = true
+  $(".spoiler").click ->
+    $(this).toggleClass 'revealed'
 
   # Amazon Associates referral code
   if referral_id = Sugar.Configuration.amazonAssociatesId
