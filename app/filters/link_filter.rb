@@ -46,7 +46,10 @@ class LinkFilter < Filter
       http.start do |http|
         http.head(uri.request_uri).code =~ /^(2|3)\d\d$/
       end
-    rescue SocketError, Net::OpenTimeout, OpenSSL::SSL::SSLError
+    rescue SocketError, Net::OpenTimeout, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED
+      false
+    rescue StandardError => e
+      logger.error "Unexpected connection error #{e.inspect}"
       false
     end
   end

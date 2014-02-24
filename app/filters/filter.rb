@@ -15,4 +15,7 @@ class Filter
     process(@post)
   end
 
+  def logger
+    @logger ||= Rails.logger
+  end
 end
