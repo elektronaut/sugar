@@ -34,6 +34,10 @@ $(Sugar).bind 'ready', ->
     $('#replyText textarea').on "focus", ->
       window.replyTabs.controls.showTab window.replyTabs.tabs[0]
 
+    # Show write tab when quoting is triggered
+    $(Sugar).on "quote", (event, data) ->
+      window.replyTabs.controls.showTab window.replyTabs.tabs[0]
+
   # Tabs on signup
   $('#signup-tabs').each ->
     new Sugar.Tabs this, showFirstTab: true
