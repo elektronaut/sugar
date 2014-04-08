@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
       :last_active, :created_at, :description, :admin,
       :moderator, :user_admin,
       :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
-      :msn, :gtalk, :last_fm, :facebok_uid, :banned_until
+      :msn, :gtalk, :last_fm, :facebook_uid, :banned_until
     ]
   end
 

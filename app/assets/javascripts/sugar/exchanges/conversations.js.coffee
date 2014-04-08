@@ -14,8 +14,8 @@ $(Sugar).bind 'ready', ->
     # Load usernames from the backend on focus
     $inputField.focus ->
       if usernames.length == 0
-        $.getJSON '/users.json', (users) ->
-          usernames = (user.username for user in users)
+        $.getJSON '/users.json', (response) ->
+          usernames = (user.username for user in response.users)
           $inputField.setOptions
             data: usernames
 

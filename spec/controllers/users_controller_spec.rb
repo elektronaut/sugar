@@ -31,7 +31,7 @@ describe UsersController do
     specify { flash[:notice].should be_nil }
 
     it "renders JSON" do
-      @json.should be_kind_of(Array)
+      @json["users"].should be_kind_of(Array)
     end
   end
 
@@ -56,7 +56,7 @@ describe UsersController do
     end
 
     it "renders JSON" do
-      @json.should be_kind_of(Array)
+      @json["users"].should be_kind_of(Array)
     end
   end
 

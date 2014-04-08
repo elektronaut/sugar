@@ -9,8 +9,8 @@ $(Sugar).bind 'ready', ->
       zoom:      2,
       mapTypeId: google.maps.MapTypeId.ROADMAP
 
-    $.getJSON '/users.json', (json) ->
-      $(json).each ->
+    $.getJSON '/users.json', (response) ->
+      $(response.users).each ->
         user = this
         if user.latitude && user.longitude
           marker = new google.maps.Marker

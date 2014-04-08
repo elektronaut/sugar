@@ -12,6 +12,8 @@ GEM
       rack-test (~> 0.6.2)
     actionpack-page_caching (1.0.2)
       actionpack (>= 4.0.0, < 5)
+    active_model_serializers (0.8.1)
+      activemodel (>= 3.0)
     activemodel (4.0.3)
       activesupport (= 4.0.3)
       builder (~> 3.1.0)
@@ -294,6 +296,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
+  active_model_serializers
   acts_as_list
   aws-s3
   backbone-on-rails

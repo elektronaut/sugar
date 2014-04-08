@@ -4,6 +4,7 @@ gem 'rails', '~> 4.0.3'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
+gem 'active_model_serializers'
 
 gem 'sqlite3'
 gem 'mysql2'
