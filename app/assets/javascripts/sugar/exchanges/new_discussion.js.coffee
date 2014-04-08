@@ -20,7 +20,6 @@ $(Sugar).bind 'ready', ->
             words = $.map(words, (word) ->
               word.replace /[!~\^=\$\*\[\]\{\}]/, ""
             )
-            words[words.length - 1] += "*"  if words[words.length - 1].match(/^[\w]{3}[^\*]*$/)
             query = words.join(" | ")
             $.getJSON "/discussions/search.json",
               query: query
@@ -29,14 +28,10 @@ $(Sugar).bind 'ready', ->
               $(searchResults).removeClass "loading"
               if json.discussions.length > 0
                 output = "<h4>Similar discussions found. Maybe you should check them out before posting?</h4>"
-                discussion = null
-                a = 0
 
-                while a < 10
-                  if a < json.discussions.length
-                    discussion = json.discussions[a].discussion
-                    output += "<a href=\"/discussions/" + discussion.id + "\" class=\"discussion\">" + discussion.title + " <span class=\"posts_count\">" + discussion.posts_count + " posts</span></a>"
-                  a += 1
+                for discussion in json.discussions[0...10]
+                  output += "<a href=\"/discussions/" + discussion.id + "\" class=\"discussion\">" + discussion.title + " <span class=\"posts_count\">" + discussion.posts_count + " posts</span></a>"
+
                 output += "<a href=\"/search?q=" + encodeURIComponent(query) + "\">Show all " + (json.total_entries) + " results</a>"  if json.total_entries > 10
                 $(searchResults).html(output).hide().slideDown "fast"
               else
