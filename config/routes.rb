@@ -10,6 +10,7 @@ Sugar::Application.routes.draw do
       resources :users do
         collection do
           get 'me'
+          get 'banned'
         end
       end
     end
