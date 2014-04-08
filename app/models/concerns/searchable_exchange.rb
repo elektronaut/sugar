@@ -25,7 +25,7 @@ module SearchableExchange
         order_by :last_post_at, :desc
         paginate page: options[:page], per_page: Exchange.per_page
       end
-      search.results
+      search
     end
   end
 

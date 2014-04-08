@@ -23,11 +23,6 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   private
 
-  # Find the user that owns the access token
-  def current_resource_owner
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-  end
-
   def find_user
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound

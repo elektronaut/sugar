@@ -31,7 +31,8 @@ class DiscussionsController < ApplicationController
   end
 
   def search
-    @exchanges = Discussion.search_results(search_query, user: current_user, page: params[:page])
+    search = Discussion.search_results(search_query, user: current_user, page: params[:page])
+    @exchanges = search.results
 
     respond_to do |format|
       format.any(:html, :mobile) do
@@ -39,14 +40,9 @@ class DiscussionsController < ApplicationController
         respond_with_exchanges(@exchanges)
       end
       format.json do
-        json = {
-          pages:         @exchanges.pages,
-          total_entries: @exchanges.total,
-          # TODO: Fix when Rails bug is fixed
-          #discussions:   @exchanges
-          discussions:   @exchanges.map{|d| {discussion: d.attributes}}
-        }.to_json(except: [:delta])
-        render text: json
+        respond_with @exchanges, meta: {
+          total: search.total
+        }
       end
     end
   end

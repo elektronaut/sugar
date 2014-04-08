@@ -15,17 +15,17 @@ describe SearchableExchange, solr: true do
     before { Sunspot.commit }
 
     context "as nobody" do
-      subject { Discussion.search_results('testing', user: nil, page: 1) }
+      subject { Discussion.search_results('testing', user: nil, page: 1).results }
       it { should =~ [discussion] }
     end
 
     context "as a regular user" do
-      subject { Discussion.search_results('testing', user: user, page: 1) }
+      subject { Discussion.search_results('testing', user: user, page: 1).results }
       it { should =~ [discussion] }
     end
 
     context "as a trusted user" do
-      subject { Discussion.search_results('testing', user: trusted_user, page: 1) }
+      subject { Discussion.search_results('testing', user: trusted_user, page: 1).results }
       it { should =~ [discussion, trusted_discussion] }
     end
   end

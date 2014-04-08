@@ -7,6 +7,11 @@ Sugar::Application.routes.draw do
   # API routes
   namespace :api, defaults: {format: 'json'} do
     scope module: :v1 do
+      resources :discussions do
+        collection do
+          get 'search'
+        end
+      end
       resources :users do
         collection do
           get 'me'
