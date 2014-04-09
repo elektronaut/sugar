@@ -21,6 +21,10 @@ $(Sugar).bind 'ready', ->
     $('#user_moderator, #user_user_admin').click(checkTrusted)
     $('#user_admin').click(checkAdmin).click(checkTrusted)
 
+    $(this).find('.clear-location').click ->
+      window.clearLocation()
+      false
+
     checkAdmin();
     checkTrusted();
 

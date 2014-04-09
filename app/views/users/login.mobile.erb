@@ -42,16 +42,18 @@
 
 <div id="login-functions">
   <p>
-    <%= link_to_function "Password reminder", "forgot_password();" %>
+    <%= link_to "Password reminder", "#", class: "forgot-password" %>
     <span class="separator">|</span>
-    <%= link_to "Regular site", imobile_format: 'html' %>
+    <%= link_to "Regular site", mobile_format: 'html' %>
   </p>
 </div>
 
 <script type="text/javascript">
   $('#password-reminder').hide();
-  function forgot_password() {
+  function forgotPassword() {
     $('#login').toggle();
     $('#password-reminder').toggle();
   }
+
+  $('.forgot-password').click(forgotPassword);
 </script>

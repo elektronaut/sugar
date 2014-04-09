@@ -90,6 +90,9 @@ $(document).ready ->
   $(window).bind 'resize', updateLayout
   updateLayout()
 
+  $('.toggle-navigation').click ->
+    window.toggleNavigation()
+
   # Open images when clicked
   $('.post .body img').click ->
     document.location = this.src
