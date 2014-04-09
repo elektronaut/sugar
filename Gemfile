@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.1.0.beta1'
+gem 'rails', '~> 4.1.0'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
@@ -82,6 +82,7 @@ group :test, :development do
   gem 'sunspot-rails-tester'
 
   # RSpec
+  gem 'minitest'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'json_spec'
