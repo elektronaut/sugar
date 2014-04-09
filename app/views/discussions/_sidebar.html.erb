@@ -1,5 +1,5 @@
 <%
-  @categories = Category.find(:all, order: :position).reject{ |c| !c.viewable_by?(current_user) }
+  @categories = Category.viewable_by(current_user)
 %>
 
 <div class="categories">

@@ -15,6 +15,8 @@ describe UploadsController, redis: true do
       amazon_aws_secret: "bar",
       amazon_s3_bucket:  "sugar"
     )
+
+    AWS.stub!
   end
 
   specify { Sugar.aws_s3?.should == true }
@@ -27,7 +29,7 @@ describe UploadsController, redis: true do
         {
           type: "image/png",
           name: "pink.png",
-          url:  "https://s3.amazonaws.com/sugar/76a68c6a781ef4919bd4352b880b7c9e50de3d96.png"
+          url:  "https://sugar.s3.amazonaws.com/76a68c6a781ef4919bd4352b880b7c9e50de3d96.png"
         }
       end
 

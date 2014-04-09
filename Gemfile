@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.0.3'
+gem 'rails', '~> 4.1.0'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
@@ -11,7 +11,7 @@ gem 'mysql2'
 gem 'pg'
 
 gem 'redis', '~> 3.0.4'
-gem 'hiredis', '~> 0.4.5'
+gem 'hiredis', '~> 0.5.1'
 gem 'redis-rails', '~> 4.0.0'
 
 gem 'therubyracer'
@@ -52,15 +52,17 @@ gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
 gem 'ruby-filemagic', require: 'filemagic'
-gem 'aws-s3', require: 'aws/s3'
+gem 'aws-sdk'
 gem 'redcarpet', '~> 3.0'
 gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
 
 group :development do
+  gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
   gem 'guard'
-  gem 'guard-spork'
+  gem 'guard-spring'
   gem 'guard-rspec'
 end
 
@@ -80,6 +82,7 @@ group :test, :development do
   gem 'sunspot-rails-tester'
 
   # RSpec
+  gem 'minitest'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'json_spec'
@@ -89,6 +92,4 @@ group :test, :development do
   # FactoryGirl
   gem 'factory_girl_rails'
 
-  # Spork
-  gem 'spork'
 end
