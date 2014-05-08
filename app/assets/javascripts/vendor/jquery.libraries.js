@@ -86,7 +86,7 @@ jQuery.extend({
  * Version 1.0, Released 2008.04.17
  *
  * Copyright (c) 2008 Daniel MacDonald (www.projectatomic.com)
- * Dual licensed GPL http://www.gnu.org/licenses/gpl.html 
+ * Dual licensed GPL http://www.gnu.org/licenses/gpl.html
  * and MIT http://www.opensource.org/licenses/mit-license.php
  */
 (function($) {
@@ -94,7 +94,7 @@ $.fn.flickr = function(o){
 var s = {
     api_key: null,              // [string]    required, see http://www.flickr.com/services/api/misc.api_keys.html
     type: null,                 // [string]    allowed values: 'photoset', 'search', default: 'flickr.photos.getRecent'
-    photoset_id: null,          // [string]    required, for type=='photoset'  
+    photoset_id: null,          // [string]    required, for type=='photoset'
     text: null,			            // [string]    for type=='search' free text search
     user_id: null,              // [string]    for type=='search' search by user id
     group_id: null,             // [string]    for type=='search' search by group id
@@ -112,11 +112,11 @@ var s = {
     callback: null              // [function]  optional, callback function applied to entire <ul>
 
     // PAGING NOTES: jQuery Flickr plug-in does not provide paging functionality, but does provide hooks for a custom paging routine
-    // within the <ul> created by the plug-in, there are two hidden <input> tags, 
+    // within the <ul> created by the plug-in, there are two hidden <input> tags,
     // input:eq(0): current page, input:eq(1): total number of pages, input:eq(2): images per page, input:eq(3): total number of images
-    
+
     // SEARCH NOTES: when setting type to 'search' at least one search parameter  must also be passed text, user_id, group_id, or tags
-    
+
     // SIZE NOTES: photos must allow viewing original size for size 'o' to function, if not, default size is shown
   };
   if(o){$.extend(s, o);}
@@ -168,11 +168,11 @@ var s = {
     });
   });
 };
-// static function to format the flickr API url according to the plug-in settings 
+// static function to format the flickr API url according to the plug-in settings
 $.flickr = {
     format: function(s){
         if (s.url) {return s.url;}
-        var url = 'http://api.flickr.com/services/rest/?format=json&jsoncallback='+s.api_callback+'&api_key='+s.api_key;
+        var url = 'https://api.flickr.com/services/rest/?format=json&jsoncallback='+s.api_callback+'&api_key='+s.api_key;
         switch (s.type){
             case 'photoset':
                 url += '&method=flickr.photosets.getPhotos&photoset_id=' + s.photoset_id;
