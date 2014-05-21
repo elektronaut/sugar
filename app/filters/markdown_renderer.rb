@@ -5,6 +5,11 @@ class MarkdownRenderer < Redcarpet::Render::HTML
     document = normalize_newlines(document)
     document = escape_leading_gts_without_space(document)
     document = separate_adjacent_blockquotes(document)
+    document
+  end
+
+  def block_html(raw_html)
+    render_spoiler(raw_html)
   end
 
   def postprocess(document)
@@ -12,6 +17,14 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   private
+
+  def render_spoiler(str)
+    if str.strip =~ /\A<div class="spoiler">(.*)<\/div>\n?\z/m
+      '<div class="spoiler">' + MarkdownFilter.new($1).to_html + "</div>\n"
+    else
+      str
+    end
+  end
 
   def normalize_newlines(document)
     document.gsub(/\r\n?/, "\n")
