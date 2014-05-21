@@ -17,12 +17,13 @@ class MarkdownFilter < Filter
   def markdown
     @markdown ||= Redcarpet::Markdown.new(
       markdown_renderer,
-      no_intra_emphasis:   true,
-      fenced_code_blocks:  true,
-      autolink:            false,
-      strikethrough:       true,
-      lax_spacing:         true,
-      space_after_headers: true
+      no_intra_emphasis:            true,
+      fenced_code_blocks:           true,
+      disable_indented_code_blocks: true,
+      autolink:                     false,
+      strikethrough:                true,
+      lax_spacing:                  true,
+      space_after_headers:          true
     )
   end
 
