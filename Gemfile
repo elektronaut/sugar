@@ -57,6 +57,9 @@ gem 'redcarpet', '~> 3.0'
 gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
 
+# TODO: Remove this when the redesign is done
+gem 'smart_assets'
+
 group :development do
   gem 'spring'
   gem 'spring-commands-rspec'

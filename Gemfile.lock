@@ -256,6 +256,9 @@ GEM
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
     slop (3.5.0)
+    smart_assets (0.1.0)
+      rails (~> 4.0)
+      sprockets-rails (~> 2.0)
     spring (1.1.2)
     spring-commands-rspec (1.0.1)
       spring (>= 0.9.1)
@@ -358,6 +361,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   shoulda-matchers
   simplecov
+  smart_assets
   spring
   spring-commands-rspec
   sqlite3
