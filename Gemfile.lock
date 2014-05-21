@@ -165,6 +165,7 @@ GEM
     nio4r (1.0.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    non-stupid-digest-assets (1.0.4)
     options (2.3.2)
     pg (0.17.1)
     polyglot (0.3.4)
@@ -256,9 +257,6 @@ GEM
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
     slop (3.5.0)
-    smart_assets (0.1.0)
-      rails (~> 4.0)
-      sprockets-rails (~> 2.0)
     spring (1.1.2)
     spring-commands-rspec (1.0.1)
       spring (>= 0.9.1)
@@ -345,6 +343,7 @@ DEPENDENCIES
   mysql2
   newrelic_rpm
   nokogiri
+  non-stupid-digest-assets
   pg
   progress_bar
   rails (~> 4.1.0)
@@ -361,7 +360,6 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   shoulda-matchers
   simplecov
-  smart_assets
   spring
   spring-commands-rspec
   sqlite3

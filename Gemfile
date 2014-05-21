@@ -58,7 +58,7 @@ gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
 
 # TODO: Remove this when the redesign is done
-gem 'smart_assets'
+gem "non-stupid-digest-assets"
 
 group :development do
   gem 'spring'
