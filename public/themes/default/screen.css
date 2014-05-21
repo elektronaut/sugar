@@ -818,12 +818,19 @@ table.discussions tr.targeted.nsfw {
   height: auto;
 }
 .post .body .instagram-wrapper {
+  border: 1px solid #eee;
   width: 100%;
   padding-top: 98px;
   padding-bottom: 100%;
   max-width: 612px;
   min-width: 300px;
   position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+@media screen and (min-width: 718px) {
+  .post .body .instagram-wrapper {
+    padding-bottom: 612px;
+  }
 }
 .post .body .instagram-wrapper iframe {
   position: absolute;
