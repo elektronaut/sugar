@@ -826,6 +826,7 @@ table.discussions tr.targeted.nsfw {
   min-width: 300px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
 }
 @media screen and (min-width: 718px) {
   .post .body .instagram-wrapper {
