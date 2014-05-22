@@ -39,7 +39,7 @@
   <% end %>
 
   <% if @theme.icon? %>
-    <link rel="icon" type="image/gif" href="<%= @theme.icon_path %>">
+    <link rel="icon" type="image/gif" href="<%= image_path @theme.icon_path %>">
   <% end %>
 </head>
 <body class="<%= body_classes %>">
