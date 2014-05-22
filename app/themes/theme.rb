@@ -10,10 +10,6 @@ class Theme
       ids.map{|id| find(id)}
     end
 
-    def asset_paths
-      all.flat_map { |theme| [theme.images_dir, theme.stylesheets_dir] }
-    end
-
     def precompile_assets
       all.flat_map { |theme| [theme.stylesheet_path, theme.mobile_stylesheet_path] }.compact
     end
@@ -46,14 +42,6 @@ class Theme
 
   def initialize(options={})
     set_options(options)
-  end
-
-  def images_dir
-    dir.join('assets', 'images')
-  end
-
-  def stylesheets_dir
-    dir.join('assets', 'stylesheets')
   end
 
   def path(filename=nil)

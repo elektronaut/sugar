@@ -52,9 +52,6 @@ module Sugar
     # Tag log entries with uuid
     config.log_tags = [:uuid]
 
-    # Add the theme asset paths
-    Theme.asset_paths.each { |path| config.assets.paths << path }
-
     # Enable the asset pipeline
     config.assets.enabled = true
 
