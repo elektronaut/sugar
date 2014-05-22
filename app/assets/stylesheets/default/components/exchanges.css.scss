@@ -1,0 +1,52 @@
+table.discussions {
+  border-collapse:     collapse;
+  border-top:          1px solid #E2DCBF;
+  width:               100%;
+  margin-bottom:       20px;
+}
+table.discussions td {
+  padding:             3px 20px 7px 0;
+  border-bottom:       1px solid #E2DCBF;
+  white-space:         nowrap;
+  color:               #6f5a43;
+}
+table.discussions td.name {
+  font-size:           1.3em;
+  font-weight:         bold;
+  padding-bottom:      0;
+  padding-top:         7px;
+  border-bottom:       0;
+}
+table.discussions td.name .title {
+  white-space:         normal;
+  float:               left;
+  max-width:           600px;
+}
+table.discussions td.last {
+  width:               100%;
+}
+table.discussions tr.new_posts td.new_posts strong {
+  color:               #c76700;
+}
+
+table.discussions tr.new_posts {
+  background:          #ffffe8;
+}
+table.discussions tr.nsfw {
+  opacity:             0.6;
+}
+table.discussions tr.closed td.name a, table.discussions tr.closed td.name a:visited {
+  color:               #666;
+}
+table.discussions tr.closed td.name a:hover {
+  color:               #333;
+}
+
+/* Targeted discussion (Keyboard navigation) */
+table.discussions .targeted td {
+  background:          #f0f5f8;
+  color:               #012;
+}
+table.discussions tr.targeted.nsfw {
+  opacity:             1.0;
+}

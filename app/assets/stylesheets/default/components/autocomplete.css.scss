@@ -1,0 +1,36 @@
+.ac_results {
+  margin-top:          4px;
+  padding:             2px;
+  border:              1px solid #E2DCBF;
+  background-color:    #fff;
+  overflow:            hidden;
+  z-index:             99999;
+}
+
+.ac_results ul {
+  margin:              0;
+  padding:             0;
+}
+
+.ac_results li {
+  margin:              0;
+  padding:             2px 5px;
+  cursor:              default;
+  display:             block;
+  font-size:           1.4em;
+  line-height:         18px;
+  overflow:            hidden;
+  color:               #484030;
+}
+
+.ac_odd {
+  background-color:    #eee;
+  background:          #f8f7f1;
+}
+
+.ac_results .ac_over {
+  background-color:    #05506d;
+  color:               #fff;
+}
+
+

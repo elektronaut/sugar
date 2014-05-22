@@ -1,0 +1,22 @@
+/* Tables */
+th {
+  font-weight:         bold;
+}
+table.list {
+  border-collapse:     collapse;
+  border-top:          1px solid #E2DCBF;
+  width:               100%;
+}
+table.list td, table.list th {
+  padding:             7px 20px 7px 0;
+  border-bottom:       1px solid #E2DCBF;
+  white-space:         nowrap;
+}
+table.list th {
+  color:               #321;
+  background:          #F5F1E0;
+}
+table.list td {
+  color:               #6f5a43;
+}
+
