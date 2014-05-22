@@ -185,6 +185,11 @@ Sugar::Application.routes.draw do
   get 'help' => 'help#index', as: :help
   get 'help/:page' => 'help#show', as: :help_page
 
+  # Old theme redirects
+  # TODO: Remove after redesign
+  get '/themes/:theme/images/*path.:format', to: redirect('assets/%{theme}/%{path}.%{format}')
+  get '/themes/:theme/*path.:format',        to: redirect('assets/%{theme}/%{path}.%{format}')
+
   # Vanilla redirects
   controller :vanilla do
     get '/vanilla'              => :discussions
