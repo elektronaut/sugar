@@ -1,0 +1,62 @@
+.spoiler,
+.spoiler *,
+.spoiler:after {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.spoiler {
+  border: 1px solid transparent;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  position: relative;
+}
+
+.spoiler * {
+  opacity: 0;
+}
+
+.spoiler.revealed {
+  background: rgba(0, 0, 0, 0.02);
+  cursor: normal;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.spoiler.revealed * {
+  opacity: 1;
+}
+
+/*
+  The :after pseudo-element is an overlay covering the entire element
+  in order to prevent clicking through.
+*/
+.spoiler:after {
+  opacity: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  padding: 8px;
+  content: "Spoiler!";
+  color: #fff;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-smoothing: subpixel-antialiased;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.7);
+}
+
+.spoiler.revealed:after {
+  opacity: 0;
+  visibility: hidden;
+  left: -5px;
+  -webkit-transform: rotate(2deg);
+  -moz-transform: rotate(2deg);
+}

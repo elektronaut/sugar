@@ -1,27 +1,12 @@
-html,body,div,span,applet,object,iframe,
-h1,h2,h3,h4,h5,h6,p,blockquote,pre,
-a,abbr,acronym,address,big,cite,code,
-del,dfn,em,font,img,ins,kbd,q,s,samp,
-small,strike,strong,sub,sup,tt,var,
-dl,dt,dd,ol,ul,li,
-fieldset,form,label,legend,
-table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
-:focus{outline:0;}
-body{line-height:1;color:black;background:white;}
-ol,ul{list-style:none;}
-table{border-collapse:separate;border-spacing:0;}
-caption,th,td{text-align:left;font-weight:normal;}
-blockquote:before,blockquote:after,
-q:before,q:after{content:"";}
-blockquote,q{quotes:"" "";}
-
+//= require default/reset
+//= require default/components/spoilers
 
 a, a:visited {
   text-decoration: none;
-  color:           #763047;
+  color: #763047;
 }
 a:hover {
-  color:           #025;
+  color: #025;
 }
 
 strong {
@@ -276,7 +261,7 @@ body[orient="landscape"] .page_content textarea {
 
 .discussion .new_posts_count {
   float: right;
-  color:           #c76700;
+  color: #c76700;
   font-size: 11px;
   letter-spacing: -0.05em;
   padding-top: 3px;
@@ -322,7 +307,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 
 .discussions .new_posts, .conversations .new_posts {
-  background:      #fffde8;
+  background: #fffde8;
   background: #fffde8 image-url('b3s/mobile/contentbg_light_new_posts.gif') bottom left repeat-x;
   border-bottom: 1px solid #E4DDB5;
 }
@@ -351,24 +336,24 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   padding: 2px 10px;
   border-bottom: 1px solid #ddd;
   font-size: 11px;
-  background:      #f8f7f1;
-  color:           #84806d;
+  background: #f8f7f1;
+  color: #84806d;
 }
 .posts .me_post {
-  background:      #f8f7f1;
-  color:           #220;
+  background: #f8f7f1;
+  color: #220;
 }
 .posts .me_post .body .poster {
-  color:           #763047;
+  color: #763047;
   text-decoration: none;
   font-weight: bold;
 }
 .posts .me_post .date {
-  color:           #84806d;
+  color: #84806d;
   font-size: 11px;
 }
 .posts .post .post_edited {
-  color:           #84806d;
+  color: #84806d;
   font-size: 11px;
 }
 .posts .post .post_info {
@@ -444,14 +429,14 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   font-size: 1.1em;
 }
 .post .body ul, .post .body ol {
-  margin-left:         25px;
+  margin-left: 25px;
 }
 .post .body ul {
-  list-style-type:     disc;
+  list-style-type: disc;
   list-style-position: outside;
 }
 .post .body ol {
-  list-style-type:     decimal;
+  list-style-type: decimal;
   list-style-position: outside;
 }
 .post .body ul p,
@@ -505,7 +490,7 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 
 .posts .post .body a, .posts .post .body a:visited {
-  color:           #364077;
+  color: #364077;
   text-decoration: underline;
 }
 
@@ -561,79 +546,43 @@ table.userinfo th {
 
 
 blockquote {
-  margin:          0;
-  padding:         5px 10px;
-  background:      #F3F1E9;
-  color:           #3C392C;
-  border:          1px solid #DEDCD4;
-  border-left:     2px solid #CCC9BC;
-  font-size:       13px;
-  font-style:      italic;
+  margin: 0;
+  padding: 5px 10px;
+  background: #F3F1E9;
+  color: #3C392C;
+  border: 1px solid #DEDCD4;
+  border-left: 2px solid #CCC9BC;
+  font-size: 13px;
+  font-style: italic;
 }
 /* Posted by.. inside blockquotes */
 blockquote cite {
-  display:         block;
-  color:           #7E7B70;
-  border-bottom:   1px solid #CCC9BC;
-  margin-bottom:   5px;
+  display: block;
+  color: #7E7B70;
+  border-bottom: 1px solid #CCC9BC;
+  margin-bottom: 5px;
 }
 
 
-.spoiler, .spoiler *, .spoiler:after {
-  -webkit-transition:  all 0.2s ease-in-out;
-  -moz-transition:     all 0.2s ease-in-out;
-  -o-transition:       all 0.2s ease-in-out;
-  -ms-transition:      all 0.2s ease-in-out;
-  transition:          all 0.2s ease-in-out;
-}
+/* -----------------------------------------------------------------------
+   SPOILERS
+   ----------------------------------------------------------------------- */
 
 .spoiler {
-  border:              1px solid transparent;
-  padding:             5px;
-  background:          rgba(0, 0, 0, 0.12);
-  color:               rgba(0, 0, 0, 0);
-  cursor:              pointer;
-  position:            relative;
+  padding: 5px;
 }
 
-.spoiler * {
-  opacity:             0;
-}
-
-.spoiler.revealed {
-  background:          rgba(0, 0, 0, 0.02);
-  cursor:              normal;
-  color:               #000;
-  border:              1px solid rgba(0, 0, 0, 0.05);
-}
-.spoiler.revealed * {
-  opacity:             1;
-}
-
-/*
-  The :after pseudo-element is an overlay covering the entire element
-  in order to prevent clicking through.
-*/
 .spoiler:after {
-  opacity:                1;
-  position:               absolute;
-  width:                  100%;
-  height:                 100%;
-  top:                    0px;
-  left:                   0px;
-  padding:                5px;
-  content:                "Spoiler!";
-  color:                  #fff;
-  -webkit-font-smoothing: subpixel-antialiased;
-  font-smoothing:         subpixel-antialiased;
-  font-weight:            bold;
-  text-shadow:            0px 0px 1px rgba(0, 0, 0, 0.7);
+  padding: 5px;
+  font-size: 1em;
 }
 
 .spoiler.revealed:after {
-  opacity:             0;
-  visibility:          hidden;
+  left: 0px;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
 }
+
 
 /* -----------------------------------------------------------------------
    RICH TEXT EDITOR
@@ -647,63 +596,63 @@ textarea.rich {
   max-width: 650px;
   height: 180px;
   margin: 0 auto;
-  border:              1px solid #d7d7d7;
+  border: 1px solid #d7d7d7;
   border-radius: 0px;
-  box-shadow:          inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
   -webkit-appearance: none;
 }
 .richTextToolbar {
-  position:            relative;
-  list-style:          none;
-  border:              1px solid #d7d7d7;
-  border-bottom:       0px;
-  background-color:    #fafafa;
-  margin:              0;
-  padding:             0px 2px;
-  height:              30px;
-  margin-bottom:       0px;
+  position: relative;
+  list-style: none;
+  border: 1px solid #d7d7d7;
+  border-bottom: 0px;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 0px 2px;
+  height: 30px;
+  margin-bottom: 0px;
   width: 98%;
-  max-width:           650px;
+  max-width: 650px;
 }
 .richTextToolbar li {
-  list-style:          none;
-  margin:              0;
-  padding:             0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 .richTextToolbar .formatting {
-  float:               right;
+  float: right;
 }
 .richTextToolbar .button {
-  float:               left;
+  float: left;
 }
 .richTextToolbar .button:first-child {
-  margin-left:         -2px;
+  margin-left: -2px;
 }
 .richTextToolbar .button a,
 .richTextToolbar .formatting a {
-  height:              30px;
-  line-height:         30px;
-  text-align:          center;
-  display:             block;
-  cursor:              pointer;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  display: block;
+  cursor: pointer;
 }
 .richTextToolbar .button a {
-  width:               26px;
-  float:               left;
-  border-left:         1px solid #fff;
-  border-right:        1px solid #d7d7d7;
-  color:               #555;
-  font-size:           12px;
-  background-color:    #F6F6F6;
+  width: 26px;
+  float: left;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #d7d7d7;
+  color: #555;
+  font-size: 12px;
+  background-color: #F6F6F6;
 }
 .richTextToolbar .formatting a {
-  font-size:           11px;
-  float:               right;
-  width:               60px;
-  text-align:          center;
+  font-size: 11px;
+  float: right;
+  width: 60px;
+  text-align: center;
 }
 .richTextToolbar .button span {
-  display:             none;
+  display: none;
 }
 
 /* Retina display overrides */

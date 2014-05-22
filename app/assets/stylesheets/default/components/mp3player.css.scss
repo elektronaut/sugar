@@ -1,26 +1,26 @@
 a.mp3player, a.mp3player:visited {
-  display:             inline-block;
-  margin:              2px;
-  padding:             2px 10px 2px 22px;
-  text-decoration:     none !important;
-  font-size:           1.1em;
-  color:               #000 !important;
+  display: inline-block;
+  margin: 2px;
+  padding: 2px 10px 2px 22px;
+  text-decoration: none !important;
+  font-size: 1.1em;
+  color: #000 !important;
 }
 
 a.mp3player:hover {
-  text-decoration:     underline;
+  text-decoration: underline;
 }
 
 a.mp3player_stopped, a.mp3player_stopped:visited {
-  background:          #f8f8f4 image-url('default/mp3player.png') repeat-x 0 -1px;
-  border:              1px solid #e5e7d8;
+  background: #f8f8f4 image-url('default/mp3player.png') repeat-x 0 -1px;
+  border: 1px solid #e5e7d8;
 }
 a.mp3player_playing, a.mp3player_playing:visited {
-  background:          #ecf6ec image-url('default/mp3player_playing.png') repeat-x 0 -1px;
-  border:              1px solid #c3dfc3;
+  background: #ecf6ec image-url('default/mp3player_playing.png') repeat-x 0 -1px;
+  border: 1px solid #c3dfc3;
 }
 a.mp3player_playing .position {
-  color:               #454;
-  font-size:           0.7em;
-  padding-left:        2px;
+  color: #454;
+  font-size: 0.7em;
+  padding-left: 2px;
 }

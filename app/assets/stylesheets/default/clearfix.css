@@ -1,15 +1,12 @@
 .clearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    font-size: 0;
-    clear: both;
-    visibility: hidden;
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
 }
 
-.clearfix {display: inline-block;}
-
-/* Hides from IE5/Mac \*/
-* html .clearfix {height: 1px;}
-.clearfix {display: block;}
-/* End hide from IE5/Mac */
+.clearfix {
+  display: inline-block;
+}

@@ -1,48 +1,57 @@
 #sidebar {
-  position:            absolute;
-  right:               0;
-  width:               200px;
-  padding:             0 0 0 30px;
-  font-size:           1.2em;
-}
-#sidebar .buttons {
-  margin:              15px 0;
-}
-#sidebar a.button, #sidebar button {
-  display:             block;
+  position: absolute;
+  right: 0;
+  width: 200px;
+  padding: 0 0 0 30px;
+  font-size: 1.2em;
+
+  .buttons {
+    margin: 15px 0;
+  }
+
+  button, a.button {
+    display: block;
+  }
+
+  .participants {
+    ul {
+      list-style-type: disc;
+      list-style-position: inside;
+    }
+    li {
+      font-size: 1.1em;
+    }
+  }
+
+  .categories {
+    ul {
+      margin-top: -10px;
+    }
+    li {
+      border-bottom: 1px solid #E2DCBF;
+      padding: 4px 0;
+      font-size: 1.1em;
+      display: block;
+      clear: both;
+    }
+    li .count {
+      float: right;
+      font-size: 0.9em;
+      padding-top: 1px;
+      color: #888;
+    }
+    .meta li .count,
+    li.current .count {
+      padding-top: 3px;
+    }
+    li.current a {
+      color: #c22;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .meta li a {
+      font-size: 1.2em;
+    }
+  }
 }
 
-#sidebar .participants ul {
-  list-style-type:     disc;
-  list-style-position: inside;
-}
-#sidebar .participants li {
-  font-size:           1.1em;
-}
-#sidebar .categories ul {
-  margin-top:          -10px;
-}
-#sidebar .categories li {
-  border-bottom:       1px solid #E2DCBF;
-  padding:             4px 0;
-  font-size:           1.1em;
-  display:             block;
-  clear:               both;
-}
-#sidebar .categories li .count {
-  float:               right;
-  font-size:           0.9em;
-  padding-top:         1px;
-  color:               #888;
-}
-#sidebar .categories .meta li .count, #sidebar .categories li.current .count {
-  padding-top:         3px;
-}
-#sidebar .categories li.current a {
-  color:               #c22;
-  font-size:           1.2em;
-  font-weight:         bold;
-}
-#sidebar .categories .meta li a {
-  font-size:           1.2em;
-}

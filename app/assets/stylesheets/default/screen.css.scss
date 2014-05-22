@@ -4,103 +4,103 @@
 //= require_self
 
 html, body {
-  height:              100%;
+  height: 100%;
 }
 
 body {
-  color:               #000000;
-  line-height:         1.3;
+  color: #000000;
+  line-height: 1.3;
 }
 
 
 /* Contextual links, ie. "New Discussion" */
 .functions {
-  font-size:           1.5em;
-  float:               right;
-  font-weight:         bold;
-  color:               #888;
+  font-size: 1.5em;
+  float: right;
+  font-weight: bold;
+  color: #888;
 }
 
 div.errors {
-  color:               #100;
-  border:              1px solid #d88;
-  background:          #fdd;
-  padding:             10px 15px 1px 15px;
-  margin:              0 -16px 1em -16px;
+  color: #100;
+  border: 1px solid #d88;
+  background: #fdd;
+  padding: 10px 15px 1px 15px;
+  margin: 0 -16px 1em -16px;
 }
 div.errors ul {
-  margin:              0;
-  list-style-type:     disc;
+  margin: 0;
+  list-style-type: disc;
   list-style-position: inside;
 }
 
 .field_with_errors {
-  display:             block;
+  display: block;
 }
 .field_with_errors label {
-  margin-top:          12px;
-  color:               #100;
-  background:          #fdd;
-  padding:             2px 8px;
-  margin-left:         -8px;
+  margin-top: 12px;
+  color: #100;
+  background: #fdd;
+  padding: 2px 8px;
+  margin-left: -8px;
 }
 .field_with_errors label span.description {
-  color:               #633;
+  color: #633;
 }
 div.fieldWithErrors {
-  display:             inline;
+  display: inline;
 }
 fieldset {
-  margin-bottom:       20px;
+  margin-bottom: 20px;
 }
 fieldset h2 {
-  border-bottom:       1px solid #E2DCBF;
-  margin-top:          20px;
-  padding-bottom:      7px;
-  margin-bottom:       7px;
-  color:               #444;
+  border-bottom: 1px solid #E2DCBF;
+  margin-top: 20px;
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+  color: #444;
 }
 fieldset p.info {
-  font-size:           1.2em;
+  font-size: 1.2em;
 }
 textarea.code {
-  width:               100%;
-  font-family:         Menlo, Monaco, Consolas, Courier New, Courier, monospace;
+  width: 100%;
+  font-family: Menlo, Monaco, Consolas, Courier New, Courier, monospace;
 }
 
 span.example {
-  font-family:         Menlo, Monaco, Consolas, Courier, monospace;
-  font-size:           11px;
-  background:          #F3F1E9;
-  padding:             2px 4px;
-  white-space:         nowrap;
-  color:               #000;
+  font-family: Menlo, Monaco, Consolas, Courier, monospace;
+  font-size: 11px;
+  background: #F3F1E9;
+  padding: 2px 4px;
+  white-space: nowrap;
+  color: #000;
 }
 
 .mobile_link {
-  font-size:           15px;
-  margin-top:          15px;
-  font-weight:         bold;
+  font-size: 15px;
+  margin-top: 15px;
+  font-weight: bold;
 }
 
 /* Pagination links */
 .pagination {
-  font-size:           1.3em;
-  font-weight:         bold;
-  color:               #888;
-  margin-top:          -1em;
-  margin-bottom:       5px;
-  clear:               both;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #888;
+  margin-top: -1em;
+  margin-bottom: 5px;
+  clear: both;
 }
 .pagination .links {
-  float:               right;
+  float: right;
 }
 
 .content {
-  font-size:           1.3em;
+  font-size: 1.3em;
 }
 .content a {
-  text-decoration:     underline;
+  text-decoration: underline;
 }
 
 #button-container.posting, #napkin-submit.posting {
@@ -115,33 +115,33 @@ span.example {
 
 /* Top heading/breadcrumbs with line */
 h2.section, #sidebar h2 {
-  padding-bottom:      7px;
-  border-bottom:       1px solid #E2DCBF;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #E2DCBF;
   width: 100%;
 }
 #sidebar h2 {
-  color:               #6f5a43;
-  margin-bottom:       10px;
+  color: #6f5a43;
+  margin-bottom: 10px;
 }
 
 .error_message {
-  font-size:           1.4em;
+  font-size: 1.4em;
 }
 
 #wrapper {
-  position:            absolute;
-  top:                 116px;
-  left:                30px;
-  right:               30px;
+  position: absolute;
+  top: 116px;
+  left: 30px;
+  right: 30px;
 }
 
 #content {
-  min-width:           600px;
-  font-size:           1.2em;
-  padding-bottom:      30px;
+  min-width: 600px;
+  font-size: 1.2em;
+  padding-bottom: 30px;
 }
 #content td, #content th {
-  padding-right:       20px;
+  padding-right: 20px;
 }
 
 
@@ -151,7 +151,7 @@ h2.section, #sidebar h2 {
    ----------------------------------------------------------------------- */
 
 body.with_sidebar #content {
-  margin-right:        230px;
+  margin-right: 230px;
 }
 
 
@@ -161,65 +161,65 @@ body.with_sidebar #content {
    ----------------------------------------------------------------------- */
 
 .new_discussion input.text, .edit_discussion input.text {
-  width:               100%;
-  max-width:           800px;
+  width: 100%;
+  max-width: 800px;
 }
 
 #new_discussion input.title, #edit_discussion input.title {
-  font-size:           1.2em;
+  font-size: 1.2em;
 }
 
 #new_discussion .title_search {
-  border:              1px solid #E2DCBF;
-  padding:             2px 8px;
-  width:               100%;
-  max-width:           588px;
-  margin-top:          2px;
+  border: 1px solid #E2DCBF;
+  padding: 2px 8px;
+  width: 100%;
+  max-width: 588px;
+  margin-top: 2px;
 }
 #new_discussion .title_search.loading {
-  background:          transparent image-url('default/ajax_spinner_small.gif') 0 2px no-repeat;
-  padding:             2px 24px;
-  border:              0;
-  color:               #84806d;
+  background: transparent image-url('default/ajax_spinner_small.gif') 0 2px no-repeat;
+  padding: 2px 24px;
+  border: 0;
+  color: #84806d;
 }
 #new_discussion .title_search h4 {
-  margin-bottom:       0;
-  padding:             8px 0;
-  font-size:           1.2em;
-  color:               #84806d;
+  margin-bottom: 0;
+  padding: 8px 0;
+  font-size: 1.2em;
+  color: #84806d;
 }
 #new_discussion .title_search a, #new_discussion .title_search a:visited {
-  border-top:          1px solid #E2DCBF;
-  padding:             4px 0;
-  font-size:           1.2em;
-  display:             block;
+  border-top: 1px solid #E2DCBF;
+  padding: 4px 0;
+  font-size: 1.2em;
+  display: block;
 }
 #new_discussion .title_search a.discussion {
-  font-weight:         bold;
+  font-weight: bold;
 }
 #new_discussion .title_search a.discussion .posts_count {
-  font-weight:         normal;
-  font-size:           0.8em;
-  padding-left:        4px;
-  color:               #84806d;
+  font-weight: normal;
+  font-size: 0.8em;
+  padding-left: 4px;
+  color: #84806d;
 }
 
 
 .userinfo {
-  margin-bottom:       1em;
+  margin-bottom: 1em;
 }
 #categories .name .count {
-  color:               #aaa;
+  color: #aaa;
 }
 
 
 
 
 .bottomlinks {
-  font-size:           1.3em;
-  font-weight:         bold;
-  border-top:          1px solid #E2DCBF;
-  padding:             5px 0;
+  font-size: 1.3em;
+  font-weight: bold;
+  border-top: 1px solid #E2DCBF;
+  padding: 5px 0;
 }
 
 
@@ -231,14 +231,14 @@ body.with_sidebar #content {
    ----------------------------------------------------------------------- */
 
 .search_tips {
-  margin-top:          -10px;
-  margin-bottom:       30px;
-  max-width:           600px;
-  font-size:           1.1em;
-  color:               #444;
+  margin-top: -10px;
+  margin-bottom: 30px;
+  max-width: 600px;
+  font-size: 1.1em;
+  color: #444;
 }
 .search_tips strong {
-  color:               #000;
+  color: #000;
 }
 
 /* -----------------------------------------------------------------------
@@ -246,10 +246,10 @@ body.with_sidebar #content {
    ----------------------------------------------------------------------- */
 
 .invites_list .email {
-  font-weight:         bold;
+  font-weight: bold;
 }
 .invites_list .actions {
-  width:               50%;
+  width: 50%;
 }
 
 
@@ -262,22 +262,22 @@ body.login #login {
 }
 
 body.login #login input[type=text], body.login #login input[type=password] {
-  font-size:           1.2em;
-  margin-bottom:       10px;
-  width:               250px;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  width: 250px;
 }
 
 body.login #login a {
-  padding-left:        5px;
-  text-decoration:     underline;
+  padding-left: 5px;
+  text-decoration: underline;
 }
 
 body.login #login .facebook {
-  margin-top:          20px;
+  margin-top: 20px;
 }
 
 body.login #login .facebook a {
-  padding-left:        1px;
-  text-decoration:     none;
+  padding-left: 1px;
+  text-decoration: none;
 }
 

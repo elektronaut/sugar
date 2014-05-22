@@ -1,47 +1,37 @@
 #compose-toggle {
-  border-top:          1px solid #E2DCBF;
-  padding-top:         15px;
-  font-size:           1.3em;
-  font-weight:         bold;
+  border-top: 1px solid #E2DCBF;
+  padding-top: 15px;
+  font-size: 1.3em;
+  font-weight: bold;
 }
 
 .compose {
-  border-top:          1px solid #E2DCBF;
-  padding-top:         15px;
+  border-top: 1px solid #E2DCBF;
+  padding-top: 15px;
 }
 .compose .napkin {
-  width:               100%;
-  height:              400px;
-  border:              1px solid #ccc;
-  margin-bottom:       1em;
-}
-.newpage_warning {
-  background:          #F3F1E9;
-  color:               #3C392C;
-  font-size:           1.3em;
-  padding:             5px 15px;
-  max-width:           570px;
-}
-.newpage_warning strong {
-  color:               #460000;
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  margin-bottom: 1em;
 }
 
 #reply-tabs {
-  font-weight:         bold;
-  font-size:           1.3em;
-  max-width:           600px;
+  font-weight: bold;
+  font-size: 1.3em;
+  max-width: 600px;
 }
 #reply-tabs li {
-  display:             inline;
+  display: inline;
 }
 #reply-tabs li a {
-  padding:             2px 5px;
+  padding: 2px 5px;
 }
 #reply-tabs li.active a {
-  background:          #05506d;
-  color:               #fff;
+  background: #05506d;
+  color: #fff;
 }
 
 #replyImage {
-  display:             none;
+  display: none;
 }

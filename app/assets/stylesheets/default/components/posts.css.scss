@@ -1,92 +1,92 @@
 .posts {
-  border-top:          1px solid #E2DCBF;
-  margin-bottom:       20px;
-  width:               100%;
+  border-top: 1px solid #E2DCBF;
+  margin-bottom: 20px;
+  width: 100%;
 }
 .posts .context {
-  border-bottom:       3px solid #E2DCBF;
+  border-bottom: 3px solid #E2DCBF;
 }
 .posts .context .post, .posts .context .post blockquote, .posts .context .post a, .posts .context .post a:visited {
-  color:               #777;
+  color: #777;
 }
 .posts .context .post a:hover {
-  color:               #555;
+  color: #555;
 }
 .posts .context .post .avatar {
-  opacity:             0.7;
+  opacity: 0.7;
 }
 /* Container for posts loaded via AJAX */
 #ajaxPosts .post:first-child, #previewPost {
-  border-top:          3px solid #E2DCBF;
+  border-top: 3px solid #E2DCBF;
 }
 /* Small block between posts that say "2 days later..." */
 .posts .post_distance {
-  border-bottom:       1px solid #E2DCBF;
-  padding:             2px 0 2px 45px;
-  background:          #f8f7f1;
-  color:               #84806d;
+  border-bottom: 1px solid #E2DCBF;
+  padding: 2px 0 2px 45px;
+  background: #f8f7f1;
+  color: #84806d;
 }
 
 .post {
-  padding-top:         15px;
-  padding-bottom:      15px;
-  border-bottom:       1px solid #E2DCBF;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #E2DCBF;
 }
 .post .title {
-  background:          transparent image-url('default/discussion_title_bg.png') 0px 14px no-repeat;
-  font-size:           1.3em;
-  font-weight:         bold;
-  padding:             7px 0 7px 19px;
-  margin:              -15px 0 0 0;
+  background: transparent image-url('default/discussion_title_bg.png') 0px 14px no-repeat;
+  font-size: 1.3em;
+  font-weight: bold;
+  padding: 7px 0 7px 19px;
+  margin: -15px 0 0 0;
 }
 .post .title small {
-  font-size:           0.8em;
-  font-weight:         normal;
-  margin-left:         7px;
+  font-size: 0.8em;
+  font-weight: normal;
+  margin-left: 7px;
 }
 .post .title .labels {
-  color:               #555;
+  color: #555;
 }
 .post .post_functions {
-  line-height:         1;
-  color:               #888;
-  float:               right;
-  margin-right:        10px;
-  font-size:           13px;
+  line-height: 1;
+  color: #888;
+  float: right;
+  margin-right: 10px;
+  font-size: 13px;
 }
 
 .post .post_info {
-  line-height:         1;
-  color:               #888;
-  margin-bottom:       -8px;
-  font-size:           13px;
+  line-height: 1;
+  color: #888;
+  margin-bottom: -8px;
+  font-size: 13px;
 }
 .post .post_info .avatar {
-  width:               32px;
-  height:              32px;
-  margin-right:        10px;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
 }
 .post .post_info .avatar img {
-  vertical-align:      top;
+  vertical-align: top;
 }
 .post .post_info .username {
-  font-size:           16px;
-  font-weight:         bold;
-  margin-right:        5px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 5px;
 }
 .post .post_info .permalink a, .post .post_info .permalink a:visited {
-  color:               #888;
+  color: #888;
 }
 .post .post_info .permalink a:hover {
-  color:               #333;
+  color: #333;
 }
 
 .post .body, .post .edit {
-  clear:               both;
-  font-size:           14px;
-  line-height:         1.35;
-  max-width:           800px;
-  margin-left:         45px;
+  clear: both;
+  font-size: 14px;
+  line-height: 1.35;
+  max-width: 800px;
+  margin-left: 45px;
 }
 .post .body img {
   max-width: 100%;
@@ -115,14 +115,14 @@
   top: 0px;
 }
 .post .body ul, .post .body ol {
-  margin-left:         17px;
+  margin-left: 17px;
 }
 .post .body ul {
-  list-style-type:     disc;
+  list-style-type: disc;
   list-style-position: outside;
 }
 .post .body ol {
-  list-style-type:     decimal;
+  list-style-type: decimal;
   list-style-position: outside;
 }
 .post .body ul p,
@@ -134,41 +134,41 @@
   margin-bottom: 0px;
 }
 .post .body .content {
-  font-size:           1em;
+  font-size: 1em;
 }
 .post .body.syntax {
-  max-width:           100%;
+  max-width: 100%;
 }
 
 .me_post {
-  background:          #f8f7f1;
-  color:               #484030;
+  background: #f8f7f1;
+  color: #484030;
 }
 .me_post .avatar {
-  float:               left;
-  margin-top:          -6px;
+  float: left;
+  margin-top: -6px;
 }
 .me_post .body {
-  font-weight:         bold;
-  clear:               none;
-  max-width:           100%;
+  font-weight: bold;
+  clear: none;
+  max-width: 100%;
 }
 .me_post .body .date {
-  color:               #888;
-  font-size:           0.9em;
-  font-weight:         normal;
+  color: #888;
+  font-size: 0.9em;
+  font-weight: normal;
 }
 .me_post .body a.poster, .me_post .body a.poster:visited {
-  text-decoration:     none;
-  color:               #05506d;
+  text-decoration: none;
+  color: #05506d;
 }
 .me_post .body a.poster:hover {
-  color:               #460000;
+  color: #460000;
 }
 .post .body .edited {
-  color:               #888;
-  font-size:           0.9em;
-  margin-top:          1em;
+  color: #888;
+  font-size: 0.9em;
+  margin-top: 1em;
 }
 .post .body h1,
 .post .body h2,
@@ -177,110 +177,51 @@
 .post .body h5,
 .post .body h6,
 .post .body blockquote {
-  margin:              15px 0px;
+  margin: 15px 0px;
 }
 .post .body p {
-  margin:              1.0em 0px;
+  margin: 1.0em 0px;
 }
 /* Ugly, but works for now */
 .post .body p:first-child {
-  margin-top:          0px;
+  margin-top: 0px;
 }
 .post .body p:last-child {
-  margin-bottom:       0px;
+  margin-bottom: 0px;
 }
 
 .post .body a {
-  color:               #005794;
-  text-decoration:     underline;
+  color: #005794;
+  text-decoration: underline;
 }
+
 .post .body a:visited {
-  color:               #3900a2;
+  color: #3900a2;
 }
+
 .post .body a:hover {
-  color:               #001d32;
-}
-
-
-.spoiler, .spoiler *, .spoiler:after {
-  -webkit-transition:  all 0.2s ease-in-out;
-  -moz-transition:     all 0.2s ease-in-out;
-  -o-transition:       all 0.2s ease-in-out;
-  -ms-transition:      all 0.2s ease-in-out;
-  transition:          all 0.2s ease-in-out;
-}
-
-.spoiler {
-  border:              1px solid transparent;
-  padding:             10px;
-  background:          rgba(0, 0, 0, 0.12);
-  color:               rgba(0, 0, 0, 0);
-  cursor:              pointer;
-  position:            relative;
-}
-
-.spoiler * {
-  opacity:             0;
-}
-
-.spoiler.revealed {
-  background:          rgba(0, 0, 0, 0.02);
-  cursor:              normal;
-  color:               #000;
-  border:              1px solid rgba(0, 0, 0, 0.05);
-}
-.spoiler.revealed * {
-  opacity:             1;
-}
-
-/*
-  The :after pseudo-element is an overlay covering the entire element
-  in order to prevent clicking through.
-*/
-.spoiler:after {
-  opacity:                1;
-  position:               absolute;
-  width:                  100%;
-  height:                 100%;
-  top:                    0px;
-  left:                   0px;
-  padding:                8px;
-  content:                "Spoiler!";
-  color:                  #fff;
-  -webkit-font-smoothing: subpixel-antialiased;
-  font-smoothing:         subpixel-antialiased;
-  font-weight:            bold;
-  font-size:              1.2em;
-  text-shadow:            0px 0px 1px rgba(0, 0, 0, 0.7);
-}
-
-.spoiler.revealed:after {
-  opacity:             0;
-  visibility:          hidden;
-  left:                -5px;
-  -webkit-transform:   rotate(2deg);
-  -moz-transform:      rotate(2deg);
+  color: #001d32;
 }
 
 
 /* Targeted post (Keyboard navigation) */
 .posts .targeted {
-  border-top:          1px solid #3B89C7;
-  border-bottom:       1px solid #3B89C7;
-  background:          #f0f5f8;
-  margin-top:          -1px;
+  border-top: 1px solid #3B89C7;
+  border-bottom: 1px solid #3B89C7;
+  background: #f0f5f8;
+  margin-top: -1px;
 }
 
 .new_posts_since_refresh {
-  font-size:           1.3em;
-  border-bottom:       1px solid #E2DCBF;
-  padding:             5px 0 5px 45px;
-  background:          #f8f7f1;
-  color:               #484030;
-  margin-top:          -1.3em;
-  margin-bottom:       1.3em;
-}
-.new_posts_since_refresh p {
-  margin:              0;
+  font-size: 1.3em;
+  border-bottom: 1px solid #E2DCBF;
+  padding: 5px 0 5px 45px;
+  background: #f8f7f1;
+  color: #484030;
+  margin-top: -1.3em;
+  margin-bottom: 1.3em;
 }
 
+.new_posts_since_refresh p {
+  margin: 0;
+}

@@ -1,19 +1,19 @@
 .help_page {
   font-size: 1.2em;
   max-width: 600px;
-}
-.help_page h3 {
-  margin: 1em 0 0.5em 0;
-}
-.help_page table {
-  border-collapse: collapse;
-  border: 1px solid #ddd;
-  width: 100%;
-}
-.help_page td {
-  border: 1px solid #ddd;
-  padding: 2px 10px 2px 2px;
-}
-.help_page td.short {
-  width: 150px;
+  h3 {
+    margin: 1em 0 0.5em 0;
+  }
+  table {
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    width: 100%;
+  }
+  td {
+    border: 1px solid #ddd;
+    padding: 2px 10px 2px 2px;
+    &.short {
+      width: 150px;
+    }
+  }
 }

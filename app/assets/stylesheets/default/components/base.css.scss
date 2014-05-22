@@ -1,16 +1,18 @@
 body, input, textarea {
-  font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
+  font-family: Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
 }
+
 input, textarea {
   font-size: 1.2em;
 }
+
 textarea {
-  width:               100%;
-  max-width:           780px;
-  height:              300px;
-  padding:             10px;
-  border:              1px solid #d7d7d7;
-  box-shadow:          inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 780px;
+  height: 300px;
+  padding: 10px;
+  border: 1px solid #d7d7d7;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Set 1em == 10px */
@@ -19,134 +21,157 @@ body       { font-size: 10px; }
 * html body{ font-size: 50%; }
 
 h2, h3, h4, h5, h6, p, ul, ol, pre {
-  margin-bottom:       1em;
+  margin-bottom: 1em;
 }
 
 h1 {
-  font-size:           2.0em;
-  font-weight:         bold;
+  font-size: 2.0em;
+  font-weight: bold;
 }
+
 h2 {
-  font-size:           1.5em;
-  font-weight:         bold;
+  font-size: 1.5em;
+  font-weight: bold;
 }
+
 h3 {
-  font-size:           1.4em;
-  font-weight:         bold;
-  margin-bottom:       0em;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 0em;
 }
+
 h4 {
-  font-size:           1.3em;
+  font-size: 1.3em;
 }
+
 h5 {
-  font-size:           1.2em;
+  font-size: 1.2em;
 }
+
 h6 {
-  font-size:           1.1em;
+  font-size: 1.1em;
 }
+
 h2 em {
-  font-weight:         normal;
-  font-style:          normal;
-  color:               #555;
+  font-weight: normal;
+  font-style: normal;
+  color: #555;
 }
 
 strong {
-  font-weight:         bold;
+  font-weight: bold;
 }
+
 em {
-  font-style:          italic;
+  font-style: italic;
 }
+
 small {
-  font-size:           0.8em;
-  color:               #444;
+  font-size: 0.8em;
+  color: #444;
 }
 
 blockquote {
-  margin:              0;
-  padding:             10px 10px;
-  background:          #F3F1E9;
-  color:               #3C392C;
-  border:              1px solid #DEDCD4;
-  border-left:         5px solid #CCC9BC;
+  margin: 0;
+  padding: 10px 10px;
+  background: #F3F1E9;
+  color: #3C392C;
+  border: 1px solid #DEDCD4;
+  border-left: 5px solid #CCC9BC;
 }
 
 /* Posted by.. inside blockquotes */
 blockquote cite {
-  display:             block;
-  color:               #7E7B70;
-  border-bottom:       1px solid #CCC9BC;
-  padding-bottom:      5px;
-  margin-bottom:       10px;
-  margin-top:          -5px;
+  display: block;
+  color: #7E7B70;
+  border-bottom: 1px solid #CCC9BC;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  margin-top: -5px;
 }
 
 code, pre.highlight {
-  font-family:         Menlo, Monaco, Consolas, Courier, monospace;
-  font-size:           12px;
+  font-family: Menlo, Monaco, Consolas, Courier, monospace;
+  font-size: 12px;
 }
+
 pre.highlight {
-  padding:             10px;
-  border-radius:       5px;
-  line-height:         1.5;
+  padding: 10px;
+  border-radius: 5px;
+  line-height: 1.5;
 }
+
 code {
-  background:          #f8f8f8;
-  border:              1px solid #eee;
-  padding:             0px 3px;
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  padding: 0px 3px;
 }
+
 pre code {
-  display:             block;
-  padding:             5px;
+  display: block;
+  padding: 5px;
 }
 
 label {
-  display:             block;
-  font-size:           1.1em;
-  font-weight:         bold;
-  margin-bottom:       0.2em;
+  display: block;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 0.2em;
 }
+
 label .description {
-  font-weight:         normal;
-  color:               #555;
+  font-weight: normal;
+  color: #555;
 }
+
 input#openid_url, input#user_openid_url {
   background: #fff image-url('default/login_openid.gif') 3px 3px no-repeat;
   padding-left: 22px;
 }
 
 a, a:visited {
-  text-decoration:     none;
-  color:               #622;
+  text-decoration: none;
+  color: #622;
 }
+
 a:hover {
-  color:               #c22;
+  color: #c22;
 }
 
 /* Damn you, Firefox */
 button::-moz-focus-inner {
-    border:              0;
-    padding:             0;
+  border: 0;
+  padding: 0;
 }
-a.button, a.button:visited, button {
-  border:              0px;
-  background:          #fbfbfb image-url('default/button.png') top right no-repeat;
-  padding:             0 15px 0 0;
-  font-family:         Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
-  font-size:           15px;
-  font-weight:         bold;
-  color:               #616161;
-  text-shadow:         1px 1px 1px #ffffff;
+
+a.button,
+a.button:visited,
+button {
+  border: 0px;
+  background: #fbfbfb image-url('default/button.png') top right no-repeat;
+  padding: 0 15px 0 0;
+  font-family: Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: #616161;
+  text-shadow: 1px 1px 1px #ffffff;
 }
-a.button span, button span {
-  padding:             5px 0 0 15px;
-  display:             block;
-  background:          #fbfbfb image-url('default/button.png') top left no-repeat;
-  height:              24px;
+
+a.button span,
+button span {
+  padding: 5px 0 0 15px;
+  display: block;
+  background: #fbfbfb image-url('default/button.png') top left no-repeat;
+  height: 24px;
 }
-a.button:hover, button:hover {
+
+a.button:hover,
+button:hover {
   background-position: right -29px;
 }
-a.button:hover span, button:hover span {
+
+a.button:hover span,
+button:hover span {
   background-position: left -29px;
-  color:               #444;
+  color: #444;
 }
