@@ -31,7 +31,7 @@ table.discussions {
   tr {
     &.new_posts {
       background: #ffffe8;
-      strong {
+      td.new_posts strong {
         color: #c76700;
       }
     }
