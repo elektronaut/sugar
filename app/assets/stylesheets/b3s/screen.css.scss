@@ -1,7 +1,7 @@
-@import url(../default/screen.css);
+//= require default/screen
 
 body {
-  background-image: url(images/header_bg_halo_skurk_danz.jpg);
+  background-image: image-url('b3s/header_bg_halo_skurk_danz.jpg');
 }
 
 #header h1 {
@@ -28,29 +28,29 @@ a:hover, #account a:hover, #sidebar .categories li.current a {
 
 /* Top tabs */
 #navigation li a, #navigation li a:visited {
-  background:          #9d5178 url(images/tab_bg.gif) repeat-x;
+  background:          #9d5178 image-url('b3s/tab_bg.gif') repeat-x;
   border:              1px solid #854155;
   border-bottom:       1px solid #c67b6a;
   color:               #fff;
 }
 #navigation li a:hover {
-  background:          #9d5178 url(images/tab_hover_bg.gif) repeat-x;
+  background:          #9d5178 image-url('b3s/tab_hover_bg.gif') repeat-x;
   color:               #fff;
 }
 #navigation li.current a, #navigation li.current a:visited {
-  background:          #f9f9f9 url(images/tab_current_bg.gif) repeat-x;
+  background:          #f9f9f9 image-url('b3s/tab_current_bg.gif') repeat-x;
   color:               #000;
   border:              1px solid #c67b6a;
   border-bottom:       1px solid #f9f9f9;
 }
 #navigation li.new a, #navigation li.new a:visited {
-  background:          #d14b40 url(images/tab_new_messages_bg.gif) repeat-x;
+  background:          #d14b40 image-url('b3s/tab_new_messages_bg.gif') repeat-x;
   color:               #fff;
   border:              1px solid #c24236;
   border-bottom:       1px solid #c98175;
 }
 #navigation li.new a:hover {
-  background:          #d14b40 url(images/tab_new_messages_hover_bg.gif) repeat-x;
+  background:          #d14b40 image-url('b3s/tab_new_messages_hover_bg.gif') repeat-x;
 }
 
 /* Other colors*/

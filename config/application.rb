@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require File.expand_path('../boot', __FILE__)
+require File.expand_path('../../app/themes/theme', __FILE__)
 
 require 'rails/all'
 
@@ -56,6 +57,7 @@ module Sugar
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( mobile.js )
+    config.assets.precompile += Theme.precompile_assets
   end
 end
 
