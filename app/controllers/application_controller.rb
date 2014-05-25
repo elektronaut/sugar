@@ -54,19 +54,16 @@ class ApplicationController < ActionController::Base
       respond_with(exchanges)
     end
 
-    # Load configuration
     def load_configuration
       Sugar.config.load
     end
 
-    # Set time zone for user
     def set_time_zone
       if current_user.try(&:time_zone)
         Time.zone = current_user.time_zone
       end
     end
 
-    # Detects the mobile user agent string and sets request.format = :mobile
     def detect_mobile
       @mobile_user_agent = false
       @mobile_user_agent ||= request.host =~ /^(iphone|m|mobile)\./
@@ -85,7 +82,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    # Sets @section to the current section.
     def set_section
       case self.class.to_s
       when 'UsersController'
