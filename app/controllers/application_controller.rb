@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  before_action :upgrade_preferred_format_cookie
   before_action :disable_xss_protection
   before_action :load_configuration
   before_action :set_time_zone
@@ -23,14 +22,6 @@ class ApplicationController < ActionController::Base
   helper_method :viewed_tracker
 
   protected
-
-    def upgrade_preferred_format_cookie
-      # TODO: This can be removed after a little while
-      if cookies['preferred-format'] && current_user
-        current_user.update(preferred_format: cookies['preferred-format'])
-        cookies.delete('preferred-format')
-      end
-    end
 
     def disable_xss_protection
       # Disabling this is probably not a good idea,
