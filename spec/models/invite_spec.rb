@@ -1,37 +1,39 @@
 require 'spec_helper'
 
 describe Invite do
+  subject(:invite) { build(:invite) }
 
   # Create the first admin user
   before { create(:user) }
-
-  let(:invite)         { create(:invite) }
-  let(:expired_invite) { create(:invite, expires_at: 2.days.ago) }
-  let(:user)           { create(:user) }
 
   it { should belong_to(:user) }
   it { should validate_presence_of(:email) }
   it { should validate_presence_of(:user_id) }
 
   describe "email validation" do
+    subject { build(:invite, email: email) }
+
+    context "when not registered" do
+      let(:email) { 'test@example.com' }
+      it { should be_valid }
+    end
 
     context "when already registered" do
-      subject { build(:invite, email: user.email) }
+      let(:email) { create(:user).email }
       it { should_not be_valid }
       it { should have(1).errors_on(:email) }
     end
 
     context "when already invited" do
-      subject { build(:invite, email: invite.email) }
+      let(:email) { create(:invite).email }
       it { should_not be_valid }
       it { should have(1).errors_on(:email) }
     end
-
   end
 
   describe "before_create" do
+    subject { create(:invite) }
 
-    subject { invite }
     its(:expires_at) { should be_within(30).of(Time.now + 14.days) }
     its(:token) { should be_kind_of(String) }
     its("token.length") { should >= 40 }
@@ -42,7 +44,6 @@ describe Invite do
         create(:invite, user: inviter)
       }.to change{inviter.available_invites}.by(-1)
     end
-
   end
 
   describe "before_destroy" do
@@ -77,35 +78,23 @@ describe Invite do
   end
 
   describe ".active" do
-
-    before do
-      invite
-      expired_invite
-    end
+    let!(:invite) { create(:invite) }
+    let!(:expired_invite) { create(:expired_invite) }
 
     subject { Invite.active }
     it { should == [invite] }
-
   end
 
   describe ".expired" do
-
-    before do
-      invite
-      expired_invite
-    end
+    let!(:invite) { create(:invite) }
+    let!(:expired_invite) { create(:expired_invite) }
 
     subject { Invite.expired }
     it { should == [expired_invite] }
-
   end
 
   describe ".destroy_expired!" do
-
-    before do
-      invite
-      expired_invite
-    end
+    let!(:expired_invite) { create(:expired_invite) }
 
     it "destroys all expired invites" do
       expect {
@@ -116,12 +105,21 @@ describe Invite do
   end
 
   describe "#expired?" do
-    specify { invite.expired?.should be_false }
-    specify { expired_invite.expired?.should be_true }
+    subject { invite.expired? }
+
+    context "when invite isn't expired" do
+      let(:invite) { create(:invite) }
+      it { should be_false }
+    end
+
+    context "when invite is expired" do
+      let(:invite) { create(:expired_invite) }
+      it { should be_true }
+    end
   end
 
   describe "#expire!" do
-    before { expired_invite }
+    let!(:invite) { create(:expired_invite) }
     it "destroys the invite" do
       expect { Invite.destroy_expired! }.to change{Invite.count}.by(-1)
     end
