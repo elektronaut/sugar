@@ -82,14 +82,10 @@ class PostsController < ApplicationController
 
   def find_discussion
     begin
-      @exchange = case
-      when params[:discussion_id]
-        Discussion.find(params[:discussion_id])
-      when params[:conversation_id]
-        Conversation.find(params[:conversation_id])
-      else
-        Exchange.find(params[:exchange_id])
-      end
+      @exchange = nil
+      @exchange ||= Discussion.find(params[:discussion_id])     if params[:discussion_id]
+      @exchange ||= Conversation.find(params[:conversation_id]) if params[:conversation_id]
+      @exchange ||= Exchange.find(params[:exchange_id])
     rescue ActiveRecord::RecordNotFound
       flash[:notice] = "Can't find that discussion!"
       redirect_to root_url and return

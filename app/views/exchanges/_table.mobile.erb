@@ -24,7 +24,7 @@
           <% elsif other_participants.length > 2 %>
             With <%= other_participants.length %> participants,
           <% else %>
-            With <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %>,
+            With <%= safe_join other_participants.map{|p| profile_link(p)}, ', ' %>,
           <% end %>
         <% else %>
           By <%= d.poster.username %>,

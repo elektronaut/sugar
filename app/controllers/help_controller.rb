@@ -6,7 +6,9 @@ class HelpController < ApplicationController
   end
 
   def show
-    @page = params[:page].gsub(/[^\w\d_\-]/, '')
-    render template: "help/#{@page}"
+    case params[:page]
+    when 'keyboard'
+      render template: "help/keyboard"
+    end
   end
 end

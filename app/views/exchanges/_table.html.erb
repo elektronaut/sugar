@@ -24,7 +24,7 @@
           <% elsif other_participants.length > 3 %>
             <td class="participants">Conversation with <%= other_participants.length %> participants</td>
           <% else %>
-            <td class="participants">Conversation with <%= raw other_participants.map{|p| profile_link(p)}.join(', ') %></td>
+            <td class="participants">Conversation with <%= safe_join other_participants.map{|p| profile_link(p)}, ', ' %></td>
           <% end %>
         <% else %>
           <td class="category">Category: <%= link_to h(d.category.name), d.category %></td>

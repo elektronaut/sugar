@@ -24,7 +24,7 @@ class DiscussionsController < ApplicationController
   def popular
     @days = params[:days].to_i
     unless (1..180).include?(@days)
-      redirect_to params.merge({days: 7}) and return
+      redirect_to popular_discussions_url(days: 7) and return
     end
     @exchanges = Discussion.viewable_by(current_user).popular_in_the_last(@days.days).page(params[:page])
     respond_with_exchanges(@exchanges)
