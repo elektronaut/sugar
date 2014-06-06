@@ -20,6 +20,7 @@ class SanitizeFilter < Filter
   def remove_unsafe_tags(parser)
     parser.search("script").remove
     parser.search("meta").remove
+    parser.search("base").remove
   end
 
   def strip_event_handlers(parser)
