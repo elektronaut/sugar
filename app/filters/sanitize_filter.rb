@@ -18,9 +18,9 @@ class SanitizeFilter < Filter
   private
 
   def remove_unsafe_tags(parser)
-    parser.search("script").remove
-    parser.search("meta").remove
-    parser.search("base").remove
+    %w{applet base meta link script}.each do |tag_name|
+      parser.search(tag_name).remove
+    end
   end
 
   def strip_event_handlers(parser)
