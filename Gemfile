@@ -14,7 +14,6 @@ gem 'redis', '~> 3.0.4'
 gem 'hiredis', '~> 0.5.1'
 gem 'redis-rails', '~> 4.0.0'
 
-gem 'therubyracer'
 gem 'json'
 gem 'sass-rails', '~> 4.0.0'
 gem 'coffee-rails'
