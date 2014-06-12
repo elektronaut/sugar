@@ -74,6 +74,7 @@ group :development_mac do
 end
 
 group :test do
+  gem 'codeclimate-test-reporter', require: false
 end
 
 group :test, :development do
