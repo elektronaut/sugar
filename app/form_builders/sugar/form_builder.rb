@@ -5,45 +5,35 @@ module Sugar
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::OutputSafetyHelper
 
-    # Are there any errors on this attribute?
     def errors_on?(attribute)
       errors_on(attribute).length > 0
     end
 
-    # Returns all errors for the attribute
     def errors_on(attribute)
       errors = object.errors[attribute] || []
       errors = [errors] unless errors.kind_of?(Array)
       errors
     end
 
-    # Returns the first error on attribute
     def first_error_on(attribute)
       errors_on(attribute).first
     end
 
-    def image_file_field(attribute, options={})
-      if object.send(attribute)
-        content_tag('p', @template.dynamic_image_tag(object.send(attribute), :size => '120x100')) +
-        self.file_field(attribute, options)
-      else
-        self.file_field(attribute, options)
+    def label(method, text=nil, options={}, &block)
+      text ||= human_attribute_name(method)
+      if errors_on?(method)
+        text += content_tag(:span, " " + first_error_on(method), class: 'error')
+      elsif options[:description]
+        text += content_tag(:span, " &mdash; #{options[:description]}".html_safe, class: "description")
       end
+      content_tag 'label', text.html_safe, for: full_attribute_name(method)
     end
 
     def field_with_label(attribute, content, label_text=nil, options={})
       classes = ['field']
       classes << 'field_with_errors' if errors_on?(attribute)
 
-      label_text ||= object.class.human_attribute_name(attribute)
-
-      if errors_on?(attribute)
-        label_text += " <span class=\"error\">#{first_error_on(attribute)}</span>"
-      elsif options[:description]
-        label_text += content_tag(:span, " &mdash; #{options[:description]}".html_safe, class: "description")
-      end
-
-      label_tag = content_tag 'label', label_text.html_safe, :for => [object.class.to_s.underscore, attribute].join('_')
+      label_tag = label(attribute, label_text, { description: options[:description] })
 
       if options[:note]
         content = safe_join([content, "#{options[:note]}".html_safe], "<br>".html_safe)
@@ -53,28 +43,31 @@ module Sugar
     end
 
     def labelled_text_field(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.text_field(attribute, options), label_text, field_options)
+      labelled_field(:text_field, attribute, label_text, options)
     end
 
     def labelled_text_area(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.text_area(attribute, options), label_text, field_options)
+      labelled_field(:text_area, attribute, label_text, options)
     end
 
     def labelled_date_select(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.date_select(attribute, options), label_text, field_options)
+      labelled_field(:date_select, attribute, label_text, options)
     end
 
     def labelled_datetime_select(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.datetime_select(attribute, options), label_text, field_options)
+      labelled_field(:datetime_select, attribute, label_text, options)
     end
 
     def labelled_time_select(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.time_select(attribute, options), label_text, field_options)
+      labelled_field(:time_select, attribute, label_text, options)
+    end
+
+    def labelled_file_field(attribute, label_text=nil, options={})
+      labelled_field(:file_field, attribute, label_text, options)
+    end
+
+    def labelled_password_field(attribute, label_text=nil, options={})
+      labelled_field(:password_field, attribute, label_text, options)
     end
 
     def labelled_time_zone_select(attribute, label_text=nil, priority_zones=nil, options={})
@@ -92,22 +85,7 @@ module Sugar
       field_with_label(attribute, self.check_box(attribute, options, checked_value, unchecked_value), label_text, field_options)
     end
 
-    def labelled_file_field(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.file_field(attribute, options), label_text, field_options)
-    end
-
-    def labelled_image_file_field(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.image_file_field(attribute, options), label_text, field_options)
-    end
-
-    def labelled_password_field(attribute, label_text=nil, options={})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, self.password_field(attribute, options), label_text, field_options)
-    end
-
-    protected
+    private
 
     def extract_field_options(options)
       field_options = {}
@@ -120,6 +98,24 @@ module Sugar
       [options, field_options]
     end
 
+    def full_attribute_name(attribute)
+      [object.class.to_s.underscore, attribute].join('_')
+    end
+
+    def human_attribute_name(attribute)
+      object.class.human_attribute_name(attribute)
+    end
+
+    def labelled_field(type, attribute, label_text=nil, options)
+      label_text, options, field_options = parse_label_text_and_options(label_text, options)
+      field_with_label(
+        attribute,
+        self.send(type, attribute, options),
+        label_text,
+        field_options
+      )
+    end
+
     def parse_label_text_and_options(label_text=nil, options={})
       if label_text.kind_of?(Hash) && options == {}
         options = label_text
@@ -127,6 +123,5 @@ module Sugar
       end
       [label_text, *extract_field_options(options)]
     end
-
   end
 end
