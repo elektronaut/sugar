@@ -7,38 +7,23 @@
 class Exchange < ActiveRecord::Base
   include HumanizableParam
   include Paginatable
+  include ExchangeScopes
+  include VirtualBody
 
-  # Default number of discussions per page
   self.per_page = 30
 
-  # Virtual attribute for the body of the first post
-  attr_accessor :body, :format
-
-  # Skips validation of @body if true
-  attr_accessor :skip_body_validation
-
-  # User which is updating the exchange, required for closing exchanges
   attr_accessor :updated_by
 
-  belongs_to :poster,         class_name: 'User'
+  belongs_to :poster, class_name: 'User'
+  belongs_to :last_poster, class_name: 'User'
+
   belongs_to :closer,         class_name: 'User'
-  belongs_to :last_poster,    class_name: 'User'
   has_many   :posts,          -> { order 'created_at ASC' }, dependent: :destroy, foreign_key: 'exchange_id'
   has_many   :exchange_views, dependent: :destroy, foreign_key: 'exchange_id'
   has_many   :users,          through: :posts
 
-  scope :sorted,       -> { order('sticky DESC, last_post_at DESC') }
-  scope :with_posters, -> { includes(:poster, :last_poster) }
-  scope :for_view,     -> { sorted.with_posters }
-
-  validates_presence_of :title
-  validates_length_of   :title, maximum: 100
-  validates_presence_of :body, on: :create, unless: :skip_body_validation
-
+  validates :title, presence: true, length: { maximum: 100 }
   validate :validate_closed
-
-  after_create :create_first_post
-  after_update :update_post_body
 
   def last_page(per_page=Post.per_page)
     (self.posts_count.to_f / per_page).ceil
@@ -79,27 +64,4 @@ class Exchange < ActiveRecord::Base
       end
     end
   end
-
-  def create_first_post
-    if self.body && !self.body.empty?
-      attributes = {
-        user: self.poster,
-        body: self.body
-      }
-      attributes[:format] = self.format unless self.format.blank?
-      self.posts.create(attributes)
-    end
-  end
-
-  def update_post_body
-    if self.body && !self.body.empty? && self.body != self.posts.first.body
-      attributes = {
-        edited_at: Time.now,
-        body: self.body
-      }
-      attributes[:format] = self.format unless self.format.blank?
-      self.posts.first.update_attributes(attributes)
-    end
-  end
-
 end

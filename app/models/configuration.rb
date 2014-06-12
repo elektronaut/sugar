@@ -10,7 +10,14 @@ class Configuration
 
     def setting(key, type, default=nil)
       settings[key] = OpenStruct.new(type: type, default: default)
+      define_reader_method(key)
+      define_boolean_reader_method(key)
+      define_writer_method(key)
+    end
 
+    private
+
+    def define_reader_method(key)
       define_method key do |*args|
         if args.length > 0
           set(key, *args)
@@ -18,52 +25,65 @@ class Configuration
           get(key)
         end
       end
+    end
 
-      define_method "#{key}=" do |value|
-        set(key, value)
-      end
-
+    def define_boolean_reader_method(key)
       define_method "#{key}?" do
         get(key) ? true : false
       end
     end
+
+    def define_writer_method(key)
+      define_method "#{key}=" do |value|
+        set(key, value)
+      end
+    end
   end
 
-  setting :forum_name,           :string, 'Sugar'
-  setting :forum_short_name,     :string, 'Sugar'
-  setting :forum_title,          :string, 'Sugar'
+  module CustomizationSettings
+    extend ActiveSupport::Concern
+    included do
+      setting :forum_name,           :string, 'Sugar'
+      setting :forum_short_name,     :string, 'Sugar'
+      setting :forum_title,          :string, 'Sugar'
+      setting :public_browsing,      :boolean, false
+      setting :signups_allowed,      :boolean, true
+      setting :domain_names,         :string
+      setting :mail_sender,          :string
 
-  # Hosts etc
-  setting :domain_names,         :string
-  setting :asset_host,           :string
-  setting :mail_sender,          :string
-  setting :session_key,          :string, '_sugar_session'
+      # Customization
+      setting :custom_header,        :string
+      setting :custom_footer,        :string
+      setting :custom_javascript,    :string
+    end
+  end
 
-  # Themes
-  setting :default_theme,        :string, 'default'
-  setting :default_mobile_theme, :string, 'default'
+  module IntegrationSettings
+    extend ActiveSupport::Concern
+    included do
+      setting :xbox_live_enabled,    :boolean, false
+      setting :flickr_api,           :string
+      setting :google_analytics,     :string
+      setting :amazon_associates_id, :string
+      setting :amazon_aws_key,       :string
+      setting :amazon_aws_secret,    :string
+      setting :amazon_s3_bucket,     :string
+      setting :facebook_app_id,      :string
+      setting :facebook_api_secret,  :string
+    end
+  end
 
-  # Options
-  setting :public_browsing,      :boolean, false
-  setting :signups_allowed,      :boolean, true
+  module ThemeSettings
+    extend ActiveSupport::Concern
+    included do
+      setting :default_theme,        :string, 'default'
+      setting :default_mobile_theme, :string, 'default'
+    end
+  end
 
-  # Integration
-  setting :xbox_live_enabled,    :boolean, false
-  setting :flickr_api,           :string
-  setting :google_analytics,     :string
-  setting :amazon_associates_id, :string
-  setting :amazon_aws_key,       :string
-  setting :amazon_aws_secret,    :string
-  setting :amazon_s3_bucket,     :string
-
-  # Facebook integration
-  setting :facebook_app_id,      :string
-  setting :facebook_api_secret,  :string
-
-  # Customization
-  setting :custom_header,        :string
-  setting :custom_footer,        :string
-  setting :custom_javascript,    :string
+  include CustomizationSettings
+  include IntegrationSettings
+  include ThemeSettings
 
   def get(key)
     raise InvalidConfigurationKey, ":#{key} is not a valid configuration option" unless has_setting?(key)
