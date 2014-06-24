@@ -33,7 +33,7 @@ class SimpleFilter < Filter
       p param pre progress q rp rt ruby s samp section select small source
       span strong style sub summary svg table tbody td textarea tfoot th
       thead time title tr track u ul var video wbr
-      allowfullscreen
+      allowfullscreen base64serialized
     }
   end
 

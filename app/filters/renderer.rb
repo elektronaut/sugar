@@ -3,12 +3,25 @@ class Renderer
     def filters(format)
       [
         AutolinkFilter,
-        (format == "markdown" ? MarkdownFilter : SimpleFilter),
+        (
+          case format
+          when "markdown"
+            [
+              MarkdownFilter,
+              CodeFilter
+            ]
+          when "html"
+            [
+              CodeFilter,
+              SimpleFilter
+            ]
+          end
+        ),
         ImageFilter,
         LinkFilter,
-        CodeFilter,
-        SanitizeFilter
-      ]
+        UnserializeFilter,
+        SanitizeFilter,
+      ].flatten
     end
 
     def render(post, options={})

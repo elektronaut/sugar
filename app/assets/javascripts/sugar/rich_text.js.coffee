@@ -34,12 +34,7 @@ Sugar.RichTextArea = (textarea, options) ->
     spoiler: (str)    -> ["<div class=\"spoiler\">", str, "</div>"]
 
     code: (str, language) ->
-      escapeEntities = (str) ->
-        str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-
-      codeTag = if language then "<code class=\"#{language}\">" else "<code>"
-
-      ["<pre>#{codeTag}", escapeEntities(str), "</code></pre>"]
+      ["```#{language}\n", str, "\n```"]
 
     quote: (text, html, username, permalink) ->
       cite = if permalink
