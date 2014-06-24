@@ -10,21 +10,10 @@ class CodeFilter < Filter
       syntax_highlight(element, code)
     end
 
-    parser.search("pre").each do |element|
-      if element.attributes["class"].try(:value) =~ /\bhighlight\b/
-        base64_serialize(element)
-      end
-    end
-
     parser.to_html
   end
 
   protected
-
-  def base64_serialize(element)
-    serialized = Base64.strict_encode64(element.to_html)
-    element.swap("<base64serialized>#{serialized}</base64serialized>")
-  end
 
   def syntax_formatter
     Rouge::Formatters::HTML.new(css_class: "highlight")

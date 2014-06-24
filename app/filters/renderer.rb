@@ -21,7 +21,6 @@ class Renderer
         ),
         ImageFilter,
         LinkFilter,
-        UnserializeFilter,
         SanitizeFilter,
       ].flatten
     end
