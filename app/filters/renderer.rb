@@ -7,21 +7,20 @@ class Renderer
           case format
           when "markdown"
             [
-              MarkdownFilter,
-              CodeFilter,
+              MarkdownFilter
             ]
           when "html"
             [
               MarkdownCodeFilter,
               SimpleFilter,
-              UnserializeFilter,
-              CodeFilter,
+              UnserializeFilter
             ]
           end
         ),
+        CodeFilter,
         ImageFilter,
         LinkFilter,
-        SanitizeFilter,
+        SanitizeFilter
       ].flatten
     end
 
