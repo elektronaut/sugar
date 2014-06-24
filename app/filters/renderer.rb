@@ -8,13 +8,14 @@ class Renderer
           when "markdown"
             [
               MarkdownFilter,
-              CodeFilter
+              CodeFilter,
             ]
           when "html"
             [
+              MarkdownCodeFilter,
               SimpleFilter,
+              UnserializeFilter,
               CodeFilter,
-              LineBreakFilter
             ]
           end
         ),

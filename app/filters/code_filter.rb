@@ -3,7 +3,7 @@
 class CodeFilter < Filter
 
   def process(post)
-    parser = Nokogiri::HTML::DocumentFragment.parse(markdown_code_blocks(post))
+    parser = Nokogiri::HTML::DocumentFragment.parse(post)
 
     parser.search("code").each do |element|
       code = element.content
@@ -24,12 +24,6 @@ class CodeFilter < Filter
   def base64_serialize(element)
     serialized = Base64.strict_encode64(element.to_html)
     element.swap("<base64serialized>#{serialized}</base64serialized>")
-  end
-
-  def markdown_code_blocks(str)
-    str.gsub(/```([\w\d_]*)\r?\n(.*?)```(?:$|(\r?\n)+)/m) do |code_block|
-      MarkdownFilter.new(code_block).to_html.strip
-    end
   end
 
   def syntax_formatter
