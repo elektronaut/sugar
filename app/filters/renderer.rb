@@ -12,8 +12,9 @@ class Renderer
             ]
           when "html"
             [
+              SimpleFilter,
               CodeFilter,
-              SimpleFilter
+              LineBreakFilter
             ]
           end
         ),

@@ -3,14 +3,10 @@
 class SimpleFilter < Filter
 
   def process(post)
-    convert_line_breaks(escape_angle_brackets(strip(post)))
+    escape_angle_brackets(strip(post))
   end
 
   private
-
-  def convert_line_breaks(str)
-    str.gsub(/[\r]?\n/, "<br>\n")
-  end
 
   def escape_angle_brackets(str)
     str
