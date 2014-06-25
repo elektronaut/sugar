@@ -3,20 +3,15 @@ class Renderer
     def filters(format)
       [
         AutolinkFilter,
-        (
-          case format
-          when "markdown"
-            [
-              MarkdownFilter
-            ]
-          when "html"
-            [
-              MarkdownCodeFilter,
-              SimpleFilter,
-              UnserializeFilter
-            ]
-          end
-        ),
+        if format == "markdown"
+          MarkdownFilter
+        else
+          [
+            MarkdownCodeFilter,
+            SimpleFilter,
+            UnserializeFilter
+          ]
+        end,
         CodeFilter,
         ImageFilter,
         LinkFilter,
