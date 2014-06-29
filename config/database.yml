@@ -4,6 +4,8 @@ sqlite: &sqlite
 
 mysql: &mysql
   adapter: mysql2
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
   username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
   password: <%= ENV['SUGAR_DB_PASSWORD'] || "" %>
   database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
