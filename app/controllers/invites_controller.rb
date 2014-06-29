@@ -91,11 +91,7 @@ class InvitesController < ApplicationController
 
   # Finds the requested invite
   def find_invite
-    begin
-      @invite = Invite.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_error 404 and return
-    end
+    @invite = Invite.find(params[:id])
   end
 
   def verify_available_invites

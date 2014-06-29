@@ -133,11 +133,7 @@ class DiscussionsController < ApplicationController
   end
 
   def find_exchange
-    begin
-      @exchange = Exchange.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_error 404 and return
-    end
+    @exchange = Exchange.find(params[:id])
 
     unless @exchange.kind_of?(Discussion)
       redirect_to @exchange and return

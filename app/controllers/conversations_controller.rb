@@ -75,11 +75,7 @@ class ConversationsController < ApplicationController
   end
 
   def find_exchange
-    begin
-      @exchange = Conversation.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_error 404 and return
-    end
+    @exchange = Conversation.find(params[:id])
 
     unless @exchange.viewable_by?(current_user)
       render_error 403 and return

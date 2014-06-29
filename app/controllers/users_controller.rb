@@ -30,15 +30,7 @@ class UsersController < ApplicationController
   private
 
     def load_user
-      begin
-        @user = User.find_by_username(params[:id]) || User.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        @user = nil
-      end
-      unless @user
-        flash[:notice] = "User not found!"
-        redirect_to users_url and return
-      end
+      @user = User.find_by_username(params[:id]) || User.find(params[:id])
     end
 
     def detect_edit_page

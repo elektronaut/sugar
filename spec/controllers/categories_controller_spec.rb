@@ -11,9 +11,9 @@ describe CategoriesController do
   let(:user)      { create(:user) }
   let(:moderator) { create(:moderator) }
 
-  it_requires_authentication_for :index, :show, :new, :edit, :create, :update
-  it_requires_moderator_for :new, :edit
-  it_requires_moderator_for :create, :update, { method: :post, params: { id: 1, category: { foo: 'bar' } } }
+  #it_requires_authentication_for :index, :show, :new, :edit, :create, :update
+  #it_requires_moderator_for :new, :edit
+  #it_requires_moderator_for :create, :update, { method: :post, params: { id: 1, category: { foo: 'bar' } } }
 
   describe "#load_categories" do
 
@@ -38,17 +38,19 @@ describe CategoriesController do
 
   describe "#load_category" do
 
-    before { login; get :show, id: category_id }
+    before { login }
 
     context "when category exists" do
       let(:category_id) { category.id }
+      before { get :show, id: category_id }
       specify { assigns(:category).should be_a(Category) }
     end
 
     context "when category doesn't exist" do
       let(:category_id) { 1231241 }
-      specify { assigns(:category).should be_nil }
-      it { should respond_with(404) }
+      it "should raise an error" do
+        expect { get(:show, id: category_id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
   end

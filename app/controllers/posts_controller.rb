@@ -81,24 +81,14 @@ class PostsController < ApplicationController
   end
 
   def find_discussion
-    begin
-      @exchange = nil
-      @exchange ||= Discussion.find(params[:discussion_id])     if params[:discussion_id]
-      @exchange ||= Conversation.find(params[:conversation_id]) if params[:conversation_id]
-      @exchange ||= Exchange.find(params[:exchange_id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Can't find that discussion!"
-      redirect_to root_url and return
-    end
+    @exchange = nil
+    @exchange ||= Discussion.find(params[:discussion_id])     if params[:discussion_id]
+    @exchange ||= Conversation.find(params[:conversation_id]) if params[:conversation_id]
+    @exchange ||= Exchange.find(params[:exchange_id])
   end
 
   def find_post
-    begin
-      @post = Post.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:notice] = "Can't find that post"
-      redirect_to polymorphic_url(@exchange, page: @exchange.last_page) and return
-    end
+    @post = Post.find(params[:id])
   end
 
   def mark_conversation_viewed

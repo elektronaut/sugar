@@ -71,11 +71,7 @@ class CategoriesController < ApplicationController
   end
 
   def load_category
-    begin
-      @category = Category.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render_error 404 and return
-    end
+    @category = Category.find(params[:id])
   end
 
   def verify_viewable

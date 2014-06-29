@@ -17,20 +17,21 @@ describe InvitesController do
 
 
   describe "#load_invite" do
-    before do
-      login invite.user
-      delete :destroy, id: invite_id
-    end
-
     context "when invite exists" do
+      before do
+        login invite.user
+        delete :destroy, id: invite_id
+      end
       let(:invite_id) { invite.id }
       specify { assigns(:invite).should be_a(Invite) }
     end
 
     context "when invite doesn't exist" do
       let(:invite_id) { 1231115 }
-      specify { assigns(:invite).should be_nil }
-      it { should respond_with(404) }
+      it "should raise an error" do
+        login invite.user
+        expect { delete(:destroy, id: invite_id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 
