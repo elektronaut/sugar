@@ -45,7 +45,7 @@ describe UsersController, redis: true do
 
       specify { assigns(:invite).should be_a(Invite) }
       specify { assigns(:user).should be_a(User) }
-      it { should redirect_to(user_url(id: assigns(:user).username)) }
+      it { should redirect_to(user_profile_url(id: assigns(:user).username)) }
     end
   end
 end

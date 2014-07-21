@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     def update_openid
       if session[:authenticated_openid_url] && @user.update_attribute(:openid_url, session[:authenticated_openid_url])
         flash[:notice] = "Your OpenID URL was updated!"
-        redirect_to user_url(id: @user.username) and return
+        redirect_to user_profile_url(id: @user.username) and return
       else
         flash[:notice] ||= 'OpenID verification failed!'
         redirect_to edit_user_url(id: @user.username)

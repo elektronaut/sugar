@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     end
 
     def verify_editable
-      return unless verify_user(user: @user, user_admin: true, redirect: user_url(@user))
+      return unless verify_user(user: @user, user_admin: true, redirect: user_profile_url(@user.username))
     end
 
     def allowed_params
