@@ -130,13 +130,13 @@ class UsersController < ApplicationController
     def grant_invite
       @user.grant_invite!
       flash[:notice] = "#{@user.username} has been granted one invite."
-      redirect_to user_url(id: @user.username) and return
+      redirect_to user_profile_url(id: @user.username) and return
     end
 
     def revoke_invites
       @user.revoke_invite!(:all)
       flash[:notice] = "#{@user.username} has been revoked of all invites."
-      redirect_to user_url(id: @user.username) and return
+      redirect_to user_profile_url(id: @user.username) and return
     end
 
 end

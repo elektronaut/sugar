@@ -60,6 +60,39 @@ describe UsersController do
     end
   end
 
+  describe "#grant_invite" do
+    let(:admin) { create(:user_admin) }
+    before do
+      login admin
+      post :grant_invite, id: user.username
+      user.reload
+    end
+
+    it "should increase the user's available invites" do
+      expect(user.available_invites).to eq(1)
+    end
+
+    specify { flash[:notice].should match("has been granted one invite") }
+    it { should redirect_to(user_profile_url(user.username)) }
+  end
+
+  describe "#revoke_invites" do
+    let(:admin) { create(:user_admin) }
+    let(:user) { create(:user, available_invites: 1) }
+    before do
+      login admin
+      post :revoke_invites, id: user.username
+      user.reload
+    end
+
+    it "should set user's available invites to zero" do
+      expect(user.available_invites).to eq(0)
+    end
+
+    specify { flash[:notice].should match("has been revoked of all invites") }
+    it { should redirect_to(user_profile_url(user.username)) }
+  end
+
   describe '#update' do
     before { login user }
 
