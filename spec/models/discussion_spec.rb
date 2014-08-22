@@ -69,13 +69,6 @@ describe Discussion do
 
       subject { Discussion.popular_in_the_last(7.days) }
       it { should == [discussion2, discussion1] }
-
-      describe "the first result" do
-        subject { Discussion.popular_in_the_last(7.days).first }
-        it { should respond_to(:recent_posts_count) }
-        specify { subject.recent_posts_count.to_i.should == 2 }
-      end
-
     end
 
     context "within the last 14 days" do

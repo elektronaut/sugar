@@ -34,9 +34,7 @@
         <td class="last_active">Last active <strong><%= time_tag d.last_post_at, class: 'relative' %></strong></td>
         <td class="post_count">
           <strong><%= d.posts_count %></strong>
-          <%= d.posts_count > 1 ? 'posts' : 'post' %><% if @days && d.respond_to?(:recent_posts_count) %>,
-            <strong><%= d.recent_posts_count %></strong> recently
-          <% end %>
+          <%= d.posts_count > 1 ? 'posts' : 'post' %>
         </td>
         <td class="new_posts last">
           <% if new_posts?(d) %>

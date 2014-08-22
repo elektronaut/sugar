@@ -20,11 +20,10 @@ class Discussion < Exchange
 
   class << self
     def popular_in_the_last(days=7.days)
-      select('exchanges.*, COUNT(posts.id) AS recent_posts_count')
-        .joins(:posts)
+      joins(:posts)
         .where('posts.created_at > ?', days.ago)
         .group('exchanges.id')
-        .order('recent_posts_count DESC')
+        .order('COUNT(posts.id) DESC')
     end
   end
 

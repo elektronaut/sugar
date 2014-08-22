@@ -107,7 +107,7 @@ GEM
     eco-source (1.1.0.rc.1)
     ejs (1.1.1)
     erubis (2.7.0)
-    execjs (2.0.2)
+    execjs (2.2.1)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.4.1)
@@ -204,7 +204,7 @@ GEM
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
     redcarpet (3.1.2)
-    redis (3.0.7)
+    redis (3.1.0)
     redis-actionpack (4.0.0)
       actionpack (~> 4)
       redis-rack (~> 1.5.0)
@@ -295,7 +295,7 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uglifier (2.5.0)
+    uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     uuidtools (2.1.4)
@@ -346,7 +346,7 @@ DEPENDENCIES
   rails-observers
   rb-fsevent
   redcarpet (~> 3.0)
-  redis (~> 3.0.4)
+  redis (~> 3.1.0)
   redis-rails (~> 4.0.0)
   rouge
   rspec-rails
