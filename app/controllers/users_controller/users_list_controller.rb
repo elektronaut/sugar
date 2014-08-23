@@ -36,6 +36,11 @@ class UsersController < ApplicationController
       respond_with(@users)
     end
 
+    def sony
+      @users = User.sony_users.by_username
+      respond_with(@users)
+    end
+
     def social
       @users = User.social.by_username
       respond_with(@users)
