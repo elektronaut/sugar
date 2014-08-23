@@ -61,6 +61,10 @@
       <th>Xbox Live</th>
       <td><%= @user.gamertag %></td>
     </tr><% end %>
+    <% if @user.sony? %><tr>
+      <th>PlayStation</th>
+      <td><%= @user.sony %></td>
+    </tr><% end %>
     <% if @user.inviter %><tr>
       <th>Invited by</th>
       <td><%= profile_link(@user.inviter) %></td>

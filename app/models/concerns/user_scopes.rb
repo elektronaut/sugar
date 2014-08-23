@@ -43,6 +43,10 @@ module UserScopes
     def xbox_users
       active.where("gamertag IS NOT NULL OR gamertag != ''")
     end
+
+    def sony_users
+      active.where("sony IS NOT NULL OR sony != ''")
+    end
   end
 
 end

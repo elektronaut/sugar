@@ -99,6 +99,10 @@
     <iframe src="http://gamercard.xbox.com/<%= @user.gamertag %>.card" scrolling="no" frameBorder="0" height="140" width="200"></iframe>
   </div><% end %>
 
+  <% if @user.sony? %><div class="social sony">
+    <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>"><img src="http://fp.profiles.us.playstation.com/playstation/psn/pid/<%= @user.sony %>.png" width="230" height="155" border="0" /></a>
+  </div><% end %>
+
   <% if @user.flickr? %><div class="social flickr clearfix">
     <h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %></h3>
     <div id="flickrPhotos"></div>

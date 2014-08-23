@@ -54,6 +54,14 @@ describe UserScopes do
     it { should == [xbox_user] }
   end
 
+  describe "sony_users" do
+    let!(:sony_user) { create(:user, sony: 'example') }
+    let!(:non_sony_user) { create(:user, sony: nil) }
+    subject { User.sony_users }
+    it { should == [sony_user] }
+  end
+
+
   describe "social" do
     let!(:user) { create(:user) }
     let!(:twitter) { create(:admin, twitter: 'elektronaut') }
