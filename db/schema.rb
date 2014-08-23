@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140103191403) do
+ActiveRecord::Schema.define(version: 20140823044508) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20140103191403) do
   add_index "exchanges", ["poster_id"], name: "poster_id_index", using: :btree
   add_index "exchanges", ["sticky", "last_post_at"], name: "sticky", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
-  add_index "exchanges", ["title"], name: "discussions_title_fulltext", type: :fulltext
+  add_index "exchanges", ["title"], name: "discussions_title_fulltext", using: :btree
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
   add_index "exchanges", ["type"], name: "type_index", using: :btree
 
@@ -227,12 +227,12 @@ ActiveRecord::Schema.define(version: 20140103191403) do
     t.string   "realname"
     t.datetime "updated_at"
     t.text     "description"
-    t.boolean  "banned",                default: false, null: false
-    t.boolean  "user_admin",            default: false, null: false
-    t.boolean  "moderator",             default: false, null: false
-    t.boolean  "admin",                 default: false, null: false
-    t.boolean  "trusted",               default: false, null: false
-    t.integer  "posts_count",           default: 0,     null: false
+    t.boolean  "banned",                           default: false, null: false
+    t.boolean  "user_admin",                       default: false, null: false
+    t.boolean  "moderator",                        default: false, null: false
+    t.boolean  "admin",                            default: false, null: false
+    t.boolean  "trusted",                          default: false, null: false
+    t.integer  "posts_count",                      default: 0,     null: false
     t.string   "location"
     t.date     "birthday"
     t.string   "stylesheet_url"
@@ -245,15 +245,15 @@ ActiveRecord::Schema.define(version: 20140103191403) do
     t.string   "flickr"
     t.string   "last_fm"
     t.string   "website"
-    t.boolean  "notify_on_message",     default: true,  null: false
+    t.boolean  "notify_on_message",                default: true,  null: false
     t.string   "openid_url"
-    t.integer  "available_invites",     default: 0,     null: false
-    t.float    "latitude"
-    t.float    "longitude"
+    t.integer  "available_invites",                default: 0,     null: false
+    t.float    "latitude",              limit: 24
+    t.float    "longitude",             limit: 24
     t.string   "facebook_uid"
-    t.integer  "participated_count",    default: 0,     null: false
-    t.integer  "favorites_count",       default: 0,     null: false
-    t.integer  "following_count",       default: 0,     null: false
+    t.integer  "participated_count",               default: 0,     null: false
+    t.integer  "favorites_count",                  default: 0,     null: false
+    t.integer  "following_count",                  default: 0,     null: false
     t.string   "time_zone"
     t.datetime "banned_until"
     t.string   "mobile_stylesheet_url"
@@ -261,9 +261,10 @@ ActiveRecord::Schema.define(version: 20140103191403) do
     t.string   "mobile_theme"
     t.string   "instagram"
     t.string   "persistence_token"
-    t.integer  "public_posts_count",    default: 0,     null: false
-    t.integer  "hidden_count",          default: 0,     null: false
+    t.integer  "public_posts_count",               default: 0,     null: false
+    t.integer  "hidden_count",                     default: 0,     null: false
     t.string   "preferred_format"
+    t.string   "sony"
   end
 
   add_index "users", ["username"], name: "username_index", using: :btree
