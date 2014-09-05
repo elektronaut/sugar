@@ -7,7 +7,6 @@ Sugar.RichTextArea = (textarea, options) ->
     emphasis: (str)   -> ["_", str, "_"]
     link: (url, name) -> ["[", name, "](#{url})"]
     image: (url)      -> ["![](", url, ")"]
-    mp3: (url, name)  -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
     blockquote: (str) -> ["", ("> " + line for line in str.split("\n")).join("\n"), ""]
     spoiler: (str)    -> ["<div class=\"spoiler\">", str, "</div>"]
 
@@ -29,7 +28,6 @@ Sugar.RichTextArea = (textarea, options) ->
     emphasis: (str)   -> ["<i>", str, "</i>"]
     link: (url, name) -> ["<a href=\"#{url}\">", name, "</a>"]
     image: (url)      -> ["<img src=\"", url, "\">"]
-    mp3: (url, name)  -> ["<a href=\"#{url}\" class=\"mp3player\">", name, "</a>"]
     blockquote: (str) -> ["<blockquote>", str, "</blockquote>"]
     spoiler: (str)    -> ["<div class=\"spoiler\">", str, "</div>"]
 
@@ -144,14 +142,6 @@ Sugar.RichTextArea = (textarea, options) ->
   addButton "Image", "picture", (selection) ->
     url = if selection.length > 0 then selection else prompt("Enter image URL", "")
     decorator.image(url)
-
-  # MP3 button
-  addButton "MP3", "music", (selection) ->
-    url = prompt("Enter MP3 URL", "")
-    name = if selection.length > 0 then selection else prompt("Enter track title", "")
-    url = if url.length > 0 then url else "http://example.com/example.mp3"
-    url = url.replace(/^(?!(f|ht)tps?:\/\/)/, 'http://')
-    decorator.mp3(url, name)
 
   # Block Quote
   addButton "Block Quote", "quote-left", (selection) -> decorator.blockquote(selection)
