@@ -17,19 +17,6 @@ describe Category do
   it { should validate_presence_of(:name) }
   it { should be_kind_of(ActiveRecord::Acts::List) }
 
-  describe "save callbacks" do
-
-    it "changes the trusted status on discussions" do
-      create(:discussion, category: category)
-      category.discussions.first.trusted?.should == false
-      category.update_attributes(trusted: true)
-      category.discussions.first.trusted?.should == true
-      category.update_attributes(trusted: false)
-      category.discussions.first.trusted?.should == false
-    end
-
-  end
-
   describe ".viewable_by" do
 
     let!(:category) { create(:category) }

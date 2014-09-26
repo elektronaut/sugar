@@ -22,3 +22,7 @@
 <% if @exchange.kind_of?(Discussion) && current_user.moderator? %>
   <%= f.labelled_check_box :sticky %>
 <% end %>
+
+<% if @exchange.kind_of?(Discussion) && current_user.trusted? %>
+  <%= f.labelled_check_box :trusted %>
+<% end %>

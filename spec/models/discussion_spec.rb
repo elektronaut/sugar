@@ -35,9 +35,9 @@ describe Discussion do
     it "changes the trusted status on discussions" do
       create(:post, exchange: discussion)
       discussion.posts.first.trusted?.should == false
-      discussion.update_attributes(category: trusted_category)
+      discussion.update(trusted: true)
       discussion.posts.first.trusted?.should == true
-      discussion.update_attributes(category: category)
+      discussion.update(trusted: false)
       discussion.posts.first.trusted?.should == false
     end
   end

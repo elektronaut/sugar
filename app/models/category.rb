@@ -8,7 +8,7 @@
 #
 # === Trusted categories
 # Categories can be flagged as <tt>trusted</tt>, only admins and users set
-# as trusted can view discussions in these. Use <tt>viewable_by?</tt> to
+# as trusted can view these. Use <tt>viewable_by?</tt> to
 # determine if a category is visible to a user.
 
 class Category < ActiveRecord::Base
@@ -18,19 +18,6 @@ class Category < ActiveRecord::Base
   has_many :discussions
   validates_presence_of :name
   acts_as_list
-
-  # Flag for trusted status, which will update after save if it has been changed.
-  attr_accessor :update_trusted
-
-  before_update do |category|
-    category.update_trusted = true if category.trusted_changed?
-  end
-
-  after_save do |category|
-    if category.update_trusted
-      category.discussions.update_all(trusted: category.trusted?)
-    end
-  end
 
   def labels?
     (self.trusted?) ? true : false
