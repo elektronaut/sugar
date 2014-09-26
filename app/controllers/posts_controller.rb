@@ -74,6 +74,7 @@ class PostsController < ApplicationController
 
   def create_post(create_params)
     @post = @exchange.posts.create(create_params)
+    @exchange.reload
     respond_with(
       @post,
       location: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
