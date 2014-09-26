@@ -9,10 +9,6 @@
 
 <%= f.labelled_text_area :body, id: "compose-body", class: "rich", "data-format-binding" => ".format", "data-formats" => "markdown html", "data-remember-format" => @exchange.new_record? %>
 
-<% if @exchange.kind_of?(Discussion) %>
-  <%= f.labelled_select :category_id, @categories.map{|c| [c.name, c.id] } %>
-<% end %>
-
 <%= f.labelled_check_box :nsfw %>
 
 <% if @exchange.closeable_by?(current_user) %>
@@ -21,4 +17,8 @@
 
 <% if @exchange.kind_of?(Discussion) && current_user.moderator? %>
   <%= f.labelled_check_box :sticky %>
+<% end %>
+
+<% if @exchange.kind_of?(Discussion) && current_user.trusted? %>
+  <%= f.labelled_check_box :trusted %>
 <% end %>

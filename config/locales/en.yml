@@ -91,9 +91,9 @@ en:
       administator_privileges: Administator privileges
       birthday_description: "Your age won't be shown, but your birthday will"
       gravatar_link: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
-      trusted_description: 'User will be able to see discussions in categories marked as trusted'
+      trusted_description: 'User will be able to see discussions marked as trusted'
       temporary_ban: Temporary ban
-      moderator_description: 'Can edit all categories, discussions and posts'
+      moderator_description: 'Can edit all discussions and posts'
       user_admin_description: 'Can edit other users and handle invites or approvals'
       admin_description: 'Same as the two above, plus access to forum configuration'
       map: Map

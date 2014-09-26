@@ -1,6 +1,0 @@
-<%
-  add_body_class "discussions category"
-  @page_title = "Discussions: #{@category.name}"
-%>
-
-<%= render partial: "exchanges/table", locals: {exchanges: @discussions} %>

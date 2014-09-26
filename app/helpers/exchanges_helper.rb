@@ -9,7 +9,6 @@ module ExchangesHelper
       exchange.labels.map(&:downcase),
       %w{odd even}[collection.to_a.index(exchange) % 2],
       (new_posts?(exchange) ? 'new_posts' : nil),
-      "in_category#{exchange.category_id}",
       "by_user#{exchange.poster_id}",
       "discussion",
       "discussion#{exchange.id}"

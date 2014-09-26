@@ -4,9 +4,6 @@
 %>
 
 <h2 class="section">
-  <% if @exchange.kind_of?(Discussion) %>
-    <%= link_to @exchange.category.name, @exchange.category %> &raquo;
-  <% end %>
   <%= link_to @exchange.title, @exchange %> &raquo;
   <%= link_to "Edit", [:edit, @exchange] %>
 </h2>

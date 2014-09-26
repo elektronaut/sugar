@@ -9,12 +9,6 @@ $(Sugar).bind 'ready modified', ->
 
 $(Sugar).bind 'ready', ->
 
-  # Make entire category <li> clickable
-  $('ul.categories li a').each ->
-    url = this.href;
-    $(this).closest('li').click ->
-      document.location = url;
-
   # Adjust min-width of #content to always contain table.discussions
   $('table.discussions').each ->
     $('#content').css 'min-width', ($(this).outerWidth() + 'px')

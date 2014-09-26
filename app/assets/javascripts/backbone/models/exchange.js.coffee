@@ -5,7 +5,6 @@ class Sugar.Models.Exchange extends Backbone.Model
 
   defaults:
     title: ''
-    category_id: false
     poster_id: false
     last_poster_id: false
     posts_count: false

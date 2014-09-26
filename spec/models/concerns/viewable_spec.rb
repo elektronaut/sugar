@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Viewable do
 
-  let(:trusted_category)   { create(:trusted_category) }
   let(:discussion)         { create(:discussion) }
-  let(:trusted_discussion) { create(:discussion, category: trusted_category) }
+  let(:trusted_discussion) { create(:discussion, trusted: true) }
   let(:user)               { create(:user) }
   let(:trusted_user)       { create(:trusted_user) }
 

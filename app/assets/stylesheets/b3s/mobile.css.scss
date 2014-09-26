@@ -247,10 +247,10 @@ body[orient="landscape"] .page_content textarea {
 }
 
 
-.discussions, .conversations, .categories {
+.discussions, .conversations {
   margin-top: -25px;
 }
-.discussion, .conversation, .category {
+.discussion, .conversation {
   padding: 8px 10px 5px 10px;
   border-bottom: 1px solid #ddd;
   color: #555;
@@ -266,21 +266,21 @@ body[orient="landscape"] .page_content textarea {
   letter-spacing: -0.05em;
   padding-top: 3px;
 }
-.discussion h2, .conversation h2, .category h2 {
+.discussion h2, .conversation h2 {
   font-weight: normal;
   font-size: 16px;
     width: 255px;
   line-height: 1.2;
   margin-bottom: 1px;
 }
-.discussion h2 a, .conversation h2 a, .category h2 a {
+.discussion h2 a, .conversation h2 a {
   color: #000;
 }
 
 .conversation h2 {
     width: 200px;
 }
-body[orient="landscape"] .discussion h2, body[orient="landscape"] .category h2 {
+body[orient="landscape"] .discussion h2 {
     width: 415px;
 }
 body[orient="landscape"] .conversation h2 {
@@ -291,7 +291,7 @@ body[orient="landscape"] .conversation h2 {
   font-size: 11px;
   letter-spacing: -0.05em;
 }
-.discussion p, .conversation p, .category p {
+.discussion p, .conversation p {
   font-size: 10px;
     overflow: hidden;
     width: 290px;
