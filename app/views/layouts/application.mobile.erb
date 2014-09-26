@@ -46,7 +46,6 @@
   <% if current_user? || Sugar.public_browsing? %>
     <div id="navigation"><ul>
       <li><%= link_to "Discussions", discussions_path %></li>
-      <li><%= link_to "Categories", categories_path %></li>
       <% if current_user? %>
         <li><%= link_to "Following", following_discussions_path %></li>
         <li><%= link_to "Favorites", favorites_discussions_path %></li>

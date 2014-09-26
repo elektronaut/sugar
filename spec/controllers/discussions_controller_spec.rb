@@ -62,45 +62,24 @@ describe DiscussionsController do
   describe "GET new" do
     before { login }
 
-    context "when no category exists" do
-      before { get :new }
-      it { should redirect_to(categories_url) }
-      specify { flash[:notice].should match(/Can't create a new discussion, no categories have been made!/) }
-    end
-
     context "Starting a new discussion" do
-      let!(:category) { create(:category) }
       before { get :new }
       specify { assigns(:exchange).should be_a(Discussion) }
       it { should render_template(:new) }
-    end
-
-    context "Starting a new discussion in a category" do
-      let!(:category) { create(:category) }
-      before { get :new, category_id: category.id }
-      specify { assigns(:exchange).category.should == category }
     end
   end
 
   describe "POST create" do
     before { login }
 
-    context "when no category exists" do
-      before { post :create }
-      it { should redirect_to(categories_url) }
-      specify { flash[:notice].should match(/Can't create a new discussion, no categories have been made!/) }
-    end
-
     context "with invalid params" do
-      let!(:category) { create(:category) }
       before { post :create, discussion: { foo: 'bar' } }
       it { should render_template(:new) }
       specify { flash.now[:notice].should match(/Could not save your discussion! Please make sure all required fields are filled in\./) }
     end
 
     context "when creating a discussion" do
-      let!(:category) { create(:category) }
-      before { post :create, discussion: { title: 'Test', body: 'Test', category_id: category.id } }
+      before { post :create, discussion: { title: 'Test', body: 'Test' } }
       specify { assigns(:exchange).should be_a(Discussion) }
       it { should redirect_to(discussion_url(assigns(:exchange))) }
     end

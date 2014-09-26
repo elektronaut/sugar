@@ -5,8 +5,8 @@ require 'digest/sha1'
 # = User accounts
 #
 # === Trusted users
-# Users with the <tt>trusted</tt> flag can see the trusted categories and
-# discussions. Admin users also count as trusted.
+# Users with the <tt>trusted</tt> flag can see the trusted discussions.
+# Admin users also count as trusted.
 
 class User < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection

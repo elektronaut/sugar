@@ -7,9 +7,7 @@ describe Discussion do
 
   let(:discussion)         { create(:discussion) }
   let(:closed_discussion)  { create(:discussion, closed: true) }
-  let(:trusted_discussion) { create(:discussion, category: trusted_category) }
-  let(:category)           { create(:category) }
-  let(:trusted_category)   { create(:trusted_category) }
+  let(:trusted_discussion) { create(:discussion, trusted: true) }
   let(:user)               { create(:user) }
   let(:trusted_user)       { create(:trusted_user) }
   let(:moderator)          { create(:moderator) }
@@ -17,19 +15,7 @@ describe Discussion do
   let(:admin)              { create(:admin) }
 
   it { should have_many(:discussion_relationships).dependent(:destroy) }
-  it { should belong_to(:category) }
-  it { should validate_presence_of(:category_id) }
   it { should be_kind_of(Exchange) }
-
-  context "in a trusted category" do
-    subject { create(:discussion, category: trusted_category) }
-    its(:trusted?) { should be_true }
-  end
-
-  context "in a regular category" do
-    subject { create(:discussion, category: category) }
-    its(:trusted?) { should be_false }
-  end
 
   describe 'save callbacks' do
     it "changes the trusted status on discussions" do
@@ -86,7 +72,6 @@ describe Discussion do
     specify { DiscussionRelationship.where(discussion_id: discussion.id).count.should == 0 }
     specify { ConversationRelationship.where(conversation_id: discussion.id).count.should == 2 }
     specify { conversation.participants.should =~ [discussion.poster, post.user] }
-    specify { conversation.category_id.should == nil }
   end
 
   describe "#participants" do

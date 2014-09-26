@@ -121,7 +121,7 @@ class UsersController < ApplicationController
             end
           end
         else
-          flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
+          flash.now[:notice] = "Couldn't save your changes, did you fill in all required fields?"
           format.any(:html, :mobile) { render action: :edit }
         end
       end

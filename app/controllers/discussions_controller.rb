@@ -8,8 +8,6 @@ class DiscussionsController < ApplicationController
 
   before_action :find_exchange, except: [:index, :new, :create, :popular, :search, :favorites, :following, :hidden]
   before_action :verify_editable, only: [:edit, :update, :destroy]
-  before_action :load_categories, only: [:new, :create, :edit, :update]
-  before_action :require_categories, only: [:new, :create]
   before_action :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
@@ -70,7 +68,6 @@ class DiscussionsController < ApplicationController
 
   def new
     @exchange = Discussion.new
-    @exchange.category = Category.find(params[:category_id]) if params[:category_id]
     render template: "exchanges/new"
   end
 
@@ -127,11 +124,11 @@ class DiscussionsController < ApplicationController
   def exchange_params
     discussion_params = params.require(:discussion)
     if current_user.moderator?
-      discussion_params.permit(:title, :body, :format, :category_id, :nsfw, :closed, :trusted, :sticky)
+      discussion_params.permit(:title, :body, :format, :nsfw, :closed, :trusted, :sticky)
     elsif current_user.trusted?
-      discussion_params.permit(:title, :body, :format, :category_id, :nsfw, :closed, :trusted)
+      discussion_params.permit(:title, :body, :format, :nsfw, :closed, :trusted)
     else
-      discussion_params.permit(:title, :body, :format, :category_id, :nsfw, :closed)
+      discussion_params.permit(:title, :body, :format, :nsfw, :closed)
     end
   end
 
@@ -146,16 +143,4 @@ class DiscussionsController < ApplicationController
       render_error 403 and return
     end
   end
-
-  def load_categories
-    @categories = Category.viewable_by(current_user)
-  end
-
-  def require_categories
-    if @categories.length == 0
-      flash[:notice] = "Can't create a new discussion, no categories have been made!"
-      redirect_to categories_url and return
-    end
-  end
-
 end

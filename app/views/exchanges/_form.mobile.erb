@@ -14,12 +14,6 @@
   <label>Enter title</label>
   <%= f.text_field(:title, class: :text) %>
 </p>
-<% if @exchange.kind_of?(Discussion) %>
-  <p>
-    <label>Choose a category</label>
-    <%= f.select(:category_id, @categories.map{|c| [c.name, c.id] } )%>
-  </p>
-<% end %>
 
 <p>
   <label>Enter your first post</label>

@@ -99,11 +99,6 @@ Sugar::Application.routes.draw do
     get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
   end
 
-  # Categories
-  resources :categories
-  get '/categories/:id/:page' => 'categories#show'
-
-
   # Discussions
   controller :discussions do
     get '/discussions/:id(/:page)(.:format)' => :show, as: :discussion, constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
