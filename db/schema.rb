@@ -11,17 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140823044508) do
-
-  create_table "categories", force: true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "discussions_count", default: 0,     null: false
-    t.boolean  "trusted",           default: false, null: false
-  end
+ActiveRecord::Schema.define(version: 20140927133145) do
 
   create_table "conversation_relationships", force: true do |t|
     t.integer  "user_id"
@@ -97,7 +87,6 @@ ActiveRecord::Schema.define(version: 20140823044508) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "last_post_at"
-    t.integer  "category_id"
     t.datetime "updated_at"
     t.boolean  "nsfw",           default: false, null: false
     t.boolean  "trusted",        default: false, null: false
@@ -106,13 +95,12 @@ ActiveRecord::Schema.define(version: 20140823044508) do
     t.string   "type"
   end
 
-  add_index "exchanges", ["category_id"], name: "category_id_index", using: :btree
   add_index "exchanges", ["created_at"], name: "created_at_index", using: :btree
   add_index "exchanges", ["last_post_at"], name: "last_post_at_index", using: :btree
   add_index "exchanges", ["poster_id"], name: "poster_id_index", using: :btree
   add_index "exchanges", ["sticky", "last_post_at"], name: "sticky", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
-  add_index "exchanges", ["title"], name: "discussions_title_fulltext", using: :btree
+  add_index "exchanges", ["title"], name: "discussions_title_fulltext", type: :fulltext
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
   add_index "exchanges", ["type"], name: "type_index", using: :btree
 
@@ -125,22 +113,6 @@ ActiveRecord::Schema.define(version: 20140823044508) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "notifications", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "notifiable_id"
-    t.string   "notifiable_type"
-    t.integer  "notifier_id"
-    t.string   "notifier_type"
-    t.string   "kind"
-    t.string   "value"
-    t.boolean  "seen",            default: false, null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
-  add_index "notifications", ["user_id", "notifiable_type", "notifiable_id", "seen", "kind"], name: "index_notification_by_user_and_kind", using: :btree
-  add_index "notifications", ["user_id", "seen"], name: "index_notifications_on_user_id_and_seen", using: :btree
 
   create_table "oauth_access_grants", force: true do |t|
     t.integer  "resource_owner_id", null: false
