@@ -73,6 +73,11 @@ parsePost = (body) ->
     /\b(https?:\/\/instagram\.com\/p\/[^\/]+\/)/g,
     '<a href="\$1"><img width="612" height="612" src="\$1media?size=l"></a>'
   )
+  # Embed Twitter statuses directly when a URL is pasted
+  body = body.replace(
+    /^https?:\/\/(mobile\.)?twitter\.com\/([\w\d_]+)\/status(es)?\/([\d]+)/gm,
+    '<blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/\$2/statuses/\$4">https://twitter.com/\$2/statuses/\$4</a></blockquote>'
+  )
   return body
 
 $(document).ready ->
