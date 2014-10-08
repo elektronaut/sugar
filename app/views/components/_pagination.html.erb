@@ -12,19 +12,19 @@
 
     <% if np = nearest_pages(p) %>
       <% if np.first > 1 %>
-        <span class="first_page"><%= link_to_unless((p.current_page == 1), "1", {page: 1, anchor: anchor}.merge(pagination_params)), class: :first_page_link %></span>
+        <span class="first_page"><%= link_to_unless((p.current_page == 1), "1", {page: 1, anchor: anchor}.merge(pagination_params), class: :first_page_link) %></span>
       <% end %>
       <% if np.first > 2 %>
         <span class="ellipsis">&hellip;</span>
       <% end %>
       <% np.each do |np| %>
-        <span class="number_page"><%= link_to_unless((p.current_page == np), np, {page: np, anchor: anchor}.merge(pagination_params)), class: :number_page_link %></span>
+        <span class="number_page"><%= link_to_unless((p.current_page == np), np, {page: np, anchor: anchor}.merge(pagination_params), class: :number_page_link) %></span>
       <% end %>
       <% if np.last < (p.total_pages - 1) %>
         <span class="ellipsis">&hellip;</span>
       <% end %>
       <% if np.last < p.total_pages %>
-        <span class="last_page"><%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {page: p.total_pages, anchor: anchor}.merge(pagination_params)), class: :last_page_link %></span>
+        <span class="last_page"><%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {page: p.total_pages, anchor: anchor}.merge(pagination_params), class: :last_page_link) %></span>
       <% end %>
     <% end %>
 
