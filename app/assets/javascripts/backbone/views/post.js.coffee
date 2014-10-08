@@ -73,7 +73,7 @@ class Sugar.Views.Post extends Backbone.View
       permalink = null
     else
       username  = $(this.el).find('.post_info .username a').text()
-      permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
+      permalink = $(this.el).find('.post_info .permalink').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
 
     # Hide spoilers
     text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"')
