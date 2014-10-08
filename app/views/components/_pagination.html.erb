@@ -8,23 +8,29 @@
 %>
 <div class="pagination">
   <% if p.total_pages > 1 %><div class="links">
-    <%= link_to_if p.previous_page, "&lt; Prev".html_safe, {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: :prev_page_link %>
+    <span class"prev_page"><i class="fa fa-chevron-left"></i><%= link_to_if p.previous_page, "Prev".html_safe, {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: :prev_page_link %></span>
 
     <% if np = nearest_pages(p) %>
       <% if np.first > 1 %>
-        <%= link_to_unless((p.current_page == 1), "1", {page: 1, anchor: anchor}.merge(pagination_params)) %>
+        <span class="first_page"><%= link_to_unless((p.current_page == 1), "1", {page: 1, anchor: anchor}.merge(pagination_params)), class: :first_page_link %></span>
       <% end %>
-      <% if np.first > 2 %>&hellip;<% end %>
+      <% if np.first > 2 %>
+        <span class="ellipsis">&hellip;</span>
+      <% end %>
       <% np.each do |np| %>
-        <%= link_to_unless((p.current_page == np), np, {page: np, anchor: anchor}.merge(pagination_params)) %>
+        <span class="number_page"><%= link_to_unless((p.current_page == np), np, {page: np, anchor: anchor}.merge(pagination_params)), class: :number_page_link %></span>
       <% end %>
-      <% if np.last < (p.total_pages - 1) %>&hellip;<% end %>
+      <% if np.last < (p.total_pages - 1) %>
+        <span class="ellipsis">&hellip;</span>
+      <% end %>
       <% if np.last < p.total_pages %>
-        <%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {page: p.total_pages, anchor: anchor}.merge(pagination_params)) %>
+        <span class="last_page"><%= link_to_unless((p.current_page == p.total_pages), "#{p.total_pages}", {page: p.total_pages, anchor: anchor}.merge(pagination_params)), class: :last_page_link %></span>
       <% end %>
     <% end %>
 
-    <%= link_to_if p.next_page,     "Next &gt;".html_safe, {page: p.next_page, anchor: anchor}.merge(pagination_params), class: :next_page_link %>
+    <span class="next_page"><%= link_to_if p.next_page, "Next".html_safe, {page: p.next_page, anchor: anchor}.merge(pagination_params), class: :next_page_link %><i class="fa fa-chevron-right"></i></span>
   </div><% end %>
-  <%= offset + 1 %> to <span class="shown_items_count"><%= offset + p.length %></span> of <span class="total_items_count"><%= p.total_count %></span>
+  <div class="items">
+    <span class="shown_items"><%= offset + 1 %></span> to <span class="shown_items_count"><%= offset + p.length %></span> of <span class="total_items_count"><%= p.total_count %></span>
+  </div>
 </div>
