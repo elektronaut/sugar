@@ -47,7 +47,13 @@
           <% if preview %>
             <time class="relative date">Preview</time>
           <% else %>
-            <%= time_tag post.created_at, class: 'relative date' %>
+            <% if permalink %>
+              <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
+                <%= time_tag post.created_at, class: 'relative date' %>
+              <% end %>
+            <% else %>
+              <%= time_tag post.created_at, class: 'relative date' %>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -62,12 +68,13 @@
         <% if preview %>
           <time class="relative date">Preview</time>
         <% else %>
-          <%= time_tag post.created_at, class: 'relative date' %>
-        <% end %>
-        <% if permalink %>
-          <span class="permalink">
-            <%= link_to "#", polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
-          </span>
+          <% if permalink %>
+            <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
+              <%= time_tag post.created_at, class: 'relative date' %>
+            <% end %>
+          <% else %>
+            <%= time_tag post.created_at, class: 'relative date' %>
+          <% end %>
         <% end %>
       </div>
       <div class="body" id="postBody-<%= post.id %>">
