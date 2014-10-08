@@ -22,7 +22,7 @@ class LinkFilter < Filter
   private
 
   def local_domains
-    Sugar.config.domain_names.try(:strip).try(:split, /\s*,\s*/)
+    Sugar.config.domain_names.try(:strip).try(:split, /\s*,\s*/) || []
   end
 
   def parser
