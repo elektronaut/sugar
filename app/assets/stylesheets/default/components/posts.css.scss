@@ -74,12 +74,6 @@
   font-weight: bold;
   margin-right: 5px;
 }
-.post .post_info .permalink a, .post .post_info .permalink a:visited {
-  color: #888;
-}
-.post .post_info .permalink a:hover {
-  color: #333;
-}
 
 .post .body, .post .edit {
   clear: both;
@@ -154,7 +148,6 @@
   max-width: 100%;
 }
 .me_post .body .date {
-  color: #888;
   font-size: 0.9em;
   font-weight: normal;
 }
@@ -201,6 +194,14 @@
 
 .post .body a:hover {
   color: #001d32;
+}
+
+.post a.permalink, .post a.permalink:visited {
+  color: #888;
+  text-decoration: none;
+}
+.post a.permalink:hover {
+  color: #333;
 }
 
 
