@@ -6,7 +6,7 @@
   <%= pagination ||= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
   <table class="discussions">
     <% exchanges.each do |d| %>
-      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
+      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>" data-exchange-id="<%= d.id %>">
         <td class="name" colspan="5"><span class="title">
           <% if d.labels? %>
             <span class="labels">[<%= d.labels.join(',') %>]</span>
@@ -14,7 +14,7 @@
           <%= link_to h(d.title), last_viewed_page_path(d) %>
         </span></td>
       </tr>
-      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
+      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>" data-exchange-id="<%= d.id %>">
         <% if d.kind_of?(Conversation) %>
           <%
             other_participants = d.participants.reject{|p| p == current_user}

@@ -19,7 +19,13 @@
     <% end %>
   <% end %>
 
-  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user_id="<%= post.user.id %>" data-exchange_id="<%= post.exchange_id %>" data-exchange_type="<%= post.exchange.type %>">
+  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>"
+       id="post-<%= post.id %>"
+       data-user_id="<%= post.user.id %>"
+       data-exchange_id="<%= post.exchange_id %>"
+       data-exchange_type="<%= post.exchange.type %>"
+       data-post_id="<%= post.id %>"
+  >
 
     <% if title %>
       <div class="title">
