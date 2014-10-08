@@ -91,6 +91,9 @@ span.example {
   margin-top: -1em;
   margin-bottom: 5px;
   clear: both;
+  .icon {
+    font-size: 0.8em;
+  }
 }
 .pagination .links {
   float: right;
