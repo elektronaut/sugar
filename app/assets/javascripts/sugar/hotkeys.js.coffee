@@ -1,292 +1,175 @@
+currentTarget = null
+targets = []
+changeCallback = (target) ->
+
+keySequence = ""
+keySequences = []
+specialKeys = [
+  8, 9, 13, 19, 20, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 96, 97,
+  98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 109, 110, 111, 112, 113,
+  114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
+]
+
+bindHotkey = (hotkey, fn) -> $(document).bind "keydown", hotkey, fn
+
+bindHotkeyWithoutMeta = (hotkey, fn) -> bindHotkey hotkey, (event) -> fn(event) if not event.metaKey
+
+bindKeySequence = (expression, fn) -> keySequences.push([expression, fn])
+
+clearNewPostsFromDiscussion = (target) ->
+  $(".discussion" + exchangeId(target)).removeClass "new_posts"
+  $(".discussion" + exchangeId(target) + " .new_posts").html ""
+
+defaultTarget = ->
+  if document.location.hash && document.location.hash.match(/^#post-([\d]+)$/)
+    postId = document.location.hash.match(/^#post-([\d]+)$/)[1]
+    $('.post[data-post_id=' + postId + ']').get(0)
+
+elemOutOfWindow = (elem) ->
+  elemTop    = $(elem).offset().top
+  elemBottom = elemTop + $(elem).height()
+  top        = $(window).scrollTop()
+  bottom     = top + $(window).height()
+  (elemTop < top) or (elemBottom > bottom)
+
+exchangeId = (target) -> $(target).closest('tr').data('exchange-id')
+
+isDiscussion = (target) -> $(target).closest('tr').hasClass("discussion")
+
+keypressToCharacter = (event) ->
+  return if event.which in specialKeys
+  if event.shiftKey and event.which >= 65 and event.which <= 90
+    String.fromCharCode(event.keyCode).toUpperCase()
+  else
+    String.fromCharCode(event.keyCode).toLowerCase()
+
+markAsRead = (target) ->
+  if isDiscussion(target)
+    $.get "/discussions/" + exchangeId(target) + "/mark_as_read", {}, ->
+      clearNewPostsFromDiscussion(target)
+
+openTarget = (target) -> visitPath(targetUrl(target))
+openTargetNewTab = (target) -> window.open targetUrl(target)
+
+scrollToTarget = (target) -> $.scrollTo target, { duration: 100, offset: { top: -50 }, axis: "y" }
+
+targetUrl = (target) -> target.href
+
+isDiscussion = (target) -> $(target).closest('tr').hasClass("discussion")
+
+isExchangesView = -> $("table.discussions").length > 0
+isPostsView     = -> $(".posts .post").length > 0
+
+onlyExchanges = (fn) -> (fn() if isExchangesView())
+onlyPosts     = (fn) -> (fn() if isPostsView())
+
+visitPath = (path)     -> document.location = path
+visitLink = (selector) -> visitPath($(selector).get(0).href) if $(selector).length > 0
+
+trackKeySequence = (event) ->
+  target = $(event.target)
+  if target.is("input") or target.is("textarea") or target.is("select")
+    keySequence = ""
+  else
+    character = keypressToCharacter(event)
+    if not event.metaKey and character and character.match(/^[\w\d]$/)
+      keySequence += character
+      keySequence = keySequence.match(/([\w\d]{0,5})$/)[1]
+      for [expression, fn] in keySequences
+        fn() if keySequence.match(expression)
+
+withTarget = (fn) -> (fn(currentTarget) if currentTarget)
+
+markTarget = (target) ->
+  if isExchangesView()
+    $("tr.discussion").removeClass "targeted"
+    $("tr.conversation").removeClass "targeted"
+    $("tr.discussion" + exchangeId(target)).addClass "targeted"
+    $("tr.conversation" + exchangeId(target)).addClass "targeted"
+  else
+    $(targets).removeClass "targeted"
+    $(target).addClass "targeted"
+  scrollToTarget(target) if elemOutOfWindow(target)
+
+addTarget = (target) -> (targets.push(target) unless target in targets)
+
+setTarget = (target) ->
+  currentTarget = target
+  markTarget(target)
+
+nextTarget = ->
+  if currentTarget
+    index = targets.indexOf(currentTarget) + 1
+    index = 0 if index >= targets.length
+    targets[index]
+  else if defaultTarget()
+    defaultTarget()
+  else if targets.length > 0
+    targets[0]
+
+previousTarget = ->
+  if currentTarget
+    index = targets.indexOf(currentTarget) - 1
+    index = targets.length - 1 if index < 0
+    targets[index]
+  else if defaultTarget()
+    index = targets.indexOf(defaultTarget()) - 1
+    index = targets.length - 1 if index < 0
+    targets[index]
+  else if targets.length > 0
+    targets[targets.length - 1]
+
+resetTargets = ->
+  targets = []
+  currentTarget = null
+
+detectTargets = ->
+  $("table.discussions td.name a").each -> addTarget this
+  $(".posts .post").each -> addTarget this
+
+
+$(document).bind "keydown", trackKeySequence
+
+bindKeySequence /gd$/, -> visitPath('/discussions')
+bindKeySequence /gf$/, -> visitPath('/discussions/following')
+bindKeySequence /gF$/, -> visitPath('/discussions/favorites')
+bindKeySequence /gc$/, -> visitPath('/discussions/conversations')
+bindKeySequence /gi$/, -> visitPath('/invites')
+bindKeySequence /gu$/, -> visitPath('/users/online')
+
+bindHotkeyWithoutMeta "shift+p", (event) -> visitLink('.prev_page_link')
+bindHotkeyWithoutMeta "shift+k", (event) -> visitLink('.prev_page_link')
+bindHotkeyWithoutMeta "shift+n", (event) -> visitLink('.next_page_link')
+bindHotkeyWithoutMeta "u",       (event) -> visitLink('#back_link')
+bindHotkeyWithoutMeta "shift+j", (event) -> visitLink('.next_page_link')
+
+bindHotkey "/", (event) ->
+  $('#q').focus()
+  event.preventDefault()
+
+bindHotkeyWithoutMeta "p", (event) -> setTarget previousTarget()
+bindHotkeyWithoutMeta "k", (event) -> setTarget previousTarget()
+bindHotkeyWithoutMeta "n", (event) -> setTarget nextTarget()
+bindHotkeyWithoutMeta "j", (event) -> setTarget nextTarget()
+
+bindHotkeyWithoutMeta "r", (event) -> onlyPosts -> Sugar.loadNewPosts()
+bindHotkeyWithoutMeta "q", (event) -> onlyPosts -> withTarget (target) -> Sugar.quotePost(target)
+
+bindHotkeyWithoutMeta "o",            (event) -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindHotkeyWithoutMeta "shift+o",      (event) -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindHotkeyWithoutMeta "Return",       (event) -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindHotkeyWithoutMeta "shift+Return", (event) -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindHotkeyWithoutMeta "y",            (event) -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+bindHotkeyWithoutMeta "m",            (event) -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+
+bindHotkeyWithoutMeta "c", (event) ->
+  onlyExchanges -> visitLink('.functions .create')
+  onlyPosts ->
+    $("#compose-body").focus()
+    event.preventDefault()
+
 $(Sugar).bind "ready", ->
-  @Hotkeys.apply()
+  resetTargets()
+  detectTargets()
 
-Sugar.Hotkeys =
-  defaultTarget: false
-  targets: []
-  currentTarget: false
-  keySequence: ""
-  specialKeys:
-    27: "esc"
-    9: "tab"
-    32: "space"
-    13: "return"
-    8: "backspace"
-    145: "scroll"
-    20: "capslock"
-    144: "numlock"
-    19: "pause"
-    45: "insert"
-    36: "home"
-    46: "del"
-    35: "end"
-    33: "pageup"
-    34: "pagedown"
-    37: "left"
-    38: "up"
-    39: "right"
-    40: "down"
-    112: "f1"
-    113: "f2"
-    114: "f3"
-    115: "f4"
-    116: "f5"
-    117: "f6"
-    118: "f7"
-    119: "f8"
-    120: "f9"
-    121: "f10"
-    122: "f11"
-    123: "f12"
-    191: "/"
-    96: "0"
-    97: "1"
-    98: "2"
-    99: "3"
-    100: "4"
-    101: "5"
-    102: "6"
-    103: "7"
-    104: "8"
-    105: "9"
-    106: "*"
-    107: "+"
-    109: "-"
-    110: "."
-    111: "/"
-
-  # Apply functionality
-  apply: ->
-    if $("table.discussions").length > 0
-      @setup.discussionsNavigation()
-      @setup.discussionsFunctions()
-    if $(".posts .post").length > 0
-      @setup.postsNavigation()
-      @setup.postsFunctions()
-    @setup.global()
-    @setup.sequences()
-    Sugar.log "Hotkeys: Loaded, " + @targets.length + " targets detected."
-
-  # Add target to list
-  addTarget: (target, targetId) ->
-    if $.inArray(target, @targets) < 0
-      $(target).data "targetId", targetId
-      @targets[@targets.length] = target
-
-  # Get current target
-  getTarget: ->
-    (if (@currentTarget) then @currentTarget else false)
-
-  # Scroll to target
-  scrollTo: (target) ->
-    targetPosition = $(target).offset().top
-    bottom = $(window).height() + $(window).scrollTop()
-    if targetPosition > bottom or targetPosition < $(window).scrollTop() or (targetPosition + $(target).height()) > bottom
-      $.scrollTo target,
-        duration: 100
-        offset:
-          top: -50
-          left: 0
-
-        axis: "y"
-
-  # Go to specific target
-  gotoTarget: (target) ->
-    @currentTarget = target
-    $(this).trigger "targetchanged", [ target ]
-
-  # Go to next target
-  gotoNextTarget: ->
-    unless @currentTarget
-      if @defaultTarget
-        @gotoTarget @defaultTarget
-      else
-        @gotoTarget @targets[0]
-    else
-      index = $.inArray(@currentTarget, @targets) + 1
-      index = 0  if index >= @targets.length
-      @gotoTarget @targets[index]
-
-  # Go to previous target
-  gotoPrevTarget: ->
-    unless @currentTarget
-      if @defaultTarget
-        @gotoTarget @defaultTarget
-        @gotoPrevTarget()
-      else
-        @gotoTarget @targets[@targets.length - 1]
-    else
-      index = $.inArray(@currentTarget, @targets) - 1
-      index = @targets.length - 1  if index < 0
-      @gotoTarget @targets[index]
-
-  setup:
-
-    # Global hotkeys
-    global: ->
-      gotoPrevPage = (event) ->
-        document.location = $(".prev_page_link").get(0).href  if not event.metaKey and $(".prev_page_link").length > 0
-
-      gotoNextPage = (event) ->
-        document.location = $(".next_page_link").get(0).href  if not event.metaKey and $(".next_page_link").length > 0
-
-      $(document).bind "keydown", "shift+p", gotoPrevPage
-      $(document).bind "keydown", "shift+k", gotoPrevPage
-      $(document).bind "keydown", "shift+n", gotoNextPage
-      $(document).bind "keydown", "shift+j", gotoNextPage
-      $(document).bind "keydown", "u", (event) ->
-        if not event.metaKey and $("#back_link").length > 0
-          document.location = $("#back_link").get(0).href
-          false
-
-    # Listen for sequences
-    sequences: ->
-      $(document).bind "keydown", (event) ->
-        target = $(event.target)
-        character = not Sugar.Hotkeys.specialKeys[event.which] and String.fromCharCode(event.keyCode).toLowerCase()
-        character = character.toUpperCase()  if event.shiftKey and event.which >= 65 and event.which <= 90
-        if target.is("input") or target.is("textarea") or target.is("select")
-          Sugar.Hotkeys.keySequence = ""
-        else
-          if not event.metaKey and character and character.match(/^[\w\d]$/)
-            Sugar.Hotkeys.keySequence += character
-            keySequence = Sugar.Hotkeys.keySequence = Sugar.Hotkeys.keySequence.match(/([\w\d]{0,5})$/)[1]
-            shortcuts =
-              "#discussions_link": /gd$/
-              "#following_link": /gf$/
-              "#favorites_link": /gF$/
-              "#conversations_link": /gc$/
-              "#messages_link": /gm$/
-              "#invites_link": /gi$/
-              "#users_link": /gu$/
-
-            for selector of shortcuts
-              document.location = $(selector).get(0).href  if keySequence.match(shortcuts[selector]) and $(selector).length > 0
-
-    # Navigating posts
-    postsNavigation: ->
-      # Find targets
-      $(".posts .post").each ->
-        Sugar.Hotkeys.addTarget this, @id.match(/(post|message)\-([\d]+)/)[2]
-
-      # Detect new posts
-      $(Sugar).bind "postsloaded", ->
-        $(".posts .post").each ->
-          Sugar.Hotkeys.addTarget this, @id.match(/(post|message)\-([\d]+)/)[1]  if @id.match(/(post|message)\-([\d]+)/)
-
-      # Set default target
-      if document.location.toString().match(/#(post|message)-([\d]+)/)
-        Sugar.Hotkeys.defaultTarget = $("#post-" + document.location.toString().match(/#(post|message)-([\d]+)/)[2]).get(0)
-      else
-        Sugar.Hotkeys.defaultTarget = $(".posts > .post").get(0)
-
-      # Target change event
-      $(Sugar.Hotkeys).bind "targetchanged", (e, target) ->
-        $(".posts .post").removeClass "targeted"
-        $(target).addClass "targeted"
-        @scrollTo target
-
-      # Keyboard bindings
-      $(document).bind "keydown", "p", (event) ->
-        Sugar.Hotkeys.gotoPrevTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "k", (event) ->
-        Sugar.Hotkeys.gotoPrevTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "n", (event) ->
-        Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "j", (event) ->
-        Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "/", (event) ->
-        $('#q').focus()
-        event.preventDefault()
-
-    # Post functions
-    postsFunctions: ->
-      # Load new posts
-      $(document).bind "keydown", "r", (event) ->
-        Sugar.loadNewPosts()  unless event.metaKey
-
-      # Compose
-      $(document).bind "keydown", "c", (event) ->
-        unless event.metaKey
-          $("#compose-body").focus()
-          false
-
-      # Quote post
-      $(document).bind "keydown", "q", (event) ->
-        if not event.metaKey and Sugar.Hotkeys.getTarget()
-          Sugar.quotePost Sugar.Hotkeys.getTarget()
-          false
-
-    # Navigating discussions
-    discussionsNavigation: ->
-      $("table.discussions td.name a").each ->
-        Sugar.Hotkeys.addTarget this, @parentNode.parentNode.parentNode.className.match(/(discussion|conversation)([\d]+)/)[2]
-
-      # Target change event
-      $(Sugar.Hotkeys).bind "targetchanged", (e, target) ->
-        $("tr.discussion").removeClass "targeted"
-        $("tr.discussion" + $(target).data("targetId")).addClass "targeted"
-        $("tr.conversation").removeClass "targeted"
-        $("tr.conversation" + $(target).data("targetId")).addClass "targeted"
-        @scrollTo target
-
-      # Keyboard bindings
-      $(document).bind "keydown", "p", (event) ->
-        Sugar.Hotkeys.gotoPrevTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "k", (event) ->
-        Sugar.Hotkeys.gotoPrevTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "n", (event) ->
-        Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "j", (event) ->
-        Sugar.Hotkeys.gotoNextTarget()  unless event.metaKey
-
-      $(document).bind "keydown", "/", (event) ->
-        $('#q').focus()
-        event.preventDefault()
-
-    # Discussion functions
-    discussionsFunctions: ->
-      # Open target
-      openTarget = (openInNewTab) ->
-        if Sugar.Hotkeys.currentTarget
-          targetUrl = Sugar.Hotkeys.currentTarget.href
-          if openInNewTab
-            window.open targetUrl
-          else
-            document.location = targetUrl
-
-      $(document).bind "keydown", "o", (event) ->
-        openTarget false  unless event.metaKey
-
-      $(document).bind "keydown", "shift+o", (event) ->
-        openTarget true  unless event.metaKey
-
-      $(document).bind "keydown", "Return", (event) ->
-        openTarget false  unless event.metaKey
-
-      $(document).bind "keydown", "shift+Return", (event) ->
-        openTarget true  unless event.metaKey
-
-      # Mark a discussion read
-      markAsRead = (event) ->
-        if not event.metaKey and Sugar.Hotkeys.currentTarget and $(Sugar.Hotkeys.currentTarget.parentNode.parentNode).hasClass("discussion")
-          target = Sugar.Hotkeys.currentTarget
-          targetId = $(target).data("targetId")
-          url = "/discussions/" + targetId + "/mark_as_read"
-          $.get url, {}, ->
-            $(".discussion" + targetId).removeClass "new_posts"
-            $(".discussion" + targetId + " .new_posts").html ""
-
-      $(document).bind "keydown", "y", markAsRead
-      $(document).bind "keydown", "m", markAsRead
-
-      # Create a new discussoin
-      $(document).bind "keydown", "c", (event) ->
-        document.location = $(".functions .create").get(0).href  if not event.metaKey and $(".functions .create").length > 0
+$(Sugar).bind "postsloaded", -> detectTargets()
