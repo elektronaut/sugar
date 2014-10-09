@@ -8,19 +8,14 @@ class Sugar.Views.Post extends Backbone.View
     'click a.edit_post': 'edit'
 
   initialize: ->
-    if $(this.el.id)
+    if $(this.el).data('post_id')
       this.model = this.modelFromExistingElement()
     else
       this.model = new Sugar.Models.Post()
 
   modelFromExistingElement: ->
-    if this.el.id.match(/([\d]+)$/)
-      id = this.el.id.match(/([\d]+)$/)[1]
-    else
-      id = null
-
     new Sugar.Models.Post({
-      id:            id,
+      id:            $(this.el).data('post_id'),
       user_id:       $(this.el).data('user_id'),
       exchange_id:   $(this.el).data('exchange_id'),
       exchange_type: $(this.el).data('exchange_type'),
