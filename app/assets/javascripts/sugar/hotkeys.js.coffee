@@ -1,5 +1,5 @@
 currentTarget = null
-keySequence = ""
+keySequence = ''
 keySequences = []
 
 specialKeys = [
@@ -8,15 +8,15 @@ specialKeys = [
   114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
 ]
 
-bindRawKey = (hotkey, fn) -> $(document).bind "keydown", hotkey, fn
+bindRawKey = (hotkey, fn) -> $(document).bind 'keydown', hotkey, fn
 
 bindKey = (hotkey, fn) -> bindRawKey hotkey, (event) -> fn(event) if not event.metaKey
 
 bindKeySequence = (expression, fn) -> keySequences.push([expression, fn])
 
 clearNewPostsFromDiscussion = (target) ->
-  $(".discussion" + exchangeId(target)).removeClass "new_posts"
-  $(".discussion" + exchangeId(target) + " .new_posts").html ""
+  $('.discussion' + exchangeId(target)).removeClass 'new_posts'
+  $('.discussion' + exchangeId(target) + ' .new_posts').html ''
 
 defaultTarget = ->
   if document.location.hash && document.location.hash.match(/^#post-([\d]+)$/)
@@ -36,7 +36,7 @@ focusElement = (event, selector) ->
   $(selector).focus()
   event.preventDefault()
 
-isDiscussion = (target) -> $(target).closest('tr').hasClass("discussion")
+isDiscussion = (target) -> $(target).closest('tr').hasClass('discussion')
 
 keypressToCharacter = (event) ->
   return if event.which in specialKeys
@@ -47,20 +47,20 @@ keypressToCharacter = (event) ->
 
 markAsRead = (target) ->
   if isDiscussion(target)
-    $.get "/discussions/" + exchangeId(target) + "/mark_as_read", {}, ->
+    $.get '/discussions/' + exchangeId(target) + '/mark_as_read', {}, ->
       clearNewPostsFromDiscussion(target)
 
 openTarget = (target) -> visitPath(targetUrl(target))
 openTargetNewTab = (target) -> window.open targetUrl(target)
 
-scrollToTarget = (target) -> $.scrollTo target, { duration: 100, offset: { top: -50 }, axis: "y" }
+scrollToTarget = (target) -> $.scrollTo target, { duration: 100, offset: { top: -50 }, axis: 'y' }
 
 targetUrl = (target) -> target.href
 
-isDiscussion = (target) -> $(target).closest('tr').hasClass("discussion")
+isDiscussion = (target) -> $(target).closest('tr').hasClass('discussion')
 
-isExchangesView = -> $("table.discussions").length > 0
-isPostsView     = -> $(".posts .post").length > 0
+isExchangesView = -> $('table.discussions').length > 0
+isPostsView     = -> $('.posts .post').length > 0
 
 onlyExchanges = (fn) -> (fn() if isExchangesView())
 onlyPosts     = (fn) -> (fn() if isPostsView())
@@ -70,8 +70,8 @@ visitLink = (selector) -> visitPath($(selector).get(0).href) if $(selector).leng
 
 trackKeySequence = (event) ->
   target = $(event.target)
-  if target.is("input") or target.is("textarea") or target.is("select")
-    keySequence = ""
+  if target.is('input') or target.is('textarea') or target.is('select')
+    keySequence = ''
   else
     character = keypressToCharacter(event)
     if not event.metaKey and character and character.match(/^[\w\d]$/)
@@ -82,16 +82,16 @@ trackKeySequence = (event) ->
 
 markTarget = (target) ->
   if isExchangesView()
-    $("tr.discussion").removeClass "targeted"
-    $("tr.conversation").removeClass "targeted"
-    $("tr.discussion" + exchangeId(target)).addClass "targeted"
-    $("tr.conversation" + exchangeId(target)).addClass "targeted"
+    $('tr.discussion').removeClass 'targeted'
+    $('tr.conversation').removeClass 'targeted'
+    $('tr.discussion' + exchangeId(target)).addClass 'targeted'
+    $('tr.conversation' + exchangeId(target)).addClass 'targeted'
   else
-    $(targets()).removeClass "targeted"
-    $(target).addClass "targeted"
+    $(targets()).removeClass 'targeted'
+    $(target).addClass 'targeted'
   scrollToTarget(target) if elemOutOfWindow(target)
 
-targets = -> $("table.discussions td.name a").get().concat $(".posts .post").get()
+targets = -> $('table.discussions td.name a').get().concat $('.posts .post').get()
 
 withTarget = (fn) -> (fn(currentTarget) if currentTarget)
 
@@ -115,7 +115,7 @@ setTarget = (target) ->
 
 resetTarget = -> currentTarget = null
 
-$(document).bind "keydown", trackKeySequence
+$(document).bind 'keydown', trackKeySequence
 
 bindKeySequence /gd$/, -> visitPath('/discussions')
 bindKeySequence /gf$/, -> visitPath('/discussions/following')
@@ -124,31 +124,31 @@ bindKeySequence /gc$/, -> visitPath('/discussions/conversations')
 bindKeySequence /gi$/, -> visitPath('/invites')
 bindKeySequence /gu$/, -> visitPath('/users/online')
 
-bindKey "shift+p", -> visitLink('.prev_page_link')
-bindKey "shift+k", -> visitLink('.prev_page_link')
-bindKey "shift+n", -> visitLink('.next_page_link')
-bindKey "u",       -> visitLink('#back_link')
-bindKey "shift+j", -> visitLink('.next_page_link')
+bindKey 'shift+p', -> visitLink('.prev_page_link')
+bindKey 'shift+k', -> visitLink('.prev_page_link')
+bindKey 'shift+n', -> visitLink('.next_page_link')
+bindKey 'u',       -> visitLink('#back_link')
+bindKey 'shift+j', -> visitLink('.next_page_link')
 
-bindKey "/", (event) -> focusElement(event, '#q')
+bindKey '/', (event) -> focusElement(event, '#q')
 
-bindKey "p", -> ifTargets -> setTarget previousTarget()
-bindKey "k", -> ifTargets -> setTarget previousTarget()
-bindKey "n", -> ifTargets -> setTarget nextTarget()
-bindKey "j", -> ifTargets -> setTarget nextTarget()
+bindKey 'p', -> ifTargets -> setTarget previousTarget()
+bindKey 'k', -> ifTargets -> setTarget previousTarget()
+bindKey 'n', -> ifTargets -> setTarget nextTarget()
+bindKey 'j', -> ifTargets -> setTarget nextTarget()
 
-bindKey "r", -> onlyPosts -> Sugar.loadNewPosts()
-bindKey "q", -> onlyPosts -> withTarget (target) -> Sugar.quotePost(target)
+bindKey 'r', -> onlyPosts -> Sugar.loadNewPosts()
+bindKey 'q', -> onlyPosts -> withTarget (target) -> Sugar.quotePost(target)
 
-bindKey "o",            -> onlyExchanges -> withTarget (target) -> openTarget(target)
-bindKey "shift+o",      -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
-bindKey "Return",       -> onlyExchanges -> withTarget (target) -> openTarget(target)
-bindKey "shift+Return", -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
-bindKey "y",            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
-bindKey "m",            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+bindKey 'o',            -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindKey 'shift+o',      -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindKey 'Return',       -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindKey 'shift+Return', -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindKey 'y',            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+bindKey 'm',            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
 
-bindKey "c", (event) ->
+bindKey 'c', (event) ->
   onlyExchanges -> visitLink('.functions .create')
   onlyPosts     -> focusElement(event, '#compose-body')
 
-$(Sugar).bind "ready", -> resetTarget()
+$(Sugar).bind 'ready', -> resetTarget()
