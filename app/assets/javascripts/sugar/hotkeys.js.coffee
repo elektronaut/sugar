@@ -8,9 +8,9 @@ specialKeys = [
   114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
 ]
 
-bindHotkey = (hotkey, fn) -> $(document).bind "keydown", hotkey, fn
+bindRawKey = (hotkey, fn) -> $(document).bind "keydown", hotkey, fn
 
-bindHotkeyWithoutMeta = (hotkey, fn) -> bindHotkey hotkey, (event) -> fn(event) if not event.metaKey
+bindKey = (hotkey, fn) -> bindRawKey hotkey, (event) -> fn(event) if not event.metaKey
 
 bindKeySequence = (expression, fn) -> keySequences.push([expression, fn])
 
@@ -31,6 +31,10 @@ elemOutOfWindow = (elem) ->
   (elemTop < top) or (elemBottom > bottom)
 
 exchangeId = (target) -> $(target).closest('tr').data('exchange-id')
+
+focusElement = (event, selector) ->
+  $(selector).focus()
+  event.preventDefault()
 
 isDiscussion = (target) -> $(target).closest('tr').hasClass("discussion")
 
@@ -76,8 +80,6 @@ trackKeySequence = (event) ->
       for [expression, fn] in keySequences
         fn() if keySequence.match(expression)
 
-withTarget = (fn) -> (fn(currentTarget) if currentTarget)
-
 markTarget = (target) ->
   if isExchangesView()
     $("tr.discussion").removeClass "targeted"
@@ -91,31 +93,25 @@ markTarget = (target) ->
 
 targets = -> $("table.discussions td.name a").get().concat $(".posts .post").get()
 
+withTarget = (fn) -> (fn(currentTarget) if currentTarget)
+
+ifTargets = (fn) -> (fn() if targets().length > 0)
+
+first = (collection) -> collection[0]
+last  = (collection) -> collection[-1..]
+
+getRelative = (collection, item, offset) ->
+  collection[(collection.indexOf(item) + offset + collection.length) % collection.length]
+
+nextTarget = ->
+  getRelative targets(), (currentTarget || defaultTarget() || last(targets())), 1
+
+previousTarget = ->
+  getRelative targets(), (currentTarget || defaultTarget() || first(targets())), -1
+
 setTarget = (target) ->
   currentTarget = target
   markTarget(target)
-
-nextTarget = ->
-  if currentTarget
-    index = targets().indexOf(currentTarget) + 1
-    index = 0 if index >= targets().length
-    targets()[index]
-  else if defaultTarget()
-    defaultTarget()
-  else if targets().length > 0
-    targets()[0]
-
-previousTarget = ->
-  if currentTarget
-    index = targets().indexOf(currentTarget) - 1
-    index = targets().length - 1 if index < 0
-    targets()[index]
-  else if defaultTarget()
-    index = targets().indexOf(defaultTarget()) - 1
-    index = targets().length - 1 if index < 0
-    targets()[index]
-  else if targets().length > 0
-    targets()[targets().length - 1]
 
 resetTarget = -> currentTarget = null
 
@@ -128,35 +124,31 @@ bindKeySequence /gc$/, -> visitPath('/discussions/conversations')
 bindKeySequence /gi$/, -> visitPath('/invites')
 bindKeySequence /gu$/, -> visitPath('/users/online')
 
-bindHotkeyWithoutMeta "shift+p", (event) -> visitLink('.prev_page_link')
-bindHotkeyWithoutMeta "shift+k", (event) -> visitLink('.prev_page_link')
-bindHotkeyWithoutMeta "shift+n", (event) -> visitLink('.next_page_link')
-bindHotkeyWithoutMeta "u",       (event) -> visitLink('#back_link')
-bindHotkeyWithoutMeta "shift+j", (event) -> visitLink('.next_page_link')
+bindKey "shift+p", -> visitLink('.prev_page_link')
+bindKey "shift+k", -> visitLink('.prev_page_link')
+bindKey "shift+n", -> visitLink('.next_page_link')
+bindKey "u",       -> visitLink('#back_link')
+bindKey "shift+j", -> visitLink('.next_page_link')
 
-bindHotkey "/", (event) ->
-  $('#q').focus()
-  event.preventDefault()
+bindKey "/", (event) -> focusElement(event, '#q')
 
-bindHotkeyWithoutMeta "p", (event) -> setTarget previousTarget()
-bindHotkeyWithoutMeta "k", (event) -> setTarget previousTarget()
-bindHotkeyWithoutMeta "n", (event) -> setTarget nextTarget()
-bindHotkeyWithoutMeta "j", (event) -> setTarget nextTarget()
+bindKey "p", -> ifTargets -> setTarget previousTarget()
+bindKey "k", -> ifTargets -> setTarget previousTarget()
+bindKey "n", -> ifTargets -> setTarget nextTarget()
+bindKey "j", -> ifTargets -> setTarget nextTarget()
 
-bindHotkeyWithoutMeta "r", (event) -> onlyPosts -> Sugar.loadNewPosts()
-bindHotkeyWithoutMeta "q", (event) -> onlyPosts -> withTarget (target) -> Sugar.quotePost(target)
+bindKey "r", -> onlyPosts -> Sugar.loadNewPosts()
+bindKey "q", -> onlyPosts -> withTarget (target) -> Sugar.quotePost(target)
 
-bindHotkeyWithoutMeta "o",            (event) -> onlyExchanges -> withTarget (target) -> openTarget(target)
-bindHotkeyWithoutMeta "shift+o",      (event) -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
-bindHotkeyWithoutMeta "Return",       (event) -> onlyExchanges -> withTarget (target) -> openTarget(target)
-bindHotkeyWithoutMeta "shift+Return", (event) -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
-bindHotkeyWithoutMeta "y",            (event) -> onlyExchanges -> withTarget (target) -> markAsRead(target)
-bindHotkeyWithoutMeta "m",            (event) -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+bindKey "o",            -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindKey "shift+o",      -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindKey "Return",       -> onlyExchanges -> withTarget (target) -> openTarget(target)
+bindKey "shift+Return", -> onlyExchanges -> withTarget (target) -> openTargetNewTab(target)
+bindKey "y",            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
+bindKey "m",            -> onlyExchanges -> withTarget (target) -> markAsRead(target)
 
-bindHotkeyWithoutMeta "c", (event) ->
+bindKey "c", (event) ->
   onlyExchanges -> visitLink('.functions .create')
-  onlyPosts ->
-    $("#compose-body").focus()
-    event.preventDefault()
+  onlyPosts     -> focusElement(event, '#compose-body')
 
 $(Sugar).bind "ready", -> resetTarget()
