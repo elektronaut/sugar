@@ -1,9 +1,7 @@
 currentTarget = null
-targets = []
-changeCallback = (target) ->
-
 keySequence = ""
 keySequences = []
+
 specialKeys = [
   8, 9, 13, 19, 20, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 96, 97,
   98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 109, 110, 111, 112, 113,
@@ -87,11 +85,11 @@ markTarget = (target) ->
     $("tr.discussion" + exchangeId(target)).addClass "targeted"
     $("tr.conversation" + exchangeId(target)).addClass "targeted"
   else
-    $(targets).removeClass "targeted"
+    $(targets()).removeClass "targeted"
     $(target).addClass "targeted"
   scrollToTarget(target) if elemOutOfWindow(target)
 
-addTarget = (target) -> (targets.push(target) unless target in targets)
+targets = -> $("table.discussions td.name a").get().concat $(".posts .post").get()
 
 setTarget = (target) ->
   currentTarget = target
@@ -99,34 +97,27 @@ setTarget = (target) ->
 
 nextTarget = ->
   if currentTarget
-    index = targets.indexOf(currentTarget) + 1
-    index = 0 if index >= targets.length
-    targets[index]
+    index = targets().indexOf(currentTarget) + 1
+    index = 0 if index >= targets().length
+    targets()[index]
   else if defaultTarget()
     defaultTarget()
-  else if targets.length > 0
-    targets[0]
+  else if targets().length > 0
+    targets()[0]
 
 previousTarget = ->
   if currentTarget
-    index = targets.indexOf(currentTarget) - 1
-    index = targets.length - 1 if index < 0
-    targets[index]
+    index = targets().indexOf(currentTarget) - 1
+    index = targets().length - 1 if index < 0
+    targets()[index]
   else if defaultTarget()
-    index = targets.indexOf(defaultTarget()) - 1
-    index = targets.length - 1 if index < 0
-    targets[index]
-  else if targets.length > 0
-    targets[targets.length - 1]
+    index = targets().indexOf(defaultTarget()) - 1
+    index = targets().length - 1 if index < 0
+    targets()[index]
+  else if targets().length > 0
+    targets()[targets().length - 1]
 
-resetTargets = ->
-  targets = []
-  currentTarget = null
-
-detectTargets = ->
-  $("table.discussions td.name a").each -> addTarget this
-  $(".posts .post").each -> addTarget this
-
+resetTarget = -> currentTarget = null
 
 $(document).bind "keydown", trackKeySequence
 
@@ -168,8 +159,4 @@ bindHotkeyWithoutMeta "c", (event) ->
     $("#compose-body").focus()
     event.preventDefault()
 
-$(Sugar).bind "ready", ->
-  resetTargets()
-  detectTargets()
-
-$(Sugar).bind "postsloaded", -> detectTargets()
+$(Sugar).bind "ready", -> resetTarget()
