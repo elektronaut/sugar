@@ -31,6 +31,10 @@
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #E2DCBF;
+  .anchor {
+    position: absolute;
+    margin-top: -20px;
+  }
 }
 .post .title {
   background: transparent image-url('default/discussion_title_bg.png') 0px 14px no-repeat;
