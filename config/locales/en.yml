@@ -4,6 +4,8 @@
 en:
   activerecord:
     attributes:
+      avatar:
+        file: Avatar
       configuration:
         google_analytics: Tracking code
         amazon_aws_key: Access Key ID
