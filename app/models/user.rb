@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
   include ExchangeParticipant
   include UserScopes
 
+  belongs_to :avatar, dependent: :destroy
+  accepts_nested_attributes_for :avatar
+  validates_associated :avatar
+
   before_create :check_for_first_user
   before_validation :ensure_last_active_is_set
 

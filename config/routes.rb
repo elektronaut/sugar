@@ -2,6 +2,8 @@
 
 Sugar::Application.routes.draw do
 
+  image_resources :avatars
+
   use_doorkeeper
 
   # API routes

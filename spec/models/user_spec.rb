@@ -27,6 +27,8 @@ describe User do
   it { should be_kind_of(ExchangeParticipant) }
   it { should be_kind_of(UserScopes) }
 
+  it { should belong_to(:avatar).dependent(:destroy) }
+
   it { should validate_presence_of(:username) }
   it { should validate_uniqueness_of(:username).case_insensitive.with_message(/is already registered/) }
 
