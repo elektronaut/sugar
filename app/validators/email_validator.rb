@@ -5,8 +5,7 @@ class EmailValidator < ActiveModel::EachValidator
     begin
       email = Mail::Address.new(value)
       valid = email.domain && email.address == value
-      tree = email.__send__(:tree)
-      valid &&= (tree.domain.dot_atom_text.elements.size > 1)
+      valid &&= email.domain =~ /\./
     rescue Exception => e
       valid = false
     end
