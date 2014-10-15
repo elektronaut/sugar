@@ -20,7 +20,7 @@
 
 <div id="userinfo">
   <p class="avatar_and_name clearfix">
-    <%= avatar_image_tag @user, '32', class: :avatar %>
+    <%= avatar_image_tag @user %>
     <%= profile_link(@user, @user.username, class: 'username') %>
     <% if @user.realname? || @user.location? %>
       <br />

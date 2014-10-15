@@ -1,3 +1,8 @@
+.avatar-image {
+  width: 32px;
+  height: 32px;
+}
+
 .users_list .username {
   font-weight: bold;
   font-size: 1.2em;
@@ -32,7 +37,7 @@ span.admin {
   margin-left: 42px;
   font-size: 1.2em;
 }
-.user_profile .avatar_and_name .avatar {
+.user_profile .avatar_and_name .avatar-image {
   float: left;
   margin-left: -42px;
 }

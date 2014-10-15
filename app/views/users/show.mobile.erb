@@ -2,7 +2,7 @@
 <div class="page_content user_profile">
 
   <div class="avatar">
-    <%= avatar_image_tag @user, '48' %>
+    <%= avatar_image_tag @user %>
     <h2><%= @user.username %></h2>
 
     <% unless !current_user? || @user == current_user %>

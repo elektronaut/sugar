@@ -13,19 +13,20 @@ module AvatarsHelper
     "#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
   end
 
-  def avatar_image_tag(user, size='32', html_options={})
+  def avatar_image_tag(user)
     html_options = {
-      size: "#{size}x#{size}",
-      alt:  user.username
-    }.merge(html_options)
+      size:  "96x96",
+      alt:   user.username,
+      class: 'avatar-image'
+    }
     if user.avatar
-      dynamic_image_tag(user.avatar, { size: "#{size}x#{size}", crop: true }.merge(html_options))
+      dynamic_image_tag(user.avatar, { crop: true }.merge(html_options))
     elsif user.avatar_url?
       image_tag user.avatar_url, html_options
     elsif user.email?
-      image_tag gravatar_url(user.email, size: size), html_options
+      image_tag gravatar_url(user.email, size: 96), html_options
     else
-      image_tag gravatar_url("#{user.id}@#{request.host}", size: size), html_options
+      image_tag gravatar_url("#{user.id}@#{request.host}", size: 96), html_options
     end
   end
 
