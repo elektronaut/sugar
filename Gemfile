@@ -22,7 +22,7 @@ gem 'dynamic_form'
 gem 'jquery-rails'
 gem 'backbone-on-rails'
 
-gem 'dynamic_image', '~> 2.0.0.beta1'
+gem 'dynamic_image', '~> 2.0.0.beta2'
 
 # Deploy with Capistrano
 group :development do
