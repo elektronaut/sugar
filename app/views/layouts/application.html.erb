@@ -12,31 +12,7 @@
     <%= stylesheet_link_tag @theme.stylesheet_path %>
   <% end %>
 
-  <%= javascript_include_tag "application" %>
-
   <%= csrf_meta_tag %>
-
-  <%# Sugar configuration %>
-  <script>
-    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
-  </script>
-
-  <%# Custom javascript %>
-  <% unless Sugar.config.custom_javascript.blank? %>
-    <script>
-      <%= raw Sugar.config.custom_javascript %>
-    </script>
-  <% end %>
-
-  <%# Embedded Tweets Renderer %>
-  <% if @posts && @posts.any? %>
-    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <% end %>
-
-  <%# Google Maps API %>
-  <% if @google_maps_api %>
-    <script src="//maps.google.com/maps/api/js?sensor=false"></script>
-  <% end %>
 
   <% if @theme.icon? %>
     <link rel="icon" type="image/gif" href="<%= image_path @theme.icon_path %>">
@@ -146,6 +122,30 @@
   <%# Custom footer %>
   <% if Sugar.config.custom_footer %>
     <%= raw Sugar.config.custom_footer %>
+  <% end %>
+
+  <%= javascript_include_tag "application" %>
+
+  <%# Sugar configuration %>
+  <script>
+    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
+  </script>
+
+  <%# Custom javascript %>
+  <% unless Sugar.config.custom_javascript.blank? %>
+    <script>
+      <%= raw Sugar.config.custom_javascript %>
+    </script>
+  <% end %>
+
+  <%# Embedded Tweets Renderer %>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <% end %>
+
+  <%# Google Maps API %>
+  <% if @google_maps_api %>
+    <script src="//maps.google.com/maps/api/js?sensor=false"></script>
   <% end %>
 
   <%# Google Analytics %>

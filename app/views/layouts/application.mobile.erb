@@ -11,19 +11,7 @@
     <%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
   <% end %>
 
-  <%= javascript_include_tag "mobile" %>
-
   <%= csrf_meta_tag %>
-
-  <%# Sugar configuration %>
-  <script>
-    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
-  </script>
-
-  <%# Embedded Tweets Renderer %>
-  <% if @posts && @posts.any? %>
-    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <% end %>
 
   <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
   <% if @theme.mobile_icon? %>
@@ -91,6 +79,19 @@
     <% end %>
     <%= link_to "Regular site", {mobile_format: 'html'}, class: 'regular_site' %>
   </div>
+
+  <%= javascript_include_tag "mobile" %>
+
+  <%# Sugar configuration %>
+  <script>
+    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
+  </script>
+
+  <%# Embedded Tweets Renderer %>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <% end %>
+
   <% if Sugar.config.google_analytics -%>
   <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
