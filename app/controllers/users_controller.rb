@@ -45,7 +45,7 @@ class UsersController < ApplicationController
 
     def allowed_params
       allowed = [
-        :aim, :avatar_url, :birthday, :description, :email,
+        :aim, :birthday, :description, :email,
         :facebook_uid, :flickr, :gamertag, :gtalk, :instagram,
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,

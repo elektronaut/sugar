@@ -18,7 +18,6 @@ en:
         nsfw: Not safe for work
       user:
         realname: Real name
-        avatar_url: Avatar URL
         description: Profile text
         moderator: Moderator
         user_admin: User administrator
