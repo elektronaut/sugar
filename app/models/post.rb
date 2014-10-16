@@ -29,7 +29,7 @@ class Post < ActiveRecord::Base
   after_destroy :decrement_public_posts_count
 
   scope :sorted,                 -> { order('created_at ASC') }
-  scope :for_view,               -> { sorted.includes(:user) }
+  scope :for_view,               -> { sorted.includes(user: [:avatar]) }
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
 
   def me_post?
