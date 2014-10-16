@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
   include ExchangeParticipant
   include UserScopes
 
+  belongs_to :avatar, dependent: :destroy
+  accepts_nested_attributes_for :avatar
+  validates_associated :avatar
+
   before_create :check_for_first_user
   before_validation :ensure_last_active_is_set
 
@@ -93,7 +97,7 @@ class User < ActiveRecord::Base
       :id, :username, :realname, :latitude, :longitude, :inviter_id,
       :last_active, :created_at, :description, :admin,
       :moderator, :user_admin,
-      :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
+      :location, :gamertag, :twitter, :flickr, :instagram, :website,
       :msn, :gtalk, :last_fm, :facebook_uid, :banned_until, :sony
     ]
   end

@@ -13,7 +13,7 @@ describe User do
   let(:moderator)    { create(:moderator) }
   let(:user_admin)   { create(:user_admin) }
   let(:public_attributes) { [
-    "admin", "avatar_url", "banned_until", "created_at", "description",
+    "admin", "banned_until", "created_at", "description",
     "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
     "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
     "moderator", "msn", "realname", "twitter", "user_admin",
@@ -26,6 +26,8 @@ describe User do
   it { should be_kind_of(Inviter) }
   it { should be_kind_of(ExchangeParticipant) }
   it { should be_kind_of(UserScopes) }
+
+  it { should belong_to(:avatar).dependent(:destroy) }
 
   it { should validate_presence_of(:username) }
   it { should validate_uniqueness_of(:username).case_insensitive.with_message(/is already registered/) }
