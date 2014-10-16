@@ -1,67 +1,6 @@
 # encoding: utf-8
 
-require 'open-uri'
-
-module OpenURI
-  class <<self
-    alias_method :open_uri_original, :open_uri
-    alias_method :redirectable_cautious?, :redirectable?
-
-    def redirectable_baller? uri1, uri2
-      valid = /\A(?:https?|ftp)\z/i
-      valid =~ uri1.scheme.downcase && valid =~ uri2.scheme
-    end
-  end
-
-  # The original open_uri takes *args but then doesn't do anything with them.
-  # Assume we can only handle a hash.
-  def self.open_uri name, options = {}
-    value = options.delete :allow_unsafe_redirects
-
-    if value
-      class <<self
-        remove_method :redirectable?
-        alias_method :redirectable?, :redirectable_baller?
-      end
-    else
-      class <<self
-        remove_method :redirectable?
-        alias_method :redirectable?, :redirectable_cautious?
-      end
-    end
-
-    self.open_uri_original name, options
-  end
-end
-
-  namespace :sugar do
-
-  desc "Fetch avatars"
-  task fetch_avatars: :environment do
-    User.all.each do |user|
-      if user.avatar_url?
-        filename = user.avatar_url.split("/").last
-        if type = FastImage.type(user.avatar_url, timeout: 10.0)
-          puts "Fetching #{user.username}"
-          content_type = "image/#{type}"
-          begin
-            data = open(user.avatar_url, allow_unsafe_redirects: true).read
-            user.update(
-              avatar_attributes: { data: data, content_type: content_type, filename: filename },
-              avatar_url: nil
-            )
-            unless user.valid?
-              puts user.errors.inspect
-            end
-          rescue
-            puts "Error fetching image for #{user.username}: #{user.avatar_url}"
-          end
-        else
-            puts "Error fetching image for #{user.username}: #{user.avatar_url}"
-        end
-      end
-    end
-  end
+namespace :sugar do
 
   desc "Move napkin drawings to S3"
   task upload_drawings: :environment do
