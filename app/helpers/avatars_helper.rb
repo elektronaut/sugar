@@ -21,8 +21,6 @@ module AvatarsHelper
     }
     if user.avatar
       dynamic_image_tag(user.avatar, { crop: true }.merge(html_options))
-    elsif user.avatar_url?
-      image_tag user.avatar_url, html_options
     elsif user.email?
       image_tag gravatar_url(user.email, size: 96), html_options
     else

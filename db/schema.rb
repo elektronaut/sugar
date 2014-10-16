@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141015220711) do
+ActiveRecord::Schema.define(version: 20141016111639) do
 
   create_table "avatars", force: true do |t|
     t.string   "content_hash"
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20141015220711) do
   add_index "exchanges", ["poster_id"], name: "poster_id_index", using: :btree
   add_index "exchanges", ["sticky", "last_post_at"], name: "sticky", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
-  add_index "exchanges", ["title"], name: "discussions_title_fulltext", using: :btree
+  add_index "exchanges", ["title"], name: "discussions_title_fulltext", type: :fulltext
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
   add_index "exchanges", ["type"], name: "type_index", using: :btree
 
@@ -131,22 +131,6 @@ ActiveRecord::Schema.define(version: 20141015220711) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "notifications", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "notifiable_id"
-    t.string   "notifiable_type"
-    t.integer  "notifier_id"
-    t.string   "notifier_type"
-    t.string   "kind"
-    t.string   "value"
-    t.boolean  "seen",            default: false, null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
-  add_index "notifications", ["user_id", "notifiable_type", "notifiable_id", "seen", "kind"], name: "index_notification_by_user_and_kind", using: :btree
-  add_index "notifications", ["user_id", "seen"], name: "index_notifications_on_user_id_and_seen", using: :btree
 
   create_table "oauth_access_grants", force: true do |t|
     t.integer  "resource_owner_id", null: false
@@ -243,7 +227,6 @@ ActiveRecord::Schema.define(version: 20141015220711) do
     t.date     "birthday"
     t.string   "stylesheet_url"
     t.string   "gamertag"
-    t.string   "avatar_url"
     t.string   "msn"
     t.string   "gtalk"
     t.string   "aim"
@@ -274,6 +257,6 @@ ActiveRecord::Schema.define(version: 20141015220711) do
     t.integer  "avatar_id"
   end
 
-  add_index "users", ["username"], name: "username_index", using: :btree
+  add_index "users", ["username"], name: "username_index", length: {"username"=>250}, using: :btree
 
 end
