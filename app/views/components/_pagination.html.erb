@@ -30,7 +30,7 @@
             <% if p.current_page == 1 %>
               1
             <% else %>
-              <%= link_to("1", {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: 'first_page_link') %>
+              <%= link_to("1", {page: 1, anchor: anchor}.merge(pagination_params), class: 'first_page_link') %>
             <% end %>
           </span>
         <% end %>
