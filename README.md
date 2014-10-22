@@ -1,7 +1,7 @@
 # Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.png)](https://travis-ci.org/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar.png)](https://codeclimate.com/github/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar/coverage.png)](https://codeclimate.com/github/elektronaut/sugar)
 
-Sugar is a modern open-source forum optimized for performance and usability, written in Ruby on Rails.
-
+Sugar is a modern open-source forum optimized for performance and usability,
+written in Ruby on Rails.
 
 ## Dependencies
 
@@ -11,12 +11,15 @@ Sugar is a modern open-source forum optimized for performance and usability, wri
 * [Java](http://www.java.com/en/download/index.jsp)
 * libmagic
 
-SQLite is supported, but you probably want [PostgreSQL](http://www.postgresql.org/) or [MySQL](http://www.mysql.com/) for production use.
-
+SQLite is supported, but you probably want
+[PostgreSQL](http://www.postgresql.org/) or [MySQL](http://www.mysql.com/) for
+production use.
 
 ## Installation
 
-If you want to hack on Sugar, the easiest way to get up and running is with [sugar-dev-box](https://github.com/elektronaut/sugar-dev-box). It provides a virtual development environment, and only requires VirtualBox and Vagrant.
+If you want to hack on Sugar, the easiest way to get up and running is with
+[sugar-dev-box](https://github.com/elektronaut/sugar-dev-box). It provides a
+virtual development environment, and only requires VirtualBox and Vagrant.
 
 Otherwise:
 
@@ -26,7 +29,9 @@ Otherwise:
     $ rake db:create
     $ rake db:migrate
 
-This assumes you have MySQL running on localhost, with a user named `rails` with no password. See [Configuring Sugar](#configuration) if your setup differs.
+This assumes you have MySQL running on localhost, with a user named `rails`
+with no password. See [Configuring Sugar](#configuration) if your setup
+differs.
 
 Now you can start Solr and the development server:
 
@@ -35,19 +40,25 @@ Now you can start Solr and the development server:
 
 Sugar is now running on [localhost:3000](http://localhost:3000/).
 
-
 ## Deploying Sugar
 
-Sugar is deployed like a regular Rails app, see the [official Rails site](http://rubyonrails.org/deploy). A sample Capistrano recipe is provided `config/deploy.rb.dist`.
+Sugar is deployed like a regular Rails app, see the
+[official Rails site](http://rubyonrails.org/deploy). A sample Capistrano
+recipe is provided `config/deploy.rb.dist`.
 
-For production use, you'll want a full grown Solr setup. See the [Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how to get up and running.
+For production use, you'll want a full grown Solr setup. See the
+[Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how
+to get up and running.
 
-[Heroku](https://www.heroku.com/) is currently not supported, but will be soon.
-
+[Heroku](https://www.heroku.com/) is currently not supported, but will be
+soon.
 
 ## <a id="configuration"></a> Configuring Sugar
 
-Most of Sugar is configured with a web interface. However, a few details must be sorted out before the app starts. The defaults should be fine for development, but you need tweak these settings for production use with environment variables.
+Most of Sugar is configured with a web interface. However, a few details must
+be sorted out before the app starts. The defaults should be fine for
+development, but you need tweak these settings for production use with
+environment variables.
 
 Environment variable  | Required | Info
 ----------------------|----------|-----------------------------------------------------------------------
@@ -60,11 +71,11 @@ SUGAR_DB_HOST         | -        | Default: `localhost`
 SUGAR_DB_USERNAME     | -        | Default: `rails`
 SUGAR_DB_PASSWORD     | -        | Default: `rails` for PostgreSQL, blank for MySQL
 
-
 ## Credits
 
-Thanks to the members of the B3S community for feedback, ideas and encouragement, names far too many to be mentioned. Napkin was written by Branden Hall of [Automata Studios](http://automatastudios.com/).
-
+Thanks to the members of the B3S community for feedback, ideas and
+encouragement, names far too many to be mentioned. Napkin was written by
+Branden Hall of [Automata Studios](http://automatastudios.com/).
 
 ## License
 
@@ -77,13 +88,13 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
