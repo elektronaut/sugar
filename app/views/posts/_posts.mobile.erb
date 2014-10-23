@@ -23,7 +23,7 @@
     <% if post_distance && previous_post && (post.created_at - previous_post.created_at) >= 12.hours %>
       <div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
     <% end %>
-    <div class="post<%= " me_post" if post.me_post? %>" id="post-<%= post.id %>">
+    <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>">
       <% if post.me_post? %>
         <div class="body">
           <%= meify post.body, post.user %>
