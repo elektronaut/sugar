@@ -249,33 +249,3 @@ body.with_sidebar #content {
 .invites_list .actions {
   width: 50%;
 }
-
-
-/* -----------------------------------------------------------------------
-   LOGIN
-   ----------------------------------------------------------------------- */
-
-body.login #login {
-  font-size: 1.2em;
-}
-
-body.login #login input[type=text], body.login #login input[type=password] {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  width: 250px;
-}
-
-body.login #login a {
-  padding-left: 5px;
-  text-decoration: underline;
-}
-
-body.login #login .facebook {
-  margin-top: 20px;
-}
-
-body.login #login .facebook a {
-  padding-left: 1px;
-  text-decoration: none;
-}
-
