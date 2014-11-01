@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     def index
-      @users = User.active
+      @users = User.active.by_username
       respond_with(@users) do |format|
         format.mobile {
           @online_users = @users.select{|u| u.online?}
