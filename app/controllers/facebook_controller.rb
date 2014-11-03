@@ -39,7 +39,7 @@ class FacebookController < ApplicationController
       if options[:access_token]
         begin
           response = open("https://graph.facebook.com/me?access_token=#{options[:access_token]}").read
-          data = JSON.parse(response).symbolize_keys
+          JSON.parse(response).symbolize_keys
         rescue => e
           logger.error "Facebook API error: #{e.message}"
           nil

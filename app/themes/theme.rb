@@ -2,7 +2,7 @@
 
 class Theme
   ATTRIBUTES = :id, :name, :author, :stylesheet, :icon, :mobile_stylesheet, :mobile_icon, :mobile_icon_precomposed
-  attr_accessor *ATTRIBUTES
+  attr_accessor(*ATTRIBUTES)
 
   class << self
     def all
@@ -98,8 +98,8 @@ class Theme
   def set_options(options={})
     options.symbolize_keys!
     options.each do |key, value|
-      if self.respond_to?("#{key.to_s}=".to_sym)
-        self.send("#{key.to_s}=".to_sym, value)
+      if self.respond_to?("#{key}=".to_sym)
+        self.send("#{key}=".to_sym, value)
       end
     end
   end

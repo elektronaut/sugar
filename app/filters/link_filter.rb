@@ -43,8 +43,8 @@ class LinkFilter < Filter
     http.read_timeout = 5
 
     begin
-      http.start do |http|
-        http.head(uri.request_uri).code =~ /^(2|3)\d\d$/
+      http.start do |h|
+        h.head(uri.request_uri).code =~ /^(2|3)\d\d$/
       end
     rescue SocketError, Net::OpenTimeout, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED
       false

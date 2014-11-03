@@ -10,7 +10,7 @@ describe PostObserver do
 
     context "when cache file exists" do
 
-      before { File.stub(:exists?).and_return(true) }
+      before { File.stub(:exist?).and_return(true) }
 
       it "deletes the file" do
         File.should_receive(:unlink)
@@ -23,7 +23,7 @@ describe PostObserver do
 
     context "when cache does not exist" do
 
-      before { File.stub(:exists?).and_return(false) }
+      before { File.stub(:exist?).and_return(false) }
 
       it "does not attempt to delete the file" do
         File.should_receive(:unlink).exactly(0).times

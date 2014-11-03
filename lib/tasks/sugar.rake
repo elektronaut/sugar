@@ -28,7 +28,7 @@ namespace :sugar do
   desc "Pack themes"
   task pack_themes: :environment do
     themes_dir = File.join(File.dirname(__FILE__), "../../public/themes")
-    Dir.entries(themes_dir).select{|d| File.exists?(File.join(themes_dir, d, 'theme.yml'))}.each do |theme|
+    Dir.entries(themes_dir).select{|d| File.exist?(File.join(themes_dir, d, 'theme.yml'))}.each do |theme|
       `cd #{themes_dir} && zip -r #{theme}.zip #{theme}`
     end
   end

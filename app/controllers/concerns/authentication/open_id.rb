@@ -20,7 +20,7 @@ module Authentication
       def openid_consumer
         require 'openid/store/filesystem'
         @openid_consumer ||= ::OpenID::Consumer.new(session,
-          ::OpenID::Store::Filesystem.new("#{Rails.root.to_s}/tmp/openid"))
+          ::OpenID::Store::Filesystem.new("#{Rails.root}/tmp/openid"))
       end
 
       def start_openid_session(identity_url, options={})
