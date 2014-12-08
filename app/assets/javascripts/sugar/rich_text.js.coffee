@@ -84,7 +84,9 @@ Sugar.RichTextArea = (textarea, options) ->
     false
 
   formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>")
-  toolbar = $("<ul class=\"richTextToolbar\"></ul>").append(formatButton).insertBefore(textarea)
+  toolbar = $("<ul class=\"richTextToolbar clearfix\"></ul>").append(formatButton).insertBefore(textarea)
+  emojiBar = $("<ul class=\"emojiBar clearfix\"></ul>").insertBefore(textarea)
+  emojiBar.hide()
 
   setFormat(format, true)
 
@@ -154,6 +156,11 @@ Sugar.RichTextArea = (textarea, options) ->
   # Spoiler button
   addButton "Spoiler", "warning-sign", (selection) -> decorator.spoiler(selection)
 
+  # Emoticons
+  addButton "Emoticons", "smile", (selection) ->
+    emojiBar.slideToggle(100)
+    ["", selection, ""]
+
   # Quoting
   $(Sugar).on "quote", (event, data) ->
     [prefix, replacement, postfix] = decorator.quote(
@@ -167,6 +174,38 @@ Sugar.RichTextArea = (textarea, options) ->
     # Scroll to the bottom of the textarea
     textarea.scrollTop = textarea.scrollHeight
 
+  # Emoticons
+  addEmojiButton = (name, image) ->
+    link = $("<a title=\"#{name}\"><img alt=\"#{name}\" class=\"emoji\" src=\"#{image}\" width=\"16\" height=\"16\"></a>")
+    link.click -> replaceSelection("", ":" + name + ": ", "")
+    $("<li class=\"button\"></li>").append(link).appendTo(emojiBar)
+
+  # TODO: Get these from the backend
+  addEmojiButton "ziggy", "/images/emoji/ziggy/ziggy.gif"
+  addEmojiButton "warm-smile", "/images/emoji/ziggy/warm-smile.gif"
+  addEmojiButton "toothy-smile", "/images/emoji/ziggy/toothy-smile.gif"
+  addEmojiButton "big-smile", "/images/emoji/ziggy/big-smile.gif"
+  addEmojiButton "sad", "/images/emoji/ziggy/sad.gif"
+  addEmojiButton "crying", "/images/emoji/ziggy/crying.gif"
+  addEmojiButton "nerd", "/images/emoji/ziggy/nerd.gif"
+  addEmojiButton "mad", "/images/emoji/ziggy/mad.gif"
+  addEmojiButton "tongue-out", "/images/emoji/ziggy/tongue-out.gif"
+  addEmojiButton "blank-stare", "/images/emoji/ziggy/blank-stare.gif"
+  addEmojiButton "blushing", "/images/emoji/ziggy/blushing.gif"
+  addEmojiButton "fml", "/images/emoji/ziggy/fml.gif"
+
+  addEmojiButton "butthurt", "/images/emoji/ziggy/butthurt.gif"
+  addEmojiButton "kisses", "/images/emoji/ziggy/kisses.gif"
+  addEmojiButton "good", "/images/emoji/ziggy/good.gif"
+  addEmojiButton "evil", "/images/emoji/ziggy/evil.gif"
+  addEmojiButton "upso", "/images/emoji/ziggy/upso.gif"
+  addEmojiButton "doh", "/images/emoji/ziggy/doh.gif"
+
+  addEmojiButton "eye-roll", "/images/emoji/ziggy/eye-roll.gif"
+  addEmojiButton "licking-lips", "/images/emoji/ziggy/licking-lips.gif"
+  addEmojiButton "deal-with-it", "/images/emoji/ziggy/deal-with-it.gif"
+
+  # Uploads
   uploadBanner = (file) -> "[Uploading \"#{file.name}\"...]"
 
   startUpload = (file) ->
@@ -195,4 +234,3 @@ Sugar.RichTextArea = (textarea, options) ->
 
 $(Sugar).bind 'ready modified', ->
   $('textarea.rich').each -> new Sugar.RichTextArea(this)
-

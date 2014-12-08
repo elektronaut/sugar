@@ -78,8 +78,8 @@ Emoji.create("ziggy/sad") do |char|
   char.set_format "gif"
 end
 
-Emoji.create("ziggy/tongue") do |char|
-  char.add_alias "tongue"
+Emoji.create("ziggy/tongue-out") do |char|
+  char.add_alias "tongue-out"
   char.set_format "gif"
 end
 
