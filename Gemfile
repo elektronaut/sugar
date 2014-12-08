@@ -22,7 +22,7 @@ gem 'dynamic_form'
 gem 'jquery-rails'
 gem 'backbone-on-rails'
 
-gem 'gemoji'
+gem 'gemoji', git: "https://github.com/elektronaut/gemoji.git"
 
 gem 'dynamic_image', '~> 2.0.0.beta5'
 
