@@ -47,7 +47,7 @@
           <%= link_to "Quote", [(discussion||post.exchange), post], class: 'quote_post', id: "quotePost-#{post.id}" %>
         </div>
         <div class="body">
-          <%= post.body_html %>
+          <%= format_post post.body_html, post.user %>
         </div>
         <% if post.edited? %>
           <div class="post_edited">Edited <%= time_tag post.edited_at, class: 'relative' %></div>
