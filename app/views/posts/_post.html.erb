@@ -48,7 +48,7 @@
       <div class="me_post_content">
         <div class="avatar"><%= avatar_image_tag(post.user) %></div>
         <div class="body" id="postBody-<%= post.id %>">
-          <span class="content"><%= meify post.body, post.user %></span>
+          <span class="content"><%= format_post post.body, post.user %></span>
           <% if preview %>
             <time class="relative date">Preview</time>
           <% else %>
@@ -83,7 +83,7 @@
       </div>
       <div class="body" id="postBody-<%= post.id %>">
         <div class="content">
-          <%= meify(post.body_html, post.user) %>
+          <%= format_post(post.body_html, post.user) %>
         </div>
         <% if post.edited? %><div class="edited">
           Edited <%= time_tag post.edited_at, class: 'relative' %>

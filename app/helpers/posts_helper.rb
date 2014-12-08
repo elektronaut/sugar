@@ -1,13 +1,25 @@
 # encoding: utf-8
 
 module PostsHelper
+  def emojify(content)
+    h(content).to_str.gsub(/:([\w+-]+):/) do |match|
+      if emoji = Emoji.find_by_alias($1)
+        %(<img alt="#$1" class="emoji" src="#{asset_path("images/emoji/#{emoji.image_filename}")}" style="vertical-align:middle" width="16" height="16" />)
+      else
+        match
+      end
+    end.html_safe if content.present?
+  end
+
+  def format_post(content, user)
+    emojify(meify(content, user))
+  end
 
   def meify(string, user)
     string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1.to_s + profile_link(user, nil, class: :poster) }.html_safe
   end
 
-  def format_post(string)
+  def render_post(string)
     Renderer.render(string)
   end
-
 end
