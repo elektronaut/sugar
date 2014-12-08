@@ -22,6 +22,8 @@ gem 'dynamic_form'
 gem 'jquery-rails'
 gem 'backbone-on-rails'
 
+gem 'gemoji'
+
 gem 'dynamic_image', '~> 2.0.0.beta5'
 
 # Deploy with Capistrano
