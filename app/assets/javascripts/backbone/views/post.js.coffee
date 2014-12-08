@@ -74,6 +74,10 @@ class Sugar.Views.Post extends Backbone.View
     text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"')
     html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"')
 
+    # Emojis
+    text = text.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:")
+    html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:")
+
     $(Sugar).trigger "quote",
       username: username
       permalink: permalink
@@ -101,4 +105,3 @@ class Sugar.Views.Post extends Backbone.View
     $(this.el).find("iframe[src*='//instagram.com/']").each ->
       unless $(this).parent().hasClass("instagram-wrapper")
         $(this).wrap('<div class="instagram-wrapper">')
-
