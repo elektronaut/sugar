@@ -1,11 +1,10 @@
-markdownDecorator =
-  bold: (str)           -> ["**", str, "**"]
-  emphasis: (str)       -> ["_", str, "_"]
-  link: (url, name)     -> ["[", name, "](#{url})"]
-  image: (url)          -> ["![](", url, ")"]
+class MarkdownDecorator
   blockquote: (str)     -> ["", ("> " + line for line in str.split("\n")).join("\n"), ""]
-  spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
+  bold: (str)           -> ["**", str, "**"]
   code: (str, language) -> ["```#{language}\n", str, "\n```"]
+  emphasis: (str)       -> ["_", str, "_"]
+  image: (url)          -> ["![](", url, ")"]
+  link: (url, name)     -> ["[", name, "](#{url})"]
   quote: (text, html, username, permalink) ->
     wrapInBlockquote = (str) ->
       ("> " + line for line in str.split("\n")).join("\n")
@@ -15,15 +14,15 @@ markdownDecorator =
       "Posted by #{username}:"
     quotedPost = wrapInBlockquote("<cite>#{cite}</cite>\n\n#{html}")
     ["", quotedPost + "\n\n", ""]
-
-htmlDecorator =
-  bold: (str)           -> ["<b>", str, "</b>"]
-  emphasis: (str)       -> ["<i>", str, "</i>"]
-  link: (url, name)     -> ["<a href=\"#{url}\">", name, "</a>"]
-  image: (url)          -> ["<img src=\"", url, "\">"]
-  blockquote: (str)     -> ["<blockquote>", str, "</blockquote>"]
   spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
+
+class HtmlDecorator
+  blockquote: (str)     -> ["<blockquote>", str, "</blockquote>"]
+  bold: (str)           -> ["<b>", str, "</b>"]
   code: (str, language) -> ["```#{language}\n", str, "\n```"]
+  emphasis: (str)       -> ["<i>", str, "</i>"]
+  image: (url)          -> ["<img src=\"", url, "\">"]
+  link: (url, name)     -> ["<a href=\"#{url}\">", name, "</a>"]
   quote: (text, html, username, permalink) ->
     cite = if permalink
       "Posted by <a href=\"#{permalink}\">#{username}</a>:"
@@ -32,6 +31,7 @@ htmlDecorator =
     content = html.replace(/\n/g, "").replace(/<br[\s\/]*>/g, "\n")
     quotedPost = "<blockquote><cite>#{cite}</cite>#{content}</blockquote>"
     ["", quotedPost + "\n\n", ""]
+  spoiler: (str)        -> ["<div class=\"spoiler\">", str, "</div>"]
 
 # Gets the selected text from an element
 getSelection = (elem) -> $(elem).getSelection().text
@@ -92,7 +92,7 @@ Sugar.RichTextArea = (textarea, options) ->
   emojiBar = $("<ul class=\"emojiBar clearfix\"></ul>").insertBefore(textarea)
   emojiBar.hide()
 
-  decorator = -> markdownDecorator
+  decorator = -> new MarkdownDecorator
 
   if $(textarea).data('formats')
     formats = $(textarea).data('formats').split(" ")
@@ -112,10 +112,10 @@ Sugar.RichTextArea = (textarea, options) ->
     format = newFormat
     if format == "markdown"
       label = "Markdown"
-      decorator = -> markdownDecorator
+      decorator = -> new MarkdownDecorator
     else if format == "html"
       label = "HTML"
-      decorator = -> htmlDecorator
+      decorator = -> new HtmlDecorator
 
     formatButton.find("a").html(label)
 
