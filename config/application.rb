@@ -55,6 +55,10 @@ module Sugar
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    # Add emoji to the assets path
+    config.assets.paths << Emoji.images_path
+    config.assets.precompile << "emoji/**/*.png"
+
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
     config.assets.precompile += %w( mobile.js )
     config.assets.precompile += Theme.precompile_assets

@@ -4,7 +4,7 @@ module PostsHelper
   def emojify(content)
     h(content).to_str.gsub(/:([\w+-]+):/) do |match|
       if emoji = Emoji.find_by_alias($1)
-        %(<img alt="#$1" class="emoji" src="#{asset_path("images/emoji/#{emoji.image_filename}")}" style="vertical-align:middle" width="16" height="16" />)
+        %(<img alt="#$1" class="emoji" src="#{image_path("emoji/#{emoji.image_filename}")}" style="vertical-align:middle" width="16" height="16" />)
       else
         match
       end
