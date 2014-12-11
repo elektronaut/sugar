@@ -60,6 +60,7 @@ en:
     users_must_be_invited: Users must be invited
     google_analytics: Google Analytics
     google_analytics_description: Enter to enable tracking
+    emoticons: Emoticons
     facebook: Facebook
     facebook_description: "To enable this feature, set up an %{link} and enter your App ID and secret here."
     facebook_apps_link: application on Facebook

@@ -16,6 +16,7 @@ module LayoutHelper
   def frontend_configuration
     {
       debug:              (Rails.env == "development"),
+      emoticons:          enabled_emoticons,
       flickrApi:          Sugar.config.flickr_api,
       facebookAppId:      Sugar.config.facebook_app_id,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
@@ -45,6 +46,16 @@ module LayoutHelper
       link_to(name, url, id: options[:id]),
       class: classes
     )
+  end
+
+  private
+
+  def enabled_emoticons
+    Sugar.config.emoticons.split(/\s+/).map do |name|
+      if emoji = Emoji.find_by_alias(name)
+        { name: name, image: "/images/emoji/#{emoji.image_filename}" }
+      end
+    end.compact
   end
 
 end
