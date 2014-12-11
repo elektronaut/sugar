@@ -23,6 +23,7 @@ gem 'jquery-rails'
 gem 'backbone-on-rails'
 
 gem 'gemoji', git: "https://github.com/elektronaut/gemoji.git"
+gem 'b3s_emoticons', git: "https://github.com/elektronaut/b3s_emoticons.git"
 
 gem 'dynamic_image', '~> 2.0.0.beta5'
 

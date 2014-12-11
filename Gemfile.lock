@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/elektronaut/b3s_emoticons.git
+  revision: db93481d33dfc31e644e5b3d0afc7ee2e1e2b296
+  specs:
+    b3s_emoticons (0.0.1)
+
+GIT
   remote: https://github.com/elektronaut/gemoji.git
   revision: 979b72c50627f2118ce926ad70c19592b37c372d
   specs:
@@ -350,6 +356,7 @@ DEPENDENCIES
   active_model_serializers
   acts_as_list
   aws-sdk
+  b3s_emoticons!
   backbone-on-rails
   bcrypt-ruby
   capistrano (~> 3.1.0)
