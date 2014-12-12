@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/elektronaut/b3s_emoticons.git
-  revision: db93481d33dfc31e644e5b3d0afc7ee2e1e2b296
+  revision: 8486a8794348fdc2f4470a62112d13597418c867
   specs:
     b3s_emoticons (0.0.1)
 
 GIT
-  remote: https://github.com/elektronaut/gemoji.git
-  revision: 979b72c50627f2118ce926ad70c19592b37c372d
+  remote: https://github.com/github/gemoji.git
+  revision: b841e20394a859f7c010bf5de09494a4eae7f0bd
   specs:
     gemoji (2.1.0)
 
