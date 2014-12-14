@@ -60,7 +60,7 @@ module Sugar
     config.assets.precompile << "emoji/**/*.png"
 
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w( mobile.js )
+    config.assets.precompile += %w( swfobject.js mobile.js )
     config.assets.precompile += Theme.precompile_assets
   end
 end
