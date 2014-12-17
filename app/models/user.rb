@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
             presence: { case_sensitive: false },
             unless: Proc.new { |u| u.openid_url? || u.facebook? }
 
+  before_update :check_username_change
+
   def name_and_email
     self.realname? ? "#{self.realname} <#{self.email}>" : self.email
   end
@@ -125,5 +127,15 @@ class User < ActiveRecord::Base
         self.admin = true
       end
     end
-
+    def check_username_change
+      if self.changed_attributes[:username]
+        if self.previous_usernames
+          prev_usernames = self.previous_usernames.split
+        else
+          prev_usernames = []
+        end
+        prev_usernames<<self.changed_attributes[:username]
+        self.previous_usernames = prev_usernames.join(',')
+      end
+    end
 end
