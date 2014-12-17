@@ -1,5 +1,5 @@
 class Api::V1::DiscussionsController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
   respond_to :json
   before_action :find_exchange, only: [:show]
 
