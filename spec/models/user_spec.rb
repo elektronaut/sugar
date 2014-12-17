@@ -77,6 +77,20 @@ describe User do
 
   end
 
+  describe "#previous_usernames" do
+    subject { user.previous_usernames }
+    let(:user) { create(:user, username: 'originalname') }
+
+    context "when username hasn't been changed" do
+      it { should eq([]) }
+    end
+
+    context "when username changes" do
+      before { user.update(username: 'newname') }
+      it { should eq(['originalname']) }
+    end
+  end
+
   describe "#realname_or_username" do
 
     subject { user.realname_or_username }
