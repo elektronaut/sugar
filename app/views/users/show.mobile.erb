@@ -93,4 +93,14 @@
       <th>Users invited</th>
       <td><%= @user.invitees.count %></td>
     </tr>
+    <% if @user.previous_usernames? %>
+    <tr>
+      <th>Previously Known As</th>
+      <td>
+        <ul>
+        <% @user.previous_usernames.split(',').each do |prev_names| %>
+          <li><%= prev_names %></li><% end %>
+        </ul>
+      </td>
+    </tr><% end %>
   </table></div>
