@@ -134,7 +134,7 @@ class User < ActiveRecord::Base
         else
           prev_usernames = []
         end
-        prev_usernames<<self.changed_attributes[:username]
+        prev_usernames << self.changed_attributes[:username]
         self.previous_usernames = prev_usernames.join(',')
       end
     end
