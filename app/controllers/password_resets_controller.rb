@@ -13,7 +13,7 @@ class PasswordResetsController < ApplicationController
         password_reset_with_token_url(
           @password_reset_token, @password_reset_token.token
         )
-      ).deliver
+      ).deliver_now
       flash[:notice] = "An email with further instructions has been sent"
       redirect_to login_users_url
     else
