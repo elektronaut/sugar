@@ -36,6 +36,17 @@
     <% end %>
   </p>
 
+  <% if @user.previous_usernames? %>
+  <div class="previous_usernames">
+    <b>Previously Known As:</b>
+    <ul>
+    <% @user.previous_usernames.each do |username| %>
+      <li><%= username %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+
   <% if @user.description? %>
   <div class="description">
     <%= render_post @user.description %>

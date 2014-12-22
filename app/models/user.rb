@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
             presence: { case_sensitive: false },
             unless: Proc.new { |u| u.openid_url? || u.facebook? }
 
+  before_update :check_username_change
+
   def name_and_email
     self.realname? ? "#{self.realname} <#{self.email}>" : self.email
   end
@@ -58,6 +60,10 @@ class User < ActiveRecord::Base
 
   def moderator?
     (self[:moderator] || admin?)
+  end
+
+  def previous_usernames
+    self[:previous_usernames].split("\n")
   end
 
   # Returns admin flags as strings
@@ -126,4 +132,9 @@ class User < ActiveRecord::Base
       end
     end
 
+    def check_username_change
+      if self.username_changed?
+        self[:previous_usernames] = ([self.username_was] + previous_usernames).join("\n")
+      end
+    end
 end
