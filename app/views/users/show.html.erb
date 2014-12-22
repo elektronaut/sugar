@@ -40,8 +40,8 @@
   <div class="previous_usernames">
     <b>Previously Known As:</b>
     <ul>
-    <% @user.previous_usernames.split(',').each do |prev_names| %>
-      <li><%= prev_names %></li>
+    <% @user.previous_usernames.each do |username| %>
+      <li><%= username %></li>
     <% end %>
     </ul>
   </div>

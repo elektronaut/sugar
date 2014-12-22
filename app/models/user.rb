@@ -62,6 +62,10 @@ class User < ActiveRecord::Base
     (self[:moderator] || admin?)
   end
 
+  def previous_usernames
+    self[:previous_usernames].split("\n")
+  end
+
   # Returns admin flags as strings
   def admin_labels
     labels = []
@@ -127,15 +131,10 @@ class User < ActiveRecord::Base
         self.admin = true
       end
     end
+
     def check_username_change
-      if self.changed_attributes[:username]
-        if self.previous_usernames
-          prev_usernames = self.previous_usernames.split
-        else
-          prev_usernames = []
-        end
-        prev_usernames << self.changed_attributes[:username]
-        self.previous_usernames = prev_usernames.join(',')
+      if self.username_changed?
+        self[:previous_usernames] = ([self.username_was] + previous_usernames).join("\n")
       end
     end
 end
