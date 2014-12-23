@@ -8,81 +8,81 @@ describe Paginatable do
 
   describe ".page" do
     subject { Exchange.page(2, context: 1) }
-    its(:offset_value) { should == 1 }
-    its(:limit_value) { should == 3 }
+    specify { expect(subject.offset_value).to eq(1) }
+    specify { expect(subject.limit_value).to eq(3) }
   end
 
   describe ".context" do
-    specify { Exchange.page(1, context: 3).context.should == 0 }
-    specify { Exchange.page(2, context: 3).context.should == 3 }
+    specify { expect(Exchange.page(1, context: 3).context).to eq(0) }
+    specify { expect(Exchange.page(2, context: 3).context).to eq(3) }
   end
 
   describe ".context?" do
-    specify { Exchange.page(1).context?.should be_false }
-    specify { Exchange.page(1, context: 3).context?.should be_false }
-    specify { Exchange.page(2, context: 3).context?.should be_true }
+    specify { expect(Exchange.page(1).context?).to eq(false) }
+    specify { expect(Exchange.page(1, context: 3).context?).to eq(false) }
+    specify { expect(Exchange.page(2, context: 3).context?).to eq(true) }
   end
 
   describe ".total_pages" do
     before { 3.times { create(:post) } }
-    specify { Exchange.page(2, context: 1).total_pages.should == 2 }
+    specify { expect(Exchange.page(2, context: 1).total_pages).to eq(2) }
   end
 
   describe ".current_page" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(0).current_page.should == 1 }
-    specify { Exchange.page(1).current_page.should == 1 }
-    specify { Exchange.page(2).current_page.should == 2 }
-    specify { Exchange.page(3).current_page.should == 2 }
-    specify { Exchange.page(2, context: 2).current_page.should == 2 }
+    specify { expect(Exchange.page(0).current_page).to eq(1) }
+    specify { expect(Exchange.page(1).current_page).to eq(1) }
+    specify { expect(Exchange.page(2).current_page).to eq(2) }
+    specify { expect(Exchange.page(3).current_page).to eq(2) }
+    specify { expect(Exchange.page(2, context: 2).current_page).to eq(2) }
   end
 
   describe ".first_page" do
-    specify { Exchange.page(2).first_page.should == 1 }
+    specify { expect(Exchange.page(2).first_page).to eq(1) }
   end
 
   describe ".last_page" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(1).last_page.should == 2 }
+    specify { expect(Exchange.page(1).last_page).to eq(2) }
   end
 
   describe ".first_page?" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(1).first_page?.should be_true }
-    specify { Exchange.page(2).first_page?.should be_false }
+    specify { expect(Exchange.page(1).first_page?).to eq(true) }
+    specify { expect(Exchange.page(2).first_page?).to eq(false) }
   end
 
   describe ".last_page?" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(1).last_page?.should be_false }
-    specify { Exchange.page(2).last_page?.should be_true }
+    specify { expect(Exchange.page(1).last_page?).to eq(false) }
+    specify { expect(Exchange.page(2).last_page?).to eq(true) }
   end
 
   describe ".previous_page" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(2).previous_page.should == 1 }
-    specify { Exchange.page(1).previous_page.should be_nil }
+    specify { expect(Exchange.page(2).previous_page).to eq(1) }
+    specify { expect(Exchange.page(1).previous_page).to eq(nil) }
   end
 
   describe ".next_page" do
     before { 3.times { create(:exchange) } }
-    specify { Exchange.page(1).next_page.should == 2 }
-    specify { Exchange.page(2).next_page.should be_nil }
+    specify { expect(Exchange.page(1).next_page).to eq(2) }
+    specify { expect(Exchange.page(2).next_page).to eq(nil) }
   end
 
   describe ".total_count" do
     before { 3.times { create(:exchange) } }
     it "ignores limit" do
-      Exchange.limit(1).total_count.should == 3
+      expect(Exchange.limit(1).total_count).to eq(3)
     end
     it "ignores offset" do
-      Exchange.offset(1).total_count.should == 3
+      expect(Exchange.offset(1).total_count).to eq(3)
     end
   end
 
   describe ".per_page" do
     before { Exchange.per_page = 19 }
-    specify { Exchange.per_page.should == 19 }
+    specify { expect(Exchange.per_page).to eq(19) }
   end
 
 end

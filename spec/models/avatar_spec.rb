@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe Avatar do
-  it { should have_one(:user) }
+  it { is_expected.to have_one(:user) }
 end

@@ -70,9 +70,6 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
-  gem 'guard'
-  gem 'guard-spring'
-  gem 'guard-rspec'
   gem 'web-console', '~> 2.0'
 end
 
@@ -92,14 +89,13 @@ group :test, :development do
   gem 'sunspot-rails-tester'
 
   # RSpec
-  gem 'minitest'
-  gem 'rspec-rails', '~> 2.14'
+  gem 'rspec-rails', '~> 3.1.0'
   gem 'shoulda-matchers'
   gem 'json_spec'
   gem 'capybara'
   gem 'fuubar'
+  gem 'database_cleaner'
 
   # FactoryGirl
   gem 'factory_girl_rails'
-
 end

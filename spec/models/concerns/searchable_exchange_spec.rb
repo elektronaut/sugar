@@ -16,17 +16,17 @@ describe SearchableExchange, solr: true do
 
     context "as nobody" do
       subject { Discussion.search_results('testing', user: nil, page: 1).results }
-      it { should =~ [discussion] }
+      it { is_expected.to match([discussion]) }
     end
 
     context "as a regular user" do
       subject { Discussion.search_results('testing', user: user, page: 1).results }
-      it { should =~ [discussion] }
+      it { is_expected.to match([discussion]) }
     end
 
     context "as a trusted user" do
       subject { Discussion.search_results('testing', user: trusted_user, page: 1).results }
-      it { should =~ [discussion, trusted_discussion] }
+      it { is_expected.to match([discussion, trusted_discussion]) }
     end
   end
 

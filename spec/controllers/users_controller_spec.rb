@@ -14,9 +14,9 @@ describe UsersController do
       get :index
     end
 
-    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
-    specify { flash[:notice].should be_nil }
-    it { should render_template(:index) }
+    specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
+    specify { expect(flash[:notice]).to eq(nil) }
+    it { is_expected.to render_template(:index) }
   end
 
   describe '#index.json' do
@@ -27,11 +27,11 @@ describe UsersController do
       @json = JSON.parse(response.body)
     end
 
-    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
-    specify { flash[:notice].should be_nil }
+    specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
+    specify { expect(flash[:notice]).to eq(nil) }
 
     it "renders JSON" do
-      @json["users"].should be_kind_of(Array)
+      expect(@json["users"]).to be_kind_of(Array)
     end
   end
 
@@ -42,9 +42,9 @@ describe UsersController do
       get :banned
     end
 
-    specify { assigns(:users).should be_a(ActiveRecord::Relation) }
-    specify { flash[:notice].should be_nil }
-    it { should render_template(:banned) }
+    specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
+    specify { expect(flash[:notice]).to eq(nil) }
+    it { is_expected.to render_template(:banned) }
   end
 
   describe '#banned.json' do
@@ -56,7 +56,7 @@ describe UsersController do
     end
 
     it "renders JSON" do
-      @json["users"].should be_kind_of(Array)
+      expect(@json["users"]).to be_kind_of(Array)
     end
   end
 
@@ -72,8 +72,8 @@ describe UsersController do
       expect(user.available_invites).to eq(1)
     end
 
-    specify { flash[:notice].should match("has been granted one invite") }
-    it { should redirect_to(user_profile_url(user.username)) }
+    specify { expect(flash[:notice]).to match("has been granted one invite") }
+    it { is_expected.to redirect_to(user_profile_url(user.username)) }
   end
 
   describe "#revoke_invites" do
@@ -89,8 +89,8 @@ describe UsersController do
       expect(user.available_invites).to eq(0)
     end
 
-    specify { flash[:notice].should match("has been revoked of all invites") }
-    it { should redirect_to(user_profile_url(user.username)) }
+    specify { expect(flash[:notice]).to match("has been revoked of all invites") }
+    it { is_expected.to redirect_to(user_profile_url(user.username)) }
   end
 
   describe '#update' do
@@ -99,15 +99,15 @@ describe UsersController do
     context "regular update" do
       before { put :update, id: user.id, user: {realname: "New name"} }
 
-      specify { assigns(:user).should be_a(User) }
-      specify { flash[:notice].should match("Your changes were saved!") }
-      it { should redirect_to(edit_user_page_url(user.username, page: 'info')) }
-      specify { user.reload.realname.should == "New name" }
+      specify { expect(assigns(:user)).to be_a(User) }
+      specify { expect(flash[:notice]).to match("Your changes were saved!") }
+      it { is_expected.to redirect_to(edit_user_page_url(user.username, page: 'info')) }
+      specify { expect(user.reload.realname).to eq("New name") }
     end
 
     context "self banning" do
       before { put :update, id: user.id, user: {banned_until: (Time.now + 2.days)} }
-      specify { user.reload.temporary_banned?.should be_true }
+      specify { expect(user.reload.temporary_banned?).to eq(true) }
     end
 
     context "banning a user" do
@@ -115,14 +115,13 @@ describe UsersController do
       before { put :update, id: target_user.id, user: {banned: true} }
       context "when user is a user admin" do
         let(:user) { create(:user_admin) }
-        specify { target_user.reload.banned?.should be_true }
+        specify { expect(target_user.reload.banned?).to eq(true) }
       end
     end
 
     context "updating openid_url" do
       it "redirects to the OpenID URL" do
-        ApplicationController.any_instance
-          .should_receive(:start_openid_session)
+        expect_any_instance_of(ApplicationController).to receive(:start_openid_session)
           .with("http://example.com/", {
             success: update_openid_user_url(id: user.username),
             fail:    edit_user_page_url(id: user.username, page: 'settings')
@@ -133,25 +132,26 @@ describe UsersController do
 
       context "with a valid OpenID URL" do
         before do
-          ApplicationController.any_instance.stub(:start_openid_session) do
+          allow_any_instance_of(ApplicationController).to receive(:start_openid_session) do
             controller.redirect_to "http://example.com/"
             true
           end
           put :update, id: user.id, user: {openid_url: "http://example.com/"}, page: 'settings'
         end
-        it { should redirect_to("http://example.com/") }
+        it { is_expected.to redirect_to("http://example.com/") }
       end
 
       context "with an invalid OpenID URL" do
         before do
-          ApplicationController.any_instance.stub(:start_openid_session) { false }
+          allow_any_instance_of(ApplicationController).to receive(:start_openid_session)
+            .and_return(false)
           put :update, id: user.id, user: {openid_url: "invalid"}, page: 'settings'
         end
 
-        it { should respond_with(:success) }
-        specify { assigns(:user).should be_a(User) }
-        it { should render_template(:edit) }
-        specify { flash.now[:notice].should == "That's not a valid OpenID URL!"}
+        it { is_expected.to respond_with(:success) }
+        specify { expect(assigns(:user)).to be_a(User) }
+        it { is_expected.to render_template(:edit) }
+        specify { expect(flash.now[:notice]).to eq("That's not a valid OpenID URL!") }
       end
     end
   end

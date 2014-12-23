@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe ConversationsController do
-
   let(:user) { create(:user) }
   let(:conversation_with_user) do
     conversation = create(:conversation)
@@ -24,9 +23,9 @@ describe ConversationsController do
       get :index
     end
 
-    specify { assigns(:exchanges).should be_a(ActiveRecord::Relation) }
-    it { should respond_with(:success) }
-    it { should render_template(:index) }
+    specify { expect(assigns(:exchanges)).to be_a(ActiveRecord::Relation) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:index) }
   end
 
   describe 'GET show' do
@@ -35,9 +34,9 @@ describe ConversationsController do
       get :show, id: conversation_with_user
     end
 
-    specify { assigns(:exchange).should be_a(Conversation) }
-    it { should respond_with(:success) }
-    it { should render_template(:show) }
+    specify { expect(assigns(:exchange)).to be_a(Conversation) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:show) }
   end
 
   describe 'DELETE remove_participant' do
@@ -46,14 +45,18 @@ describe ConversationsController do
       delete :remove_participant, id: conversation_with_user
     end
 
-    specify { flash[:notice].should match(/You have been removed from the conversation/) }
-
-    it 'redirects back to conversations' do
-      response.should redirect_to(conversations_url)
+    specify do
+      expect(flash[:notice]).to match(
+        /You have been removed from the conversation/
+      )
     end
 
-    it 'removes the user from the conversation' do
-      assigns(:exchange).participants.to_a.should_not include(user)
+    it "redirects back to conversations" do
+      expect(response).to redirect_to(conversations_url)
+    end
+
+    it "removes the user from the conversation" do
+      expect(assigns(:exchange).participants.to_a).not_to include(user)
     end
   end
 
@@ -63,9 +66,9 @@ describe ConversationsController do
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
       before { get :new, type: 'conversation', username: recipient.username }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { assigns(:recipient).should == recipient }
-      it { should render_template(:new) }
+      specify { expect(assigns(:exchange)).to be_a(Conversation) }
+      specify { expect(assigns(:recipient)).to eq(recipient) }
+      it { is_expected.to render_template(:new) }
     end
   end
 
@@ -81,12 +84,10 @@ describe ConversationsController do
              conversation: { title: 'Test', body: 'Test' }
       end
 
-      specify { assigns(:recipient).should be_a(User) }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { should redirect_to(conversation_url(assigns(:exchange))) }
-      specify { assigns(:exchange).participants.should include(recipient) }
+      specify { expect(assigns(:recipient)).to be_a(User) }
+      specify { expect(assigns(:exchange)).to be_a(Conversation) }
+      it { is_expected.to redirect_to(conversation_url(assigns(:exchange))) }
+      specify { expect(assigns(:exchange).participants).to include(recipient) }
     end
-
   end
-
 end

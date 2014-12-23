@@ -4,13 +4,13 @@ describe Conversation do
   let(:conversation) { create(:conversation) }
   let(:user) { create(:user) }
 
-  it { should have_many(:conversation_relationships).dependent(:destroy) }
-  it { should have_many(:participants).through(:conversation_relationships) }
-  it { should be_kind_of(Exchange) }
+  it { is_expected.to have_many(:conversation_relationships).dependent(:destroy) }
+  it { is_expected.to have_many(:participants).through(:conversation_relationships) }
+  it { is_expected.to be_kind_of(Exchange) }
 
   describe "after_create hook" do
     subject { conversation }
-    its(:participants) { should include(conversation.poster) }
+    specify { expect(subject.participants).to include(conversation.poster) }
   end
 
   describe "#add_participant" do
@@ -57,12 +57,12 @@ describe Conversation do
     context "with a second participant" do
       before { conversation.add_participant(user) }
       subject { conversation.removeable?(user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
 
     context "with only one participant" do
       subject { conversation.removeable?(conversation.poster) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
   end
@@ -71,13 +71,13 @@ describe Conversation do
 
     context "with a non-participant" do
       subject { conversation.viewable_by?(user) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "with a participant" do
       before { conversation.add_participant(user) }
       subject { conversation.viewable_by?(user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
 
   end
@@ -86,18 +86,18 @@ describe Conversation do
 
     context "with a non-participant" do
       subject { conversation.editable_by?(user) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "with a participant" do
       before { conversation.add_participant(user) }
       subject { conversation.editable_by?(user) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "with the poster" do
       subject { conversation.editable_by?(conversation.poster) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
 
   end
@@ -106,19 +106,19 @@ describe Conversation do
 
     context "non-participant" do
       subject { conversation.postable_by?(user) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "participant" do
       before { conversation.add_participant(user) }
       subject { conversation.postable_by?(user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
 
   end
 
   describe "#closeable_by?" do
-    specify { conversation.closeable_by?(conversation.poster).should be_false }
+    specify { expect(conversation.closeable_by?(conversation.poster)).to eq(false) }
   end
 
 end
