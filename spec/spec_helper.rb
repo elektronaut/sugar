@@ -6,8 +6,7 @@ CodeClimate::TestReporter.start
 require 'rubygems'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
-#require 'sunspot/rails/spec_helper'
+require 'shoulda-matchers'
 
 $original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session
@@ -35,6 +34,18 @@ RSpec.configure do |config|
   config.before do
     Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
   end
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :deletion
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
   config.before :each, solr: true do
     Sunspot::Rails::Tester.start_original_sunspot_session
     Sunspot.session = $original_sunspot_session
@@ -47,12 +58,14 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.infer_spec_type_from_file_location!
 
   config.include RedisHelper, redis: true
   config.include JsonSpec::Helpers

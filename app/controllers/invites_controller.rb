@@ -42,7 +42,7 @@ class InvitesController < ApplicationController
     @invite = current_user.invites.create(invite_params)
     if @invite.valid?
       begin
-        Mailer.invite(@invite, accept_invite_url(id: @invite.token)).deliver
+        Mailer.invite(@invite, accept_invite_url(id: @invite.token)).deliver_now
         flash[:notice] = "Your invite has been sent to #{@invite.email}"
       rescue Net::SMTPFatalError, Net::SMTPSyntaxError
         flash[:notice] = "There was a problem sending your invite to #{@invite.email}, it has been cancelled."

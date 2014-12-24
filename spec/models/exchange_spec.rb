@@ -13,15 +13,15 @@ describe Exchange do
   let(:user_admin)       { create(:user_admin) }
   let(:admin)            { create(:admin) }
 
-  it { should belong_to(:poster).class_name("User") }
-  it { should belong_to(:closer).class_name("User") }
-  it { should belong_to(:last_poster).class_name("User") }
-  it { should have_many(:posts).dependent(:destroy) }
-  it { should have_many(:exchange_views).dependent(:destroy) }
+  it { is_expected.to belong_to(:poster).class_name("User") }
+  it { is_expected.to belong_to(:closer).class_name("User") }
+  it { is_expected.to belong_to(:last_poster).class_name("User") }
+  it { is_expected.to have_many(:posts).dependent(:destroy) }
+  it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
 
-  it { should validate_presence_of(:title)}
-  it { should ensure_length_of(:title).is_at_most(100) }
-  it { should validate_presence_of(:body)}
+  it { is_expected.to validate_presence_of(:title)}
+  it { is_expected.to ensure_length_of(:title).is_at_most(100) }
+  it { is_expected.to validate_presence_of(:body)}
 
   describe "#updated_by" do
     it 'changes closer when updating' do
@@ -40,64 +40,64 @@ describe Exchange do
 
     context "without arguments" do
       subject { exchange.last_page }
-      it { should == 1 }
+      it { is_expected.to eq(1) }
     end
 
     context "with argument" do
       subject { exchange.last_page(2) }
-      it { should == 2 }
+      it { is_expected.to eq(2) }
     end
 
   end
 
   describe "#labels?" do
-    specify { Exchange.new.labels?.should be_false }
-    specify { Exchange.new(trusted: true).labels?.should be_true }
-    specify { Exchange.new(sticky: true).labels?.should be_true }
-    specify { Exchange.new(closed: true).labels?.should be_true }
-    specify { Exchange.new(nsfw: true).labels?.should be_true }
+    specify { expect(Exchange.new.labels?).to eq(false) }
+    specify { expect(Exchange.new(trusted: true).labels?).to eq(true) }
+    specify { expect(Exchange.new(sticky: true).labels?).to eq(true) }
+    specify { expect(Exchange.new(closed: true).labels?).to eq(true) }
+    specify { expect(Exchange.new(nsfw: true).labels?).to eq(true) }
   end
 
   describe "#labels" do
-    specify { Exchange.new.labels.should == [] }
-    specify { Exchange.new(trusted: true).labels.should == ["Trusted"] }
-    specify { Exchange.new(sticky: true).labels.should == ["Sticky"] }
-    specify { Exchange.new(closed: true).labels.should == ["Closed"] }
-    specify { Exchange.new(nsfw: true).labels.should == ["NSFW"] }
+    specify { expect(Exchange.new.labels).to eq([]) }
+    specify { expect(Exchange.new(trusted: true).labels).to eq(["Trusted"]) }
+    specify { expect(Exchange.new(sticky: true).labels).to eq(["Sticky"]) }
+    specify { expect(Exchange.new(closed: true).labels).to eq(["Closed"]) }
+    specify { expect(Exchange.new(nsfw: true).labels).to eq(["NSFW"]) }
     specify {
-      Exchange.new(trusted: true, sticky: true, closed: true, nsfw: true)
-        .labels.should == ["Trusted", "Sticky", "Closed", "NSFW"]
+      expect(Exchange.new(trusted: true, sticky: true, closed: true, nsfw: true)
+        .labels).to eq(["Trusted", "Sticky", "Closed", "NSFW"])
     }
   end
 
   describe "#to_param" do
     subject { exchange.to_param }
-    it { should =~ /^[\d]+;This\-is\-my\-Discussion$/ }
+    it { is_expected.to match(/^[\d]+;This\-is\-my\-Discussion$/) }
   end
 
   describe "#closeable_by?" do
 
-    specify { exchange.closeable_by?(user).should be_false }
+    specify { expect(exchange.closeable_by?(user)).to eq(false) }
 
     context "when not closed" do
-      specify { exchange.closeable_by?(exchange.poster).should be_true }
-      specify { exchange.closeable_by?(moderator).should be_true }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
     end
 
     context "when closed by the poster" do
       subject { exchange }
       before { exchange.update_attributes(closed: true, updated_by: exchange.poster) }
-      specify { exchange.closeable_by?(exchange.poster).should be_true }
-      specify { exchange.closeable_by?(moderator).should be_true }
-      its(:closer) { should == exchange.poster }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(subject.closer).to eq(exchange.poster) }
     end
 
     context "closed by moderator" do
       subject { exchange }
       before { exchange.update_attributes(closed: true, updated_by: moderator) }
-      specify { exchange.closeable_by?(exchange.poster).should be_false }
-      specify { exchange.closeable_by?(moderator).should be_true }
-      its(:closer) { should == moderator }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
+      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(subject.closer).to eq(moderator) }
     end
 
   end
@@ -111,35 +111,44 @@ describe Exchange do
     subject { exchange }
 
     context "with no updated_by" do
-      before { exchange.update_attributes(closed: false) }
-      it { should be_valid }
-      it { should have(0).errors_on(:closed) }
+      before do
+        exchange.update_attributes(closed: false)
+        exchange.valid?
+      end
+      it { is_expected.to be_valid }
+      specify { expect(exchange.errors[:closed]).to eq([]) }
     end
 
     context "with updated_by poster" do
-      before { exchange.update_attributes(closed: false, updated_by: exchange.poster) }
-      it { should_not be_valid }
-      it { should have(1).errors_on(:closed) }
+      before do
+        exchange.update_attributes(closed: false, updated_by: exchange.poster)
+        exchange.valid?
+      end
+      it { is_expected.to_not be_valid }
+      specify { expect(exchange.errors[:closed].length).to eq(1) }
     end
 
     context "with updated_by moderator" do
-      before { exchange.update_attributes(closed: false, updated_by: moderator) }
-      it { should be_valid }
-      it { should have(0).errors_on(:closed) }
+      before do
+        exchange.update_attributes(closed: false, updated_by: moderator)
+        exchange.valid?
+      end
+      it { is_expected.to be_valid }
+      specify { expect(exchange.errors[:closed]).to eq([]) }
     end
 
   end
 
   describe "#create_first_post" do
     subject { exchange.posts.first }
-    its(:body) { should == "First post!" }
-    its(:user) { should == exchange.poster }
+    specify { expect(subject.body).to eq("First post!") }
+    specify { expect(subject.user).to eq(exchange.poster) }
   end
 
   describe "#update_post_body" do
     before { exchange.update_attributes(body: 'changed post') }
     subject { exchange.posts.first }
-    its(:body) { should == "changed post" }
+    specify { expect(subject.body).to eq("changed post") }
   end
 
 end

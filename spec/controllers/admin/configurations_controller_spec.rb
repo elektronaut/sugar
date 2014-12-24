@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe Admin::ConfigurationsController, redis: true do
-
   let(:admin) { create(:admin) }
 
   it_requires_admin_for :show, :edit, :update
@@ -13,29 +12,29 @@ describe Admin::ConfigurationsController, redis: true do
 
     describe "show" do
       before { get :show }
-      it 'redirects to edit' do
-        response.should redirect_to(edit_admin_configuration_url)
+      it "redirects to edit" do
+        expect(response).to redirect_to(edit_admin_configuration_url)
       end
     end
 
     describe "edit" do
       before { get :edit }
-      it { should respond_with(:success) }
-      it { should render_template(:edit) }
-      specify { flash[:notice].should be_nil }
+      it { is_expected.to respond_with(:success) }
+      it { is_expected.to render_template(:edit) }
+      specify { expect(flash[:notice]).to eq(nil) }
     end
 
     describe "update" do
       before { patch :update, configuration: { forum_name: "New Forum Name" } }
-      specify { flash[:notice].should be_nil }
-      it 'should update the forum configuration' do
-        Sugar.config.forum_name.should == "New Forum Name"
+      specify { expect(flash[:notice]).to eq(nil) }
+
+      it "should update the forum configuration" do
+        expect(Sugar.config.forum_name).to eq("New Forum Name")
       end
-      it 'redirects back to edit' do
-        response.should redirect_to(edit_admin_configuration_url)
+
+      it "redirects back to edit" do
+        expect(response).to redirect_to(edit_admin_configuration_url)
       end
     end
-
   end
-
 end

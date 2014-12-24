@@ -83,11 +83,13 @@ module Authenticable
   end
 
   def new_password?
-    self.password && !self.password.blank?
+    (self.password &&
+     !self.password.blank?) ? true : false
   end
 
   def new_password_confirmed?
-    self.new_password? && self.password == self.confirm_password
+    (self.new_password? &&
+     self.password == self.confirm_password) ? true : false
   end
 
   def password_needs_rehash?

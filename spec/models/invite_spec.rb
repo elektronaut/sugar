@@ -6,37 +6,39 @@ describe Invite do
   # Create the first admin user
   before { create(:user) }
 
-  it { should belong_to(:user) }
-  it { should validate_presence_of(:email) }
-  it { should validate_presence_of(:user_id) }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to validate_presence_of(:email) }
+  it { is_expected.to validate_presence_of(:user_id) }
 
   describe "email validation" do
     subject { build(:invite, email: email) }
 
     context "when not registered" do
       let(:email) { 'test@example.com' }
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context "when already registered" do
+      before { subject.valid? }
       let(:email) { create(:user).email }
-      it { should_not be_valid }
-      it { should have(1).errors_on(:email) }
+      it { is_expected.to_not be_valid }
+      specify { expect(subject.errors[:email].length).to eq(1) }
     end
 
     context "when already invited" do
+      before { subject.valid? }
       let(:email) { create(:invite).email }
-      it { should_not be_valid }
-      it { should have(1).errors_on(:email) }
+      it { is_expected.to_not be_valid }
+      specify { expect(subject.errors[:email].length).to eq(1) }
     end
   end
 
   describe "before_create" do
     subject { create(:invite) }
 
-    its(:expires_at) { should be_within(30).of(Time.now + 14.days) }
-    its(:token) { should be_kind_of(String) }
-    its("token.length") { should >= 40 }
+    specify { expect(subject.expires_at).to be_within(30).of(Time.now + 14.days) }
+    specify { expect(subject.token).to be_kind_of(String) }
+    specify { expect(subject.token.length >= 40).to eq(true) }
 
     it "revokes an invite from the inviter" do
       inviter = create(:user, available_invites: 1)
@@ -68,13 +70,13 @@ describe Invite do
 
   describe ".unique_token" do
     subject { Invite.unique_token }
-    it { should be_kind_of(String) }
-    its(:length) { should >= 40 }
+    it { is_expected.to be_kind_of(String) }
+    specify { expect(subject.length >= 40).to eq(true) }
   end
 
   describe ".expiration_time" do
     subject { Invite.expiration_time }
-    it { should == 14.days }
+    it { is_expected.to eq(14.days) }
   end
 
   describe ".active" do
@@ -82,7 +84,7 @@ describe Invite do
     let!(:expired_invite) { create(:expired_invite) }
 
     subject { Invite.active }
-    it { should == [invite] }
+    it { is_expected.to eq([invite]) }
   end
 
   describe ".expired" do
@@ -90,7 +92,7 @@ describe Invite do
     let!(:expired_invite) { create(:expired_invite) }
 
     subject { Invite.expired }
-    it { should == [expired_invite] }
+    it { is_expected.to eq([expired_invite]) }
   end
 
   describe ".destroy_expired!" do
@@ -109,12 +111,12 @@ describe Invite do
 
     context "when invite isn't expired" do
       let(:invite) { create(:invite) }
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "when invite is expired" do
       let(:invite) { create(:expired_invite) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
   end
 

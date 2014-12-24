@@ -7,24 +7,24 @@ describe DiscussionRelationship do
   let(:trusted_discussion) { create(:trusted_discussion) }
   let(:user)               { create(:user) }
 
-  it { should belong_to(:user) }
-  it { should belong_to(:discussion) }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:discussion) }
 
-  its(:favorite?) { should be_false }
-  its(:following?) { should be_true }
-  its(:participated?) { should be_false }
+  specify { expect(subject.favorite?).to eq(false) }
+  specify { expect(subject.following?).to eq(true) }
+  specify { expect(subject.participated?).to eq(false) }
 
 
   describe ".define" do
 
     context "when the discussion is trusted" do
       subject { DiscussionRelationship.define(user, trusted_discussion) }
-      its(:trusted?) { should be_true }
+      specify { expect(subject.trusted?).to eq(true) }
     end
 
     context "when the discussion isn't trusted" do
       subject { DiscussionRelationship.define(user, discussion) }
-      its(:trusted?) { should be_false }
+      specify { expect(subject.trusted?).to eq(false) }
     end
 
     context "with no existing relationship" do
@@ -33,9 +33,9 @@ describe DiscussionRelationship do
         DiscussionRelationship.define(user, discussion, favorite: true)
       end
 
-      specify { relationship.valid?.should be_true }
-      specify { relationship.favorite?.should be_true }
-      specify { relationship.user.discussion_relationships.should include(relationship) }
+      specify { expect(relationship.valid?).to eq(true) }
+      specify { expect(relationship.favorite?).to eq(true) }
+      specify { expect(relationship.user.discussion_relationships).to include(relationship) }
 
       it "creates a new record" do
         discussion # Creating a discussion also creates a separate relationship,
@@ -53,8 +53,8 @@ describe DiscussionRelationship do
         DiscussionRelationship.define(existing.user, existing.discussion, favorite: true)
       end
 
-      specify { relationship.valid?.should be_true }
-      specify { relationship.favorite?.should be_true }
+      specify { expect(relationship.valid?).to eq(true) }
+      specify { expect(relationship.favorite?).to eq(true) }
 
       it "doesn't create a new record" do
         existing

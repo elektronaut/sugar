@@ -62,14 +62,17 @@ module ExchangeParticipant
   end
 
   def following?(discussion)
-    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).following?
+    (discussion_relationship_with(discussion) &&
+     discussion_relationship_with(discussion).following?) ? true : false
   end
 
   def favorite?(discussion)
-    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).favorite?
+    (discussion_relationship_with(discussion) &&
+     discussion_relationship_with(discussion).favorite?) ? true : false
   end
 
   def hidden?(discussion)
-    discussion_relationship_with(discussion) && discussion_relationship_with(discussion).hidden?
+    (discussion_relationship_with(discussion) &&
+     discussion_relationship_with(discussion).hidden?) ? true : false
   end
 end
