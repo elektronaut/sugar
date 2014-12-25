@@ -3,6 +3,7 @@
 module ApplicationHelper
   include AvatarsHelper
   include ExchangesHelper
+  include IconsHelper
   include LayoutHelper
   include PaginationHelper
   include PostsHelper

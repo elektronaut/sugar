@@ -12,12 +12,8 @@
     <%= stylesheet_link_tag @theme.stylesheet_path %>
   <% end %>
 
+  <%= icon_tags %>
   <%= csrf_meta_tag %>
-
-  <% if @theme.icon? %>
-    <link rel="icon" type="image/gif" href="<%= image_path @theme.icon_path %>">
-  <% end %>
-
   <%= javascript_include_tag "swfobject" %>
 </head>
 <body class="<%= body_classes %>">

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Theme
-  ATTRIBUTES = :id, :name, :author, :stylesheet, :icon, :mobile_stylesheet, :mobile_icon, :mobile_icon_precomposed
+  ATTRIBUTES = :id, :name, :author, :stylesheet, :mobile_stylesheet
   attr_accessor(*ATTRIBUTES)
 
   class << self
@@ -64,20 +64,8 @@ class Theme
     path(stylesheet)
   end
 
-  def icon_path
-    path(icon)
-  end
-
   def mobile_stylesheet_path
     path(mobile_stylesheet)
-  end
-
-  def mobile_icon_path
-    path(mobile_icon)
-  end
-
-  def mobile_icon_precomposed?
-    @mobile_icon_precomposed ||= false
   end
 
   def full_name
