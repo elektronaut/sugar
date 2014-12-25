@@ -5,6 +5,6 @@ module HumanizableParam
     slug = slug.gsub(/[\[\{]/,'(')
     slug = slug.gsub(/[\]\}]/,')')
     slug = slug.gsub(/[^\w\d!$&'()*,;=\-]+/,'-').gsub(/[\-]{2,}/,'-').gsub(/(^\-|\-$)/,'')
-    "#{self.id};" + slug
+    "#{self.id}-" + slug
   end
 end

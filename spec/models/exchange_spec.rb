@@ -72,7 +72,7 @@ describe Exchange do
 
   describe "#to_param" do
     subject { exchange.to_param }
-    it { is_expected.to match(/^[\d]+;This\-is\-my\-Discussion$/) }
+    it { is_expected.to match(/^[\d]+-This\-is\-my\-Discussion$/) }
   end
 
   describe "#closeable_by?" do
