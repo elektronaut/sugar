@@ -5,6 +5,7 @@ class MarkdownRenderer < Redcarpet::Render::HTML
     document = normalize_newlines(document)
     document = escape_leading_gts_without_space(document)
     document = separate_adjacent_blockquotes(document)
+    document = youtube_embed(document)
     document
   end
 
@@ -37,4 +38,19 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   def escape_leading_gts_without_space(document)
     document.gsub(/^([\s]*)([>]+)([^\s>])/) { $1 + ("&gt;" * $2.length) + $3 }
   end
+
+  def youtube_embed(document)
+    document.gsub(/!y\[(.*)\]\((.*)\)/){
+      title = $1
+      youtube_url = $2
+      if youtube_url[/youtu\.be\/([^\?]*)/]
+        youtube_id = $1
+      else
+        youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+        youtube_id = $5
+      end
+      "<iframe title=\"#{title}\" src=\"https://www.youtube.com/embed/#{youtube_id}\" frameborder=\"0\" allowfullscreen></iframe>"
+    }
+  end
+
 end
