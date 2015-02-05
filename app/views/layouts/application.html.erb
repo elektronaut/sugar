@@ -44,7 +44,7 @@
     <div id="account">
       <% if current_user? %>
         Hello, <%= profile_link(current_user) %>!
-        (<%= link_to "Sign out", logout_users_path %>)
+        (<%= link_to "Sign out", logout_users_path, data: { confirm: "Do you really want to sign out?"} %>)
       <% else %>
         <% if Sugar.config.signups_allowed %>
           <%= link_to("Sign up", new_user_path) %>
