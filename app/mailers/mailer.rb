@@ -30,4 +30,14 @@ class Mailer < ActionMailer::Base
     )
   end
 
+  def new_post(username, email, url, conversation)
+    @username   = username
+    @url 	= url
+    @conversation = conversation
+    mail(
+      to:      email,
+      subject: "New post in conversation at #{Sugar.config.forum_name}!"
+    )
+  end
+
 end
