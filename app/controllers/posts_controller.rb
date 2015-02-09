@@ -80,9 +80,11 @@ class PostsController < ApplicationController
       location: polymorphic_url(@exchange, page: @exchange.last_page, anchor: "post-#{@post.id}")
     )
 
-    @exchange.posts.collect(&:user_id).uniq.each do |user_id|
-      if @current_user.id != user_id
-        Mailer.new_post(@current_user.username, User.find(user_id.to_s).email ,location, @exchange.title).deliver_now
+    Thread.new do
+      @exchange.posts.collect(&:user_id).uniq.each do |user_id|
+        if @current_user.id != user_id
+          Mailer.new_post(@current_user.username, User.find(user_id.to_s).email ,location, @exchange.title).deliver_now
+        end
       end
     end
   end
