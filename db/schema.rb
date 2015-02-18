@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.datetime "updated_at"
   end
 
-  add_index "conversation_relationships", ["conversation_id"], name: "conversation_id_index", using: :btree
-  add_index "conversation_relationships", ["user_id"], name: "user_id_index", using: :btree
+  add_index "conversation_relationships", ["conversation_id"], name: "index_conversation_relationships_on_conversation_id", using: :btree
+  add_index "conversation_relationships", ["user_id"], name: "index_conversation_relationships_on_user_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   limit: 4,     default: 0
@@ -66,24 +66,13 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.boolean "hidden",        limit: 1, default: false, null: false
   end
 
-  add_index "discussion_relationships", ["discussion_id"], name: "discussion_id_index", using: :btree
-  add_index "discussion_relationships", ["favorite"], name: "favorite_index", using: :btree
-  add_index "discussion_relationships", ["following"], name: "following_index", using: :btree
+  add_index "discussion_relationships", ["discussion_id"], name: "index_discussion_relationships_on_discussion_id", using: :btree
+  add_index "discussion_relationships", ["favorite"], name: "index_discussion_relationships_on_favorite", using: :btree
+  add_index "discussion_relationships", ["following"], name: "index_discussion_relationships_on_following", using: :btree
   add_index "discussion_relationships", ["hidden"], name: "index_discussion_relationships_on_hidden", using: :btree
-  add_index "discussion_relationships", ["participated"], name: "participated_index", using: :btree
-  add_index "discussion_relationships", ["trusted"], name: "trusted_index", using: :btree
-  add_index "discussion_relationships", ["user_id"], name: "user_id_index", using: :btree
-
-  create_table "discussion_views_backup", force: :cascade do |t|
-    t.integer "user_id",       limit: 4
-    t.integer "discussion_id", limit: 4
-    t.integer "post_id",       limit: 4
-    t.integer "post_index",    limit: 4, default: 0, null: false
-  end
-
-  add_index "discussion_views_backup", ["discussion_id"], name: "discussion_id_index", using: :btree
-  add_index "discussion_views_backup", ["post_id"], name: "post_id_index", using: :btree
-  add_index "discussion_views_backup", ["user_id"], name: "user_id_index", using: :btree
+  add_index "discussion_relationships", ["participated"], name: "index_discussion_relationships_on_participated", using: :btree
+  add_index "discussion_relationships", ["trusted"], name: "index_discussion_relationships_on_trusted", using: :btree
+  add_index "discussion_relationships", ["user_id"], name: "index_discussion_relationships_on_user_id", using: :btree
 
   create_table "exchange_views", force: :cascade do |t|
     t.integer "user_id",     limit: 4
@@ -98,29 +87,28 @@ ActiveRecord::Schema.define(version: 20141217124333) do
   add_index "exchange_views", ["user_id"], name: "user_id_index", using: :btree
 
   create_table "exchanges", force: :cascade do |t|
-    t.integer  "poster_id",      limit: 4
-    t.integer  "last_poster_id", limit: 4
-    t.boolean  "closed",         limit: 1,   default: false, null: false
-    t.boolean  "sticky",         limit: 1,   default: false, null: false
     t.string   "title",          limit: 255
-    t.datetime "created_at"
-    t.datetime "last_post_at"
-    t.datetime "updated_at"
+    t.boolean  "sticky",         limit: 1,   default: false, null: false
+    t.boolean  "closed",         limit: 1,   default: false, null: false
     t.boolean  "nsfw",           limit: 1,   default: false, null: false
     t.boolean  "trusted",        limit: 1,   default: false, null: false
-    t.integer  "posts_count",    limit: 4,   default: 0
+    t.integer  "poster_id",      limit: 4
+    t.integer  "last_poster_id", limit: 4
     t.integer  "closer_id",      limit: 4
+    t.integer  "posts_count",    limit: 4,   default: 0,     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "last_post_at"
     t.string   "type",           limit: 255
   end
 
   add_index "exchanges", ["created_at"], name: "created_at_index", using: :btree
   add_index "exchanges", ["last_post_at"], name: "last_post_at_index", using: :btree
   add_index "exchanges", ["poster_id"], name: "poster_id_index", using: :btree
-  add_index "exchanges", ["sticky", "last_post_at"], name: "sticky", using: :btree
+  add_index "exchanges", ["sticky", "last_post_at"], name: "index_exchanges_on_sticky_and_last_post_at", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
-  add_index "exchanges", ["title"], name: "discussions_title_fulltext", type: :fulltext
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
-  add_index "exchanges", ["type"], name: "type_index", using: :btree
+  add_index "exchanges", ["type"], name: "index_exchanges_on_type", length: {"type"=>191}, using: :btree
 
   create_table "invites", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -143,8 +131,6 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.string   "scopes",            limit: 255
   end
 
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
-
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4
     t.integer  "application_id",    limit: 4,   null: false
@@ -156,78 +142,73 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.string   "scopes",            limit: 255
   end
 
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
   add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
 
   create_table "oauth_applications", force: :cascade do |t|
     t.string   "name",         limit: 255,              null: false
     t.string   "uid",          limit: 255,              null: false
     t.string   "secret",       limit: 255,              null: false
     t.string   "redirect_uri", limit: 255,              null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "owner_id",     limit: 4
     t.string   "owner_type",   limit: 255
     t.string   "scopes",       limit: 255, default: "", null: false
   end
 
-  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", length: {"owner_id"=>nil, "owner_type"=>191}, using: :btree
 
   create_table "password_reset_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.string   "token",      limit: 255
     t.datetime "expires_at"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "password_reset_tokens", ["user_id"], name: "index_password_reset_tokens_on_user_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
-    t.integer  "exchange_id",  limit: 4
+    t.text     "body",         limit: 65535
+    t.text     "body_html",    limit: 65535
     t.integer  "user_id",      limit: 4
+    t.integer  "exchange_id",  limit: 4
+    t.boolean  "trusted",      limit: 1,     default: false,      null: false
+    t.datetime "edited_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "body",         limit: 65535
-    t.string   "format_type",  limit: 255
-    t.text     "body_html",    limit: 65535
-    t.datetime "edited_at"
-    t.boolean  "trusted",      limit: 1,     default: false,      null: false
     t.boolean  "conversation", limit: 1,     default: false,      null: false
     t.string   "format",       limit: 255,   default: "markdown", null: false
   end
 
-  add_index "posts", ["conversation"], name: "type_index", using: :btree
-  add_index "posts", ["created_at"], name: "created_at_index", using: :btree
-  add_index "posts", ["exchange_id", "created_at"], name: "discussion_id", using: :btree
-  add_index "posts", ["exchange_id"], name: "discussion_id_index", using: :btree
-  add_index "posts", ["trusted"], name: "trusted_index", using: :btree
+  add_index "posts", ["conversation"], name: "index_posts_on_conversation", using: :btree
+  add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
+  add_index "posts", ["exchange_id", "created_at"], name: "index_posts_on_exchange_id_and_created_at", using: :btree
+  add_index "posts", ["exchange_id"], name: "index_posts_on_exchange_id", using: :btree
+  add_index "posts", ["trusted"], name: "index_posts_on_trusted", using: :btree
   add_index "posts", ["user_id", "conversation"], name: "index_posts_on_user_id_and_conversation", using: :btree
-  add_index "posts", ["user_id", "created_at"], name: "user_id_and_created_at_index", using: :btree
-  add_index "posts", ["user_id"], name: "user_id_index", using: :btree
+  add_index "posts", ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at", using: :btree
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",              limit: 255
-    t.string   "hashed_password",       limit: 255
-    t.string   "email",                 limit: 255
-    t.datetime "created_at"
-    t.datetime "last_active"
-    t.integer  "inviter_id",            limit: 4
     t.string   "realname",              limit: 255
-    t.datetime "updated_at"
+    t.string   "email",                 limit: 255
+    t.string   "hashed_password",       limit: 255
+    t.string   "location",              limit: 255
+    t.string   "gamertag",              limit: 255
+    t.string   "stylesheet_url",        limit: 255
     t.text     "description",           limit: 65535
     t.boolean  "banned",                limit: 1,     default: false, null: false
-    t.boolean  "user_admin",            limit: 1,     default: false, null: false
-    t.boolean  "moderator",             limit: 1,     default: false, null: false
     t.boolean  "admin",                 limit: 1,     default: false, null: false
     t.boolean  "trusted",               limit: 1,     default: false, null: false
-    t.integer  "posts_count",           limit: 4,     default: 0,     null: false
-    t.string   "location",              limit: 255
+    t.boolean  "user_admin",            limit: 1,     default: false, null: false
+    t.boolean  "moderator",             limit: 1,     default: false, null: false
+    t.boolean  "notify_on_message",     limit: 1,     default: true,  null: false
+    t.datetime "last_active"
     t.date     "birthday"
-    t.string   "stylesheet_url",        limit: 255
-    t.string   "gamertag",              limit: 255
+    t.integer  "posts_count",           limit: 4,     default: 0,     null: false
+    t.integer  "inviter_id",            limit: 4
     t.string   "msn",                   limit: 255
     t.string   "gtalk",                 limit: 255
     t.string   "aim",                   limit: 255
@@ -235,11 +216,12 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.string   "flickr",                limit: 255
     t.string   "last_fm",               limit: 255
     t.string   "website",               limit: 255
-    t.boolean  "notify_on_message",     limit: 1,     default: true,  null: false
     t.string   "openid_url",            limit: 255
-    t.integer  "available_invites",     limit: 4,     default: 0,     null: false
-    t.float    "latitude",              limit: 24
     t.float    "longitude",             limit: 24
+    t.float    "latitude",              limit: 24
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "available_invites",     limit: 4,     default: 0,     null: false
     t.string   "facebook_uid",          limit: 255
     t.integer  "participated_count",    limit: 4,     default: 0,     null: false
     t.integer  "favorites_count",       limit: 4,     default: 0,     null: false
@@ -256,8 +238,10 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.string   "preferred_format",      limit: 255
     t.string   "sony",                  limit: 255
     t.integer  "avatar_id",             limit: 4
+    t.text     "previous_usernames",    limit: 65535
   end
 
-  add_index "users", ["username"], name: "username_index", length: {"username"=>250}, using: :btree
+  add_index "users", ["last_active"], name: "last_active_index", using: :btree
+  add_index "users", ["username"], name: "username_index", length: {"username"=>191}, using: :btree
 
 end
