@@ -103,7 +103,7 @@ class User < ActiveRecord::Base
       :last_active, :created_at, :description, :admin,
       :moderator, :user_admin,
       :location, :gamertag, :twitter, :flickr, :instagram, :website,
-      :msn, :gtalk, :last_fm, :facebook_uid, :banned_until, :sony
+      :msn, :gtalk, :last_fm, :facebook_uid, :banned_until, :sony, :nintendo
     ]
   end
 

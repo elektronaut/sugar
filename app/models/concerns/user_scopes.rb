@@ -47,6 +47,10 @@ module UserScopes
     def sony_users
       active.where("sony IS NOT NULL AND sony != ''")
     end
+
+    def nintendo_users
+      active.where("nintendo IS NOT NULL AND nintendo != ''")
+    end
   end
 
 end
