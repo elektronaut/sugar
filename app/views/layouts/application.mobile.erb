@@ -11,24 +11,10 @@
     <%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
   <% end %>
 
-  <%= javascript_include_tag "mobile" %>
-
+  <%= icon_tags %>
   <%= csrf_meta_tag %>
 
-  <%# Sugar configuration %>
-  <script>
-    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
-  </script>
-
-  <%# Embedded Tweets Renderer %>
-  <% if @posts && @posts.any? %>
-    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <% end %>
-
   <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
-  <% if @theme.mobile_icon? %>
-    <link rel="<%= @theme.mobile_icon_precomposed? ? 'apple-touch-icon-precomposed' : 'apple-touch-icon'%>" href="<%= image_path @theme.mobile_icon_path %>" />
-  <% end %>
 </head>
 <body>
     <div id="header">
@@ -46,8 +32,8 @@
   <% if current_user? || Sugar.public_browsing? %>
     <div id="navigation"><ul>
       <li><%= link_to "Discussions", discussions_path %></li>
-      <li><%= link_to "Categories", categories_path %></li>
       <% if current_user? %>
+        <li><%= link_to "Popular", popular_discussions_path %></li>
         <li><%= link_to "Following", following_discussions_path %></li>
         <li><%= link_to "Favorites", favorites_discussions_path %></li>
         <% if current_user.unread_conversations? %>
@@ -91,6 +77,20 @@
     <% end %>
     <%= link_to "Regular site", {mobile_format: 'html'}, class: 'regular_site' %>
   </div>
+
+  <%= javascript_include_tag "mobile" %>
+
+  <%# Sugar configuration %>
+  <script>
+    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
+  </script>
+
+  <%# External embeds %>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="//platform.instagram.com/en_US/embeds.js" charset="utf-8"></script>
+  <% end %>
+
   <% if Sugar.config.google_analytics -%>
   <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

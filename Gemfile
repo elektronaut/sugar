@@ -1,10 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.2.0'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.8.0'
+gem 'responders', '~> 2.0'
 
 gem 'sqlite3'
 gem 'mysql2'
@@ -21,6 +22,12 @@ gem 'uglifier'
 gem 'dynamic_form'
 gem 'jquery-rails'
 gem 'backbone-on-rails'
+
+gem 'gemoji', git: "https://github.com/github/gemoji.git"
+gem 'b3s_emoticons', git: "https://github.com/elektronaut/b3s_emoticons.git"
+
+#gem 'dynamic_image', '~> 2.0.0.beta5
+gem 'dynamic_image', git: 'https://github.com/elektronaut/dynamic_image.git'
 
 # Deploy with Capistrano
 group :development do
@@ -63,9 +70,7 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
-  gem 'guard'
-  gem 'guard-spring'
-  gem 'guard-rspec'
+  gem 'web-console', '~> 2.0'
 end
 
 group :development_mac do
@@ -78,20 +83,19 @@ group :test do
 end
 
 group :test, :development do
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', '~> 0.10.0'
 
   gem 'sunspot_solr', '~> 2.1.0'
   gem 'sunspot-rails-tester'
 
   # RSpec
-  gem 'minitest'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.1.0'
   gem 'shoulda-matchers'
   gem 'json_spec'
   gem 'capybara'
   gem 'fuubar'
+  gem 'database_cleaner'
 
   # FactoryGirl
   gem 'factory_girl_rails'
-
 end

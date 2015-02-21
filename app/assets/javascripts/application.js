@@ -3,6 +3,7 @@
 //= require underscore
 //= require backbone
 
+//= require jquery.scrollTo.min
 //= require_tree ./vendor
 
 //= require backbone/sugar

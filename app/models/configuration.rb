@@ -55,6 +55,7 @@ class Configuration
       setting :custom_header,        :string
       setting :custom_footer,        :string
       setting :custom_javascript,    :string
+      setting :emoticons,            :string, 'smiley laughing blush heart_eyes kissing_heart flushed worried grimacing cry angry heart star +1 -1'
     end
   end
 

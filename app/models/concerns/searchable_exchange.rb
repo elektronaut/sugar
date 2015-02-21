@@ -7,7 +7,6 @@ module SearchableExchange
       string  :type
       integer :poster_id
       integer :last_poster_id
-      integer :category_id
       boolean :trusted
       boolean :closed
       boolean :sticky

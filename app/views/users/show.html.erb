@@ -20,7 +20,7 @@
 
 <div id="userinfo">
   <p class="avatar_and_name clearfix">
-    <%= avatar_image_tag @user, '32', class: :avatar %>
+    <%= avatar_image_tag @user %>
     <%= profile_link(@user, @user.username, class: 'username') %>
     <% if @user.realname? || @user.location? %>
       <br />
@@ -36,9 +36,24 @@
     <% end %>
   </p>
 
+  <% if @user.previous_usernames.any? %>
+    <div class="previous_usernames">
+      <b>
+        Previously Known As:
+      </b>
+      <ul>
+        <% @user.previous_usernames.uniq.each do |username| %>
+          <li>
+            <%= username %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <% if @user.description? %>
   <div class="description">
-    <%= format_post @user.description %>
+    <%= render_post @user.description %>
   </div>
   <% end %>
 

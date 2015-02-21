@@ -4,6 +4,8 @@
 en:
   activerecord:
     attributes:
+      avatar:
+        file: Avatar
       configuration:
         google_analytics: Tracking code
         amazon_aws_key: Access Key ID
@@ -16,7 +18,6 @@ en:
         nsfw: Not safe for work
       user:
         realname: Real name
-        avatar_url: Avatar URL
         description: Profile text
         moderator: Moderator
         user_admin: User administrator
@@ -59,6 +60,7 @@ en:
     users_must_be_invited: Users must be invited
     google_analytics: Google Analytics
     google_analytics_description: Enter to enable tracking
+    emoticons: Emoticons
     facebook: Facebook
     facebook_description: "To enable this feature, set up an %{link} and enter your App ID and secret here."
     facebook_apps_link: application on Facebook
@@ -91,9 +93,9 @@ en:
       administator_privileges: Administator privileges
       birthday_description: "Your age won't be shown, but your birthday will"
       gravatar_link: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
-      trusted_description: 'User will be able to see discussions in categories marked as trusted'
+      trusted_description: 'User will be able to see discussions marked as trusted'
       temporary_ban: Temporary ban
-      moderator_description: 'Can edit all categories, discussions and posts'
+      moderator_description: 'Can edit all discussions and posts'
       user_admin_description: 'Can edit other users and handle invites or approvals'
       admin_description: 'Same as the two above, plus access to forum configuration'
       map: Map

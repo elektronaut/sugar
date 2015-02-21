@@ -1,9 +1,6 @@
 <% @page_title = "Edit post" %>
 
 <h2 class="section">
-  <% if @exchange.kind_of?(Conversation) %>
-    <%= link_to @exchange.category.name, @exchange.category %> &raquo;
-  <% end %>
   <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
   <%= link_to @exchange.title, @exchange %> &raquo;
   <%= link_to "New post", [:new, @exchange, :posts] %>

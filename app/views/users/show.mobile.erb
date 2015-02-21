@@ -2,7 +2,7 @@
 <div class="page_content user_profile">
 
   <div class="avatar">
-    <%= avatar_image_tag @user, '48' %>
+    <%= avatar_image_tag @user %>
     <h2><%= @user.username %></h2>
 
     <% unless !current_user? || @user == current_user %>
@@ -93,4 +93,18 @@
       <th>Users invited</th>
       <td><%= @user.invitees.count %></td>
     </tr>
+    <% if @user.previous_usernames.any? %>
+      <tr>
+        <th>Previously Known As</th>
+        <td>
+          <ul>
+            <% @user.previous_usernames.uniq.each do |username| %>
+              <li>
+                <%= username %>
+              </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
   </table></div>

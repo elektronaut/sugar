@@ -3,9 +3,11 @@
 module ApplicationHelper
   include AvatarsHelper
   include ExchangesHelper
+  include IconsHelper
   include LayoutHelper
   include PaginationHelper
   include PostsHelper
+  include DynamicImage::Helper
 
   def facebook_oauth_url(redirect_uri)
     "https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config.facebook_app_id}&redirect_uri=#{redirect_uri}&scope=email"

@@ -5,9 +5,6 @@
 %>
 
 <h2 class="section">
-  <% if @exchange.kind_of?(Discussion) %>
-    <%= link_to @exchange.category.name, @exchange.category %> &raquo;
-  <% end %>
   <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
   <%= link_to @exchange.title, @exchange, id: 'discussionLink'  %>
   &raquo;

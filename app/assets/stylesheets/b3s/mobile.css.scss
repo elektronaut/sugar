@@ -1,6 +1,20 @@
 //= require default/reset
 //= require default/components/spoilers
 
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+
 a, a:visited {
   text-decoration: none;
   color: #763047;
@@ -247,10 +261,10 @@ body[orient="landscape"] .page_content textarea {
 }
 
 
-.discussions, .conversations, .categories {
+.discussions, .conversations {
   margin-top: -25px;
 }
-.discussion, .conversation, .category {
+.discussion, .conversation {
   padding: 8px 10px 5px 10px;
   border-bottom: 1px solid #ddd;
   color: #555;
@@ -266,21 +280,21 @@ body[orient="landscape"] .page_content textarea {
   letter-spacing: -0.05em;
   padding-top: 3px;
 }
-.discussion h2, .conversation h2, .category h2 {
+.discussion h2, .conversation h2 {
   font-weight: normal;
   font-size: 16px;
     width: 255px;
   line-height: 1.2;
   margin-bottom: 1px;
 }
-.discussion h2 a, .conversation h2 a, .category h2 a {
+.discussion h2 a, .conversation h2 a {
   color: #000;
 }
 
 .conversation h2 {
     width: 200px;
 }
-body[orient="landscape"] .discussion h2, body[orient="landscape"] .category h2 {
+body[orient="landscape"] .discussion h2 {
     width: 415px;
 }
 body[orient="landscape"] .conversation h2 {
@@ -291,7 +305,7 @@ body[orient="landscape"] .conversation h2 {
   font-size: 11px;
   letter-spacing: -0.05em;
 }
-.discussion p, .conversation p, .category p {
+.discussion p, .conversation p {
   font-size: 10px;
     overflow: hidden;
     width: 290px;
@@ -512,6 +526,11 @@ table.userinfo th {
   padding-right: 15px;
 }
 
+
+.avatar-image {
+  width: 48px;
+  height: 48px;
+}
 .avatar {
   margin-left: 60px;
   margin-bottom: 10px;
@@ -601,58 +620,68 @@ textarea.rich {
   box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
   -webkit-appearance: none;
 }
-.richTextToolbar {
+.richTextToolbar,
+.emojiBar {
   position: relative;
+  display: block;
   list-style: none;
   border: 1px solid #d7d7d7;
   border-bottom: 0px;
   background-color: #fafafa;
   margin: 0;
-  padding: 0px 2px;
-  height: 30px;
+  padding: 0px 2px 0px 0px;
+  line-height: 30px;
   margin-bottom: 0px;
   width: 98%;
   max-width: 650px;
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .formatting {
+    float: right;
+  }
+  .button {
+    float: left;
+  }
+  .button a,
+  .formatting a {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+  }
+  .button a {
+    width: 26px;
+    float: left;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #d7d7d7;
+    color: #555;
+    font-size: 12px;
+    background-color: #F6F6F6;
+  }
+  .formatting a {
+    font-size: 11px;
+    float: right;
+    width: 60px;
+    text-align: center;
+  }
+  .button span {
+    display: none;
+  }
 }
-.richTextToolbar li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.richTextToolbar .formatting {
-  float: right;
-}
-.richTextToolbar .button {
-  float: left;
-}
-.richTextToolbar .button:first-child {
-  margin-left: -2px;
-}
-.richTextToolbar .button a,
-.richTextToolbar .formatting a {
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  display: block;
-  cursor: pointer;
-}
-.richTextToolbar .button a {
-  width: 26px;
-  float: left;
-  border-left: 1px solid #fff;
-  border-right: 1px solid #d7d7d7;
-  color: #555;
-  font-size: 12px;
-  background-color: #F6F6F6;
-}
-.richTextToolbar .formatting a {
-  font-size: 11px;
-  float: right;
-  width: 60px;
-  text-align: center;
-}
-.richTextToolbar .button span {
-  display: none;
+.emojiBar {
+  .button a {
+    background-color: transparent;
+    line-height: 25px;
+    border: 0px;
+    width: 28px;
+    img {
+      vertical-align: middle;
+    }
+  }
 }
 
 /* Retina display overrides */

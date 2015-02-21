@@ -8,19 +8,14 @@ class Sugar.Views.Post extends Backbone.View
     'click a.edit_post': 'edit'
 
   initialize: ->
-    if $(this.el.id)
+    if $(this.el).data('post_id')
       this.model = this.modelFromExistingElement()
     else
       this.model = new Sugar.Models.Post()
 
   modelFromExistingElement: ->
-    if this.el.id.match(/([\d]+)$/)
-      id = this.el.id.match(/([\d]+)$/)[1]
-    else
-      id = null
-
     new Sugar.Models.Post({
-      id:            id,
+      id:            $(this.el).data('post_id'),
       user_id:       $(this.el).data('user_id'),
       exchange_id:   $(this.el).data('exchange_id'),
       exchange_type: $(this.el).data('exchange_type'),
@@ -73,11 +68,15 @@ class Sugar.Views.Post extends Backbone.View
       permalink = null
     else
       username  = $(this.el).find('.post_info .username a').text()
-      permalink = $(this.el).find('.post_info .permalink a').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
+      permalink = $(this.el).find('.post_info .permalink').get()[0].href.replace(/^https?:\/\/([\w\d\.:\-]*)/, '')
 
     # Hide spoilers
     text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"')
     html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"')
+
+    # Emojis
+    text = text.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:")
+    html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:")
 
     $(Sugar).trigger "quote",
       username: username
@@ -106,4 +105,3 @@ class Sugar.Views.Post extends Backbone.View
     $(this.el).find("iframe[src*='//instagram.com/']").each ->
       unless $(this).parent().hasClass("instagram-wrapper")
         $(this).wrap('<div class="instagram-wrapper">')
-

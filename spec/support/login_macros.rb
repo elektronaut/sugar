@@ -14,7 +14,7 @@ module LoginMacros
         it "requires login for #{action} action" do
           logout
           self.send options[:method], action, options[:params].merge(format: options[:format])
-          response.should redirect_to(login_users_url)
+          expect(response).to redirect_to(login_users_url)
         end
       end
     end
@@ -26,8 +26,8 @@ module LoginMacros
       end
       actions.each do |action|
         it "requires authentication for #{action}" do
-          Sugar.stub(:public_browsing?).and_return(false)
-          controller.should_receive(:require_user_account)
+          allow(Sugar).to receive(:public_browsing?).and_return(false)
+          expect(controller).to receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
           self.send options[:method], action, options[:params].merge(format: options[:format])
@@ -42,7 +42,7 @@ module LoginMacros
       end
       actions.each do |action|
         it "requires a user for #{action}" do
-          controller.should_receive(:require_user_account)
+          expect(controller).to receive(:require_user_account)
             .at_least(:once)
             .and_return(true)
           self.send options[:method], action, options[:params].merge(format: options[:format])
@@ -58,14 +58,14 @@ module LoginMacros
       actions.each do |action|
         it "requires an admin for #{action}" do
           received_option = false
-          controller.should_receive(:verify_user) { |options|
+          expect(controller).to receive(:verify_user) { |options|
             if options[:admin]
               received_option = true
             end
             true
           }.at_least(:once)
           self.send options[:method], action, options[:params].merge(format: options[:format])
-          received_option.should be_true
+          expect(received_option).to eq(true)
         end
       end
     end
@@ -78,14 +78,14 @@ module LoginMacros
       actions.each do |action|
         it "requires a moderator for #{action}" do
           received_option = false
-          controller.should_receive(:verify_user) { |options|
+          expect(controller).to receive(:verify_user) { |options|
             if options[:moderator]
               received_option = true
             end
             true
           }.at_least(:once)
           self.send options[:method], action, options[:params].merge(format: options[:format])
-          received_option.should be_true
+          expect(received_option).to eq(true)
         end
       end
     end
@@ -98,14 +98,14 @@ module LoginMacros
       actions.each do |action|
         it "requires a user admin for #{action}" do
           received_option = false
-          controller.should_receive(:verify_user) { |options|
+          expect(controller).to receive(:verify_user) { |options|
             if options[:user_admin]
               received_option = true
             end
             true
           }.at_least(:once)
           self.send options[:method], action, options[:params].merge(format: options[:format])
-          received_option.should be_true
+          expect(received_option).to eq(true)
         end
       end
     end

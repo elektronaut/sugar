@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe Viewable do
 
-  let(:trusted_category)   { create(:trusted_category) }
   let(:discussion)         { create(:discussion) }
-  let(:trusted_discussion) { create(:discussion, category: trusted_category) }
+  let(:trusted_discussion) { create(:discussion, trusted: true) }
   let(:user)               { create(:user) }
   let(:trusted_user)       { create(:trusted_user) }
 
@@ -18,30 +17,30 @@ describe Viewable do
 
     context "when user is trusted" do
       let(:user) { create(:trusted_user) }
-      it { should =~ [discussion, trusted_discussion] }
+      it { is_expected.to match([discussion, trusted_discussion]) }
     end
 
     context "when user isn't trusted" do
       let(:user) { create(:user) }
-      it { should =~ [discussion] }
+      it { is_expected.to match([discussion]) }
     end
   end
 
   describe "#viewable_by?" do
-    specify { trusted_discussion.viewable_by?(trusted_user).should be_true }
-    specify { trusted_discussion.viewable_by?(user).should be_false }
-    specify { trusted_discussion.viewable_by?(nil).should be_false }
+    specify { expect(trusted_discussion.viewable_by?(trusted_user)).to eq(true) }
+    specify { expect(trusted_discussion.viewable_by?(user)).to eq(false) }
+    specify { expect(trusted_discussion.viewable_by?(nil)).to eq(false) }
 
     context "when public browsing is on" do
       before { configure public_browsing: true }
-      specify { discussion.viewable_by?(user).should be_true }
-      specify { discussion.viewable_by?(nil).should be_true }
+      specify { expect(discussion.viewable_by?(user)).to eq(true) }
+      specify { expect(discussion.viewable_by?(nil)).to eq(true) }
     end
 
     context "when public browsing is off" do
       before { configure public_browsing: false }
-      specify { discussion.viewable_by?(user).should be_true }
-      specify { discussion.viewable_by?(nil).should be_false }
+      specify { expect(discussion.viewable_by?(user)).to eq(true) }
+      specify { expect(discussion.viewable_by?(nil)).to eq(false) }
     end
   end
 

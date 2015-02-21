@@ -12,35 +12,9 @@
     <%= stylesheet_link_tag @theme.stylesheet_path %>
   <% end %>
 
-  <%= javascript_include_tag "application" %>
-
+  <%= icon_tags %>
   <%= csrf_meta_tag %>
-
-  <%# Sugar configuration %>
-  <script>
-    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
-  </script>
-
-  <%# Custom javascript %>
-  <% unless Sugar.config.custom_javascript.blank? %>
-    <script>
-      <%= raw Sugar.config.custom_javascript %>
-    </script>
-  <% end %>
-
-  <%# Embedded Tweets Renderer %>
-  <% if @posts && @posts.any? %>
-    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <% end %>
-
-  <%# Google Maps API %>
-  <% if @google_maps_api %>
-    <script src="//maps.google.com/maps/api/js?sensor=false"></script>
-  <% end %>
-
-  <% if @theme.icon? %>
-    <link rel="icon" type="image/gif" href="<%= image_path @theme.icon_path %>">
-  <% end %>
+  <%= javascript_include_tag "swfobject" %>
 </head>
 <body class="<%= body_classes %>">
 
@@ -70,7 +44,7 @@
     <div id="account">
       <% if current_user? %>
         Hello, <%= profile_link(current_user) %>!
-        (<%= link_to "Sign out", logout_users_path %>)
+        (<%= link_to "Sign out", logout_users_path, data: { confirm: "Do you really want to sign out?"} %>)
       <% else %>
         <% if Sugar.config.signups_allowed %>
           <%= link_to("Sign up", new_user_path) %>
@@ -146,6 +120,31 @@
   <%# Custom footer %>
   <% if Sugar.config.custom_footer %>
     <%= raw Sugar.config.custom_footer %>
+  <% end %>
+
+  <%= javascript_include_tag "application" %>
+
+  <%# Sugar configuration %>
+  <script>
+    Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
+  </script>
+
+  <%# Custom javascript %>
+  <% unless Sugar.config.custom_javascript.blank? %>
+    <script>
+      <%= raw Sugar.config.custom_javascript %>
+    </script>
+  <% end %>
+
+  <%# External embeds %>
+  <% if @posts && @posts.any? %>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="//platform.instagram.com/en_US/embeds.js" charset="utf-8"></script>
+  <% end %>
+
+  <%# Google Maps API %>
+  <% if @google_maps_api %>
+    <script src="//maps.google.com/maps/api/js?sensor=false"></script>
   <% end %>
 
   <%# Google Analytics %>

@@ -2,86 +2,91 @@
   border-top: 1px solid #E2DCBF;
   margin-bottom: 20px;
   width: 100%;
+
+  .context {
+    border-bottom: 3px solid #E2DCBF;
+    .post {
+      &,
+      blockquote,
+      a,
+      a:visited {
+        color: #777;
+      }
+      a:hover {
+        color: #555;
+      }
+      .avatar {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  // Small block between posts that say "2 days later..."
+  .post_distance {
+    border-bottom: 1px solid #E2DCBF;
+    padding: 2px 0 2px 45px;
+    background: #f8f7f1;
+    color: #84806d;
+  }
 }
-.posts .context {
-  border-bottom: 3px solid #E2DCBF;
-}
-.posts .context .post, .posts .context .post blockquote, .posts .context .post a, .posts .context .post a:visited {
-  color: #777;
-}
-.posts .context .post a:hover {
-  color: #555;
-}
-.posts .context .post .avatar {
-  opacity: 0.7;
-}
-/* Container for posts loaded via AJAX */
+
+// Container for posts loaded via AJAX
 #ajaxPosts .post:first-child, #previewPost {
   border-top: 3px solid #E2DCBF;
 }
-/* Small block between posts that say "2 days later..." */
-.posts .post_distance {
-  border-bottom: 1px solid #E2DCBF;
-  padding: 2px 0 2px 45px;
-  background: #f8f7f1;
-  color: #84806d;
-}
+
 
 .post {
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #E2DCBF;
+  .anchor {
+    position: absolute;
+    margin-top: -20px;
+  }
+  .title {
+    background: transparent image-url('default/discussion_title_bg.png') 0px 14px no-repeat;
+    font-size: 1.3em;
+    font-weight: bold;
+    padding: 7px 0 7px 19px;
+    margin: -15px 0 0 0;
+    small {
+      font-size: 0.8em;
+      font-weight: normal;
+      margin-left: 7px;
+    }
+    .labels {
+      color: #555;
+    }
+  }
+  .post_functions {
+    line-height: 1;
+    color: #888;
+    float: right;
+    margin-right: 10px;
+    font-size: 13px;
+  }
+  .post_info {
+    line-height: 1;
+    color: #888;
+    margin-bottom: -8px;
+    font-size: 13px;
+    .avatar {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+      img {
+        vertical-align: top;
+      }
+    }
+    .username {
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+  }
 }
-.post .title {
-  background: transparent image-url('default/discussion_title_bg.png') 0px 14px no-repeat;
-  font-size: 1.3em;
-  font-weight: bold;
-  padding: 7px 0 7px 19px;
-  margin: -15px 0 0 0;
-}
-.post .title small {
-  font-size: 0.8em;
-  font-weight: normal;
-  margin-left: 7px;
-}
-.post .title .labels {
-  color: #555;
-}
-.post .post_functions {
-  line-height: 1;
-  color: #888;
-  float: right;
-  margin-right: 10px;
-  font-size: 13px;
-}
-
-.post .post_info {
-  line-height: 1;
-  color: #888;
-  margin-bottom: -8px;
-  font-size: 13px;
-}
-.post .post_info .avatar {
-  width: 32px;
-  height: 32px;
-  margin-right: 10px;
-}
-.post .post_info .avatar img {
-  vertical-align: top;
-}
-.post .post_info .username {
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-.post .post_info .permalink a, .post .post_info .permalink a:visited {
-  color: #888;
-}
-.post .post_info .permalink a:hover {
-  color: #333;
-}
-
-.post .body, .post .edit {
+.body, .post .edit {
   clear: both;
   font-size: 14px;
   line-height: 1.35;
@@ -113,6 +118,9 @@
   width: 100%;
   height: 100%;
   top: 0px;
+}
+iframe.instagram-media {
+  position: relative !important;
 }
 .post .body ul, .post .body ol {
   margin-left: 17px;
@@ -154,7 +162,6 @@
   max-width: 100%;
 }
 .me_post .body .date {
-  color: #888;
   font-size: 0.9em;
   font-weight: normal;
 }
@@ -201,6 +208,14 @@
 
 .post .body a:hover {
   color: #001d32;
+}
+
+.post a.permalink, .post a.permalink:visited {
+  color: #888;
+  text-decoration: none;
+}
+.post a.permalink:hover {
+  color: #333;
 }
 
 

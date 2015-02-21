@@ -30,7 +30,6 @@ module Inviter
 
   # Number of remaining invites. User admins always have at least one invite.
   def available_invites
-     number = self[:available_invites]
      self.user_admin? ? 1 : self[:available_invites]
   end
 

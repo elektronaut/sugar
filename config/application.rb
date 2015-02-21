@@ -8,7 +8,7 @@ require 'rails/all'
 if defined?(Bundler)
   Bundler.require(:default, Rails.env)
   Bundler.require([Rails.env, 'mac'].join('_')) if RUBY_PLATFORM =~ /darwin/
-  Bundler.require(:newrelic) if File.exists?(File.join(File.dirname(__FILE__), 'newrelic.yml'))
+  Bundler.require(:newrelic) if File.exist?(File.join(File.dirname(__FILE__), 'newrelic.yml'))
 end
 
 
@@ -55,8 +55,12 @@ module Sugar
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    # Add emoji to the assets path
+    config.assets.paths << Emoji.images_path
+    config.assets.precompile << "emoji/**/*.png"
+
     # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-    config.assets.precompile += %w( mobile.js )
+    config.assets.precompile += %w( swfobject.js mobile.js )
     config.assets.precompile += Theme.precompile_assets
   end
 end

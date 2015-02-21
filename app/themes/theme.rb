@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 class Theme
-  ATTRIBUTES = :id, :name, :author, :stylesheet, :icon, :mobile_stylesheet, :mobile_icon, :mobile_icon_precomposed
-  attr_accessor *ATTRIBUTES
+  ATTRIBUTES = :id, :name, :author, :stylesheet, :mobile_stylesheet
+  attr_accessor(*ATTRIBUTES)
 
   class << self
     def all
@@ -64,20 +64,8 @@ class Theme
     path(stylesheet)
   end
 
-  def icon_path
-    path(icon)
-  end
-
   def mobile_stylesheet_path
     path(mobile_stylesheet)
-  end
-
-  def mobile_icon_path
-    path(mobile_icon)
-  end
-
-  def mobile_icon_precomposed?
-    @mobile_icon_precomposed ||= false
   end
 
   def full_name
@@ -98,8 +86,8 @@ class Theme
   def set_options(options={})
     options.symbolize_keys!
     options.each do |key, value|
-      if self.respond_to?("#{key.to_s}=".to_sym)
-        self.send("#{key.to_s}=".to_sym, value)
+      if self.respond_to?("#{key}=".to_sym)
+        self.send("#{key}=".to_sym, value)
       end
     end
   end

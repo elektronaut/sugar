@@ -19,7 +19,7 @@ describe UploadsController, redis: true do
     AWS.stub!
   end
 
-  specify { Sugar.aws_s3?.should == true }
+  specify { expect(Sugar.aws_s3?).to eq(true) }
 
   describe "POST create" do
     before { login(user) }
@@ -37,10 +37,10 @@ describe UploadsController, redis: true do
       before { post :create, upload: { file: png_file }, format: :json }
 
       it "should respond with JSON" do
-        response.header["Content-Type"].should match "application/json"
+        expect(response.header["Content-Type"]).to match "application/json"
       end
 
-      it { should be_json_eql(expected_response.to_json) }
+      it { is_expected.to be_json_eql(expected_response.to_json) }
     end
   end
 

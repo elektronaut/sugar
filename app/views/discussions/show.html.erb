@@ -1,5 +1,5 @@
 <%
-  add_body_class "discussion", "category#{@exchange.category_id}", "discussion_by_user#{@exchange.poster_id}"
+  add_body_class "discussion", "discussion_by_user#{@exchange.poster_id}", @exchange.labels.map(&:downcase)
   add_body_class 'last_page' if @posts.last_page?
   @page_title = @exchange.title
   previous_post = nil
@@ -31,7 +31,6 @@
 </div>
 
 <h2 class="section">
-  <%= link_to @exchange.category.name, @exchange.category %> &raquo;
   <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
   <%= link_to @exchange.title, @exchange, id: 'discussionLink'  %>
 </h2>

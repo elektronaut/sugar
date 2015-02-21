@@ -1,10 +1,16 @@
+napkinObject = ->
+  swfobject.getObjectById("napkin")
+
+withNapkinObject = (fn) ->
+  (fn(napkinObject())) if napkinObject()
+
 # Make drawings clickable
 $(Sugar).bind 'ready postsloaded', ->
   $('.drawing img').each ->
     if !$(this).data('napkin_applied')
-      $(this).click ->
-        swfobject.getObjectById("napkin").setBackground @src  if swfobject.getObjectById("napkin")
+      img = this
       $(this).data('napkin_applied', true)
+      $(this).click -> withNapkinObject (obj) -> obj.setBackground(img.src)
 
 # Drawing upload handler
 $(Sugar).bind 'ready', ->
@@ -25,7 +31,7 @@ $(Sugar).bind 'ready', ->
     # Button handler
     $buttons.find('button').click ->
       show_status 'Posting, please wait&hellip;'
-      swfobject.getObjectById("napkin").uploadDrawing()
+      withNapkinObject (obj) -> obj.uploadDrawing()
 
     # Callback from napkin
     window.onDrawingUploaded = (url) ->

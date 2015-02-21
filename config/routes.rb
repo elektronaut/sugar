@@ -2,6 +2,8 @@
 
 Sugar::Application.routes.draw do
 
+  image_resources :avatars
+
   use_doorkeeper
 
   # API routes
@@ -98,11 +100,6 @@ Sugar::Application.routes.draw do
   controller :password_resets do
     get '/password_resets/:id/:token' => :show, as: :password_reset_with_token
   end
-
-  # Categories
-  resources :categories
-  get '/categories/:id/:page' => 'categories#show'
-
 
   # Discussions
   controller :discussions do

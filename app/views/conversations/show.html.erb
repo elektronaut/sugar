@@ -1,7 +1,7 @@
 <%
   add_body_class "discussion", "conversation", "discussion_by_user#{@exchange.poster_id}"
   add_body_class 'last_page' if @posts.last_page?
-  @page_title = h(@exchange.title)
+  @page_title = @exchange.title
   previous_post = nil
 -%>
 

@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe InvitesController do
-
   # Create the first admin user
   before { create(:user) }
 
@@ -15,7 +14,6 @@ describe InvitesController do
   it_requires_login_for :index, :all, :new, :create, :destroy
   it_requires_user_admin_for :all
 
-
   describe "#load_invite" do
     context "when invite exists" do
       before do
@@ -23,7 +21,7 @@ describe InvitesController do
         delete :destroy, id: invite_id
       end
       let(:invite_id) { invite.id }
-      specify { assigns(:invite).should be_a(Invite) }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
     end
 
     context "when invite doesn't exist" do
@@ -40,20 +38,20 @@ describe InvitesController do
 
     context "when user has invites" do
       let(:user) { create(:user, available_invites: 1) }
-      it { should respond_with(:success) }
-      specify { flash[:notice].should be_nil }
+      it { is_expected.to respond_with(:success) }
+      specify { expect(flash[:notice]).to eq(nil) }
     end
 
     context "when user is user admin" do
       let(:user) { create(:user_admin) }
-      it { should respond_with(:success) }
-      specify { flash[:notice].should be_nil }
+      it { is_expected.to respond_with(:success) }
+      specify { expect(flash[:notice]).to eq(nil) }
     end
 
     context "when user doesn't have any invites" do
       let(:user) { create(:user, available_invites: 0) }
-      specify { flash[:notice].should match(/You don't have any invites!/) }
-      it { should respond_with(:redirect) }
+      specify { expect(flash[:notice]).to match(/You don't have any invites!/) }
+      it { is_expected.to respond_with(:redirect) }
     end
   end
 
@@ -61,10 +59,10 @@ describe InvitesController do
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
     before { login(user); get :index }
 
-    it { should respond_with(:success) }
-    it { should render_template(:index) }
-    specify { flash[:notice].should be_nil }
-    specify { assigns(:invites).should =~ [invites.first] }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:index) }
+    specify { expect(flash[:notice]).to eq(nil) }
+    specify { expect(assigns(:invites)).to match_array([invites.first]) }
   end
 
   describe "GET all" do
@@ -73,9 +71,9 @@ describe InvitesController do
 
     before { login(user); get :all }
 
-    it { should respond_with(:success) }
-    it { should render_template(:all) }
-    specify { assigns(:invites).should =~ invites }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:all) }
+    specify { expect(assigns(:invites)).to match_array(invites) }
   end
 
   describe "GET accept" do
@@ -83,37 +81,39 @@ describe InvitesController do
 
     context "when invite is valid" do
       let(:token) { invite.token }
-      specify { flash[:notice].should be_nil }
-      specify { session[:invite_token].should == invite.token }
+      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(session[:invite_token]).to eq(invite.token) }
       it "redirects to the signup page" do
-        response.should redirect_to(new_user_by_token_url(token: invite.token))
+        expect(response).to(
+          redirect_to(new_user_by_token_url(token: invite.token))
+        )
       end
     end
 
     context "when invite is expired" do
       let(:token) { expired_invite.token }
-      specify { flash[:notice].should match(/Your invite has expired!/) }
-      specify { session[:invite_token].should be_nil }
+      specify { expect(flash[:notice]).to match(/Your invite has expired!/) }
+      specify { expect(session[:invite_token]).to eq(nil) }
       it "redirects to the login page" do
-        response.should redirect_to(login_users_url)
+        expect(response).to redirect_to(login_users_url)
       end
     end
 
     context "when invite doesn't exist" do
       let(:token) { "invalid token" }
-      specify { flash[:notice].should match(/That's not a valid invite!/) }
-      specify { session[:invite_token].should be_nil }
+      specify { expect(flash[:notice]).to match(/That's not a valid invite!/) }
+      specify { expect(session[:invite_token]).to eq(nil) }
       it "redirects to the login page" do
-        response.should redirect_to(login_users_url)
+        expect(response).to redirect_to(login_users_url)
       end
     end
   end
 
   describe "GET new" do
     before { login(user_with_invites); get :new }
-    it { should respond_with(:success) }
-    it { should render_template(:new) }
-    specify { assigns(:invite).should be_a(Invite) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:new) }
+    specify { expect(assigns(:invite)).to be_a(Invite) }
   end
 
   describe "POST create" do
@@ -127,41 +127,53 @@ describe InvitesController do
         }
       end
 
-      specify { assigns(:invite).should be_a(Invite) }
-      specify { flash[:notice].should match(/Your invite has been sent to no\-reply@example\.com/) }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
 
-      specify { last_email.to.should == ['no-reply@example.com'] }
-      specify { last_email.body.encoded.should match('testing message') }
+      it "should set the flash" do
+        expect(flash[:notice]).to match(
+          /Your invite has been sent to no\-reply@example\.com/
+        )
+      end
 
-      it { should redirect_to(invites_url) }
+      specify { expect(last_email.to).to eq(['no-reply@example.com']) }
+      specify { expect(last_email.body.encoded).to match('testing message') }
+
+      it { is_expected.to redirect_to(invites_url) }
     end
 
     context "when email is invalid" do
       before do
-        Mailer.stub(:invite) { raise Net::SMTPSyntaxError }
+        allow(Mailer).to receive(:invite) do
+          raise Net::SMTPSyntaxError
+        end
         post :create, invite: {
           email:   'totally@wrong.com',
           message: 'testing message'
         }
       end
 
-      specify { flash[:notice].should match("There was a problem sending your invite to totally@wrong.com, it has been cancelled.") }
-      it { should redirect_to(invites_url) }
+      it "should set the flash" do
+        expect(flash[:notice]).to match(
+          "There was a problem sending your invite to totally@wrong.com, it has been cancelled."
+        )
+      end
+
+      it { is_expected.to redirect_to(invites_url) }
 
       it "should not send an email" do
-        last_email.should be_nil
+        expect(last_email).to eq(nil)
       end
 
       it "should not create an invite" do
-        Invite.count.should == 0
+        expect(Invite.count).to eq(0)
       end
     end
 
     context "with invalid params" do
       before { post :create, invite: { foo: 'bar' } }
-      specify { assigns(:invite).should be_a(Invite) }
-      it { should respond_with(:success) }
-      it { should render_template(:new) }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
+      it { is_expected.to respond_with(:success) }
+      it { is_expected.to render_template(:new) }
     end
   end
 
@@ -169,24 +181,23 @@ describe InvitesController do
     context "when user owns the invite" do
       before { login(invite.user) and delete(:destroy, id: invite.id) }
 
-      specify { assigns(:invite).should be_a(Invite) }
-      specify { assigns(:invite).destroyed?.should be_true }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
+      specify { expect(assigns(:invite).destroyed?).to eq(true) }
 
       it "redirects to the invites page" do
-        response.should redirect_to(invites_url)
+        expect(response).to redirect_to(invites_url)
       end
     end
 
     context "when user doesn't own the invite" do
       before { login(user) and delete(:destroy, id: invite.id) }
 
-      specify { assigns(:invite).should be_a(Invite) }
-      specify { assigns(:invite).destroyed?.should be_false }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
+      specify { expect(assigns(:invite).destroyed?).to eq(false) }
 
       it "redirects to the discussions page" do
-        response.should redirect_to(discussions_url)
+        expect(response).to redirect_to(discussions_url)
       end
     end
   end
-
 end

@@ -1,3 +1,8 @@
+.avatar-image {
+  width: 32px;
+  height: 32px;
+}
+
 .users_list .username {
   font-weight: bold;
   font-size: 1.2em;
@@ -12,121 +17,127 @@
 span.admin {
   color: #062;
 }
-.users_list .xbox_online {
-  font-weight: bold;
-}
-.users_list .xbox_tile {
-  padding: 0 10px 0 0 !important;
-}
-.users_list .xbox_tile img {
-  margin-bottom: -7px;
-}
 
+.users_list {
+  .xbox_online {
+    font-weight: bold;
+  }
+  .xbox_tile {
+    padding: 0 10px 0 0 !important;
+    img {
+      margin-bottom: -7px;
+    }
+  }
+}
 
 #userinfo {
   width: 425px;
   float: left;
   position: absolute;
 }
-.user_profile .avatar_and_name {
-  margin-left: 42px;
-  font-size: 1.2em;
-}
-.user_profile .avatar_and_name .avatar {
-  float: left;
-  margin-left: -42px;
-}
-.user_profile .username {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-.user_profile small {
-  font-size: 1em;
-  color: #888;
-}
-.user_profile .description {
-  margin-bottom: 1em;
-  max-width: 100%;
-  overflow: hidden;
-}
-.user_profile .posts_and_discussions {
-  font-size: 1.2em;
-}
-.user_profile .grant_invites {
-  font-size: 1.2em;
-  margin-bottom: 0;
-}
-.user_profile .posts_and_discussions a {
-  font-weight: bold;
-}
-.user_profile .social, .user_profile .invitees {
-  border-top: 1px solid #E2DCBF;
-  padding-top: 1em;
-  margin-bottom: 1em;
-}
-.user_profile .social h3, .user_profile .invitees h3 {
-  font-weight: normal;
-  margin-bottom: 4px;
-}
-.user_profile .social h3 a, .user_profile .invitees h3 a {
-  font-weight: bold;
-}
-.user_profile .twitter .tweet p {
-  margin-bottom: 4px;
-}
-.user_profile .twitter .tweet .time {
-  font-size: 0.85em;
-}
-.user_profile .flickr li {
-  display: inline;
-  margin: 0 2px 2px 0;
-}
-.user_profile .xboxlive p {
-  margin-left: 76px;
-}
-.user_profile .xboxlive p .avatar {
-  float: left;
-  margin-left: -76px;
-}
-.user_profile .invitees li a {
-  font-weight: bold;
-  font-size: 1.3em;
-}
 
-.user_profile .welcome {
-  font-size: 1.3em;
-  margin-top: -19px;
-  max-width: 600px;
-  margin-left: 10px;
-}
-.user_profile .welcome h2 {
-  margin-bottom: 0;
-  color: #544;
-}
-.user_profile .welcome a {
-  text-decoration: underline;
-}
+.user_profile {
+  .avatar_and_name {
+    margin-left: 42px;
+    font-size: 1.2em;
+    .avatar-image {
+      float: left;
+      margin-left: -42px;
+    }
+  }
+  .username {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+  small {
+    font-size: 1em;
+    color: #888;
+  }
+  .description {
+    margin-bottom: 1em;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .grant_invites {
+    font-size: 1.2em;
+    margin-bottom: 0;
+  }
+  .posts_and_discussions {
+    font-size: 1.2em;
+    a {
+      font-weight: bold;
+    }
+  }
+  .social, .invitees {
+    border-top: 1px solid #E2DCBF;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    h3 {
+      font-weight: normal;
+      margin-bottom: 4px;
+      a {
+        font-weight: bold;
+      }
+    }
+  }
+  .twitter .tweet {
+    p {
+      margin-bottom: 4px;
+    }
+    .time {
+      font-size: 0.85em;
+    }
+  }
+  .flickr li {
+    display: inline;
+    margin: 0 2px 2px 0;
+  }
+  .xboxlive {
+    p {
+      margin-left: 76px;
+      .avatar {
+        float: left;
+        margin-left: -76px;
+      }
+    }
+  }
+  .invitees li a {
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+  .welcome {
+    font-size: 1.3em;
+    margin-top: -19px;
+    max-width: 600px;
+    margin-left: 10px;
+    h2 {
+      margin-bottom: 0;
+      color: #544;
+    }
+    a {
+      text-decoration: underline;
+    }
+  }
 
-
-/* Overrides for the recent posts on the user profile */
-.user_profile #userPosts {
-  margin-left: 437px;
-  border-left: 1px solid #E2DCBF;
-  padding-left: 12px;
-  padding-top: 15px;
-}
-.user_profile #userPosts .posts {
-  border-top: 0;
-}
-.user_profile #userPosts .posts .post:first-child {
-  padding-top: 0;
-}
-.user_profile #userPosts .posts .post:last-child {
-  border-bottom: 0;
-}
-.user_profile #userPosts .posts .post:first-child .title {
-  padding-top: 0;
-  background-position: 0 7px;
+  #userPosts {
+    margin-left: 437px;
+    border-left: 1px solid #E2DCBF;
+    padding-left: 12px;
+    padding-top: 15px;
+    .posts {
+      border-top: 0;
+      .post:first-child {
+        padding-top: 0;
+        .title {
+          padding-top: 0;
+          background-position: 0 7px;
+        }
+      }
+      .post:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
 }
 
 #editProfileMap {

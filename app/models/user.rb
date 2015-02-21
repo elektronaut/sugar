@@ -5,8 +5,8 @@ require 'digest/sha1'
 # = User accounts
 #
 # === Trusted users
-# Users with the <tt>trusted</tt> flag can see the trusted categories and
-# discussions. Admin users also count as trusted.
+# Users with the <tt>trusted</tt> flag can see the trusted discussions.
+# Admin users also count as trusted.
 
 class User < ActiveRecord::Base
   include ActiveModel::ForbiddenAttributesProtection
@@ -15,8 +15,13 @@ class User < ActiveRecord::Base
   include ExchangeParticipant
   include UserScopes
 
+  belongs_to :avatar, dependent: :destroy
+  accepts_nested_attributes_for :avatar
+  validates_associated :avatar
+
   before_create :check_for_first_user
   before_validation :ensure_last_active_is_set
+  before_update :check_username_change
 
   validates :username,
             presence: true,
@@ -56,6 +61,10 @@ class User < ActiveRecord::Base
     (self[:moderator] || admin?)
   end
 
+  def previous_usernames
+    (self[:previous_usernames] || "").split("\n")
+  end
+
   # Returns admin flags as strings
   def admin_labels
     labels = []
@@ -93,7 +102,7 @@ class User < ActiveRecord::Base
       :id, :username, :realname, :latitude, :longitude, :inviter_id,
       :last_active, :created_at, :description, :admin,
       :moderator, :user_admin,
-      :location, :gamertag, :avatar_url, :twitter, :flickr, :instagram, :website,
+      :location, :gamertag, :twitter, :flickr, :instagram, :website,
       :msn, :gtalk, :last_fm, :facebook_uid, :banned_until, :sony
     ]
   end
@@ -122,4 +131,9 @@ class User < ActiveRecord::Base
       end
     end
 
+    def check_username_change
+      if self.username_changed?
+        self[:previous_usernames] = ([self.username_was] + previous_usernames).join("\n")
+      end
+    end
 end

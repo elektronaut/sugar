@@ -4,18 +4,10 @@ class Discussion < Exchange
   include SearchableExchange
   include Viewable
 
-  has_many   :discussion_relationships, dependent: :destroy
-  belongs_to :category, counter_cache: true
+  has_many :discussion_relationships, dependent: :destroy
 
-  validates_presence_of :category_id
+  scope :for_view, -> { sorted.with_posters }
 
-  # Flag for trusted status, which will update after save if it has been changed.
-  attr_accessor :update_trusted
-
-  scope :with_category, -> { includes(:poster, :last_poster, :category) }
-  scope :for_view,      -> { sorted.with_posters.with_category }
-
-  validate   :inherit_trusted_from_category
   after_save :update_trusted_status
 
   class << self
@@ -33,7 +25,7 @@ class Discussion < Exchange
       self.transaction do
         self.update_attributes(type: "Conversation")
         self.becomes(Conversation).tap do |conversation|
-          conversation.update_attributes(category_id: nil, trusted: false, sticky: false, closed: false, nsfw: false)
+          conversation.update_attributes(trusted: false, sticky: false, closed: false, nsfw: false)
           self.posts.update_all(conversation: true, trusted: false)
           self.participants.each do |participant|
             conversation.add_participant(participant)
@@ -62,11 +54,6 @@ class Discussion < Exchange
   end
 
   private
-
-  def inherit_trusted_from_category
-    self.trusted = self.category.trusted if self.category
-    true
-  end
 
   def update_trusted_status
     if self.trusted_changed?

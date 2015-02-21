@@ -3,41 +3,40 @@
   font-weight: bold;
   font-size: 1.3em;
   max-width: 600px;
-}
-.tabbed_navigation li {
-  display: inline;
-}
-
-.tabbed_navigation li a {
-  padding: 2px 5px;
-}
-.tabbed_navigation li.active a {
-  background: #05506d;
-  color: #fff;
+  li {
+    display: inline;
+    a {
+      padding: 2px 5px;
+    }
+    &.active a {
+      background: #05506d;
+      color: #fff;
+    }
+  }
 }
 
 /* Top tabs: users list and editing profiles */
 .topTabs {
   border-bottom: 1px solid #E2DCBF;
   padding-bottom: 1px;
-}
-.topTabs li {
-  display: inline;
-}
-.topTabs li a {
-  border: 1px solid #E2DCBF;
-  padding: 2px 7px;
-  background: #f8f7f1;
-  color: #484030;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-.topTabs li a:hover {
-  color: #460000;
-}
-.topTabs li.active a {
-  background: #05506d;
-  background: #622;
-  border: 1px solid #622;
-  color: #fff;
+  li {
+    display: inline;
+    a {
+      border: 1px solid #E2DCBF;
+      padding: 2px 7px;
+      background: #f8f7f1;
+      color: #484030;
+      font-weight: bold;
+      font-size: 1.1em;
+      &:hover {
+        color: #460000;
+      }
+    }
+    &.active a {
+      background: #05506d;
+      background: #622;
+      border: 1px solid #622;
+      color: #fff;
+    }
+  }
 }

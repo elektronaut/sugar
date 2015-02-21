@@ -19,8 +19,13 @@
     <% end %>
   <% end %>
 
-  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>" id="post-<%= post.id %>" data-user_id="<%= post.user.id %>" data-exchange_id="<%= post.exchange_id %>" data-exchange_type="<%= post.exchange.type %>">
-
+  <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>"
+       data-user_id="<%= post.user.id %>"
+       data-exchange_id="<%= post.exchange_id %>"
+       data-exchange_type="<%= post.exchange.type %>"
+       data-post_id="<%= post.id %>"
+  >
+    <a name="post-<%= post.id %>" class="anchor"></a>
     <% if title %>
       <div class="title">
         <% if post.exchange.labels? %>
@@ -43,18 +48,23 @@
       <div class="me_post_content">
         <div class="avatar"><%= avatar_image_tag(post.user) %></div>
         <div class="body" id="postBody-<%= post.id %>">
-          <span class="content"><%= meify post.body, post.user %></span>
+          <span class="content"><%= format_post post.body, post.user %></span>
           <% if preview %>
             <time class="relative date">Preview</time>
           <% else %>
-            <%= time_tag post.created_at, class: 'relative date' %>
+            <% if permalink %>
+              <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
+                <%= time_tag post.created_at, class: 'relative date' %>
+              <% end %>
+            <% else %>
+              <%= time_tag post.created_at, class: 'relative date' %>
+            <% end %>
           <% end %>
         </div>
       </div>
 
     <% else %>
       <div class="post_info">
-        <a name="post-<%= post.id %>" class="anchor"></a>
         <span class="avatar">
           <%= avatar_image_tag(post.user) %>
         </span>
@@ -62,17 +72,18 @@
         <% if preview %>
           <time class="relative date">Preview</time>
         <% else %>
-          <%= time_tag post.created_at, class: 'relative date' %>
-        <% end %>
-        <% if permalink %>
-          <span class="permalink">
-            <%= link_to "#", polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post" %>
-          </span>
+          <% if permalink %>
+            <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
+              <%= time_tag post.created_at, class: 'relative date' %>
+            <% end %>
+          <% else %>
+            <%= time_tag post.created_at, class: 'relative date' %>
+          <% end %>
         <% end %>
       </div>
       <div class="body" id="postBody-<%= post.id %>">
         <div class="content">
-          <%= meify(post.body_html, post.user) %>
+          <%= format_post(post.body_html, post.user) %>
         </div>
         <% if post.edited? %><div class="edited">
           Edited <%= time_tag post.edited_at, class: 'relative' %>

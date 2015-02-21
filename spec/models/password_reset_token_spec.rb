@@ -4,8 +4,8 @@ describe PasswordResetToken do
   let (:password_reset_token) { create(:password_reset_token) }
   let (:expired_password_reset_token) { create(:password_reset_token, expires_at: 2.days.ago) }
 
-  it { should belong_to(:user) }
-  it { should validate_presence_of(:user_id) }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to validate_presence_of(:user_id) }
 
   describe ".expire!" do
     before do
@@ -13,7 +13,7 @@ describe PasswordResetToken do
       expired_password_reset_token
       PasswordResetToken.expire!
     end
-    specify { PasswordResetToken.all.should == [password_reset_token] }
+    specify { expect(PasswordResetToken.all).to eq([password_reset_token]) }
   end
 
   describe ".find_by_token" do
@@ -22,17 +22,17 @@ describe PasswordResetToken do
     subject { user.password_reset_tokens.find_by_token(token) }
 
     context "when a token exists" do
-      it { should == password_reset_token }
+      it { is_expected.to eq(password_reset_token) }
     end
 
     context "when a token is expired" do
       let(:password_reset_token) { expired_password_reset_token }
-      it { should be_nil }
+      it { is_expected.to eq(nil) }
     end
 
     context "when a doesn't exist" do
       let(:token) { 'wrong token' }
-      it { should be_nil }
+      it { is_expected.to eq(nil) }
     end
   end
 
@@ -40,22 +40,22 @@ describe PasswordResetToken do
     subject { password_reset_token.expired? }
 
     context "when token is valid" do
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "when token is expired" do
       let(:password_reset_token) { expired_password_reset_token }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
   end
 
   describe "#expires_at" do
     subject { password_reset_token.expires_at }
-    it { should be_within(30).of(Time.now + 48.hours) }
+    it { is_expected.to be_within(30).of(Time.now + 48.hours) }
   end
 
   describe "#token" do
     subject { password_reset_token.token }
-    its(:length) { should == 32 }
+    specify { expect(subject.length).to eq(32) }
   end
 end

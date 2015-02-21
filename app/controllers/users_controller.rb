@@ -45,12 +45,13 @@ class UsersController < ApplicationController
 
     def allowed_params
       allowed = [
-        :aim, :avatar_url, :birthday, :description, :email,
+        :aim, :birthday, :description, :email,
         :facebook_uid, :flickr, :gamertag, :gtalk, :instagram,
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
-        :password, :confirm_password, :banned_until, :preferred_format, :sony
+        :password, :confirm_password, :banned_until, :preferred_format, :sony,
+        avatar_attributes: [:file]
       ]
       if current_user?
         if current_user.user_admin?
@@ -121,7 +122,7 @@ class UsersController < ApplicationController
             end
           end
         else
-          flash.now[:notice] = "Couldn't save your category, did you fill in all required fields?"
+          flash.now[:notice] = "Couldn't save your changes, did you fill in all required fields?"
           format.any(:html, :mobile) { render action: :edit }
         end
       end

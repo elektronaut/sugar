@@ -11,7 +11,7 @@ describe UserScopes do
     let!(:banned) { create(:user, banned: true) }
     let!(:active) { create(:user) }
     subject { User.active }
-    it { should == [active] }
+    it { is_expected.to eq([active]) }
   end
 
   describe "by_username" do
@@ -19,7 +19,7 @@ describe UserScopes do
     let!(:user1) { create(:user, username: 'danz') }
     let!(:user2) { create(:user, username: 'adam') }
     subject { User.by_username }
-    it { should == [user2, user1] }
+    it { is_expected.to eq([user2, user1]) }
   end
 
   describe "banned" do
@@ -28,14 +28,14 @@ describe UserScopes do
     let!(:banned) { create(:user, banned: true) }
     let!(:temporarily_banned) { create(:user, banned_until: (Time.now + 2.days)) }
     subject { User.banned }
-    it { should =~ [banned, temporarily_banned] }
+    it { is_expected.to match_array([banned, temporarily_banned]) }
   end
 
   describe "online" do
     let!(:online) { create(:user, last_active: 5.minutes.ago) }
     let!(:not_online) { create(:user, last_active: 20.minutes.ago) }
     subject { User.online }
-    it { should == [online] }
+    it { is_expected.to eq([online]) }
   end
 
   describe "admins" do
@@ -44,21 +44,21 @@ describe UserScopes do
     let!(:moderator) { create(:moderator) }
     let!(:user_admin) { create(:user_admin) }
     subject { User.admins }
-    it { should =~ [admin, moderator, user_admin] }
+    it { is_expected.to match_array([admin, moderator, user_admin]) }
   end
 
   describe "xbox_users" do
     let!(:xbox_user) { create(:user, gamertag: 'example') }
     let!(:non_xbox_user) { create(:user, gamertag: nil) }
     subject { User.xbox_users }
-    it { should == [xbox_user] }
+    it { is_expected.to eq([xbox_user]) }
   end
 
   describe "sony_users" do
     let!(:sony_user) { create(:user, sony: 'example') }
     let!(:non_sony_user) { create(:user, sony: nil) }
     subject { User.sony_users }
-    it { should == [sony_user] }
+    it { is_expected.to eq([sony_user]) }
   end
 
 
@@ -68,14 +68,14 @@ describe UserScopes do
     let!(:instagram) { create(:admin, instagram: 'elektronaut') }
     let!(:flickr) { create(:admin, flickr: 'elektronaut') }
     subject { User.social }
-    it { should =~ [twitter, instagram, flickr] }
+    it { is_expected.to match_array([twitter, instagram, flickr]) }
   end
 
   describe "recently_joined" do
     let!(:user1) { create(:user, created_at: 2.days.ago) }
     let!(:user2) { create(:user, created_at: 1.days.ago) }
     subject { User.recently_joined }
-    it { should == [user2, user1] }
+    it { is_expected.to eq([user2, user1]) }
   end
 
   describe "top_posters" do
@@ -83,7 +83,7 @@ describe UserScopes do
     let!(:user2) { create(:user, public_posts_count: 2) }
     let!(:user3) { create(:user, public_posts_count: 0) }
     subject { User.top_posters }
-    it { should == [user2, user1] }
+    it { is_expected.to eq([user2, user1]) }
   end
 
   describe "trusted" do
@@ -93,7 +93,7 @@ describe UserScopes do
     let!(:moderator) { create(:moderator) }
     let!(:user_admin) { create(:user_admin) }
     subject { User.trusted }
-    it { should =~ [trusted, admin, moderator, user_admin] }
+    it { is_expected.to match_array([trusted, admin, moderator, user_admin]) }
   end
 
 end

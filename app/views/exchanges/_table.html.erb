@@ -6,15 +6,15 @@
   <%= pagination ||= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
   <table class="discussions">
     <% exchanges.each do |d| %>
-      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
-        <td class="name" colspan="<%= d.kind_of?(Conversation) ? 5 : 6 %>"><span class="title">
+      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>" data-exchange-id="<%= d.id %>">
+        <td class="name" colspan="5"><span class="title">
           <% if d.labels? %>
             <span class="labels">[<%= d.labels.join(',') %>]</span>
           <% end %>
           <%= link_to h(d.title), last_viewed_page_path(d) %>
         </span></td>
       </tr>
-      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
+      <tr class="<%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>" data-exchange-id="<%= d.id %>">
         <% if d.kind_of?(Conversation) %>
           <%
             other_participants = d.participants.reject{|p| p == current_user}
@@ -27,7 +27,6 @@
             <td class="participants">Conversation with <%= safe_join other_participants.map{|p| profile_link(p)}, ', ' %></td>
           <% end %>
         <% else %>
-          <td class="category">Category: <%= link_to h(d.category.name), d.category %></td>
           <td class="started_by">Started by <%= profile_link(d.poster) %></td>
         <% end %>
         <td class="last_post">Last post by <%= profile_link(d.last_poster) %></td>

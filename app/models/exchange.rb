@@ -2,7 +2,8 @@
 
 # = Exchange
 #
-# Exchange is the base class for all threads, which both Discussion and Conversation inherit from.
+# Exchange is the base class for all threads, which both Discussion
+# and Conversation inherit from.
 
 class Exchange < ActiveRecord::Base
   include HumanizableParam

@@ -10,34 +10,37 @@ body {
   left: 0;
   right: 0;
   min-width: 800px;
+  h1 {
+    font-size: 4em;
+    font-weight: bold;
+    margin: 15px 0 0 20px;
+    text-shadow: #aaa 1px 1px 1px;
+    letter-spacing: -0.03em;
+  }
 }
-#header h1 {
-  font-size: 4em;
-  font-weight: bold;
-  margin: 15px 0 0 20px;
-  text-shadow: #aaa 1px 1px 1px;
-  letter-spacing: -0.03em;
-}
+
 #search {
   position: absolute;
   top: 33px;
   right: 20px;
 }
+
 #account {
   position: absolute;
   bottom: 2px;
   right: 20px;
   font-size: 1.2em;
   color: #555;
+  a, a:visited {
+   color: #555;
+   font-weight: bold;
+   text-decoration: underline;
+  }
+  a:hover {
+    color: #333;
+  }
 }
-#account a, #account a:visited {
-  color: #555;
-  font-weight: bold;
-  text-decoration: underline;
-}
-#account a:hover {
-  color: #333;
-}
+
 #navigation {
   margin: 0;
   position: absolute;
@@ -45,46 +48,51 @@ body {
   left: 20px;
   font-size: 1.2em;
   line-height: 1;
-}
-#navigation li {
-  display: inline;
-  margin: 0 3px 0 0;
-  float: left;
-}
-#navigation li a, #navigation li a:visited {
-  margin: 0;
-  text-decoration: none;
-  padding: 1px 10px 1px 10px;
-  background: #888 image-url('default/tab_bg.png') repeat-x;
-  border: 1px solid #787878;
-  border-bottom: 1px solid #666;
-  color: #fff;
-}
-#navigation li a:hover {
-  background: #666 image-url('default/tab_hover_bg.png') repeat-x;
-  border: 1px solid #666;
-  border-bottom: 1px solid #666;
-  color: #fff;
-}
-#navigation li.current a, #navigation li.current a:visited {
-  background: #f9f9f9 image-url('default/tab_current_bg.png') repeat-x;
-  padding-top: 2px;
-  color: #000;
-  border: 1px solid #aaa;
-  border-bottom: 1px solid #f9f9f9;
-  font-weight: bold;
-}
-#navigation li.current a:hover {
-}
-#navigation li.new a, #navigation li.new a:visited {
-  background: #d14b40 image-url('default/tab_new_messages_bg.gif') repeat-x;
-  color: #fff;
-  border: 1px solid #c24236;
-  border-bottom: 1px solid #c98175;
-  padding-left: 22px;
-}
-#navigation li.new a:hover {
-  background: #d14b40 image-url('default/tab_new_messages_hover_bg.gif') repeat-x;
+  li {
+    display: inline;
+    margin: 0 3px 0 0;
+    float: left;
+    a,
+    a:visited {
+      margin: 0;
+      text-decoration: none;
+      padding: 1px 10px 1px 10px;
+      background: #888 image-url('default/tab_bg.png') repeat-x;
+      border: 1px solid #787878;
+      border-bottom: 1px solid #666;
+      color: #fff;
+    }
+    a:hover {
+      background: #666 image-url('default/tab_hover_bg.png') repeat-x;
+      border: 1px solid #666;
+      border-bottom: 1px solid #666;
+      color: #fff;
+    }
+    &.current {
+      a,
+      a:visited {
+        background: #f9f9f9 image-url('default/tab_current_bg.png') repeat-x;
+        padding-top: 2px;
+        color: #000;
+        border: 1px solid #aaa;
+        border-bottom: 1px solid #f9f9f9;
+        font-weight: bold;
+      }
+    }
+    &.new {
+      a,
+      a:visited {
+        background: #d14b40 image-url('default/tab_new_messages_bg.gif') repeat-x;
+        color: #fff;
+        border: 1px solid #c24236;
+        border-bottom: 1px solid #c98175;
+        padding-left: 22px;
+      }
+      a:hover {
+        background: #d14b40 image-url('default/tab_new_messages_hover_bg.gif') repeat-x;
+      }
+    }
+  }
 }
 
 /* Errors and other notices */
