@@ -61,7 +61,20 @@ describe UserScopes do
     it { is_expected.to eq([sony_user]) }
   end
 
+  describe "nintendo_users" do
+    let!(:nintendo_user) { create(:user, nintendo: 'example') }
+    let!(:non_nintendo_user) { create(:user, nintendo: nil) }
+    subject { User.nintendo_users }
+    it { is_expected.to eq([nintendo_user]) }
+  end
 
+  describe "steam_users" do
+    let!(:steam_user) { create(:user, steam: 'example') }
+    let!(:non_steam_user) { create(:user, steam: nil) }
+    subject { User.steam_users }
+    it { is_expected.to eq([steam_user]) }
+  end
+  
   describe "social" do
     let!(:user) { create(:user) }
     let!(:twitter) { create(:admin, twitter: 'elektronaut') }

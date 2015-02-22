@@ -13,7 +13,8 @@ describe User do
     "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
     "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
     "moderator", "msn", "realname", "twitter", "user_admin",
-    "username", "website", "active", "banned", "sony"
+    "username", "website", "active", "banned",
+    "sony", "nintendo", "steam"
   ] }
 
   subject { user }

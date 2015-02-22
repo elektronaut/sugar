@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217124333) do
+ActiveRecord::Schema.define(version: 20150221190042) do
 
   create_table "avatars", force: :cascade do |t|
     t.string   "content_hash",   limit: 255
@@ -239,6 +239,8 @@ ActiveRecord::Schema.define(version: 20141217124333) do
     t.string   "sony",                  limit: 255
     t.integer  "avatar_id",             limit: 4
     t.text     "previous_usernames",    limit: 65535
+    t.string   "nintendo",              limit: 255
+    t.string   "steam",                 limit: 255
   end
 
   add_index "users", ["last_active"], name: "last_active_index", using: :btree

@@ -41,6 +41,16 @@ class UsersController < ApplicationController
       respond_with(@users)
     end
 
+    def nintendo
+      @users = User.nintendo_users.by_username
+      respond_with(@users)
+    end
+    
+    def steam
+      @users = User.steam_users.by_username
+      respond_with(@users)
+    end
+    
     def social
       @users = User.social.by_username
       respond_with(@users)
