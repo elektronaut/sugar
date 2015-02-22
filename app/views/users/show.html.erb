@@ -110,20 +110,11 @@
     </div>
   </div><% end %>
 
-  <% if @user.gamertag? %><div class="social xboxlive">
-    <iframe src="http://gamercard.xbox.com/<%= @user.gamertag %>.card" scrolling="no" frameBorder="0" height="140" width="200"></iframe>
-  </div><% end %>
-
-  <% if @user.sony? %><div class="social sony">
-    <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>"><img src="http://fp.profiles.us.playstation.com/playstation/psn/pid/<%= @user.sony %>.png" width="230" height="155" border="0" /></a>
-  </div><% end %>
-
-  <% if @user.nintendo? %><div class="social nintendo">
-    <strong>Nintendo ID:</strong> <a href="http://miiverse.nintendo.com/users/<%= @user.nintendo %>"><%= @user.nintendo %></a>
-  </div><% end %>
-
-  <% if @user.steam? %><div class="social steam">
-    <strong>Steam ID:</strong> <a href="http://steamcommunity.com/id/<%= @user.steam %>"><%= @user.steam %></a>
+  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? %><div class="social gaming">
+    <% if @user.gamertag? %><strong>Xbox Live:</strong> <a href="http://gamercard.xbox.com/en-US/Profile?Gamertag=<?= @user.gamertag ?>"><%= @user.gamertag %></a><br /><% end %>
+    <% if @user.sony? %><strong>PlayStation:</strong> <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>"><%= @user.sony %></a><br /><% end %>
+    <% if @user.nintendo? %><strong>Nintendo ID:</strong> <a href="http://miiverse.nintendo.com/users/<%= @user.nintendo %>"><%= @user.nintendo %></a><br /><% end %>
+    <% if @user.steam? %><strong>Steam ID:</strong> <a href="http://steamcommunity.com/id/<%= @user.steam %>"><%= @user.steam %></a><br /><% end %>
   </div><% end %>
 
   <% if @user.flickr? %><div class="social flickr clearfix">
