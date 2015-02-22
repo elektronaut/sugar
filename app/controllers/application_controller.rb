@@ -1,14 +1,13 @@
 # encoding: utf-8
 
-require 'digest/md5'
+require "digest/md5"
 
 class ApplicationController < ActionController::Base
-
   include Authentication
 
   self.responder = Sugar::Responder
 
-  layout 'application'
+  layout "application"
 
   protect_from_forgery
 
@@ -27,20 +26,25 @@ class ApplicationController < ActionController::Base
     # Disabling this is probably not a good idea, but the header
     # causes Chrome to choke when being redirected back after a submit
     # and the page contains an iframe.
-    response.headers['X-XSS-Protection'] = "0"
+    response.headers["X-XSS-Protection"] = "0"
+  end
+
+  def error_messages
+    {
+      404 => "Not found"
+    }
   end
 
   # Renders an error
-  def render_error(error, options={})
-    options[:status] ||= error if error.kind_of?(Numeric)
-    error_messages = {
-      404 => 'Not found'
-    }
+  def render_error(error, options = {})
+    if error.is_a?(Numeric)
+      options[:status] ||= error
+    end
     respond_to do |format|
-      format.html   {options[:template] ||= "errors/#{error}"}
-      format.mobile {options[:template] ||= "errors/#{error}"}
-      format.xml    {options[:text] ||= error_messages[error]}
-      format.json   {options[:text] ||= error_messages[error]}
+      format.html { options[:template] ||= "errors/#{error}" }
+      format.mobile { options[:template] ||= "errors/#{error}" }
+      format.xml { options[:text] ||= error_messages[error] }
+      format.json { options[:text] ||= error_messages[error] }
     end
     render options
   end
@@ -66,34 +70,38 @@ class ApplicationController < ActionController::Base
 
   def mobile_user_agent?
     request.host =~ /^(iphone|m|mobile)\./ ||
-      (request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android|IEMobile)/])
+      (request.env["HTTP_USER_AGENT"] &&
+      request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android|IEMobile)/])
   end
   helper_method :mobile_user_agent?
 
   def detect_mobile
     if mobile_user_agent?
-      session[:mobile_format] ||= 'mobile'
+      session[:mobile_format] ||= "mobile"
       session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
-      request.format = :mobile if session[:mobile_format] == 'mobile' && request.format == "text/html"
+      if session[:mobile_format] == "mobile" && request.format == "text/html"
+        request.format = :mobile
+      end
     end
   end
 
   def require_s3
     unless Sugar.aws_s3?
       flash[:notice] = "Amazon Web Services not configured!"
-      redirect_to root_url and return
+      redirect_to root_url
+      return
     end
   end
 
   def set_section
     case self.class.to_s
-    when 'UsersController'
+    when "UsersController"
       @section = :users
-    when 'MessagesController'
+    when "MessagesController"
       @section = :messages
-    when 'InvitesController'
+    when "InvitesController"
       @section = :invites
-    when 'ConversationsController'
+    when "ConversationsController"
       @section = :conversations
     else
       @section = :discussions
@@ -126,5 +134,4 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
 end

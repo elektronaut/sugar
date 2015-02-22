@@ -24,11 +24,14 @@ module DrawingsController
     drawing_file do |file|
       upload = Upload.create(file, name: "drawing.jpg")
       if upload.valid?
-        {body: "<div class=\"drawing\"><img src=\"#{upload.url}\" alt=\"Drawing\" /></div>"}
+        {
+          body: "<div class=\"drawing\">" +
+            "<img src=\"#{upload.url}\" alt=\"Drawing\" />" +
+            "</div>"
+        }
       else
         {}
       end
     end
   end
-
 end

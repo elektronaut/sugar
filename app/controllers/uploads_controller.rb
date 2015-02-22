@@ -1,5 +1,4 @@
 class UploadsController < ApplicationController
-
   requires_authentication
   requires_user
 

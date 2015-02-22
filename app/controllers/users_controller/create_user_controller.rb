@@ -28,7 +28,8 @@ class UsersController < ApplicationController
           redirect_to user_profile_url(id: @user.username)
         end
       else
-        flash.now[:notice] = "Could not create your account, please fill in all required fields."
+        flash.now[:notice] = "Could not create your account, " +
+          "please fill in all required fields."
         render action: :new
       end
     end
@@ -66,20 +67,19 @@ class UsersController < ApplicationController
       if @invite && @invite.expired?
         session.delete(:invite_token)
         flash[:notice] = "Your invite has expired"
-        redirect_to login_users_url and return
+        redirect_to login_users_url
       end
     end
 
     def check_for_signups_allowed
       if !Sugar.config.signups_allowed && User.any? && !@invite
         flash[:notice] = "Signups are not allowed"
-        redirect_to login_users_url and return
+        redirect_to login_users_url
       end
     end
 
     def facebook_user_params
       session[:facebook_user_params] || {}
     end
-
   end
 end
