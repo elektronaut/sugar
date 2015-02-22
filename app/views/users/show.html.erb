@@ -85,10 +85,17 @@
   </p>
 
   <p>
-    <% if @user.birthday? %><strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br /><% end %>
-    <strong>Member since</strong>: <%= time_tag @user.created_at, class: 'relative' %><br />
-    <% if @user.inviter %><strong>Invited by</strong>: <%= profile_link(@user.inviter) %><br /><% end %>
-    <strong>Last active</strong>: <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, class: 'relative') %><br />
+    <% if @user.birthday? %>
+      <strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br />
+    <% end %>
+    <strong>Member since</strong>:
+    <%= time_tag @user.created_at, class: 'relative' %><br />
+    <% if @user.inviter %>
+      <strong>Invited by</strong>:
+      <%= profile_link(@user.inviter) %><br />
+    <% end %>
+    <strong>Last active</strong>:
+    <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, class: 'relative') %><br />
     <% if @user.banned? %>
       <%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
     <% elsif @user.admin? %>
@@ -97,45 +104,102 @@
   </p>
 
   <p>
-    <% if @user.gtalk? %><strong>Google Talk</strong>: <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br /><% end %>
-    <% if @user.msn? %><strong>MSN Messenger</strong>: <%= @user.msn %><br /><% end %>
-    <% if @user.aim? %><strong>AIM</strong>: <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br /><% end %>
-    <% if @user.instagram? %><strong>Instagram</strong>: <%= @user.instagram %><br /><% end %>
+    <% if @user.gtalk? %>
+      <strong>Google Talk</strong>:
+      <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br />
+    <% end %>
+    <% if @user.msn? %>
+      <strong>MSN Messenger</strong>:
+      <%= @user.msn %><br />
+    <% end %>
+    <% if @user.aim? %>
+      <strong>AIM</strong>:
+      <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br />
+    <% end %>
+    <% if @user.instagram? %>
+      <strong>Instagram</strong>: <%= @user.instagram %><br />
+    <% end %>
   </p>
 
-  <% if @user.twitter? %><div class="social twitter">
-    <h3>Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", class: 'username' %></h3>
-    <div id="profileTweets">
-      <ul id="twitter_update_list"></ul>
+  <% if @user.twitter? %>
+    <div class="social twitter">
+      <h3>
+        Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", class: 'username' %>
+      </h3>
+      <div id="profileTweets">
+        <ul id="twitter_update_list"></ul>
+      </div>
     </div>
-  </div><% end %>
+  <% end %>
 
-  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? %><div class="social gaming">
-    <% if @user.gamertag? %><strong>Xbox Live:</strong> <a href="http://gamercard.xbox.com/en-US/Profile?Gamertag=<?= @user.gamertag ?>"><%= @user.gamertag %></a><br /><% end %>
-    <% if @user.sony? %><strong>PlayStation:</strong> <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>"><%= @user.sony %></a><br /><% end %>
-    <% if @user.nintendo? %><strong>Nintendo ID:</strong> <a href="http://miiverse.nintendo.com/users/<%= @user.nintendo %>"><%= @user.nintendo %></a><br /><% end %>
-    <% if @user.steam? %><strong>Steam ID:</strong> <a href="http://steamcommunity.com/id/<%= @user.steam %>"><%= @user.steam %></a><br /><% end %>
-  </div><% end %>
+  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? %>
+    <div class="social gaming">
+      <% if @user.gamertag? %>
+        <strong>Xbox Live:</strong>
+        <a href="http://gamercard.xbox.com/en-US/Profile?Gamertag=<?= @user.gamertag ?>">
+          <%= @user.gamertag %>
+        </a>
+        <br />
+      <% end %>
+      <% if @user.sony? %>
+        <strong>PlayStation:</strong>
+        <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>">
+          <%= @user.sony %>
+        </a>
+        <br />
+      <% end %>
+      <% if @user.nintendo? %>
+        <strong>Nintendo ID:</strong>
+        <a href="http://miiverse.nintendo.com/users/<%= @user.nintendo %>">
+          <%= @user.nintendo %>
+        </a>
+        <br />
+      <% end %>
+      <% if @user.steam? %>
+        <strong>Steam ID:</strong>
+        <a href="http://steamcommunity.com/id/<%= @user.steam %>">
+          <%= @user.steam %>
+        </a>
+        <br />
+      <% end %>
+    </div>
+  <% end %>
 
-  <% if @user.flickr? %><div class="social flickr clearfix">
-    <h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %></h3>
-    <div id="flickrPhotos"></div>
-  </div><% end %>
+  <% if @user.flickr? %>
+    <div class="social flickr clearfix">
+      <h3>
+        <%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %>
+      </h3>
+      <div id="flickrPhotos"></div>
+    </div>
+  <% end %>
 
-  <% if @user.last_fm? %><div class="social lastfm">
-    <h3>Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %></h3>
-    <a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1"><img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" /></a>
-  </div><% end %>
+  <% if @user.last_fm? %>
+    <div class="social lastfm">
+      <h3>
+        Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
+      </h3>
+      <a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1">
+        <img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" />
+      </a>
+    </div>
+  <% end %>
 
-  <% if @user.invitees.count > 0 %><div class="invitees">
-    <h3><%= @user.username %> has invited <%= @user.invitees.count %> users:</h3>
-    <ul><% @user.invitees.each do |invitee| %>
-      <li>
-        <%= profile_link(invitee) %>
-        (joined <%= time_tag invitee.created_at, class: 'relative' %>)
-      </li>
-    <% end %></ul>
-  </div><% end %>
+  <% if @user.invitees.count > 0 %>
+    <div class="invitees">
+      <h3>
+        <%= @user.username %> has invited <%= @user.invitees.count %> users:
+      </h3>
+      <ul>
+        <% @user.invitees.each do |invitee| %>
+          <li>
+            <%= profile_link(invitee) %>
+            (joined <%= time_tag invitee.created_at, class: 'relative' %>)
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
 </div>
 <div id="userPosts">
