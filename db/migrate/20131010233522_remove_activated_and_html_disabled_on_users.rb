@@ -4,6 +4,7 @@ class RemoveActivatedAndHtmlDisabledOnUsers < ActiveRecord::Migration
     remove_column :users, :html_disabled
     remove_column :users, :application
   end
+
   def down
     add_column :users, :activated, :boolean, default: false, null: false
     add_column :users, :html_disabled, :boolean, default: false, null: false
