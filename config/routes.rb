@@ -69,6 +69,8 @@ Sugar::Application.routes.draw do
       get 'xboxlive'
       get 'sony'
       get 'nintendo'
+      get 'steam'
+      
       get 'social'
       get 'online'
       get 'recently_joined'

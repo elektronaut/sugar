@@ -50,7 +50,8 @@ class UsersController < ApplicationController
         :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
         :mobile_theme, :msn, :notify_on_message, :realname,
         :stylesheet_url, :theme, :time_zone, :twitter, :website,
-        :password, :confirm_password, :banned_until, :preferred_format, :sony, :nintendo,
+        :password, :confirm_password, :banned_until, :preferred_format,
+        :sony, :nintendo, :steam,
         avatar_attributes: [:file]
       ]
       if current_user?

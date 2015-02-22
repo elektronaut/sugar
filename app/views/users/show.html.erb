@@ -118,6 +118,14 @@
     <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>"><img src="http://fp.profiles.us.playstation.com/playstation/psn/pid/<%= @user.sony %>.png" width="230" height="155" border="0" /></a>
   </div><% end %>
 
+  <% if @user.nintendo? %><div class="social nintendo">
+    <strong>Nintendo ID:</strong> <a href="http://miiverse.nintendo.com/users/<%= @user.nintendo %>"><%= @user.nintendo %></a>
+  </div><% end %>
+
+  <% if @user.steam? %><div class="social steam">
+    <strong>Steam ID:</strong> <a href="http://steamcommunity.com/id/<%= @user.steam %>"><%= @user.steam %></a>
+  </div><% end %>
+
   <% if @user.flickr? %><div class="social flickr clearfix">
     <h3><%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %></h3>
     <div id="flickrPhotos"></div>

@@ -65,6 +65,14 @@
       <th>PlayStation</th>
       <td><%= @user.sony %></td>
     </tr><% end %>
+    <% if @user.nintendo? %><tr>
+      <th>Nintendo ID</th>
+      <td><%= @user.nintendo %></td>
+    </tr><% end %>
+    <% if @user.steam? %><tr>
+      <th>Steam ID</th>
+      <td><%= @user.steam %></td>
+    </tr><% end %>
     <% if @user.inviter %><tr>
       <th>Invited by</th>
       <td><%= profile_link(@user.inviter) %></td>

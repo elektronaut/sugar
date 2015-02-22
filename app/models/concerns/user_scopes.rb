@@ -51,6 +51,10 @@ module UserScopes
     def nintendo_users
       active.where("nintendo IS NOT NULL AND nintendo != ''")
     end
+
+    def steam_users
+      active.where("steam IS NOT NULL AND steam != ''")
+    end
   end
 
 end
