@@ -4,6 +4,7 @@ class MarkdownDecorator
   code: (str, language) -> ["```#{language}\n", str, "\n```"]
   emphasis: (str)       -> ["_", str, "_"]
   image: (url)          -> ["![](", url, ")"]
+  youtube: (url)          -> ["!y[Video title](", url, ")"]
   link: (url, name)     -> ["[", name, "](#{url})"]
   quote: (text, html, username, permalink) ->
     wrapInBlockquote = (str) ->
@@ -22,6 +23,15 @@ class HtmlDecorator
   code: (str, language) -> ["```#{language}\n", str, "\n```"]
   emphasis: (str)       -> ["<i>", str, "</i>"]
   image: (url)          -> ["<img src=\"", url, "\">"]
+  youtube: (url) ->
+    code = undefined
+    regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+    match = url.match(regExp)
+    if match and match[7].length is 11
+      code = match[7]
+    else
+      return [""]
+    return ["<iframe src=\"https://www.youtube.com/embed/", code, "\" frameborder=\"0\" allowfullscreen></iframe>"]
   link: (url, name)     -> ["<a href=\"#{url}\">", name, "</a>"]
   quote: (text, html, username, permalink) ->
     cite = if permalink
@@ -162,6 +172,11 @@ Sugar.RichTextArea = (textarea, options) ->
   addButton "Image", "picture", (selection) ->
     url = if selection.length > 0 then selection else prompt("Enter image URL", "")
     decorator().image(url)
+
+    # Youtube tag
+  addButton "Youtube", "youtube", (selection) ->
+    url = if selection.length > 0 then selection else prompt("Enter video URL", "")
+    decorator().youtube(url)
 
   # Block Quote
   addButton "Block Quote", "quote-left", (selection) -> decorator().blockquote(selection)
