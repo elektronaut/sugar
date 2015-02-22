@@ -1,7 +1,8 @@
 class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
-      t.string     :username, :realname, :email, :hashed_password, :location, :gamertag, :avatar_url
+      t.string     :username, limit: 100
+      t.string     :realname, :email, :hashed_password, :location, :gamertag, :avatar_url
       t.string     :stylesheet_url
       t.text       :description
       t.boolean    :banned, :activated, :admin, :trusted, :user_admin, :moderator, :work_safe_urls, :html_disabled, null: false, default: false
