@@ -26,7 +26,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def find_user
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: "not-found" }.to_json, status: 404 and return
+    render json: { error: "not-found" }.to_json, status: 404
+    return
   end
-
 end
