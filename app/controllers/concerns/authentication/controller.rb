@@ -141,8 +141,8 @@ module Authentication
         )
         flash[:notice] =
           "You have been banned for " +
-          distance_of_time_in_words(Time.now, current_user.banned_until) +
-          "!"
+            distance_of_time_in_words(Time.now, current_user.banned_until) +
+            "!"
         deauthenticate!
       end
     end
@@ -173,8 +173,8 @@ module Authentication
 
     def cleanup_temporary_ban
       if current_user? &&
-         current_user.banned_until? &&
-         !current_user.temporary_banned?
+          current_user.banned_until? &&
+          !current_user.temporary_banned?
         current_user.update_attributes(banned_until: nil)
       end
     end

@@ -28,7 +28,7 @@ class UsersController < ApplicationController
         success = start_openid_session(
           params[:user][:openid_url],
           success: update_openid_user_url(id: @user.username),
-          fail:    edit_user_page_url(id: @user.username, page: "settings")
+          fail: edit_user_page_url(id: @user.username, page: "settings")
         )
         unless success
           flash[:notice] = "WARNING: Your OpenID URL is invalid!"
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
         success = start_openid_session(
           params[:user][:openid_url],
           success: update_openid_user_url(id: @user.username),
-          fail:    edit_user_page_url(id: @user.username, page: @page)
+          fail: edit_user_page_url(id: @user.username, page: @page)
         )
         unless success
           flash.now[:notice] = "That's not a valid OpenID URL!"

@@ -29,9 +29,9 @@ class FacebookController < ApplicationController
     )
       session[:facebook_user_params] = {
         facebook_uid: @user_info[:id],
-        email:        @user_info[:email],
-        realname:     @user_info[:name],
-        username:     (@user_info[:username] || @user_info[:name])
+        email: @user_info[:email],
+        realname: @user_info[:name],
+        username: (@user_info[:username] || @user_info[:name])
       }
     else
       flash[:error] = "Failed to verify your Facebook account"
@@ -51,7 +51,7 @@ class FacebookController < ApplicationController
       flash[:error] = "Failed to verify your Facebook account"
     end
     redirect_to edit_user_page_url(
-      id:   current_user.username,
+      id: current_user.username,
       page: "services"
     )
   end
@@ -60,7 +60,7 @@ class FacebookController < ApplicationController
     current_user.update_attribute(:facebook_uid, nil)
     flash[:notice] = "You have disconnected your Facebook account"
     redirect_to edit_user_page_url(
-      id:   current_user.username,
+      id: current_user.username,
       page: "services"
     )
   end
@@ -108,8 +108,6 @@ class FacebookController < ApplicationController
         logger.error "Facebook API error: #{e.message}"
         nil
       end
-    else
-      nil
     end
   end
 end

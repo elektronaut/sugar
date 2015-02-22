@@ -6,7 +6,7 @@ class UsersController < ApplicationController
       @users = User.active.by_username
       respond_with(@users) do |format|
         format.mobile do
-          @online_users = @users.select { |u| u.online? }
+          @online_users = @users.select(&:online?)
         end
       end
     end
