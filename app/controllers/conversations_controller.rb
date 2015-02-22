@@ -33,7 +33,8 @@ class ConversationsController < ApplicationController
       @exchange.add_participant(@recipient) if @recipient
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your conversation! Please make sure all required fields are filled in."
+      flash.now[:notice] = "Could not save your conversation! " +
+        "Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
   end
@@ -56,7 +57,7 @@ class ConversationsController < ApplicationController
       end
     end
     if request.xhr?
-      render template: 'conversations/participants', layout: false
+      render template: "conversations/participants", layout: false
     else
       redirect_to @exchange
     end
@@ -64,21 +65,24 @@ class ConversationsController < ApplicationController
 
   def remove_participant
     @exchange.remove_participant(current_user)
-    flash[:notice] = 'You have been removed from the conversation'
-    redirect_to conversations_url and return
+    flash[:notice] = "You have been removed from the conversation"
+    redirect_to conversations_url
   end
 
   private
 
   def exchange_params
-    params.require(:conversation).permit(:recipient_id, :title, :body, :format, :recipient_id)
+    params.require(:conversation).permit(
+      :recipient_id, :title, :body, :format, :recipient_id
+    )
   end
 
   def find_exchange
     @exchange = Conversation.find(params[:id])
 
     unless @exchange.viewable_by?(current_user)
-      render_error 403 and return
+      render_error 403
+      return
     end
   end
 
@@ -91,5 +95,4 @@ class ConversationsController < ApplicationController
       end
     end
   end
-
 end
