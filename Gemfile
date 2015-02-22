@@ -71,6 +71,7 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
   gem 'web-console', '~> 2.0'
+  gem 'hound-tools', '~> 0.0.4', require: false
 end
 
 group :development_mac do
