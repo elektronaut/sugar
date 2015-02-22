@@ -62,7 +62,6 @@ class Configuration
   module IntegrationSettings
     extend ActiveSupport::Concern
     included do
-      setting :xbox_live_enabled,    :boolean, false
       setting :flickr_api,           :string
       setting :google_analytics,     :string
       setting :amazon_associates_id, :string
