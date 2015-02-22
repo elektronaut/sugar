@@ -13,8 +13,8 @@ describe Post do
   let(:moderator)          { create(:moderator) }
   let(:admin)              { create(:admin) }
   let(:user_admin)         { create(:user_admin) }
-  let(:mentioned_users)    { ["eléktronaut", "#1", "With space"].map{|u| create(:user, username: u) } }
-  let(:mentioning_post)    { create(:post, body: mentioned_users.map{|u| "@#{u.username.downcase}" }.join(" and ")) }
+  let(:mentioned_users)    { ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) } }
+  let(:mentioning_post)    { create(:post, body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")) }
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:exchange) }

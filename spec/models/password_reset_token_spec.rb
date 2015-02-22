@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe PasswordResetToken do
   let (:password_reset_token) { create(:password_reset_token) }
@@ -31,7 +31,7 @@ describe PasswordResetToken do
     end
 
     context "when a doesn't exist" do
-      let(:token) { 'wrong token' }
+      let(:token) { "wrong token" }
       it { is_expected.to eq(nil) }
     end
   end

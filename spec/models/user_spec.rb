@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe User do
   let(:user)         { build(:user) }
@@ -8,14 +8,16 @@ describe User do
   let(:admin)        { build(:admin) }
   let(:moderator)    { build(:moderator) }
   let(:user_admin)   { build(:user_admin) }
-  let(:public_attributes) { [
-    "admin", "banned_until", "created_at", "description",
-    "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
-    "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
-    "moderator", "msn", "realname", "twitter", "user_admin",
-    "username", "website", "active", "banned",
-    "sony", "nintendo", "steam"
-  ] }
+  let(:public_attributes) do
+    [
+      "admin", "banned_until", "created_at", "description",
+      "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
+      "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
+      "moderator", "msn", "realname", "twitter", "user_admin",
+      "username", "website", "active", "banned",
+      "sony", "nintendo", "steam"
+    ]
+  end
 
   subject { user }
 
@@ -26,15 +28,19 @@ describe User do
 
   it { is_expected.to belong_to(:avatar).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
-  it { is_expected.to validate_uniqueness_of(:username)
-      .case_insensitive.with_message(/is already registered/) }
+  it do
+    is_expected.to validate_uniqueness_of(:username)
+      .case_insensitive.with_message(/is already registered/)
+  end
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
   it { is_expected.to allow_value("فاطمة").for(:username) }
   it { is_expected.to allow_value("王秀英").for(:username) }
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
-  it { is_expected.to validate_uniqueness_of(:email)
-      .case_insensitive.with_message(/is already registered/) }
+  it do
+    is_expected.to validate_uniqueness_of(:email)
+      .case_insensitive.with_message(/is already registered/)
+  end
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
 
@@ -58,7 +64,7 @@ describe User do
     subject { user.name_and_email }
 
     context "when realname is set" do
-      let(:user) { build(:user, realname: 'John') }
+      let(:user) { build(:user, realname: "John") }
       it { is_expected.to eq("#{user.realname} <#{user.email}>") }
     end
 
@@ -70,15 +76,15 @@ describe User do
 
   describe "#previous_usernames" do
     subject { user.previous_usernames }
-    let(:user) { create(:user, username: 'originalname') }
+    let(:user) { create(:user, username: "originalname") }
 
     context "when username hasn't been changed" do
       it { is_expected.to eq([]) }
     end
 
     context "when username changes" do
-      before { user.update(username: 'newname') }
-      it { is_expected.to eq(['originalname']) }
+      before { user.update(username: "newname") }
+      it { is_expected.to eq(["originalname"]) }
     end
   end
 
@@ -86,7 +92,7 @@ describe User do
     subject { user.realname_or_username }
 
     context "when realname is set" do
-      let(:user) { build(:user, realname: 'John') }
+      let(:user) { build(:user, realname: "John") }
       it { is_expected.to eq(user.realname) }
     end
 
@@ -134,8 +140,10 @@ describe User do
     specify { expect(admin.admin_labels).to eq(["Admin"]) }
     specify { expect(user_admin.admin_labels).to eq(["User Admin"]) }
     specify { expect(moderator.admin_labels).to eq(["Moderator"]) }
-    specify { expect(build(:user, moderator: true, user_admin: true)
-      .admin_labels).to eq(["User Admin", "Moderator"]) }
+    specify do
+      expect(build(:user, moderator: true, user_admin: true)
+      .admin_labels).to eq(["User Admin", "Moderator"])
+    end
     specify { expect(user.admin_labels).to eq([]) }
   end
 
@@ -189,9 +197,11 @@ describe User do
 
     context "when gamertag is nil" do
       let(:user) { build(:user, gamertag: "my gamertag") }
-      it { is_expected.to(
+      it do
+        is_expected.to(
         eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
-      ) }
+      )
+      end
     end
   end
 

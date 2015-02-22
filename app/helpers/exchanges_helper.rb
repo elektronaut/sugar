@@ -1,14 +1,13 @@
 # encoding: utf-8
 
 module ExchangesHelper
-
   # Returns an array of class names for an exchange
   def exchange_classes(collection, exchange)
     @exchange_classes ||= {}
     @exchange_classes[[collection, exchange]] ||= [
       exchange.labels.map(&:downcase),
       %w{odd even}[collection.to_a.index(exchange) % 2],
-      (new_posts?(exchange) ? 'new_posts' : nil),
+      (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",
       "discussion#{exchange.id}"
@@ -34,12 +33,11 @@ module ExchangesHelper
   end
 
   def post_page(post)
-    if controller.kind_of?(ExchangesController) && params[:action] == 'show' && @posts
+    if controller.is_a?(ExchangesController) && params[:action] == "show" && @posts
       # Speed tweak
       @posts.current_page
     else
       post.page
     end
   end
-
 end

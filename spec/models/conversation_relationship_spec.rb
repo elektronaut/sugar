@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe ConversationRelationship do
   before { create(:conversation_relationship) }

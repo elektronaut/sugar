@@ -1,16 +1,15 @@
 # encoding: utf-8
 
-require File.expand_path('../boot', __FILE__)
-require File.expand_path('../../app/themes/theme', __FILE__)
+require File.expand_path("../boot", __FILE__)
+require File.expand_path("../../app/themes/theme", __FILE__)
 
-require 'rails/all'
+require "rails/all"
 
 if defined?(Bundler)
   Bundler.require(:default, Rails.env)
-  Bundler.require([Rails.env, 'mac'].join('_')) if RUBY_PLATFORM =~ /darwin/
-  Bundler.require(:newrelic) if File.exist?(File.join(File.dirname(__FILE__), 'newrelic.yml'))
+  Bundler.require([Rails.env, "mac"].join("_")) if RUBY_PLATFORM =~ /darwin/
+  Bundler.require(:newrelic) if File.exist?(File.join(File.dirname(__FILE__), "newrelic.yml"))
 end
-
 
 module Sugar
   class Application < Rails::Application
@@ -32,7 +31,7 @@ module Sugar
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'UTC'
+    config.time_zone = "UTC"
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -65,4 +64,4 @@ module Sugar
   end
 end
 
-require Rails.root.join('lib/sugar.rb')
+require Rails.root.join("lib/sugar.rb")

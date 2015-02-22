@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Discussion do
 
@@ -17,7 +17,7 @@ describe Discussion do
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
   it { is_expected.to be_kind_of(Exchange) }
 
-  describe 'save callbacks' do
+  describe "save callbacks" do
     it "changes the trusted status on discussions" do
       create(:post, exchange: discussion)
       expect(discussion.posts.first.trusted?).to eq(false)

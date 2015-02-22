@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class LinkFilter < Filter
-
   HTTPS_WHITELIST = %w{
     youtube.com
     *.youtube.com
@@ -31,7 +30,7 @@ class LinkFilter < Filter
 
   def matches_https_whitelist?(url)
     host = URI.parse(url).host
-    HTTPS_WHITELIST.find { |domain| File.fnmatch(domain, host) }
+    HTTPS_WHITELIST.detect { |domain| File.fnmatch(domain, host) }
   end
 
   def url_exists?(url)
@@ -56,10 +55,10 @@ class LinkFilter < Filter
 
   def relativize_local_links!
     parser.search("a").each do |link|
-      if href = link.try(:attributes).try(:[], 'href').try(:value)
+      if href = link.try(:attributes).try(:[], "href").try(:value)
         host = URI.parse(href).host
-        if local_domains.find { |d| host == d }
-          link.set_attribute 'href', href.gsub(Regexp.new("(https?:)?\/\/" + Regexp.escape(host)), "")
+        if local_domains.detect { |d| host == d }
+          link.set_attribute "href", href.gsub(Regexp.new("(https?:)?\/\/" + Regexp.escape(host)), "")
         end
       end
     end
@@ -67,9 +66,9 @@ class LinkFilter < Filter
 
   def rewrite_for_https_support!
     parser.css("iframe,img").each do |iframe|
-      if src = iframe.try(:attributes).try(:[], 'src').try(:value)
+      if src = iframe.try(:attributes).try(:[], "src").try(:value)
         if matches_https_whitelist?(src) || (src =~ /\Ahttp:\/\// && url_exists?(src))
-          iframe.set_attribute 'src', src.gsub(/\Ahttps?:\/\//, "//")
+          iframe.set_attribute "src", src.gsub(/\Ahttps?:\/\//, "//")
         end
       end
     end

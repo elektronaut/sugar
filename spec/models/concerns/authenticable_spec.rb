@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Authenticable do
 
   # Create the first admin user
-  before { create(:user, openid_url: 'http://whatever.com', facebook_uid: 345 ) }
+  before { create(:user, openid_url: "http://whatever.com", facebook_uid: 345) }
 
-  let(:user)          { create(:user, facebook_uid: 123, openid_url: 'http://example.com') }
+  let(:user)          { create(:user, facebook_uid: 123, openid_url: "http://example.com") }
   let(:banned_user)   { create(:banned_user) }
 
   subject { user }
@@ -23,33 +23,33 @@ describe Authenticable do
     before { user.valid? }
 
     context "when confirm_password is missing" do
-      let(:user) { build(:user, password: 'new') }
+      let(:user) { build(:user, password: "new") }
       specify { expect(subject.length).to eq(1) }
     end
 
     context "when confirm_password is wrong" do
-      let(:user) { build(:user, password: 'new', confirm_password: 'wrong') }
+      let(:user) { build(:user, password: "new", confirm_password: "wrong") }
       specify { expect(subject.length).to eq(1) }
     end
 
     context "when confirm_password is present" do
-      let(:user) { build(:user, password: 'new', confirm_password: 'new') }
+      let(:user) { build(:user, password: "new", confirm_password: "new") }
       it { is_expected.to eq([]) }
     end
   end
 
   describe ".encrypt_password" do
     before do
-      allow(BCrypt::Password).to receive(:create).and_return('hashed password')
+      allow(BCrypt::Password).to receive(:create).and_return("hashed password")
     end
-    subject { User.encrypt_password('password') }
-    it { is_expected.to eq('hashed password') }
+    subject { User.encrypt_password("password") }
+    it { is_expected.to eq("hashed password") }
   end
 
   describe ".find_and_authenticate_with_password" do
-    let(:username) { 'user123' }
-    let(:password) { 'password123' }
-    let!(:user) { create(:user, username: 'user123', password: 'password123', confirm_password: 'password123') }
+    let(:username) { "user123" }
+    let(:password) { "password123" }
+    let!(:user) { create(:user, username: "user123", password: "password123", confirm_password: "password123") }
     subject { User.find_and_authenticate_with_password(username, password) }
 
     context "when username and password is correct" do
@@ -57,7 +57,7 @@ describe Authenticable do
     end
 
     context "when username is wrong" do
-      let(:username) { 'user456' }
+      let(:username) { "user456" }
       it { is_expected.to eq(nil) }
     end
 
@@ -67,7 +67,7 @@ describe Authenticable do
     end
 
     context "when password is wrong" do
-      let(:password) { 'password456' }
+      let(:password) { "password456" }
       it { is_expected.to eq(nil) }
     end
 
@@ -186,8 +186,8 @@ describe Authenticable do
     end
 
     context "when password is set" do
-     let(:user) { create(:user, password: 'new', confirm_password: 'new') }
-     it { is_expected.to eq('new') }
+      let(:user) { create(:user, password: "new", confirm_password: "new") }
+      it { is_expected.to eq("new") }
     end
 
   end
@@ -197,19 +197,19 @@ describe Authenticable do
     subject { user.openid_url }
 
     context "when missing http" do
-      let(:user) { build(:user, openid_url: 'example.com') }
-      it { is_expected.to eq('http://example.com/') }
+      let(:user) { build(:user, openid_url: "example.com") }
+      it { is_expected.to eq("http://example.com/") }
     end
 
     context "when not missing http" do
-      let(:user) { build(:user, openid_url: 'https://example.com') }
-      it { is_expected.to eq('https://example.com/') }
+      let(:user) { build(:user, openid_url: "https://example.com") }
+      it { is_expected.to eq("https://example.com/") }
     end
 
   end
 
   describe "#encrypt_new_password" do
-    let(:user) { build(:user, hashed_password: nil, password: 'new', confirm_password: 'new') }
+    let(:user) { build(:user, hashed_password: nil, password: "new", confirm_password: "new") }
     before { user.valid? }
     subject { user.hashed_password }
     it { is_expected.to_not be_blank }

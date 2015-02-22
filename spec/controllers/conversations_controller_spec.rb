@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ConversationsController do
   let(:user) { create(:user) }
@@ -17,7 +17,7 @@ describe ConversationsController do
   it_requires_login_for :show, :edit, :update
   it_requires_login_for :invite_participant, :remove_participant
 
-  describe 'GET index' do
+  describe "GET index" do
     before do
       login(user)
       get :index
@@ -28,7 +28,7 @@ describe ConversationsController do
     it { is_expected.to render_template(:index) }
   end
 
-  describe 'GET show' do
+  describe "GET show" do
     before do
       login(user)
       get :show, id: conversation_with_user
@@ -39,7 +39,7 @@ describe ConversationsController do
     it { is_expected.to render_template(:show) }
   end
 
-  describe 'DELETE remove_participant' do
+  describe "DELETE remove_participant" do
     before do
       login(user)
       delete :remove_participant, id: conversation_with_user
@@ -65,7 +65,7 @@ describe ConversationsController do
 
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
-      before { get :new, type: 'conversation', username: recipient.username }
+      before { get :new, type: "conversation", username: recipient.username }
       specify { expect(assigns(:exchange)).to be_a(Conversation) }
       specify { expect(assigns(:recipient)).to eq(recipient) }
       it { is_expected.to render_template(:new) }
@@ -81,7 +81,7 @@ describe ConversationsController do
       before do
         post :create,
              recipient_id: recipient.id,
-             conversation: { title: 'Test', body: 'Test' }
+             conversation: { title: "Test", body: "Test" }
       end
 
       specify { expect(assigns(:recipient)).to be_a(User) }

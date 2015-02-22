@@ -18,5 +18,4 @@ class PostObserver < ActiveRecord::Observer
   def after_destroy(post)
     clean_cache_for(post)
   end
-
 end

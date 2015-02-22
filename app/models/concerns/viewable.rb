@@ -19,5 +19,4 @@ module Viewable
       (Sugar.public_browsing? || user) ? true : false
     end
   end
-
 end

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe UserScopes do
 
@@ -16,8 +16,8 @@ describe UserScopes do
 
   describe "by_username" do
     before { first_user.destroy }
-    let!(:user1) { create(:user, username: 'danz') }
-    let!(:user2) { create(:user, username: 'adam') }
+    let!(:user1) { create(:user, username: "danz") }
+    let!(:user2) { create(:user, username: "adam") }
     subject { User.by_username }
     it { is_expected.to eq([user2, user1]) }
   end
@@ -48,38 +48,38 @@ describe UserScopes do
   end
 
   describe "xbox_users" do
-    let!(:xbox_user) { create(:user, gamertag: 'example') }
+    let!(:xbox_user) { create(:user, gamertag: "example") }
     let!(:non_xbox_user) { create(:user, gamertag: nil) }
     subject { User.xbox_users }
     it { is_expected.to eq([xbox_user]) }
   end
 
   describe "sony_users" do
-    let!(:sony_user) { create(:user, sony: 'example') }
+    let!(:sony_user) { create(:user, sony: "example") }
     let!(:non_sony_user) { create(:user, sony: nil) }
     subject { User.sony_users }
     it { is_expected.to eq([sony_user]) }
   end
 
   describe "nintendo_users" do
-    let!(:nintendo_user) { create(:user, nintendo: 'example') }
+    let!(:nintendo_user) { create(:user, nintendo: "example") }
     let!(:non_nintendo_user) { create(:user, nintendo: nil) }
     subject { User.nintendo_users }
     it { is_expected.to eq([nintendo_user]) }
   end
 
   describe "steam_users" do
-    let!(:steam_user) { create(:user, steam: 'example') }
+    let!(:steam_user) { create(:user, steam: "example") }
     let!(:non_steam_user) { create(:user, steam: nil) }
     subject { User.steam_users }
     it { is_expected.to eq([steam_user]) }
   end
-  
+
   describe "social" do
     let!(:user) { create(:user) }
-    let!(:twitter) { create(:admin, twitter: 'elektronaut') }
-    let!(:instagram) { create(:admin, instagram: 'elektronaut') }
-    let!(:flickr) { create(:admin, flickr: 'elektronaut') }
+    let!(:twitter) { create(:admin, twitter: "elektronaut") }
+    let!(:instagram) { create(:admin, instagram: "elektronaut") }
+    let!(:flickr) { create(:admin, flickr: "elektronaut") }
     subject { User.social }
     it { is_expected.to match_array([twitter, instagram, flickr]) }
   end

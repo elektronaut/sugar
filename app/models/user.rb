@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'digest/sha1'
+require "digest/sha1"
 
 # = User accounts
 #
@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
 
   validates :email,
             email: true,
-            uniqueness: { case_sensitive: false, message: 'is already registered' },
+            uniqueness: { case_sensitive: false, message: "is already registered" },
             if: :email?
 
   validates :email,
@@ -38,15 +38,15 @@ class User < ActiveRecord::Base
             unless: Proc.new { |u| u.openid_url? || u.facebook? }
 
   def name_and_email
-    self.realname? ? "#{self.realname} <#{self.email}>" : self.email
+    self.realname? ? "#{realname} <#{email}>" : email
   end
 
   def realname_or_username
-    self.realname? ? self.realname : self.username
+    self.realname? ? realname : username
   end
 
   def online?
-    (self.last_active && self.last_active > 15.minutes.ago) ? true : false
+    (last_active && last_active > 15.minutes.ago) ? true : false
   end
 
   def trusted?
@@ -78,22 +78,22 @@ class User < ActiveRecord::Base
   end
 
   def theme
-    self.theme? ? self.attributes['theme'] : Sugar.config.default_theme
+    self.theme? ? attributes["theme"] : Sugar.config.default_theme
   end
 
   def mark_active!
-    if !self.last_active || self.last_active < 10.minutes.ago
-      self.update_columns(last_active: Time.now)
+    if !last_active || last_active < 10.minutes.ago
+      update_columns(last_active: Time.now)
     end
   end
 
   def mobile_theme
-    self.mobile_theme? ? self.attributes['mobile_theme'] : Sugar.config.default_mobile_theme
+    self.mobile_theme? ? attributes["mobile_theme"] : Sugar.config.default_mobile_theme
   end
 
   def gamertag_avatar_url
     if self.gamertag?
-      "http://avatar.xboxlive.com/avatar/#{URI.escape(self.gamertag)}/avatarpic-l.png"
+      "http://avatar.xboxlive.com/avatar/#{URI.escape(gamertag)}/avatarpic-l.png"
     end
   end
 
@@ -112,29 +112,29 @@ class User < ActiveRecord::Base
     [:active, :banned]
   end
 
-  def as_json(options={})
-    super({only: serializable_params, methods: serializable_methods}.merge(options))
+  def as_json(options = {})
+    super({ only: serializable_params, methods: serializable_methods }.merge(options))
   end
 
-  def to_xml(options={})
-    super({only: serializable_params, methods: serializable_methods}.merge(options))
+  def to_xml(options = {})
+    super({ only: serializable_params, methods: serializable_methods }.merge(options))
   end
 
   protected
 
-    def ensure_last_active_is_set
-      self.last_active ||= Time.now
-    end
+  def ensure_last_active_is_set
+    self.last_active ||= Time.now
+  end
 
-    def check_for_first_user
-      unless User.any?
-        self.admin = true
-      end
+  def check_for_first_user
+    unless User.any?
+      self.admin = true
     end
+  end
 
-    def check_username_change
-      if self.username_changed?
-        self[:previous_usernames] = ([self.username_was] + previous_usernames).join("\n")
-      end
+  def check_username_change
+    if self.username_changed?
+      self[:previous_usernames] = ([username_was] + previous_usernames).join("\n")
     end
+  end
 end

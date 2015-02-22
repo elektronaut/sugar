@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Invite do
   subject(:invite) { build(:invite) }
@@ -14,7 +14,7 @@ describe Invite do
     subject { build(:invite, email: email) }
 
     context "when not registered" do
-      let(:email) { 'test@example.com' }
+      let(:email) { "test@example.com" }
       it { is_expected.to be_valid }
     end
 
@@ -42,9 +42,9 @@ describe Invite do
 
     it "revokes an invite from the inviter" do
       inviter = create(:user, available_invites: 1)
-      expect {
+      expect do
         create(:invite, user: inviter)
-      }.to change{inviter.available_invites}.by(-1)
+      end.to change { inviter.available_invites }.by(-1)
     end
   end
 
@@ -53,17 +53,17 @@ describe Invite do
     context "when invite has been used" do
       before { invite.used = true }
       it "doesn't grant the user an invite" do
-        expect {
+        expect do
           invite.destroy
-        }.not_to change{ invite.user.available_invites }
+        end.not_to change { invite.user.available_invites }
       end
     end
 
     context "when invite hasn't been used" do
       it "grants the inviter back an invite" do
-        expect {
+        expect do
           invite.destroy
-        }.to change{ invite.user.available_invites }.by(1)
+        end.to change { invite.user.available_invites }.by(1)
       end
     end
   end
@@ -99,9 +99,9 @@ describe Invite do
     let!(:expired_invite) { create(:expired_invite) }
 
     it "destroys all expired invites" do
-      expect {
+      expect do
         Invite.destroy_expired!
-      }.to change{ Invite.count }.by(-1)
+      end.to change { Invite.count }.by(-1)
     end
 
   end
@@ -123,7 +123,7 @@ describe Invite do
   describe "#expire!" do
     let!(:invite) { create(:expired_invite) }
     it "destroys the invite" do
-      expect { Invite.destroy_expired! }.to change{Invite.count}.by(-1)
+      expect { Invite.destroy_expired! }.to change { Invite.count }.by(-1)
     end
   end
 

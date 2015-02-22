@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvitesController do
   # Create the first admin user
@@ -122,8 +122,8 @@ describe InvitesController do
     context "with valid params" do
       before do
         post :create, invite: {
-          email:   'no-reply@example.com',
-          message: 'testing message'
+          email:   "no-reply@example.com",
+          message: "testing message"
         }
       end
 
@@ -135,8 +135,8 @@ describe InvitesController do
         )
       end
 
-      specify { expect(last_email.to).to eq(['no-reply@example.com']) }
-      specify { expect(last_email.body.encoded).to match('testing message') }
+      specify { expect(last_email.to).to eq(["no-reply@example.com"]) }
+      specify { expect(last_email.body.encoded).to match("testing message") }
 
       it { is_expected.to redirect_to(invites_url) }
     end
@@ -147,8 +147,8 @@ describe InvitesController do
           raise Net::SMTPSyntaxError
         end
         post :create, invite: {
-          email:   'totally@wrong.com',
-          message: 'testing message'
+          email:   "totally@wrong.com",
+          message: "testing message"
         }
       end
 
@@ -170,7 +170,7 @@ describe InvitesController do
     end
 
     context "with invalid params" do
-      before { post :create, invite: { foo: 'bar' } }
+      before { post :create, invite: { foo: "bar" } }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
@@ -179,7 +179,7 @@ describe InvitesController do
 
   describe "DELETE destroy" do
     context "when user owns the invite" do
-      before { login(invite.user) and delete(:destroy, id: invite.id) }
+      before { login(invite.user) && delete(:destroy, id: invite.id) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(true) }
@@ -190,7 +190,7 @@ describe InvitesController do
     end
 
     context "when user doesn't own the invite" do
-      before { login(user) and delete(:destroy, id: invite.id) }
+      before { login(user) && delete(:destroy, id: invite.id) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(false) }

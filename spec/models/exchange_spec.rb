@@ -5,7 +5,7 @@ describe Exchange do
   # Create the first admin user
   before { create(:user) }
 
-  let(:exchange)         { create(:exchange, title: 'This is my Discussion', body: 'First post!') }
+  let(:exchange)         { create(:exchange, title: "This is my Discussion", body: "First post!") }
   let(:nsfw_exchange)    { create(:exchange, nsfw: true) }
   let(:user)             { create(:user) }
   let(:trusted_user)     { create(:trusted_user) }
@@ -19,15 +19,15 @@ describe Exchange do
   it { is_expected.to have_many(:posts).dependent(:destroy) }
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
 
-  it { is_expected.to validate_presence_of(:title)}
+  it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to ensure_length_of(:title).is_at_most(100) }
-  it { is_expected.to validate_presence_of(:body)}
+  it { is_expected.to validate_presence_of(:body) }
 
   describe "#updated_by" do
-    it 'changes closer when updating' do
-      expect {
+    it "changes closer when updating" do
+      expect do
         exchange.update_attributes(closed: true, updated_by: moderator)
-      }.to change{ exchange.closer }.from(nil).to(moderator)
+      end.to change { exchange.closer }.from(nil).to(moderator)
     end
   end
 
@@ -64,10 +64,10 @@ describe Exchange do
     specify { expect(Exchange.new(sticky: true).labels).to eq(["Sticky"]) }
     specify { expect(Exchange.new(closed: true).labels).to eq(["Closed"]) }
     specify { expect(Exchange.new(nsfw: true).labels).to eq(["NSFW"]) }
-    specify {
+    specify do
       expect(Exchange.new(trusted: true, sticky: true, closed: true, nsfw: true)
         .labels).to eq(["Trusted", "Sticky", "Closed", "NSFW"])
-    }
+    end
   end
 
   describe "#to_param" do
@@ -146,7 +146,7 @@ describe Exchange do
   end
 
   describe "#update_post_body" do
-    before { exchange.update_attributes(body: 'changed post') }
+    before { exchange.update_attributes(body: "changed post") }
     subject { exchange.posts.first }
     specify { expect(subject.body).to eq("changed post") }
   end

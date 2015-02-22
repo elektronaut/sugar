@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PostsController do
 
@@ -15,7 +15,7 @@ describe PostsController do
     before { login(user) }
 
     context "with valid params" do
-      let(:post_params) { {body: "foo", format: "html"} }
+      let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
         before { post :create, discussion_id: discussion.id, post: post_params }
@@ -41,7 +41,7 @@ describe PostsController do
     end
 
     context "with invalid params" do
-      let(:post_params) { {body: "", format: "html"} }
+      let(:post_params) { { body: "", format: "html" } }
 
       context "HTML format" do
         before { post :create, discussion_id: discussion.id, post: post_params }
@@ -62,7 +62,7 @@ describe PostsController do
     before { login(user) }
 
     context "with valid params" do
-      let(:post_params) { {body: "foo", format: "html"} }
+      let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
         before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params }
@@ -80,7 +80,7 @@ describe PostsController do
     end
 
     context "with invalid params" do
-      let(:post_params) { {body: "", format: "wrong_format"} }
+      let(:post_params) { { body: "", format: "wrong_format" } }
 
       context "HTML format" do
         before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params }

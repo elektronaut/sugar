@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe DiscussionRelationship do
 
@@ -13,7 +13,6 @@ describe DiscussionRelationship do
   specify { expect(subject.favorite?).to eq(false) }
   specify { expect(subject.following?).to eq(true) }
   specify { expect(subject.participated?).to eq(false) }
-
 
   describe ".define" do
 
@@ -39,8 +38,8 @@ describe DiscussionRelationship do
 
       it "creates a new record" do
         discussion # Creating a discussion also creates a separate relationship,
-                   # so this needs to happen first.
-        expect { relationship }.to change{ DiscussionRelationship.count }.by(1)
+        # so this needs to happen first.
+        expect { relationship }.to change { DiscussionRelationship.count }.by(1)
       end
 
     end
@@ -58,7 +57,7 @@ describe DiscussionRelationship do
 
       it "doesn't create a new record" do
         existing
-        expect { relationship }.not_to change{ DiscussionRelationship.count }
+        expect { relationship }.not_to change { DiscussionRelationship.count }
       end
 
     end
@@ -68,21 +67,21 @@ describe DiscussionRelationship do
   describe "#update_user_caches!" do
 
     it "updates caches when created" do
-      expect {
+      expect do
         create(:discussion_relationship, user: user, favorite: true)
-      }.to change{ user.favorites_count }.by(1)
+      end.to change { user.favorites_count }.by(1)
     end
 
     it "updates caches when updated" do
-      expect {
+      expect do
         relationship.update_attributes(favorite: true)
-      }.to change{ relationship.user.favorites_count }.by(1)
+      end.to change { relationship.user.favorites_count }.by(1)
     end
 
     it "updates caches when destroyed" do
-      expect {
+      expect do
         relationship.destroy
-      }.to change{ relationship.user.following_count }.by(-1)
+      end.to change { relationship.user.following_count }.by(-1)
     end
 
   end

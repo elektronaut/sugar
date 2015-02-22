@@ -7,11 +7,11 @@ FactoryGirl.define do
     description         { "Hi, I'm #{realname}!" }
     sequence(:location) { |n| "Location #{n}" }
 
-    admin      false
+    admin false
     user_admin false
-    moderator  false
-    banned     false
-    trusted    false
+    moderator false
+    banned false
+    trusted false
 
     factory :admin do
       admin true
@@ -22,8 +22,8 @@ FactoryGirl.define do
     end
 
     factory :new_user do
-      password 'foobar'
-      confirm_password 'foobar'
+      password "foobar"
+      confirm_password "foobar"
       hashed_password nil
     end
 

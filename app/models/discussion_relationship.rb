@@ -15,22 +15,22 @@ class DiscussionRelationship < ActiveRecord::Base
   end
 
   class << self
-    def define(user, discussion, options={})
-      relationship = self.where(user_id: user.id, discussion_id: discussion.id).first
+    def define(user, discussion, options = {})
+      relationship = where(user_id: user.id, discussion_id: discussion.id).first
       relationship ||= DiscussionRelationship.create(user_id: user.id, discussion_id: discussion.id)
-      relationship.update_attributes(options.merge({trusted: discussion.trusted}))
+      relationship.update_attributes(options.merge(trusted: discussion.trusted))
       relationship.save
       relationship
     end
   end
 
   def update_user_caches!
-    self.user.update_attributes({
-      participated_count: DiscussionRelationship.where(user_id: self.user.id, participated: true).count,
-      following_count:    DiscussionRelationship.where(user_id: self.user.id, following: true).count,
-      favorites_count:    DiscussionRelationship.where(user_id: self.user.id, favorite: true).count,
-      hidden_count:       DiscussionRelationship.where(user_id: self.user.id, hidden: true).count
-    })
+    user.update_attributes(
+      participated_count: DiscussionRelationship.where(user_id: user.id, participated: true).count,
+      following_count:    DiscussionRelationship.where(user_id: user.id, following: true).count,
+      favorites_count:    DiscussionRelationship.where(user_id: user.id, favorite: true).count,
+      hidden_count:       DiscussionRelationship.where(user_id: user.id, hidden: true).count
+    )
   end
 
   protected

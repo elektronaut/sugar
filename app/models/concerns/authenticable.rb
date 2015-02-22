@@ -19,11 +19,11 @@ module Authenticable
               presence: true
 
     validates :openid_url,
-              uniqueness: { message: 'is already registered' },
+              uniqueness: { message: "is already registered" },
               if: :openid_url?
 
     validates :facebook_uid,
-              uniqueness: { message: 'is already registered' },
+              uniqueness: { message: "is already registered" },
               if: :facebook_uid?
 
     before_save :clear_banned_until
@@ -63,78 +63,77 @@ module Authenticable
   end
 
   def generate_new_password!
-    new_password = ''
-    seed = [0..9,'a'..'z','A'..'Z'].map(&:to_a).flatten.map(&:to_s)
-    (7+rand(3)).times{ new_password += seed[rand(seed.length)] }
+    new_password = ""
+    seed = [0..9, "a".."z", "A".."Z"].map(&:to_a).flatten.map(&:to_s)
+    (7 + rand(3)).times { new_password += seed[rand(seed.length)] }
     self.password = self.confirm_password = new_password
   end
 
   def valid_password?(pass)
-    if self.hashed_password.length <= 40
+    if hashed_password.length <= 40
       # Legacy SHA1
-      Digest::SHA1.hexdigest(pass) == self.hashed_password
+      Digest::SHA1.hexdigest(pass) == hashed_password
     else
-      BCrypt::Password.new(self.hashed_password) == pass
+      BCrypt::Password.new(hashed_password) == pass
     end
   end
 
   def hash_password!(password)
-    self.update_attributes(hashed_password: User.encrypt_password(password))
+    update_attributes(hashed_password: User.encrypt_password(password))
   end
 
   def new_password?
-    (self.password &&
-     !self.password.blank?) ? true : false
+    (password &&
+     !password.blank?) ? true : false
   end
 
   def new_password_confirmed?
     (self.new_password? &&
-     self.password == self.confirm_password) ? true : false
+     password == confirm_password) ? true : false
   end
 
   def password_needs_rehash?
-    self.hashed_password.length <= 40
+    hashed_password.length <= 40
   end
 
   def temporary_banned?
-    self.banned_until? && self.banned_until > Time.now
+    self.banned_until? && banned_until > Time.now
   end
 
   protected
 
-    def ensure_password
-      unless self.new_password? || self.hashed_password?
-        if self.openid_url? || self.facebook?
-          self.generate_new_password!
-        end
+  def ensure_password
+    unless self.new_password? || self.hashed_password?
+      if self.openid_url? || self.facebook?
+        self.generate_new_password!
       end
     end
+  end
 
-    def normalize_openid_url
-      if self.openid_url?
-        unless self.openid_url =~ /^https?:\/\//
-          self.openid_url = "http://" + self.openid_url
-        end
-        self.openid_url = OpenID.normalize_url(self.openid_url)
+  def normalize_openid_url
+    if self.openid_url?
+      unless openid_url =~ /^https?:\/\//
+        self.openid_url = "http://" + openid_url
       end
+      self.openid_url = OpenID.normalize_url(openid_url)
     end
+  end
 
-    def encrypt_new_password
-      if self.new_password? && self.new_password_confirmed?
-        self.hashed_password = User.encrypt_password(self.password)
-      end
+  def encrypt_new_password
+    if self.new_password? && self.new_password_confirmed?
+      self.hashed_password = User.encrypt_password(password)
     end
+  end
 
-    def clear_banned_until
-      if self.banned_until? && self.banned_until <= Time.now
-        self.banned_until = nil
-      end
+  def clear_banned_until
+    if self.banned_until? && banned_until <= Time.now
+      self.banned_until = nil
     end
+  end
 
-    def update_persistence_token
-      if !self.persistence_token || self.hashed_password_changed?
-        self.persistence_token = self.class.generate_token
-      end
+  def update_persistence_token
+    if !persistence_token || self.hashed_password_changed?
+      self.persistence_token = self.class.generate_token
     end
-
+  end
 end

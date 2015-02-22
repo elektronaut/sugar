@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ExchangeParticipant do
 
@@ -12,7 +12,7 @@ describe ExchangeParticipant do
 
   it { is_expected.to have_many(:discussions) }
   it { is_expected.to have_many(:posts) }
-  it { is_expected.to have_many(:discussion_posts).class_name('Post') }
+  it { is_expected.to have_many(:discussion_posts).class_name("Post") }
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
   it { is_expected.to have_many(:conversation_relationships).dependent(:destroy) }
@@ -25,9 +25,9 @@ describe ExchangeParticipant do
       let!(:exchange_view) { create(:exchange_view, user: user, exchange: discussion) }
 
       it "does not create a new view" do
-        expect {
+        expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        }.to change{ ExchangeView.count }.by(0)
+        end.to change { ExchangeView.count }.by(0)
       end
 
       describe "the new view" do
@@ -45,9 +45,9 @@ describe ExchangeParticipant do
 
     context "without existing discussion view" do
       it "creates a new view" do
-        expect {
+        expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        }.to change{ ExchangeView.count }.by(1)
+        end.to change { ExchangeView.count }.by(1)
       end
 
       describe "the new discussion view" do
@@ -62,9 +62,9 @@ describe ExchangeParticipant do
 
   describe "#mark_conversation_viewed" do
     let(:user)         { conversation.poster }
-    let(:conversation_relationship) {
+    let(:conversation_relationship) do
       user.conversation_relationships.where(conversation_id: conversation).first
-    }
+    end
     before { conversation_relationship.update_attributes(new_posts: true) }
     before { user.mark_conversation_viewed(conversation) }
     subject { user.conversation_relationships.where(conversation_id: conversation).first }
@@ -82,7 +82,7 @@ describe ExchangeParticipant do
 
     subject { user.posts_per_day }
 
-    it { is_expected.to be_within(0.001).of(1.0/3.0) }
+    it { is_expected.to be_within(0.001).of(1.0 / 3.0) }
   end
 
   describe "#unread_conversations_count" do

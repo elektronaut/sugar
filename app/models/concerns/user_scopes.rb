@@ -56,5 +56,4 @@ module UserScopes
       active.where("steam IS NOT NULL AND steam != ''")
     end
   end
-
 end

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe UsersController, redis: true do
   let(:invite) { create(:invite) }
@@ -30,18 +30,18 @@ describe UsersController, redis: true do
   end
 
   describe "#create" do
-    let(:params) {
+    let(:params) do
       attributes = attributes_for(:user)
       {
         username:         attributes[:username],
         email:            attributes[:email],
-        password:         'randompassword',
-        confirm_password: 'randompassword',
+        password:         "randompassword",
+        confirm_password: "randompassword",
         realname:         attributes[:realname]
       }
-    }
+    end
 
-    context 'with a valid invite token' do
+    context "with a valid invite token" do
       before { post :create, token: invite.token, user: params }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:user)).to be_a(User) }

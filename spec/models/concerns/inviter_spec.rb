@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Inviter do
 
@@ -11,8 +11,8 @@ describe Inviter do
 
   subject { user }
 
-  it { is_expected.to belong_to(:inviter).class_name('User') }
-  it { is_expected.to have_many(:invitees).class_name('User') }
+  it { is_expected.to belong_to(:inviter).class_name("User") }
+  it { is_expected.to have_many(:invitees).class_name("User") }
   it { is_expected.to have_many(:invites).dependent(:destroy) }
 
   describe "active scope on invites" do

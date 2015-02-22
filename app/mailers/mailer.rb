@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 class Mailer < ActionMailer::Base
-
-  default from: Proc.new { Sugar.config.mail_sender || 'no-reply@example.com' }
+  default from: Proc.new { Sugar.config.mail_sender || "no-reply@example.com" }
 
   def invite(invite, login_url)
     @invite    = invite
@@ -29,5 +28,4 @@ class Mailer < ActionMailer::Base
       subject: "Password reset for #{Sugar.config.forum_name}"
     )
   end
-
 end

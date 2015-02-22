@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class UnserializeFilter < Filter
-
   def process(post)
     parser = Nokogiri::HTML::DocumentFragment.parse(post)
     parser.search("base64serialized").each do |element|
@@ -9,5 +8,4 @@ class UnserializeFilter < Filter
     end
     parser.to_html
   end
-
 end

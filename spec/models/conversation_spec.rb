@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Conversation do
   let(:conversation) { create(:conversation) }
@@ -17,17 +17,17 @@ describe Conversation do
 
     context "with a new participant" do
       specify do
-        expect {
+        expect do
           conversation.add_participant(user)
-        }.to change{ conversation.participants.count }.by(1)
+        end.to change { conversation.participants.count }.by(1)
       end
     end
 
     context "with an existing participant" do
       specify do
-        expect {
+        expect do
           conversation.add_participant(conversation.poster)
-        }.to change{ conversation.participants.count }.by(0)
+        end.to change { conversation.participants.count }.by(0)
       end
     end
 
@@ -37,16 +37,17 @@ describe Conversation do
 
     context "with a second participant" do
       before { conversation.add_participant(user) }
-      it { expect {
-        conversation.remove_participant(user)
-      }.to change{ conversation.participants.count }.by(-1) }
+      it do
+        expect do
+          conversation.remove_participant(user)
+        end.to change { conversation.participants.count }.by(-1) end
     end
 
     context "with only one participant" do
       it "can't be removed" do
-        expect {
+        expect do
           conversation.remove_participant(conversation.poster)
-        }.to raise_exception(Conversation::RemoveParticipantError)
+        end.to raise_exception(Conversation::RemoveParticipantError)
       end
     end
 

@@ -16,7 +16,7 @@ module PostsHelper
   end
 
   def meify(string, user)
-    string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/){ $1.to_s + profile_link(user, nil, class: :poster) }.html_safe
+    string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/) { $1.to_s + profile_link(user, nil, class: :poster) }.html_safe
   end
 
   def render_post(string)
