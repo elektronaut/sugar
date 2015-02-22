@@ -49,9 +49,10 @@ class PasswordResetsController < ApplicationController
       @password_reset_token = PasswordResetToken.find(params[:id])
     rescue ActiveRecord::RecordNotFound
     end
-    unless @password_reset_token && @password_reset_token.token == params[:token]
+    unless @password_reset_token &&
+        @password_reset_token.token == params[:token]
       flash[:notice] = "Invalid password reset request"
-      redirect_to login_users_url and return
+      redirect_to login_users_url
     end
   end
 
@@ -59,8 +60,7 @@ class PasswordResetsController < ApplicationController
     if @password_reset_token.expired?
       @password_reset_token.destroy
       flash[:notice] = "Your password reset link has expired"
-      redirect_to login_users_url and return
+      redirect_to login_users_url
     end
   end
-
 end

@@ -5,9 +5,9 @@ class UsersController < ApplicationController
     def index
       @users = User.active.by_username
       respond_with(@users) do |format|
-        format.mobile {
-          @online_users = @users.select{|u| u.online?}
-        }
+        format.mobile do
+          @online_users = @users.select(&:online?)
+        end
       end
     end
 
@@ -45,12 +45,12 @@ class UsersController < ApplicationController
       @users = User.nintendo_users.by_username
       respond_with(@users)
     end
-    
+
     def steam
       @users = User.steam_users.by_username
       respond_with(@users)
     end
-    
+
     def social
       @users = User.social.by_username
       respond_with(@users)
@@ -71,6 +71,5 @@ class UsersController < ApplicationController
       @users = User.trusted.by_username
       respond_with(@users)
     end
-
   end
 end

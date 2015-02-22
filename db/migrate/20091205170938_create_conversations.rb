@@ -1,6 +1,6 @@
 class CreateConversations < ActiveRecord::Migration
   def self.up
-    add_column :discussions, :type, :string
+    add_column :discussions, :type, :string, limit: 100
     add_index  :discussions, :type
     execute "UPDATE discussions SET #{ActiveRecord::Base.connection.quote_column_name("type")}='Discussion'"
 
