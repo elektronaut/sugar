@@ -12,10 +12,10 @@ class Discussion < Exchange
 
   class << self
     def popular_in_the_last(days = 7.days)
-      joins(:posts)
-        .where("posts.created_at > ?", days.ago)
-        .group("exchanges.id")
-        .order("COUNT(posts.id) DESC")
+      joins(:posts).
+        where("posts.created_at > ?", days.ago).
+        group("exchanges.id").
+        order("COUNT(posts.id) DESC")
     end
   end
 
@@ -25,7 +25,12 @@ class Discussion < Exchange
       transaction do
         update_attributes(type: "Conversation")
         becomes(Conversation).tap do |conversation|
-          conversation.update_attributes(trusted: false, sticky: false, closed: false, nsfw: false)
+          conversation.update_attributes(
+            trusted: false,
+            sticky: false,
+            closed: false,
+            nsfw: false
+          )
           posts.update_all(conversation: true, trusted: false)
           participants.each do |participant|
             conversation.add_participant(participant)
@@ -60,7 +65,10 @@ class Discussion < Exchange
       posts.update_all(trusted: self.trusted?)
       discussion_relationships.update_all(trusted: self.trusted?)
       participants.each do |user|
-        user.update_column(:public_posts_count, user.discussion_posts.where(trusted: false).count)
+        user.update_column(
+          :public_posts_count,
+          user.discussion_posts.where(trusted: false).count
+        )
       end
     end
   end

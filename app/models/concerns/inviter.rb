@@ -7,9 +7,17 @@ module Inviter
     before_create :set_inviter
     after_create :expire_invite
 
-    belongs_to :inviter, class_name: "User"
-    has_many :invitees, -> { order "username ASC" }, class_name: "User", foreign_key: "inviter_id"
-    has_many :invites, -> { order "created_at ASC" }, dependent: :destroy
+    belongs_to :inviter,
+               class_name: "User"
+
+    has_many :invitees,
+             -> { order "username ASC" },
+             class_name: "User",
+             foreign_key: "inviter_id"
+
+    has_many :invites,
+             -> { order "created_at ASC" },
+             dependent: :destroy
   end
 
   def invites?
@@ -33,7 +41,8 @@ module Inviter
     self.user_admin? ? 1 : self[:available_invites]
   end
 
-  # Revokes invites from a user, default = 1. Pass :all as an argument to revoke all invites.
+  # Revokes invites from a user, default = 1.
+  # Pass :all as an argument to revoke all invites.
   def revoke_invite!(number = 1)
     return available_invites if self.user_admin?
     number = available_invites if number == :all

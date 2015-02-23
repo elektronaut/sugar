@@ -6,7 +6,7 @@ class EmailValidator < ActiveModel::EachValidator
       email = Mail::Address.new(value)
       valid = email.domain && email.address == value
       valid &&= email.domain =~ /\./
-    rescue => e
+    rescue
       valid = false
     end
     record.errors[attribute] << (options[:message] || "is invalid") unless valid

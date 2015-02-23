@@ -49,7 +49,9 @@ class MarkdownRenderer < Redcarpet::Render::HTML
         youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
         youtube_id = $5
       end
-      "<iframe title=\"#{title}\" src=\"https://www.youtube.com/embed/#{youtube_id}\" frameborder=\"0\" allowfullscreen></iframe>"
+      "<iframe title=\"#{title}\" " +
+        "src=\"https://www.youtube.com/embed/#{youtube_id}\" " +
+        "frameborder=\"0\" allowfullscreen></iframe>"
     end
   end
 end

@@ -25,12 +25,18 @@ class User < ActiveRecord::Base
 
   validates :username,
             presence: true,
-            uniqueness: { case_sensitive: false, message: "is already registered" },
+            uniqueness: {
+              case_sensitive: false,
+              message: "is already registered"
+            },
             format: { with: /\A[^\?]+\Z/, message: "is not valid" }
 
   validates :email,
             email: true,
-            uniqueness: { case_sensitive: false, message: "is already registered" },
+            uniqueness: {
+              case_sensitive: false,
+              message: "is already registered"
+            },
             if: :email?
 
   validates :email,
@@ -88,12 +94,18 @@ class User < ActiveRecord::Base
   end
 
   def mobile_theme
-    self.mobile_theme? ? attributes["mobile_theme"] : Sugar.config.default_mobile_theme
+    if self.mobile_theme?
+      attributes["mobile_theme"]
+    else
+      Sugar.config.default_mobile_theme
+    end
   end
 
   def gamertag_avatar_url
     if self.gamertag?
-      "http://avatar.xboxlive.com/avatar/#{URI.escape(gamertag)}/avatarpic-l.png"
+      "http://avatar.xboxlive.com/avatar/" +
+        URI.escape(gamertag) +
+        "/avatarpic-l.png"
     end
   end
 
@@ -113,11 +125,19 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({ only: serializable_params, methods: serializable_methods }.merge(options))
+    super(
+      {
+        only: serializable_params, methods: serializable_methods
+      }.merge(options)
+    )
   end
 
   def to_xml(options = {})
-    super({ only: serializable_params, methods: serializable_methods }.merge(options))
+    super(
+      {
+        only: serializable_params, methods: serializable_methods
+      }.merge(options)
+    )
   end
 
   protected
@@ -134,7 +154,8 @@ class User < ActiveRecord::Base
 
   def check_username_change
     if self.username_changed?
-      self[:previous_usernames] = ([username_was] + previous_usernames).join("\n")
+      self[:previous_usernames] =
+        ([username_was] + previous_usernames).join("\n")
     end
   end
 end

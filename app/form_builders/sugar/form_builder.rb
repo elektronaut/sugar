@@ -24,7 +24,10 @@ module Sugar
       if errors_on?(method)
         text += content_tag(:span, " " + first_error_on(method), class: "error")
       elsif options[:description]
-        text += content_tag(:span, " &mdash; #{options[:description]}".html_safe, class: "description")
+        text += content_tag(
+          :span,
+          " &mdash; #{options[:description]}".html_safe, class: "description"
+        )
       end
       content_tag "label", text.html_safe, for: full_attribute_name(method)
     end
@@ -33,10 +36,17 @@ module Sugar
       classes = ["field"]
       classes << "field_with_errors" if errors_on?(attribute)
 
-      label_tag = label(attribute, label_text,  description: options[:description])
+      label_tag = label(
+        attribute,
+        label_text,
+        description: options[:description]
+      )
 
       if options[:note]
-        content = safe_join([content, "#{options[:note]}".html_safe], "<br>".html_safe)
+        content = safe_join(
+          [content, "#{options[:note]}".html_safe],
+          "<br>".html_safe
+        )
       end
 
       content_tag "p", label_tag + content, class: classes.join(" ")
@@ -70,19 +80,54 @@ module Sugar
       labelled_field(:password_field, attribute, label_text, options)
     end
 
-    def labelled_time_zone_select(attribute, label_text = nil, priority_zones = nil, options = {})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, time_zone_select(attribute, priority_zones, options), label_text, field_options)
+    def labelled_time_zone_select(
+          attribute,
+          label_text = nil,
+          priority_zones = nil,
+          options = {}
+        )
+      label_text, options, field_options = parse_label_text_and_options(
+        label_text,
+        options
+      )
+      field_with_label(
+        attribute,
+        time_zone_select(attribute, priority_zones, options),
+        label_text,
+        field_options
+      )
     end
 
     def labelled_select(attribute, choices, label_text = nil, options = {})
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, select(attribute, choices, options), label_text, field_options)
+      label_text, options, field_options = parse_label_text_and_options(
+        label_text,
+        options
+      )
+      field_with_label(
+        attribute,
+        select(attribute, choices, options),
+        label_text,
+        field_options
+      )
     end
 
-    def labelled_check_box(attribute, label_text = nil, options = {}, checked_value = "1", unchecked_value = "0")
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
-      field_with_label(attribute, check_box(attribute, options, checked_value, unchecked_value), label_text, field_options)
+    def labelled_check_box(
+          attribute,
+          label_text = nil,
+          options = {},
+          checked_value = "1",
+          unchecked_value = "0"
+        )
+      label_text, options, field_options = parse_label_text_and_options(
+        label_text,
+        options
+      )
+      field_with_label(
+        attribute,
+        check_box(attribute, options, checked_value, unchecked_value),
+        label_text,
+        field_options
+      )
     end
 
     private
@@ -107,7 +152,10 @@ module Sugar
     end
 
     def labelled_field(type, attribute, label_text = nil, options)
-      label_text, options, field_options = parse_label_text_and_options(label_text, options)
+      label_text, options, field_options = parse_label_text_and_options(
+        label_text,
+        options
+      )
       field_with_label(
         attribute,
         send(type, attribute, options),

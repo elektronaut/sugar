@@ -6,12 +6,16 @@ class Theme
 
   class << self
     def all
-      ids = base_dir.entries.select { |d| File.exist?(base_dir.join(d, "theme.yml")) }.map(&:to_s)
+      ids = base_dir.entries.select do |d|
+        File.exist?(base_dir.join(d, "theme.yml"))
+      end.map(&:to_s)
       ids.map { |id| find(id) }
     end
 
     def precompile_assets
-      all.flat_map { |theme| [theme.stylesheet_path, theme.mobile_stylesheet_path] }.compact
+      all.flat_map do |theme|
+        [theme.stylesheet_path, theme.mobile_stylesheet_path]
+      end.compact
     end
 
     def mobile

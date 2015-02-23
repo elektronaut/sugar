@@ -1,12 +1,16 @@
 # encoding: utf-8
 
 namespace :benchmark do
-
   desc "Create random users"
   task create_users: :environment do
     count = User.count
     100.times do |i|
-      User.create(username: "random user #{count + i}", password: "loser", confirm_password: "loser", email: "email@email.com", last_active: Time.now)
+      User.create(
+        username: "random user #{count + i}",
+        password: "loser",
+        confirm_password: "loser",
+        email: "email@email.com", last_active: Time.now
+      )
     end
   end
 
@@ -14,9 +18,13 @@ namespace :benchmark do
   task create_discussions: :environment do
     users = User.find(:all)
     categories = Category.find(:all)
-    randlimit = rand(12000)
-    lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    count = Discussion.count
+    lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed " +
+      "do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut " +
+      "enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi " +
+      "ut aliquip ex ea commodo consequat. Duis aute irure dolor in " +
+      "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla " +
+      "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in " +
+      "culpa qui officia deserunt mollit anim id est laborum."
     1.times do |_i|
       u = users[rand(users.length - 1)]
       d = u.discussions.create(

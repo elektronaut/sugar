@@ -10,7 +10,10 @@ module ApplicationHelper
   include DynamicImage::Helper
 
   def facebook_oauth_url(redirect_uri)
-    "https://www.facebook.com/dialog/oauth?client_id=#{Sugar.config.facebook_app_id}&redirect_uri=#{redirect_uri}&scope=email"
+    "https://www.facebook.com/dialog/oauth?client_id=" +
+      "#{Sugar.config.facebook_app_id}" +
+      "&redirect_uri=#{redirect_uri}" +
+      "&scope=email"
   end
 
   def pretty_link(url)
@@ -27,7 +30,11 @@ module ApplicationHelper
   def profile_link(user, link_text = nil, options = {})
     if user
       link_text ||= user.username
-      link_to link_text, user_profile_path(id: user.username), { title: "#{possessive(user.username)} profile" }.merge(options)
+      link_to(
+        link_text,
+        user_profile_path(id: user.username),
+        { title: "#{possessive(user.username)} profile" }.merge(options)
+      )
     else
       "Unknown"
     end

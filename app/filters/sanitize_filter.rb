@@ -26,9 +26,14 @@ class SanitizeFilter < Filter
     parser.search("*").each do |elem|
       elem.attributes.each do |name, attr|
         # XSS fix
-        elem.remove_attribute(name) if attr.value && attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
+        if attr.value &&
+           attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
+          elem.remove_attribute(name)
+        end
         # Strip out event handlers
-        elem.remove_attribute(name) if name.downcase =~ /^on/
+        if name.downcase =~ /^on/
+          elem.remove_attribute(name)
+        end
       end
     end
   end
@@ -48,13 +53,15 @@ class SanitizeFilter < Filter
       change_allowscriptaccess_for_param(element)
     end
 
-    # Make sure there's a <param name="allowScriptAccess" value="sameDomain"> in object tags
+    # Make sure there's a <param name="allowScriptAccess" value="sameDomain">
+    # in object tags
     parser.search("object").each do |element|
       enforce_allowscriptaccess_param_in(element)
     end
   end
 
-  # Changes allowScriptAccess to sameDomain on element if the attribute is present.
+  # Changes allowScriptAccess to sameDomain on element if the attribute
+  # is present.
   def change_allowscriptaccess_attribute_on(element)
     element.attributes.each do |name, _value|
       if name.downcase =~ /^allowscriptaccess/
@@ -82,7 +89,8 @@ class SanitizeFilter < Filter
   # Makes sure the element contains an allowScriptAccess param.
   def enforce_allowscriptaccess_param_in(element)
     unless element.search(">param [name=allowScriptAccess]").length > 0
-      element.inner_html += '<param name="allowScriptAccess" value="sameDomain" />'
+      element.inner_html +=
+        '<param name="allowScriptAccess" value="sameDomain" />'
     end
   end
 end

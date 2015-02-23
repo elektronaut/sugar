@@ -18,9 +18,17 @@ class Exchange < ActiveRecord::Base
   belongs_to :poster, class_name: "User"
   belongs_to :last_poster, class_name: "User"
 
-  belongs_to :closer,         class_name: "User"
-  has_many :posts,          -> { order "created_at ASC" }, dependent: :destroy, foreign_key: "exchange_id"
-  has_many :exchange_views, dependent: :destroy, foreign_key: "exchange_id"
+  belongs_to :closer, class_name: "User"
+
+  has_many :posts,
+           -> { order "created_at ASC" },
+           dependent: :destroy,
+           foreign_key: "exchange_id"
+
+  has_many :exchange_views,
+           dependent: :destroy,
+           foreign_key: "exchange_id"
+
   has_many :users,          through: :posts
 
   validates :title, presence: true, length: { maximum: 100 }
@@ -49,7 +57,11 @@ class Exchange < ActiveRecord::Base
 
   def closeable_by?(user)
     return false unless user
-    (user.moderator? || (!closer && poster == user) || closer == user) ? true : false
+    if user.moderator? || (!closer && poster == user) || closer == user
+      true
+    else
+      false
+    end
   end
 
   private

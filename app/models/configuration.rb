@@ -43,40 +43,45 @@ class Configuration
   module CustomizationSettings
     extend ActiveSupport::Concern
     included do
-      setting :forum_name,           :string, "Sugar"
-      setting :forum_short_name,     :string, "Sugar"
-      setting :forum_title,          :string, "Sugar"
-      setting :public_browsing,      :boolean, false
-      setting :signups_allowed,      :boolean, true
-      setting :domain_names,         :string
-      setting :mail_sender,          :string
+      setting :forum_name, :string, "Sugar"
+      setting :forum_short_name, :string, "Sugar"
+      setting :forum_title, :string, "Sugar"
+      setting :public_browsing, :boolean, false
+      setting :signups_allowed, :boolean, true
+      setting :domain_names, :string
+      setting :mail_sender, :string
 
       # Customization
-      setting :custom_header,        :string
-      setting :custom_footer,        :string
-      setting :custom_javascript,    :string
-      setting :emoticons,            :string, "smiley laughing blush heart_eyes kissing_heart flushed worried grimacing cry angry heart star +1 -1"
+      setting :custom_header, :string
+      setting :custom_footer, :string
+      setting :custom_javascript, :string
+      setting(
+        :emoticons,
+        :string,
+        "smiley laughing blush heart_eyes kissing_heart flushed worried " +
+          "grimacing cry angry heart star +1 -1"
+        )
     end
   end
 
   module IntegrationSettings
     extend ActiveSupport::Concern
     included do
-      setting :flickr_api,           :string
-      setting :google_analytics,     :string
+      setting :flickr_api, :string
+      setting :google_analytics, :string
       setting :amazon_associates_id, :string
-      setting :amazon_aws_key,       :string
-      setting :amazon_aws_secret,    :string
-      setting :amazon_s3_bucket,     :string
-      setting :facebook_app_id,      :string
-      setting :facebook_api_secret,  :string
+      setting :amazon_aws_key, :string
+      setting :amazon_aws_secret, :string
+      setting :amazon_s3_bucket, :string
+      setting :facebook_app_id, :string
+      setting :facebook_api_secret, :string
     end
   end
 
   module ThemeSettings
     extend ActiveSupport::Concern
     included do
-      setting :default_theme,        :string, "default"
+      setting :default_theme, :string, "default"
       setting :default_mobile_theme, :string, "default"
     end
   end
@@ -86,7 +91,12 @@ class Configuration
   include ThemeSettings
 
   def get(key)
-    raise InvalidConfigurationKey, ":#{key} is not a valid configuration option" unless has_setting?(key)
+    unless has_setting?(key)
+      raise(
+        InvalidConfigurationKey,
+        ":#{key} is not a valid configuration option"
+      )
+    end
     if configuration.has_key?(key)
       configuration[key]
     else
@@ -97,11 +107,18 @@ class Configuration
   def set(key, value)
     key = key.to_sym if key.is_a?(String)
     unless has_setting?(key)
-      raise InvalidConfigurationKey, ":#{key} is not a valid configuration option"
+      raise(
+        InvalidConfigurationKey,
+        ":#{key} is not a valid configuration option"
+      )
     end
     value = parse_value(key, value)
     unless valid_type?(key, value)
-      raise ArgumentError, "expected #{self.class.settings[key].type}, got #{value.class} (#{value.inspect})"
+      raise(
+        ArgumentError,
+        "expected #{self.class.settings[key].type}, " +
+          "got #{value.class} (#{value.inspect})"
+      )
     end
     configuration[key] = value
   end

@@ -4,7 +4,7 @@ require "digest/sha1"
 
 class Invite < ActiveRecord::Base
   belongs_to :user
-  validates_presence_of :email, :user_id
+  validates :email, :user_id, presence: true
 
   attr_accessor :used
 
@@ -24,7 +24,9 @@ class Invite < ActiveRecord::Base
     # Makes a unique random token.
     def unique_token
       token = nil
-      token = Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s) until token && !self.exists?(token: token)
+      until token && !self.exists?(token: token)
+        token = Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s)
+      end
       token
     end
 

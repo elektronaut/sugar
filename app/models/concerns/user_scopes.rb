@@ -9,7 +9,12 @@ module UserScopes
     end
 
     def admins
-      active.where("admin = ? OR user_admin = ? OR moderator = ?", true, true, true)
+      active.where(
+        "admin = ? OR user_admin = ? OR moderator = ?",
+        true,
+        true,
+        true
+      )
     end
 
     def banned
@@ -25,7 +30,11 @@ module UserScopes
     end
 
     def social
-      active.where("(twitter IS NOT NULL AND twitter != '') OR (instagram IS NOT NULL AND instagram != '') OR (flickr IS NOT NULL AND flickr != '')")
+      active.where(
+        "(twitter IS NOT NULL AND twitter != '') " +
+        "OR (instagram IS NOT NULL AND instagram != '') " +
+        "OR (flickr IS NOT NULL AND flickr != '')"
+      )
     end
 
     def recently_joined
@@ -37,7 +46,13 @@ module UserScopes
     end
 
     def trusted
-      active.where("trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?", true, true, true, true)
+      active.where(
+        "trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?",
+        true,
+        true,
+        true,
+        true
+      )
     end
 
     def xbox_users

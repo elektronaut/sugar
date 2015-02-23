@@ -44,16 +44,23 @@ Sugar::Application.routes.draw do
   resources :uploads
 
   # Search discussions
-  get "/search/:query.:format" => "discussions#search", as: :formatted_search_with_query
-  get "/search/:query"         => "discussions#search", as: :search_with_query
-  match "/search"              => "discussions#search", as: :search, via: [:get, :post]
+  get "/search/:query.:format" => "discussions#search",
+      as: :formatted_search_with_query
+  get "/search/:query" => "discussions#search",
+      as: :search_with_query
+  match "/search" => "discussions#search",
+        as: :search, via: [:get, :post]
 
   # Search posts
   get "/posts/search/:query" => "posts#search"
-  match "/posts/search" => "posts#search", as: :search_posts, via: [:get, :post]
+  match "/posts/search" => "posts#search",
+        as: :search_posts, via: [:get, :post]
 
-  match "/discussions/:id/search_posts/:query" => "discussions#search_posts", via: [:get, :post]
-  match "/conversations/:id/search_posts/:query" => "conversations#search_posts", via: [:get, :post]
+  match "/discussions/:id/search_posts/:query" => "discussions#search_posts",
+        via: [:get, :post]
+  match "/conversations/:id/search_posts/:query" =>
+        "conversations#search_posts",
+        via: [:get, :post]
 
   # Users
   resources :users, except: [:edit, :show] do
@@ -83,20 +90,32 @@ Sugar::Application.routes.draw do
   end
 
   controller :users, constraints: { id: /[^\?\/]+/ } do
-    post "/users/profile/:id/grant_invite"       => :grant_invite,   as: :grant_invite_user
-    post "/users/profile/:id/revoke_invites"     => :revoke_invites, as: :revoke_invites_user
-    get "/users/profile/:id/update_openid"      => :update_openid,  as: :update_openid_user
-    get "/users/profile/:id/edit"               => :edit,           as: :edit_user
-    get "/users/profile/:id/edit/:page"         => :edit,           as: :edit_user_page
-    get "/users/profile/:id"                    => :show,           as: :user_profile
-    get "/users/profile/:id/discussions"        => :discussions,    as: :discussions_user
-    get "/users/profile/:id/discussions/:page"  => :discussions
-    get "/users/profile/:id/participated"       => :participated,   as: :participated_user
+    post "/users/profile/:id/grant_invite" => :grant_invite,
+         as: :grant_invite_user
+    post "/users/profile/:id/revoke_invites" => :revoke_invites,
+         as: :revoke_invites_user
+    get "/users/profile/:id/update_openid" => :update_openid,
+        as: :update_openid_user
+    get "/users/profile/:id/edit" => :edit,
+        as: :edit_user
+    get "/users/profile/:id/edit/:page" => :edit,
+        as: :edit_user_page
+    get "/users/profile/:id" => :show,
+        as: :user_profile
+    get "/users/profile/:id/discussions" => :discussions,
+        as: :discussions_user
+    get "/users/profile/:id/discussions/:page" => :discussions
+    get "/users/profile/:id/participated" => :participated,
+        as: :participated_user
     get "/users/profile/:id/participated/:page" => :participated
-    get "/users/profile/:id/posts"              => :posts,          as: :posts_user
-    get "/users/profile/:id/posts/:page"        => :posts,          as: :paged_user_posts
-    get "/users/profile/:id/stats"              => :stats,          as: :stats_user
-    get "/users/new/:token"                     => :new,            as: :new_user_by_token
+    get "/users/profile/:id/posts" => :posts,
+        as: :posts_user
+    get "/users/profile/:id/posts/:page" => :posts,
+        as: :paged_user_posts
+    get "/users/profile/:id/stats" => :stats,
+        as: :stats_user
+    get "/users/new/:token" => :new,
+        as: :new_user_by_token
   end
 
   resources :password_resets, only: [:new, :create, :show, :update]
@@ -106,22 +125,27 @@ Sugar::Application.routes.draw do
 
   # Discussions
   controller :discussions do
-    get "/discussions/:id(/:page)(.:format)" => :show, as: :discussion, constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
-    get "/discussions/popular/:days/:page"   => :popular
-    get "/discussions/popular/:days"         => :popular
-    get "/discussions/archive/:page"         => :index, as: :paged_discussions
+    get "/discussions/:id(/:page)(.:format)" => :show,
+        as: :discussion,
+        constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+    get "/discussions/popular/:days/:page" => :popular
+    get "/discussions/popular/:days" => :popular
+    get "/discussions/archive/:page" => :index, as: :paged_discussions
   end
 
   # Conversations
   controller :conversations do
-    get "/conversations/:id(/:page)(.:format)" => :show, as: :conversation, constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
-    get "/conversations/new/with/:username"    => :new, as: :new_conversation_with
-    get "/conversations/archive/:page"         => :index, as: :paged_conversations
+    get "/conversations/:id(/:page)(.:format)" => :show,
+        as: :conversation,
+        constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+    get "/conversations/new/with/:username" => :new,
+        as: :new_conversation_with
+    get "/conversations/archive/:page" => :index,
+        as: :paged_conversations
   end
 
   [:discussions, :conversations].each do |resource_type|
     resources resource_type, except: [:show] do
-
       member do
         get "search_posts"
         get "mark_as_read"
@@ -163,7 +187,7 @@ Sugar::Application.routes.draw do
   end
 
   controller :posts do
-    get "/discussions/:discussion_id/posts/since/:index"     => :since
+    get "/discussions/:discussion_id/posts/since/:index" => :since
     get "/conversations/:conversation_id/posts/since/:index" => :since
   end
 
@@ -188,18 +212,19 @@ Sugar::Application.routes.draw do
 
   # Old theme redirects
   # TODO: Remove after redesign
-  get "/themes/:theme/images/*path.:format", to: redirect("assets/%{theme}/%{path}.%{format}")
-  get "/themes/:theme/*path.:format",        to: redirect("assets/%{theme}/%{path}.%{format}")
+  get "/themes/:theme/images/*path.:format",
+      to: redirect("assets/%{theme}/%{path}.%{format}")
+  get "/themes/:theme/*path.:format",
+      to: redirect("assets/%{theme}/%{path}.%{format}")
 
   # Vanilla redirects
   controller :vanilla do
-    get "/vanilla"              => :discussions
-    get "/vanilla/index.php"    => :discussions
+    get "/vanilla" => :discussions
+    get "/vanilla/index.php" => :discussions
     get "/vanilla/comments.php" => :discussion
-    get "/vanilla/account.php"  => :user
+    get "/vanilla/account.php" => :user
   end
 
   # Root
   root to: "discussions#index"
-
 end

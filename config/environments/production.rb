@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 Sugar::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
+  # Settings specified here will take precedence over those in
+  # config/application.rb
 
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -26,9 +27,11 @@ Sugar::Application.configure do
 
   # Specifies the header that your server uses for sending files
   # (comment out if your front-end server doesn't support this)
-  config.action_dispatch.x_sendfile_header = "X-Sendfile" # Use 'X-Accel-Redirect' for nginx
+  # Use 'X-Accel-Redirect' for nginx
+  config.action_dispatch.x_sendfile_header = "X-Sendfile"
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # Force all access to the app over SSL, use Strict-Transport-Security,
+  # and use secure cookies.
   config.force_ssl = false
 
   # See everything in the log (default is :info)
@@ -40,7 +43,9 @@ Sugar::Application.configure do
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
 
-  config.cache_store = :redis_store, "redis://localhost:6379/0/cache", { expires_in: 180.minutes }
+  config.cache_store = :redis_store,
+                       "redis://localhost:6379/0/cache",
+                       { expires_in: 180.minutes }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -59,5 +64,6 @@ Sugar::Application.configure do
   config.active_support.deprecation = :notify
 
   # Store all page caches in a subfolder of public
-  config.action_controller.page_cache_directory = File.join(File.dirname(__FILE__), "../../public/cache")
+  config.action_controller.page_cache_directory =
+    File.join(File.dirname(__FILE__), "../../public/cache")
 end

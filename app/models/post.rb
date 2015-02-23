@@ -11,7 +11,7 @@ class Post < ActiveRecord::Base
   belongs_to :exchange, counter_cache: :posts_count, touch: true
   has_many :exchange_views
 
-  validates_presence_of :body, :user_id, :exchange_id
+  validates :body, :user_id, :exchange_id, presence: true
   validates :format, inclusion: %w{markdown html}
 
   attr_accessor :skip_html
@@ -71,7 +71,10 @@ class Post < ActiveRecord::Base
 
   def mentioned_users
     @mentioned_users ||= User.all.select do |user|
-      user_expression = Regexp.new("@" + Regexp.quote(user.username), Regexp::IGNORECASE)
+      user_expression = Regexp.new(
+        "@" + Regexp.quote(user.username),
+        Regexp::IGNORECASE
+      )
       body.match(user_expression) ? true : false
     end
   end
@@ -121,13 +124,18 @@ class Post < ActiveRecord::Base
   end
 
   def update_exchange
-    exchange.update_attributes(last_poster_id: user.id, last_post_at: created_at)
+    exchange.update_attributes(
+      last_poster_id: user.id,
+      last_post_at: created_at
+    )
   end
 
   def notify_new_conversation_post
     if self.conversation?
       exchange.conversation_relationships.each do |relationship|
-        relationship.update_attributes(new_posts: true) unless relationship.user == user
+        unless relationship.user == user
+          relationship.update_attributes(new_posts: true)
+        end
       end
     end
   end

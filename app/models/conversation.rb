@@ -7,8 +7,13 @@
 class Conversation < Exchange
   class RemoveParticipantError < StandardError; end
 
-  has_many :conversation_relationships, -> { order "created_at ASC" }, dependent: :destroy
-  has_many :participants, through: :conversation_relationships, source: :user
+  has_many :conversation_relationships,
+           -> { order "created_at ASC" },
+           dependent: :destroy
+
+  has_many :participants,
+           through: :conversation_relationships,
+           source: :user
 
   after_create do |conversation|
     conversation.add_participant(conversation.poster, new_posts: false)

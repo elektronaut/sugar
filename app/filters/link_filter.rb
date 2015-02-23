@@ -45,7 +45,10 @@ class LinkFilter < Filter
       http.start do |h|
         h.head(uri.request_uri).code =~ /^(2|3)\d\d$/
       end
-    rescue SocketError, Net::OpenTimeout, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED
+    rescue SocketError,
+           Net::OpenTimeout,
+           OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED
       false
     rescue StandardError => e
       logger.error "Unexpected connection error #{e.inspect}"
@@ -58,7 +61,10 @@ class LinkFilter < Filter
       if href = link.try(:attributes).try(:[], "href").try(:value)
         host = URI.parse(href).host
         if local_domains.detect { |d| host == d }
-          link.set_attribute "href", href.gsub(Regexp.new("(https?:)?\/\/" + Regexp.escape(host)), "")
+          link.set_attribute(
+            "href",
+            href.gsub(Regexp.new("(https?:)?\/\/" + Regexp.escape(host)), "")
+          )
         end
       end
     end
@@ -67,7 +73,8 @@ class LinkFilter < Filter
   def rewrite_for_https_support!
     parser.css("iframe,img").each do |iframe|
       if src = iframe.try(:attributes).try(:[], "src").try(:value)
-        if matches_https_whitelist?(src) || (src =~ /\Ahttp:\/\// && url_exists?(src))
+        if matches_https_whitelist?(src) ||
+           (src =~ /\Ahttp:\/\// && url_exists?(src))
           iframe.set_attribute "src", src.gsub(/\Ahttps?:\/\//, "//")
         end
       end

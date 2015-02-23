@@ -7,7 +7,13 @@ module Sugar
     attr_accessor :redis
 
     def aws_s3?
-      (config.amazon_aws_key && config.amazon_aws_secret && config.amazon_s3_bucket) ? true : false
+      if config.amazon_aws_key &&
+          config.amazon_aws_secret &&
+          config.amazon_s3_bucket
+        true
+      else
+        false
+      end
     end
 
     def redis
@@ -15,7 +21,7 @@ module Sugar
     end
 
     def config(_key = nil, *_args)
-      @config ||= Configuration.new.tap { |c| c.load }
+      @config ||= Configuration.new.tap(&:load)
     end
 
     def public_browsing?

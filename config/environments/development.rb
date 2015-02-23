@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 Sugar::Application.configure do
-  # Settings specified here will take precedence over those in config/environment.rb
+  # Settings specified here will take precedence over those in
+  # config/environment.rb
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
@@ -10,7 +11,9 @@ Sugar::Application.configure do
   config.eager_load = false
 
   # Use Redis for the cache store
-  config.cache_store = :redis_store, "redis://localhost:6379/0/cache", { expires_in: 90.minutes }
+  config.cache_store = :redis_store,
+                       "redis://localhost:6379/0/cache",
+                       { expires_in: 90.minutes }
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -29,5 +32,6 @@ Sugar::Application.configure do
   # config.action_controller.perform_caching = true
 
   # Store all page caches in a subfolder of public
-  config.action_controller.page_cache_directory = Rails.root.join("public/cache")
+  config.action_controller.page_cache_directory =
+    Rails.root.join("public/cache")
 end
