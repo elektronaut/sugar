@@ -16,6 +16,21 @@ describe ExchangeParticipant do
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
 
   it do
+    is_expected.to have_many(:followed_discussions).
+      through(:discussion_relationships)
+  end
+
+  it do
+    is_expected.to have_many(:favorite_discussions).
+      through(:discussion_relationships)
+  end
+
+  it do
+    is_expected.to have_many(:hidden_discussions).
+      through(:discussion_relationships)
+  end
+
+  it do
     is_expected.to have_many(:conversation_relationships).
       dependent(:destroy)
   end
@@ -23,6 +38,16 @@ describe ExchangeParticipant do
   it do
     is_expected.to have_many(:conversations).
       through(:conversation_relationships)
+  end
+
+  describe "#unhidden_discussions" do
+    let!(:discussion) { create(:discussion) }
+    let!(:hidden_discussion) { create(:discussion) }
+    before do
+      DiscussionRelationship.define(user, hidden_discussion, hidden: true)
+    end
+    subject { user.unhidden_discussions }
+    it { is_expected.to match_array([discussion]) }
   end
 
   describe "#mark_exchange_viewed" do
@@ -173,6 +198,19 @@ describe ExchangeParticipant do
 
     context "when discussion is favorite" do
       before { DiscussionRelationship.define(user, discussion, favorite: true) }
+      it { is_expected.to eq(true) }
+    end
+  end
+
+  describe "#hidden?" do
+    subject { user.hidden?(discussion) }
+
+    context "when discussion isn't hidden" do
+      it { is_expected.to eq(false) }
+    end
+
+    context "when discussion is hidden" do
+      before { DiscussionRelationship.define(user, discussion, hidden: true) }
       it { is_expected.to eq(true) }
     end
   end

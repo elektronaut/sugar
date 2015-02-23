@@ -13,6 +13,38 @@ describe DiscussionRelationship do
   specify { expect(subject.following?).to eq(true) }
   specify { expect(subject.participated?).to eq(false) }
 
+  describe "mutual exclusive flags" do
+    context "when a discussion is being hidden" do
+      let(:relationship) do
+        create(:discussion_relationship, following: true, favorite: true)
+      end
+
+      before { relationship.update(hidden: true) }
+
+      it "should unset following" do
+        expect(relationship.following?).to eq(false)
+      end
+
+      it "should unset favorite" do
+        expect(relationship.following?).to eq(false)
+      end
+    end
+
+    context "when following a hidden discussion" do
+      let(:relationship) { create(:discussion_relationship, hidden: true) }
+      before { relationship.update(following: true) }
+      subject { relationship.hidden? }
+      it { is_expected.to eq(false) }
+    end
+
+    context "when favoriting a hidden discussion" do
+      let(:relationship) { create(:discussion_relationship, hidden: true) }
+      before { relationship.update(favorite: true) }
+      subject { relationship.hidden? }
+      it { is_expected.to eq(false) }
+    end
+  end
+
   describe ".define" do
     context "when the discussion is trusted" do
       subject { DiscussionRelationship.define(user, trusted_discussion) }

@@ -42,6 +42,16 @@ describe Post do
     end
   end
 
+  describe "after_destroy" do
+    describe "decrementing public posts count" do
+      let!(:post) { create(:post, user: user) }
+
+      it "should decrement public_posts_count on user" do
+        expect { post.destroy }.to change { user.public_posts_count }.by(-1)
+      end
+    end
+  end
+
   describe "#me_post?" do
     subject { post.me_post? }
 

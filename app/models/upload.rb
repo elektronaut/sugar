@@ -60,7 +60,7 @@ class Upload
   end
 
   def valid?
-    file && valid_mime_type?
+    (file && valid_mime_type?) ? true : false
   end
 
   private
