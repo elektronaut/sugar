@@ -73,12 +73,8 @@ Sugar::Application.routes.draw do
       get "connect_facebook"
       get "disconnect_facebook"
 
-      get "xboxlive"
-      get "sony"
-      get "nintendo"
-      get "steam"
-
       get "social"
+      get "gaming"
       get "online"
       get "recently_joined"
       get "admins"
