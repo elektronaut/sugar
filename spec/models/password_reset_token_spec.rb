@@ -2,7 +2,9 @@ require "spec_helper"
 
 describe PasswordResetToken do
   let (:password_reset_token) { create(:password_reset_token) }
-  let (:expired_password_reset_token) { create(:password_reset_token, expires_at: 2.days.ago) }
+  let (:expired_password_reset_token) do
+    create(:password_reset_token, expires_at: 2.days.ago)
+  end
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to validate_presence_of(:user_id) }

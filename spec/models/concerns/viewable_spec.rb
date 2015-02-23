@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe Viewable do
-
   let(:discussion)         { create(:discussion) }
   let(:trusted_discussion) { create(:discussion, trusted: true) }
   let(:user)               { create(:user) }
@@ -27,7 +26,10 @@ describe Viewable do
   end
 
   describe "#viewable_by?" do
-    specify { expect(trusted_discussion.viewable_by?(trusted_user)).to eq(true) }
+    specify do
+      expect(trusted_discussion.viewable_by?(trusted_user)).to eq(true)
+    end
+
     specify { expect(trusted_discussion.viewable_by?(user)).to eq(false) }
     specify { expect(trusted_discussion.viewable_by?(nil)).to eq(false) }
 
@@ -43,5 +45,4 @@ describe Viewable do
       specify { expect(discussion.viewable_by?(nil)).to eq(false) }
     end
   end
-
 end

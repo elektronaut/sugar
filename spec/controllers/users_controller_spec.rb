@@ -89,7 +89,10 @@ describe UsersController do
       expect(user.available_invites).to eq(0)
     end
 
-    specify { expect(flash[:notice]).to match("has been revoked of all invites") }
+    it "should set the flash" do
+      expect(flash[:notice]).to match("has been revoked of all invites")
+    end
+
     it { is_expected.to redirect_to(user_profile_url(user.username)) }
   end
 
@@ -101,12 +104,21 @@ describe UsersController do
 
       specify { expect(assigns(:user)).to be_a(User) }
       specify { expect(flash[:notice]).to match("Your changes were saved!") }
-      it { is_expected.to redirect_to(edit_user_page_url(user.username, page: "info")) }
+
+      it "should redirect back to the edit page" do
+        is_expected.to redirect_to(
+          edit_user_page_url(user.username, page: "info")
+        )
+      end
+
       specify { expect(user.reload.realname).to eq("New name") }
     end
 
     context "self banning" do
-      before { put :update, id: user.id, user: { banned_until: (Time.now + 2.days) } }
+      before do
+        put :update, id: user.id, user: { banned_until: (Time.now + 2.days) }
+      end
+
       specify { expect(user.reload.temporary_banned?).to eq(true) }
     end
 
@@ -121,37 +133,62 @@ describe UsersController do
 
     context "updating openid_url" do
       it "redirects to the OpenID URL" do
-        expect_any_instance_of(ApplicationController).to receive(:start_openid_session)
-          .with("http://example.com/",
-                success: update_openid_user_url(id: user.username),
-                fail:    edit_user_page_url(id: user.username, page: "settings")
-                )
-          .and_return(false)
-        put :update, id: user.id, user: { openid_url: "http://example.com/" }, page: "settings"
+        expect_any_instance_of(
+          ApplicationController
+        ).to receive(:start_openid_session).
+          with(
+            "http://example.com/",
+            success: update_openid_user_url(id: user.username),
+            fail:    edit_user_page_url(id: user.username, page: "settings")
+          ).
+          and_return(false)
+        put(
+          :update,
+          id: user.id,
+          user: { openid_url: "http://example.com/" },
+          page: "settings"
+        )
       end
 
       context "with a valid OpenID URL" do
         before do
-          allow_any_instance_of(ApplicationController).to receive(:start_openid_session) do
+          allow_any_instance_of(
+            ApplicationController
+          ).to receive(:start_openid_session) do
             controller.redirect_to "http://example.com/"
             true
           end
-          put :update, id: user.id, user: { openid_url: "http://example.com/" }, page: "settings"
+          put(
+            :update,
+            id: user.id,
+            user: { openid_url: "http://example.com/" },
+            page: "settings"
+          )
         end
         it { is_expected.to redirect_to("http://example.com/") }
       end
 
       context "with an invalid OpenID URL" do
         before do
-          allow_any_instance_of(ApplicationController).to receive(:start_openid_session)
-            .and_return(false)
-          put :update, id: user.id, user: { openid_url: "invalid" }, page: "settings"
+          allow_any_instance_of(
+            ApplicationController
+          ).to receive(:start_openid_session).
+            and_return(false)
+          put(
+            :update,
+            id: user.id,
+            user: { openid_url: "invalid" },
+            page: "settings"
+          )
         end
 
         it { is_expected.to respond_with(:success) }
         specify { expect(assigns(:user)).to be_a(User) }
         it { is_expected.to render_template(:edit) }
-        specify { expect(flash.now[:notice]).to eq("That's not a valid OpenID URL!") }
+
+        it "should set the flash" do
+          expect(flash.now[:notice]).to eq("That's not a valid OpenID URL!")
+        end
       end
     end
   end

@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe SimpleFilter do
-
   it "strips surrounding whitespace" do
     expect(SimpleFilter.new("  \n\n  foo  \n\n  ").to_html).to eq("foo")
   end
@@ -19,13 +18,16 @@ describe SimpleFilter do
   end
 
   it "doesn't escape tags" do
-    expect(SimpleFilter.new("<a href=\"#\">link</a>").to_html).to eq("<a href=\"#\">link</a>")
+    expect(
+      SimpleFilter.new("<a href=\"#\">link</a>").to_html
+    ).to eq("<a href=\"#\">link</a>")
   end
 
   it "doesn't escape right angle brackets after an empty attribute" do
-    input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe>\nfoo"
-    output = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe><br>\nfoo"
+    input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" " +
+      "allowfullscreen></iframe>\nfoo"
+    output = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" " +
+      "allowfullscreen></iframe><br>\nfoo"
     expect(SimpleFilter.new(input).to_html).to eq(output)
   end
-
 end

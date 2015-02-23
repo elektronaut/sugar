@@ -6,9 +6,9 @@ describe InvitesController do
   # Create the first admin user
   before { create(:user) }
 
-  let(:invite)            { create(:invite) }
-  let(:expired_invite)    { create(:invite, expires_at: 2.days.ago) }
-  let(:user)              { create(:user) }
+  let(:invite) { create(:invite) }
+  let(:expired_invite) { create(:invite, expires_at: 2.days.ago) }
+  let(:user) { create(:user) }
   let(:user_with_invites) { create(:user, available_invites: 1) }
 
   it_requires_login_for :index, :all, :new, :create, :destroy
@@ -28,13 +28,18 @@ describe InvitesController do
       let(:invite_id) { 1231115 }
       it "should raise an error" do
         login invite.user
-        expect { delete(:destroy, id: invite_id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect do
+          delete(:destroy, id: invite_id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
   describe "#verify_available_invites" do
-    before { login(user); get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     context "when user has invites" do
       let(:user) { create(:user, available_invites: 1) }
@@ -57,7 +62,11 @@ describe InvitesController do
 
   describe "GET index" do
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
-    before { login(user); get :index }
+
+    before do
+      login(user)
+      get :index
+    end
 
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:index) }
@@ -69,7 +78,10 @@ describe InvitesController do
     let(:user) { create(:user_admin) }
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
 
-    before { login(user); get :all }
+    before do
+      login(user)
+      get :all
+    end
 
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:all) }
@@ -110,7 +122,10 @@ describe InvitesController do
   end
 
   describe "GET new" do
-    before { login(user_with_invites); get :new }
+    before do
+      login(user_with_invites)
+      get :new
+    end
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:new) }
     specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -154,7 +169,8 @@ describe InvitesController do
 
       it "should set the flash" do
         expect(flash[:notice]).to match(
-          "There was a problem sending your invite to totally@wrong.com, it has been cancelled."
+          "There was a problem sending your invite to totally@wrong.com, " +
+          "it has been cancelled."
         )
       end
 

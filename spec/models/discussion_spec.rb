@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe Discussion do
-
   # Create the first admin user
   before { create(:user) }
 
@@ -69,9 +68,24 @@ describe Discussion do
     before { discussion.convert_to_conversation! }
     specify { expect(discussion.type).to eq("Conversation") }
     specify { expect(post.reload.conversation?).to eq(true) }
-    specify { expect(DiscussionRelationship.where(discussion_id: discussion.id).count).to eq(0) }
-    specify { expect(ConversationRelationship.where(conversation_id: discussion.id).count).to eq(2) }
-    specify { expect(conversation.participants).to match_array([discussion.poster, post.user]) }
+
+    specify do
+      expect(
+        DiscussionRelationship.where(discussion_id: discussion.id).count
+      ).to eq(0)
+    end
+
+    specify do
+      expect(
+        ConversationRelationship.where(conversation_id: discussion.id).count
+      ).to eq(2)
+    end
+
+    specify do
+      expect(
+        conversation.participants
+      ).to match_array([discussion.poster, post.user])
+    end
   end
 
   describe "#participants" do
@@ -81,9 +95,7 @@ describe Discussion do
   end
 
   describe "#viewable_by?" do
-
     context "when discussion is trusted" do
-
       context "with a regular user" do
         subject { trusted_discussion.viewable_by?(user) }
         it { is_expected.to eq(false) }
@@ -93,11 +105,9 @@ describe Discussion do
         subject { trusted_discussion.viewable_by?(trusted_user) }
         it { is_expected.to eq(true) }
       end
-
     end
 
     context "when discussion isn't trusted" do
-
       context "when public browsing is on" do
         before { Sugar.config.public_browsing = true }
         specify { expect(discussion.viewable_by?(nil)).to eq(true) }
@@ -108,9 +118,7 @@ describe Discussion do
         specify { expect(discussion.viewable_by?(nil)).to eq(false) }
         specify { expect(discussion.viewable_by?(user)).to eq(true) }
       end
-
     end
-
   end
 
   describe "#editable_by?" do
@@ -123,7 +131,6 @@ describe Discussion do
   end
 
   describe "#postable_by?" do
-
     context "when not closed" do
       specify { expect(discussion.postable_by?(user)).to eq(true) }
       specify { expect(discussion.postable_by?(nil)).to eq(false) }
@@ -131,11 +138,15 @@ describe Discussion do
 
     context "when closed" do
       specify { expect(closed_discussion.postable_by?(user)).to eq(false) }
-      specify { expect(closed_discussion.postable_by?(closed_discussion.poster)).to eq(false) }
+
+      specify do
+        expect(
+          closed_discussion.postable_by?(closed_discussion.poster)
+        ).to eq(false)
+      end
+
       specify { expect(closed_discussion.postable_by?(moderator)).to eq(true) }
       specify { expect(closed_discussion.postable_by?(admin)).to eq(true) }
     end
-
   end
-
 end

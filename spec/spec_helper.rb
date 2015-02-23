@@ -32,7 +32,8 @@ RSpec.configure do |config|
 
   # Stub Sunspot
   config.before do
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
+    Sunspot.session =
+      Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
   end
 
   config.before(:suite) do

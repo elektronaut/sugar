@@ -21,7 +21,9 @@ describe DiscussionsController do
     before { Sugar.config.update(public_browsing: true) }
 
     it_requires_login_for :new, :create, :favorites, :following
-    it_requires_login_for :edit, :update, :follow, :unfollow, :favorite, :unfavorite
+    it_requires_login_for :edit, :update,
+                          :follow, :unfollow,
+                          :favorite, :unfavorite
 
     it "is open for browsing discussions and posts" do
       discussion = create(:discussion)
@@ -71,7 +73,10 @@ describe DiscussionsController do
       it { is_expected.to render_template(:new) }
       specify do
         expect(flash.now[:notice]).to match(
-          /Could not save your discussion! Please make sure all required fields are filled in\./
+          Regexp.new(
+            "Could not save your discussion! " +
+            "Please make sure all required fields are filled in"
+          )
         )
       end
     end

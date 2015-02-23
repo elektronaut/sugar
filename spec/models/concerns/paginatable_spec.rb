@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe Paginatable do
-
   before(:each) do
     Exchange.per_page = 2
   end
@@ -84,5 +83,4 @@ describe Paginatable do
     before { Exchange.per_page = 19 }
     specify { expect(Exchange.per_page).to eq(19) }
   end
-
 end

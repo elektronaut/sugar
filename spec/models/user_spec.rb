@@ -3,17 +3,17 @@
 require "spec_helper"
 
 describe User do
-  let(:user)         { build(:user) }
+  let(:user) { build(:user) }
   let(:trusted_user) { build(:trusted_user) }
-  let(:admin)        { build(:admin) }
-  let(:moderator)    { build(:moderator) }
-  let(:user_admin)   { build(:user_admin) }
+  let(:admin) { build(:admin) }
+  let(:moderator) { build(:moderator) }
+  let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
     [
       "admin", "banned_until", "created_at", "description",
       "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
-      "inviter_id", "last_active", "last_fm", "latitude", "location", "longitude",
-      "moderator", "msn", "realname", "twitter", "user_admin",
+      "inviter_id", "last_active", "last_fm", "latitude", "location",
+      "longitude", "moderator", "msn", "realname", "twitter", "user_admin",
       "username", "website", "active", "banned",
       "sony", "nintendo", "steam"
     ]
@@ -29,8 +29,8 @@ describe User do
   it { is_expected.to belong_to(:avatar).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
   it do
-    is_expected.to validate_uniqueness_of(:username)
-      .case_insensitive.with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:username).
+      case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
   it { is_expected.to allow_value("فاطمة").for(:username) }
@@ -38,8 +38,8 @@ describe User do
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
   it do
-    is_expected.to validate_uniqueness_of(:email)
-      .case_insensitive.with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:email).
+      case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
@@ -141,8 +141,9 @@ describe User do
     specify { expect(user_admin.admin_labels).to eq(["User Admin"]) }
     specify { expect(moderator.admin_labels).to eq(["Moderator"]) }
     specify do
-      expect(build(:user, moderator: true, user_admin: true)
-      .admin_labels).to eq(["User Admin", "Moderator"])
+      expect(
+        build(:user, moderator: true, user_admin: true).admin_labels
+      ).to eq(["User Admin", "Moderator"])
     end
     specify { expect(user.admin_labels).to eq([]) }
   end
@@ -199,7 +200,8 @@ describe User do
       let(:user) { build(:user, gamertag: "my gamertag") }
       it do
         is_expected.to(
-        eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
+          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png"
+        )
       )
       end
     end

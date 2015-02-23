@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe UserScopes do
-
   # Create the first admin user
   let!(:first_user) { create(:banned_user) }
 
@@ -26,7 +25,9 @@ describe UserScopes do
     before { first_user.destroy }
     let!(:not_banned) { create(:user) }
     let!(:banned) { create(:user, banned: true) }
-    let!(:temporarily_banned) { create(:user, banned_until: (Time.now + 2.days)) }
+    let!(:temporarily_banned) do
+      create(:user, banned_until: (Time.now + 2.days))
+    end
     subject { User.banned }
     it { is_expected.to match_array([banned, temporarily_banned]) }
   end
@@ -108,5 +109,4 @@ describe UserScopes do
     subject { User.trusted }
     it { is_expected.to match_array([trusted, admin, moderator, user_admin]) }
   end
-
 end

@@ -45,7 +45,11 @@ describe UsersController, redis: true do
       before { post :create, token: invite.token, user: params }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:user)).to be_a(User) }
-      it { is_expected.to redirect_to(user_profile_url(id: assigns(:user).username)) }
+      it "should redirect " do
+        is_expected.to redirect_to(
+          user_profile_url(id: assigns(:user).username)
+        )
+      end
     end
   end
 end

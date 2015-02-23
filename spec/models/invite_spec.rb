@@ -36,7 +36,10 @@ describe Invite do
   describe "before_create" do
     subject { create(:invite) }
 
-    specify { expect(subject.expires_at).to be_within(30).of(Time.now + 14.days) }
+    specify do
+      expect(subject.expires_at).to be_within(30).of(Time.now + 14.days)
+    end
+
     specify { expect(subject.token).to be_kind_of(String) }
     specify { expect(subject.token.length >= 40).to eq(true) }
 
@@ -49,7 +52,6 @@ describe Invite do
   end
 
   describe "before_destroy" do
-
     context "when invite has been used" do
       before { invite.used = true }
       it "doesn't grant the user an invite" do
@@ -103,7 +105,6 @@ describe Invite do
         Invite.destroy_expired!
       end.to change { Invite.count }.by(-1)
     end
-
   end
 
   describe "#expired?" do
@@ -126,5 +127,4 @@ describe Invite do
       expect { Invite.destroy_expired! }.to change { Invite.count }.by(-1)
     end
   end
-
 end
