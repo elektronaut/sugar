@@ -1,9 +1,8 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ExchangeParticipant do
-
   let(:user)         { create(:user) }
   let(:discussion)   { create(:discussion) }
   let(:conversation) { create(:conversation) }
@@ -12,22 +11,32 @@ describe ExchangeParticipant do
 
   it { is_expected.to have_many(:discussions) }
   it { is_expected.to have_many(:posts) }
-  it { is_expected.to have_many(:discussion_posts).class_name('Post') }
+  it { is_expected.to have_many(:discussion_posts).class_name("Post") }
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
-  it { is_expected.to have_many(:conversation_relationships).dependent(:destroy) }
-  it { is_expected.to have_many(:conversations).through(:conversation_relationships) }
+
+  it do
+    is_expected.to have_many(:conversation_relationships).
+      dependent(:destroy)
+  end
+
+  it do
+    is_expected.to have_many(:conversations).
+      through(:conversation_relationships)
+  end
 
   describe "#mark_exchange_viewed" do
     let(:post) { create(:post, exchange: discussion) }
 
     context "with existing exchange view" do
-      let!(:exchange_view) { create(:exchange_view, user: user, exchange: discussion) }
+      let!(:exchange_view) do
+        create(:exchange_view, user: user, exchange: discussion)
+      end
 
       it "does not create a new view" do
-        expect {
+        expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        }.to change{ ExchangeView.count }.by(0)
+        end.to change { ExchangeView.count }.by(0)
       end
 
       describe "the new view" do
@@ -40,14 +49,13 @@ describe ExchangeParticipant do
         specify { expect(subject.post_index).to eq(2) }
         specify { expect(subject.post).to eq(post) }
       end
-
     end
 
     context "without existing discussion view" do
       it "creates a new view" do
-        expect {
+        expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        }.to change{ ExchangeView.count }.by(1)
+        end.to change { ExchangeView.count }.by(1)
       end
 
       describe "the new discussion view" do
@@ -57,22 +65,22 @@ describe ExchangeParticipant do
         specify { expect(subject.post).to eq(post) }
       end
     end
-
   end
 
   describe "#mark_conversation_viewed" do
     let(:user)         { conversation.poster }
-    let(:conversation_relationship) {
+    let(:conversation_relationship) do
       user.conversation_relationships.where(conversation_id: conversation).first
-    }
+    end
     before { conversation_relationship.update_attributes(new_posts: true) }
     before { user.mark_conversation_viewed(conversation) }
-    subject { user.conversation_relationships.where(conversation_id: conversation).first }
+    subject do
+      user.conversation_relationships.where(conversation_id: conversation).first
+    end
     specify { expect(subject.new_posts?).to eq(false) }
   end
 
   describe "#posts_per_day" do
-
     let(:user) { create(:user, created_at: 3.days.ago) }
 
     before do
@@ -82,11 +90,10 @@ describe ExchangeParticipant do
 
     subject { user.posts_per_day }
 
-    it { is_expected.to be_within(0.001).of(1.0/3.0) }
+    it { is_expected.to be_within(0.001).of(1.0 / 3.0) }
   end
 
   describe "#unread_conversations_count" do
-
     subject { user.unread_conversations_count }
 
     context "with no conversations" do
@@ -94,19 +101,33 @@ describe ExchangeParticipant do
     end
 
     context "when notifications is set to false" do
-      before { create(:conversation_relationship, user: user, new_posts: true, notifications: false) }
+      before do
+        create(
+          :conversation_relationship,
+          user: user,
+          new_posts: true,
+          notifications: false
+        )
+      end
+
       it { is_expected.to eq(0) }
     end
 
     context "when notifications is set to false" do
-      before { create(:conversation_relationship, user: user, new_posts: true, notifications: true) }
+      before do
+        create(
+          :conversation_relationship,
+          user: user,
+          new_posts: true,
+          notifications: true
+        )
+      end
+
       it { is_expected.to eq(1) }
     end
-
   end
 
   describe "#unread_conversations?" do
-
     subject { user.unread_conversations? }
 
     context "with no unread conversations" do
@@ -114,14 +135,20 @@ describe ExchangeParticipant do
     end
 
     context "with unread conversations" do
-      before { create(:conversation_relationship, user: user, new_posts: true, notifications: true) }
+      before do
+        create(
+          :conversation_relationship,
+          user: user,
+          new_posts: true,
+          notifications: true
+        )
+      end
+
       it { is_expected.to eq(true) }
     end
-
   end
 
   describe "#following?" do
-
     subject { user.following?(discussion) }
 
     context "when discussion isn't followed" do
@@ -129,14 +156,15 @@ describe ExchangeParticipant do
     end
 
     context "when discussion is followed" do
-      before { DiscussionRelationship.define(user, discussion, following: true) }
+      before do
+        DiscussionRelationship.define(user, discussion, following: true)
+      end
+
       it { is_expected.to eq(true) }
     end
-
   end
 
   describe "#favorite?" do
-
     subject { user.favorite?(discussion) }
 
     context "when discussion isn't favorite" do
@@ -147,7 +175,5 @@ describe ExchangeParticipant do
       before { DiscussionRelationship.define(user, discussion, favorite: true) }
       it { is_expected.to eq(true) }
     end
-
   end
-
 end

@@ -9,9 +9,9 @@ class Post < ActiveRecord::Base
 
   belongs_to :user, counter_cache: true, touch: true
   belongs_to :exchange, counter_cache: :posts_count, touch: true
-  has_many   :exchange_views
+  has_many :exchange_views
 
-  validates_presence_of :body, :user_id, :exchange_id
+  validates :body, :user_id, :exchange_id, presence: true
   validates :format, inclusion: %w{markdown html}
 
   attr_accessor :skip_html
@@ -28,29 +28,29 @@ class Post < ActiveRecord::Base
 
   after_destroy :decrement_public_posts_count
 
-  scope :sorted,                 -> { order('created_at ASC') }
+  scope :sorted,                 -> { order("created_at ASC") }
   scope :for_view,               -> { sorted.includes(user: [:avatar]) }
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
 
   def me_post?
-    @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/) ) ? true : false
+    @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/)) ? true : false
   end
 
   def post_number
-    @post_number ||= self.exchange.posts.where('id < ?', self.id).count + 1
+    @post_number ||= exchange.posts.where("id < ?", id).count + 1
   end
 
-  def page(options={})
+  def page(options = {})
     limit = options[:limit] || Post.per_page
-    (post_number.to_f/limit).ceil
+    (post_number.to_f / limit).ceil
   end
 
   def body_html
-    if self.new_record? || Rails.env == 'development'
-      Renderer.render(self.body, format: self.format)
+    if self.new_record? || Rails.env == "development"
+      Renderer.render(body, format: format)
     else
       unless body_html?
-        self.update_column(:body_html, Renderer.render(self.body, format: self.format))
+        update_column(:body_html, Renderer.render(body, format: format))
       end
       self[:body_html].html_safe
     end
@@ -58,7 +58,7 @@ class Post < ActiveRecord::Base
 
   def edited?
     return false unless edited_at?
-    (((self.edited_at || self.created_at) - self.created_at) > 60.seconds ) ? true : false
+    (((edited_at || created_at) - created_at) > 60.seconds) ? true : false
   end
 
   def editable_by?(user)
@@ -71,8 +71,11 @@ class Post < ActiveRecord::Base
 
   def mentioned_users
     @mentioned_users ||= User.all.select do |user|
-      user_expression = Regexp.new('@'+Regexp.quote(user.username), Regexp::IGNORECASE)
-      self.body.match(user_expression) ? true : false
+      user_expression = Regexp.new(
+        "@" + Regexp.quote(user.username),
+        Regexp::IGNORECASE
+      )
+      body.match(user_expression) ? true : false
     end
   end
 
@@ -80,7 +83,7 @@ class Post < ActiveRecord::Base
 
   def update_public_posts_count(delta)
     if !self.conversation? && !self.trusted?
-      self.user.update_column(:public_posts_count, self.user.public_posts_count + delta)
+      user.update_column(:public_posts_count, user.public_posts_count + delta)
     end
   end
 
@@ -93,20 +96,20 @@ class Post < ActiveRecord::Base
   end
 
   def update_trusted_status
-    if self.exchange
-      self.trusted = self.exchange.trusted
+    if exchange
+      self.trusted = exchange.trusted
     end
     true
   end
 
   def render_html
-    unless self.skip_html
-      self.body_html = Renderer.render(self.body, format: self.format)
+    unless skip_html
+      self.body_html = Renderer.render(body, format: format)
     end
   end
 
   def flag_conversation
-    self.conversation = self.exchange.kind_of?(Conversation)
+    self.conversation = exchange.is_a?(Conversation)
     true
   end
 
@@ -116,20 +119,24 @@ class Post < ActiveRecord::Base
 
   def define_relationship
     unless self.conversation?
-      DiscussionRelationship.define(self.user, self.exchange, participated: true)
+      DiscussionRelationship.define(user, exchange, participated: true)
     end
   end
 
   def update_exchange
-    self.exchange.update_attributes(last_poster_id: self.user.id, last_post_at: self.created_at)
+    exchange.update_attributes(
+      last_poster_id: user.id,
+      last_post_at: created_at
+    )
   end
 
   def notify_new_conversation_post
     if self.conversation?
-      self.exchange.conversation_relationships.each do |relationship|
-        relationship.update_attributes(new_posts: true) unless relationship.user == self.user
+      exchange.conversation_relationships.each do |relationship|
+        unless relationship.user == user
+          relationship.update_attributes(new_posts: true)
+        end
       end
     end
   end
-
 end

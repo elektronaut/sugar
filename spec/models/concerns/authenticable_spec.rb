@@ -1,20 +1,29 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Authenticable do
-
   # Create the first admin user
-  before { create(:user, openid_url: 'http://whatever.com', facebook_uid: 345 ) }
+  before { create(:user, openid_url: "http://whatever.com", facebook_uid: 345) }
 
-  let(:user)          { create(:user, facebook_uid: 123, openid_url: 'http://example.com') }
-  let(:banned_user)   { create(:banned_user) }
+  let(:user) do
+    create(:user, facebook_uid: 123, openid_url: "http://example.com")
+  end
+  let(:banned_user) { create(:banned_user) }
 
   subject { user }
 
   it { is_expected.to validate_presence_of(:hashed_password) }
-  it { is_expected.to validate_uniqueness_of(:openid_url).with_message(/is already registered/) }
-  it { is_expected.to validate_uniqueness_of(:facebook_uid).with_message(/is already registered/) }
+
+  it "should validate openid_url" do
+    is_expected.to validate_uniqueness_of(:openid_url).
+      with_message(/is already registered/)
+  end
+
+  it "should validate facebook_uid" do
+    is_expected.to validate_uniqueness_of(:facebook_uid).
+      with_message(/is already registered/)
+  end
 
   it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
 
@@ -23,33 +32,40 @@ describe Authenticable do
     before { user.valid? }
 
     context "when confirm_password is missing" do
-      let(:user) { build(:user, password: 'new') }
+      let(:user) { build(:user, password: "new") }
       specify { expect(subject.length).to eq(1) }
     end
 
     context "when confirm_password is wrong" do
-      let(:user) { build(:user, password: 'new', confirm_password: 'wrong') }
+      let(:user) { build(:user, password: "new", confirm_password: "wrong") }
       specify { expect(subject.length).to eq(1) }
     end
 
     context "when confirm_password is present" do
-      let(:user) { build(:user, password: 'new', confirm_password: 'new') }
+      let(:user) { build(:user, password: "new", confirm_password: "new") }
       it { is_expected.to eq([]) }
     end
   end
 
   describe ".encrypt_password" do
     before do
-      allow(BCrypt::Password).to receive(:create).and_return('hashed password')
+      allow(BCrypt::Password).to receive(:create).and_return("hashed password")
     end
-    subject { User.encrypt_password('password') }
-    it { is_expected.to eq('hashed password') }
+    subject { User.encrypt_password("password") }
+    it { is_expected.to eq("hashed password") }
   end
 
   describe ".find_and_authenticate_with_password" do
-    let(:username) { 'user123' }
-    let(:password) { 'password123' }
-    let!(:user) { create(:user, username: 'user123', password: 'password123', confirm_password: 'password123') }
+    let(:username) { "user123" }
+    let(:password) { "password123" }
+    let!(:user) do
+      create(
+        :user,
+        username: "user123",
+        password: "password123",
+        confirm_password: "password123"
+      )
+    end
     subject { User.find_and_authenticate_with_password(username, password) }
 
     context "when username and password is correct" do
@@ -57,7 +73,7 @@ describe Authenticable do
     end
 
     context "when username is wrong" do
-      let(:username) { 'user456' }
+      let(:username) { "user456" }
       it { is_expected.to eq(nil) }
     end
 
@@ -67,7 +83,7 @@ describe Authenticable do
     end
 
     context "when password is wrong" do
-      let(:password) { 'password456' }
+      let(:password) { "password456" }
       it { is_expected.to eq(nil) }
     end
 
@@ -95,29 +111,42 @@ describe Authenticable do
   end
 
   describe "#valid_password?" do
-
     context "with SHA1 hashed password" do
       specify do
-        expect(create(:user, hashed_password: Digest::SHA1.hexdigest("password123"))
-          .valid_password?("password123")).to eq(true)
+        expect(
+          create(
+            :user,
+            hashed_password: Digest::SHA1.hexdigest("password123")
+          ).valid_password?("password123")
+        ).to eq(true)
       end
       specify do
-        expect(create(:user, hashed_password: Digest::SHA1.hexdigest("password123"))
-          .valid_password?("password")).to eq(false)
+        expect(
+          create(
+            :user,
+            hashed_password: Digest::SHA1.hexdigest("password123")
+          ).valid_password?("password")
+        ).to eq(false)
       end
     end
 
     context "with BCrypt hashed password" do
       specify do
-        expect(create(:user, hashed_password: BCrypt::Password.create("password123"))
-          .valid_password?("password123")).to eq(true)
+        expect(
+          create(
+            :user,
+            hashed_password: BCrypt::Password.create("password123")
+          ).valid_password?("password123")
+        ).to eq(true)
       end
       specify do
-        expect(create(:user, hashed_password: BCrypt::Password.create("password123"))
-          .valid_password?("password")).to eq(false)
+        expect(
+          create(
+            :user,
+            hashed_password: BCrypt::Password.create("password123")
+          ).valid_password?("password")).to eq(false)
       end
     end
-
   end
 
   describe "#hash_password!" do
@@ -132,38 +161,70 @@ describe Authenticable do
 
   describe "#new_password?" do
     specify { expect(user.new_password?).to eq(false) }
-    specify { expect(build(:user, password: "New password").new_password?).to eq(true) }
+    specify do
+      expect(build(:user, password: "New password").new_password?).to eq(true)
+    end
   end
 
   describe "#new_password_confirmed?" do
     specify { expect(user.new_password_confirmed?).to eq(false) }
-    specify { expect(build(:user, password: "new").new_password_confirmed?).to eq(false) }
-    specify { expect(build(:user, password: "new", confirm_password: "wrong").new_password_confirmed?).to eq(false) }
-    specify { expect(build(:user, password: "new", confirm_password: "new").new_password_confirmed?).to eq(true) }
+    specify do
+      expect(build(:user, password: "new").new_password_confirmed?).to eq(false)
+    end
+    specify do
+      expect(
+        build(
+          :user, password: "new", confirm_password: "wrong"
+        ).new_password_confirmed?
+      ).to eq(false)
+    end
+    specify do
+      expect(
+        build(
+          :user, password: "new", confirm_password: "new"
+        ).new_password_confirmed?
+      ).to eq(true)
+    end
   end
 
   describe "#password_needs_rehash?" do
-
     context "when password is hashed with SHA1" do
       specify do
-        expect(create(:user, hashed_password: Digest::SHA1.hexdigest("password123"))
-          .password_needs_rehash?).to eq(true)
+        expect(
+          create(
+            :user, hashed_password: Digest::SHA1.hexdigest("password123")
+          ).password_needs_rehash?
+        ).to eq(true)
       end
     end
 
     context "when password is hashed with BCrypt" do
       specify do
-        expect(create(:user, hashed_password: BCrypt::Password.create("password123"))
-          .password_needs_rehash?).to eq(false)
+        expect(
+          create(
+            :user, hashed_password: BCrypt::Password.create("password123")
+          ).password_needs_rehash?
+        ).to eq(false)
       end
     end
-
   end
 
   describe "#temporary_banned?" do
     specify { expect(user.temporary_banned?).to eq(false) }
-    specify { expect(create(:user, banned_until: 2.days.ago).temporary_banned?).to eq(false) }
-    specify { expect(create(:user, banned_until: (Time.now + 2.days)).temporary_banned?).to eq(true) }
+    specify do
+      expect(
+        create(
+          :user, banned_until: 2.days.ago
+        ).temporary_banned?
+      ).to eq(false)
+    end
+    specify do
+      expect(
+        create(
+          :user, banned_until: (Time.now + 2.days)
+        ).temporary_banned?
+      ).to eq(true)
+    end
   end
 
   describe "#ensure_password" do
@@ -181,15 +242,16 @@ describe Authenticable do
     end
 
     context "when signed up with OpenID" do
-      let(:user) { build(:user, hashed_password: nil, openid_url: "http://example.com/") }
+      let(:user) do
+        build(:user, hashed_password: nil, openid_url: "http://example.com/")
+      end
       it { is_expected.to_not be_blank }
     end
 
     context "when password is set" do
-     let(:user) { create(:user, password: 'new', confirm_password: 'new') }
-     it { is_expected.to eq('new') }
+      let(:user) { create(:user, password: "new", confirm_password: "new") }
+      it { is_expected.to eq("new") }
     end
-
   end
 
   describe "#normalize_openid_url" do
@@ -197,27 +259,38 @@ describe Authenticable do
     subject { user.openid_url }
 
     context "when missing http" do
-      let(:user) { build(:user, openid_url: 'example.com') }
-      it { is_expected.to eq('http://example.com/') }
+      let(:user) { build(:user, openid_url: "example.com") }
+      it { is_expected.to eq("http://example.com/") }
     end
 
     context "when not missing http" do
-      let(:user) { build(:user, openid_url: 'https://example.com') }
-      it { is_expected.to eq('https://example.com/') }
+      let(:user) { build(:user, openid_url: "https://example.com") }
+      it { is_expected.to eq("https://example.com/") }
     end
-
   end
 
   describe "#encrypt_new_password" do
-    let(:user) { build(:user, hashed_password: nil, password: 'new', confirm_password: 'new') }
+    let(:user) do
+      build(
+        :user, hashed_password: nil, password: "new", confirm_password: "new"
+      )
+    end
     before { user.valid? }
     subject { user.hashed_password }
     it { is_expected.to_not be_blank }
   end
 
   describe "#clear_banned_until" do
-    specify { expect(create(:user, banned_until: 2.seconds.ago).banned_until).to eq(nil) }
-    specify { expect(create(:user, banned_until: (Time.now + 2.days)).banned_until).to be_kind_of(Time) }
+    specify do
+      expect(
+        create(:user, banned_until: 2.seconds.ago).banned_until
+      ).to eq(nil)
+    end
+    specify do
+      expect(
+        create(:user, banned_until: (Time.now + 2.days)).banned_until
+      ).to be_kind_of(Time)
+    end
   end
 
   describe "#update_persistence_token" do
@@ -243,5 +316,4 @@ describe Authenticable do
       it { is_expected.to eq(previous_token) }
     end
   end
-
 end

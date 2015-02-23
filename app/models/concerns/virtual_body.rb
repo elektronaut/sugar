@@ -11,24 +11,24 @@ module VirtualBody
   private
 
   def create_first_post
-    if self.body && !self.body.empty?
+    if body && !body.empty?
       attributes = {
-        user: self.poster,
-        body: self.body
+        user: poster,
+        body: body
       }
-      attributes[:format] = self.format unless self.format.blank?
-      self.posts.create(attributes)
+      attributes[:format] = format unless format.blank?
+      posts.create(attributes)
     end
   end
 
   def update_post_body
-    if self.body && !self.body.empty? && self.body != self.posts.first.body
+    if body && !body.empty? && body != posts.first.body
       attributes = {
         edited_at: Time.now,
-        body: self.body
+        body: body
       }
-      attributes[:format] = self.format unless self.format.blank?
-      self.posts.first.update_attributes(attributes)
+      attributes[:format] = format unless format.blank?
+      posts.first.update_attributes(attributes)
     end
   end
 end

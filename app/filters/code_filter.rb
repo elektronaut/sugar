@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class CodeFilter < Filter
-
   def process(post)
     parser = Nokogiri::HTML::DocumentFragment.parse(post)
 

@@ -3,7 +3,7 @@ if defined?(PhusionPassenger)
     # We're in smart spawning mode.
     if forked
       # Re-establish redis connection
-      require 'redis'
+      require "redis"
 
       # The important two lines
       Sugar.redis.client.disconnect

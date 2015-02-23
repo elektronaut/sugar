@@ -2,10 +2,10 @@ class CreateXboxInfos < ActiveRecord::Migration
   def self.up
     create_table :xbox_infos do |t|
       t.belongs_to :user
-      t.integer    :status, :gamerscore
-      t.string     :info, :info2, :status_text, :reputation, :tile_url, :zone
-      t.boolean    :valid_xml, null: false, default: false
-      t.text       :xml_data
+      t.integer :status, :gamerscore
+      t.string :info, :info2, :status_text, :reputation, :tile_url, :zone
+      t.boolean :valid_xml, null: false, default: false
+      t.text :xml_data
       t.timestamps
     end
   end

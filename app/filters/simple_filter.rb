@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class SimpleFilter < Filter
-
   def process(post)
     convert_line_breaks(escape_angle_brackets(strip(post)))
   end
@@ -13,13 +12,13 @@ class SimpleFilter < Filter
   end
 
   def escape_angle_brackets(str)
-    str
-      .gsub(Regexp.new("<(?!/|" + html_tags.join("|") + ")"), "&lt;")
-      .gsub(Regexp.new("(?<!\"|'|" + html_tags.join("|") + ")>"), "&gt;")
+    str.
+      gsub(Regexp.new("<(?!/|" + html_tags.join("|") + ")"), "&lt;").
+      gsub(Regexp.new("(?<!\"|'|" + html_tags.join("|") + ")>"), "&gt;")
   end
 
   def strip(post)
-    post.gsub(/\A[\s\n]*/, '').gsub(/[\s\n]*\Z/, '')
+    post.gsub(/\A[\s\n]*/, "").gsub(/[\s\n]*\Z/, "")
   end
 
   def html_tags
@@ -36,5 +35,4 @@ class SimpleFilter < Filter
       allowfullscreen base64serialized
     }
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class MarkdownCodeFilter < Filter
-
   def process(post)
     markdown_code_blocks(post)
   end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class MarkdownFilter < Filter
-
   def process(post)
     markdown.render(post)
   end
@@ -26,5 +25,4 @@ class MarkdownFilter < Filter
       space_after_headers:          true
     )
   end
-
 end

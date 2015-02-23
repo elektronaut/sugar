@@ -11,15 +11,17 @@ describe Mailer do
   end
 
   describe "invite" do
-
     let(:mail) { Mailer.invite(invite, login_url) }
 
-    specify { expect(mail.subject).to eq("#{invite.user.realname} has invited you to Sugar!") }
+    specify do
+      expect(
+        mail.subject
+      ).to eq("#{invite.user.realname} has invited you to Sugar!")
+    end
     specify { expect(mail.to).to eq([invite.email]) }
     specify { expect(mail.from).to eq(["test@example.com"]) }
 
     describe "its body" do
-
       subject { mail.body.encoded }
 
       it { is_expected.to match(Sugar.config.forum_name) }
@@ -57,7 +59,9 @@ describe Mailer do
   end
 
   describe "password_reset" do
-    let(:mail) { Mailer.password_reset("user@example.com", "http://example.com") }
+    let(:mail) do
+      Mailer.password_reset("user@example.com", "http://example.com")
+    end
     subject { mail }
 
     specify { expect(mail.subject).to eq("Password reset for Sugar") }
@@ -65,5 +69,4 @@ describe Mailer do
     specify { expect(mail.from).to eq(["test@example.com"]) }
     specify { expect(mail.body.encoded).to match("http://example.com") }
   end
-
 end

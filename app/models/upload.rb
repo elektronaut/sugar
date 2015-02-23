@@ -2,8 +2,8 @@ class Upload
   attr_accessor :file, :options
 
   class << self
-    def create(file, options={})
-      upload = self.new(file, options)
+    def create(file, options = {})
+      upload = new(file, options)
       if upload.valid?
         upload.save
       end
@@ -11,7 +11,7 @@ class Upload
     end
   end
 
-  def initialize(file, options={})
+  def initialize(file, options = {})
     @file = file
     @options = options
   end
@@ -20,7 +20,7 @@ class Upload
     @s3_bucket ||= AWS::S3.new(
       access_key_id:     Sugar.config.amazon_aws_key,
       secret_access_key: Sugar.config.amazon_aws_secret,
-      region:            'us-east-1'
+      region:            "us-east-1"
     ).buckets[Sugar.config.amazon_s3_bucket]
   end
 

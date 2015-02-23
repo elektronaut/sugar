@@ -2,9 +2,11 @@ module ExchangeParticipant
   extend ActiveSupport::Concern
 
   included do
-    has_many :discussions, foreign_key: 'poster_id'
+    has_many :discussions, foreign_key: "poster_id"
     has_many :posts
-    has_many :discussion_posts, -> { where conversation: false }, class_name: 'Post'
+    has_many :discussion_posts,
+             -> { where conversation: false },
+             class_name: "Post"
     has_many :exchange_views, dependent: :destroy
     has_many :discussion_relationships, dependent: :destroy
 
@@ -30,27 +32,44 @@ module ExchangeParticipant
   end
 
   def unhidden_discussions
-    Discussion.where(Discussion.arel_table[:id].in(self.hidden_discussions.map(&:id)).not)
+    Discussion.where(
+      Discussion.arel_table[:id].in(hidden_discussions.map(&:id)).not
+    )
   end
 
   def mark_exchange_viewed(exchange, post, index)
-    if exchange_view = ExchangeView.where(user_id: self.id, exchange_id: exchange.id).first
-      exchange_view.update_attributes(post_index: index, post_id: post.id) if exchange_view.post_index < index
+    if exchange_view = ExchangeView.where(
+      user_id: id,
+      exchange_id: exchange.id
+    ).first
+      if exchange_view.post_index < index
+        exchange_view.update_attributes(
+          post_index: index,
+          post_id: post.id
+        )
+      end
     else
-      ExchangeView.create(exchange_id: exchange.id, user_id: self.id, post_index: index, post_id: post.id)
+      ExchangeView.create(
+        exchange_id: exchange.id,
+        user_id: id,
+        post_index: index,
+        post_id: post.id
+      )
     end
   end
 
   def mark_conversation_viewed(conversation)
-    self.conversation_relationships.where(conversation_id: conversation).first.update_attributes(new_posts: false)
+    conversation_relationships.where(
+      conversation_id: conversation
+    ).first.update_attributes(new_posts: false)
   end
 
   def posts_per_day
-    public_posts_count.to_f / ((Time.now - self.created_at).to_f / 1.day)
+    public_posts_count.to_f / ((Time.now - created_at).to_f / 1.day)
   end
 
   def unread_conversations_count
-    self.conversation_relationships.where(new_posts: true, notifications: true).count
+    conversation_relationships.where(new_posts: true, notifications: true).count
   end
 
   def unread_conversations?
@@ -58,21 +77,33 @@ module ExchangeParticipant
   end
 
   def discussion_relationship_with(discussion)
-    self.discussion_relationships.where(discussion_id: discussion.id).first
+    discussion_relationships.where(discussion_id: discussion.id).first
   end
 
   def following?(discussion)
-    (discussion_relationship_with(discussion) &&
-     discussion_relationship_with(discussion).following?) ? true : false
+    if discussion_relationship_with(discussion) &&
+        discussion_relationship_with(discussion).following?
+      true
+    else
+      false
+    end
   end
 
   def favorite?(discussion)
-    (discussion_relationship_with(discussion) &&
-     discussion_relationship_with(discussion).favorite?) ? true : false
+    if discussion_relationship_with(discussion) &&
+        discussion_relationship_with(discussion).favorite?
+      true
+    else
+      false
+    end
   end
 
   def hidden?(discussion)
-    (discussion_relationship_with(discussion) &&
-     discussion_relationship_with(discussion).hidden?) ? true : false
+    if discussion_relationship_with(discussion) &&
+        discussion_relationship_with(discussion).hidden?
+      true
+    else
+      false
+    end
   end
 end

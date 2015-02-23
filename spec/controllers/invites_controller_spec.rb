@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvitesController do
   # Create the first admin user
   before { create(:user) }
 
-  let(:invite)            { create(:invite) }
-  let(:expired_invite)    { create(:invite, expires_at: 2.days.ago) }
-  let(:user)              { create(:user) }
+  let(:invite) { create(:invite) }
+  let(:expired_invite) { create(:invite, expires_at: 2.days.ago) }
+  let(:user) { create(:user) }
   let(:user_with_invites) { create(:user, available_invites: 1) }
 
   it_requires_login_for :index, :all, :new, :create, :destroy
@@ -28,13 +28,18 @@ describe InvitesController do
       let(:invite_id) { 1231115 }
       it "should raise an error" do
         login invite.user
-        expect { delete(:destroy, id: invite_id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect do
+          delete(:destroy, id: invite_id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
   describe "#verify_available_invites" do
-    before { login(user); get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     context "when user has invites" do
       let(:user) { create(:user, available_invites: 1) }
@@ -57,7 +62,11 @@ describe InvitesController do
 
   describe "GET index" do
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
-    before { login(user); get :index }
+
+    before do
+      login(user)
+      get :index
+    end
 
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:index) }
@@ -69,7 +78,10 @@ describe InvitesController do
     let(:user) { create(:user_admin) }
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
 
-    before { login(user); get :all }
+    before do
+      login(user)
+      get :all
+    end
 
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:all) }
@@ -110,7 +122,10 @@ describe InvitesController do
   end
 
   describe "GET new" do
-    before { login(user_with_invites); get :new }
+    before do
+      login(user_with_invites)
+      get :new
+    end
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:new) }
     specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -122,8 +137,8 @@ describe InvitesController do
     context "with valid params" do
       before do
         post :create, invite: {
-          email:   'no-reply@example.com',
-          message: 'testing message'
+          email:   "no-reply@example.com",
+          message: "testing message"
         }
       end
 
@@ -135,8 +150,8 @@ describe InvitesController do
         )
       end
 
-      specify { expect(last_email.to).to eq(['no-reply@example.com']) }
-      specify { expect(last_email.body.encoded).to match('testing message') }
+      specify { expect(last_email.to).to eq(["no-reply@example.com"]) }
+      specify { expect(last_email.body.encoded).to match("testing message") }
 
       it { is_expected.to redirect_to(invites_url) }
     end
@@ -147,14 +162,15 @@ describe InvitesController do
           raise Net::SMTPSyntaxError
         end
         post :create, invite: {
-          email:   'totally@wrong.com',
-          message: 'testing message'
+          email:   "totally@wrong.com",
+          message: "testing message"
         }
       end
 
       it "should set the flash" do
         expect(flash[:notice]).to match(
-          "There was a problem sending your invite to totally@wrong.com, it has been cancelled."
+          "There was a problem sending your invite to totally@wrong.com, " +
+          "it has been cancelled."
         )
       end
 
@@ -170,7 +186,7 @@ describe InvitesController do
     end
 
     context "with invalid params" do
-      before { post :create, invite: { foo: 'bar' } }
+      before { post :create, invite: { foo: "bar" } }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
@@ -179,7 +195,7 @@ describe InvitesController do
 
   describe "DELETE destroy" do
     context "when user owns the invite" do
-      before { login(invite.user) and delete(:destroy, id: invite.id) }
+      before { login(invite.user) && delete(:destroy, id: invite.id) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(true) }
@@ -190,7 +206,7 @@ describe InvitesController do
     end
 
     context "when user doesn't own the invite" do
-      before { login(user) and delete(:destroy, id: invite.id) }
+      before { login(user) && delete(:destroy, id: invite.id) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(false) }

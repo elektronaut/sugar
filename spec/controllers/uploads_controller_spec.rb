@@ -1,9 +1,13 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe UploadsController, redis: true do
-
-  let(:user)          { create(:user) }
-  let(:png_file)      { Rack::Test::UploadedFile.new(Rails.root.join("spec/support/pink.png"), "image/png") }
+  let(:user) { create(:user) }
+  let(:png_file) do
+    Rack::Test::UploadedFile.new(
+      Rails.root.join("spec/support/pink.png"),
+      "image/png"
+    )
+  end
 
   before do
     # Create the first admin user
@@ -11,9 +15,9 @@ describe UploadsController, redis: true do
 
     # Configure S3
     Sugar.config.update(
-      amazon_aws_key:    "foo",
+      amazon_aws_key: "foo",
       amazon_aws_secret: "bar",
-      amazon_s3_bucket:  "sugar"
+      amazon_s3_bucket: "sugar"
     )
 
     AWS.stub!
@@ -29,7 +33,8 @@ describe UploadsController, redis: true do
         {
           type: "image/png",
           name: "pink.png",
-          url:  "https://sugar.s3.amazonaws.com/76a68c6a781ef4919bd4352b880b7c9e50de3d96.png"
+          url: "https://sugar.s3.amazonaws.com/" +
+            "76a68c6a781ef4919bd4352b880b7c9e50de3d96.png"
         }
       end
 
@@ -43,5 +48,4 @@ describe UploadsController, redis: true do
       it { is_expected.to be_json_eql(expected_response.to_json) }
     end
   end
-
 end

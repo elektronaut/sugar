@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 Sugar::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
+  # Settings specified here will take precedence over those in
+  # config/application.rb
 
   # The test environment is used exclusively to run your application's
   # test suite.  You never need to work with it otherwise.  Remember that
@@ -29,9 +30,11 @@ Sugar::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # Use SQL instead of Active Record's schema dumper when creating the test database.
-  # This is necessary if your schema can't be completely dumped by the schema dumper,
-  # like if you have constraints or database-specific column types
+  # Use SQL instead of Active Record's schema dumper when creating the
+  # test database.
+  # This is necessary if your schema can't be completely dumped by the
+  # schema dumper, like if you have constraints or database-specific
+  # column types
   # config.active_record.schema_format = :sql
 
   # Print deprecation notices to the stderr

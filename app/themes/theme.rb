@@ -6,16 +6,20 @@ class Theme
 
   class << self
     def all
-      ids = base_dir.entries.select{|d| File.exist?(base_dir.join(d, 'theme.yml'))}.map(&:to_s)
-      ids.map{|id| find(id)}
+      ids = base_dir.entries.select do |d|
+        File.exist?(base_dir.join(d, "theme.yml"))
+      end.map(&:to_s)
+      ids.map { |id| find(id) }
     end
 
     def precompile_assets
-      all.flat_map { |theme| [theme.stylesheet_path, theme.mobile_stylesheet_path] }.compact
+      all.flat_map do |theme|
+        [theme.stylesheet_path, theme.mobile_stylesheet_path]
+      end.compact
     end
 
     def mobile
-      all.select{|t| t.mobile?}
+      all.select(&:mobile?)
     end
 
     def find(id)
@@ -23,7 +27,7 @@ class Theme
     end
 
     def base_dir
-      Rails.root.join('app', 'themes')
+      Rails.root.join("app", "themes")
     end
 
     private
@@ -34,17 +38,17 @@ class Theme
 
     def load(id)
       theme_dir  = base_dir.join(id)
-      theme_file = theme_dir.join('theme.yml')
-      raise 'Theme not found' unless File.exist?(theme_file)
-      Theme.new(YAML.load_file(theme_file).merge({id: id}))
+      theme_file = theme_dir.join("theme.yml")
+      raise "Theme not found" unless File.exist?(theme_file)
+      Theme.new(YAML.load_file(theme_file).merge(id: id))
     end
   end
 
-  def initialize(options={})
+  def initialize(options = {})
     set_options(options)
   end
 
-  def path(filename=nil)
+  def path(filename = nil)
     filename ? "#{id}/#{filename}" : nil
   end
 
@@ -57,7 +61,7 @@ class Theme
   end
 
   def stylesheet
-    @stylesheet || 'screen.css'
+    @stylesheet || "screen.css"
   end
 
   def stylesheet_path
@@ -75,19 +79,19 @@ class Theme
   private
 
   def method_missing(method, *args, &block)
-    base_method = method.to_s.gsub(/\?$/, '').to_sym
+    base_method = method.to_s.gsub(/\?$/, "").to_sym
     if method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)
-      !self.send(base_method).blank?
+      !send(base_method).blank?
     else
       super
     end
   end
 
-  def set_options(options={})
+  def set_options(options = {})
     options.symbolize_keys!
     options.each do |key, value|
       if self.respond_to?("#{key}=".to_sym)
-        self.send("#{key}=".to_sym, value)
+        send("#{key}=".to_sym, value)
       end
     end
   end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module LayoutHelper
-
   def add_body_class(*class_names)
     @body_classes ||= []
     @body_classes += [class_names].flatten # Should also work with arrays
@@ -9,8 +8,10 @@ module LayoutHelper
 
   def body_classes
     @body_classes ||= []
-    @body_classes << 'with_sidebar' if content_for?(:sidebar) && !@body_classes.include?('with_sidebar')
-    @body_classes.uniq.join(' ')
+    if content_for?(:sidebar) && !@body_classes.include?("with_sidebar")
+      @body_classes << "with_sidebar"
+    end
+    @body_classes.uniq.join(" ")
   end
 
   def frontend_configuration
@@ -27,19 +28,26 @@ module LayoutHelper
   end
 
   def search_mode_options
-    options = [['in discussions', search_path], ['in posts', search_posts_path]]
-    options << ["in this #{@exchange.type.downcase}", polymorphic_path([:search_posts, @exchange])] if @exchange && @exchange.id
+    options = [["in discussions", search_path], ["in posts", search_posts_path]]
+    if @exchange && @exchange.id
+      options << [
+        "in this #{@exchange.type.downcase}",
+        polymorphic_path([:search_posts, @exchange])
+      ]
+    end
     options
   end
 
-  def header_tab(name, url, options={})
+  def header_tab(name, url, options = {})
     options[:section] ||= name.downcase.to_sym
-    options[:id]      ||= "#{options[:section]}_link"
-    options[:class]   ||= []
-    options[:class]   = [options[:class]] unless options[:class].kind_of?(Array)
+    options[:id] ||= "#{options[:section]}_link"
+    options[:class] ||= []
+    unless options[:class].is_a?(Array)
+      options[:class] = [options[:class]]
+    end
 
     classes = [options[:section].to_s] + options[:class]
-    classes << 'current' if @section == options[:section]
+    classes << "current" if @section == options[:section]
 
     content_tag(
       :li,
@@ -57,5 +65,4 @@ module LayoutHelper
       end
     end.compact
   end
-
 end
