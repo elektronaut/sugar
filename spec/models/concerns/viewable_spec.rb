@@ -1,10 +1,10 @@
 require "spec_helper"
 
 describe Viewable do
-  let(:discussion)         { create(:discussion) }
+  let(:discussion) { create(:discussion) }
   let(:trusted_discussion) { create(:discussion, trusted: true) }
-  let(:user)               { create(:user) }
-  let(:trusted_user)       { create(:trusted_user) }
+  let(:user) { create(:user) }
+  let(:trusted_user) { create(:trusted_user) }
 
   describe ".viewable_by" do
     before do
@@ -16,12 +16,12 @@ describe Viewable do
 
     context "when user is trusted" do
       let(:user) { create(:trusted_user) }
-      it { is_expected.to match([discussion, trusted_discussion]) }
+      it { is_expected.to match_array([discussion, trusted_discussion]) }
     end
 
     context "when user isn't trusted" do
       let(:user) { create(:user) }
-      it { is_expected.to match([discussion]) }
+      it { is_expected.to match_array([discussion]) }
     end
   end
 
