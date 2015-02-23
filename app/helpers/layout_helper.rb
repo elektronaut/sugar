@@ -3,7 +3,7 @@
 module LayoutHelper
   def add_body_class(*class_names)
     @body_classes ||= []
-    @body_classes += [class_names].flatten # Should also work with arrays
+    @body_classes += Array(class_names)
   end
 
   def body_classes
