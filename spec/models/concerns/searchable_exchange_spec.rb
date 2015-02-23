@@ -22,7 +22,7 @@ describe SearchableExchange, solr: true do
         Discussion.search_results("testing", user: nil, page: 1).results
       end
 
-      it { is_expected.to match([discussion]) }
+      it { is_expected.to match_array([discussion]) }
     end
 
     context "as a regular user" do
@@ -30,7 +30,7 @@ describe SearchableExchange, solr: true do
         Discussion.search_results("testing", user: user, page: 1).results
       end
 
-      it { is_expected.to match([discussion]) }
+      it { is_expected.to match_array([discussion]) }
     end
 
     context "as a trusted user" do
@@ -39,7 +39,7 @@ describe SearchableExchange, solr: true do
           results
       end
 
-      it { is_expected.to match([discussion, trusted_discussion]) }
+      it { is_expected.to match_array([discussion, trusted_discussion]) }
     end
   end
 end

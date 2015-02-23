@@ -91,7 +91,7 @@ describe Discussion do
   describe "#participants" do
     let!(:post) { create(:post, exchange: discussion) }
     subject { discussion.participants }
-    it { is_expected.to match([discussion.poster, post.user]) }
+    it { is_expected.to match_array([discussion.poster, post.user]) }
   end
 
   describe "#viewable_by?" do
