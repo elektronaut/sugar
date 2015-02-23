@@ -3,15 +3,14 @@
 module ExchangesHelper
   # Returns an array of class names for an exchange
   def exchange_classes(collection, exchange)
-    @exchange_classes ||= {}
-    @exchange_classes[[collection, exchange]] ||= [
+    [
       exchange.labels.map(&:downcase),
       %w{odd even}[collection.to_a.index(exchange) % 2],
       (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",
       "discussion#{exchange.id}"
-    ]
+    ].flatten.compact
   end
 
   def new_posts_count(exchange)
