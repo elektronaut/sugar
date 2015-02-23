@@ -125,26 +125,12 @@ describe ExchangeParticipant do
       it { is_expected.to eq(0) }
     end
 
-    context "when notifications is set to false" do
+    context "with conversations" do
       before do
         create(
           :conversation_relationship,
           user: user,
-          new_posts: true,
-          notifications: false
-        )
-      end
-
-      it { is_expected.to eq(0) }
-    end
-
-    context "when notifications is set to false" do
-      before do
-        create(
-          :conversation_relationship,
-          user: user,
-          new_posts: true,
-          notifications: true
+          new_posts: true
         )
       end
 
@@ -164,8 +150,7 @@ describe ExchangeParticipant do
         create(
           :conversation_relationship,
           user: user,
-          new_posts: true,
-          notifications: true
+          new_posts: true
         )
       end
 
