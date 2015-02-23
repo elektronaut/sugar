@@ -156,6 +156,8 @@ Sugar::Application.routes.draw do
         if resource_type == :conversations
           post "invite_participant"
           delete "remove_participant"
+          get "mute"
+          get "unmute"
         end
       end
 
