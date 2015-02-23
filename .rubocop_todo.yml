@@ -35,7 +35,7 @@ Metrics/LineLength:
 
 # Offense count: 6
 Metrics/PerceivedComplexity:
-  Max: 15
+  Max: 25
   Enabled: true
 
 # Offense count: 1
