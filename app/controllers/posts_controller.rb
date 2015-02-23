@@ -83,22 +83,37 @@ class PostsController < ApplicationController
   def create_post(create_params)
     @post = @exchange.posts.create(create_params)
     @exchange.reload
-    respond_with(
-      @post,
-      location: polymorphic_url(
-        @exchange,
-        page: @exchange.last_page,
-        anchor: "post-#{@post.id}"
-      )
+
+    exchange_url = polymorphic_url(
+      @exchange,
+      page: @exchange.last_page,
+      anchor: "post-#{@post.id}"
     )
 
-    Thread.new do
-      @exchange.posts.collect(&:user_id).uniq.each do |user_id|
-        if @current_user.id != user_id
-          Mailer.new_post(@current_user.username, User.find(user_id.to_s).email ,location, @exchange.title).deliver_now
-        end
-      end
+    if @exchange.is_a?(Conversation)
+      deliver_conversation_notifications(@post, exchange_url)
     end
+
+    respond_with(@post, location: exchange_url)
+  end
+
+  def deliver_conversation_notifications(post, url)
+    notification_recipients(post).each do |user|
+      Mailer.new_post(
+        post.user.username,
+        user.email,
+        url,
+        post.exchange.title
+      ).deliver_later
+    end
+  end
+
+  def notification_recipients(post)
+    post.
+      exchange.
+      participants.
+      reject { |p| p == post.user }.
+      select(&:email?)
   end
 
   def find_discussion
