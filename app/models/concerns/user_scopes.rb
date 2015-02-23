@@ -37,6 +37,15 @@ module UserScopes
       )
     end
 
+    def gaming
+      active.where(
+        "(gamertag IS NOT NULL AND gamertag != '') " +
+        "OR (sony IS NOT NULL AND sony != '') " +
+        "OR (nintendo IS NOT NULL AND nintendo != '') " +
+        "OR (steam IS NOT NULL AND steam != '')"
+      )
+    end
+
     def recently_joined
       active.order("created_at DESC")
     end
@@ -53,22 +62,6 @@ module UserScopes
         true,
         true
       )
-    end
-
-    def xbox_users
-      active.where("gamertag IS NOT NULL AND gamertag != ''")
-    end
-
-    def sony_users
-      active.where("sony IS NOT NULL AND sony != ''")
-    end
-
-    def nintendo_users
-      active.where("nintendo IS NOT NULL AND nintendo != ''")
-    end
-
-    def steam_users
-      active.where("steam IS NOT NULL AND steam != ''")
     end
   end
 end

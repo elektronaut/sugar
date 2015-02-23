@@ -18,6 +18,14 @@
         "Flickr Profile"
       when :last_fm
         "Last.fm Username"
+      when :gamertag
+        "Xbox Live"
+      when :sony
+        "PlayStation"
+      when :nintendo
+        "Nintendo ID"
+      when :steam
+        "Steam ID"
       else
         column.to_s.humanize
       end
@@ -58,6 +66,14 @@
         link_to(user.last_fm, "http://www.last.fm/user/#{user.last_fm}") if user.last_fm?
       when :flickr
         link_to(user.flickr, "http://www.flickr.com/photos/#{user.flickr}") if user.flickr?
+      when :gamertag
+        link_to(image_tag(user.gamertag_avatar_url, size: '24x24') + " " + user.gamertag, "http://live.xbox.com/en-us/Profile?Gamertag=#{user.gamertag}") if user.gamertag?
+      when :sony
+        link_to(user.sony, "http://us.playstation.com/playstation/psn/visit/profiles/#{user.sony}") if user.sony?
+      when :nintendo
+        link_to(user.nintendo, "http://miiverse.nintendo.com/users/#{user.nintendo}") if user.nintendo?
+      when :steam
+        link_to(user.steam, "http://steamcommunity.com/id/#{user.steam}") if user.steam?
       else
         "#{column} not defined"
       end

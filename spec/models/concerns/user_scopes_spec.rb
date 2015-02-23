@@ -48,34 +48,6 @@ describe UserScopes do
     it { is_expected.to match_array([admin, moderator, user_admin]) }
   end
 
-  describe "xbox_users" do
-    let!(:xbox_user) { create(:user, gamertag: "example") }
-    let!(:non_xbox_user) { create(:user, gamertag: nil) }
-    subject { User.xbox_users }
-    it { is_expected.to eq([xbox_user]) }
-  end
-
-  describe "sony_users" do
-    let!(:sony_user) { create(:user, sony: "example") }
-    let!(:non_sony_user) { create(:user, sony: nil) }
-    subject { User.sony_users }
-    it { is_expected.to eq([sony_user]) }
-  end
-
-  describe "nintendo_users" do
-    let!(:nintendo_user) { create(:user, nintendo: "example") }
-    let!(:non_nintendo_user) { create(:user, nintendo: nil) }
-    subject { User.nintendo_users }
-    it { is_expected.to eq([nintendo_user]) }
-  end
-
-  describe "steam_users" do
-    let!(:steam_user) { create(:user, steam: "example") }
-    let!(:non_steam_user) { create(:user, steam: nil) }
-    subject { User.steam_users }
-    it { is_expected.to eq([steam_user]) }
-  end
-
   describe "social" do
     let!(:user) { create(:user) }
     let!(:twitter) { create(:admin, twitter: "elektronaut") }
@@ -83,6 +55,16 @@ describe UserScopes do
     let!(:flickr) { create(:admin, flickr: "elektronaut") }
     subject { User.social }
     it { is_expected.to match_array([twitter, instagram, flickr]) }
+  end
+
+  describe "gaming" do
+    let!(:user) { create(:user) }
+    let!(:gamertag) { create(:user, gamertag: "example") }
+    let!(:sony) { create(:user, sony: "example") }
+    let!(:nintendo) { create(:user, nintendo: "example") }
+    let!(:steam) { create(:user, steam: "example") }
+    subject { User.gaming }
+    it { is_expected.to match_array([gamertag, sony, nintendo, steam]) }
   end
 
   describe "recently_joined" do
