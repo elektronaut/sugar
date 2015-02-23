@@ -5,11 +5,11 @@ require "spec_helper"
 describe ApplicationHelper do
   describe "#facebook_oauth_url" do
     let(:redirect_url) { "http://example.com/foo" }
+    before { Sugar.config.facebook_app_id = "123" }
     subject { helper.facebook_oauth_url(redirect_url) }
     it do
       is_expected.to eq(
-        "https://www.facebook.com/dialog/oauth?client_id=" +
-          "853251131352622" +
+        "https://www.facebook.com/dialog/oauth?client_id=123" +
           "&redirect_uri=http://example.com/foo" +
           "&scope=email"
       )
