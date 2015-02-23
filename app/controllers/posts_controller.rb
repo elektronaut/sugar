@@ -91,29 +91,10 @@ class PostsController < ApplicationController
     )
 
     if @exchange.is_a?(Conversation)
-      deliver_conversation_notifications(@post, exchange_url)
+      ConversationNotifier.new(@post, exchange_url).deliver_later
     end
 
     respond_with(@post, location: exchange_url)
-  end
-
-  def deliver_conversation_notifications(post, url)
-    notification_recipients(post).each do |user|
-      Mailer.new_post(
-        post.user.username,
-        user.email,
-        url,
-        post.exchange.title
-      ).deliver_later
-    end
-  end
-
-  def notification_recipients(post)
-    post.
-      exchange.
-      participants.
-      reject { |p| p == post.user }.
-      select(&:email?)
   end
 
   def find_discussion
