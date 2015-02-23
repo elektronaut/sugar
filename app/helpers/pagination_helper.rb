@@ -1,5 +1,5 @@
 module PaginationHelper
-  def nearest_pages(collection, number=9)
+  def nearest_pages(collection, number = 9)
     first = collection.current_page - (number / 2)
     first = 1 if first < 1
     last  = first + (number - 1)

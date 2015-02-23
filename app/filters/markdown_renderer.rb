@@ -40,7 +40,7 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   def youtube_embed(document)
-    document.gsub(/!y\[(.*)\]\((.*)\)/){
+    document.gsub(/!y\[(.*)\]\((.*)\)/)do
       title = $1
       youtube_url = $2
       if youtube_url[/youtu\.be\/([^\?]*)/]
@@ -49,8 +49,9 @@ class MarkdownRenderer < Redcarpet::Render::HTML
         youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
         youtube_id = $5
       end
-      "<iframe title=\"#{title}\" src=\"https://www.youtube.com/embed/#{youtube_id}\" frameborder=\"0\" allowfullscreen></iframe>"
-    }
+      "<iframe title=\"#{title}\" " +
+        "src=\"https://www.youtube.com/embed/#{youtube_id}\" " +
+        "frameborder=\"0\" allowfullscreen></iframe>"
+    end
   end
-
 end

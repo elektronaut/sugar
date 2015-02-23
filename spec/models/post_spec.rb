@@ -3,18 +3,25 @@
 require "spec_helper"
 
 describe Post do
-  let(:discussion)         { create(:discussion) }
+  let(:discussion) { create(:discussion) }
   let(:trusted_discussion) { create(:trusted_discussion) }
-  let(:conversation)       { create(:conversation) }
-  let(:post)               { create(:post) }
-  let(:trusted_post)       { create(:trusted_post) }
-  let(:user)               { create(:user) }
-  let(:trusted_user)       { create(:trusted_user) }
-  let(:moderator)          { create(:moderator) }
-  let(:admin)              { create(:admin) }
-  let(:user_admin)         { create(:user_admin) }
-  let(:mentioned_users)    { ["eléktronaut", "#1", "With space"].map{|u| create(:user, username: u) } }
-  let(:mentioning_post)    { create(:post, body: mentioned_users.map{|u| "@#{u.username.downcase}" }.join(" and ")) }
+  let(:conversation) { create(:conversation) }
+  let(:post) { create(:post) }
+  let(:trusted_post) { create(:trusted_post) }
+  let(:user) { create(:user) }
+  let(:trusted_user) { create(:trusted_user) }
+  let(:moderator) { create(:moderator) }
+  let(:admin) { create(:admin) }
+  let(:user_admin) { create(:user_admin) }
+  let(:mentioned_users) do
+    ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
+  end
+  let(:mentioning_post) do
+    create(
+      :post,
+      body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
+    )
+  end
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:exchange) }
@@ -23,7 +30,9 @@ describe Post do
   describe "after_create" do
     let(:post) { create(:post, exchange: discussion) }
 
-    specify { expect(post.user.participated_discussions).to include(discussion) }
+    specify do
+      expect(post.user.participated_discussions).to include(discussion)
+    end
 
     describe "the discussion it belongs to" do
       before { post }
@@ -93,14 +102,17 @@ describe Post do
       let!(:post) { build(:post, exchange: discussion) }
 
       it "parses the post" do
-        expect(Renderer).to receive(:render).exactly(1).times
-          .and_return(double(to_html: "<p>Test</p>"))
+        expect(Renderer).to receive(:render).
+          exactly(1).times.
+          and_return(double(to_html: "<p>Test</p>"))
         post.body_html
       end
     end
 
     context "when body_html has been set" do
-      let!(:post) { create(:post, exchange: discussion, body_html: "<p>Test</p>") }
+      let!(:post) do
+        create(:post, exchange: discussion, body_html: "<p>Test</p>")
+      end
 
       it "uses the cached version" do
         expect(Renderer).to receive(:render).exactly(0).times
@@ -111,8 +123,9 @@ describe Post do
     context "when body_html hasn't been set" do
       it "parses the post" do
         post.body_html = nil
-        expect(Renderer).to receive(:render).exactly(1).times
-          .and_return("<p>Test</p>".html_safe)
+        expect(Renderer).to receive(:render).
+          exactly(1).times.
+          and_return("<p>Test</p>".html_safe)
         post.body_html
       end
     end
@@ -126,12 +139,18 @@ describe Post do
     end
 
     context "when post has been edited" do
-      let(:post) { create(:post, created_at: 5.minutes.ago, edited_at: 2.minutes.ago) }
+      let(:post) do
+        create(:post, created_at: 5.minutes.ago, edited_at: 2.minutes.ago)
+      end
+
       it { is_expected.to eq(true) }
     end
 
     context "when post has been edited less than five seconds ago" do
-      let(:post) { create(:post, created_at: 14.seconds.ago, edited_at: 10.seconds.ago) }
+      let(:post) do
+        create(:post, created_at: 14.seconds.ago, edited_at: 10.seconds.ago)
+      end
+
       it { is_expected.to eq(false) }
     end
   end
@@ -211,8 +230,9 @@ describe Post do
     context "when skip_html is false" do
       before { discussion }
       it "parses the post" do
-        expect(Renderer).to receive(:render).exactly(1).times
-          .and_return("<p>Test</p>".html_safe)
+        expect(Renderer).to receive(:render).
+          exactly(1).times.
+          and_return("<p>Test</p>".html_safe)
         create(:post, exchange: discussion)
       end
     end
@@ -250,7 +270,10 @@ describe Post do
     end
 
     context "when edited_at isn't set" do
-      before { allow(Time).to receive(:now).and_return(Time.parse("Oct 22 2012")) }
+      before do
+        allow(Time).to receive(:now).
+          and_return(Time.parse("Oct 22 2012"))
+      end
       specify { expect(subject.edited_at).to eq(Time.now) }
     end
   end
@@ -259,8 +282,11 @@ describe Post do
     context "when it belongs to a discussion" do
       before { discussion }
       it "defines a relationship between the discussion and the poster" do
-        expect(DiscussionRelationship).to receive(:define).exactly(1).times
-          .with(user, discussion, participated: true)
+        expect(
+          DiscussionRelationship
+        ).to receive(:define).
+          exactly(1).times.
+          with(user, discussion, participated: true)
         create(:post, user: user, exchange: discussion)
       end
     end

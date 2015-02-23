@@ -1,7 +1,6 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe DiscussionRelationship do
-
   let(:relationship)       { create(:discussion_relationship) }
   let(:discussion)         { create(:discussion) }
   let(:trusted_discussion) { create(:trusted_discussion) }
@@ -14,9 +13,7 @@ describe DiscussionRelationship do
   specify { expect(subject.following?).to eq(true) }
   specify { expect(subject.participated?).to eq(false) }
 
-
   describe ".define" do
-
     context "when the discussion is trusted" do
       subject { DiscussionRelationship.define(user, trusted_discussion) }
       specify { expect(subject.trusted?).to eq(true) }
@@ -28,29 +25,33 @@ describe DiscussionRelationship do
     end
 
     context "with no existing relationship" do
-
       let(:relationship) do
         DiscussionRelationship.define(user, discussion, favorite: true)
       end
 
       specify { expect(relationship.valid?).to eq(true) }
       specify { expect(relationship.favorite?).to eq(true) }
-      specify { expect(relationship.user.discussion_relationships).to include(relationship) }
-
-      it "creates a new record" do
-        discussion # Creating a discussion also creates a separate relationship,
-                   # so this needs to happen first.
-        expect { relationship }.to change{ DiscussionRelationship.count }.by(1)
+      specify do
+        expect(
+          relationship.user.discussion_relationships
+        ).to include(relationship)
       end
 
+      it "creates a new record" do
+        # Creating a discussion also creates a separate relationship,
+        # so this needs to happen first.
+        discussion
+        expect { relationship }.to change { DiscussionRelationship.count }.by(1)
+      end
     end
 
     context "with an existing relationship" do
-
       let(:existing) { create(:discussion_relationship) }
 
       let(:relationship) do
-        DiscussionRelationship.define(existing.user, existing.discussion, favorite: true)
+        DiscussionRelationship.define(
+          existing.user, existing.discussion, favorite: true
+        )
       end
 
       specify { expect(relationship.valid?).to eq(true) }
@@ -58,33 +59,28 @@ describe DiscussionRelationship do
 
       it "doesn't create a new record" do
         existing
-        expect { relationship }.not_to change{ DiscussionRelationship.count }
+        expect { relationship }.not_to change { DiscussionRelationship.count }
       end
-
     end
-
   end
 
   describe "#update_user_caches!" do
-
     it "updates caches when created" do
-      expect {
+      expect do
         create(:discussion_relationship, user: user, favorite: true)
-      }.to change{ user.favorites_count }.by(1)
+      end.to change { user.favorites_count }.by(1)
     end
 
     it "updates caches when updated" do
-      expect {
+      expect do
         relationship.update_attributes(favorite: true)
-      }.to change{ relationship.user.favorites_count }.by(1)
+      end.to change { relationship.user.favorites_count }.by(1)
     end
 
     it "updates caches when destroyed" do
-      expect {
+      expect do
         relationship.destroy
-      }.to change{ relationship.user.following_count }.by(-1)
+      end.to change { relationship.user.following_count }.by(-1)
     end
-
   end
-
 end

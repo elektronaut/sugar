@@ -1,15 +1,18 @@
 # encoding: utf-8
 
-require 'digest/md5'
+require "digest/md5"
 
 module AvatarsHelper
-
-  def gravatar_url(email, options={})
+  def gravatar_url(email, options = {})
     options = {
       size: 24
     }.merge(options)
     hash = Digest::MD5.hexdigest(email)
-    base_url = request.ssl? ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+    base_url = if request.ssl?
+                 "https://secure.gravatar.com"
+               else
+                 "http://www.gravatar.com"
+               end
     "#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
   end
 
@@ -17,15 +20,20 @@ module AvatarsHelper
     html_options = {
       size:  "96x96",
       alt:   user.username,
-      class: 'avatar-image'
+      class: "avatar-image"
     }
     if user.avatar
       dynamic_image_tag(user.avatar, { crop: true }.merge(html_options))
     elsif user.email?
-      image_tag gravatar_url(user.email, size: 96), html_options
+      image_tag(
+        gravatar_url(user.email, size: 96),
+        html_options
+      )
     else
-      image_tag gravatar_url("#{user.id}@#{request.host}", size: 96), html_options
+      image_tag(
+        gravatar_url("#{user.id}@#{request.host}", size: 96),
+        html_options
+      )
     end
   end
-
 end

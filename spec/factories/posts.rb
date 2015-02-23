@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :post do
-    sequence(:body) {|n| "Post body #{n}"}
+    sequence(:body) { |n| "Post body #{n}" }
     association :exchange, factory: :discussion
     user
 

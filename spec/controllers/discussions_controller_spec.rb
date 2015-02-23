@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe DiscussionsController do
   let(:user) { create(:user) }
@@ -21,7 +21,9 @@ describe DiscussionsController do
     before { Sugar.config.update(public_browsing: true) }
 
     it_requires_login_for :new, :create, :favorites, :following
-    it_requires_login_for :edit, :update, :follow, :unfollow, :favorite, :unfavorite
+    it_requires_login_for :edit, :update,
+                          :follow, :unfollow,
+                          :favorite, :unfavorite
 
     it "is open for browsing discussions and posts" do
       discussion = create(:discussion)
@@ -67,17 +69,20 @@ describe DiscussionsController do
     before { login }
 
     context "with invalid params" do
-      before { post :create, discussion: { foo: 'bar' } }
+      before { post :create, discussion: { foo: "bar" } }
       it { is_expected.to render_template(:new) }
       specify do
         expect(flash.now[:notice]).to match(
-          /Could not save your discussion! Please make sure all required fields are filled in\./
+          Regexp.new(
+            "Could not save your discussion! " +
+            "Please make sure all required fields are filled in"
+          )
         )
       end
     end
 
     context "when creating a discussion" do
-      before { post :create, discussion: { title: 'Test', body: 'Test' } }
+      before { post :create, discussion: { title: "Test", body: "Test" } }
       specify { expect(assigns(:exchange)).to be_a(Discussion) }
       it { is_expected.to redirect_to(discussion_url(assigns(:exchange))) }
     end

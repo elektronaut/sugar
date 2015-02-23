@@ -1,19 +1,19 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
-require 'rubygems'
+require "rubygems"
 require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
-require 'shoulda-matchers'
+require "rspec/rails"
+require "shoulda-matchers"
 
 $original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| load f}
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| load f }
 
 Sugar.redis = Redis.connect(RedisHelper::CONFIG)
 
@@ -28,11 +28,12 @@ RSpec.configure do |config|
   config.mock_with :rspec
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  #config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # Stub Sunspot
   config.before do
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
+    Sunspot.session =
+      Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
   end
 
   config.before(:suite) do

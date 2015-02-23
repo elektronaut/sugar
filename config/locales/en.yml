@@ -73,7 +73,6 @@ en:
     amazon_associates_id_description: Enter to enable referals
     flickr: Flickr
     flickr_api_description: Enter to enable Flickr integration
-    xbox_live: Xbox Live
     custom_html: Custom HTML
     custom_javascript: Custom Javascript
     custom_header_description: 'Included right after &lt;body&gt;'

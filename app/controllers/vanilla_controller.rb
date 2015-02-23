@@ -2,7 +2,6 @@
 
 # Controller for redirecting old URLs
 class VanillaController < ApplicationController
-
   # /vanilla/?page=2
   def discussions
     headers["Status"] = "301 Moved Permanently"
@@ -12,7 +11,10 @@ class VanillaController < ApplicationController
   # /vanilla/comments.php?DiscussionID=13892&page=6
   def discussion
     headers["Status"] = "301 Moved Permanently"
-    redirect_to polymorphic_url(Exchange.find(params[:DiscussionID]), page: params[:page])
+    redirect_to polymorphic_url(
+      Exchange.find(params[:DiscussionID]),
+      page: params[:page]
+    )
   end
 
   # /vanilla/account.php?u=4
@@ -20,5 +22,4 @@ class VanillaController < ApplicationController
     headers["Status"] = "301 Moved Permanently"
     redirect_to user_profile_url(id: params[:u])
   end
-
 end

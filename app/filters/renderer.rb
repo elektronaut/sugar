@@ -19,9 +19,11 @@ class Renderer
       ].flatten
     end
 
-    def render(post, options={})
+    def render(post, options = {})
       options[:format] ||= "markdown"
-      filters(options[:format]).inject(post) { |str, filter| filter.new(str).to_html }.html_safe
+      filters(options[:format]).inject(post) do |str, filter|
+        filter.new(str).to_html
+      end.html_safe
     end
   end
 end

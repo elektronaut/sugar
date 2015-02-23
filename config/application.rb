@@ -1,20 +1,22 @@
 # encoding: utf-8
 
-require File.expand_path('../boot', __FILE__)
-require File.expand_path('../../app/themes/theme', __FILE__)
+require File.expand_path("../boot", __FILE__)
+require File.expand_path("../../app/themes/theme", __FILE__)
 
-require 'rails/all'
+require "rails/all"
 
 if defined?(Bundler)
   Bundler.require(:default, Rails.env)
-  Bundler.require([Rails.env, 'mac'].join('_')) if RUBY_PLATFORM =~ /darwin/
-  Bundler.require(:newrelic) if File.exist?(File.join(File.dirname(__FILE__), 'newrelic.yml'))
+  Bundler.require([Rails.env, "mac"].join("_")) if RUBY_PLATFORM =~ /darwin/
+  if File.exist?(File.join(File.dirname(__FILE__), "newrelic.yml"))
+    Bundler.require(:newrelic)
+  end
 end
-
 
 module Sugar
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
+    # Settings in config/environments/* take precedence over those
+    # specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
@@ -23,24 +25,29 @@ module Sugar
       #{config.root}/lib
     )
 
-    # Only load the plugins named here, in the order given (default is alphabetical).
+    # Only load the plugins named here, in the order given
+    # (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
     # Activate observers that should always be running.
     config.active_record.observers = :post_observer
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'UTC'
+    # Set Time.zone default to the specified zone and make Active Record
+    # auto-convert to this zone.
+    # Run "rake -D time" for a list of tasks for finding time zone names.
+    # Default is UTC.
+    config.time_zone = "UTC"
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    # The default locale is :en and all translations from
+    # config/locales/*.rb,yml are auto loaded.
+    # config.i18n.load_path +=
+    #   Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
     config.i18n.enforce_available_locales = true
 
-    # JavaScript files you want as :defaults (application.js is always included).
+    # JavaScript files you want as :defaults (application.js is always included)
     # config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
 
     # Configure the default encoding used in templates for Ruby 1.9.
@@ -59,10 +66,11 @@ module Sugar
     config.assets.paths << Emoji.images_path
     config.assets.precompile << "emoji/**/*.png"
 
-    # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
+    # Precompile additional assets (application.js, application.css, and all
+    # non-JS/CSS are already added)
     config.assets.precompile += %w( swfobject.js mobile.js )
     config.assets.precompile += Theme.precompile_assets
   end
 end
 
-require Rails.root.join('lib/sugar.rb')
+require Rails.root.join("lib/sugar.rb")

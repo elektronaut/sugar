@@ -75,7 +75,6 @@ class ViewedTracker
   end
 
   def view(exchange)
-    views.detect{|v| v.exchange_id == exchange.id } || empty_view(exchange)
+    views.detect { |v| v.exchange_id == exchange.id } || empty_view(exchange)
   end
-
 end
