@@ -40,9 +40,11 @@ module LayoutHelper
 
   def header_tab(name, url, options = {})
     options[:section] ||= name.downcase.to_sym
-    options[:id]      ||= "#{options[:section]}_link"
-    options[:class]   ||= []
-    options[:class]   = [options[:class]] unless options[:class].is_a?(Array)
+    options[:id] ||= "#{options[:section]}_link"
+    options[:class] ||= []
+    unless options[:class].is_a?(Array)
+      options[:class] = [options[:class]]
+    end
 
     classes = [options[:section].to_s] + options[:class]
     classes << "current" if @section == options[:section]
