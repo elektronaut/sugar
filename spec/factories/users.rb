@@ -38,5 +38,14 @@ FactoryGirl.define do
     factory :banned_user do
       banned true
     end
+
+    factory :user_with_avatar do
+      avatar Avatar.create(
+        file: Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/support/pink.png"),
+          "image/png"
+        )
+      )
+    end
   end
 end
