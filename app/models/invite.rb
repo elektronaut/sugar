@@ -39,9 +39,7 @@ class Invite < ActiveRecord::Base
     end
 
     def destroy_expired!
-      expired.each do |invite|
-        invite.destroy
-      end
+      expired.each(&:destroy)
     end
   end
 

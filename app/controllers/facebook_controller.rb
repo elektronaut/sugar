@@ -85,8 +85,6 @@ class FacebookController < ApplicationController
       response = open(access_token_url).read
       if response =~ /access_token=/
         CGI::parse(response)["access_token"].first
-      else
-        nil
       end
     rescue => e
       logger.error "Facebook authentication error: #{e.message}"

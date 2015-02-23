@@ -66,16 +66,12 @@ module Paginatable
     def previous_page
       if current_page > 1
         current_page - 1
-      else
-        nil
       end
     end
 
     def next_page
       if current_page < total_pages
         current_page + 1
-      else
-        nil
       end
     end
 

@@ -10,14 +10,17 @@ module IconsHelper
   private
 
   def regular_icon_tags
-    tag(:link,
-        rel: "icon",
-        href: image_path("icons/favicon.ico"),
-        type: "image/x-icon") +
-    tag(:link,
-        rel: "icon",
-        href: image_path("icons/favicon.png"),
-        type: "image/png")
+    tag(
+      :link,
+      rel: "icon",
+      href: image_path("icons/favicon.ico"),
+      type: "image/x-icon"
+    ) + tag(
+      :link,
+      rel: "icon",
+      href: image_path("icons/favicon.png"),
+      type: "image/png"
+    )
   end
 
   def apple_icon_tags

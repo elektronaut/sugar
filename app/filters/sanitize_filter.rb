@@ -27,7 +27,7 @@ class SanitizeFilter < Filter
       elem.attributes.each do |name, attr|
         # XSS fix
         if attr.value &&
-           attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
+            attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
           elem.remove_attribute(name)
         end
         # Strip out event handlers

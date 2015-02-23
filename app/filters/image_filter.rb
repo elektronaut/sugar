@@ -7,7 +7,7 @@ class ImageFilter < Filter
       if element.attributes && !element.attributes["src"].blank?
         url = element.attributes["src"]
         if element.attributes["width"].blank? ||
-           element.attributes["height"].blank?
+            element.attributes["height"].blank?
           if dimensions = FastImage.size(url, timeout: 2.0)
             width, height = dimensions
             element.set_attribute "width", width.to_s

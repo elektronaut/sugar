@@ -19,7 +19,7 @@ class Theme
     end
 
     def mobile
-      all.select { |t| t.mobile? }
+      all.select(&:mobile?)
     end
 
     def find(id)

@@ -35,8 +35,8 @@ module ExchangesHelper
   def post_page(post)
     # Speed optimization
     if controller.is_a?(ExchangesController) &&
-       params[:action] == "show" &&
-       @posts
+        params[:action] == "show" &&
+        @posts
       @posts.current_page
     else
       post.page

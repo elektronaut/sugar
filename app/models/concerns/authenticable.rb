@@ -48,8 +48,6 @@ module Authenticable
       if user && user.valid_password?(password)
         user.hash_password!(password) if user.password_needs_rehash?
         user
-      else
-        nil
       end
     end
   end

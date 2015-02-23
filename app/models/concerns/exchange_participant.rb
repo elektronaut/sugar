@@ -39,9 +39,9 @@ module ExchangeParticipant
 
   def mark_exchange_viewed(exchange, post, index)
     if exchange_view = ExchangeView.where(
-         user_id: id,
-         exchange_id: exchange.id
-       ).first
+      user_id: id,
+      exchange_id: exchange.id
+    ).first
       if exchange_view.post_index < index
         exchange_view.update_attributes(
           post_index: index,
@@ -82,7 +82,7 @@ module ExchangeParticipant
 
   def following?(discussion)
     if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).following?
+        discussion_relationship_with(discussion).following?
       true
     else
       false
@@ -91,7 +91,7 @@ module ExchangeParticipant
 
   def favorite?(discussion)
     if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).favorite?
+        discussion_relationship_with(discussion).favorite?
       true
     else
       false
@@ -100,7 +100,7 @@ module ExchangeParticipant
 
   def hidden?(discussion)
     if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).hidden?
+        discussion_relationship_with(discussion).hidden?
       true
     else
       false

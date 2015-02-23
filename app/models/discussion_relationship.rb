@@ -6,13 +6,8 @@ class DiscussionRelationship < ActiveRecord::Base
 
   before_validation :ensure_flags_are_mutually_exclusive
 
-  after_save do |relationship|
-    relationship.update_user_caches!
-  end
-
-  after_destroy do |relationship|
-    relationship.update_user_caches!
-  end
+  after_save :update_user_caches!
+  after_destroy :update_user_caches!
 
   class << self
     def define(user, discussion, options = {})
@@ -45,7 +40,7 @@ class DiscussionRelationship < ActiveRecord::Base
         self.following = false
         self.favorite = false
       elsif (self.favorite_changed? && self.favorite?) ||
-        (self.following_changed? && self.following?)
+          (self.following_changed? && self.following?)
         # Unhide if discussion has been followed/favorited
         self.hidden = false
       end

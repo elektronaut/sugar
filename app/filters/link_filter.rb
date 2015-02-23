@@ -74,7 +74,7 @@ class LinkFilter < Filter
     parser.css("iframe,img").each do |iframe|
       if src = iframe.try(:attributes).try(:[], "src").try(:value)
         if matches_https_whitelist?(src) ||
-           (src =~ /\Ahttp:\/\// && url_exists?(src))
+            (src =~ /\Ahttp:\/\// && url_exists?(src))
           iframe.set_attribute "src", src.gsub(/\Ahttps?:\/\//, "//")
         end
       end
