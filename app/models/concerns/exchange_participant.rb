@@ -76,6 +76,12 @@ module ExchangeParticipant
     unread_conversations_count > 0
   end
 
+  def muted_conversation?(conversation)
+    !conversation_relationships.
+      where(notifications: true, conversation: conversation).
+      any?
+  end
+
   def discussion_relationship_with(discussion)
     discussion_relationships.where(discussion_id: discussion.id).first
   end

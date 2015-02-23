@@ -69,6 +69,20 @@ class ConversationsController < ApplicationController
     redirect_to conversations_url
   end
 
+  def mute
+    current_user.
+      conversation_relationships.where(conversation: @exchange).
+      update_all(notifications: false)
+    redirect_to conversation_url(@exchange, page: params[:page])
+  end
+
+  def unmute
+    current_user.
+      conversation_relationships.where(conversation: @exchange).
+      update_all(notifications: true)
+    redirect_to conversation_url(@exchange, page: params[:page])
+  end
+
   private
 
   def exchange_params

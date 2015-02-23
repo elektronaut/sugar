@@ -173,6 +173,23 @@ describe ExchangeParticipant do
     end
   end
 
+  describe "#muted_conversation?" do
+    let(:conversation) { create(:conversation) }
+    before { conversation.add_participant(user) }
+    subject { user.muted_conversation?(conversation) }
+
+    context "when conversation isn't muted" do
+      it { is_expected.to eq(false) }
+    end
+
+    context "when conversation is muted" do
+      before do
+        user.conversation_relationships.update_all(notifications: false)
+      end
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe "#following?" do
     subject { user.following?(discussion) }
 

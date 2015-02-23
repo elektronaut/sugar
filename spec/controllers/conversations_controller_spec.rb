@@ -90,4 +90,45 @@ describe ConversationsController do
       specify { expect(assigns(:exchange).participants).to include(recipient) }
     end
   end
+
+  describe "GET mute" do
+    let(:user) { create(:user) }
+    let(:conversation) { create(:conversation) }
+    before do
+      conversation.add_participant(user)
+      login(user)
+      get :mute, id: conversation.id, page: 2
+    end
+
+    it "should mute the conversation" do
+      expect(user.muted_conversation?(conversation)).to eq(true)
+    end
+
+    it "should redirect back to the conversation" do
+      expect(subject).to redirect_to(
+        conversation_url(assigns(:exchange), page: 2)
+      )
+    end
+  end
+
+  describe "GET unmute" do
+    let(:user) { create(:user) }
+    let(:conversation) { create(:conversation) }
+    before do
+      conversation.add_participant(user)
+      user.conversation_relationships.update_all(notifications: false)
+      login(user)
+      get :unmute, id: conversation.id, page: 2
+    end
+
+    it "should mute the conversation" do
+      expect(user.muted_conversation?(conversation)).to eq(false)
+    end
+
+    it "should redirect back to the conversation" do
+      expect(subject).to redirect_to(
+        conversation_url(assigns(:exchange), page: 2)
+      )
+    end
+  end
 end
