@@ -50,8 +50,7 @@ For production use, you'll want a full grown Solr setup. See the
 [Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how
 to get up and running.
 
-[Heroku](https://www.heroku.com/) is currently not supported, but will be
-soon.
+[Heroku](https://www.heroku.com/) is currently not supported.
 
 ## <a id="configuration"></a> Configuring Sugar
 
