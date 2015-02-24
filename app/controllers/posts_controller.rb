@@ -90,9 +90,9 @@ class PostsController < ApplicationController
       anchor: "post-#{@post.id}"
     )
 
-    if @exchange.is_a?(Conversation)
-      ConversationNotifier.new(@post, exchange_url).deliver_later
-    end
+    # if @exchange.is_a?(Conversation)
+    #   ConversationNotifier.new(@post, exchange_url).deliver_later
+    # end
 
     respond_with(@post, location: exchange_url)
   end
