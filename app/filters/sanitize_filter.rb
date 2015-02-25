@@ -88,7 +88,7 @@ class SanitizeFilter < Filter
 
   # Makes sure the element contains an allowScriptAccess param.
   def enforce_allowscriptaccess_param_in(element)
-    unless element.search(">param [name=allowScriptAccess]").length > 0
+    unless element.search(">param[name=allowScriptAccess]").length > 0
       element.inner_html +=
         '<param name="allowScriptAccess" value="sameDomain" />'
     end
