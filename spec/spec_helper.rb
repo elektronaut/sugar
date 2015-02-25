@@ -9,7 +9,10 @@ require "rspec/rails"
 require "shoulda-matchers"
 require "webmock/rspec"
 
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+  allow: "codeclimate.com"
+)
 
 $original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session
