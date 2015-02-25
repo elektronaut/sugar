@@ -4,7 +4,7 @@ class ViewedTracker
   end
 
   def any?
-    user && exchanges.any?
+    (user && exchanges.any?) ? true : false
   end
 
   def exchanges=(new_exchanges)
