@@ -7,6 +7,9 @@ require "rubygems"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "shoulda-matchers"
+require "webmock/rspec"
+
+WebMock.disable_net_connect!(allow_localhost: true)
 
 $original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session

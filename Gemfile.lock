@@ -121,6 +121,8 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.7.5)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     daemon-spawn (0.4.2)
     database_cleaner (1.3.0)
     debug_inspector (0.0.2)
@@ -354,6 +356,7 @@ GEM
     ruby-openid (2.6.0)
     ruby-progressbar (1.7.1)
     ruby_gntp (0.3.4)
+    safe_yaml (1.0.4)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -410,6 +413,9 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (~> 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    webmock (1.20.4)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
     xpath (2.0.0)
       nokogiri (~> 1.3)
     yui-compressor (0.12.0)
@@ -476,4 +482,5 @@ DEPENDENCIES
   sunspot_solr (~> 2.1.0)
   uglifier
   web-console (~> 2.0)
+  webmock
   yui-compressor

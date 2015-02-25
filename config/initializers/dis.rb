@@ -7,7 +7,7 @@ Dis::Storage.layers << Dis::Layer.new(
   path: Rails.env
 )
 
-if Sugar.aws_s3?
+if Sugar.aws_s3? && !Rails.env.test?
   Dis::Storage.layers << Dis::Layer.new(
     Fog::Storage.new(
                        provider:              "AWS",

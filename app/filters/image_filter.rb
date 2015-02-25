@@ -5,7 +5,7 @@ class ImageFilter < Filter
     parser = Nokogiri::HTML::DocumentFragment.parse(post)
     parser.css("img").each do |element|
       if element.attributes && !element.attributes["src"].blank?
-        url = element.attributes["src"]
+        url = element.attributes["src"].to_s
         if element.attributes["width"].blank? ||
             element.attributes["height"].blank?
           if dimensions = FastImage.size(url, timeout: 2.0)
