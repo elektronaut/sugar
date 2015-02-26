@@ -5,7 +5,7 @@ written in Ruby on Rails.
 
 ## Dependencies
 
-* [Ruby 1.9+](https://www.ruby-lang.org/en/)
+* [Ruby 2.0+](https://www.ruby-lang.org/en/)
 * [Bundler](http://bundler.io/)
 * [Redis](http://redis.io/)
 * [Java](http://www.java.com/en/download/index.jsp)
