@@ -40,6 +40,7 @@ class Sugar.Views.Post extends Backbone.View
     this.applyAmazonReferralCode()
     this.applySpoiler()
     this.wrapInstagramEmbeds()
+    this.embedGifvVideos()
     this
 
   edit: (event) ->
@@ -100,6 +101,28 @@ class Sugar.Views.Post extends Backbone.View
 
           link.href += if link.href.match(/\?/) then '&' else '?'
           link.href += 'tag=' + referral_id
+
+  embedGifvVideos: ->
+    testElem = (window.videoTestElement ||= document.createElement("video"))
+    canPlay = (type) -> testElem.canPlayType && testElem.canPlayType(type)
+
+    if canPlay('video/webm') || canPlay('video/mp4')
+      $(this.el).find("img").each ->
+        # Convert Imgur GIFs to GIFV
+        if this.src.match(/imgur\.com\/.*\.(gif)$/i)
+          this.src += "v"
+
+        # Embed GIFv files
+        if this.src.match(/\.gifv$/)
+          baseUrl = this.src.replace(/\.gifv$/, '')
+          $(this).replaceWith(
+            '<a href="' + baseUrl + '.gif">' +
+            '<div class="gifv-container">' +
+            '<video autoplay loop muted>' +
+            '<source type="video/webm" src="' + baseUrl + '.webm">' +
+            '<source type="video/mp4" src="' + baseUrl + '.mp4">' +
+            '</video></div></a>'
+          )
 
   wrapInstagramEmbeds: ->
     $(this.el).find("iframe[src*='//instagram.com/']").each ->
