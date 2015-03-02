@@ -117,11 +117,10 @@ class Sugar.Views.Post extends Backbone.View
           baseUrl = this.src.replace(/\.gifv$/, '')
           $(this).replaceWith(
             '<a href="' + baseUrl + '.gif">' +
-            '<div class="gifv-container">' +
             '<video autoplay loop muted>' +
             '<source type="video/webm" src="' + baseUrl + '.webm">' +
             '<source type="video/mp4" src="' + baseUrl + '.mp4">' +
-            '</video></div></a>'
+            '</video></a>'
           )
 
   wrapInstagramEmbeds: ->
