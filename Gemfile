@@ -96,7 +96,7 @@ group :test, :development do
   gem 'capybara'
   gem 'fuubar'
   gem 'database_cleaner'
-  gem 'webmock'
+  gem 'webmock', require: false
 
   # FactoryGirl
   gem 'factory_girl_rails'
