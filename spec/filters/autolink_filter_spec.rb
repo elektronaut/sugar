@@ -34,26 +34,10 @@ describe AutolinkFilter do
     end
   end
 
-  context "when input contains a URL to a GIF file on imgur" do
-    let(:input) { "http://i.imgur.com/abcdefg.gif" }
-    let(:output) do
-      "<video loop controls autoplay>" +
-        "<source src=\"http://i.imgur.com/abcdefg.mp4\" type=\"video/mp4\">" +
-        "</video>"
-    end
-    it "should embed it as video" do
-      expect(filter.to_html).to eq(output)
-    end
-  end
-
-  context "when input contains a URL to a GIFV file on imgur" do
+  context "when input contains a URL to a GIFV file" do
     let(:input) { "http://i.imgur.com/abcdefg.gifv" }
-    let(:output) do
-      "<video loop controls autoplay>" +
-        "<source src=\"http://i.imgur.com/abcdefg.mp4\" type=\"video/mp4\">" +
-        "</video>"
-    end
-    it "should embed it as video" do
+    let(:output) { "<img src=\"http://i.imgur.com/abcdefg.gif\">" }
+    it "should embed it as a GIF" do
       expect(filter.to_html).to eq(output)
     end
   end
