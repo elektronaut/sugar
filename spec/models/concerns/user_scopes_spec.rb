@@ -63,8 +63,9 @@ describe UserScopes do
     let!(:sony) { create(:user, sony: "example") }
     let!(:nintendo) { create(:user, nintendo: "example") }
     let!(:steam) { create(:user, steam: "example") }
+    let!(:battlenet) { create(:user, battlenet: "example#1234") }
     subject { User.gaming }
-    it { is_expected.to match_array([gamertag, sony, nintendo, steam]) }
+    it { is_expected.to match_array([gamertag, sony, nintendo, steam, battlenet]) }
   end
 
   describe "recently_joined" do
