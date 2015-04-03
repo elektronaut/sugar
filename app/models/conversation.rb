@@ -12,6 +12,7 @@ class Conversation < Exchange
            dependent: :destroy
 
   has_many :participants,
+           -> { reorder("username ASC") },
            through: :conversation_relationships,
            source: :user
 

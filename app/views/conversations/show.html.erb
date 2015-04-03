@@ -7,7 +7,8 @@
 
 <%= content_for :sidebar do %>
   <div class="participants">
-    <%= render partial: "conversations/participants", locals: {participants: @exchange.participants} %>
+    <%= render(partial: "conversations/participants",
+               locals: { participants: @exchange.participants }) %>
   </div>
   <div class="invite">
     <h2>Invite someone</h2>
