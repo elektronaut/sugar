@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221190042) do
+ActiveRecord::Schema.define(version: 20150322093615) do
 
   create_table "avatars", force: :cascade do |t|
     t.string   "content_hash",   limit: 255
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 20150221190042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_post_at"
-    t.string   "type",           limit: 100
+    t.string   "type",           limit: 255
   end
 
   add_index "exchanges", ["created_at"], name: "created_at_index", using: :btree
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20150221190042) do
   add_index "exchanges", ["sticky", "last_post_at"], name: "index_exchanges_on_sticky_and_last_post_at", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
-  add_index "exchanges", ["type"], name: "index_exchanges_on_type", using: :btree
+  add_index "exchanges", ["type"], name: "index_exchanges_on_type", length: {"type"=>191}, using: :btree
 
   create_table "invites", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -152,11 +152,11 @@ ActiveRecord::Schema.define(version: 20150221190042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id",     limit: 4
-    t.string   "owner_type",   limit: 100
+    t.string   "owner_type",   limit: 255
     t.string   "scopes",       limit: 255, default: "", null: false
   end
 
-  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
+  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", length: {"owner_id"=>nil, "owner_type"=>191}, using: :btree
 
   create_table "password_reset_tokens", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -191,7 +191,7 @@ ActiveRecord::Schema.define(version: 20150221190042) do
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",              limit: 100
+    t.string   "username",              limit: 255
     t.string   "realname",              limit: 255
     t.string   "email",                 limit: 255
     t.string   "hashed_password",       limit: 255
@@ -241,9 +241,10 @@ ActiveRecord::Schema.define(version: 20150221190042) do
     t.text     "previous_usernames",    limit: 65535
     t.string   "nintendo",              limit: 255
     t.string   "steam",                 limit: 255
+    t.string   "battlenet",             limit: 255
   end
 
   add_index "users", ["last_active"], name: "last_active_index", using: :btree
-  add_index "users", ["username"], name: "username_index", using: :btree
+  add_index "users", ["username"], name: "username_index", length: {"username"=>191}, using: :btree
 
 end
