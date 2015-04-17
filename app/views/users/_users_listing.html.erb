@@ -26,6 +26,8 @@
         "Nintendo ID"
       when :steam
         "Steam ID"
+      when :battlenet
+        "Battle.net"
       else
         column.to_s.humanize
       end
@@ -71,9 +73,11 @@
       when :sony
         link_to(user.sony, "http://us.playstation.com/playstation/psn/visit/profiles/#{user.sony}") if user.sony?
       when :nintendo
-        link_to(user.nintendo, "http://miiverse.nintendo.com/users/#{user.nintendo}") if user.nintendo?
+        link_to(user.nintendo, "https://miiverse.nintendo.net/users/#{user.nintendo}") if user.nintendo?
       when :steam
         link_to(user.steam, "http://steamcommunity.com/id/#{user.steam}") if user.steam?
+      when :battlenet
+        user.battlenet if user.battlenet?
       else
         "#{column} not defined"
       end

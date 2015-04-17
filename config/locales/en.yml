@@ -30,6 +30,7 @@ en:
         sony: PlayStation username
         nintendo: Nintendo ID
         steam: Steam ID
+        battlenet: Battle.net BattleTag
         twitter: Twitter username
         flickr: Flickr user ID
         last_fm: Last.fm username
@@ -116,6 +117,7 @@ en:
       chosen_a_time_zone: chosen a time zone
       gaming: Gaming
       social_media: Social Media
+      messaging: Messaging
     new:
       openid_description: "<a href=\"http://openid.net/what/\">What's this?"
       optional_fields: "The following fields are optional, but it's always nice to provide a bit more information:"

@@ -73,6 +73,10 @@
       <th>Steam ID</th>
       <td><%= @user.steam %></td>
     </tr><% end %>
+    <% if @user.battlenet? %><tr>
+      <th>Battle.net BattleTag</th>
+      <td><%= @user.battlenet %></td>
+    </tr><% end %>
     <% if @user.inviter %><tr>
       <th>Invited by</th>
       <td><%= profile_link(@user.inviter) %></td>

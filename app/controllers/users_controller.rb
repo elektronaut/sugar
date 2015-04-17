@@ -145,7 +145,7 @@ class UsersController < ApplicationController
       :mobile_theme, :msn, :notify_on_message, :realname,
       :stylesheet_url, :theme, :time_zone, :twitter, :website,
       :password, :confirm_password, :banned_until, :preferred_format,
-      :sony, :nintendo, :steam,
+      :sony, :nintendo, :steam, :battlenet,
       avatar_attributes: [:file]
     ]
     if current_user?
