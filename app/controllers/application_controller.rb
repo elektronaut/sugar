@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_action :strict_transport_security
   before_action :disable_xss_protection
   before_action :load_configuration
   before_action :set_time_zone
@@ -21,6 +22,17 @@ class ApplicationController < ActionController::Base
   helper_method :viewed_tracker
 
   protected
+
+  def user_has_stylesheet?
+    current_user && current_user.stylesheet_url?
+  end
+
+  def strict_transport_security
+    if request.ssl? && !user_has_stylesheet?
+      response.headers["Strict-Transport-Security"] =
+        "max-age=31536000; includeSubDomains"
+    end
+  end
 
   def disable_xss_protection
     # Disabling this is probably not a good idea, but the header
