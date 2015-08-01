@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731222329) do
+ActiveRecord::Schema.define(version: 20150801174029) do
 
   create_table "avatars", force: :cascade do |t|
     t.string   "content_hash",   limit: 255
@@ -182,9 +182,13 @@ ActiveRecord::Schema.define(version: 20150731222329) do
     t.integer  "crop_start_y",   limit: 4
     t.integer  "crop_gravity_x", limit: 4
     t.integer  "crop_gravity_y", limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "original_url",   limit: 4096
   end
+
+  add_index "post_images", ["id", "content_hash"], name: "index_post_images_on_id_and_content_hash", unique: true, using: :btree
+  add_index "post_images", ["original_url"], name: "index_post_images_on_original_url", length: {"original_url"=>250}, using: :btree
 
   create_table "posts", force: :cascade do |t|
     t.text     "body",         limit: 65535
