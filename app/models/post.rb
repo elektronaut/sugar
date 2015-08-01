@@ -16,7 +16,8 @@ class Post < ActiveRecord::Base
 
   attr_accessor :skip_html
 
-  before_save :set_edit_timestamp,
+  before_save :fetch_images,
+              :set_edit_timestamp,
               :update_trusted_status,
               :flag_conversation,
               :render_html
@@ -63,6 +64,10 @@ class Post < ActiveRecord::Base
 
   def editable_by?(user)
     (user && (user.moderator? || user == self.user)) ? true : false
+  end
+
+  def fetch_images
+    self.body = ImageFetcher.fetch(body)
   end
 
   def mentions_users?

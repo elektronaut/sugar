@@ -50,6 +50,7 @@ gem 'acts_as_list'
 
 gem 'nokogiri'
 gem 'daemon-spawn'
+gem 'httparty', '~> 0.13.5'
 
 gem 'sunspot_rails', '~> 2.1.0'
 gem 'progress_bar'

@@ -3,6 +3,7 @@
 Sugar::Application.routes.draw do
 
   image_resources :avatars
+  image_resources :post_images
 
   use_doorkeeper
 

@@ -67,6 +67,7 @@ class PostsController < ApplicationController
 
   def preview
     @post = @exchange.posts.new(post_params.merge(user: current_user))
+    @post.fetch_images
     if request.xhr?
       render layout: false
     end
