@@ -34,9 +34,9 @@ class ImageFetcher
 
   def fetch_markdown_images(str)
     str.gsub(
-      /(!\[[^\]]*\]\((ftp|https?):\/\/[^\s]+\.(jpg|jpeg|gif|png)\b\/?\))/i
+      /(!\[[^\]]*\])(\((ftp|https?):\/\/[^\s]+\.(jpg|jpeg|gif|png)\b\/?)\)/i
     ) do
-      match = $1
+      match = $2
       uri = extract_uri(match)
       if post_image = fetch_image(uri)
         embed_image(post_image)
@@ -65,7 +65,11 @@ class ImageFetcher
     return nil unless uri
     # Only fetch imgurl URLs for now
     return nil unless URI.parse(uri).hostname == "i.imgur.com"
-    create_image(uri)
+    find_image(uri) || create_image(uri)
+  end
+
+  def find_image(uri)
+    PostImage.where(original_url: uri).first
   end
 
   def has_src?(elem)
@@ -111,7 +115,8 @@ class ImageFetcher
     PostImage.create(
       data: fetch_file(uri),
       content_type: content_type(uri),
-      filename: filename(uri)
+      filename: filename(uri),
+      original_url: uri
     )
   end
 
