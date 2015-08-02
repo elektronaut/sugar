@@ -12,10 +12,11 @@ class ImageFetcher
   end
 
   def fetch
-    str = fetch_autolinked_images(body)
-    str = fetch_markdown_images(str)
-    str = fetch_tagged_images(str)
-    str
+    fetch_tagged_images(
+      fetch_markdown_images(
+        fetch_autolinked_images(body)
+      )
+    )
   end
 
   private
@@ -82,21 +83,11 @@ class ImageFetcher
     end
   end
 
-  def content_type(uri)
-    name = filename(uri)
-    if name =~ /\.gif/i
-      "image/gif"
-    elsif name =~ /\.png/i
-      "image/png"
-    else
-      "image/jpeg"
-    end
-  end
-
-  def create_tempfile(uri)
+  def create_tempfile(data)
     Tempfile.new("post-image-temp").tap do |f|
       f.binmode
-      f.write HTTParty.get(uri).parsed_response
+      f.write data
+      f.rewind
     end
   end
 
@@ -104,20 +95,26 @@ class ImageFetcher
     "[image:#{post_image.id}:#{post_image.content_hash}]"
   end
 
-  def fetch_file(uri)
+  def uploaded_file(request)
     Rack::Test::UploadedFile.new(
-      create_tempfile(uri),
-      content_type(uri)
+      create_tempfile(request.parsed_response),
+      request.content_type
     )
   end
 
   def create_image(uri)
-    PostImage.create(
-      data: fetch_file(uri),
-      content_type: content_type(uri),
+    request = HTTParty.get(uri)
+    image = PostImage.create(
+      data: uploaded_file(request),
+      content_type: request.content_type,
       filename: filename(uri),
       original_url: uri
     )
+    if image.valid?
+      image
+    else
+      nil
+    end
   end
 
   def filename(uri)
