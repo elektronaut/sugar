@@ -37,6 +37,11 @@ describe ImageFetcher do
       it { is_expected.to eq(body) }
     end
 
+    context "when image is not on the whitelist, Markdown syntax" do
+      let(:body) { "![](http://example.com/example.jpg)" }
+      it { is_expected.to eq(body) }
+    end
+
     context "when image has already been fetched" do
       let!(:image) { create(:post_image, original_url: url) }
       it { is_expected.to eq("[image:#{image.id}:#{image.content_hash}]") }

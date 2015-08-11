@@ -35,14 +35,14 @@ class ImageFetcher
 
   def fetch_markdown_images(str)
     str.gsub(
-      /(!\[[^\]]*\])(\((ftp|https?):\/\/[^\s]+\.(jpg|jpeg|gif|png)\b\/?)\)/i
+      /((!\[[^\]]*\])(\((ftp|https?):\/\/[^\s]+\.(jpg|jpeg|gif|png)\b\/?)\))/i
     ) do
-      match = $2
+      full, match = $1, $3
       uri = extract_uri(match)
       if post_image = fetch_image(uri)
         embed_image(post_image)
       else
-        match
+        full
       end
     end
   end
