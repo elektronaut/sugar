@@ -65,8 +65,12 @@ class ImageFetcher
   def fetch_image(uri)
     return nil unless uri
     # Only fetch imgurl URLs for now
-    return nil unless URI.parse(uri).hostname == "i.imgur.com"
+    return nil unless host_whitelist?(URI.parse(uri).hostname)
     find_image(uri) || create_image(uri)
+  end
+
+  def host_whitelist?(hostname)
+    %w{i.imgur.com m.imgur.com}.include?(hostname)
   end
 
   def find_image(uri)
