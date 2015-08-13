@@ -22,6 +22,18 @@ class SanitizeFilter < Filter
     end
   end
 
+  def jquery_ujs_attributes
+    %w{
+      data-confirm
+      data-disable-with
+      data-method
+      data-params
+      data-remote
+      data-type
+      data-url
+    }
+  end
+
   def strip_event_handlers(parser)
     parser.search("*").each do |elem|
       elem.attributes.each do |name, attr|
@@ -32,6 +44,10 @@ class SanitizeFilter < Filter
         end
         # Strip out event handlers
         if name.downcase =~ /^on/
+          elem.remove_attribute(name)
+        end
+        # Remove UJS attributes
+        if jquery_ujs_attributes.include?(name.downcase)
           elem.remove_attribute(name)
         end
       end

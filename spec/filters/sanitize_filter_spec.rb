@@ -10,6 +10,13 @@ describe SanitizeFilter do
     end
   end
 
+  context "when input contains jQuery UJS attributes" do
+    let(:input) { "<a href=\"/\" data-method=\"post\">foo</a>" }
+    it "should strip the tag" do
+      expect(filter.to_html).to eq("<a href=\"/\">foo</a>")
+    end
+  end
+
   context "when input contains a script tag" do
     let(:input) { "<script>alert('foo');</script>" }
     it "should strip the tag" do
