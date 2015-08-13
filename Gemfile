@@ -59,7 +59,7 @@ gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
 gem 'ruby-filemagic', require: 'filemagic'
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 1.60.0'
 gem 'redcarpet', '~> 3.0'
 gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
@@ -71,7 +71,7 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'yui-compressor', require: 'yui/compressor'
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 2.1.0'
   gem 'hound-tools', '~> 0.0.4', require: false
 end
 
