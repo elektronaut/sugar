@@ -17,7 +17,7 @@ class SanitizeFilter < Filter
   private
 
   def remove_unsafe_tags(parser)
-    %w{applet base meta link script}.each do |tag_name|
+    %w{applet base meta link script form}.each do |tag_name|
       parser.search(tag_name).remove
     end
   end
