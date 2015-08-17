@@ -72,11 +72,6 @@ GEM
     addressable (2.3.6)
     arel (6.0.3)
     ast (2.0.0)
-    aws-sdk (1.60.2)
-      aws-sdk-v1 (= 1.60.2)
-    aws-sdk-v1 (1.60.2)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
     backbone-on-rails (1.1.2.0)
       actionmailer
       actionpack
@@ -432,7 +427,6 @@ DEPENDENCIES
   actionpack-page_caching
   active_model_serializers (~> 0.8.0)
   acts_as_list
-  aws-sdk (~> 1.60.0)
   b3s_emoticons!
   backbone-on-rails
   bcrypt-ruby
