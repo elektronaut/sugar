@@ -80,7 +80,7 @@ bindUploads = (elem, decorator) ->
     replacedText = $(elem).val().replace(uploadBanner(file), response.embed)
     $(elem).val(replacedText)
   $(elem).filedrop
-    allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif']
+    allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff']
     maxfiles: 25
     maxfilesize: 10
     paramname: "upload[file]"
