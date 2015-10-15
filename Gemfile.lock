@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/elektronaut/b3s_emoticons.git
-  revision: 8486a8794348fdc2f4470a62112d13597418c867
+  revision: cc4bf4a565b0351f48ff8117a8525e2bf411171e
   specs:
     b3s_emoticons (0.0.1)
 
