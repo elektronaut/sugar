@@ -59,7 +59,6 @@ gem 'newrelic_rpm', group: 'newrelic'
 
 gem 'fastimage'
 gem 'ruby-filemagic', require: 'filemagic'
-gem 'aws-sdk', '~> 1.60.0'
 gem 'redcarpet', '~> 3.0'
 gem 'rouge'
 gem "font-awesome-rails", "~> 3.2.1"
