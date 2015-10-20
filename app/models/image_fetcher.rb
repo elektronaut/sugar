@@ -52,10 +52,15 @@ class ImageFetcher
     parser.css("img").each do |element|
       post_image = fetch_image(elem_src(element))
       if post_image
-        element.replace(embed_image(post_image))
+        [
+          element.to_s,
+          element.to_s.gsub(/>$/, " />") # Nokogiri botches self-closing tags
+        ].each do |pattern|
+          str = str.gsub(pattern, embed_image(post_image))
+        end
       end
     end
-    parser.to_html
+    str
   end
 
   def extract_uri(str)
