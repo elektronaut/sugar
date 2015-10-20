@@ -27,8 +27,13 @@ describe ImageFetcher do
       it { is_expected.to eq("[image:#{image.id}:#{image.content_hash}]") }
     end
 
-    context "when image is embedded with HTML" do
+    context "when image is embedded with <img> tag" do
       let(:body) { "<img src=\"#{url}\" alt=\"foo\">" }
+      it { is_expected.to eq("[image:#{image.id}:#{image.content_hash}]") }
+    end
+
+    context "when image is embedded with <img /> tag" do
+      let(:body) { "<img src=\"#{url}\" alt=\"foo\" />" }
       it { is_expected.to eq("[image:#{image.id}:#{image.content_hash}]") }
     end
 

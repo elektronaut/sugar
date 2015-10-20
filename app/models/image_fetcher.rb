@@ -52,10 +52,10 @@ class ImageFetcher
     parser.css("img").each do |element|
       post_image = fetch_image(elem_src(element))
       if post_image
-        str = str.gsub(element.to_s, embed_image(post_image))
+        element.replace(embed_image(post_image))
       end
     end
-    str
+    parser.to_html
   end
 
   def extract_uri(str)
