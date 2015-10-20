@@ -39,6 +39,11 @@ FactoryGirl.define do
       banned true
     end
 
+    factory :facebook_user do
+      sequence(:facebook_uid) { |n| "#{n}" }
+      hashed_password nil
+    end
+
     factory :user_with_avatar do
       association :avatar, factory: :avatar
     end
