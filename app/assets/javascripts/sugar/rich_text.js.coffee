@@ -82,7 +82,7 @@ bindUploads = (elem, decorator) ->
   $(elem).filedrop
     allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff']
     maxfiles: 25
-    maxfilesize: 10
+    maxfilesize: 20
     paramname: "upload[file]"
     url: "/uploads.json"
     headers:
