@@ -81,13 +81,6 @@ end
 
 group :test do
   gem 'codeclimate-test-reporter', require: false
-end
-
-group :test, :development do
-  gem 'dotenv-rails', '~> 0.10.0'
-
-  gem 'sunspot_solr', '~> 2.1.0'
-  gem 'sunspot-rails-tester'
 
   # RSpec
   gem 'rspec-rails', '~> 3.1.0'
@@ -97,6 +90,15 @@ group :test, :development do
   gem 'fuubar'
   gem 'database_cleaner'
   gem 'webmock', require: false
+end
+
+group :test, :development do
+  gem 'dotenv-rails', '~> 0.10.0'
+
+  gem 'sunspot_solr', '~> 2.1.0'
+  gem 'sunspot-rails-tester'
+
+  gem 'pry'
 
   # FactoryGirl
   gem 'factory_girl_rails'
