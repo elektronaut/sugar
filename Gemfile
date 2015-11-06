@@ -4,19 +4,19 @@ gem 'rails', '~> 4.2.0'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
-gem 'active_model_serializers', '~> 0.8.0'
-gem 'responders', '~> 2.0'
+gem 'active_model_serializers', '~> 0.9.0'
+gem 'responders', '~> 2.1.0'
 
 gem 'sqlite3'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.20'
 gem 'pg'
 
-gem 'redis', '~> 3.1.0'
-gem 'hiredis', '~> 0.5.1'
+gem 'redis', '~> 3.2.0'
+gem 'hiredis', '~> 0.6.0'
 gem 'redis-rails', '~> 4.0.0'
 
 gem 'json'
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails', '~> 5.0.0'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'dynamic_form'
@@ -52,7 +52,7 @@ gem 'nokogiri'
 gem 'daemon-spawn'
 gem 'httparty', '~> 0.13.5'
 
-gem 'sunspot_rails', '~> 2.1.0'
+gem 'sunspot_rails', '~> 2.2.0'
 gem 'progress_bar'
 
 gem 'newrelic_rpm', group: 'newrelic'
@@ -84,7 +84,7 @@ group :test do
 
   # RSpec
   gem 'rspec-rails', '~> 3.1.0'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.7.0'
   gem 'json_spec'
   gem 'capybara'
   gem 'fuubar'
