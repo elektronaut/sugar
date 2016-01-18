@@ -22,6 +22,7 @@ describe Authenticable do
 
   it "should validate facebook_uid" do
     is_expected.to validate_uniqueness_of(:facebook_uid).
+      case_insensitive.
       with_message(/is already registered/)
   end
 

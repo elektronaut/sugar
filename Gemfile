@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 4.2.5'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'rails-observers'
 gem 'actionpack-page_caching'
@@ -8,7 +8,7 @@ gem 'active_model_serializers', '~> 0.9.0'
 gem 'responders', '~> 2.1.0'
 
 gem 'sqlite3'
-gem 'mysql2', '~> 0.3.20'
+gem 'mysql2', '~> 0.4.2'
 gem 'pg'
 
 gem 'redis', '~> 3.2.0'
@@ -31,7 +31,7 @@ gem 'dynamic_image', git: 'https://github.com/elektronaut/dynamic_image.git'
 
 # Deploy with Capistrano
 group :development do
-  gem 'capistrano', '~> 3.1.0'
+  gem 'capistrano', '~> 3.4.0'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
@@ -83,12 +83,12 @@ group :test do
   gem 'codeclimate-test-reporter', require: false
 
   # RSpec
-  gem 'rspec-rails', '~> 3.1.0'
-  gem 'shoulda-matchers', '~> 2.7.0'
+  gem 'rspec-rails', '~> 3.4.0'
+  gem 'shoulda-matchers', '~> 3.1.0'
   gem 'json_spec'
   gem 'capybara'
   gem 'fuubar'
-  gem 'database_cleaner', '~> 1.3.0'
+  gem 'database_cleaner', '~> 1.5.0'
   gem 'webmock', require: false
 end
 

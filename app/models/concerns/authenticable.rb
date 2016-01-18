@@ -23,7 +23,10 @@ module Authenticable
               if: :openid_url?
 
     validates :facebook_uid,
-              uniqueness: { message: "is already registered" },
+              uniqueness: {
+                message: "is already registered",
+                case_sensitive: false
+              },
               if: :facebook_uid?
 
     before_save :clear_banned_until
