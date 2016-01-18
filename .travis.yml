@@ -11,19 +11,15 @@ services:
   - mysql
   - redis
 rvm:
-  - 2.0.0
   - 2.1.0
   - 2.2.3
+  - 2.3.0
 env:
   - SUGAR_DB=sqlite
   - SUGAR_DB=mysql
   - SUGAR_DB=postgresql
 matrix:
   exclude:
-    - rvm: 2.0.0
-      env: SUGAR_DB=sqlite
-    - rvm: 2.0.0
-      env: SUGAR_DB=postgresql
     - rvm: 2.1.0
       env: SUGAR_DB=sqlite
     - rvm: 2.1.0
