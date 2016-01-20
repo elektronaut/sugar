@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe ImageFilter do
   let(:image_url) { "http://example.com/image.jpg" }

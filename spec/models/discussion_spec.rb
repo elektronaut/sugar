@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe Discussion do
   # Create the first admin user

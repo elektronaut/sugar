@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 require "digest/md5"
 
 describe AvatarsHelper do

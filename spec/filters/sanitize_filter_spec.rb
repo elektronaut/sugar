@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe SanitizeFilter do
   let(:filter) { SanitizeFilter.new(input) }

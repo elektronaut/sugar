@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe LinkFilter do
   let(:filter) { LinkFilter.new(input) }

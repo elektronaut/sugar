@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe PostObserver do
   let(:post) { double(exchange_id: 2, conversation: false) }

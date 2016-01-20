@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe ExchangeView do
   it { is_expected.to belong_to(:user) }

@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe Exchange do
   # Create the first admin user

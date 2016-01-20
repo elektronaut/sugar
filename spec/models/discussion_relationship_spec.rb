@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe DiscussionRelationship do
   let(:relationship)       { create(:discussion_relationship) }

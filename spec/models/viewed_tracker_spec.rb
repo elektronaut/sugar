@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe ViewedTracker do
   let(:user) { create(:user) }

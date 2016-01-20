@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe Admin::ConfigurationsController, redis: true do
   let(:admin) { create(:admin) }

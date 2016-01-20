@@ -4,6 +4,7 @@ module Authentication
   module Controller
     extend ActiveSupport::Concern
     include ActionView::Helpers::DateHelper
+    include CurrentUserHelper
 
     included do
       before_action :load_session_user
@@ -14,8 +15,6 @@ module Authentication
       after_action :update_last_active
       after_action :cleanup_authenticated_openid_url
       after_action :store_session_authentication
-
-      helper_method :current_user, :current_user?
     end
 
     protected
@@ -79,14 +78,6 @@ module Authentication
         end
       end
       false
-    end
-
-    def current_user
-      @current_user
-    end
-
-    def current_user?
-      current_user ? true : false
     end
 
     def set_current_user(user)

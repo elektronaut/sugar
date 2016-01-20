@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe PasswordResetToken do
   let (:password_reset_token) { create(:password_reset_token) }

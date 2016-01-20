@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe Sugar, redis: true do
   # Reload config before each run

@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe MarkdownCodeFilter do
   let(:filter) { MarkdownCodeFilter.new(input) }
