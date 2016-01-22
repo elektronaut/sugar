@@ -10,6 +10,7 @@ class ConversationsController < ApplicationController
   before_action :verify_editable, only: [:edit, :update, :destroy]
   before_action :find_recipient, only: [:create]
   before_action :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :find_remove_user, only: [:remove_participant]
 
   def index
     @exchanges = current_user.conversations.page(params[:page]).for_view
@@ -64,9 +65,16 @@ class ConversationsController < ApplicationController
   end
 
   def remove_participant
-    @exchange.remove_participant(current_user)
-    flash[:notice] = "You have been removed from the conversation"
-    redirect_to conversations_url
+    @exchange.remove_participant(@user)
+
+    if @user == current_user
+      flash[:notice] = "You have been removed from the conversation"
+      redirect_to conversations_url
+    else
+      flash[:notice] = "#{@user.username} has been removed from " \
+        "the conversation"
+      redirect_to @exchange
+    end
   end
 
   def mute
@@ -107,6 +115,14 @@ class ConversationsController < ApplicationController
       rescue ActiveRecord::RecordNotFound
         @recipient = nil
       end
+    end
+  end
+
+  def find_remove_user
+    @user = User.find_by_username(params[:username])
+    unless @exchange.removeable_by?(@user, current_user)
+      flash[:error] = "You can't do that!"
+      redirect_to @exchange
     end
   end
 end

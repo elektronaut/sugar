@@ -47,6 +47,13 @@ class Conversation < Exchange
     user && participants.include?(user) && participants.count > 1
   end
 
+  def removeable_by?(participant, remover)
+    return false unless removeable?(participant)
+    participant == remover ||
+      remover.moderator? ||
+      remover == poster
+  end
+
   def viewable_by?(user)
     user && participants.include?(user)
   end

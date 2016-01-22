@@ -8,7 +8,10 @@
 <%= content_for :sidebar do %>
   <div class="participants">
     <%= render(partial: "conversations/participants",
-               locals: { participants: @exchange.participants }) %>
+               locals: {
+                 exchange: @exchange,
+                 participants: @exchange.participants
+               }) %>
   </div>
   <div class="invite">
     <h2>Invite someone</h2>
@@ -28,11 +31,16 @@
       /
     <% end -%>
     <% if @exchange.removeable?(current_user) %>
-      <%= link_to 'Remove conversation',
-          [:remove_participant, @exchange],
-          method: :delete,
-          confirm: "Are you sure? You'll have to ask one of the other participants to invite you back if you regret it."
-      %>
+      <%= link_to("Remove conversation",
+                  remove_participant_conversation_path(
+                    @exchange,
+                    username: current_user.username
+                  ),
+                  method: :delete,
+                  data: {
+                    confirm: "Are you sure? You'll have to ask one of the " \
+                    "other participants to invite you back if you regret it."
+                  }) %>
       /
     <% end %>
     <% if current_user.muted_conversation?(@exchange) -%>

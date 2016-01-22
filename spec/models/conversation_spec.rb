@@ -68,6 +68,41 @@ describe Conversation do
     end
   end
 
+  describe "#removeable_by?" do
+    subject { conversation.removeable_by?(user, remover) }
+
+    before do
+      conversation.add_participant(user)
+      conversation.add_participant(remover)
+    end
+
+    context "when remover is self" do
+      let(:remover) { user }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when remover is a moderator" do
+      let(:remover) { create(:moderator) }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when remover is the poster" do
+      let(:remover) { conversation.poster }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when remover is a regular user" do
+      let(:remover) { create(:user) }
+      it { is_expected.to eq(false) }
+    end
+
+    context "with only one participant" do
+      let(:user) { conversation.poster }
+      let(:remover) { conversation.poster }
+      it { is_expected.to eq(false) }
+    end
+  end
+
   describe "#viewable_by?" do
     context "with a non-participant" do
       subject { conversation.viewable_by?(user) }
