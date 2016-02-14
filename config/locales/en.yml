@@ -107,6 +107,7 @@ en:
       facebook_connected: You have connected your Facebook account.
       remove?: 'Remove?'
       flickr_description: 'Note: This is not your username'
+      steam_description: 'Note: Not your login; 64-bit integer or custom URL name<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
       account_info: Account info
       settings: Settings
       theme: Theme
