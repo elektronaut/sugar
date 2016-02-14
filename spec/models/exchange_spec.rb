@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe Exchange do
   # Create the first admin user
@@ -21,7 +21,7 @@ describe Exchange do
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
 
   it { is_expected.to validate_presence_of(:title) }
-  it { is_expected.to ensure_length_of(:title).is_at_most(100) }
+  it { is_expected.to validate_length_of(:title).is_at_most(100) }
   it { is_expected.to validate_presence_of(:body) }
 
   describe "#updated_by" do

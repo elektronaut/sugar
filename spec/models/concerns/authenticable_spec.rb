@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe Authenticable do
   # Create the first admin user
@@ -22,6 +22,7 @@ describe Authenticable do
 
   it "should validate facebook_uid" do
     is_expected.to validate_uniqueness_of(:facebook_uid).
+      case_insensitive.
       with_message(/is already registered/)
   end
 
@@ -44,6 +45,18 @@ describe Authenticable do
     context "when confirm_password is present" do
       let(:user) { build(:user, password: "new", confirm_password: "new") }
       it { is_expected.to eq([]) }
+    end
+  end
+
+  describe "password generation" do
+    context "when user is a Facebook user" do
+      let(:user) { create(:facebook_user) }
+
+      it "should generate a password" do
+        expect(user.password.blank?).to eq(false)
+        expect(user.hashed_password.blank?).to eq(false)
+        expect(user.valid?).to eq(true)
+      end
     end
   end
 
@@ -101,13 +114,6 @@ describe Authenticable do
   describe "#active" do
     specify { expect(user.active).to eq(true) }
     specify { expect(banned_user.active).to eq(false) }
-  end
-
-  describe "#generate_new_password!" do
-    subject { user.generate_new_password! }
-    it { is_expected.to be_kind_of(String) }
-    it { is_expected.to eq(user.password) }
-    specify { expect(user).to be_valid }
   end
 
   describe "#valid_password?" do

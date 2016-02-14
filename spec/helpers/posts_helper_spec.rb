@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe PostsHelper do
   let(:user) { create(:user, username: "foo") }
@@ -8,7 +8,8 @@ describe PostsHelper do
 
   let(:smile_image) do
     "<img alt=\"smile\" class=\"emoji\" " +
-      "src=\"/assets/emoji/unicode/1f604.png\" " +
+      "src=\"/assets/emoji/unicode/1f604-216f3409215c9945a5bc8c83e0a586e6591" \
+      "361fb9d93492d6dd7c604f66dac5d.png\" " +
       "style=\"vertical-align:middle\" " +
       "width=\"16\" height=\"16\" />"
   end
@@ -18,7 +19,7 @@ describe PostsHelper do
 
     context "when emoji is defined" do
       let(:input) { ":smile:" }
-      it { is_expected.to eq(smile_image) }
+      it { is_expected.to match(smile_image) }
     end
 
     context "when emoji isn't defined" do

@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe Viewable do
   let(:discussion) { create(:discussion) }

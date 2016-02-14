@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 
 describe ConversationsController do
   let(:user) { create(:user) }
@@ -40,23 +40,67 @@ describe ConversationsController do
   end
 
   describe "DELETE remove_participant" do
-    before do
-      login(user)
-      delete :remove_participant, id: conversation_with_user
-    end
+    let(:remover) { create(:moderator) }
 
-    specify do
-      expect(flash[:notice]).to match(
-        /You have been removed from the conversation/
+    before { conversation_with_user.add_participant(remover) }
+
+    before do
+      login(remover)
+      delete(
+        :remove_participant,
+        id: conversation_with_user,
+        username: user.username
       )
     end
 
-    it "redirects back to conversations" do
-      expect(response).to redirect_to(conversations_url)
+    context "when removing self" do
+      let(:remover) { user }
+
+      specify do
+        expect(flash[:notice]).to match(
+          /You have been removed from the conversation/
+        )
+      end
+
+      it "redirects back to conversations" do
+        expect(response).to redirect_to(conversations_url)
+      end
+
+      it "removes the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).not_to include(user)
+      end
     end
 
-    it "removes the user from the conversation" do
-      expect(assigns(:exchange).participants.to_a).not_to include(user)
+    context "when removing someone else" do
+      specify do
+        expect(flash[:notice]).to eq(
+          "#{user.username} has been removed from the conversation"
+        )
+      end
+
+      it "redirects back to the conversation" do
+        expect(response).to redirect_to(conversation_url(assigns(:exchange)))
+      end
+
+      it "removes the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).not_to include(user)
+      end
+    end
+
+    context "when removing someone else without privileges" do
+      let(:remover) { create(:user) }
+
+      specify do
+        expect(flash[:error]).to eq("You can't do that!")
+      end
+
+      it "redirects back to the conversation" do
+        expect(response).to redirect_to(conversation_url(assigns(:exchange)))
+      end
+
+      it "should not remove the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).to include(user)
+      end
     end
   end
 

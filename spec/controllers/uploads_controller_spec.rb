@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe UploadsController, redis: true do
   let(:user) { create(:user) }
@@ -12,29 +12,19 @@ describe UploadsController, redis: true do
   before do
     # Create the first admin user
     create(:user)
-
-    # Configure S3
-    Sugar.config.update(
-      amazon_aws_key: "foo",
-      amazon_aws_secret: "bar",
-      amazon_s3_bucket: "sugar"
-    )
-
-    AWS.stub!
   end
-
-  specify { expect(Sugar.aws_s3?).to eq(true) }
 
   describe "POST create" do
     before { login(user) }
 
     context "with a valid file" do
+      let(:last_image) { PostImage.last }
       let(:expected_response) do
         {
           type: "image/png",
           name: "pink.png",
-          url: "https://sugar.s3.amazonaws.com/" +
-            "76a68c6a781ef4919bd4352b880b7c9e50de3d96.png"
+          embed: "[image:#{last_image.id}:" +
+            "76a68c6a781ef4919bd4352b880b7c9e50de3d96]"
         }
       end
 

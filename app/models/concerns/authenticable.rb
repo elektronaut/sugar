@@ -23,7 +23,10 @@ module Authenticable
               if: :openid_url?
 
     validates :facebook_uid,
-              uniqueness: { message: "is already registered" },
+              uniqueness: {
+                message: "is already registered",
+                case_sensitive: false
+              },
               if: :facebook_uid?
 
     before_save :clear_banned_until
@@ -60,13 +63,6 @@ module Authenticable
     !self.banned?
   end
 
-  def generate_new_password!
-    new_password = ""
-    seed = [0..9, "a".."z", "A".."Z"].map(&:to_a).flatten.map(&:to_s)
-    (7 + rand(3)).times { new_password += seed[rand(seed.length)] }
-    self.password = self.confirm_password = new_password
-  end
-
   def valid_password?(pass)
     if hashed_password.length <= 40
       # Legacy SHA1
@@ -101,7 +97,7 @@ module Authenticable
   def ensure_password
     unless self.new_password? || self.hashed_password?
       if self.openid_url? || self.facebook?
-        self.generate_new_password!
+        self.password = self.confirm_password = SecureRandom.base64(15)
       end
     end
   end

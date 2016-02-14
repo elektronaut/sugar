@@ -4,6 +4,7 @@ require "digest/md5"
 
 class ApplicationController < ActionController::Base
   include Authentication
+  include ViewedTrackerHelper
 
   self.responder = Sugar::Responder
 
@@ -17,8 +18,6 @@ class ApplicationController < ActionController::Base
   before_action :detect_mobile
   before_action :set_section
   before_action :set_theme
-
-  helper_method :viewed_tracker
 
   protected
 
@@ -47,10 +46,6 @@ class ApplicationController < ActionController::Base
       format.json { options[:text] ||= error_messages[error] }
     end
     render options
-  end
-
-  def viewed_tracker
-    @viewed_tracker ||= ViewedTracker.new(current_user)
   end
 
   def respond_with_exchanges(exchanges)

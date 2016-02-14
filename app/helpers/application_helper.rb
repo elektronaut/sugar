@@ -2,6 +2,7 @@
 
 module ApplicationHelper
   include AvatarsHelper
+  include CurrentUserHelper
   include ExchangesHelper
   include IconsHelper
   include LayoutHelper

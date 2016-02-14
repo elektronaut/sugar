@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "spec_helper"
+require "rails_helper"
 require "digest/md5"
 
 describe AvatarsHelper do
@@ -10,24 +10,10 @@ describe AvatarsHelper do
   describe "#gravatar_url" do
     subject { helper.gravatar_url(email) }
 
-    context "when request isn't over SSL" do
-      it do
-        is_expected.to eq(
-          "http://www.gravatar.com/avatar/#{digest}?s=24&r=x&d=identicon"
-        )
-      end
-    end
-
-    context "when request is over SSL" do
-      before do
-        allow(helper).to receive(:request).
-          and_return(double(ssl?: true))
-      end
-      it do
-        is_expected.to eq(
-          "https://secure.gravatar.com/avatar/#{digest}?s=24&r=x&d=identicon"
-        )
-      end
+    it do
+      is_expected.to eq(
+        "https://secure.gravatar.com/avatar/#{digest}?s=24&r=x&d=identicon"
+      )
     end
   end
 
@@ -54,7 +40,7 @@ describe AvatarsHelper do
       it do
         is_expected.to eq(
           "<img alt=\"foo\" class=\"avatar-image\" " +
-            "src=\"http://www.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
+            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
             "&amp;d=identicon\" width=\"96\" height=\"96\" />"
         )
       end
@@ -68,7 +54,7 @@ describe AvatarsHelper do
       it do
         is_expected.to eq(
           "<img alt=\"foo\" class=\"avatar-image\" " +
-            "src=\"http://www.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
+            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
             "&amp;d=identicon\" width=\"96\" height=\"96\" />"
         )
       end

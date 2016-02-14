@@ -2,20 +2,24 @@ class UploadsController < ApplicationController
   requires_authentication
   requires_user
 
-  before_action :require_s3
-
   respond_to :xml, :json
 
   def create
     response = {}
-    upload = Upload.new(upload_params[:file])
+    post_image = PostImage.new(file: upload_params[:file])
 
-    if upload.valid?
-      upload.save
+    if post_image.valid?
+      hash = Dis::Storage.file_digest(upload_params[:file])
+      if PostImage.where(content_hash: hash).any?
+        post_image = PostImage.where(content_hash: hash).first
+      else
+        post_image.save
+      end
+
       response = {
-        name: upload.name,
-        type: upload.mime_type,
-        url:  upload.url
+        name: post_image.filename,
+        type: post_image.content_type,
+        embed: "[image:#{post_image.id}:#{post_image.content_hash}]"
       }
     end
 

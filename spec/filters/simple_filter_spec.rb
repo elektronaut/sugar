@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe SimpleFilter do
   it "strips surrounding whitespace" do

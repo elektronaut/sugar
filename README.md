@@ -1,4 +1,4 @@
-# Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.svg?branch=master)](https://travis-ci.org/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar/badges/gpa.svg)](https://codeclimate.com/github/elektronaut/sugar) [![Test Coverage](https://codeclimate.com/github/elektronaut/sugar/badges/coverage.svg)](https://codeclimate.com/github/elektronaut/sugar)
+# Sugar [![Build Status](https://travis-ci.org/elektronaut/sugar.svg?branch=master)](https://travis-ci.org/elektronaut/sugar) [![Code Climate](https://codeclimate.com/github/elektronaut/sugar/badges/gpa.svg)](https://codeclimate.com/github/elektronaut/sugar) [![Test Coverage](https://codeclimate.com/github/elektronaut/sugar/badges/coverage.svg)](https://codeclimate.com/github/elektronaut/sugar) [![Dependency Status](https://gemnasium.com/elektronaut/sugar.svg)](https://gemnasium.com/elektronaut/sugar)
 
 Sugar is a modern open-source forum optimized for performance and usability,
 written in Ruby on Rails.

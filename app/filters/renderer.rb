@@ -15,6 +15,7 @@ class Renderer
         CodeFilter,
         ImageFilter,
         LinkFilter,
+        PostImageFilter,
         SanitizeFilter
       ].flatten
     end

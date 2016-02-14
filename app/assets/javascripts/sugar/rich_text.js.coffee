@@ -77,12 +77,12 @@ bindUploads = (elem, decorator) ->
   uploadBanner = (file) -> "[Uploading \"#{file.name}\"...]"
   startUpload = (file) -> replaceSelection(elem, "", uploadBanner(file) + "\n", "")
   finishUpload = (file, response) ->
-    replacedText = $(elem).val().replace(uploadBanner(file), decorator().image(response.url).join(""))
+    replacedText = $(elem).val().replace(uploadBanner(file), response.embed)
     $(elem).val(replacedText)
   $(elem).filedrop
-    allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif']
+    allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff']
     maxfiles: 25
-    maxfilesize: 2
+    maxfilesize: 20
     paramname: "upload[file]"
     url: "/uploads.json"
     headers:

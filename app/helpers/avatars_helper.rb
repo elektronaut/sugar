@@ -8,12 +8,8 @@ module AvatarsHelper
       size: 24
     }.merge(options)
     hash = Digest::MD5.hexdigest(email)
-    base_url = if request.ssl?
-                 "https://secure.gravatar.com"
-               else
-                 "http://www.gravatar.com"
-               end
-    "#{base_url}/avatar/#{hash}?s=#{options[:size]}&r=x&d=identicon"
+    "https://secure.gravatar.com/avatar/#{hash}" \
+      "?s=#{options[:size]}&r=x&d=identicon"
   end
 
   def avatar_image_tag(user)

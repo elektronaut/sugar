@@ -17,9 +17,21 @@ class SanitizeFilter < Filter
   private
 
   def remove_unsafe_tags(parser)
-    %w{applet base meta link script}.each do |tag_name|
+    %w{applet base meta link script form}.each do |tag_name|
       parser.search(tag_name).remove
     end
+  end
+
+  def jquery_ujs_attributes
+    %w{
+      data-confirm
+      data-disable-with
+      data-method
+      data-params
+      data-remote
+      data-type
+      data-url
+    }
   end
 
   def strip_event_handlers(parser)
@@ -32,6 +44,10 @@ class SanitizeFilter < Filter
         end
         # Strip out event handlers
         if name.downcase =~ /^on/
+          elem.remove_attribute(name)
+        end
+        # Remove UJS attributes
+        if jquery_ujs_attributes.include?(name.downcase)
           elem.remove_attribute(name)
         end
       end

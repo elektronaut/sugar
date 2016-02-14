@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 
 describe CodeFilter do
   let(:filter) { CodeFilter.new(input) }

@@ -3,6 +3,7 @@
 Sugar::Application.routes.draw do
 
   image_resources :avatars
+  image_resources :post_images
 
   use_doorkeeper
 
@@ -155,7 +156,6 @@ Sugar::Application.routes.draw do
         end
         if resource_type == :conversations
           post "invite_participant"
-          delete "remove_participant"
           get "mute"
           get "unmute"
         end
@@ -182,6 +182,12 @@ Sugar::Application.routes.draw do
         end
       end
     end
+  end
+
+  controller :conversations do
+    delete "/conversations/:id/remove_participant(/:username)" =>
+      :remove_participant,
+      as: :remove_participant_conversation
   end
 
   controller :posts do
