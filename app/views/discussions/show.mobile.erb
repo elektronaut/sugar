@@ -3,6 +3,7 @@
   previous_post = nil
 %>
 
+<%= render partial: 'components/pagination', locals: { p: @posts } %>
 <div class="posts">
   <%= render partial: 'posts/posts', locals: { posts: @posts, post_distance: true } %>
 </div>

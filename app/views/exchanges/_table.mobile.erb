@@ -34,7 +34,11 @@
       </p>
     </div><% end %>
   </div>
-  <%= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
+  <%= render(partial: 'components/pagination',
+             locals: {
+               p: exchanges,
+               pagination_params: pagination_params
+             }) %>
 <% else %>
   <p><%= no_exchanges %></p>
 <% end %>

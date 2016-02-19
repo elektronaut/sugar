@@ -231,13 +231,13 @@ label {
 
 .content {
   background: #fff image-url('b3s/mobile/contentbg.gif') repeat-x;
-  padding: 25px 0 10px 0;
+  padding-bottom: 10px;
   min-height: 285px;
     -webkit-user-select: auto;
 }
 
 .page_content {
-  padding: 0 15px;
+  padding: 25px 15px 0px 15px;
 }
 .page_content textarea {
   width: 275px;
@@ -249,7 +249,7 @@ body[orient="landscape"] .page_content textarea {
 
 
 .pagination {
-  padding: 5px 10px;
+  padding: 15px 10px;
   color: #888;
   border-bottom: 1px solid #ddd;
   background: #f8f8f8;
@@ -257,13 +257,11 @@ body[orient="landscape"] .page_content textarea {
 .pagination .links {
   float: right;
   font-weight: bold;
-  word-spacing: 5px;
+  .link {
+    margin-left: 5px;
+  }
 }
 
-
-.discussions, .conversations {
-  margin-top: -25px;
-}
 .discussion, .conversation {
   padding: 8px 10px 5px 10px;
   border-bottom: 1px solid #ddd;
@@ -330,10 +328,6 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   float: right;
   color: #888;
   font-size: 10px;
-}
-
-.posts {
-  margin-top: -20px;
 }
 
 .posts .discussion {
@@ -508,10 +502,6 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   text-decoration: underline;
 }
 
-.user_profile {
-  margin-top: -10px;
-}
-
 table.userinfo {
   clear: both;
   margin-top: 20px;
@@ -545,7 +535,6 @@ table.userinfo th {
 }
 
 .users_list {
-  margin-top: -20px;
   width: 100%;
 }
 .users_list th {
