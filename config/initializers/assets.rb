@@ -11,5 +11,7 @@ Rails.application.config.assets.paths << Emoji.images_path
 # Rails.application.config.assets.precompile += %w( search.js )
 Rails.application.config.assets.precompile += %w( swfobject.js mobile.js )
 Rails.application.config.assets.precompile += Theme.precompile_assets
+Rails.application.config.assets.precompile << "emoji/*.png"
+Rails.application.config.assets.precompile << "emoji/*.gif"
 Rails.application.config.assets.precompile << "emoji/**/*.png"
 Rails.application.config.assets.precompile << "emoji/**/*.gif"
