@@ -6,12 +6,11 @@ class UsersController < ApplicationController
   requires_authentication except: [
     :login, :authenticate, :logout, :new, :create
   ]
-  requires_user only: [:edit, :update, :update_openid]
+  requires_user only: [:edit, :update]
   requires_user_admin only: [:grant_invite, :revoke_invites]
 
   include CreateUserController
   include LoginUsersController
-  include OpenidUserController
   include UsersListController
 
   before_action :load_user,
@@ -19,13 +18,13 @@ class UsersController < ApplicationController
                   :show, :edit,
                   :update, :destroy,
                   :participated, :discussions,
-                  :posts, :update_openid,
+                  :posts,
                   :grant_invite, :revoke_invites,
                   :stats
                 ]
 
   before_action :detect_edit_page, only: [:edit, :update]
-  before_action :verify_editable,  only: [:edit, :update, :update_openid]
+  before_action :verify_editable,  only: [:edit, :update]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -90,10 +89,8 @@ class UsersController < ApplicationController
       if @user.update_attributes(user_params)
         current_user.reload if @user == current_user
         format.any(:html, :mobile) do
-          unless initiate_openid_on_update
-            flash[:notice] = "Your changes were saved!"
-            redirect_to edit_user_page_url(id: @user.username, page: @page)
-          end
+          flash[:notice] = "Your changes were saved!"
+          redirect_to edit_user_page_url(id: @user.username, page: @page)
         end
       else
         flash.now[:notice] = "Couldn't save your changes, " \

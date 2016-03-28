@@ -23,13 +23,6 @@ Sugar::Application.routes.draw do
     end
   end
 
-  # OpenID
-  resource :openid, controller: "openid" do
-    member do
-      get "complete"
-    end
-  end
-
   # Facebook
   resource :facebook, controller: "facebook" do
     member do
@@ -90,8 +83,6 @@ Sugar::Application.routes.draw do
          as: :grant_invite_user
     post "/users/profile/:id/revoke_invites" => :revoke_invites,
          as: :revoke_invites_user
-    get "/users/profile/:id/update_openid" => :update_openid,
-        as: :update_openid_user
     get "/users/profile/:id/edit" => :edit,
         as: :edit_user
     get "/users/profile/:id/edit/:page" => :edit,

@@ -16,15 +16,6 @@
       <%= submit_tag "Login" %>
     </p>
   <% end %>
-  <%= form_tag(openid_path, class: 'form') do %>
-    <p>
-      <label>..or log in using OpenID</label>
-      <%= text_field_tag 'openid_url', '', class: :text %>
-    </p>
-    <p>
-      <%= submit_tag "Login" %>
-    </p>
-  <% end %>
 </div>
 
 <div id="password-reminder" class="login_box">

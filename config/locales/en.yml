@@ -35,7 +35,6 @@ en:
         flickr: Flickr user ID
         last_fm: Last.fm username
         instagram: Instagram username
-        openid_url: OpenID Identity URL
         email: Email address
         password: Password
         confirm_password: Confirm password
@@ -120,7 +119,6 @@ en:
       social_media: Social Media
       messaging: Messaging
     new:
-      openid_description: "<a href=\"http://openid.net/what/\">What's this?"
       optional_fields: "The following fields are optional, but it's always nice to provide a bit more information:"
     sign_up: Sign up
     sign_up_with_facebook: Sign up with Facebook
