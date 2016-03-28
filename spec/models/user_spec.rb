@@ -52,11 +52,6 @@ describe User do
       subject { build(:user, email: nil, facebook_uid: 123) }
       it { is_expected.not_to validate_presence_of(:email) }
     end
-
-    context "when signed up with OpenID" do
-      subject { build(:user, email: nil, openid_url: "http://example.com/") }
-      it { is_expected.not_to validate_presence_of(:email) }
-    end
   end
 
   describe "#name_and_email" do

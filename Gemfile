@@ -43,9 +43,6 @@ end
 # OAuth
 gem "doorkeeper" # , '~> 0.7.2'
 
-# OpenID gem. The stock gem is incompatible with Ruby 1.9, this fixes that.
-gem "ruby-openid", require: "openid"
-
 gem "acts_as_list"
 
 gem "nokogiri"

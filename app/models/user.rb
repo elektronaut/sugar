@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
 
   validates :email,
             presence: { case_sensitive: false },
-            unless: proc { |u| u.openid_url? || u.facebook? }
+            unless: proc { |u| u.facebook? }
 
   def name_and_email
     realname? ? "#{realname} <#{email}>" : email

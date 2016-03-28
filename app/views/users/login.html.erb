@@ -22,20 +22,6 @@
       <button type="submit">Sign in</button>
       <%= link_to("<strong>Help!</strong> I forgot my password!".html_safe, new_password_reset_path, class: 'password_reset') %>
     </fieldset>
-    <p>
-      <button class="openid_toggle" type="button">Sign in with OpenID</button>
-    </p>
-  <% end %>
-
-  <%= form_tag(openid_path, class: 'form openid') do %>
-    <fieldset>
-      <label>OpenID URL</label>
-      <%= text_field_tag 'openid_url', '', class: :text %>
-    </fieldset>
-    <fieldset>
-      <button type="submit">Sign in</button>
-      <%= link_to "Login with username/password", '#', class: 'username_and_password_toggle' %>
-    </fieldset>
   <% end %>
 
   <% if Sugar.config.facebook_app_id -%>

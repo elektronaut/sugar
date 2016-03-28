@@ -337,7 +337,6 @@ GEM
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
     ruby-filemagic (0.7.1)
-    ruby-openid (2.7.0)
     ruby-progressbar (1.7.5)
     ruby_gntp (0.3.4)
     safe_yaml (1.0.4)
@@ -453,7 +452,6 @@ DEPENDENCIES
   rouge
   rspec-rails (~> 3.4.0)
   ruby-filemagic
-  ruby-openid
   ruby_gntp
   sass-rails (~> 5.0.0)
   shoulda-matchers (~> 3.1.0)

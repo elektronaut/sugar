@@ -4,21 +4,16 @@ require "rails_helper"
 
 describe Authenticable do
   # Create the first admin user
-  before { create(:user, openid_url: "http://whatever.com", facebook_uid: 345) }
+  before { create(:user, facebook_uid: 345) }
 
   let(:user) do
-    create(:user, facebook_uid: 123, openid_url: "http://example.com")
+    create(:user, facebook_uid: 123)
   end
   let(:banned_user) { create(:banned_user) }
 
   subject { user }
 
   it { is_expected.to validate_presence_of(:hashed_password) }
-
-  it "should validate openid_url" do
-    is_expected.to validate_uniqueness_of(:openid_url)
-      .with_message(/is already registered/)
-  end
 
   it "should validate facebook_uid" do
     is_expected.to validate_uniqueness_of(:facebook_uid)
@@ -247,31 +242,9 @@ describe Authenticable do
       it { is_expected.to_not be_blank }
     end
 
-    context "when signed up with OpenID" do
-      let(:user) do
-        build(:user, hashed_password: nil, openid_url: "http://example.com/")
-      end
-      it { is_expected.to_not be_blank }
-    end
-
     context "when password is set" do
       let(:user) { create(:user, password: "new", confirm_password: "new") }
       it { is_expected.to eq("new") }
-    end
-  end
-
-  describe "#normalize_openid_url" do
-    before { user.valid? }
-    subject { user.openid_url }
-
-    context "when missing http" do
-      let(:user) { build(:user, openid_url: "example.com") }
-      it { is_expected.to eq("http://example.com/") }
-    end
-
-    context "when not missing http" do
-      let(:user) { build(:user, openid_url: "https://example.com") }
-      it { is_expected.to eq("https://example.com/") }
     end
   end
 

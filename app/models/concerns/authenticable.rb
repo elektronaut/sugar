@@ -6,7 +6,6 @@ module Authenticable
 
   included do
     before_validation :ensure_password, on: :create
-    before_validation :normalize_openid_url
     before_validation :encrypt_new_password
 
     validate do |user|
@@ -17,10 +16,6 @@ module Authenticable
 
     validates :hashed_password,
               presence: true
-
-    validates :openid_url,
-              uniqueness: { message: "is already registered" },
-              if: :openid_url?
 
     validates :facebook_uid,
               uniqueness: {
@@ -95,18 +90,9 @@ module Authenticable
 
   def ensure_password
     unless new_password? || hashed_password?
-      if openid_url? || facebook?
+      if facebook?
         self.password = self.confirm_password = SecureRandom.base64(15)
       end
-    end
-  end
-
-  def normalize_openid_url
-    if openid_url?
-      unless openid_url =~ %r{^https?://}
-        self.openid_url = "http://" + openid_url
-      end
-      self.openid_url = OpenID.normalize_url(openid_url)
     end
   end
 

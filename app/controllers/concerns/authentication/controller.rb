@@ -13,7 +13,6 @@ module Authentication
       before_action :verify_activated_account
       after_action :cleanup_temporary_ban
       after_action :update_last_active
-      after_action :cleanup_authenticated_openid_url
       after_action :store_session_authentication
     end
 
@@ -158,11 +157,6 @@ module Authentication
          !current_user.temporary_banned?
         current_user.update_attributes(banned_until: nil)
       end
-    end
-
-    def cleanup_authenticated_openid_url
-      return unless current_user && session[:authenticated_openid_url]
-      session.delete(:authenticated_openid_url)
     end
 
     def update_last_active

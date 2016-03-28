@@ -9,12 +9,8 @@
 <%= f.labelled_text_field :username %>
 <%= f.labelled_text_field :email, size: 50 %>
 
-<% if mode == :openid %>
-  <%= f.labelled_text_field :openid_url, size: 47, description: t('user.new.openid_description').html_safe %>
-<% else %>
-  <%= f.labelled_password_field :password %>
-  <%= f.labelled_password_field :confirm_password %>
-<% end %>
+<%= f.labelled_password_field :password %>
+<%= f.labelled_password_field :confirm_password %>
 
 <p>
   <%= t('user.new.optional_fields') %>

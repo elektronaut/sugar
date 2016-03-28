@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731222329) do
+ActiveRecord::Schema.define(version: 20160328211958) do
 
   create_table "avatars", force: :cascade do |t|
     t.string   "content_hash",   limit: 255
@@ -233,7 +233,6 @@ ActiveRecord::Schema.define(version: 20150731222329) do
     t.string   "flickr",                limit: 255
     t.string   "last_fm",               limit: 255
     t.string   "website",               limit: 255
-    t.string   "openid_url",            limit: 255
     t.float    "longitude",             limit: 24
     t.float    "latitude",              limit: 24
     t.datetime "created_at",                                          null: false

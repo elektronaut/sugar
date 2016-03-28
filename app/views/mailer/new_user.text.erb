@@ -3,11 +3,7 @@ Hi <%= @user.username %>,
 thanks for signing up! This email is just a note to let you know that
 your account has been successfully created.
 
-<% if @user.openid_url? -%>
-You've signed up using your OpenID URL:
-
-  <%= @user.openid_url %>
-<% elsif @user.facebook? -%>
+<% if @user.facebook? -%>
 You've signed up using your Facebook account.
 <% end -%>
 

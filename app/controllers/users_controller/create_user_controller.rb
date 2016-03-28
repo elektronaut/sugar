@@ -24,9 +24,7 @@ class UsersController < ApplicationController
 
       if @user.save
         finalize_successful_signup
-        unless initiate_openid_on_create
-          redirect_to user_profile_url(id: @user.username)
-        end
+        redirect_to user_profile_url(id: @user.username)
       else
         flash.now[:notice] = "Could not create your account, " \
                              "please fill in all required fields."

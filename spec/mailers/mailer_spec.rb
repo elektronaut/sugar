@@ -49,12 +49,6 @@ describe Mailer do
         it { is_expected.to match(user.username) }
         it { is_expected.to match(login_url) }
       end
-
-      context "when signed up with OpenID" do
-        let(:user) { create(:new_user, openid_url: "http://example.com/") }
-        it { is_expected.to match(user.openid_url) }
-        it { is_expected.to match(user.username) }
-      end
     end
   end
 
