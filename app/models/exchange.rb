@@ -64,6 +64,15 @@ class Exchange < ActiveRecord::Base
     end
   end
 
+  def unlabel!
+    update_attributes(
+      trusted: false,
+      sticky: false,
+      closed: false,
+      nsfw: false
+    )
+  end
+
   private
 
   def validate_closed

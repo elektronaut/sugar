@@ -38,23 +38,15 @@ module ExchangeParticipant
   end
 
   def mark_exchange_viewed(exchange, post, index)
-    exchange_view = ExchangeView.find_by(
-      user_id: id,
-      exchange_id: exchange.id
-    )
-    if exchange_view
-      if exchange_view.post_index < index
-        exchange_view.update_attributes(
-          post_index: index,
-          post_id: post.id
-        )
+    view = ExchangeView.find_by(user_id: id, exchange_id: exchange.id)
+    if view
+      if view.post_index < index
+        view.update_attributes(post_index: index, post_id: post.id)
       end
     else
       ExchangeView.create(
-        exchange_id: exchange.id,
-        user_id: id,
-        post_index: index,
-        post_id: post.id
+        exchange_id: exchange.id, user_id: id,
+        post_index: index,        post_id: post.id
       )
     end
   end

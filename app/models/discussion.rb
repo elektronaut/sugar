@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Discussion < Exchange
+  class InvalidExchange < StandardError; end
+
   include SearchableExchange
   include Viewable
 
@@ -21,22 +23,16 @@ class Discussion < Exchange
 
   # Converts a discussion to a conversation
   def convert_to_conversation!
-    if valid?
-      transaction do
-        update_attributes(type: "Conversation")
-        becomes(Conversation).tap do |conversation|
-          conversation.update_attributes(
-            trusted: false,
-            sticky: false,
-            closed: false,
-            nsfw: false
-          )
-          posts.update_all(conversation: true, trusted: false)
-          participants.each do |participant|
-            conversation.add_participant(participant)
-          end
-          discussion_relationships.destroy_all
+    raise InvalidExchange unless valid?
+    transaction do
+      update_attributes(type: "Conversation")
+      becomes(Conversation).tap do |conversation|
+        conversation.unlabel!
+        posts.update_all(conversation: true, trusted: false)
+        participants.each do |participant|
+          conversation.add_participant(participant)
         end
+        discussion_relationships.destroy_all
       end
     end
   end

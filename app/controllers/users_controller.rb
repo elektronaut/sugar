@@ -135,8 +135,13 @@ class UsersController < ApplicationController
     )
   end
 
+  def allowed_admin_params
+    return [] unless current_user? && current_user.admin?
+    [:admin]
+  end
+
   def allowed_params
-    allowed = [
+    [
       :aim, :birthday, :description, :email,
       :facebook_uid, :flickr, :gamertag, :gtalk, :instagram,
       :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
@@ -145,17 +150,15 @@ class UsersController < ApplicationController
       :password, :confirm_password, :banned_until, :preferred_format,
       :sony, :nintendo, :steam, :battlenet,
       avatar_attributes: [:file]
+    ] + allowed_user_admin_params + allowed_admin_params
+  end
+
+  def allowed_user_admin_params
+    return [] unless current_user? && current_user.user_admin?
+    [
+      :username, :banned, :user_admin, :moderator,
+      :trusted, :available_invites, :status
     ]
-    if current_user?
-      if current_user.user_admin?
-        allowed += [
-          :username, :banned, :user_admin, :moderator,
-          :trusted, :available_invites, :status
-        ]
-      end
-      allowed += [:admin] if current_user.admin?
-    end
-    allowed
   end
 
   def user_params

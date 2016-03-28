@@ -111,21 +111,14 @@ module Sugar
       )
     end
 
-    def labelled_check_box(
-          attribute,
-          label_text = nil,
-          options = {},
-          checked_value = "1",
-          unchecked_value = "0"
-    )
-      label_text, options, field_options = parse_label_text_and_options(
-        label_text,
-        options
-      )
+    def labelled_check_box(attr, label = nil, options = {},
+                           checked = "1", unchecked = "0")
+      label, options, field_options =
+        parse_label_and_opts(label, options)
       field_with_label(
-        attribute,
-        check_box(attribute, options, checked_value, unchecked_value),
-        label_text,
+        attr,
+        check_box(attr, options, checked, unchecked),
+        label,
         field_options
       )
     end
@@ -152,7 +145,7 @@ module Sugar
     end
 
     def labelled_field(type, attribute, label_text = nil, options = {})
-      label_text, options, field_options = parse_label_text_and_options(
+      label_text, options, field_options = parse_label_and_opts(
         label_text,
         options
       )
@@ -164,7 +157,7 @@ module Sugar
       )
     end
 
-    def parse_label_text_and_options(label_text = nil, options = {})
+    def parse_label_and_opts(label_text = nil, options = {})
       if label_text.is_a?(Hash) && options == {}
         options = label_text
         label_text = nil

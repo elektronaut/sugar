@@ -13,23 +13,25 @@ module AvatarsHelper
   end
 
   def avatar_image_tag(user)
-    html_options = {
+    if user.avatar
+      dynamic_image_tag(user.avatar, { crop: true }.merge(avatar_options(user)))
+    elsif user.email?
+      image_tag(gravatar_url(user.email, size: 96), avatar_options(user))
+    else
+      image_tag(
+        gravatar_url("#{user.id}@#{request.host}", size: 96),
+        avatar_options(user)
+      )
+    end
+  end
+
+  private
+
+  def avatar_options(user)
+    {
       size:  "96x96",
       alt:   user.username,
       class: "avatar-image"
     }
-    if user.avatar
-      dynamic_image_tag(user.avatar, { crop: true }.merge(html_options))
-    elsif user.email?
-      image_tag(
-        gravatar_url(user.email, size: 96),
-        html_options
-      )
-    else
-      image_tag(
-        gravatar_url("#{user.id}@#{request.host}", size: 96),
-        html_options
-      )
-    end
   end
 end

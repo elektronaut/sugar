@@ -106,20 +106,8 @@ class Configuration
 
   def set(key, value)
     key = key.to_sym if key.is_a?(String)
-    unless setting?(key)
-      raise(
-        InvalidConfigurationKey,
-        ":#{key} is not a valid configuration option"
-      )
-    end
+    validate_setting(key, value)
     value = parse_value(key, value)
-    unless valid_type?(key, value)
-      raise(
-        ArgumentError,
-        "expected #{self.class.settings[key].type}, " \
-          "got #{value.class} (#{value.inspect})"
-      )
-    end
     configuration[key] = value
   end
 
@@ -162,6 +150,18 @@ class Configuration
       value.is_a?(TrueClass) || value.is_a?(FalseClass)
     else
       value.is_a?(type_for(key).to_s.camelize.constantize)
+    end
+  end
+
+  def validate_setting(key, value)
+    unless setting?(key)
+      raise(InvalidConfigurationKey,
+            ":#{key} is not a valid configuration option")
+    end
+    unless valid_type?(key, parse_value(key, value))
+      raise(ArgumentError,
+            "expected #{self.class.settings[key].type}, " \
+              "got #{value.class} (#{value.inspect})")
     end
   end
 

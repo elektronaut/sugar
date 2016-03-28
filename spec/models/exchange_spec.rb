@@ -147,6 +147,17 @@ describe Exchange do
     specify { expect(subject.user).to eq(exchange.poster) }
   end
 
+  describe "#unlabel!" do
+    let(:exchange) do
+      create(:discussion, trusted: true, sticky: true, closed: true, nsfw: true)
+    end
+    before { exchange.unlabel! }
+    specify { expect(exchange.trusted?).to eq(false) }
+    specify { expect(exchange.sticky?).to eq(false) }
+    specify { expect(exchange.closed?).to eq(false) }
+    specify { expect(exchange.nsfw?).to eq(false) }
+  end
+
   describe "#update_post_body" do
     before { exchange.update_attributes(body: "changed post") }
     subject { exchange.posts.first }

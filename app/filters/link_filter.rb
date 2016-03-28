@@ -20,6 +20,17 @@ class LinkFilter < Filter
 
   private
 
+  def head_request(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 2
+    http.read_timeout = 5
+
+    http.start do |h|
+      h.head(uri.request_uri).code
+    end
+  end
+
   def local_domains
     Sugar.config.domain_names.try(:strip).try(:split, /\s*,\s*/) || []
   end
@@ -34,22 +45,12 @@ class LinkFilter < Filter
     HTTPS_WHITELIST.detect { |domain| File.fnmatch(domain, host) }
   end
 
-  def url_exists?(url)
+  def https_url_exists?(url)
     uri = URI.parse(url.gsub(%r{^(https?:)//}, "https://"))
-
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.open_timeout = 2
-    http.read_timeout = 5
-
     begin
-      http.start do |h|
-        h.head(uri.request_uri).code =~ /^(2|3)\d\d$/
-      end
-    rescue SocketError,
-           Net::OpenTimeout,
-           OpenSSL::SSL::SSLError,
-           Errno::ECONNREFUSED
+      head_request(uri) =~ /^(2|3)\d\d$/
+    rescue SocketError, Net::OpenTimeout,
+           OpenSSL::SSL::SSLError, Errno::ECONNREFUSED
       false
     rescue StandardError => e
       logger.error "Unexpected connection error #{e.inspect}"
@@ -75,7 +76,7 @@ class LinkFilter < Filter
       src = iframe.try(:attributes).try(:[], "src").try(:value)
       next unless src
       if matches_https_whitelist?(src) ||
-         (src =~ %r{\Ahttp://} && url_exists?(src))
+         (src =~ %r{\Ahttp://} && https_url_exists?(src))
         iframe.set_attribute "src", src.gsub(%r{\Ahttps?://}, "//")
       end
     end

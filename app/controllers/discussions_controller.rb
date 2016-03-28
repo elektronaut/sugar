@@ -41,22 +41,14 @@ class DiscussionsController < ApplicationController
   end
 
   def search
-    search = Discussion.search_results(
-      search_query,
-      user: current_user,
-      page: params[:page]
-    )
-    @exchanges = search.results
-
+    @exchanges = search_results.results
     respond_to do |format|
       format.any(:html, :mobile) do
         @search_path = search_path
         respond_with_exchanges(@exchanges)
       end
       format.json do
-        respond_with @exchanges, meta: {
-          total: search.total
-        }
+        respond_with @exchanges, meta: { total: search_results.total }
       end
     end
   end
@@ -176,5 +168,13 @@ class DiscussionsController < ApplicationController
     end
 
     render_error 403 unless @exchange.viewable_by?(current_user)
+  end
+
+  def search_results
+    @search_results ||= Discussion.search_results(
+      search_query,
+      user: current_user,
+      page: params[:page]
+    )
   end
 end
