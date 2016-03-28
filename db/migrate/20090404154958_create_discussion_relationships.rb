@@ -1,21 +1,19 @@
 class CreateDiscussionRelationships < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :discussion_relationships do |t|
-      t.belongs_to :user, :discussion
+      t.references :user, index: true
+      t.belongs_to :discussion, index: true
       t.boolean :participated, null: false, default: false
       t.boolean :following,    null: false, default: true
       t.boolean :favorite,     null: false, default: false
       t.boolean :trusted,      null: false, default: false
-    end
-    add_index :discussion_relationships, :user_id
-    add_index :discussion_relationships, :discussion_id
-    add_index :discussion_relationships, :participated
-    add_index :discussion_relationships, :following
-    add_index :discussion_relationships, :favorite
-    add_index :discussion_relationships, :trusted
-  end
+      t.boolean :hidden,       null: false, default: false
 
-  def self.down
-    drop_table :discussion_participations
+      t.index :participated
+      t.index :following
+      t.index :favorite
+      t.index :trusted
+      t.index :hidden
+    end
   end
 end

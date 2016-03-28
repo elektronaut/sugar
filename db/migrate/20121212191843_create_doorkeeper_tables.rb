@@ -5,10 +5,10 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       t.string :uid, null: false
       t.string :secret, null: false
       t.string :redirect_uri, null: false
-      t.timestamps
-    end
+      t.timestamps null: false
 
-    # add_index :oauth_applications, :uid, unique: true
+      # t.index :uid, unique: true
+    end
 
     create_table :oauth_access_grants do |t|
       t.integer :resource_owner_id, null: false
@@ -19,9 +19,9 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       t.datetime :created_at, null: false
       t.datetime :revoked_at
       t.string :scopes
-    end
 
-    # add_index :oauth_access_grants, :token, unique: true
+      # t.index :token, unique: true
+    end
 
     create_table :oauth_access_tokens do |t|
       t.integer :resource_owner_id
@@ -32,10 +32,10 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       t.datetime :revoked_at
       t.datetime :created_at, null: false
       t.string :scopes
-    end
 
-    # add_index :oauth_access_tokens, :token, unique: true
-    add_index :oauth_access_tokens, :resource_owner_id
-    # add_index :oauth_access_tokens, :refresh_token, unique: true
+      # t.index :token, unique: true
+      t.index :resource_owner_id
+      # t.index :refresh_token, unique: true
+    end
   end
 end

@@ -14,8 +14,7 @@ class CreateAvatars < ActiveRecord::Migration
       t.integer :crop_start_y
       t.integer :crop_gravity_x
       t.integer :crop_gravity_y
-      t.timestamps
+      t.timestamps null: false
     end
-    add_column :users, :avatar_id, :integer
   end
 end

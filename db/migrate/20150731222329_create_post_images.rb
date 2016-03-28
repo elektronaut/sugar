@@ -14,8 +14,11 @@ class CreatePostImages < ActiveRecord::Migration
       t.integer :crop_start_y
       t.integer :crop_gravity_x
       t.integer :crop_gravity_y
-
+      t.string :original_url, limit: 4096
       t.timestamps null: false
+
+      t.index [:id, :content_hash], unique: true, length: { content_hash: 190 }
+      t.index :original_url, length: { original_url: 190 }
     end
   end
 end
