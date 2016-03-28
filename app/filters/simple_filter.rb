@@ -12,9 +12,9 @@ class SimpleFilter < Filter
   end
 
   def escape_angle_brackets(str)
-    str.
-      gsub(Regexp.new("<(?!/|" + html_tags.join("|") + ")"), "&lt;").
-      gsub(Regexp.new("(?<!\"|'|" + html_tags.join("|") + ")>"), "&gt;")
+    str
+      .gsub(Regexp.new("<(?!/|" + html_tags.join("|") + ")"), "&lt;")
+      .gsub(Regexp.new("(?<!\"|'|" + html_tags.join("|") + ")>"), "&gt;")
   end
 
   def strip(post)
@@ -22,7 +22,7 @@ class SimpleFilter < Filter
   end
 
   def html_tags
-    %w{
+    %w(
       a abbr address area article aside audio b base bdi bdo blockquote
       body br button canvas caption cite code col colgroup data datalist
       dd del details dfn div dl dt em embed fieldset figcaption figure
@@ -33,6 +33,6 @@ class SimpleFilter < Filter
       source span strong style sub summary svg table tbody td textarea tfoot
       th thead time title tr track u ul var video wbr
       allowfullscreen base64serialized
-    }
+    )
   end
 end

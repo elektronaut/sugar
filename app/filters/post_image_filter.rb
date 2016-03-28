@@ -7,7 +7,9 @@ class PostImageFilter < Filter
 
   def process(post)
     post.gsub(/(\[image:([\d]+):([\w\d]+)\])/) do
-      tag, id, content_hash = $1, $2, $3
+      tag = Regexp.last_match(1)
+      id = Regexp.last_match(2)
+      content_hash = Regexp.last_match(3)
       embed_image(id, content_hash) || tag
     end
   end

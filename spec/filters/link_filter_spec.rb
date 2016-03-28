@@ -29,21 +29,21 @@ describe LinkFilter do
   end
 
   context "when input contains an image not on the HTTPS whitelist" do
-    let(:input) { "<img src=\"http://example.com/image.jpg\">" }
+    let(:input) { '<img src="http://example.com/image.jpg">' }
 
     context "and the image exists" do
       it "should rewrite the URL to one without protocol" do
-        req = stub_request(:head, "https://example.com/image.jpg").
-          to_return(status: 200)
-        expect(filter.to_html).to eq("<img src=\"//example.com/image.jpg\">")
+        req = stub_request(:head, "https://example.com/image.jpg")
+              .to_return(status: 200)
+        expect(filter.to_html).to eq('<img src="//example.com/image.jpg">')
         assert_requested(req)
       end
     end
 
     context "and the image doesn't exists" do
       it "shouldn't change the URL" do
-        req = stub_request(:head, "https://example.com/image.jpg").
-          to_return(status: 404)
+        req = stub_request(:head, "https://example.com/image.jpg")
+              .to_return(status: 404)
         expect(filter.to_html).to eq(input)
         assert_requested(req)
       end
@@ -51,8 +51,8 @@ describe LinkFilter do
 
     context "and the server doesn't respond" do
       it "shouldn't change the URL" do
-        req = stub_request(:head, "https://example.com/image.jpg").
-          to_raise(SocketError)
+        req = stub_request(:head, "https://example.com/image.jpg")
+              .to_raise(SocketError)
         expect(filter.to_html).to eq(input)
         assert_requested(req)
       end
@@ -60,10 +60,10 @@ describe LinkFilter do
 
     context "and an unexpected error occurs" do
       it "should log the error" do
-        stub_request(:head, "https://example.com/image.jpg").
-          to_raise("foo")
-        expect(filter.logger).to receive(:error).
-          with("Unexpected connection error #<StandardError: foo>")
+        stub_request(:head, "https://example.com/image.jpg")
+          .to_raise("foo")
+        expect(filter.logger).to receive(:error)
+          .with('Unexpected connection error #<StandardError: foo>')
         expect(filter.to_html).to eq(input)
       end
     end

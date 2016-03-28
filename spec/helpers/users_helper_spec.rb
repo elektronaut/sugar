@@ -12,7 +12,7 @@ describe UsersHelper do
     context "without options" do
       it do
         is_expected.to eq(
-          "<li class=\"tab\"><a href=\"/users/stuff\">Stuff</a></li>"
+          '<li class="tab"><a href="/users/stuff">Stuff</a></li>'
         )
       end
     end
@@ -21,7 +21,7 @@ describe UsersHelper do
       let(:options) { { class: "foo" } }
       it do
         is_expected.to eq(
-          "<li class=\"tab foo\"><a href=\"/users/stuff\">Stuff</a></li>"
+          '<li class="tab foo"><a href="/users/stuff">Stuff</a></li>'
         )
       end
     end
@@ -32,7 +32,7 @@ describe UsersHelper do
       context "and action doesn't match params" do
         it do
           is_expected.to eq(
-            "<li class=\"tab\"><a href=\"/users/stuff\">Stuff</a></li>"
+            '<li class="tab"><a href="/users/stuff">Stuff</a></li>'
           )
         end
       end
@@ -43,7 +43,7 @@ describe UsersHelper do
         end
         it do
           is_expected.to eq(
-            "<li class=\"tab active\"><a href=\"/users/stuff\">Stuff</a></li>"
+            '<li class="tab active"><a href="/users/stuff">Stuff</a></li>'
           )
         end
       end

@@ -40,7 +40,7 @@ FactoryGirl.define do
     end
 
     factory :facebook_user do
-      sequence(:facebook_uid) { |n| "#{n}" }
+      sequence(:facebook_uid, &:to_s)
       hashed_password nil
     end
 

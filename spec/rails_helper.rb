@@ -32,21 +32,21 @@ require "webmock/rspec"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
   allow: "codeclimate.com"
 )
 
-$original_sunspot_session = Sunspot.session
+original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session
 
 Sugar.redis = Redis.connect(RedisHelper::CONFIG)
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-#Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| load f }
+# Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| load f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -105,7 +105,7 @@ RSpec.configure do |config|
   # Stub Sunspot
   config.before do
     Sunspot.session =
-      Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
+      Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
   end
 
   config.before(:suite) do
@@ -121,7 +121,7 @@ RSpec.configure do |config|
 
   config.before :each, solr: true do
     Sunspot::Rails::Tester.start_original_sunspot_session
-    Sunspot.session = $original_sunspot_session
+    Sunspot.session = original_sunspot_session
     Sunspot.remove_all!
   end
 end

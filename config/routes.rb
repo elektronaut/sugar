@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 Sugar::Application.routes.draw do
-
   image_resources :avatars
   image_resources :post_images
 
@@ -45,22 +44,22 @@ Sugar::Application.routes.draw do
   resources :uploads
 
   # Search discussions
-  get "/search/:query.:format" => "discussions#search",
+  get "/search/:query.:format" => 'discussions#search',
       as: :formatted_search_with_query
-  get "/search/:query" => "discussions#search",
+  get "/search/:query" => 'discussions#search',
       as: :search_with_query
-  match "/search" => "discussions#search",
+  match "/search" => 'discussions#search',
         as: :search, via: [:get, :post]
 
   # Search posts
-  get "/posts/search/:query" => "posts#search"
-  match "/posts/search" => "posts#search",
+  get "/posts/search/:query" => 'posts#search'
+  match "/posts/search" => 'posts#search',
         as: :search_posts, via: [:get, :post]
 
-  match "/discussions/:id/search_posts/:query" => "discussions#search_posts",
+  match "/discussions/:id/search_posts/:query" => 'discussions#search_posts',
         via: [:get, :post]
   match "/conversations/:id/search_posts/:query" =>
-        "conversations#search_posts",
+        'conversations#search_posts',
         via: [:get, :post]
 
   # Users
@@ -86,7 +85,7 @@ Sugar::Application.routes.draw do
     end
   end
 
-  controller :users, constraints: { id: /[^\?\/]+/ } do
+  controller :users, constraints: { id: %r{[^\?/]+} } do
     post "/users/profile/:id/grant_invite" => :grant_invite,
          as: :grant_invite_user
     post "/users/profile/:id/revoke_invites" => :revoke_invites,
@@ -124,7 +123,7 @@ Sugar::Application.routes.draw do
   controller :discussions do
     get "/discussions/:id(/:page)(.:format)" => :show,
         as: :discussion,
-        constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+        constraints: { id: %r{\d[^/\.]*}, page: /\d+/ }
     get "/discussions/popular/:days/:page" => :popular
     get "/discussions/popular/:days" => :popular
     get "/discussions/archive/:page" => :index, as: :paged_discussions
@@ -134,7 +133,7 @@ Sugar::Application.routes.draw do
   controller :conversations do
     get "/conversations/:id(/:page)(.:format)" => :show,
         as: :conversation,
-        constraints: { id: /\d[^\/\.]*/, page: /\d+/ }
+        constraints: { id: %r{\d[^/\.]*}, page: /\d+/ }
     get "/conversations/new/with/:username" => :new,
         as: :new_conversation_with
     get "/conversations/archive/:page" => :index,
@@ -187,7 +186,7 @@ Sugar::Application.routes.draw do
   controller :conversations do
     delete "/conversations/:id/remove_participant(/:username)" =>
       :remove_participant,
-      as: :remove_participant_conversation
+           as: :remove_participant_conversation
   end
 
   controller :posts do
@@ -208,11 +207,11 @@ Sugar::Application.routes.draw do
   namespace :admin do
     resource :configuration
   end
-  get "admin" => "admin/configurations#show", as: :admin
+  get "admin" => 'admin/configurations#show', as: :admin
 
   # Help pages
-  get "help" => "help#index", as: :help
-  get "help/:page" => "help#show", as: :help_page
+  get "help" => 'help#index', as: :help
+  get "help/:page" => 'help#show', as: :help_page
 
   # Old theme redirects
   # TODO: Remove after redesign
@@ -230,5 +229,5 @@ Sugar::Application.routes.draw do
   end
 
   # Root
-  root to: "discussions#index"
+  root to: 'discussions#index'
 end

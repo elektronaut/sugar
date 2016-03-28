@@ -6,7 +6,7 @@ module Sugar
     include ActionView::Helpers::OutputSafetyHelper
 
     def errors_on?(attribute)
-      errors_on(attribute).length > 0
+      errors_on(attribute).any?
     end
 
     def errors_on(attribute)
@@ -44,7 +44,7 @@ module Sugar
 
       if options[:note]
         content = safe_join(
-          [content, "#{options[:note]}".html_safe],
+          [content, (options[:note]).to_s.html_safe],
           "<br>".html_safe
         )
       end
@@ -85,7 +85,7 @@ module Sugar
           label_text = nil,
           priority_zones = nil,
           options = {}
-        )
+    )
       label_text, options, field_options = parse_label_text_and_options(
         label_text,
         options
@@ -117,7 +117,7 @@ module Sugar
           options = {},
           checked_value = "1",
           unchecked_value = "0"
-        )
+    )
       label_text, options, field_options = parse_label_text_and_options(
         label_text,
         options
@@ -135,7 +135,7 @@ module Sugar
     def extract_field_options(options)
       field_options = {}
       [:description, :note].each do |key|
-        if options.has_key?(key)
+        if options.key?(key)
           field_options[key] = options[key]
           options.delete(key)
         end
@@ -151,7 +151,7 @@ module Sugar
       object.class.human_attribute_name(attribute)
     end
 
-    def labelled_field(type, attribute, label_text = nil, options)
+    def labelled_field(type, attribute, label_text = nil, options = {})
       label_text, options, field_options = parse_label_text_and_options(
         label_text,
         options

@@ -16,14 +16,14 @@ describe Authenticable do
   it { is_expected.to validate_presence_of(:hashed_password) }
 
   it "should validate openid_url" do
-    is_expected.to validate_uniqueness_of(:openid_url).
-      with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:openid_url)
+      .with_message(/is already registered/)
   end
 
   it "should validate facebook_uid" do
-    is_expected.to validate_uniqueness_of(:facebook_uid).
-      case_insensitive.
-      with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:facebook_uid)
+      .case_insensitive
+      .with_message(/is already registered/)
   end
 
   it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
@@ -227,7 +227,7 @@ describe Authenticable do
     specify do
       expect(
         create(
-          :user, banned_until: (Time.now + 2.days)
+          :user, banned_until: (Time.now.utc + 2.days)
         ).temporary_banned?
       ).to eq(true)
     end
@@ -294,7 +294,7 @@ describe Authenticable do
     end
     specify do
       expect(
-        create(:user, banned_until: (Time.now + 2.days)).banned_until
+        create(:user, banned_until: (Time.now.utc + 2.days)).banned_until
       ).to be_kind_of(Time)
     end
   end

@@ -42,9 +42,7 @@ module LayoutHelper
     options[:section] ||= name.downcase.to_sym
     options[:id] ||= "#{options[:section]}_link"
     options[:class] ||= []
-    unless options[:class].is_a?(Array)
-      options[:class] = [options[:class]]
-    end
+    options[:class] = [options[:class]] unless options[:class].is_a?(Array)
 
     classes = [options[:section].to_s] + options[:class]
     classes << "current" if @section == options[:section]
@@ -60,7 +58,8 @@ module LayoutHelper
 
   def enabled_emoticons
     Sugar.config.emoticons.split(/\s+/).map do |name|
-      if emoji = Emoji.find_by_alias(name)
+      emoji = Emoji.find_by_alias(name)
+      if emoji
         { name: name, image: image_path("emoji/#{emoji.image_filename}") }
       end
     end.compact

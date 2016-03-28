@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Theme
-  ATTRIBUTES = :id, :name, :author, :stylesheet, :mobile_stylesheet
+  ATTRIBUTES = [:id, :name, :author, :stylesheet, :mobile_stylesheet].freeze
   attr_accessor(*ATTRIBUTES)
 
   class << self
@@ -33,7 +33,7 @@ class Theme
     private
 
     def themes
-      @@themes ||= {}
+      @themes ||= {}
     end
 
     def load(id)
@@ -45,7 +45,7 @@ class Theme
   end
 
   def initialize(options = {})
-    set_options(options)
+    configure_options(options)
   end
 
   def path(filename = nil)
@@ -87,12 +87,10 @@ class Theme
     end
   end
 
-  def set_options(options = {})
+  def configure_options(options = {})
     options.symbolize_keys!
     options.each do |key, value|
-      if self.respond_to?("#{key}=".to_sym)
-        send("#{key}=".to_sym, value)
-      end
+      send("#{key}=".to_sym, value) if respond_to?("#{key}=".to_sym)
     end
   end
 end

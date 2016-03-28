@@ -11,12 +11,11 @@ class UsersController < ApplicationController
     end
 
     def authenticate
-      if set_current_user(
-        User.find_and_authenticate_with_password(
-          params[:username],
-          params[:password]
-        )
+      @current_user = User.find_and_authenticate_with_password(
+        params[:username],
+        params[:password]
       )
+      if current_user?
         redirect_to discussions_url
       else
         flash[:notice] ||= "That's not a valid username or password."
@@ -33,17 +32,13 @@ class UsersController < ApplicationController
     private
 
     def detect_admin_signup
-      unless User.any?
-        redirect_to new_user_path
-        return
-      end
+      return if User.any?
+      redirect_to new_user_path
     end
 
     def check_if_already_logged_in
-      if current_user?
-        redirect_to discussions_url
-        return
-      end
+      return unless current_user?
+      redirect_to discussions_url
     end
   end
 end

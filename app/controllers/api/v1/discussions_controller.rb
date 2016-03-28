@@ -4,11 +4,11 @@ class Api::V1::DiscussionsController < Api::V1::ApiController
   before_action :find_exchange, only: [:show]
 
   def index
-    @exchanges = current_resource_owner.
-      unhidden_discussions.
-      viewable_by(current_resource_owner).
-      page(params[:page]).
-      for_view
+    @exchanges = current_resource_owner
+                 .unhidden_discussions
+                 .viewable_by(current_resource_owner)
+                 .page(params[:page])
+                 .for_view
     respond_with @exchanges
   end
 

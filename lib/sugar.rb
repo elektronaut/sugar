@@ -8,8 +8,8 @@ module Sugar
 
     def aws_s3?
       if config.amazon_aws_key &&
-          config.amazon_aws_secret &&
-          config.amazon_s3_bucket
+         config.amazon_aws_secret &&
+         config.amazon_s3_bucket
         true
       else
         false

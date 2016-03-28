@@ -26,7 +26,7 @@ describe UserScopes do
     let!(:not_banned) { create(:user) }
     let!(:banned) { create(:user, banned: true) }
     let!(:temporarily_banned) do
-      create(:user, banned_until: (Time.now + 2.days))
+      create(:user, banned_until: (Time.now.utc + 2.days))
     end
     subject { User.banned }
     it { is_expected.to match_array([banned, temporarily_banned]) }
@@ -63,7 +63,7 @@ describe UserScopes do
     let!(:sony) { create(:user, sony: "example") }
     let!(:nintendo) { create(:user, nintendo: "example") }
     let!(:steam) { create(:user, steam: "example") }
-    let!(:battlenet) { create(:user, battlenet: "example#1234") }
+    let!(:battlenet) { create(:user, battlenet: 'example#1234') }
 
     it "should be a list of all gaming profiles" do
       expect(User.gaming).to match_array(
@@ -74,7 +74,7 @@ describe UserScopes do
 
   describe "recently_joined" do
     let!(:user1) { create(:user, created_at: 2.days.ago) }
-    let!(:user2) { create(:user, created_at: 1.days.ago) }
+    let!(:user2) { create(:user, created_at: 1.day.ago) }
     subject { User.recently_joined }
     it { is_expected.to eq([user2, user1]) }
   end

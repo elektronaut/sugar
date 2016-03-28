@@ -1,14 +1,14 @@
 # encoding: utf-8
 
 class Mailer < ActionMailer::Base
-  default from: Proc.new { Sugar.config.mail_sender || "no-reply@example.com" }
+  default from: proc { Sugar.config.mail_sender || "no-reply@example.com" }
 
   def invite(invite, login_url)
     @invite    = invite
     @login_url = login_url
     mail(
       to:      @invite.email,
-      subject: "#{@invite.user.realname_or_username} has invited you to " +
+      subject: "#{@invite.user.realname_or_username} has invited you to " \
         "#{Sugar.config.forum_name}!"
     )
   end

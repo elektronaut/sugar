@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801174029) do
-
+ActiveRecord::Schema.define(version: 20_150_801_174_029) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -81,12 +80,12 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.integer "user_id"
     t.integer "exchange_id"
     t.integer "post_id"
-    t.integer "post_index",  default: 0, null: false
+    t.integer "post_index", default: 0, null: false
   end
 
   add_index "exchange_views", ["exchange_id"], name: "discussion_id_index", using: :btree
   add_index "exchange_views", ["post_id"], name: "post_id_index", using: :btree
-  add_index "exchange_views", ["user_id", "exchange_id"], name: "user_id_discussion_id_index", unique: true, using: :btree
+  add_index "exchange_views", %w(user_id exchange_id), name: "user_id_discussion_id_index", unique: true, using: :btree
   add_index "exchange_views", ["user_id"], name: "user_id_index", using: :btree
 
   create_table "exchanges", force: :cascade do |t|
@@ -98,17 +97,17 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.integer  "poster_id"
     t.integer  "last_poster_id"
     t.integer  "closer_id"
-    t.integer  "posts_count",                default: 0,     null: false
+    t.integer  "posts_count", default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_post_at"
-    t.string   "type",           limit: 100
+    t.string   "type", limit: 100
   end
 
   add_index "exchanges", ["created_at"], name: "created_at_index", using: :btree
   add_index "exchanges", ["last_post_at"], name: "last_post_at_index", using: :btree
   add_index "exchanges", ["poster_id"], name: "poster_id_index", using: :btree
-  add_index "exchanges", ["sticky", "last_post_at"], name: "index_exchanges_on_sticky_and_last_post_at", using: :btree
+  add_index "exchanges", %w(sticky last_post_at), name: "index_exchanges_on_sticky_and_last_post_at", using: :btree
   add_index "exchanges", ["sticky"], name: "sticky_index", using: :btree
   add_index "exchanges", ["trusted"], name: "trusted_index", using: :btree
   add_index "exchanges", ["type"], name: "index_exchanges_on_type", using: :btree
@@ -141,7 +140,7 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.string   "refresh_token"
     t.integer  "expires_in"
     t.datetime "revoked_at"
-    t.datetime "created_at",        null: false
+    t.datetime "created_at", null: false
     t.string   "scopes"
   end
 
@@ -155,11 +154,11 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id"
-    t.string   "owner_type",   limit: 100
-    t.string   "scopes",                   default: "", null: false
+    t.string   "owner_type", limit: 100
+    t.string   "scopes", default: "", null: false
   end
 
-  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
+  add_index "oauth_applications", %w(owner_id owner_type), name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
 
   create_table "password_reset_tokens", force: :cascade do |t|
     t.integer  "user_id"
@@ -187,10 +186,10 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.integer  "crop_gravity_y"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.string   "original_url",   limit: 4096
+    t.string   "original_url", limit: 4096
   end
 
-  add_index "post_images", ["id", "content_hash"], name: "index_post_images_on_id_and_content_hash", unique: true, using: :btree
+  add_index "post_images", %w(id content_hash), name: "index_post_images_on_id_and_content_hash", unique: true, using: :btree
   add_index "post_images", ["original_url"], name: "index_post_images_on_original_url", using: :btree
 
   create_table "posts", force: :cascade do |t|
@@ -198,7 +197,7 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.text     "body_html"
     t.integer  "user_id"
     t.integer  "exchange_id"
-    t.boolean  "trusted",      default: false,      null: false
+    t.boolean  "trusted", default: false, null: false
     t.datetime "edited_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -208,11 +207,11 @@ ActiveRecord::Schema.define(version: 20150801174029) do
 
   add_index "posts", ["conversation"], name: "index_posts_on_conversation", using: :btree
   add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
-  add_index "posts", ["exchange_id", "created_at"], name: "index_posts_on_exchange_id_and_created_at", using: :btree
+  add_index "posts", %w(exchange_id created_at), name: "index_posts_on_exchange_id_and_created_at", using: :btree
   add_index "posts", ["exchange_id"], name: "index_posts_on_exchange_id", using: :btree
   add_index "posts", ["trusted"], name: "index_posts_on_trusted", using: :btree
-  add_index "posts", ["user_id", "conversation"], name: "index_posts_on_user_id_and_conversation", using: :btree
-  add_index "posts", ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at", using: :btree
+  add_index "posts", %w(user_id conversation), name: "index_posts_on_user_id_and_conversation", using: :btree
+  add_index "posts", %w(user_id created_at), name: "index_posts_on_user_id_and_created_at", using: :btree
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -232,7 +231,7 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.boolean  "notify_on_message",                 default: true,  null: false
     t.datetime "last_active"
     t.date     "birthday"
-    t.integer  "posts_count",                       default: 0,     null: false
+    t.integer  "posts_count", default: 0, null: false
     t.integer  "inviter_id"
     t.string   "msn"
     t.string   "gtalk"
@@ -246,7 +245,7 @@ ActiveRecord::Schema.define(version: 20150801174029) do
     t.float    "latitude"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "available_invites",                 default: 0,     null: false
+    t.integer  "available_invites", default: 0, null: false
     t.string   "facebook_uid"
     t.integer  "participated_count",                default: 0,     null: false
     t.integer  "favorites_count",                   default: 0,     null: false
@@ -271,5 +270,4 @@ ActiveRecord::Schema.define(version: 20150801174029) do
 
   add_index "users", ["last_active"], name: "last_active_index", using: :btree
   add_index "users", ["username"], name: "username_index", using: :btree
-
 end

@@ -17,21 +17,21 @@ class Invite < ActiveRecord::Base
   after_create :revoke_invite
   before_destroy :grant_invite
 
-  scope :active, -> { where("expires_at >= ?", Time.now).includes(:user) }
-  scope :expired, -> { where("expires_at < ?", Time.now) }
+  scope :active, -> { where("expires_at >= ?", Time.now.utc).includes(:user) }
+  scope :expired, -> { where("expires_at < ?", Time.now.utc) }
 
   class << self
     # Makes a unique random token.
     def unique_token
       token = nil
-      until token && !self.exists?(token: token)
-        token = Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s)
+      until token && !exists?(token: token)
+        token = Digest::SHA1.hexdigest(rand(65_535).to_s + Time.now.utc.to_s)
       end
       token
     end
 
     def find_by_token(token)
-      where(token: token).first
+      find_by(token: token)
     end
 
     def expiration_time
@@ -44,7 +44,7 @@ class Invite < ActiveRecord::Base
   end
 
   def expired?
-    (Time.now <= expires_at) ? false : true
+    (Time.now.utc <= expires_at) ? false : true
   end
 
   def expire!
@@ -67,15 +67,14 @@ class Invite < ActiveRecord::Base
   end
 
   def set_expires_at
-    self.expires_at ||= Time.now + Invite.expiration_time
+    self.expires_at ||= Time.now.utc + Invite.expiration_time
   end
 
   def validate_email_registered
-    if User.exists?(email: email)
-      errors.add(:email, "is already registered!")
-    end
-    if Invite.active.select { |i| i != self && i.email == email }.length > 0
-      errors.add(:email, "has already been invited!")
-    end
+    errors.add(:email, "is already registered!") if User.exists?(email: email)
+    return unless Invite.active.select do |i|
+      i != self && i.email == email
+    end.any?
+    errors.add(:email, "has already been invited!")
   end
 end

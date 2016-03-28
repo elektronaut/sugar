@@ -73,15 +73,9 @@ module Authentication
 
     def verify_current_user_flags(options = {})
       [:admin, :moderator, :user_admin].each do |flag|
-        if options[flag] && current_user.send("#{flag}?".to_sym)
-          return true
-        end
+        return true if options[flag] && current_user.send("#{flag}?".to_sym)
       end
       false
-    end
-
-    def set_current_user(user)
-      @current_user = user
     end
 
     def default_verify_user_options(options = {})
@@ -113,13 +107,9 @@ module Authentication
 
     def load_session_user
       if session[:user_id] && session[:persistence_token] && !current_user?
-        begin
-          user = User.find(session[:user_id])
-          if user.persistence_token == session[:persistence_token]
-            set_current_user(user)
-          end
-        rescue ActiveRecord::RecordNotFound
-          # No need to do anything if the record does not exist
+        user = User.where(id: session[:user_id]).first
+        if user && user.persistence_token == session[:persistence_token]
+          @current_user = user
         end
       end
     end
@@ -127,13 +117,13 @@ module Authentication
     def handle_temporary_ban
       if current_user? && current_user.temporary_banned?
         logger.info(
-          "Authentication failed for user:#{current_user.id} " +
+          "Authentication failed for user:#{current_user.id} " \
             "(#{current_user.username}) - temporary ban"
         )
         flash[:notice] =
           "You have been banned for " +
-            distance_of_time_in_words(Time.now, current_user.banned_until) +
-            "!"
+          distance_of_time_in_words(Time.zone.now, current_user.banned_until) +
+          "!"
         deauthenticate!
       end
     end
@@ -141,7 +131,7 @@ module Authentication
     def handle_permanent_ban
       if current_user && current_user.banned?
         logger.info(
-          "Authentication failed for user:#{current_user.id} " +
+          "Authentication failed for user:#{current_user.id} " \
             "(#{current_user.username}) - permanent ban"
         )
         flash[:notice] = "You have been banned!"
@@ -152,34 +142,31 @@ module Authentication
     def verify_activated_account
       if current_user?
         logger.info(
-          "Authenticated as user:#{current_user.id} " +
+          "Authenticated as user:#{current_user.id} " \
             "(#{current_user.username})"
         )
       end
     end
 
     def deauthenticate!
-      set_current_user(nil)
+      @current_user = nil
     end
 
     def cleanup_temporary_ban
       if current_user? &&
-          current_user.banned_until? &&
-          !current_user.temporary_banned?
+         current_user.banned_until? &&
+         !current_user.temporary_banned?
         current_user.update_attributes(banned_until: nil)
       end
     end
 
     def cleanup_authenticated_openid_url
-      if current_user && session[:authenticated_openid_url]
-        session.delete(:authenticated_openid_url)
-      end
+      return unless current_user && session[:authenticated_openid_url]
+      session.delete(:authenticated_openid_url)
     end
 
     def update_last_active
-      if current_user?
-        current_user.mark_active!
-      end
+      current_user.mark_active! if current_user?
     end
 
     def store_session_authentication

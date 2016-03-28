@@ -9,14 +9,13 @@ describe User do
   let(:moderator) { build(:moderator) }
   let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
-    [
-      "admin", "banned_until", "created_at", "description",
-      "flickr", "gamertag", "gtalk", "id", "instagram", "facebook_uid",
-      "inviter_id", "last_active", "last_fm", "latitude", "location",
-      "longitude", "moderator", "msn", "realname", "twitter", "user_admin",
-      "username", "website", "active", "banned",
-      "sony", "nintendo", "steam", "battlenet"
-    ]
+    %w(
+      admin banned_until created_at description
+      flickr gamertag gtalk id instagram facebook_uid
+      inviter_id last_active last_fm latitude location
+      longitude moderator msn realname twitter user_admin
+      username website active banned
+      sony nintendo steam battlenet)
   end
 
   subject { user }
@@ -29,8 +28,8 @@ describe User do
   it { is_expected.to belong_to(:avatar).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
   it do
-    is_expected.to validate_uniqueness_of(:username).
-      case_insensitive.with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:username)
+      .case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
   it { is_expected.to allow_value("فاطمة").for(:username) }
@@ -38,8 +37,8 @@ describe User do
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
   it do
-    is_expected.to validate_uniqueness_of(:email).
-      case_insensitive.with_message(/is already registered/)
+    is_expected.to validate_uniqueness_of(:email)
+      .case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
@@ -70,7 +69,7 @@ describe User do
 
     context "when realname isn't set" do
       let(:user) { build(:user, realname: nil) }
-      it { is_expected.to eq("#{user.email}") }
+      it { is_expected.to eq(user.email.to_s) }
     end
   end
 
@@ -160,12 +159,12 @@ describe User do
 
     context "when user hasn't signed in yet" do
       let(:user) { create(:user, last_active: nil) }
-      it { is_expected.to be_within(1.0).of(Time.now) }
+      it { is_expected.to be_within(1.0).of(Time.now.utc) }
     end
 
     context "when user has been active" do
       let(:user) { create(:user, last_active: 2.days.ago) }
-      it { is_expected.to be_within(1.0).of(Time.now) }
+      it { is_expected.to be_within(1.0).of(Time.now.utc) }
     end
 
     context "when user has been active in the last 10 minutes" do
@@ -200,9 +199,8 @@ describe User do
       let(:user) { build(:user, gamertag: "my gamertag") }
       it do
         is_expected.to(
-          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png"
+          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
         )
-      )
       end
     end
   end

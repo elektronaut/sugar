@@ -36,9 +36,7 @@ class ApplicationController < ActionController::Base
 
   # Renders an error
   def render_error(error, options = {})
-    if error.is_a?(Numeric)
-      options[:status] ||= error
-    end
+    options[:status] ||= error if error.is_a?(Numeric)
     respond_to do |format|
       format.html { options[:template] ||= "errors/#{error}" }
       format.mobile { options[:template] ||= "errors/#{error}" }
@@ -58,15 +56,13 @@ class ApplicationController < ActionController::Base
   end
 
   def set_time_zone
-    if current_user.try(&:time_zone)
-      Time.zone = current_user.time_zone
-    end
+    Time.zone = current_user.time_zone if current_user.try(&:time_zone)
   end
 
   def mobile_user_agent?
     request.host =~ /^(iphone|m|mobile)\./ ||
       (request.env["HTTP_USER_AGENT"] &&
-      request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari|Android|IEMobile)/])
+      request.env["HTTP_USER_AGENT"][%r{(Mobile/.+Safari|Android|IEMobile)}])
   end
   helper_method :mobile_user_agent?
 
@@ -81,29 +77,27 @@ class ApplicationController < ActionController::Base
   end
 
   def require_s3
-    unless Sugar.aws_s3?
-      flash[:notice] = "Amazon Web Services not configured!"
-      redirect_to root_url
-      return
-    end
+    return if Sugar.aws_s3?
+    flash[:notice] = "Amazon Web Services not configured!"
+    redirect_to root_url
   end
 
   def set_section
-    case self.class.to_s
-    when "UsersController"
-      @section = :users
-    when "MessagesController"
-      @section = :messages
-    when "InvitesController"
-      @section = :invites
-    when "ConversationsController"
-      @section = :conversations
-    else
-      @section = :discussions
-    end
+    @section = case self.class.to_s
+               when "UsersController"
+                 :users
+               when "MessagesController"
+                 :messages
+               when "InvitesController"
+                 :invites
+               when "ConversationsController"
+                 :conversations
+               else
+                 :discussions
+               end
   end
 
-  def get_mobile_theme
+  def mobile_theme
     if current_user?
       Theme.find(current_user.mobile_theme)
     else
@@ -111,7 +105,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def get_theme
+  def theme
     if current_user?
       Theme.find(current_user.theme)
     else
@@ -122,10 +116,10 @@ class ApplicationController < ActionController::Base
   def set_theme
     respond_to do |format|
       format.mobile do
-        @theme = get_mobile_theme
+        @theme = mobile_theme
       end
       format.any do
-        @theme = get_theme
+        @theme = theme
       end
     end
   end

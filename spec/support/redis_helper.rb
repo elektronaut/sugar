@@ -1,5 +1,5 @@
 module RedisHelper
-  CONFIG = { url: "redis://127.0.0.1:6379/2" }
+  CONFIG = { url: "redis://127.0.0.1:6379/2" }.freeze
 
   def redis
     @redis ||= ::Redis.connect(CONFIG)

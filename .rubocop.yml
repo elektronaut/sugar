@@ -1,8 +1,15 @@
 inherit_from:
-  - .hound/defaults.yml
-  - .hound/overrides.yml
   - .rubocop_todo.yml
 
-# Rails cops (so we don't need to run with -R option)
 AllCops:
-  RunRailsCops: true
+  Exclude:
+    - 'db/schema.rb'
+
+Rails:
+  Enabled: true
+
+StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false

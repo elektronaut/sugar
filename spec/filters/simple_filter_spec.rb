@@ -19,15 +19,15 @@ describe SimpleFilter do
 
   it "doesn't escape tags" do
     expect(
-      SimpleFilter.new("<a href=\"#\">link</a>").to_html
-    ).to eq("<a href=\"#\">link</a>")
+      SimpleFilter.new('<a href="#">link</a>').to_html
+    ).to eq('<a href="#">link</a>')
   end
 
   it "doesn't escape right angle brackets after an empty attribute" do
-    input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" " +
-      "allowfullscreen></iframe>\nfoo"
-    output = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" " +
-      "allowfullscreen></iframe><br>\nfoo"
+    input = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
+            "allowfullscreen></iframe>\nfoo"
+    output = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
+             "allowfullscreen></iframe><br>\nfoo"
     expect(SimpleFilter.new(input).to_html).to eq(output)
   end
 end

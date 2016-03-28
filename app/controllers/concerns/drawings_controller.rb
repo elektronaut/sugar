@@ -15,8 +15,8 @@ module DrawingsController
     )
     if post_image.valid?
       {
-        body: "<div class=\"drawing\">" +
-          "[image:#{post_image.id}:#{post_image.content_hash}]" +
+        body: '<div class="drawing">' \
+          "[image:#{post_image.id}:#{post_image.content_hash}]" \
           "</div>"
       }
     else

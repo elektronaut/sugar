@@ -21,7 +21,7 @@ module SearchablePost
         if options[:exchange]
           with :exchange_id, options[:exchange].id
         else
-          with :conversation,  false
+          with :conversation, false
         end
         order_by :created_at, :desc
         paginate page: options[:page], per_page: Post.per_page

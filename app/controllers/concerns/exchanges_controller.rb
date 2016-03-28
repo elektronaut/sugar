@@ -47,8 +47,8 @@ module ExchangesController
       flash[:notice] = "Your changes were saved."
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your discussion! " +
-        "Please make sure all required fields are filled in."
+      flash.now[:notice] = "Could not save your discussion! " \
+                           "Please make sure all required fields are filled in."
       render template: "exchanges/edit"
     end
   end
@@ -59,18 +59,13 @@ module ExchangesController
       @exchange.posts.last,
       @exchange.posts_count
     )
-    if request.xhr?
-      render layout: false, text: "OK"
-    end
+    render layout: false, text: "OK" if request.xhr?
   end
 
   protected
 
   def verify_editable
-    unless @exchange.editable_by?(current_user)
-      render_error 403
-      return
-    end
+    render_error 403 unless @exchange.editable_by?(current_user)
   end
 
   def search_query
@@ -78,10 +73,9 @@ module ExchangesController
   end
 
   def require_and_set_search_query
-    unless @search_query = search_query
-      flash[:notice] = "No query specified!"
-      redirect_to root_url
-      return
-    end
+    @search_query = search_query
+    return if @search_query
+    flash[:notice] = "No query specified!"
+    redirect_to root_url
   end
 end

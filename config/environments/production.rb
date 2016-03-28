@@ -20,7 +20,7 @@ Sugar::Application.configure do
   config.assets.compile = false
 
   # Specify the default JavaScript compressor
-  config.assets.js_compressor  = :uglifier
+  config.assets.js_compressor = :uglifier
 
   # Generate digests for assets URLs.
   config.assets.digest = true

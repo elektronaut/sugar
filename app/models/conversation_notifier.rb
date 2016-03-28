@@ -4,7 +4,8 @@ class ConversationNotifier
   attr_reader :post, :url
 
   def initialize(post, url)
-    @post, @url = post, url
+    @post = post
+    @url = url
   end
 
   def deliver_now
@@ -35,9 +36,9 @@ class ConversationNotifier
   end
 
   def notify_users
-    notify_relationships.
-      map(&:user).
-      select(&:email?)
+    notify_relationships
+      .map(&:user)
+      .select(&:email?)
   end
 
   def recipients

@@ -29,7 +29,7 @@ class Exchange < ActiveRecord::Base
            dependent: :destroy,
            foreign_key: "exchange_id"
 
-  has_many :users,          through: :posts
+  has_many :users, through: :posts
 
   validates :title, presence: true, length: { maximum: 100 }
   validate :validate_closed
@@ -39,15 +39,15 @@ class Exchange < ActiveRecord::Base
   end
 
   def labels?
-    (self.closed? || self.sticky? || self.nsfw? || self.trusted?) ? true : false
+    (closed? || sticky? || nsfw? || trusted?) ? true : false
   end
 
   def labels
     labels = []
-    labels << "Trusted" if self.trusted?
-    labels << "Sticky"  if self.sticky?
-    labels << "Closed"  if self.closed?
-    labels << "NSFW"    if self.nsfw?
+    labels << "Trusted" if trusted?
+    labels << "Sticky"  if sticky?
+    labels << "Closed"  if closed?
+    labels << "NSFW"    if nsfw?
     labels
   end
 
@@ -67,10 +67,10 @@ class Exchange < ActiveRecord::Base
   private
 
   def validate_closed
-    if self.closed_changed?
-      if !self.closed? && (!updated_by || !self.closeable_by?(updated_by))
+    if closed_changed?
+      if !closed? && (!updated_by || !closeable_by?(updated_by))
         errors.add(:closed, "can't be changed!")
-      elsif self.closed?
+      elsif closed?
         self.closer = updated_by
       else
         self.closer = nil

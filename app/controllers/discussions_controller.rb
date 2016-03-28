@@ -14,29 +14,29 @@ class DiscussionsController < ApplicationController
 
   def index
     if current_user?
-      @exchanges = current_user.
-        unhidden_discussions.
-        viewable_by(current_user).
-        page(params[:page]).
-        for_view
+      @exchanges = current_user
+                   .unhidden_discussions
+                   .viewable_by(current_user)
+                   .page(params[:page])
+                   .for_view
     else
-      @exchanges = Discussion.
-        viewable_by(nil).
-        page(params[:page]).
-        for_view
+      @exchanges = Discussion
+                   .viewable_by(nil)
+                   .page(params[:page])
+                   .for_view
     end
     respond_with_exchanges(@exchanges)
   end
 
   def popular
     @days = params[:days].to_i
-    unless (1..180).include?(@days)
+    unless (1..180).cover?(@days)
       redirect_to popular_discussions_url(days: 7)
       return
     end
-    @exchanges = Discussion.viewable_by(current_user).
-      popular_in_the_last(@days.days).
-      page(params[:page])
+    @exchanges = Discussion.viewable_by(current_user)
+                           .popular_in_the_last(@days.days)
+                           .page(params[:page])
     respond_with_exchanges(@exchanges)
   end
 
@@ -63,30 +63,30 @@ class DiscussionsController < ApplicationController
 
   def favorites
     @section = :favorites
-    @exchanges = current_user.
-      favorite_discussions.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view
+    @exchanges = current_user
+                 .favorite_discussions
+                 .viewable_by(current_user)
+                 .page(params[:page])
+                 .for_view
     respond_with_exchanges(@exchanges)
   end
 
   def following
     @section = :following
-    @exchanges = current_user.
-      followed_discussions.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view
+    @exchanges = current_user
+                 .followed_discussions
+                 .viewable_by(current_user)
+                 .page(params[:page])
+                 .for_view
     respond_with_exchanges(@exchanges)
   end
 
   def hidden
-    @exchanges = current_user.
-      hidden_discussions.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view
+    @exchanges = current_user
+                 .hidden_discussions
+                 .viewable_by(current_user)
+                 .page(params[:page])
+                 .for_view
     respond_with_exchanges(@exchanges)
   end
 
@@ -104,8 +104,8 @@ class DiscussionsController < ApplicationController
     if @exchange.valid?
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your discussion! " +
-        "Please make sure all required fields are filled in."
+      flash.now[:notice] = "Could not save your discussion! " \
+                           "Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
   end
@@ -175,9 +175,6 @@ class DiscussionsController < ApplicationController
       return
     end
 
-    unless @exchange.viewable_by?(current_user)
-      render_error 403
-      return
-    end
+    render_error 403 unless @exchange.viewable_by?(current_user)
   end
 end

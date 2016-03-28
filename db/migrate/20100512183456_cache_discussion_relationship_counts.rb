@@ -5,24 +5,24 @@ class CacheDiscussionRelationshipCounts < ActiveRecord::Migration
     end
     User.update_all(
       [
-        "following_count = (SELECT COUNT(*) FROM discussion_relationships " +
-        "WHERE discussion_relationships.user_id = users.id " +
+        "following_count = (SELECT COUNT(*) FROM discussion_relationships " \
+        "WHERE discussion_relationships.user_id = users.id " \
         "AND following = ?)",
         true
       ]
     )
     User.update_all(
       [
-        "favorites_count = (SELECT COUNT(*) FROM discussion_relationships " +
-        "WHERE discussion_relationships.user_id = users.id " +
+        "favorites_count = (SELECT COUNT(*) FROM discussion_relationships " \
+        "WHERE discussion_relationships.user_id = users.id " \
         "AND favorite = ?)",
         true
       ]
     )
     User.update_all(
       [
-        "participated_count = (SELECT COUNT(*) FROM discussion_relationships " +
-        "WHERE discussion_relationships.user_id = users.id " +
+        "participated_count = (SELECT COUNT(*) FROM discussion_relationships " \
+        "WHERE discussion_relationships.user_id = users.id " \
         "AND participated = ?)",
         true
       ]

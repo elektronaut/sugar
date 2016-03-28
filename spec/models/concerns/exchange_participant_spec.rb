@@ -16,31 +16,31 @@ describe ExchangeParticipant do
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
 
   it do
-    is_expected.to have_many(:followed_discussions).
-      through(:discussion_relationships)
+    is_expected.to have_many(:followed_discussions)
+      .through(:discussion_relationships)
   end
 
   it do
-    is_expected.to have_many(:favorite_discussions).
-      through(:discussion_relationships)
+    is_expected.to have_many(:favorite_discussions)
+      .through(:discussion_relationships)
   end
 
   it do
-    is_expected.to have_many(:hidden_discussions).
-      through(:discussion_relationships)
+    is_expected.to have_many(:hidden_discussions)
+      .through(:discussion_relationships)
   end
 
   it do
-    is_expected.to have_many(:conversation_relationships).
-      dependent(:destroy)
+    is_expected.to have_many(:conversation_relationships)
+      .dependent(:destroy)
   end
 
   it do
-    is_expected.to have_many(:conversations).
-      through(:conversation_relationships)
+    is_expected.to have_many(:conversations)
+      .through(:conversation_relationships)
   end
 
-  describe "#unhidden_discussions" do
+  describe '#unhidden_discussions' do
     let!(:discussion) { create(:discussion) }
     let!(:hidden_discussion) { create(:discussion) }
     before do
@@ -50,7 +50,7 @@ describe ExchangeParticipant do
     it { is_expected.to match_array([discussion]) }
   end
 
-  describe "#mark_exchange_viewed" do
+  describe '#mark_exchange_viewed' do
     let(:post) { create(:post, exchange: discussion) }
 
     context "with existing exchange view" do
@@ -93,7 +93,7 @@ describe ExchangeParticipant do
   end
 
   describe "#mark_conversation_viewed" do
-    let(:user)         { conversation.poster }
+    let(:user) { conversation.poster }
     let(:conversation_relationship) do
       user.conversation_relationships.where(conversation_id: conversation).first
     end

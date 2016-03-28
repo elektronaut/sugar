@@ -19,11 +19,11 @@ describe CodeFilter do
   end
 
   context "when input contains <code> with language" do
-    let(:input) { "<pre><code class=\"javascript\">alert(\"foo\")</code></pre>" }
+    let(:input) { '<pre><code class="javascript">alert("foo")</code></pre>' }
     it "should syntax highlight it" do
       output = filter.to_html
       expect(output).to match(/^<pre class="highlight"><code>/)
-      expect(output).to match(/<span class="nx">alert<\/span>/)
+      expect(output).to match(%r{<span class="nx">alert</span>})
     end
   end
 end

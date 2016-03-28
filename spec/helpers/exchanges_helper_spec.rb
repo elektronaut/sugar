@@ -18,21 +18,23 @@ describe ExchangesHelper do
 
   before do
     allow(viewed_tracker).to receive(:exchanges).and_return(collection)
-    allow(helper).to receive(:viewed_tracker).
-      and_return(viewed_tracker)
+    allow(helper).to receive(:viewed_tracker)
+      .and_return(viewed_tracker)
   end
 
   describe "#exchange_classes" do
     subject { helper.exchange_classes(collection, exchange) }
 
     it "should result in an array" do
-      expect(subject).to match_array([
-        "odd",
-        "by_user#{exchange.poster.id}",
-        "discussion",
-        "discussion#{exchange.id}",
-        "new_posts"
-      ])
+      expect(subject).to match_array(
+        [
+          "odd",
+          "by_user#{exchange.poster.id}",
+          "discussion",
+          "discussion#{exchange.id}",
+          "new_posts"
+        ]
+      )
     end
 
     context "when exchange is read" do
@@ -107,10 +109,10 @@ describe ExchangesHelper do
     context "when viewing a discussion" do
       let(:posts) { double("posts") }
       before do
-        allow(helper).to receive(:controller).
-          and_return(DiscussionsController.new)
-        allow(helper).to receive(:params).
-          and_return(action: "show")
+        allow(helper).to receive(:controller)
+          .and_return(DiscussionsController.new)
+        allow(helper).to receive(:params)
+          .and_return(action: "show")
         helper.instance_variable_set("@posts", posts)
       end
 

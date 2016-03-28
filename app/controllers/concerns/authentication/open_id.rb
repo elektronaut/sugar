@@ -12,8 +12,8 @@ module Authentication
 
     def load_openid_user
       if session[:authenticated_openid_url] && !current_user?
-        set_current_user(
-          User.find_by_openid_url(session[:authenticated_openid_url])
+        @current_user = User.find_by_openid_url(
+          session[:authenticated_openid_url]
         )
       end
     end
@@ -40,9 +40,9 @@ module Authentication
 
       if response
         perform_openid_authentication(response, options)
-        return true
+        true
       else
-        return false
+        false
       end
     end
 

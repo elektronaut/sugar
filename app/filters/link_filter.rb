@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class LinkFilter < Filter
-  HTTPS_WHITELIST = %w{
+  HTTPS_WHITELIST = %w(
     youtube.com
     *.youtube.com
     vimeo.com
@@ -9,7 +9,7 @@ class LinkFilter < Filter
     i.imgur.com
     *.cloudfront.net
     *.s3.amazonaws.com
-  }
+  ).freeze
 
   def process(post)
     @post = post
@@ -35,7 +35,7 @@ class LinkFilter < Filter
   end
 
   def url_exists?(url)
-    uri = URI.parse(url.gsub(/^(https?:)\/\//, "https://"))
+    uri = URI.parse(url.gsub(%r{^(https?:)//}, "https://"))
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -59,25 +59,24 @@ class LinkFilter < Filter
 
   def relativize_local_links!
     parser.search("a").each do |link|
-      if href = link.try(:attributes).try(:[], "href").try(:value)
-        host = URI.parse(href).host
-        if local_domains.detect { |d| host == d }
-          link.set_attribute(
-            "href",
-            href.gsub(Regexp.new("(https?:)?\/\/" + Regexp.escape(host)), "")
-          )
-        end
-      end
+      href = link.try(:attributes).try(:[], "href").try(:value)
+      next unless href
+      host = URI.parse(href).host
+      next unless local_domains.detect { |d| host == d }
+      link.set_attribute(
+        "href",
+        href.gsub(Regexp.new("(https?:)?//" + Regexp.escape(host)), "")
+      )
     end
   end
 
   def rewrite_for_https_support!
     parser.css("iframe,img").each do |iframe|
-      if src = iframe.try(:attributes).try(:[], "src").try(:value)
-        if matches_https_whitelist?(src) ||
-            (src =~ /\Ahttp:\/\// && url_exists?(src))
-          iframe.set_attribute "src", src.gsub(/\Ahttps?:\/\//, "//")
-        end
+      src = iframe.try(:attributes).try(:[], "src").try(:value)
+      next unless src
+      if matches_https_whitelist?(src) ||
+         (src =~ %r{\Ahttp://} && url_exists?(src))
+        iframe.set_attribute "src", src.gsub(%r{\Ahttps?://}, "//")
       end
     end
   end

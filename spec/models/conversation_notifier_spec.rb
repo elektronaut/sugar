@@ -15,15 +15,15 @@ describe ConversationNotifier do
 
   describe "#deliver_now" do
     it "should deliver the emails" do
-      expect { notifier.deliver_now }.to change { email_deliveries.length }.
-        by(1)
+      expect { notifier.deliver_now }.to change { email_deliveries.length }
+        .by(1)
       expect(last_email.to).to eq([conversation.posts.first.user.email])
     end
 
     it "should not deliver to muted participants" do
-      ConversationRelationship.
-        where(conversation: conversation).
-        update_all(notifications: false)
+      ConversationRelationship
+        .where(conversation: conversation)
+        .update_all(notifications: false)
       expect { notifier.deliver_now }.not_to change { email_deliveries.length }
     end
   end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 namespace :sugar do
-
   desc "Move napkin drawings to S3"
   task upload_drawings: :environment do
     base_path = Rails.root.join("public/doodles")
@@ -43,10 +42,10 @@ namespace :sugar do
   end
 
   desc "Disable web"
-  task disable_web: :environment  do
+  task disable_web: :environment do
     require "erb"
-    @reason = ENV["REASON"] || "DOWNTIME! The toobs are being vacuumed, " +
-             "check back in a couple of minutes."
+    @reason = ENV["REASON"] || "DOWNTIME! The toobs are being vacuumed, " \
+                               "check back in a couple of minutes."
     template_file = File.join(
       File.dirname(__FILE__),
       "../../config/maintenance.erb"
@@ -85,11 +84,11 @@ namespace :sugar do
     User.find(:all, order: "username ASC").each do |user|
       puts "Generating participated discussions for #{user.username}.."
       discussions = Discussion.find_by_sql(
-        "SELECT DISTINCT exchange_id AS id, trusted " +
+        "SELECT DISTINCT exchange_id AS id, trusted " \
           "FROM posts WHERE user_id = #{user.id}"
       )
-      puts "  - #{discussions.length} discussions found, " +
-        "generating relationships"
+      puts "  - #{discussions.length} discussions found, " \
+           "generating relationships"
       discussions.each do |d|
         DiscussionRelationship.define(user, d, participated: true)
       end
@@ -100,8 +99,6 @@ namespace :sugar do
   task remove_empty_discussions: :environment do
     empty_discussions = Discussion.find(:all, conditions: ["posts_count = 0"])
     puts "#{empty_discussions.length} empty discussions found, cleaning..."
-    empty_discussions.each do |d|
-      d.destroy
-    end
+    empty_discussions.each(&:destroy)
   end
 end

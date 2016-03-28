@@ -6,7 +6,8 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    if params[:email] && @user = User.where(email: params[:email]).first
+    @user = User.where(email: params[:email]).first if params[:email]
+    if @user
       @password_reset_token = @user.password_reset_tokens.create
       Mailer.password_reset(
         @user.email,
@@ -30,7 +31,7 @@ class PasswordResetsController < ApplicationController
     @user = @password_reset_token.user
     if !user_params[:password].blank? && @user.update_attributes(user_params)
       @password_reset_token.destroy
-      set_current_user(@user)
+      @current_user = @user
       flash[:notice] = "Your password has been changed"
       redirect_to root_url
     else
@@ -45,12 +46,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def find_password_reset_token
-    begin
-      @password_reset_token = PasswordResetToken.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-    end
+    @password_reset_token = PasswordResetToken.where(id: params[:id]).first
     unless @password_reset_token &&
-        @password_reset_token.token == params[:token]
+           @password_reset_token.token == params[:token]
       flash[:notice] = "Invalid password reset request"
       redirect_to login_users_url
     end

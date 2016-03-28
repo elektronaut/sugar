@@ -112,9 +112,9 @@ describe Post do
       let!(:post) { build(:post, exchange: discussion) }
 
       it "parses the post" do
-        expect(Renderer).to receive(:render).
-          exactly(1).times.
-          and_return(double(to_html: "<p>Test</p>"))
+        expect(Renderer).to receive(:render)
+          .exactly(1).times
+          .and_return(double(to_html: "<p>Test</p>"))
         post.body_html
       end
     end
@@ -133,9 +133,9 @@ describe Post do
     context "when body_html hasn't been set" do
       it "parses the post" do
         post.body_html = nil
-        expect(Renderer).to receive(:render).
-          exactly(1).times.
-          and_return("<p>Test</p>".html_safe)
+        expect(Renderer).to receive(:render)
+          .exactly(1).times
+          .and_return("<p>Test</p>".html_safe)
         post.body_html
       end
     end
@@ -240,9 +240,9 @@ describe Post do
     context "when skip_html is false" do
       before { discussion }
       it "parses the post" do
-        expect(Renderer).to receive(:render).
-          exactly(1).times.
-          and_return("<p>Test</p>".html_safe)
+        expect(Renderer).to receive(:render)
+          .exactly(1).times
+          .and_return("<p>Test</p>".html_safe)
         create(:post, exchange: discussion)
       end
     end
@@ -281,10 +281,10 @@ describe Post do
 
     context "when edited_at isn't set" do
       before do
-        allow(Time).to receive(:now).
-          and_return(Time.parse("Oct 22 2012"))
+        allow(Time).to receive(:now)
+          .and_return(Time.zone.parse("Oct 22 2012"))
       end
-      specify { expect(subject.edited_at).to eq(Time.now) }
+      specify { expect(subject.edited_at).to eq(Time.now.utc) }
     end
   end
 
@@ -294,9 +294,9 @@ describe Post do
       it "defines a relationship between the discussion and the poster" do
         expect(
           DiscussionRelationship
-        ).to receive(:define).
-          exactly(1).times.
-          with(user, discussion, participated: true)
+        ).to receive(:define)
+          .exactly(1).times
+          .with(user, discussion, participated: true)
         create(:post, user: user, exchange: discussion)
       end
     end

@@ -23,14 +23,12 @@ module Paginatable
     def page(page = nil, options = {})
       scope = all.extend(WithContext)
       scope.context = page.to_i > 1 ? options[:context].to_i : 0
-      scope.
-        limit(pagination_limit + scope.context).
-        offset(pagination_offset(page.to_i) - scope.context)
+      scope
+        .limit(pagination_limit + scope.context)
+        .offset(pagination_offset(page.to_i) - scope.context)
     end
 
-    def context
-      all.context
-    end
+    delegate :context, to: :all
 
     def context?
       context != 0
@@ -64,15 +62,11 @@ module Paginatable
     end
 
     def previous_page
-      if current_page > 1
-        current_page - 1
-      end
+      current_page - 1 if current_page > 1
     end
 
     def next_page
-      if current_page < total_pages
-        current_page + 1
-      end
+      current_page + 1 if current_page < total_pages
     end
 
     def total_count

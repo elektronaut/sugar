@@ -8,7 +8,7 @@ describe ImageFilter do
   end
 
   context "when img has no src" do
-    let(:input) { "<img class=\"foo\">" }
+    let(:input) { '<img class="foo">' }
     it "should not be touched" do
       expect(filter.to_html).to eq(input)
     end
@@ -18,9 +18,9 @@ describe ImageFilter do
     let(:input) { "<img src=\"#{image_url}\">" }
     let(:output) { "<img src=\"#{image_url}\" width=\"640\" height=\"480\">" }
     it "should fetch the image size" do
-      expect(FastImage).to receive(:size).
-        with(image_url, timeout: 2.0).
-        and_return([640, 480])
+      expect(FastImage).to receive(:size)
+        .with(image_url, timeout: 2.0)
+        .and_return([640, 480])
       expect(filter.to_html).to eq(output)
     end
   end
@@ -29,9 +29,9 @@ describe ImageFilter do
     let(:input) { "<img width=\"320\" src=\"#{image_url}\">" }
     let(:output) { "<img width=\"640\" src=\"#{image_url}\" height=\"480\">" }
     it "should fetch the image size" do
-      expect(FastImage).to receive(:size).
-        with(image_url, timeout: 2.0).
-        and_return([640, 480])
+      expect(FastImage).to receive(:size)
+        .with(image_url, timeout: 2.0)
+        .and_return([640, 480])
       expect(filter.to_html).to eq(output)
     end
   end

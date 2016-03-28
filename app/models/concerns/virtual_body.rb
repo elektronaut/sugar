@@ -24,7 +24,7 @@ module VirtualBody
   def update_post_body
     if body && !body.empty? && body != posts.first.body
       attributes = {
-        edited_at: Time.now,
+        edited_at: Time.now.utc,
         body: body
       }
       attributes[:format] = format unless format.blank?

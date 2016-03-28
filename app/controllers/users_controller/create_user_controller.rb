@@ -28,8 +28,8 @@ class UsersController < ApplicationController
           redirect_to user_profile_url(id: @user.username)
         end
       else
-        flash.now[:notice] = "Could not create your account, " +
-          "please fill in all required fields."
+        flash.now[:notice] = "Could not create your account, " \
+                             "please fill in all required fields."
         render action: :new
       end
     end
@@ -41,9 +41,7 @@ class UsersController < ApplicationController
     end
 
     def find_invite
-      if invite_token?
-        @invite = Invite.find_by_token(invite_token)
-      end
+      @invite = Invite.find_by_token(invite_token) if invite_token?
     end
 
     def invite_token
@@ -55,12 +53,10 @@ class UsersController < ApplicationController
     end
 
     def finalize_successful_signup
-      if @user.email?
-        Mailer.new_user(@user, login_users_url).deliver_now
-      end
+      Mailer.new_user(@user, login_users_url).deliver_now if @user.email?
       session.delete(:facebook_user_params)
       session.delete(:invite_token)
-      set_current_user(@user)
+      @current_user = @user
     end
 
     def check_for_expired_invite

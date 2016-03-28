@@ -5,7 +5,7 @@ module ExchangesHelper
   def exchange_classes(collection, exchange)
     [
       exchange.labels.map(&:downcase),
-      %w{odd even}[collection.to_a.index(exchange) % 2],
+      %w(odd even)[collection.to_a.index(exchange) % 2],
       (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",
@@ -17,9 +17,7 @@ module ExchangesHelper
     viewed_tracker.new_posts(exchange)
   end
 
-  def new_posts?(exchange)
-    viewed_tracker.new_posts?(exchange)
-  end
+  delegate :new_posts?, to: :viewed_tracker
 
   def last_viewed_page_path(exchange)
     last_page    = viewed_tracker.last_page(exchange)
@@ -34,8 +32,8 @@ module ExchangesHelper
   def post_page(post)
     # Speed optimization
     if controller.is_a?(ExchangesController) &&
-        params[:action] == "show" &&
-        @posts
+       params[:action] == "show" &&
+       @posts
       @posts.current_page
     else
       post.page

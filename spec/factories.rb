@@ -4,6 +4,6 @@ FactoryGirl.define do
   end
 
   sequence :sha1hash do |n|
-    Digest::SHA1.hexdigest("#{n}")
+    Digest::SHA1.hexdigest(n.to_s)
   end
 end

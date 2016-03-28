@@ -17,7 +17,8 @@ class OpenidController < ApplicationController
 
     # Setup needed
     when ::OpenID::Consumer::SetupNeededResponse
-      if setup_url = openid_setup_url(response)
+      setup_url = openid_setup_url(response)
+      if setup_url
         redirect_to setup_url
         return
       elsif setup_response(response)

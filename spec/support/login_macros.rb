@@ -6,9 +6,7 @@ module LoginMacros
   module ClassMethods
     def it_requires_login_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires login for #{action} action" do
           logout
@@ -22,15 +20,13 @@ module LoginMacros
 
     def it_requires_authentication_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires authentication for #{action}" do
           allow(Sugar).to receive(:public_browsing?).and_return(false)
-          expect(controller).to receive(:require_user_account).
-            at_least(:once).
-            and_return(true)
+          expect(controller).to receive(:require_user_account)
+            .at_least(:once)
+            .and_return(true)
           send options[:method], action, options[:params].merge(
             format: options[:format]
           )
@@ -40,14 +36,12 @@ module LoginMacros
 
     def it_requires_user_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires a user for #{action}" do
-          expect(controller).to receive(:require_user_account).
-            at_least(:once).
-            and_return(true)
+          expect(controller).to receive(:require_user_account)
+            .at_least(:once)
+            .and_return(true)
           send options[:method], action, options[:params].merge(
             format: options[:format]
           )
@@ -57,16 +51,12 @@ module LoginMacros
 
     def it_requires_admin_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires an admin for #{action}" do
           received_option = false
           expect(controller).to receive(:verify_user) do |opts|
-            if opts[:admin]
-              received_option = true
-            end
+            received_option = true if opts[:admin]
             true
           end.at_least(:once)
           send options[:method], action, options[:params].merge(
@@ -79,16 +69,12 @@ module LoginMacros
 
     def it_requires_moderator_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires a moderator for #{action}" do
           received_option = false
           expect(controller).to receive(:verify_user) do |opts|
-            if opts[:moderator]
-              received_option = true
-            end
+            received_option = true if opts[:moderator]
             true
           end.at_least(:once)
           send options[:method], action, options[:params].merge(
@@ -101,16 +87,12 @@ module LoginMacros
 
     def it_requires_user_admin_for(*actions)
       options = { method: :get, params: { id: 1 }, format: :html }
-      if actions.last.is_a?(Hash)
-        options.merge!(actions.pop)
-      end
+      options.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires a user admin for #{action}" do
           received_option = false
           expect(controller).to receive(:verify_user) do |opts|
-            if opts[:user_admin]
-              received_option = true
-            end
+            received_option = true if opts[:user_admin]
             true
           end.at_least(:once)
           send options[:method], action, options[:params].merge(

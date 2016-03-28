@@ -18,7 +18,7 @@ module UserScopes
     end
 
     def banned
-      where("banned = ? OR banned_until > ?", true, Time.now)
+      where("banned = ? OR banned_until > ?", true, Time.now.utc)
     end
 
     def by_username
@@ -31,18 +31,18 @@ module UserScopes
 
     def social
       active.where(
-        "(twitter IS NOT NULL AND twitter != '') " +
-        "OR (instagram IS NOT NULL AND instagram != '') " +
+        "(twitter IS NOT NULL AND twitter != '') " \
+        "OR (instagram IS NOT NULL AND instagram != '') " \
         "OR (flickr IS NOT NULL AND flickr != '')"
       )
     end
 
     def gaming
       active.where(
-        "(gamertag IS NOT NULL AND gamertag != '') " +
-        "OR (sony IS NOT NULL AND sony != '') " +
-        "OR (nintendo IS NOT NULL AND nintendo != '') " +
-        "OR (steam IS NOT NULL AND steam != '')" +
+        "(gamertag IS NOT NULL AND gamertag != '') " \
+        "OR (sony IS NOT NULL AND sony != '') " \
+        "OR (nintendo IS NOT NULL AND nintendo != '') " \
+        "OR (steam IS NOT NULL AND steam != '')" \
         "OR (battlenet IS NOT NULL AND battlenet != '')"
       )
     end

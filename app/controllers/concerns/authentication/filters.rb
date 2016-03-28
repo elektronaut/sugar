@@ -4,9 +4,7 @@ module Authentication
   module Filters
     def requires_authentication(*args)
       send(:before_action, *args) do |controller|
-        unless Sugar.public_browsing?
-          controller.send(:require_user_account)
-        end
+        controller.send(:require_user_account) unless Sugar.public_browsing?
       end
     end
 

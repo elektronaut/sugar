@@ -6,12 +6,12 @@ describe ImageFetcher do
   describe ".fetch" do
     let(:url) { "http://i.imgur.com/foobar.png" }
     let(:image) { PostImage.last }
-    let(:body) { "#{url}" }
+    let(:body) { url.to_s }
     subject { ImageFetcher.fetch(body) }
 
     before do
-      stub_request(:get, url).
-        to_return(
+      stub_request(:get, url)
+        .to_return(
           status: 200,
           body: File.open(Rails.root.join("spec/support/pink.png"), "rb"),
           headers: { "Content-Type" => "image/png" }
@@ -54,8 +54,8 @@ describe ImageFetcher do
 
     context "when image doesn't exist" do
       before do
-        stub_request(:get, url).
-          to_return(status: 404, body: "Not Found")
+        stub_request(:get, url)
+          .to_return(status: 404, body: "Not Found")
       end
       it { is_expected.to eq(body) }
     end

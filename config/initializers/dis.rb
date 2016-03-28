@@ -10,10 +10,10 @@ Dis::Storage.layers << Dis::Layer.new(
 if Sugar.aws_s3? && !Rails.env.test?
   Dis::Storage.layers << Dis::Layer.new(
     Fog::Storage.new(
-                       provider:              "AWS",
-                       aws_access_key_id:     Sugar.config.amazon_aws_key,
-                       aws_secret_access_key: Sugar.config.amazon_aws_secret
-                     ),
+      provider:              "AWS",
+      aws_access_key_id:     Sugar.config.amazon_aws_key,
+      aws_secret_access_key: Sugar.config.amazon_aws_secret
+    ),
     path: Sugar.config.amazon_s3_bucket,
     delayed: true
   )

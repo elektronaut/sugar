@@ -7,11 +7,11 @@ describe PostsHelper do
   let(:profile_link) { helper.profile_link(user, nil, class: :poster) }
 
   let(:smile_image) do
-    "<img alt=\"smile\" class=\"emoji\" " +
-      "src=\"/assets/emoji/unicode/1f604-216f3409215c9945a5bc8c83e0a586e6591" \
-      "361fb9d93492d6dd7c604f66dac5d.png\" " +
-      "style=\"vertical-align:middle\" " +
-      "width=\"16\" height=\"16\" />"
+    '<img alt="smile" class="emoji" ' \
+      'src="/assets/emoji/unicode/1f604-216f3409215c9945a5bc8c83e0a586e6591' \
+      '361fb9d93492d6dd7c604f66dac5d.png" ' \
+      'style="vertical-align:middle" ' \
+      'width="16" height="16" />'
   end
 
   describe "#emojify" do

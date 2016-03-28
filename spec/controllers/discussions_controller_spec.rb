@@ -74,7 +74,7 @@ describe DiscussionsController do
       specify do
         expect(flash.now[:notice]).to match(
           Regexp.new(
-            "Could not save your discussion! " +
+            "Could not save your discussion! " \
             "Please make sure all required fields are filled in"
           )
         )

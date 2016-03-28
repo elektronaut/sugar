@@ -11,14 +11,12 @@ class ImageFilter < Filter
 
   private
 
-  def has_src?(elem)
+  def src?(elem)
     elem.attributes && !elem.attributes["src"].blank?
   end
 
   def image_src(elem)
-    if has_src?(elem)
-      elem.attributes["src"].to_s
-    end
+    elem.attributes["src"].to_s if src?(elem)
   end
 
   def needs_dimensions?(elem)
@@ -29,7 +27,8 @@ class ImageFilter < Filter
   def process_image(elem)
     url = image_src(elem)
     if url && needs_dimensions?(elem)
-      if dimensions = FastImage.size(url, timeout: 2.0)
+      dimensions = FastImage.size(url, timeout: 2.0)
+      if dimensions
         width, height = dimensions
         elem.set_attribute "width", width.to_s
         elem.set_attribute "height", height.to_s

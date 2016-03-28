@@ -12,7 +12,7 @@ class Post < ActiveRecord::Base
   has_many :exchange_views
 
   validates :body, :user_id, :exchange_id, presence: true
-  validates :format, inclusion: %w{markdown html}
+  validates :format, inclusion: %w(markdown html)
 
   attr_accessor :skip_html
 
@@ -34,7 +34,7 @@ class Post < ActiveRecord::Base
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
 
   def me_post?
-    @me_post ||= (body.strip =~ /^\/me/ && !(body =~ /\n/)) ? true : false
+    @me_post ||= (body.strip =~ %r{^/me} && !(body =~ /\n/)) ? true : false
   end
 
   def post_number
@@ -47,7 +47,7 @@ class Post < ActiveRecord::Base
   end
 
   def body_html
-    if self.new_record? || Rails.env == "development"
+    if new_record? || Rails.env == "development"
       Renderer.render(body, format: format)
     else
       unless body_html?
@@ -71,7 +71,7 @@ class Post < ActiveRecord::Base
   end
 
   def mentions_users?
-    (mentioned_users.length > 0) ? true : false
+    mentioned_users.any?
   end
 
   def mentioned_users
@@ -87,9 +87,8 @@ class Post < ActiveRecord::Base
   private
 
   def update_public_posts_count(delta)
-    if !self.conversation? && !self.trusted?
-      user.update_column(:public_posts_count, user.public_posts_count + delta)
-    end
+    return if conversation? || trusted?
+    user.update_column(:public_posts_count, user.public_posts_count + delta)
   end
 
   def increment_public_posts_count
@@ -101,16 +100,12 @@ class Post < ActiveRecord::Base
   end
 
   def update_trusted_status
-    if exchange
-      self.trusted = exchange.trusted
-    end
+    self.trusted = exchange.trusted if exchange
     true
   end
 
   def render_html
-    unless skip_html
-      self.body_html = Renderer.render(body, format: format)
-    end
+    self.body_html = Renderer.render(body, format: format) unless skip_html
   end
 
   def flag_conversation
@@ -119,13 +114,12 @@ class Post < ActiveRecord::Base
   end
 
   def set_edit_timestamp
-    self.edited_at ||= Time.now
+    self.edited_at ||= Time.now.utc
   end
 
   def define_relationship
-    unless self.conversation?
-      DiscussionRelationship.define(user, exchange, participated: true)
-    end
+    return if conversation?
+    DiscussionRelationship.define(user, exchange, participated: true)
   end
 
   def update_exchange
@@ -136,7 +130,7 @@ class Post < ActiveRecord::Base
   end
 
   def notify_new_conversation_post
-    if self.conversation?
+    if conversation?
       exchange.conversation_relationships.each do |relationship|
         unless relationship.user == user
           relationship.update_attributes(new_posts: true)

@@ -38,10 +38,11 @@ module ExchangeParticipant
   end
 
   def mark_exchange_viewed(exchange, post, index)
-    if exchange_view = ExchangeView.where(
+    exchange_view = ExchangeView.find_by(
       user_id: id,
       exchange_id: exchange.id
-    ).first
+    )
+    if exchange_view
       if exchange_view.post_index < index
         exchange_view.update_attributes(
           post_index: index,
@@ -59,13 +60,13 @@ module ExchangeParticipant
   end
 
   def mark_conversation_viewed(conversation)
-    conversation_relationships.where(
-      conversation_id: conversation
-    ).first.update_attributes(new_posts: false)
+    conversation_relationships
+      .find_by(conversation_id: conversation)
+      .update_attributes(new_posts: false)
   end
 
   def posts_per_day
-    public_posts_count.to_f / ((Time.now - created_at).to_f / 1.day)
+    public_posts_count.to_f / ((Time.now.utc - created_at).to_f / 1.day)
   end
 
   def unread_conversations_count
@@ -77,18 +78,18 @@ module ExchangeParticipant
   end
 
   def muted_conversation?(conversation)
-    !conversation_relationships.
-      where(notifications: true, conversation: conversation).
-      any?
+    !conversation_relationships
+      .where(notifications: true, conversation: conversation)
+      .any?
   end
 
   def discussion_relationship_with(discussion)
-    discussion_relationships.where(discussion_id: discussion.id).first
+    discussion_relationships.find_by(discussion_id: discussion.id)
   end
 
   def following?(discussion)
     if discussion_relationship_with(discussion) &&
-        discussion_relationship_with(discussion).following?
+       discussion_relationship_with(discussion).following?
       true
     else
       false
@@ -97,7 +98,7 @@ module ExchangeParticipant
 
   def favorite?(discussion)
     if discussion_relationship_with(discussion) &&
-        discussion_relationship_with(discussion).favorite?
+       discussion_relationship_with(discussion).favorite?
       true
     else
       false
@@ -106,7 +107,7 @@ module ExchangeParticipant
 
   def hidden?(discussion)
     if discussion_relationship_with(discussion) &&
-        discussion_relationship_with(discussion).hidden?
+       discussion_relationship_with(discussion).hidden?
       true
     else
       false

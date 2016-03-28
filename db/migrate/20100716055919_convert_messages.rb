@@ -1,8 +1,10 @@
 class ConvertMessages < ActiveRecord::Migration
-  def self.up
-    if const_defined?("ThinkingSphinx")
-      ThinkingSphinx.deltas_enabled = false
-    end
+  def disable_deltas!
+    ThinkingSphinx.deltas_enabled = false if const_defined?("ThinkingSphinx")
+  end
+
+  def up
+    disable_deltas!
 
     partners = Message.find_by_sql(
       "SELECT DISTINCT sender_id, recipient_id FROM messages"
@@ -14,7 +16,7 @@ class ConvertMessages < ActiveRecord::Migration
       messages = Message.find(
         :all,
         conditions: [
-          "(sender_id = ? AND recipient_id = ?) OR " +
+          "(sender_id = ? AND recipient_id = ?) OR " \
             "(sender_id = ? AND recipient_id = ?)",
           user1.id, user2.id, user2.id, user1.id
         ],
@@ -24,7 +26,7 @@ class ConvertMessages < ActiveRecord::Migration
 
       threaded_messages = {}
       subject = "Conversation between " +
-        [user1.username, user2.username].sort.join(" and ")
+                [user1.username, user2.username].sort.join(" and ")
       messages.each do |message|
         subject = message.subject if message.subject?
         subject = subject[0...100]
@@ -50,15 +52,13 @@ class ConvertMessages < ActiveRecord::Migration
             skip_html: true
           )
           last_read[message.sender] = post
-          if message.read?
-            last_read[message.recipient] = post
-          end
+          last_read[message.recipient] = post if message.read?
         end
         # Create relationships
         [user1, user2].each do |user|
-          new_posts = if ms.select do |m|
+          new_posts = if ms.count do |m|
                            m.recipient_id == user.id && !m.read?
-                         end.length > 0
+                         end > 0
                         true
                       else
                         false
@@ -83,7 +83,7 @@ class ConvertMessages < ActiveRecord::Migration
     drop_table :messages
   end
 
-  def self.down
+  def down
     # Conversation.destroy_all
     # ConversationRelationship.destroy_all
   end

@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     end
 
     def banned
-      @users  = User.banned.by_username
+      @users = User.banned.by_username
       respond_with(@users)
     end
 
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     end
 
     def admins
-      @users  = User.admins.by_username
+      @users = User.admins.by_username
       respond_with(@users)
     end
 

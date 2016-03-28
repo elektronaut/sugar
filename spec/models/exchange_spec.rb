@@ -68,7 +68,7 @@ describe Exchange do
         Exchange.new(
           trusted: true, sticky: true, closed: true, nsfw: true
         ).labels
-      ).to eq(["Trusted", "Sticky", "Closed", "NSFW"])
+      ).to eq(%w(Trusted Sticky Closed NSFW))
     end
   end
 

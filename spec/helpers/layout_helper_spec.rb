@@ -13,7 +13,7 @@ describe LayoutHelper do
     end
 
     context "when argument is an array" do
-      let(:class_name) { ["foo", "bar"] }
+      let(:class_name) { %w(foo bar) }
       it { is_expected.to eq("foo bar") }
     end
   end
@@ -40,8 +40,8 @@ describe LayoutHelper do
     let(:user) { nil }
     let(:config) { helper.frontend_configuration }
     let(:default_emoticons) do
-      %w{smiley laughing blush heart_eyes kissing_heart flushed worried
-         grimacing cry angry heart star +1 -1}.map do |name|
+      %w(smiley laughing blush heart_eyes kissing_heart flushed worried
+         grimacing cry angry heart star +1 -1).map do |name|
         {
           name: name,
           image: helper.image_path(
@@ -87,9 +87,9 @@ describe LayoutHelper do
     context "with no exchange" do
       specify do
         expect(subject).to eq([
-          ["in discussions", helper.search_path],
-          ["in posts", helper.search_posts_path]
-        ])
+                                ["in discussions", helper.search_path],
+                                ["in posts", helper.search_posts_path]
+                              ])
       end
     end
 
@@ -97,14 +97,16 @@ describe LayoutHelper do
       let(:discussion) { create(:discussion) }
       before { helper.instance_variable_set("@exchange", discussion) }
       specify do
-        expect(subject).to eq([
-          ["in discussions", helper.search_path],
-          ["in posts", helper.search_posts_path],
+        expect(subject).to eq(
           [
-            "in this discussion",
-            helper.polymorphic_path([:search_posts, discussion])
+            ["in discussions", helper.search_path],
+            ["in posts", helper.search_posts_path],
+            [
+              "in this discussion",
+              helper.polymorphic_path([:search_posts, discussion])
+            ]
           ]
-        ])
+        )
       end
     end
   end
@@ -116,7 +118,7 @@ describe LayoutHelper do
     context "when not current section" do
       specify do
         expect(subject).to eq(
-          "<li class=\"discussions\"><a id=\"discussions_link\" " +
+          "<li class=\"discussions\"><a id=\"discussions_link\" " \
             "href=\"#{url}\">Discussions</a></li>"
         )
       end
@@ -126,7 +128,7 @@ describe LayoutHelper do
       before { helper.instance_variable_set("@section", :discussions) }
       specify do
         expect(subject).to eq(
-          "<li class=\"discussions current\"><a id=\"discussions_link\" " +
+          "<li class=\"discussions current\"><a id=\"discussions_link\" " \
             "href=\"#{url}\">Discussions</a></li>"
         )
       end

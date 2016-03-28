@@ -20,8 +20,10 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   private
 
   def render_spoiler(str)
-    if str.strip =~ /\A<div class="spoiler">(.*)<\/div>\n?\z/m
-      '<div class="spoiler">' + MarkdownFilter.new($1).to_html + "</div>\n"
+    if str.strip =~ %r{\A<div class="spoiler">(.*)</div>\n?\z}m
+      '<div class="spoiler">' +
+        MarkdownFilter.new(Regexp.last_match(1)).to_html +
+        "</div>\n"
     else
       str
     end
@@ -36,22 +38,26 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   def escape_leading_gts_without_space(document)
-    document.gsub(/^([\s]*)([>]+)([^\s>])/) { $1 + ("&gt;" * $2.length) + $3 }
+    document.gsub(/^([\s]*)([>]+)([^\s>])/) do
+      Regexp.last_match(1) +
+        ("&gt;" * Regexp.last_match(2).length) +
+        Regexp.last_match(3)
+    end
   end
 
   def youtube_embed(document)
-    document.gsub(/!y\[(.*)\]\((.*)\)/)do
-      title = $1
-      youtube_url = $2
-      if youtube_url[/youtu\.be\/([^\?]*)/]
-        youtube_id = $1
+    document.gsub(/!y\[(.*)\]\((.*)\)/) do
+      title = Regexp.last_match(1)
+      youtube_url = Regexp.last_match(2)
+      if youtube_url[%r{youtu\.be/([^\?]*)}]
+        youtube_id = Regexp.last_match(1)
       else
-        youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
-        youtube_id = $5
+        youtube_url[%r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^\&\?]*).*}]
+        youtube_id = Regexp.last_match(5)
       end
-      "<iframe title=\"#{title}\" " +
-        "src=\"https://www.youtube.com/embed/#{youtube_id}\" " +
-        "frameborder=\"0\" allowfullscreen></iframe>"
+      "<iframe title=\"#{title}\" " \
+        "src=\"https://www.youtube.com/embed/#{youtube_id}\" " \
+        'frameborder="0" allowfullscreen></iframe>'
     end
   end
 end

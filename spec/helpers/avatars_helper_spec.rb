@@ -25,8 +25,8 @@ describe AvatarsHelper do
       it do
         is_expected.to match(
           Regexp.new(
-            '<img alt="foo" class="avatar-image" ' +
-              'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' +
+            '<img alt="foo" class="avatar-image" ' \
+              'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
               'width="16" height="16" \/>'
           )
         )
@@ -39,9 +39,9 @@ describe AvatarsHelper do
       end
       it do
         is_expected.to eq(
-          "<img alt=\"foo\" class=\"avatar-image\" " +
-            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
-            "&amp;d=identicon\" width=\"96\" height=\"96\" />"
+          '<img alt="foo" class="avatar-image" ' \
+            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+            '&amp;d=identicon" width="96" height="96" />'
         )
       end
     end
@@ -53,9 +53,9 @@ describe AvatarsHelper do
       let(:digest) { Digest::MD5.hexdigest("#{user.id}@test.host") }
       it do
         is_expected.to eq(
-          "<img alt=\"foo\" class=\"avatar-image\" " +
-            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" +
-            "&amp;d=identicon\" width=\"96\" height=\"96\" />"
+          '<img alt="foo" class="avatar-image" ' \
+            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+            '&amp;d=identicon" width="96" height="96" />'
         )
       end
     end

@@ -29,22 +29,22 @@ module Inviter
   end
 
   def invites_or_invitees?
-    self.invites? || self.invitees?
+    invites? || invitees?
   end
 
   def available_invites?
-    self.user_admin? || available_invites > 0
+    user_admin? || available_invites > 0
   end
 
   # Number of remaining invites. User admins always have at least one invite.
   def available_invites
-    self.user_admin? ? 1 : self[:available_invites]
+    user_admin? ? 1 : self[:available_invites]
   end
 
   # Revokes invites from a user, default = 1.
   # Pass :all as an argument to revoke all invites.
   def revoke_invite!(number = 1)
-    return available_invites if self.user_admin?
+    return available_invites if user_admin?
     number = available_invites if number == :all
     new_invites = available_invites - number
     new_invites = 0 if new_invites < 0
@@ -53,7 +53,7 @@ module Inviter
   end
 
   def grant_invite!(number = 1)
-    return available_invites if self.user_admin?
+    return available_invites if user_admin?
     new_number = (available_invites + number)
     update_column(:available_invites, new_number)
     invites
@@ -62,14 +62,10 @@ module Inviter
   protected
 
   def set_inviter
-    if invite
-      self.inviter = invite.user
-    end
+    self.inviter = invite.user if invite
   end
 
   def expire_invite
-    if invite
-      invite.expire!
-    end
+    invite.expire! if invite
   end
 end

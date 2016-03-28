@@ -12,16 +12,16 @@ class Discussion < Exchange
 
   class << self
     def popular_in_the_last(days = 7.days)
-      joins(:posts).
-        where("posts.created_at > ?", days.ago).
-        group("exchanges.id").
-        order("COUNT(posts.id) DESC")
+      joins(:posts)
+        .where("posts.created_at > ?", days.ago)
+        .group("exchanges.id")
+        .order("COUNT(posts.id) DESC")
     end
   end
 
   # Converts a discussion to a conversation
   def convert_to_conversation!
-    if self.valid?
+    if valid?
       transaction do
         update_attributes(type: "Conversation")
         becomes(Conversation).tap do |conversation|
@@ -43,9 +43,9 @@ class Discussion < Exchange
 
   def participants
     User.find_by_sql(
-      "SELECT u.*, MAX(p.created_at) AS last_post_at " +
-      "FROM users u, posts p " +
-      "WHERE p.exchange_id = #{id} AND p.user_id = u.id " +
+      "SELECT u.*, MAX(p.created_at) AS last_post_at " \
+      "FROM users u, posts p " \
+      "WHERE p.exchange_id = #{id} AND p.user_id = u.id " \
       "GROUP BY u.id "
     )
   end
@@ -55,15 +55,15 @@ class Discussion < Exchange
   end
 
   def postable_by?(user)
-    (user && (user.moderator? || !self.closed?)) ? true : false
+    (user && (user.moderator? || !closed?)) ? true : false
   end
 
   private
 
   def update_trusted_status
-    if self.trusted_changed?
-      posts.update_all(trusted: self.trusted?)
-      discussion_relationships.update_all(trusted: self.trusted?)
+    if trusted_changed?
+      posts.update_all(trusted: trusted?)
+      discussion_relationships.update_all(trusted: trusted?)
       participants.each do |user|
         user.update_column(
           :public_posts_count,

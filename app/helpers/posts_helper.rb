@@ -3,10 +3,11 @@
 module PostsHelper
   def emojify(content)
     h(content).to_str.gsub(/:([\w+-]+):/) do |match|
-      if emoji = Emoji.find_by_alias($1)
-        "<img alt=\"#{$1}\" class=\"emoji\" src=\"" +
+      emoji = Emoji.find_by_alias(Regexp.last_match(1))
+      if emoji
+        "<img alt=\"#{Regexp.last_match(1)}\" class=\"emoji\" src=\"" +
           image_path("emoji/#{emoji.image_filename}") +
-          "\" style=\"vertical-align:middle\" width=\"16\" height=\"16\" />"
+          '" style="vertical-align:middle" width="16" height="16" />'
       else
         match
       end
@@ -18,8 +19,8 @@ module PostsHelper
   end
 
   def meify(string, user)
-    string.gsub(/(^|\<[\w]+\s?\/?\>|[\s])\/me/) do
-      $1.to_s + profile_link(user, nil, class: :poster)
+    string.gsub(%r{(^|\<[\w]+\s?/?\>|[\s])/me}) do
+      Regexp.last_match(1).to_s + profile_link(user, nil, class: :poster)
     end.html_safe
   end
 

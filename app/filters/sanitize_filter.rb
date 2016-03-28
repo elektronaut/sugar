@@ -3,7 +3,7 @@
 class SanitizeFilter < Filter
   def process(post)
     # Normalize <script> tags so the parser will find them
-    post = post.gsub(/<script[\s\/]*/i, "<script ")
+    post = post.gsub(%r{<script[\s/]*}i, "<script ")
 
     parser = Nokogiri::HTML::DocumentFragment.parse(post)
 
@@ -17,13 +17,13 @@ class SanitizeFilter < Filter
   private
 
   def remove_unsafe_tags(parser)
-    %w{applet base meta link script form}.each do |tag_name|
+    %w(applet base meta link script form).each do |tag_name|
       parser.search(tag_name).remove
     end
   end
 
   def jquery_ujs_attributes
-    %w{
+    %w(
       data-confirm
       data-disable-with
       data-method
@@ -31,7 +31,7 @@ class SanitizeFilter < Filter
       data-remote
       data-type
       data-url
-    }
+    )
   end
 
   def strip_event_handlers(parser)
@@ -39,13 +39,11 @@ class SanitizeFilter < Filter
       elem.attributes.each do |name, attr|
         # XSS fix
         if attr.value &&
-            attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
+           attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
           elem.remove_attribute(name)
         end
         # Strip out event handlers
-        if name.downcase =~ /^on/
-          elem.remove_attribute(name)
-        end
+        elem.remove_attribute(name) if name.downcase =~ /^on/
         # Remove UJS attributes
         if jquery_ujs_attributes.include?(name.downcase)
           elem.remove_attribute(name)
@@ -95,16 +93,16 @@ class SanitizeFilter < Filter
   def change_allowscriptaccess_for_param(element)
     element.attributes.each do |name, attr|
       # Change allowScriptAccess to sameDomain
-      if name.downcase == "name" && attr.value.downcase == "allowscriptaccess"
-        element.set_attribute "name", "allowScriptAccess"
-        element.set_attribute "value", "sameDomain"
-      end
+      next unless name.casecmp("name").zero? &&
+                  attr.value.casecmp("allowscriptaccess").zero?
+      element.set_attribute "name", "allowScriptAccess"
+      element.set_attribute "value", "sameDomain"
     end
   end
 
   # Makes sure the element contains an allowScriptAccess param.
   def enforce_allowscriptaccess_param_in(element)
-    unless element.search(">param[name=allowScriptAccess]").length > 0
+    if element.search(">param[name=allowScriptAccess]").empty?
       element.inner_html +=
         '<param name="allowScriptAccess" value="sameDomain" />'
     end

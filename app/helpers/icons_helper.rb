@@ -24,7 +24,7 @@ module IconsHelper
   end
 
   def apple_icon_tags
-    safe_join(%w{57 72 114 144 60 120 76 152}.map do |s|
+    safe_join(%w(57 72 114 144 60 120 76 152).map do |s|
       tag(:link,
           rel: "apple-touch-icon-precomposed",
           sizes: "#{s}x#{s}",

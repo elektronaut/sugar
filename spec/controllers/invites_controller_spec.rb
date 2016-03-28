@@ -25,7 +25,7 @@ describe InvitesController do
     end
 
     context "when invite doesn't exist" do
-      let(:invite_id) { 1231115 }
+      let(:invite_id) { 1_231_115 }
       it "should raise an error" do
         login invite.user
         expect do
@@ -169,7 +169,7 @@ describe InvitesController do
 
       it "should set the flash" do
         expect(flash[:notice]).to match(
-          "There was a problem sending your invite to totally@wrong.com, " +
+          "There was a problem sending your invite to totally@wrong.com, " \
           "it has been cancelled."
         )
       end

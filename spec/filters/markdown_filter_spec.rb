@@ -14,7 +14,7 @@ describe MarkdownFilter do
   context "when input contains adjacent blockquotes" do
     let(:input) { "> quote 1\n\n  > quote 2" }
     let(:output) do
-      "<blockquote>\n<p>quote 1</p>\n</blockquote>\n\n" +
+      "<blockquote>\n<p>quote 1</p>\n</blockquote>\n\n" \
         "<blockquote>\n<p>quote 2</p>\n</blockquote>\n"
     end
     it "should convert it to <br>" do
@@ -23,7 +23,7 @@ describe MarkdownFilter do
   end
 
   context "when input contains a spoiler tag" do
-    let(:input) { "<div class=\"spoiler\">*foo*</div>" }
+    let(:input) { '<div class="spoiler">*foo*</div>' }
     let(:output) { "<div class=\"spoiler\"><p><em>foo</em></p>\n</div>\n" }
     it "should convert the contents of the spoiler tag from Markdown" do
       expect(filter.to_html).to eq(output)
@@ -33,7 +33,7 @@ describe MarkdownFilter do
   context "when input contains a YouTube code" do
     let(:id) { "abcd" }
     let(:output) do
-      "<iframe title=\"title\" src=\"https://www.youtube.com/embed/#{id}\" " +
+      "<iframe title=\"title\" src=\"https://www.youtube.com/embed/#{id}\" " \
         "frameborder=\"0\" allowfullscreen></iframe>\n"
     end
 

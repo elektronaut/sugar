@@ -3,8 +3,8 @@ class CreateConversations < ActiveRecord::Migration
     add_column :discussions, :type, :string, limit: 100
     add_index :discussions, :type
     execute "UPDATE discussions SET " +
-      ActiveRecord::Base.connection.quote_column_name("type") +
-      "='Discussion'"
+            ActiveRecord::Base.connection.quote_column_name("type") +
+            "='Discussion'"
 
     add_column :posts, :conversation, :boolean, null: false, default: false
     add_index :posts, :conversation

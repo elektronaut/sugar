@@ -19,7 +19,7 @@ class Configuration
 
     def define_reader_method(key)
       define_method key do |*args|
-        if args.length > 0
+        if args.any?
           set(key, *args)
         else
           get(key)
@@ -58,9 +58,9 @@ class Configuration
       setting(
         :emoticons,
         :string,
-        "smiley laughing blush heart_eyes kissing_heart flushed worried " +
+        "smiley laughing blush heart_eyes kissing_heart flushed worried " \
           "grimacing cry angry heart star +1 -1"
-        )
+      )
     end
   end
 
@@ -91,13 +91,13 @@ class Configuration
   include ThemeSettings
 
   def get(key)
-    unless has_setting?(key)
+    unless setting?(key)
       raise(
         InvalidConfigurationKey,
         ":#{key} is not a valid configuration option"
       )
     end
-    if configuration.has_key?(key)
+    if configuration.key?(key)
       configuration[key]
     else
       self.class.settings[key].default
@@ -106,7 +106,7 @@ class Configuration
 
   def set(key, value)
     key = key.to_sym if key.is_a?(String)
-    unless has_setting?(key)
+    unless setting?(key)
       raise(
         InvalidConfigurationKey,
         ":#{key} is not a valid configuration option"
@@ -116,7 +116,7 @@ class Configuration
     unless valid_type?(key, value)
       raise(
         ArgumentError,
-        "expected #{self.class.settings[key].type}, " +
+        "expected #{self.class.settings[key].type}, " \
           "got #{value.class} (#{value.inspect})"
       )
     end
@@ -124,9 +124,9 @@ class Configuration
   end
 
   def load
-    if saved_config = Sugar.redis.get("configuration")
-      @configuration = JSON.parse(saved_config).symbolize_keys
-    end
+    saved_config = Sugar.redis.get("configuration")
+    return unless saved_config
+    @configuration = JSON.parse(saved_config).symbolize_keys
   end
 
   def save
@@ -148,8 +148,8 @@ class Configuration
     @configuration ||= {}
   end
 
-  def has_setting?(key)
-    self.class.settings.has_key?(key)
+  def setting?(key)
+    self.class.settings.key?(key)
   end
 
   def type_for(key)
@@ -167,12 +167,11 @@ class Configuration
 
   def parse_value(key, value)
     if type_for(key) == :boolean
-      value = true  if value == "1"
-      value = false if value == "0"
-      value = true  if value == "true"
-      value = false if value == "false"
-      value = true  if value == :enabled
-      value = false if value == :disabled
+      if ["1", "true", :enabled].include?(value)
+        value = true
+      elsif ["0", "false", :disabled].include?(value)
+        value = false
+      end
     end
     value
   end

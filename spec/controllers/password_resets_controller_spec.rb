@@ -30,10 +30,14 @@ describe PasswordResetsController do
       end
       specify { expect(last_email.to).to eq([user.email]) }
       specify do
-        expect(last_email.body.encoded).to match(password_reset_with_token_url(
-        assigns(:password_reset_token).id,
-        assigns(:password_reset_token).token
-      ))
+        expect(last_email.body.encoded).to(
+          match(
+            password_reset_with_token_url(
+              assigns(:password_reset_token).id,
+              assigns(:password_reset_token).token
+            )
+          )
+        )
       end
     end
 

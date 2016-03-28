@@ -35,7 +35,7 @@ class Conversation < Exchange
 
   def remove_participant(user)
     if user.is_a?(User) && participants.include?(user)
-      raise RemoveParticipantError unless self.removeable?(user)
+      raise RemoveParticipantError unless removeable?(user)
       ConversationRelationship.where(
         user_id:         user.id,
         conversation_id: id

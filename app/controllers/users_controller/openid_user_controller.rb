@@ -4,10 +4,10 @@ class UsersController < ApplicationController
 
     def update_openid
       if session[:authenticated_openid_url] &&
-          @user.update_attribute(
-            :openid_url,
-            session[:authenticated_openid_url]
-          )
+         @user.update_attribute(
+           :openid_url,
+           session[:authenticated_openid_url]
+         )
         flash[:notice] = "Your OpenID URL was updated!"
         redirect_to user_profile_url(id: @user.username)
       else
@@ -30,9 +30,7 @@ class UsersController < ApplicationController
           success: update_openid_user_url(id: @user.username),
           fail: edit_user_page_url(id: @user.username, page: "settings")
         )
-        unless success
-          flash[:notice] = "WARNING: Your OpenID URL is invalid!"
-        end
+        flash[:notice] = "WARNING: Your OpenID URL is invalid!" unless success
         success
       else
         false

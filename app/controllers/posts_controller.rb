@@ -35,9 +35,7 @@ class PostsController < ApplicationController
 
   def since
     @posts = @exchange.posts.limit(200).offset(params[:index]).for_view
-    if request.xhr?
-      render layout: false
-    end
+    render layout: false if request.xhr?
   end
 
   def search
@@ -54,7 +52,7 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post.update_attributes(post_params.merge(edited_at: Time.now))
+    @post.update_attributes(post_params.merge(edited_at: Time.now.utc))
     respond_with(
       @post,
       location: polymorphic_url(
@@ -68,15 +66,11 @@ class PostsController < ApplicationController
   def preview
     @post = @exchange.posts.new(post_params.merge(user: current_user))
     @post.fetch_images
-    if request.xhr?
-      render layout: false
-    end
+    render layout: false if request.xhr?
   end
 
   def edit
-    if request.xhr?
-      render layout: false
-    end
+    render layout: false if request.xhr?
   end
 
   private
@@ -114,9 +108,8 @@ class PostsController < ApplicationController
   end
 
   def mark_conversation_viewed
-    if @exchange.is_a?(Conversation)
-      current_user.mark_conversation_viewed(@exchange)
-    end
+    return unless @exchange.is_a?(Conversation)
+    current_user.mark_conversation_viewed(@exchange)
   end
 
   def mark_exchange_viewed
@@ -146,10 +139,10 @@ class PostsController < ApplicationController
   end
 
   def require_and_set_search_query
-    unless @search_query = search_query
-      flash[:notice] = "No query specified!"
-      redirect_to root_url
-    end
+    @search_query = search_query
+    return if @search_query
+    flash[:notice] = "No query specified!"
+    redirect_to root_url
   end
 
   def verify_editable
@@ -162,8 +155,8 @@ class PostsController < ApplicationController
 
   def verify_postable
     unless @exchange.postable_by?(current_user)
-      flash[:notice] = "This discussion is closed, " +
-        "you don't have permission to post here"
+      flash[:notice] = "This discussion is closed, " \
+                       "you don't have permission to post here"
       redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
     end
   end

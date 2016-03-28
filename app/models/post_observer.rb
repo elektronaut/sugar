@@ -8,9 +8,7 @@ class PostObserver < ActiveRecord::Observer
     cache_file = Rails.root.join(
       "public/cache/#{exchange_type}s/#{post.exchange_id}/posts/count.json"
     )
-    if File.exist?(cache_file)
-      File.unlink(cache_file)
-    end
+    File.unlink(cache_file) if File.exist?(cache_file)
   end
 
   def after_create(post)

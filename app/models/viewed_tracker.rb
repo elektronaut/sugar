@@ -63,9 +63,7 @@ class ViewedTracker
     )
   end
 
-  def user
-    @user
-  end
+  attr_reader :user
 
   def views
     @views ||= ExchangeView.where(

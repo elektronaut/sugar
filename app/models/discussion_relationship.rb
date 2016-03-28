@@ -11,7 +11,7 @@ class DiscussionRelationship < ActiveRecord::Base
 
   class << self
     def define(user, discussion, options = {})
-      relationship = where(user_id: user.id, discussion_id: discussion.id).first
+      relationship = find_by(user_id: user.id, discussion_id: discussion.id)
       relationship ||= DiscussionRelationship.create(
         user_id: user.id,
         discussion_id: discussion.id
@@ -33,14 +33,18 @@ class DiscussionRelationship < ActiveRecord::Base
 
   protected
 
+  def favorite_or_following_enabled?
+    (favorite_changed? && favorite?) ||
+      (following_changed? && following?)
+  end
+
   def ensure_flags_are_mutually_exclusive
-    if self.hidden?
-      if self.hidden_changed?
+    if hidden?
+      if hidden_changed?
         # Unfollow if discussion has been hidden
         self.following = false
         self.favorite = false
-      elsif (self.favorite_changed? && self.favorite?) ||
-          (self.following_changed? && self.following?)
+      elsif favorite_or_following_enabled?
         # Unhide if discussion has been followed/favorited
         self.hidden = false
       end

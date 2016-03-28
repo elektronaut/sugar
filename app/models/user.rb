@@ -41,14 +41,14 @@ class User < ActiveRecord::Base
 
   validates :email,
             presence: { case_sensitive: false },
-            unless: Proc.new { |u| u.openid_url? || u.facebook? }
+            unless: proc { |u| u.openid_url? || u.facebook? }
 
   def name_and_email
-    self.realname? ? "#{realname} <#{email}>" : email
+    realname? ? "#{realname} <#{email}>" : email
   end
 
   def realname_or_username
-    self.realname? ? realname : username
+    realname? ? realname : username
   end
 
   def online?
@@ -74,27 +74,26 @@ class User < ActiveRecord::Base
   # Returns admin flags as strings
   def admin_labels
     labels = []
-    if self.admin?
+    if admin?
       labels << "Admin"
     else
-      labels << "User Admin" if self.user_admin?
-      labels << "Moderator" if self.moderator?
+      labels << "User Admin" if user_admin?
+      labels << "Moderator" if moderator?
     end
     labels
   end
 
   def theme
-    self.theme? ? attributes["theme"] : Sugar.config.default_theme
+    theme? ? attributes["theme"] : Sugar.config.default_theme
   end
 
   def mark_active!
-    if !last_active || last_active < 10.minutes.ago
-      update_columns(last_active: Time.now)
-    end
+    return if last_active && last_active > 10.minutes.ago
+    update_columns(last_active: Time.now.utc)
   end
 
   def mobile_theme
-    if self.mobile_theme?
+    if mobile_theme?
       attributes["mobile_theme"]
     else
       Sugar.config.default_mobile_theme
@@ -102,11 +101,8 @@ class User < ActiveRecord::Base
   end
 
   def gamertag_avatar_url
-    if self.gamertag?
-      "http://avatar.xboxlive.com/avatar/" +
-        URI.escape(gamertag) +
-        "/avatarpic-l.png"
-    end
+    return unless gamertag?
+    "http://avatar.xboxlive.com/avatar/#{URI.escape(gamertag)}/avatarpic-l.png"
   end
 
   def serializable_params
@@ -143,19 +139,15 @@ class User < ActiveRecord::Base
   protected
 
   def ensure_last_active_is_set
-    self.last_active ||= Time.now
+    self.last_active ||= Time.now.utc
   end
 
   def check_for_first_user
-    unless User.any?
-      self.admin = true
-    end
+    self.admin = true unless User.any?
   end
 
   def check_username_change
-    if self.username_changed?
-      self[:previous_usernames] =
-        ([username_was] + previous_usernames).join("\n")
-    end
+    return unless username_changed?
+    self[:previous_usernames] = ([username_was] + previous_usernames).join("\n")
   end
 end

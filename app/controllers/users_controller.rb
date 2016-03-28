@@ -32,51 +32,51 @@ class UsersController < ApplicationController
   def show
     respond_with(@user) do |format|
       format.html do
-        @posts = @user.
-          discussion_posts.
-          viewable_by(current_user).
-          limit(15).
-          page(params[:page]).
-          for_view_with_exchange.
-          reverse_order
+        @posts = @user
+                 .discussion_posts
+                 .viewable_by(current_user)
+                 .limit(15)
+                 .page(params[:page])
+                 .for_view_with_exchange
+                 .reverse_order
       end
     end
   end
 
   def discussions
-    @discussions = @user.
-      discussions.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view
+    @discussions = @user
+                   .discussions
+                   .viewable_by(current_user)
+                   .page(params[:page])
+                   .for_view
     respond_with_exchanges(@discussions)
   end
 
   def participated
     @section = :participated if @user == current_user
-    @discussions = @user.
-      participated_discussions.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view
+    @discussions = @user
+                   .participated_discussions
+                   .viewable_by(current_user)
+                   .page(params[:page])
+                   .for_view
     respond_with_exchanges(@discussions)
   end
 
   def posts
-    @posts = @user.
-      discussion_posts.
-      viewable_by(current_user).
-      page(params[:page]).
-      for_view_with_exchange.
-      reverse_order
+    @posts = @user
+             .discussion_posts
+             .viewable_by(current_user)
+             .page(params[:page])
+             .for_view_with_exchange
+             .reverse_order
   end
 
   def stats
     @posts_per_week = Post.find_by_sql(
-      "SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, " +
-        "WEEK(created_at) AS week " +
-        "FROM posts " +
-        "WHERE user_id = #{@user.id} " +
+      "SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, " \
+        "WEEK(created_at) AS week " \
+        "FROM posts " \
+        "WHERE user_id = #{@user.id} " \
         "GROUP BY YEAR(created_at), WEEK(created_at);"
     )
     @max_posts_per_week = @posts_per_week.map { |p| p.post_count.to_i }.max
@@ -88,9 +88,7 @@ class UsersController < ApplicationController
   def update
     respond_with(@user) do |format|
       if @user.update_attributes(user_params)
-        if @user == current_user
-          current_user.reload
-        end
+        current_user.reload if @user == current_user
         format.any(:html, :mobile) do
           unless initiate_openid_on_update
             flash[:notice] = "Your changes were saved!"
@@ -98,8 +96,8 @@ class UsersController < ApplicationController
           end
         end
       else
-        flash.now[:notice] = "Couldn't save your changes, " +
-          "did you fill in all required fields?"
+        flash.now[:notice] = "Couldn't save your changes, " \
+                             "did you fill in all required fields?"
         format.any(:html, :mobile) { render action: :edit }
       end
     end
@@ -124,7 +122,7 @@ class UsersController < ApplicationController
   end
 
   def detect_edit_page
-    pages = %w{admin info location services settings temporary_ban}
+    pages = %w(admin info location services settings temporary_ban)
     @page = params[:page] if pages.include?(params[:page])
     @page ||= "info"
   end
@@ -155,9 +153,7 @@ class UsersController < ApplicationController
           :trusted, :available_invites, :status
         ]
       end
-      if current_user.admin?
-        allowed += [:admin]
-      end
+      allowed += [:admin] if current_user.admin?
     end
     allowed
   end

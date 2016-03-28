@@ -35,8 +35,8 @@ describe SearchableExchange, solr: true do
 
     context "as a trusted user" do
       subject do
-        Discussion.search_results("testing", user: trusted_user, page: 1).
-          results
+        Discussion.search_results("testing", user: trusted_user, page: 1)
+                  .results
       end
 
       it { is_expected.to match_array([discussion, trusted_discussion]) }

@@ -37,7 +37,7 @@ module Authenticable
 
   module ClassMethods
     def generate_token
-      Digest::SHA1.hexdigest(rand(65535).to_s + Time.now.to_s)
+      Digest::SHA1.hexdigest(rand(65_535).to_s + Time.now.utc.to_s)
     end
 
     def encrypt_password(password)
@@ -48,19 +48,18 @@ module Authenticable
       return nil if username.blank?
       return nil if password.blank?
       user = User.find_by_username(username)
-      if user && user.valid_password?(password)
-        user.hash_password!(password) if user.password_needs_rehash?
-        user
-      end
+      return unless user && user.valid_password?(password)
+      user.hash_password!(password) if user.password_needs_rehash?
+      user
     end
   end
 
   def facebook?
-    self.facebook_uid?
+    facebook_uid?
   end
 
   def active
-    !self.banned?
+    !banned?
   end
 
   def valid_password?(pass)
@@ -81,7 +80,7 @@ module Authenticable
   end
 
   def new_password_confirmed?
-    (self.new_password? && password == confirm_password) ? true : false
+    (new_password? && password == confirm_password) ? true : false
   end
 
   def password_needs_rehash?
@@ -89,22 +88,22 @@ module Authenticable
   end
 
   def temporary_banned?
-    self.banned_until? && banned_until > Time.now
+    banned_until? && banned_until > Time.now.utc
   end
 
   protected
 
   def ensure_password
-    unless self.new_password? || self.hashed_password?
-      if self.openid_url? || self.facebook?
+    unless new_password? || hashed_password?
+      if openid_url? || facebook?
         self.password = self.confirm_password = SecureRandom.base64(15)
       end
     end
   end
 
   def normalize_openid_url
-    if self.openid_url?
-      unless openid_url =~ /^https?:\/\//
+    if openid_url?
+      unless openid_url =~ %r{^https?://}
         self.openid_url = "http://" + openid_url
       end
       self.openid_url = OpenID.normalize_url(openid_url)
@@ -112,20 +111,16 @@ module Authenticable
   end
 
   def encrypt_new_password
-    if self.new_password? && self.new_password_confirmed?
-      self.hashed_password = User.encrypt_password(password)
-    end
+    return unless new_password? && new_password_confirmed?
+    self.hashed_password = User.encrypt_password(password)
   end
 
   def clear_banned_until
-    if self.banned_until? && banned_until <= Time.now
-      self.banned_until = nil
-    end
+    self.banned_until = nil if banned_until? && banned_until <= Time.now.utc
   end
 
   def update_persistence_token
-    if !persistence_token || self.hashed_password_changed?
-      self.persistence_token = self.class.generate_token
-    end
+    return unless !persistence_token || hashed_password_changed?
+    self.persistence_token = self.class.generate_token
   end
 end

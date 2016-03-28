@@ -37,7 +37,7 @@ describe Invite do
     subject { create(:invite) }
 
     specify do
-      expect(subject.expires_at).to be_within(30).of(Time.now + 14.days)
+      expect(subject.expires_at).to be_within(30).of(Time.now.utc + 14.days)
     end
 
     specify { expect(subject.token).to be_kind_of(String) }

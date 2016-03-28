@@ -34,8 +34,8 @@ class ConversationsController < ApplicationController
       @exchange.add_participant(@recipient) if @recipient
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your conversation! " +
-        "Please make sure all required fields are filled in."
+      flash.now[:notice] = "Could not save your conversation! " \
+                           "Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
   end
@@ -52,9 +52,8 @@ class ConversationsController < ApplicationController
     if params[:username]
       usernames = params[:username].split(/\s*,\s*/)
       usernames.each do |username|
-        if user = User.find_by_username(username)
-          @exchange.add_participant(user)
-        end
+        user = User.find_by_username(username)
+        @exchange.add_participant(user) if user
       end
     end
     if request.xhr?
@@ -78,16 +77,16 @@ class ConversationsController < ApplicationController
   end
 
   def mute
-    current_user.
-      conversation_relationships.where(conversation: @exchange).
-      update_all(notifications: false)
+    current_user
+      .conversation_relationships.where(conversation: @exchange)
+      .update_all(notifications: false)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 
   def unmute
-    current_user.
-      conversation_relationships.where(conversation: @exchange).
-      update_all(notifications: true)
+    current_user
+      .conversation_relationships.where(conversation: @exchange)
+      .update_all(notifications: true)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 
@@ -101,11 +100,7 @@ class ConversationsController < ApplicationController
 
   def find_exchange
     @exchange = Conversation.find(params[:id])
-
-    unless @exchange.viewable_by?(current_user)
-      render_error 403
-      return
-    end
+    render_error 403 unless @exchange.viewable_by?(current_user)
   end
 
   def find_recipient
@@ -120,9 +115,8 @@ class ConversationsController < ApplicationController
 
   def find_remove_user
     @user = User.find_by_username(params[:username])
-    unless @exchange.removeable_by?(@user, current_user)
-      flash[:error] = "You can't do that!"
-      redirect_to @exchange
-    end
+    return if @exchange.removeable_by?(@user, current_user)
+    flash[:error] = "You can't do that!"
+    redirect_to @exchange
   end
 end

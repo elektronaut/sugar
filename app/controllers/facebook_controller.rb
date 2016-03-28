@@ -6,7 +6,8 @@ class FacebookController < ApplicationController
     if @user_info ||= get_user_info(code: params[:code])
 
       # User exists
-      if set_current_user(User.find_by_facebook_uid(@user_info[:id]))
+      @current_user = User.find_by_facebook_uid(@user_info[:id])
+      if @current_user
         redirect_to discussions_url
 
       # Go to signup if allowed
@@ -76,16 +77,14 @@ class FacebookController < ApplicationController
 
     options[:redirect_uri] ||= login_facebook_url
 
-    access_token_url = "https://graph.facebook.com/oauth/access_token" +
-      "?client_id=#{Sugar.config.facebook_app_id}" +
-      "&redirect_uri=#{options[:redirect_uri]}" +
-      "&client_secret=#{Sugar.config.facebook_api_secret}" +
-      "&code=#{code}"
+    access_token_url = "https://graph.facebook.com/oauth/access_token" \
+                       "?client_id=#{Sugar.config.facebook_app_id}" \
+                       "&redirect_uri=#{options[:redirect_uri]}" \
+                       "&client_secret=#{Sugar.config.facebook_api_secret}" \
+                       "&code=#{code}"
     begin
       response = open(access_token_url).read
-      if response =~ /access_token=/
-        CGI::parse(response)["access_token"].first
-      end
+      CGI.parse(response)["access_token"].first if response =~ /access_token=/
     rescue => e
       logger.error "Facebook authentication error: #{e.message}"
       nil

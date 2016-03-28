@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe UsersController do
-
   let(:user) { create(:user) }
 
   # Create the first admin user
@@ -116,7 +115,9 @@ describe UsersController do
 
     context "self banning" do
       before do
-        put :update, id: user.id, user: { banned_until: (Time.now + 2.days) }
+        put(:update,
+            id: user.id,
+            user: { banned_until: (Time.now.utc + 2.days) })
       end
 
       specify { expect(user.reload.temporary_banned?).to eq(true) }
@@ -135,13 +136,13 @@ describe UsersController do
       it "redirects to the OpenID URL" do
         expect_any_instance_of(
           ApplicationController
-        ).to receive(:start_openid_session).
-          with(
+        ).to receive(:start_openid_session)
+          .with(
             "http://example.com/",
             success: update_openid_user_url(id: user.username),
             fail:    edit_user_page_url(id: user.username, page: "settings")
-          ).
-          and_return(false)
+          )
+          .and_return(false)
         put(
           :update,
           id: user.id,
@@ -172,8 +173,8 @@ describe UsersController do
         before do
           allow_any_instance_of(
             ApplicationController
-          ).to receive(:start_openid_session).
-            and_return(false)
+          ).to receive(:start_openid_session)
+            .and_return(false)
           put(
             :update,
             id: user.id,
