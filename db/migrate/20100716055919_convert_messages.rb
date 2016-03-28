@@ -1,6 +1,6 @@
 class ConvertMessages < ActiveRecord::Migration
   def disable_deltas!
-    ThinkingSphinx.deltas_enabled = false if const_defined?("ThinkingSphinx")
+    ThinkingSphinx.deltas_enabled = false if Object.const_defined?("ThinkingSphinx")
   end
 
   def up
