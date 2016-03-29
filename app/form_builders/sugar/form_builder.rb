@@ -32,19 +32,15 @@ module Sugar
       content_tag "label", text.html_safe, for: full_attribute_name(method)
     end
 
-    def field_with_label(attribute, content, label_text = nil, options = {})
+    def field_with_label(attr, content, label_text = nil, opts = {})
       classes = ["field"]
-      classes << "field_with_errors" if errors_on?(attribute)
+      classes << "field_with_errors" if errors_on?(attr)
 
-      label_tag = label(
-        attribute,
-        label_text,
-        description: options[:description]
-      )
+      label_tag = label(attr, label_text, description: opts[:description])
 
-      if options[:note]
+      if opts[:note]
         content = safe_join(
-          [content, (options[:note]).to_s.html_safe],
+          [content, (opts[:note]).to_s.html_safe],
           "<br>".html_safe
         )
       end
@@ -80,34 +76,23 @@ module Sugar
       labelled_field(:password_field, attribute, label_text, options)
     end
 
-    def labelled_time_zone_select(
-          attribute,
-          label_text = nil,
-          priority_zones = nil,
-          options = {}
-    )
-      label_text, options, field_options = parse_label_text_and_options(
-        label_text,
-        options
-      )
+    def labelled_time_zone_select(attr, label = nil, priority = nil, opts = {})
+      label, opts, field_opts = parse_label_and_opts(label, opts)
       field_with_label(
-        attribute,
-        time_zone_select(attribute, priority_zones, options),
-        label_text,
-        field_options
+        attr,
+        time_zone_select(attr, priority, opts),
+        label,
+        field_opts
       )
     end
 
-    def labelled_select(attribute, choices, label_text = nil, options = {})
-      label_text, options, field_options = parse_label_text_and_options(
-        label_text,
-        options
-      )
+    def labelled_select(attr, choices, label = nil, opts = {})
+      label, opts, field_opts = parse_label_and_opts(label, opts)
       field_with_label(
-        attribute,
-        select(attribute, choices, options),
-        label_text,
-        field_options
+        attr,
+        select(attr, choices, opts),
+        label,
+        field_opts
       )
     end
 
