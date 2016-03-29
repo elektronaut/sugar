@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Post < ActiveRecord::Base
+  include ConversationPost
   include SearchablePost
   include Paginatable
   include Viewable
@@ -19,12 +20,10 @@ class Post < ActiveRecord::Base
   before_save :fetch_images,
               :set_edit_timestamp,
               :update_trusted_status,
-              :flag_conversation,
               :render_html
 
   after_create :update_exchange,
                :define_relationship,
-               :notify_new_conversation_post,
                :increment_public_posts_count
 
   after_destroy :decrement_public_posts_count
@@ -42,8 +41,7 @@ class Post < ActiveRecord::Base
   end
 
   def page(options = {})
-    limit = options[:limit] || Post.per_page
-    (post_number.to_f / limit).ceil
+    (post_number.to_f / (options[:limit] || Post.per_page)).ceil
   end
 
   def body_html
@@ -76,10 +74,8 @@ class Post < ActiveRecord::Base
 
   def mentioned_users
     @mentioned_users ||= User.all.select do |user|
-      user_expression = Regexp.new(
-        "@" + Regexp.quote(user.username),
-        Regexp::IGNORECASE
-      )
+      user_expression = Regexp.new("@" + Regexp.quote(user.username),
+                                   Regexp::IGNORECASE)
       body.match(user_expression) ? true : false
     end
   end
@@ -108,11 +104,6 @@ class Post < ActiveRecord::Base
     self.body_html = Renderer.render(body, format: format) unless skip_html
   end
 
-  def flag_conversation
-    self.conversation = exchange.is_a?(Conversation)
-    true
-  end
-
   def set_edit_timestamp
     self.edited_at ||= Time.now.utc
   end
@@ -127,15 +118,5 @@ class Post < ActiveRecord::Base
       last_poster_id: user.id,
       last_post_at: created_at
     )
-  end
-
-  def notify_new_conversation_post
-    if conversation?
-      exchange.conversation_relationships.each do |relationship|
-        unless relationship.user == user
-          relationship.update_attributes(new_posts: true)
-        end
-      end
-    end
   end
 end

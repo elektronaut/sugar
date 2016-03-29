@@ -256,20 +256,6 @@ describe Post do
     end
   end
 
-  describe "#flag_conversation" do
-    subject { post }
-
-    context "when in a conversation" do
-      let(:post) { create(:post, exchange: conversation) }
-      specify { expect(subject.conversation?).to eq(true) }
-    end
-
-    context "when in a regular discussion" do
-      let(:post) { create(:post, exchange: discussion) }
-      specify { expect(subject.conversation?).to eq(false) }
-    end
-  end
-
   describe "#set_edit_timestamp" do
     subject { post }
 
