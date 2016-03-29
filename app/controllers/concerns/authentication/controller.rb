@@ -7,102 +7,16 @@ module Authentication
     include CurrentUserHelper
 
     included do
-      before_action :load_session_user
-      before_action :handle_temporary_ban
-      before_action :handle_permanent_ban
-      before_action :verify_activated_account
-      after_action :cleanup_temporary_ban
-      after_action :update_last_active
-      after_action :store_session_authentication
+      before_action :load_session_user,
+                    :handle_temporary_ban,
+                    :handle_permanent_ban,
+                    :verify_activated_account
+      after_action :cleanup_temporary_ban,
+                   :update_last_active,
+                   :store_session_authentication
     end
 
     protected
-
-    # Verifies the current_user. The user is considered verified if one or more
-    # criteria are met. If not, a redirect is performed.
-    #
-    # Criteria:
-    #
-    #  :user       - Checks that current_user matches the given user or :any
-    #  :admin      - Checks that current_user is an admin
-    #  :moderator  - Checks that current_user is a moderator
-    #  :user_admin - Checks that current_user is a user admin
-    #
-    # Other options:
-    #
-    #  :notice   - Notice to display if verification fails
-    #  :redirect - URL to redirect to if verification fails
-    #
-    # Examples:
-    #
-    #  # Require any user
-    #  verify_user(
-    #    user: :any,
-    #    redirect: login_users_url,
-    #    notice: 'You must be logged in!'
-    #  )
-    #
-    #  # Only accessible by a moderator
-    #  verify_user(moderator: true, notice: 'You must be a moderator!')
-    #
-    #  # Only accessible by a user admin or the user who owns the invite
-    #  verify_user(user: @invite.user, user_admin: true)
-    #
-    def verify_user(options = {})
-      options = default_verify_user_options(options)
-
-      if current_user?
-        verified = verify_current_user(options)
-        verified ||= verify_current_user_flags(options)
-      else
-        verified = false
-      end
-
-      handle_unverified_user(options) unless verified
-      verified
-    end
-
-    def verify_current_user(options = {})
-      if options[:user]
-        options[:user] == :any || options[:user] == current_user
-      else
-        false
-      end
-    end
-
-    def verify_current_user_flags(options = {})
-      [:admin, :moderator, :user_admin].each do |flag|
-        return true if options[flag] && current_user.send("#{flag}?".to_sym)
-      end
-      false
-    end
-
-    def default_verify_user_options(options = {})
-      options[:redirect] ||= discussions_url
-      options[:notice] ||= "You don't have permission to do that!"
-      options[:api_notice] ||= options[:notice]
-      options
-    end
-
-    def handle_unverified_user(options)
-      respond_to do |format|
-        format.any(:html, :mobile) do
-          flash[:notice] = options[:notice]
-          redirect_to options[:redirect]
-        end
-        format.json { render json: options[:api_notice], status: 401 }
-        format.xml { render xml: options[:api_notice], status: 401 }
-      end
-    end
-
-    def require_user_account
-      verify_user(
-        user: :any,
-        redirect: login_users_url,
-        notice: "You must be logged in to do that",
-        api_notice: "Authorization required"
-      )
-    end
 
     def load_session_user
       if session[:user_id] && session[:persistence_token] && !current_user?

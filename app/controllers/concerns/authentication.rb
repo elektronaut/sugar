@@ -6,6 +6,7 @@ module Authentication
     def setup_controller(controller)
       controller.send :extend,  Authentication::Filters
       controller.send :include, Authentication::Controller
+      controller.send :include, Authentication::VerifyUser
     end
 
     def included(base)
