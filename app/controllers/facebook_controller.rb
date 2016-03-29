@@ -3,58 +3,44 @@ class FacebookController < ApplicationController
   before_action :detect_admin_signup, only: [:signup]
 
   def login
-    if @user_info ||= get_user_info(code: params[:code])
-
-      # User exists
-      @current_user = User.find_by_facebook_uid(@user_info[:id])
+    require_user_info(login_users_url, code: params[:code]) do |user_info|
+      @current_user = User.find_by_facebook_uid(user_info[:id])
       if @current_user
         redirect_to discussions_url
-
-      # Go to signup if allowed
       elsif Sugar.config.signups_allowed
         signup
       else
         flash[:notice] = "Could not find your Facebook account"
         redirect_to login_users_url
       end
-    else
-      flash[:error] = "Failed to verify your Facebook account"
-      redirect_to login_users_url
     end
   end
 
   def signup
-    if @user_info ||= get_user_info(
-      code: params[:code],
-      redirect_uri: signup_facebook_url
-    )
+    require_user_info(
+      new_user_url, code: params[:code], redirect_uri: signup_facebook_url
+    ) do |user_info|
       session[:facebook_user_params] = {
-        facebook_uid: @user_info[:id],
-        email: @user_info[:email],
-        realname: @user_info[:name],
-        username: (@user_info[:username] || @user_info[:name])
+        facebook_uid: user_info[:id],
+        email:        user_info[:email],
+        realname:     user_info[:name],
+        username:     (user_info[:username] || user_info[:name])
       }
-    else
-      flash[:error] = "Failed to verify your Facebook account"
+      redirect_to new_user_url
     end
-    redirect_to new_user_url
   end
 
   def connect
-    if @user_info ||= get_user_info(
-      code: params[:code],
-      redirect_uri: connect_facebook_url
-    )
-      if @user_info[:id]
-        current_user.update_attribute(:facebook_uid, @user_info[:id])
+    redirect_url = edit_user_page_url(id: current_user.username,
+                                      page: "services")
+    require_user_info(
+      redirect_url, code: params[:code], redirect_uri: connect_facebook_url
+    ) do |user_info|
+      if user_info[:id]
+        current_user.update_attribute(:facebook_uid, user_info[:id])
       end
-    else
-      flash[:error] = "Failed to verify your Facebook account"
+      redirect_to redirect_url
     end
-    redirect_to edit_user_page_url(
-      id: current_user.username,
-      page: "services"
-    )
   end
 
   def disconnect
@@ -72,18 +58,25 @@ class FacebookController < ApplicationController
     @admin_signup = true if User.count(:all) == 0
   end
 
+  def fb_profile_url(access_token)
+    "https://graph.facebook.com/me?access_token=#{access_token}"
+  end
+
+  def fb_access_token_url(code, redirect_uri)
+    "https://graph.facebook.com/oauth/access_token" \
+      "?client_id=#{Sugar.config.facebook_app_id}" \
+      "&redirect_uri=#{redirect_uri}" \
+      "&client_secret=#{Sugar.config.facebook_api_secret}" \
+      "&code=#{code}"
+  end
+
   def get_access_token(code, options = {})
     return nil unless code
 
     options[:redirect_uri] ||= login_facebook_url
 
-    access_token_url = "https://graph.facebook.com/oauth/access_token" \
-                       "?client_id=#{Sugar.config.facebook_app_id}" \
-                       "&redirect_uri=#{options[:redirect_uri]}" \
-                       "&client_secret=#{Sugar.config.facebook_api_secret}" \
-                       "&code=#{code}"
     begin
-      response = open(access_token_url).read
+      response = open(fb_access_token_url(code, options[:redirect_uri])).read
       CGI.parse(response)["access_token"].first if response =~ /access_token=/
     rescue => e
       logger.error "Facebook authentication error: #{e.message}"
@@ -97,14 +90,22 @@ class FacebookController < ApplicationController
     end
     if options[:access_token]
       begin
-        response = open(
-          "https://graph.facebook.com/me?access_token=#{options[:access_token]}"
-        ).read
+        response = open(fb_profile_url(options[:access_token])).read
         JSON.parse(response).symbolize_keys
       rescue => e
         logger.error "Facebook API error: #{e.message}"
         nil
       end
+    end
+  end
+
+  def require_user_info(redirect_url, opts = {})
+    @user_info ||= get_user_info(opts)
+    if @user_info
+      yield @user_info
+    else
+      flash[:error] = "Failed to verify your Facebook account"
+      redirect_to redirect_url
     end
   end
 end

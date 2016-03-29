@@ -9,12 +9,7 @@ class PasswordResetsController < ApplicationController
     @user = User.where(email: params[:email]).first if params[:email]
     if @user
       @password_reset_token = @user.password_reset_tokens.create
-      Mailer.password_reset(
-        @user.email,
-        password_reset_with_token_url(
-          @password_reset_token, @password_reset_token.token
-        )
-      ).deliver_now
+      deliver_password_reset(@user, @password_reset_token)
       flash[:notice] = "An email with further instructions has been sent"
       redirect_to login_users_url
     else
@@ -40,6 +35,16 @@ class PasswordResetsController < ApplicationController
   end
 
   private
+
+  def deliver_password_reset(user, password_reset_token)
+    Mailer.password_reset(
+      user.email,
+      password_reset_with_token_url(
+        password_reset_token,
+        password_reset_token.token
+      )
+    ).deliver_now
+  end
 
   def user_params
     params.require(:user).permit(:password, :confirm_password)

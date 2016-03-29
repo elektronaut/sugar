@@ -40,19 +40,18 @@ class InvitesController < ApplicationController
 
   def create
     @invite = current_user.invites.create(invite_params)
-    if @invite.valid?
-      begin
-        Mailer.invite(@invite, accept_invite_url(id: @invite.token)).deliver_now
-        flash[:notice] = "Your invite has been sent to #{@invite.email}"
-      rescue Net::SMTPFatalError, Net::SMTPSyntaxError
-        flash[:notice] = "There was a problem sending your invite to " \
-                         "#{@invite.email}, it has been cancelled."
-        @invite.destroy
-      end
-      redirect_to invites_url
-    else
+
+    if !@invite.valid?
       render action: :new
+      return
+    elsif deliver_invite(@invite)
+      flash[:notice] = "Your invite has been sent to #{@invite.email}"
+    else
+      flash[:notice] = "There was a problem sending your invite to " \
+        "#{@invite.email}, it has been cancelled."
+      @invite.destroy
     end
+    redirect_to invites_url
   end
 
   def destroy
@@ -65,6 +64,12 @@ class InvitesController < ApplicationController
 
   private
 
+  def deliver_invite(invite)
+    Mailer.invite(invite, accept_invite_url(id: invite.token)).deliver_now
+  rescue Net::SMTPFatalError, Net::SMTPSyntaxError
+    false
+  end
+
   def invite_params
     params.require(:invite).permit(:email, :message)
   end
@@ -75,18 +80,14 @@ class InvitesController < ApplicationController
   end
 
   def verify_available_invites
-    unless current_user? && current_user.available_invites?
-      respond_to do |format|
-        format.any(:html, :mobile) do
-          flash[:notice] = "You don't have any invites!"
-          redirect_to online_users_url
-        end
-        format.any(:xml, :json) do
-          render(
-            text: "You don't have any invites!",
-            status: :method_not_allowed
-          )
-        end
+    return if current_user? && current_user.available_invites?
+    respond_to do |format|
+      format.any(:html, :mobile) do
+        flash[:notice] = "You don't have any invites!"
+        redirect_to online_users_url
+      end
+      format.any(:xml, :json) do
+        render(text: "You don't have any invites!", status: :method_not_allowed)
       end
     end
   end

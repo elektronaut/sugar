@@ -50,54 +50,48 @@ module LoginMacros
     end
 
     def it_requires_admin_for(*actions)
-      options = { method: :get, params: { id: 1 }, format: :html }
-      options.merge!(actions.pop) if actions.last.is_a?(Hash)
+      opts = { method: :get, params: { id: 1 }, format: :html }
+      opts.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires an admin for #{action}" do
           received_option = false
-          expect(controller).to receive(:verify_user) do |opts|
-            received_option = true if opts[:admin]
+          expect(controller).to receive(:verify_user) do |o|
+            received_option = true if o[:admin]
             true
           end.at_least(:once)
-          send options[:method], action, options[:params].merge(
-            format: options[:format]
-          )
+          send opts[:method], action, opts[:params].merge(format: opts[:format])
           expect(received_option).to eq(true)
         end
       end
     end
 
     def it_requires_moderator_for(*actions)
-      options = { method: :get, params: { id: 1 }, format: :html }
-      options.merge!(actions.pop) if actions.last.is_a?(Hash)
+      opts = { method: :get, params: { id: 1 }, format: :html }
+      opts.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires a moderator for #{action}" do
           received_option = false
-          expect(controller).to receive(:verify_user) do |opts|
-            received_option = true if opts[:moderator]
+          expect(controller).to receive(:verify_user) do |o|
+            received_option = true if o[:moderator]
             true
           end.at_least(:once)
-          send options[:method], action, options[:params].merge(
-            format: options[:format]
-          )
+          send opts[:method], action, opts[:params].merge(format: opts[:format])
           expect(received_option).to eq(true)
         end
       end
     end
 
     def it_requires_user_admin_for(*actions)
-      options = { method: :get, params: { id: 1 }, format: :html }
-      options.merge!(actions.pop) if actions.last.is_a?(Hash)
+      opts = { method: :get, params: { id: 1 }, format: :html }
+      opts.merge!(actions.pop) if actions.last.is_a?(Hash)
       actions.each do |action|
         it "requires a user admin for #{action}" do
           received_option = false
-          expect(controller).to receive(:verify_user) do |opts|
-            received_option = true if opts[:user_admin]
+          expect(controller).to receive(:verify_user) do |o|
+            received_option = true if o[:user_admin]
             true
           end.at_least(:once)
-          send options[:method], action, options[:params].merge(
-            format: options[:format]
-          )
+          send opts[:method], action, opts[:params].merge(format: opts[:format])
           expect(received_option).to eq(true)
         end
       end

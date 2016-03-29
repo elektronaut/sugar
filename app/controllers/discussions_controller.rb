@@ -142,21 +142,22 @@ class DiscussionsController < ApplicationController
 
   private
 
+  def trusted_exchange_params
+    return [] unless current_user.trusted?
+    [:trusted]
+  end
+
+  def moderator_exchange_params
+    return [] unless current_user.moderator?
+    [:sticky]
+  end
+
   def exchange_params
-    discussion_params = params.require(:discussion)
-    if current_user.moderator?
-      discussion_params.permit(
-        :title, :body, :format, :nsfw, :closed, :trusted, :sticky
-      )
-    elsif current_user.trusted?
-      discussion_params.permit(
-        :title, :body, :format, :nsfw, :closed, :trusted
-      )
-    else
-      discussion_params.permit(
-        :title, :body, :format, :nsfw, :closed
-      )
-    end
+    params.require(:discussion).permit(
+      [:title, :body, :format, :nsfw, :closed] +
+        trusted_exchange_params +
+        moderator_exchange_params
+    )
   end
 
   def find_exchange

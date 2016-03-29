@@ -8,19 +8,14 @@ module DrawingsController
   protected
 
   def drawing_params
-    post_image = PostImage.create(
-      data: Base64.decode64(params[:drawing]),
-      content_type: "image/jpeg",
-      filename: "drawing.jpg"
-    )
-    if post_image.valid?
-      {
-        body: '<div class="drawing">' \
-          "[image:#{post_image.id}:#{post_image.content_hash}]" \
-          "</div>"
-      }
-    else
-      {}
-    end
+    post_image = PostImage.create(data: Base64.decode64(params[:drawing]),
+                                  content_type: "image/jpeg",
+                                  filename: "drawing.jpg")
+    return {} unless post_image.valid?
+    {
+      body: '<div class="drawing">' \
+        "[image:#{post_image.id}:#{post_image.content_hash}]" \
+        "</div>"
+    }
   end
 end
