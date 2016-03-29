@@ -21,14 +21,21 @@ module VirtualBody
     end
   end
 
+  def format_options
+    return {} if format.blank?
+    { format: format }
+  end
+
+  def post_attributes
+    {
+      edited_at: Time.now.utc,
+      body: body
+    }.merge(format_options)
+  end
+
   def update_post_body
     if body && !body.empty? && body != posts.first.body
-      attributes = {
-        edited_at: Time.now.utc,
-        body: body
-      }
-      attributes[:format] = format unless format.blank?
-      posts.first.update_attributes(attributes)
+      posts.first.update_attributes(post_attributes)
     end
   end
 end

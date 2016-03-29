@@ -41,13 +41,10 @@ module ExchangeParticipant
     view = ExchangeView.find_by(user_id: id, exchange_id: exchange.id)
     if view
       if view.post_index < index
-        view.update_attributes(post_index: index, post_id: post.id)
+        view.update(post_index: index, post_id: post.id)
       end
     else
-      ExchangeView.create(
-        exchange_id: exchange.id, user_id: id,
-        post_index: index,        post_id: post.id
-      )
+      create_exchange_view(exchange, post, index)
     end
   end
 
@@ -104,5 +101,16 @@ module ExchangeParticipant
     else
       false
     end
+  end
+
+  private
+
+  def create_exchange_view(exchange, post, index)
+    ExchangeView.create(
+      exchange_id: exchange.id,
+      user_id: id,
+      post_index: index,
+      post_id: post.id
+    )
   end
 end

@@ -113,16 +113,17 @@ module Authentication
       end
     end
 
+    def ban_duration
+      distance_of_time_in_words(Time.zone.now, current_user.banned_until)
+    end
+
     def handle_temporary_ban
       if current_user? && current_user.temporary_banned?
         logger.info(
           "Authentication failed for user:#{current_user.id} " \
             "(#{current_user.username}) - temporary ban"
         )
-        flash[:notice] =
-          "You have been banned for " +
-          distance_of_time_in_words(Time.zone.now, current_user.banned_until) +
-          "!"
+        flash[:notice] = "You have been banned for #{ban_duration}!"
         deauthenticate!
       end
     end

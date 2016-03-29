@@ -24,14 +24,11 @@ module ExchangesController
     @page = params[:page] || 1
     @posts = @exchange.posts.page(@page, context: context).for_view
 
-    # Mark discussion as viewed
-    if current_user?
-      current_user.mark_exchange_viewed(
-        @exchange,
-        @posts.last,
-        (@posts.offset_value + @posts.count)
-      )
-    end
+    mark_as_viewed!(
+      @exchange,
+      @posts.last,
+      (@posts.offset_value + @posts.count)
+    )
 
     respond_with(@exchange)
   end
@@ -54,7 +51,7 @@ module ExchangesController
   end
 
   def mark_as_read
-    current_user.mark_exchange_viewed(
+    mark_as_viewed!(
       @exchange,
       @exchange.posts.last,
       @exchange.posts_count
@@ -63,6 +60,11 @@ module ExchangesController
   end
 
   protected
+
+  def mark_as_viewed!(exchange, last_post, count)
+    return unless current_user?
+    current_user.mark_exchange_viewed(exchange, last_post, count)
+  end
 
   def verify_editable
     render_error 403 unless @exchange.editable_by?(current_user)

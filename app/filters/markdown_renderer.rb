@@ -45,18 +45,20 @@ class MarkdownRenderer < Redcarpet::Render::HTML
     end
   end
 
+  def youtube_id(url)
+    if url =~ %r{youtu\.be/([^\?]*)}
+      Regexp.last_match(1)
+    else
+      url.match(%r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^\&\?]*).*})[5]
+    end
+  end
+
   def youtube_embed(document)
     document.gsub(/!y\[(.*)\]\((.*)\)/) do
       title = Regexp.last_match(1)
       youtube_url = Regexp.last_match(2)
-      if youtube_url[%r{youtu\.be/([^\?]*)}]
-        youtube_id = Regexp.last_match(1)
-      else
-        youtube_url[%r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^\&\?]*).*}]
-        youtube_id = Regexp.last_match(5)
-      end
       "<iframe title=\"#{title}\" " \
-        "src=\"https://www.youtube.com/embed/#{youtube_id}\" " \
+        "src=\"https://www.youtube.com/embed/#{youtube_id(youtube_url)}\" " \
         'frameborder="0" allowfullscreen></iframe>'
     end
   end

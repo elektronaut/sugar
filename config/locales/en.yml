@@ -127,6 +127,11 @@ en:
     message_description: 'Optional, will appear in the welcoming email'
     send_invite: Send invite
     new_invite: New Invite
+    sent: "Your invite has been sent to %{email}"
+    failed: "There was a problem sending your invite to %{email}, it has been cancelled."
+  flash:
+    changes_saved: Your changes were saved!
+    invalid_record: "Couldn't save your changes, did you fill in all required fields?"
   admin: Admin
   save: Save
   new: New

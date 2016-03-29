@@ -15,12 +15,8 @@ class ViewedTracker
   def last_page(exchange)
     return 1 unless user
     if new_posts?(exchange)
-      post_index = view(exchange).post_index
-      if post_index == 0
-        1
-      else
-        (post_index.to_f / Post.per_page).ceil
-      end
+      index = view(exchange).post_index
+      [(index.to_f / Post.per_page).ceil, 1].max
     else
       exchange.last_page
     end

@@ -1,4 +1,5 @@
 class PasswordResetsController < ApplicationController
+  before_action :find_user_by_email, only: [:create]
   before_action :find_password_reset_token, only: [:show, :update]
   before_action :check_for_expired_token, only: [:show, :update]
 
@@ -6,7 +7,6 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    @user = User.where(email: params[:email]).first if params[:email]
     if @user
       @password_reset_token = @user.password_reset_tokens.create
       deliver_password_reset(@user, @password_reset_token)
@@ -48,6 +48,10 @@ class PasswordResetsController < ApplicationController
 
   def user_params
     params.require(:user).permit(:password, :confirm_password)
+  end
+
+  def find_user_by_email
+    @user = User.where(email: params[:email]).first if params[:email]
   end
 
   def find_password_reset_token

@@ -29,9 +29,7 @@ class Discussion < Exchange
       becomes(Conversation).tap do |conversation|
         conversation.unlabel!
         posts.update_all(conversation: true, trusted: false)
-        participants.each do |participant|
-          conversation.add_participant(participant)
-        end
+        participants.each { |p| conversation.add_participant(p) }
         discussion_relationships.destroy_all
       end
     end

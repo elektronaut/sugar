@@ -4,8 +4,7 @@ class FacebookController < ApplicationController
 
   def login
     require_user_info(login_users_url, code: params[:code]) do |user_info|
-      @current_user = User.find_by_facebook_uid(user_info[:id])
-      if @current_user
+      if authenticate_with_facebook(user_info[:id])
         redirect_to discussions_url
       elsif Sugar.config.signups_allowed
         signup
@@ -16,16 +15,20 @@ class FacebookController < ApplicationController
     end
   end
 
+  def facebook_session_data(user_info)
+    {
+      facebook_uid: user_info[:id],
+      email:        user_info[:email],
+      realname:     user_info[:name],
+      username:     (user_info[:username] || user_info[:name])
+    }
+  end
+
   def signup
     require_user_info(
       new_user_url, code: params[:code], redirect_uri: signup_facebook_url
     ) do |user_info|
-      session[:facebook_user_params] = {
-        facebook_uid: user_info[:id],
-        email:        user_info[:email],
-        realname:     user_info[:name],
-        username:     (user_info[:username] || user_info[:name])
-      }
+      session[:facebook_user_params] = facebook_session_data(user_info)
       redirect_to new_user_url
     end
   end
@@ -53,6 +56,15 @@ class FacebookController < ApplicationController
   end
 
   protected
+
+  def authenticate_with_facebook(facebook_uid)
+    user = User.find_by_facebook_uid(facebook_uid)
+    if user
+      @current_user = user
+    else
+      false
+    end
+  end
 
   def detect_admin_signup
     @admin_signup = true if User.count(:all) == 0
@@ -85,17 +97,15 @@ class FacebookController < ApplicationController
   end
 
   def get_user_info(options = {})
-    if options[:code]
-      options[:access_token] ||= get_access_token(options[:code], options)
-    end
-    if options[:access_token]
-      begin
-        response = open(fb_profile_url(options[:access_token])).read
-        JSON.parse(response).symbolize_keys
-      rescue => e
-        logger.error "Facebook API error: #{e.message}"
-        nil
-      end
+    access_token = options[:access_token] ||
+                   get_access_token(options[:code], options)
+    return unless access_token
+    begin
+      response = open(fb_profile_url(access_token)).read
+      JSON.parse(response).symbolize_keys
+    rescue => e
+      logger.error "Facebook API error: #{e.message}"
+      nil
     end
   end
 

@@ -8,6 +8,7 @@ class InvitesController < ApplicationController
   respond_to :html, :mobile, :xml, :json
 
   before_action :find_invite, only: [:show, :edit, :update, :destroy]
+  before_action :find_invite_by_token, only: [:accept]
   before_action :verify_available_invites, only: [:new, :create]
 
   def index
@@ -19,13 +20,10 @@ class InvitesController < ApplicationController
   end
 
   def accept
-    @invite = Invite.find_by_token(params[:id])
-    session[:invite_token] = nil
-    if @invite && @invite.expired?
-      @invite.destroy
+    session[:invite_token] = session_invite_token(@invite)
+    if expire_invite(@invite)
       flash[:notice] ||= "Your invite has expired!"
     elsif @invite
-      session[:invite_token] = @invite.token
       redirect_to new_user_by_token_url(token: @invite.token)
       return
     else
@@ -39,17 +37,15 @@ class InvitesController < ApplicationController
   end
 
   def create
-    @invite = current_user.invites.create(invite_params)
+    @invite = create_invite(invite_params)
 
     if !@invite.valid?
       render action: :new
       return
-    elsif deliver_invite(@invite)
-      flash[:notice] = "Your invite has been sent to #{@invite.email}"
+    elsif deliver_invite!(@invite)
+      flash[:notice] = t("invite.sent", email: @invite.email)
     else
-      flash[:notice] = "There was a problem sending your invite to " \
-        "#{@invite.email}, it has been cancelled."
-      @invite.destroy
+      flash[:notice] = t("invite.failed", email: @invite.email)
     end
     redirect_to invites_url
   end
@@ -64,10 +60,20 @@ class InvitesController < ApplicationController
 
   private
 
-  def deliver_invite(invite)
+  def create_invite(attrs)
+    current_user.invites.create(attrs)
+  end
+
+  def deliver_invite!(invite)
     Mailer.invite(invite, accept_invite_url(id: invite.token)).deliver_now
   rescue Net::SMTPFatalError, Net::SMTPSyntaxError
+    @invite.destroy
     false
+  end
+
+  def expire_invite(invite)
+    return false unless invite && invite.expired?
+    @invite.destroy
   end
 
   def invite_params
@@ -77,6 +83,15 @@ class InvitesController < ApplicationController
   # Finds the requested invite
   def find_invite
     @invite = Invite.find(params[:id])
+  end
+
+  def find_invite_by_token
+    @invite = Invite.find_by_token(params[:id])
+  end
+
+  def session_invite_token(invite)
+    return nil unless invite && !invite.expired?
+    invite.token
   end
 
   def verify_available_invites

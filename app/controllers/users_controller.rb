@@ -31,13 +31,12 @@ class UsersController < ApplicationController
   def show
     respond_with(@user) do |format|
       format.html do
-        @posts = @user
-                 .discussion_posts
-                 .viewable_by(current_user)
-                 .limit(15)
-                 .page(params[:page])
-                 .for_view_with_exchange
-                 .reverse_order
+        @posts = @user.discussion_posts
+                      .viewable_by(current_user)
+                      .limit(15)
+                      .page(params[:page])
+                      .for_view_with_exchange
+                      .reverse_order
       end
     end
   end
@@ -85,17 +84,13 @@ class UsersController < ApplicationController
   end
 
   def update
-    respond_with(@user) do |format|
-      if @user.update_attributes(user_params)
-        current_user.reload if @user == current_user
-        format.any(:html, :mobile) do
-          flash[:notice] = "Your changes were saved!"
-          redirect_to edit_user_page_url(id: @user.username, page: @page)
-        end
+    respond_with_user(@user) do
+      if update_user
+        flash[:notice] = t("flash.changes_saved")
+        redirect_to edit_user_page_url(id: @user.username, page: @page)
       else
-        flash.now[:notice] = "Couldn't save your changes, " \
-                             "did you fill in all required fields?"
-        format.any(:html, :mobile) { render action: :edit }
+        flash.now[:notice] = t("flash.invalid_record")
+        render action: :edit
       end
     end
   end
@@ -156,6 +151,22 @@ class UsersController < ApplicationController
       :username, :banned, :user_admin, :moderator,
       :trusted, :available_invites, :status
     ]
+  end
+
+  def respond_with_user(user)
+    respond_to do |format|
+      format.any(:html, :mobile) { yield }
+      format.json { render json: user }
+      format.xml { render xml: user }
+    end
+  end
+
+  def update_user
+    if @user.update(user_params)
+      current_user.reload if @user == current_user
+    else
+      false
+    end
   end
 
   def user_params

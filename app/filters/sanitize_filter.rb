@@ -9,6 +9,7 @@ class SanitizeFilter < Filter
 
     remove_unsafe_tags(parser)
     strip_event_handlers(parser)
+    strip_ujs_attributes(parser)
     enforce_allowscriptaccess(parser)
 
     parser.to_html
@@ -44,7 +45,13 @@ class SanitizeFilter < Filter
         end
         # Strip out event handlers
         elem.remove_attribute(name) if name.downcase =~ /^on/
-        # Remove UJS attributes
+      end
+    end
+  end
+
+  def strip_ujs_attributes(parser)
+    parser.search("*").each do |elem|
+      elem.attributes.each do |name, _|
         if jquery_ujs_attributes.include?(name.downcase)
           elem.remove_attribute(name)
         end
@@ -54,24 +61,20 @@ class SanitizeFilter < Filter
 
   # Enforces allowScriptAccess = sameDomain on iframes and other embeds.
   def enforce_allowscriptaccess(parser)
-    parser.search("*").each do |element|
-      change_allowscriptaccess_attribute_on(element)
-    end
+    parser.search("*")
+          .each { |e| change_allowscriptaccess_attribute_on(e) }
 
-    parser.search("embed").each do |element|
-      enforce_allowscriptaccess_attribute_on(element)
-    end
+    parser.search("embed")
+          .each { |e| enforce_allowscriptaccess_attribute_on(e) }
 
     # Change allowScriptAccess in param tags
-    parser.search("param").each do |element|
-      change_allowscriptaccess_for_param(element)
-    end
+    parser.search("param")
+          .each { |e| change_allowscriptaccess_for_param(e) }
 
     # Make sure there's a <param name="allowScriptAccess" value="sameDomain">
     # in object tags
-    parser.search("object").each do |element|
-      enforce_allowscriptaccess_param_in(element)
-    end
+    parser.search("object")
+          .each { |e| enforce_allowscriptaccess_param_in(e) }
   end
 
   # Changes allowScriptAccess to sameDomain on element if the attribute

@@ -25,13 +25,11 @@ class ImageFetcher
     str.gsub(%r{(^|\s)((ftp|https?)://[^\s]+\.(jpg|jpeg|gif|png)\b/?)}i) do
       pre = Regexp.last_match(1)
       match = Regexp.last_match(2)
+
       uri = extract_uri(match)
-      post_image = fetch_image(uri)
-      if post_image
-        pre + match.gsub(uri, embed_image(post_image))
-      else
-        pre + match
-      end
+      image = fetch_image(uri)
+
+      pre + (image ? match.gsub(uri, embed_image(image)) : match)
     end
   end
 
@@ -43,25 +41,18 @@ class ImageFetcher
       match = Regexp.last_match(3)
       uri = extract_uri(match)
       post_image = fetch_image(uri)
-      if post_image
-        embed_image(post_image)
-      else
-        full
-      end
+      post_image ? embed_image(post_image) : full
     end
   end
 
   def fetch_tagged_images(str)
-    parser = Nokogiri::HTML::DocumentFragment.parse(str)
-    parser.css("img").each do |element|
+    Nokogiri::HTML::DocumentFragment.parse(str).css("img").each do |element|
       post_image = fetch_image(elem_src(element))
       next unless post_image
       [
         element.to_s,
         element.to_s.gsub(/>$/, " />") # Nokogiri botches self-closing tags
-      ].each do |pattern|
-        str = str.gsub(pattern, embed_image(post_image))
-      end
+      ].each { |pattern| str = str.gsub(pattern, embed_image(post_image)) }
     end
     str
   end

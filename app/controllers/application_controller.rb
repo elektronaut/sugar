@@ -38,10 +38,8 @@ class ApplicationController < ActionController::Base
   def render_error(error, options = {})
     options[:status] ||= error if error.is_a?(Numeric)
     respond_to do |format|
-      format.html { options[:template] ||= "errors/#{error}" }
-      format.mobile { options[:template] ||= "errors/#{error}" }
-      format.xml { options[:text] ||= error_messages[error] }
-      format.json { options[:text] ||= error_messages[error] }
+      format.any(:html, :mobile) { options[:template] ||= "errors/#{error}" }
+      format.any(:xml, :json) { options[:text] ||= error_messages[error] }
     end
     render options
   end
@@ -67,12 +65,12 @@ class ApplicationController < ActionController::Base
   helper_method :mobile_user_agent?
 
   def detect_mobile
-    if mobile_user_agent?
-      session[:mobile_format] ||= "mobile"
-      session[:mobile_format] = params[:mobile_format] if params[:mobile_format]
-      if session[:mobile_format] == "mobile" && request.format == "text/html"
-        request.format = :mobile
-      end
+    return unless mobile_user_agent?
+    session[:mobile_format] = params[:mobile_format] ||
+                              session[:mobile_format] ||
+                              "mobile"
+    if session[:mobile_format] == "mobile" && request.format == "text/html"
+      request.format = :mobile
     end
   end
 
@@ -83,18 +81,12 @@ class ApplicationController < ActionController::Base
   end
 
   def set_section
-    @section = case self.class.to_s
-               when "UsersController"
-                 :users
-               when "MessagesController"
-                 :messages
-               when "InvitesController"
-                 :invites
-               when "ConversationsController"
-                 :conversations
-               else
-                 :discussions
-               end
+    mapping = {
+      UsersController         => :users,
+      InvitesController       => :invites,
+      ConversationsController => :conversations
+    }
+    mapping[self.class] || :discussions
   end
 
   def mobile_theme

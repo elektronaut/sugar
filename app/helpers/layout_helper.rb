@@ -39,17 +39,14 @@ module LayoutHelper
   end
 
   def header_tab(name, url, options = {})
-    options[:section] ||= name.downcase.to_sym
-    options[:id] ||= "#{options[:section]}_link"
-    options[:class] ||= []
-    options[:class] = [options[:class]] unless options[:class].is_a?(Array)
+    section = options[:section] || name.downcase.to_sym
 
-    classes = [options[:section].to_s] + options[:class]
-    classes << "current" if @section == options[:section]
+    classes = [section.to_s] + Array(options[:class])
+    classes << "current" if @section == section
 
     content_tag(
       :li,
-      link_to(name, url, id: options[:id]),
+      link_to(name, url, id: (options[:id] || "#{section}_link")),
       class: classes
     )
   end

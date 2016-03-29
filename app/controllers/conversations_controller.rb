@@ -50,11 +50,7 @@ class ConversationsController < ApplicationController
 
   def invite_participant
     if params[:username]
-      usernames = params[:username].split(/\s*,\s*/)
-      usernames.each do |username|
-        user = User.find_by_username(username)
-        @exchange.add_participant(user) if user
-      end
+      add_participants(@exchange, params[:username].split(/\s*,\s*/))
     end
     if request.xhr?
       render template: "conversations/participants", layout: false
@@ -91,6 +87,13 @@ class ConversationsController < ApplicationController
   end
 
   private
+
+  def add_participants(exchange, usernames)
+    usernames.each do |username|
+      user = User.find_by_username(username)
+      exchange.add_participant(user) if user
+    end
+  end
 
   def exchange_params
     params.require(:conversation).permit(

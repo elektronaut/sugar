@@ -20,6 +20,10 @@ class LinkFilter < Filter
 
   private
 
+  def extract_href(elem)
+    elem.try(:attributes).try(:[], "href").try(:value)
+  end
+
   def head_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -60,7 +64,7 @@ class LinkFilter < Filter
 
   def relativize_local_links!
     parser.search("a").each do |link|
-      href = link.try(:attributes).try(:[], "href").try(:value)
+      href = extract_href(link)
       next unless href
       host = URI.parse(href).host
       next unless local_domains.detect { |d| host == d }

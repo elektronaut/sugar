@@ -13,18 +13,12 @@ class DiscussionsController < ApplicationController
   before_action :require_and_set_search_query, only: [:search, :search_posts]
 
   def index
-    if current_user?
-      @exchanges = current_user
-                   .unhidden_discussions
-                   .viewable_by(current_user)
-                   .page(params[:page])
-                   .for_view
-    else
-      @exchanges = Discussion
-                   .viewable_by(nil)
-                   .page(params[:page])
-                   .for_view
-    end
+    scope = if current_user?
+              current_user.unhidden_discussions.viewable_by(current_user)
+            else
+              Discussion.viewable_by(nil)
+            end
+    @exchanges = scope.page(params[:page]).for_view
     respond_with_exchanges(@exchanges)
   end
 

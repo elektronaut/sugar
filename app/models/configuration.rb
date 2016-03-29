@@ -91,12 +91,7 @@ class Configuration
   include ThemeSettings
 
   def get(key)
-    unless setting?(key)
-      raise(
-        InvalidConfigurationKey,
-        ":#{key} is not a valid configuration option"
-      )
-    end
+    validate_setting(key)
     if configuration.key?(key)
       configuration[key]
     else
@@ -106,7 +101,8 @@ class Configuration
 
   def set(key, value)
     key = key.to_sym if key.is_a?(String)
-    validate_setting(key, value)
+    validate_setting(key)
+    validate_type(key, value)
     value = parse_value(key, value)
     configuration[key] = value
   end
@@ -153,11 +149,14 @@ class Configuration
     end
   end
 
-  def validate_setting(key, value)
+  def validate_setting(key)
     unless setting?(key)
       raise(InvalidConfigurationKey,
             ":#{key} is not a valid configuration option")
     end
+  end
+
+  def validate_type(key, value)
     unless valid_type?(key, parse_value(key, value))
       raise(ArgumentError,
             "expected #{self.class.settings[key].type}, " \

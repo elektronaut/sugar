@@ -5,6 +5,10 @@ AllCops:
   Exclude:
     - 'db/schema.rb'
 
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*"
+
 Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"

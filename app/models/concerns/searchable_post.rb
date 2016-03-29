@@ -15,18 +15,25 @@ module SearchablePost
 
   module ClassMethods
     def search_results(query, options = {})
-      search = Post.search do
-        fulltext query
-        with :trusted, false unless options[:user] && options[:user].trusted?
-        if options[:exchange]
-          with :exchange_id, options[:exchange].id
-        else
-          with :conversation, false
-        end
-        order_by :created_at, :desc
-        paginate page: options[:page], per_page: Post.per_page
+      perform_search(
+        query,
+        options[:page],
+        (options[:user] && options[:user].trusted?),
+        options[:exchange]
+      ).results
+    end
+
+    private
+
+    def perform_search(query, page, trusted, exchange)
+      Post.search do
+        fulltext(query)
+        with(:trusted, false) unless trusted
+        with(:exchange_id, exchange.id) if exchange
+        with(:conversation, false) unless exchange
+        order_by(:created_at, :desc)
+        paginate(page: page, per_page: Post.per_page)
       end
-      search.results
     end
   end
 end
