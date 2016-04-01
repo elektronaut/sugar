@@ -130,6 +130,11 @@
                   "http://www.flickr.com/photos/#{@user.flickr}") %>
       <br />
     <% end %>
+    <% if @user.last_fm? %>
+      <strong>LastFM</strong>:
+      <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
+      <br>
+    <% end %>
   </p>
 
   <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? || @user.battlenet %>
@@ -167,17 +172,6 @@
         <%= @user.battlenet %>
         <br />
       <% end %>
-    </div>
-  <% end %>
-
-  <% if @user.last_fm? %>
-    <div class="social lastfm">
-      <h3>
-        Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
-      </h3>
-      <a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1">
-        <img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" />
-      </a>
     </div>
   <% end %>
 
