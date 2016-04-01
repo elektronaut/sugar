@@ -84,8 +84,9 @@ class UsersController < ApplicationController
   end
 
   def update
+    updated = update_user
     respond_with_user(@user) do
-      if update_user
+      if updated
         flash[:notice] = t("flash.changes_saved")
         redirect_to edit_user_page_url(id: @user.username, page: @page)
       else
@@ -162,11 +163,9 @@ class UsersController < ApplicationController
   end
 
   def update_user
-    if @user.update(user_params)
-      current_user.reload if @user == current_user
-    else
-      false
-    end
+    return nil unless @user.update(user_params)
+    current_user.reload if @user == current_user
+    @user
   end
 
   def user_params
