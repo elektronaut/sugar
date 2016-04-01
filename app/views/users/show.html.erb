@@ -119,6 +119,12 @@
     <% if @user.instagram? %>
       <strong>Instagram</strong>: <%= @user.instagram %><br />
     <% end %>
+    <% if @user.flickr? %>
+      <strong>Flickr</strong>:
+      <%= link_to("Photos on Flickr",
+                  "http://www.flickr.com/photos/#{@user.flickr}") %>
+      <br />
+    <% end %>
   </p>
 
   <% if @user.twitter? %>
@@ -167,15 +173,6 @@
         <%= @user.battlenet %>
         <br />
       <% end %>
-    </div>
-  <% end %>
-
-  <% if @user.flickr? %>
-    <div class="social flickr clearfix">
-      <h3>
-        <%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %>
-      </h3>
-      <div id="flickrPhotos"></div>
     </div>
   <% end %>
 

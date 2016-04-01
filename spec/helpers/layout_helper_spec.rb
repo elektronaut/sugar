@@ -54,7 +54,6 @@ describe LayoutHelper do
     before do
       Sugar.config.reset!
       Sugar.config.update(
-        flickr_api: "flickr",
         facebook_app_id: "facebook",
         amazon_associates_id: "amazon"
       )
@@ -63,7 +62,6 @@ describe LayoutHelper do
     end
 
     specify { expect(config[:debug]).to eq(false) }
-    specify { expect(config[:flickrApi]).to eq("flickr") }
     specify { expect(config[:facebookAppId]).to eq("facebook") }
     specify { expect(config[:amazonAssociatesId]).to eq("amazon") }
     specify { expect(config[:uploads]).to eq(true) }

@@ -45,17 +45,3 @@ $(Sugar).bind 'ready', ->
                                 "/statuses/" + @id + "\" class=\"time\">" +
                                 relative_time(@created_at) + "</a>" +
                                 "</p>" + "</div>"
-
-  # Show latest photos from Flickr
-  if Sugar.Configuration.flickrApi
-    $("#flickrProfileURL").each ->
-      fuid = @href.split("/")
-      fuid = fuid[(fuid.length - 1)]
-      $("#flickrPhotos").hide()
-      $("#flickrPhotos").flickr
-        api_key: Sugar.Configuration.flickrApi
-        type: "search"
-        user_id: fuid
-        per_page: 15
-        callback: (list) ->
-          $("#flickrPhotos").show()

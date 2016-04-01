@@ -67,7 +67,6 @@ class Configuration
   module IntegrationSettings
     extend ActiveSupport::Concern
     included do
-      setting :flickr_api, :string
       setting :google_analytics, :string
       setting :amazon_associates_id, :string
       setting :amazon_aws_key, :string

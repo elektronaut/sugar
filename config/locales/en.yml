@@ -12,7 +12,6 @@ en:
         amazon_aws_secret: Secret Access Key
         amazon_s3_bucket: S3 Bucket
         amazon_associates_id: Tracking ID
-        flickr_api: API key
       exchange:
         body: First post
         nsfw: Not safe for work
@@ -72,7 +71,6 @@ en:
     amazon_associates: Amazon Associates
     amazon_associates_id_description: Enter to enable referals
     flickr: Flickr
-    flickr_api_description: Enter to enable Flickr integration
     custom_html: Custom HTML
     custom_javascript: Custom Javascript
     custom_header_description: 'Included right after &lt;body&gt;'
