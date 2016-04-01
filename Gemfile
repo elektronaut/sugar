@@ -22,6 +22,7 @@ gem "uglifier"
 gem "dynamic_form"
 gem "jquery-rails"
 gem "backbone-on-rails"
+gem "react-rails"
 
 gem "gemoji", git: "https://github.com/github/gemoji.git"
 gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
