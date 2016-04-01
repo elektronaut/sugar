@@ -104,6 +104,11 @@
   </p>
 
   <p>
+    <% if @user.twitter? %>
+      <strong>Twitter</strong>:
+      <%= link_to "#{@user.twitter}", "http://twitter.com/#{@user.twitter}" %>
+      <br>
+    <% end %>
     <% if @user.gtalk? %>
       <strong>Google Talk</strong>:
       <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br />
@@ -119,18 +124,18 @@
     <% if @user.instagram? %>
       <strong>Instagram</strong>: <%= @user.instagram %><br />
     <% end %>
+    <% if @user.flickr? %>
+      <strong>Flickr</strong>:
+      <%= link_to("Photos on Flickr",
+                  "http://www.flickr.com/photos/#{@user.flickr}") %>
+      <br />
+    <% end %>
+    <% if @user.last_fm? %>
+      <strong>LastFM</strong>:
+      <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
+      <br>
+    <% end %>
   </p>
-
-  <% if @user.twitter? %>
-    <div class="social twitter">
-      <h3>
-        Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", class: 'username' %>
-      </h3>
-      <div id="profileTweets">
-        <ul id="twitter_update_list"></ul>
-      </div>
-    </div>
-  <% end %>
 
   <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
@@ -167,26 +172,6 @@
         <%= @user.battlenet %>
         <br />
       <% end %>
-    </div>
-  <% end %>
-
-  <% if @user.flickr? %>
-    <div class="social flickr clearfix">
-      <h3>
-        <%= link_to "Photos on Flickr", "http://www.flickr.com/photos/#{@user.flickr}", id: 'flickrProfileURL' %>
-      </h3>
-      <div id="flickrPhotos"></div>
-    </div>
-  <% end %>
-
-  <% if @user.last_fm? %>
-    <div class="social lastfm">
-      <h3>
-        Last.fm: <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
-      </h3>
-      <a href="http://www.last.fm/user/<%= @user.last_fm %>/?chartstyle=lastfmrecent3v1">
-        <img src="http://imagegen.last.fm/lastfmrecent3v1/recenttracks/<%= @user.last_fm %>.gif" border="0" alt="<%= @user.last_fm %>'s Profile Page" />
-      </a>
     </div>
   <% end %>
 

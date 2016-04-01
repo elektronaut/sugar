@@ -18,7 +18,6 @@ module LayoutHelper
     {
       debug:              (Rails.env == "development"),
       emoticons:          enabled_emoticons,
-      flickrApi:          Sugar.config.flickr_api,
       facebookAppId:      Sugar.config.facebook_app_id,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
       uploads:            Sugar.aws_s3?,
