@@ -104,6 +104,11 @@
   </p>
 
   <p>
+    <% if @user.twitter? %>
+      <strong>Twitter</strong>:
+      <%= link_to "#{@user.twitter}", "http://twitter.com/#{@user.twitter}" %>
+      <br>
+    <% end %>
     <% if @user.gtalk? %>
       <strong>Google Talk</strong>:
       <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br />
@@ -126,17 +131,6 @@
       <br />
     <% end %>
   </p>
-
-  <% if @user.twitter? %>
-    <div class="social twitter">
-      <h3>
-        Twitter: <%= link_to "@#{@user.twitter}", "http://twitter.com/#{@user.twitter}", class: 'username' %>
-      </h3>
-      <div id="profileTweets">
-        <ul id="twitter_update_list"></ul>
-      </div>
-    </div>
-  <% end %>
 
   <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
