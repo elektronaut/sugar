@@ -141,19 +141,53 @@
     });
   };
 
+  let uploadBanner = (file) =>
+    "[Uploading \"" + file.name + "\"...]";
+
+  let startUpload = (elem, file) =>
+    replaceSelection(elem, "", uploadBanner(file) + "\n", "");
+
+  let finishUpload = (elem, file, response) => {
+    $(elem).val(
+      $(elem).val().replace(uploadBanner(file), response.embed)
+    );
+  };
+
+  let failedUpload = (elem, file) => {
+    $(elem).val($(elem).val().replace(uploadBanner(file), ""));
+  }
+
+  let uploadImage = (textarea) => {
+    let fileInput = $(
+      "<input type=\"file\" name=\"file\" " +
+      "accept=\"image/gif, image/png, image/jpeg\" " +
+      "style=\"display: none;\"/>"
+    );
+    fileInput.insertBefore(textarea);
+    fileInput.get(0).addEventListener('change', function () {
+      let file = fileInput.get(0).files[0];
+      let reader = new FileReader();
+      reader.onload = function () {
+        startUpload(textarea, file);
+        var formData = new FormData();
+        formData.append("upload[file]", file);
+        $.ajax({
+          url: "/uploads.json",
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: (json) => finishUpload(textarea, file, json),
+          error: () => failedUpload(textarea, file)
+        });
+        fileInput.remove();
+      }
+      reader.readAsDataURL(file);
+    }, false)
+    fileInput.click();
+  };
+
   let bindUploads = (elem) => {
-    let uploadBanner = (file) =>
-      "[Uploading \"" + file.name + "\"...]";
-
-    let startUpload = (file) =>
-      replaceSelection(elem, "", uploadBanner(file) + "\n", "");
-
-    let finishUpload = (file, response) => {
-      let replacedText = $(elem).val()
-                                .replace(uploadBanner(file), response.embed);
-      return $(elem).val(replacedText);
-    };
-
     $(elem).filedrop({
       allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff'],
       maxfiles: 25,
@@ -161,8 +195,8 @@
       paramname: "upload[file]",
       url: "/uploads.json",
       headers: { "X-CSRF-Token": Sugar.authToken($(elem).closest("form")) },
-      uploadStarted: (i, file) => startUpload(file),
-      uploadFinished: (i, file, response) => finishUpload(file, response)
+      uploadStarted: (i, file) => startUpload(elem, file),
+      uploadFinished: (i, file, response) => finishUpload(elem, file, response)
     });
   };
 
@@ -174,7 +208,7 @@
 
     let decorator = () => new MarkdownDecorator;
     let formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>");
-    let emojiBar = $("<ul class=\"emojiBar clearfix\"></ul>")
+    let emojiBar = $("<ul class=\"emojiBar clearfix\"></ul>");
     let icons = Sugar.Configuration.emoticons;
 
     var formats = ["markdown"];
@@ -244,8 +278,11 @@
         `<i class="icon-${className}"></i></a>`
       );
       link.click(function() {
-        let [prefix, replacement, postfix] = callback(getSelection(textarea));
-        replaceSelection(textarea, prefix, replacement, postfix);
+        let result = callback(getSelection(textarea));
+        if (result) {
+          let [prefix, replacement, postfix] = result;
+          replaceSelection(textarea, prefix, replacement, postfix);
+        }
       });
       $("<li class=\"button\"></li>").append(link).insertBefore(formatButton);
     };
@@ -264,6 +301,10 @@
     addButton("Image", "picture", (s) => {
       let url = s.length > 0 ? s : prompt("Enter image URL", "");
       return decorator().image(url);
+    });
+
+    addButton("Upload Image", "upload", (s) => {
+      uploadImage(textarea);
     });
 
     addButton("Youtube", "youtube", (s) => {
