@@ -86,6 +86,7 @@ RSpec.configure do |config|
   # Use FactoryGirl shorthand
   config.include FactoryGirl::Syntax::Methods
 
+  config.include Features, type: :feature
   config.include RedisHelper, redis: true
   config.include JsonSpec::Helpers
   config.include LoginMacros, type: :controller
