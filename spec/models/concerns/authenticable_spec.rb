@@ -64,29 +64,29 @@ describe Authenticable do
   end
 
   describe ".find_and_authenticate_with_password" do
-    let(:username) { "user123" }
+    let(:email) { "test@example.com" }
     let(:password) { "password123" }
     let!(:user) do
       create(
         :user,
-        username: "user123",
+        email: "test@example.com",
         password: "password123",
         confirm_password: "password123"
       )
     end
-    subject { User.find_and_authenticate_with_password(username, password) }
+    subject { User.find_and_authenticate_with_password(email, password) }
 
     context "when username and password is correct" do
       it { is_expected.to eq(user) }
     end
 
-    context "when username is wrong" do
-      let(:username) { "user456" }
+    context "when email is wrong" do
+      let(:email) { "wrong@example.com" }
       it { is_expected.to eq(nil) }
     end
 
-    context "when username is blank" do
-      let(:username) { nil }
+    context "when email is blank" do
+      let(:email) { nil }
       it { is_expected.to eq(nil) }
     end
 

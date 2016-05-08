@@ -39,10 +39,10 @@ module Authenticable
       BCrypt::Password.create(password)
     end
 
-    def find_and_authenticate_with_password(username, password)
-      return nil if username.blank?
+    def find_and_authenticate_with_password(email, password)
+      return nil if email.blank?
       return nil if password.blank?
-      user = User.find_by_username(username)
+      user = User.find_by_email(email)
       return unless user && user.valid_password?(password)
       user.hash_password!(password) if user.password_needs_rehash?
       user

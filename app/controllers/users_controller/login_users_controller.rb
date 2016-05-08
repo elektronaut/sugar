@@ -12,13 +12,13 @@ class UsersController < ApplicationController
 
     def authenticate
       @current_user = User.find_and_authenticate_with_password(
-        params[:username],
+        params[:email],
         params[:password]
       )
       if current_user?
         redirect_to discussions_url
       else
-        flash[:notice] ||= "That's not a valid username or password."
+        flash[:notice] ||= "That's not a valid email or password."
         redirect_to login_users_url
       end
     end
