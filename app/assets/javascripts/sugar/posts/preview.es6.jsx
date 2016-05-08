@@ -13,7 +13,7 @@ $(Sugar).bind('ready', function () {
       data: {
         "post[body]": postBody,
         "post[format]": format,
-        authenticity_token: Sugar.authToken("#replyText form")
+        authenticity_token: Sugar.authToken()
       },
 
       success: function (previewPost) {

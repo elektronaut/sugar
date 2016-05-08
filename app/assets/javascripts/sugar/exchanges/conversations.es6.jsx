@@ -34,7 +34,7 @@ $(Sugar).bind('ready', function() {
 
       var data = {
         username:           $inputField.val(),
-        authenticity_token: Sugar.authToken(this)
+        authenticity_token: Sugar.authToken()
       };
 
       $.post(this.action, data, function(response) {

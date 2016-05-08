@@ -13,7 +13,7 @@ $(Sugar).bind('ready', function () {
         data: {
           "post[body]": body,
           "post[format]": format,
-          authenticity_token: Sugar.authToken(this),
+          authenticity_token: Sugar.authToken(),
           format: "json"
         },
 

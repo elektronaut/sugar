@@ -194,7 +194,7 @@
       maxfilesize: 20,
       paramname: "upload[file]",
       url: "/uploads.json",
-      headers: { "X-CSRF-Token": Sugar.authToken($(elem).closest("form")) },
+      headers: { "X-CSRF-Token": Sugar.authToken() },
       uploadStarted: (i, file) => startUpload(elem, file),
       uploadFinished: (i, file, response) => finishUpload(elem, file, response)
     });

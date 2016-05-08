@@ -16,6 +16,7 @@ module LayoutHelper
 
   def frontend_configuration
     {
+      authToken:          form_authenticity_token,
       debug:              (Rails.env == "development"),
       emoticons:          enabled_emoticons,
       facebookAppId:      Sugar.config.facebook_app_id,

@@ -26,11 +26,7 @@ $.extend(window.Sugar, {
     }
   },
 
-  authToken(elem) {
-    if (elem) {
-      return $(elem).find("input[name='authenticity_token']").val();
-    } else {
-      return $("input[name='authenticity_token']").val();
-    }
+  authToken() {
+    return this.Configuration.authToken;
   }
 });
