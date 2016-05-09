@@ -48,7 +48,7 @@ describe AvatarsHelper do
 
     context "when user doesn't have an email set" do
       let(:user) do
-        create(:user, email: nil, username: "foo", facebook_uid: "123")
+        create(:user, username: "foo").tap { |u| u.email = nil }
       end
       let(:digest) { Digest::MD5.hexdigest("#{user.id}@test.host") }
       it do

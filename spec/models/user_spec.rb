@@ -42,17 +42,7 @@ describe User do
   end
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
-
-  describe "validation" do
-    context "when signed up with email" do
-      it { is_expected.to validate_presence_of(:email) }
-    end
-
-    context "when signed up with Facebook" do
-      subject { build(:user, email: nil, facebook_uid: 123) }
-      it { is_expected.not_to validate_presence_of(:email) }
-    end
-  end
+  it { is_expected.to validate_presence_of(:email) }
 
   describe "#name_and_email" do
     subject { user.name_and_email }

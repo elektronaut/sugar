@@ -33,15 +33,11 @@ class User < ActiveRecord::Base
 
   validates :email,
             email: true,
+            presence: true,
             uniqueness: {
               case_sensitive: false,
               message: "is already registered"
-            },
-            if: :email?
-
-  validates :email,
-            presence: { case_sensitive: false },
-            unless: proc { |u| u.facebook? }
+            }
 
   def name_and_email
     realname? ? "#{realname} <#{email}>" : email
