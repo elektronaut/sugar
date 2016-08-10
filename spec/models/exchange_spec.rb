@@ -20,6 +20,9 @@ describe Exchange do
   it { is_expected.to have_many(:posts).dependent(:destroy) }
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
 
+  it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
+  it { is_expected.to have_many(:exchange_moderator_users) }
+
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_length_of(:title).is_at_most(100) }
   it { is_expected.to validate_presence_of(:body) }
@@ -72,6 +75,40 @@ describe Exchange do
     end
   end
 
+  describe "#moderators" do
+    subject { exchange.moderators }
+
+    context "without any moderators" do
+      it { is_expected.to match_array([exchange.poster]) }
+    end
+
+    context "with moderators" do
+      let(:moderator) { create(:user) }
+
+      before do
+        exchange.exchange_moderators.create(user: exchange.poster)
+        exchange.exchange_moderators.create(user: moderator)
+      end
+
+      it { is_expected.to match_array([exchange.poster, moderator]) }
+    end
+  end
+
+  describe "#moderators?" do
+    subject { exchange.moderators? }
+
+    context "without any moderators" do
+      it { is_expected.to eq(false) }
+    end
+
+    context "with moderators" do
+      let!(:moderator) do
+        create(:exchange_moderator, exchange: exchange).user
+      end
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe "#to_param" do
     subject { exchange.to_param }
     it { is_expected.to match(/^[\d]+-This\-is\-my\-Discussion$/) }
@@ -80,9 +117,14 @@ describe Exchange do
   describe "#closeable_by?" do
     specify { expect(exchange.closeable_by?(user)).to eq(false) }
 
+    let(:exchange_moderator) do
+      create(:exchange_moderator, exchange: exchange).user
+    end
+
     context "when not closed" do
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
     end
 
     context "when closed by the poster" do
@@ -93,6 +135,7 @@ describe Exchange do
       end
 
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
       specify { expect(subject.closer).to eq(exchange.poster) }
     end
@@ -103,6 +146,20 @@ describe Exchange do
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
       specify { expect(subject.closer).to eq(moderator) }
+      it "should not be closeable by an exchange moderator" do
+        expect(exchange.closeable_by?(exchange_moderator)).to eq(false)
+      end
+    end
+
+    context "closed by exchange moderator" do
+      subject { exchange }
+      before do
+        exchange.update_attributes(closed: true, updated_by: exchange_moderator)
+      end
+      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(subject.closer).to eq(exchange_moderator) }
     end
   end
 

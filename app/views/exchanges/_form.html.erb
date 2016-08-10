@@ -22,3 +22,13 @@
 <% if @exchange.kind_of?(Discussion) && current_user.trusted? %>
   <%= f.labelled_check_box :trusted %>
 <% end %>
+
+<% if @exchange.moderators? %>
+  <p class="field">
+    <label>
+      Moderators
+    </label>
+    <%= safe_join(@exchange.moderators.map { |u| profile_link(u).html_safe },
+                  ", ") %>
+  </p>
+<% end %>

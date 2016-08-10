@@ -15,21 +15,27 @@ class Exchange < ActiveRecord::Base
 
   attr_accessor :updated_by
 
-  belongs_to :poster, class_name: "User"
-  belongs_to :last_poster, class_name: "User"
+  belongs_to(:poster, class_name: "User")
+  belongs_to(:last_poster, class_name: "User")
 
-  belongs_to :closer, class_name: "User"
+  belongs_to(:closer, class_name: "User")
 
-  has_many :posts,
+  has_many(:posts,
            -> { order "created_at ASC" },
            dependent: :destroy,
-           foreign_key: "exchange_id"
+           foreign_key: "exchange_id")
 
-  has_many :exchange_views,
+  has_many(:exchange_views,
            dependent: :destroy,
-           foreign_key: "exchange_id"
+           foreign_key: "exchange_id")
 
-  has_many :users, through: :posts
+  has_many(:users, through: :posts)
+
+  has_many(:exchange_moderators, dependent: :destroy)
+
+  has_many(:exchange_moderator_users,
+           through: :exchange_moderators,
+           source: :user)
 
   validates :title, presence: true, length: { maximum: 100 }
   validate :validate_closed
@@ -51,17 +57,23 @@ class Exchange < ActiveRecord::Base
     labels
   end
 
+  def moderators
+    ([poster] + exchange_moderator_users).uniq
+  end
+
+  def moderators?
+    exchange_moderators.any?
+  end
+
   def to_param
     humanized_param(title)
   end
 
   def closeable_by?(user)
     return false unless user
-    if user.moderator? || (!closer && poster == user) || closer == user
-      true
-    else
-      false
-    end
+    return true if user.moderator?
+    return false if closer && !moderators.include?(closer)
+    moderators.include?(user)
   end
 
   def unlabel!

@@ -28,3 +28,13 @@
     <%= f.check_box(:sticky) %> Sticky<br />
   <% end %>
 </p>
+
+<% if @exchange.moderators? %>
+  <p>
+    <label>
+      Moderators
+    </label>
+    <%= safe_join(@exchange.moderators.map { |u| profile_link(u).html_safe },
+                  ", ") %>
+  </p>
+<% end %>

@@ -59,7 +59,7 @@ class Conversation < Exchange
   end
 
   def editable_by?(user)
-    user && user == poster
+    user && moderators.include?(user)
   end
 
   def postable_by?(user)

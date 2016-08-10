@@ -3,6 +3,9 @@ require "rails_helper"
 describe Conversation do
   let(:conversation) { create(:conversation) }
   let(:user) { create(:user) }
+  let(:exchange_moderator) do
+    create(:exchange_moderator, exchange: conversation).user
+  end
 
   it do
     is_expected.to have_many(:conversation_relationships).dependent(:destroy)
@@ -130,6 +133,11 @@ describe Conversation do
 
     context "with the poster" do
       subject { conversation.editable_by?(conversation.poster) }
+      it { is_expected.to eq(true) }
+    end
+
+    context "with an exchange moderator" do
+      subject { conversation.editable_by?(exchange_moderator) }
       it { is_expected.to eq(true) }
     end
   end
