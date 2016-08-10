@@ -12,6 +12,9 @@ describe Discussion do
   let(:moderator)          { create(:moderator) }
   let(:user_admin)         { create(:user_admin) }
   let(:admin)              { create(:admin) }
+  let(:exchange_moderator) do
+    create(:exchange_moderator, exchange: discussion).user
+  end
 
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
   it { is_expected.to be_kind_of(Exchange) }
@@ -125,6 +128,7 @@ describe Discussion do
     specify { expect(discussion.editable_by?(discussion.poster)).to eq(true) }
     specify { expect(discussion.editable_by?(user)).to eq(false) }
     specify { expect(discussion.editable_by?(moderator)).to eq(true) }
+    specify { expect(discussion.editable_by?(exchange_moderator)).to eq(true) }
     specify { expect(discussion.editable_by?(admin)).to eq(true) }
     specify { expect(discussion.editable_by?(user_admin)).to eq(false) }
     specify { expect(discussion.editable_by?(nil)).to eq(false) }

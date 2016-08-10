@@ -26,6 +26,7 @@ describe User do
   it { is_expected.to be_kind_of(UserScopes) }
 
   it { is_expected.to belong_to(:avatar).dependent(:destroy) }
+  it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
   it do
     is_expected.to validate_uniqueness_of(:username)

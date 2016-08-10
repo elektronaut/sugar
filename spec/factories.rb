@@ -16,6 +16,11 @@ FactoryGirl.define do
     discussion
   end
 
+  factory :exchange_moderator do
+    association :exchange, factory: :discussion
+    user
+  end
+
   factory :exchange_view do
     user
     exchange

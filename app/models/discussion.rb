@@ -45,7 +45,9 @@ class Discussion < Exchange
   end
 
   def editable_by?(user)
-    (user && (user.moderator? || user == poster)) ? true : false
+    return false unless user
+    return true if user.moderator?
+    moderators.include?(user)
   end
 
   def postable_by?(user)
