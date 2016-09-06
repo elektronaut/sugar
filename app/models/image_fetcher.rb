@@ -51,7 +51,8 @@ class ImageFetcher
       next unless post_image
       [
         element.to_s,
-        element.to_s.gsub(/>$/, " />") # Nokogiri botches self-closing tags
+        element.to_s.gsub(/>$/, "/>"), # Nokogiri botches self-closing tags
+        element.to_s.gsub(/>$/, " />")
       ].each { |pattern| str = str.gsub(pattern, embed_image(post_image)) }
     end
     str
