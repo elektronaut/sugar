@@ -26,8 +26,8 @@ Otherwise:
     $ git clone https://github.com/elektronaut/sugar.git
     $ cd sugar
     $ bundle
-    $ rake db:create
-    $ rake db:migrate
+    $ bin/rake db:create
+    $ bin/rake db:migrate
 
 This assumes you have MySQL running on localhost, with a user named `rails`
 with no password. See [Configuring Sugar](#configuration) if your setup
@@ -35,8 +35,8 @@ differs.
 
 Now you can start Solr and the development server:
 
-    $ sunspot-solr start
-    $ bundle exec rails server
+    $ bin/sunspot-solr start
+    $ bin/rails server
 
 Sugar is now running on [localhost:3000](http://localhost:3000/).
 
