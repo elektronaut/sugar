@@ -63,20 +63,6 @@ function resizeYoutube() {
   });
 };
 
-function parsePost(body) {
-  // Embed Twitter statuses directly when a URL is pasted
-  body = body.replace(
-    /^https?:\/\/(mobile\.)?twitter\.com\/([\w\d_]+)\/status(es)?\/([\d]+)/gm,
-    function (match, mobile, username, statuses, id) {
-      return '<blockquote class="twitter-tweet" lang="en">' +
-             '<a href="https://twitter.com/' + username + '/statuses/' +
-             id + '">https://twitter.com/' + username + '/statuses/' + id +
-             '</a></blockquote>';
-    }
-  );
-  return body;
-};
-
 $(document).ready(function () {
   let updateLayout = function () {
     if ((window.orientation != null)) {
@@ -153,7 +139,6 @@ $(document).ready(function () {
   // Posting
   $('form.new_post').submit(function () {
     let body = $(this).find('#compose-body');
-    body.val(parsePost(body.val()));
     return true;
   });
 

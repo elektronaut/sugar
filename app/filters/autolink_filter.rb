@@ -17,6 +17,8 @@ class AutolinkFilter < Filter
       "<img src=\"#{url}\">"
     elsif url =~ /\.(gifv)$/i
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
+    elsif url =~ /^https?:\/\/(mobile\.)?twitter\.com\/([\w\d_]+)\/status(es)?\/([\d]+)/
+      twitter_embed(url)
     elsif url =~ /(https?:\/\/(www\.)?instagram\.com\/p\/[^\/]+\/)/
       instagram_embed(url)
     else
@@ -24,12 +26,19 @@ class AutolinkFilter < Filter
     end
   end
 
-  def instagram_embed(url)
-    api_url = "https://api.instagram.com/oembed?url=#{url}"
-    response = JSON.parse(HTTParty.get(api_url).body)
+  def oembed(base_url, url)
+    response = JSON.parse(HTTParty.get("#{base_url}?url=#{url}").body)
     response["html"]
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
     url
+  end
+
+  def instagram_embed(url)
+    oembed("https://api.instagram.com/oembed", url)
+  end
+
+  def twitter_embed(url)
+    oembed("https://publish.twitter.com/oembed", url)
   end
 end

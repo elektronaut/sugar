@@ -6,6 +6,10 @@ describe AutolinkFilter do
     File.read(Rails.root.join("spec/support/requests/instagram_embed.json"))
   end
   let(:instagram_json) { JSON.parse(instagram_embed) }
+  let(:twitter_embed) do
+    File.read(Rails.root.join("spec/support/requests/twitter_embed.json"))
+  end
+  let(:twitter_json) { JSON.parse(twitter_embed) }
 
   context "when input contains a URL" do
     let(:input) { "http://example.com/foo?bar=1" }
@@ -58,6 +62,21 @@ describe AutolinkFilter do
 
     it "should convert it to an embed" do
       expect(filter.to_html).to eq(instagram_json["html"])
+    end
+  end
+
+  context "when URL is a Twitter status" do
+    let(:input) { "https://twitter.com/Interior/status/463440424141459456" }
+    before do
+      stub_request(
+        :get,
+        "https://publish.twitter.com/oembed?" \
+        "url=https://twitter.com/Interior/status/463440424141459456"
+      ).to_return(status: 200, body: twitter_embed)
+    end
+
+    it "should convert it to an embed" do
+      expect(filter.to_html).to eq(twitter_json["html"])
     end
   end
 end
