@@ -44,7 +44,6 @@ Sugar.Views.Post = Backbone.View.extend({
     });
     this.applyAmazonReferralCode();
     this.applySpoiler();
-    this.wrapInstagramEmbeds();
     this.embedGifvVideos();
     return this;
   },
@@ -151,13 +150,5 @@ Sugar.Views.Post = Backbone.View.extend({
         }
       });
     }
-  },
-
-  wrapInstagramEmbeds: function () {
-    $(this.el).find("iframe[src*='//instagram.com/']").each(function() {
-      if (!$(this).parent().hasClass("instagram-wrapper")) {
-        $(this).wrap('<div class="instagram-wrapper">');
-      }
-    });
   }
 });

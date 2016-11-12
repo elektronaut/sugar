@@ -63,73 +63,6 @@ function resizeYoutube() {
   });
 };
 
-function wrapInstagramEmbeds() {
-  $(".post .body iframe[src*='//instagram.com/']").each(function () {
-    if (!$(this).parent().hasClass("instagram-wrapper")) {
-      $(this).wrap('<div class="instagram-wrapper">');
-    }
-  });
-};
-
-function getImageSize(img) {
-  if (!img.originalWidth) {
-    if ($(img).attr('width')) {
-      img.originalWidth = parseInt($(img).attr('width'), 10);
-    } else if ($(img).width() > 0) {
-      img.originalWidth = $(img).width();
-    }
-  }
-
-  if (!img.originalHeight) {
-    if ($(img).attr('height')) {
-      img.originalHeight = parseInt($(img).attr('height'), 10);
-    } else if ($(img).height() > 0) {
-      img.originalHeight = $(img).height();
-    }
-  }
-
-  return (
-    img.originalWidth &&
-    img.originalWidth > 0 &&
-    img.originalHeight &&
-    img.originalHeight > 0
-  );
-};
-
-function resizeImage(img) {
-  var maxWidth = $(document).width();
-  if ($(img).parent().width() < maxWidth) {
-    maxWidth = $(img).parent().width();
-  }
-  if (!img.proportions) {
-    img.proportions = img.originalWidth / img.originalHeight;
-  }
-  if (img.originalWidth > maxWidth) {
-    $(img).css({
-      width:  maxWidth + 'px',
-      height: parseInt((maxWidth / img.proportions), 10) + 'px'
-    });
-  }
-};
-
-function resizeImages() {
-  $(".post .body img").each(function () {
-    var img = this;
-    if (getImageSize(img)) {
-      return resizeImage(img);
-    } else {
-      if (!img.resizeInterval) {
-        img.resizeInterval = setInterval(function () {
-          if (getImageSize(img)) {
-            clearInterval(img.resizeInterval);
-            resizeImage(img);
-          }
-        }, 500);
-      }
-    }
-  });
-};
-
 function parsePost(body) {
   // Embed Twitter statuses directly when a URL is pasted
   body = body.replace(
@@ -154,7 +87,6 @@ $(document).ready(function () {
       }
     }
     resizeYoutube();
-    resizeImages();
   };
 
   $(window).bind('orientationchange', updateLayout);
@@ -239,7 +171,6 @@ $(document).ready(function () {
   });
 
   addReferralIds();
-  wrapInstagramEmbeds();
   resizeYoutube();
   Sugar.init();
 });
