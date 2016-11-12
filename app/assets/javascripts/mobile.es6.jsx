@@ -131,15 +131,6 @@ function resizeImages() {
 };
 
 function parsePost(body) {
-  // Embed Instagram photos directly when a share URL is pasted
-  body = body.replace(
-    /\b(https?:\/\/instagram\.com\/p\/[^\/]+\/)/g,
-    function (match, url) {
-      return '<a href="' + url + '">' +
-             '<img width="612" height="612" src="' + url + 'media?size=l">' +
-             '</a>';
-    }
-  );
   // Embed Twitter statuses directly when a URL is pasted
   body = body.replace(
     /^https?:\/\/(mobile\.)?twitter\.com\/([\w\d_]+)\/status(es)?\/([\d]+)/gm,

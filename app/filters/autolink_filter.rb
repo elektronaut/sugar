@@ -17,8 +17,19 @@ class AutolinkFilter < Filter
       "<img src=\"#{url}\">"
     elsif url =~ /\.(gifv)$/i
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
+    elsif url =~ /(https?:\/\/(www\.)?instagram\.com\/p\/[^\/]+\/)/
+      instagram_embed(url)
     else
       "<a href=\"#{url}\">#{url}</a>"
     end
+  end
+
+  def instagram_embed(url)
+    api_url = "https://api.instagram.com/oembed?url=#{url}"
+    response = JSON.parse(HTTParty.get(api_url).body)
+    response["html"]
+  rescue StandardError => e
+    logger.error "Unexpected connection error #{e.inspect}"
+    url
   end
 end

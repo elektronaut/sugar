@@ -2,6 +2,10 @@ require "rails_helper"
 
 describe AutolinkFilter do
   let(:filter) { AutolinkFilter.new(input) }
+  let(:instagram_embed) do
+    File.read(Rails.root.join("spec/support/requests/instagram_embed.json"))
+  end
+  let(:instagram_json) { JSON.parse(instagram_embed) }
 
   context "when input contains a URL" do
     let(:input) { "http://example.com/foo?bar=1" }
@@ -39,6 +43,21 @@ describe AutolinkFilter do
     let(:output) { '<img src="http://i.imgur.com/abcdefg.gif">' }
     it "should embed it as a GIF" do
       expect(filter.to_html).to eq(output)
+    end
+  end
+
+  context "when URL is an Instagram photo" do
+    let(:input) { "https://www.instagram.com/p/8ql-VChPSZ/" }
+    before do
+      stub_request(
+        :get,
+        "https://api.instagram.com/oembed?" \
+        "url=https://www.instagram.com/p/8ql-VChPSZ/"
+      ).to_return(status: 200, body: instagram_embed)
+    end
+
+    it "should convert it to an embed" do
+      expect(filter.to_html).to eq(instagram_json["html"])
     end
   end
 end
