@@ -300,7 +300,7 @@
 
     addButton("Image", "picture", (s) => {
       let url = s.length > 0 ? s : prompt("Enter image URL", "");
-      return decorator().image(url);
+      return !!url ? decorator().image(url) : false;
     });
 
     addButton("Upload Image", "upload", (s) => {
