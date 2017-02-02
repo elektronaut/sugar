@@ -1,6 +1,21 @@
 # encoding: utf-8
 
 namespace :sugar do
+  desc "Scrub private data from the database"
+  task scrub_private_data: :environment do
+    keep_users = ENV["KEEP_USERS"].split(",").map(&:to_i)
+
+    Conversation.delete_all
+    Discussion.where(trusted: true).delete_all
+    Post.where(trusted: true).delete_all
+    Post.where(conversation: true).delete_all
+    PasswordResetToken.delete_all
+
+    User.all.reject { |u| keep_users.include?(u.id) }.each do |u|
+      u.update_columns(hashed_password: "", persistence_token: "")
+    end
+  end
+
   desc "Move napkin drawings to S3"
   task upload_drawings: :environment do
     base_path = Rails.root.join("public/doodles")
