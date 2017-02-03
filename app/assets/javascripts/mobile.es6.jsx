@@ -114,7 +114,7 @@ $(document).ready(function () {
 
     let post = $(this).closest(".post");
     let username = post.find(".post_info .username a").text();
-    let permalink = post.find(".post_info .permalink a")
+    let permalink = post.find(".post_info .permalink")
                         .get()[0]
                         .href
                         .replace(/^https?:\/\/([\w\d\.:\-]*)/, "");

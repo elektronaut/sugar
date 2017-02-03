@@ -34,11 +34,7 @@
           <a name="post-<%= post.id %>" class="anchor"></a>
           <span class="username"><%= profile_link(post.user) %></span>
           <span class="date">
-            <% if permalink %>
-              <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
-                <%= time_tag post.created_at, class: 'relative' %>
-              <% end %>
-            <% else %>
+            <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
               <%= time_tag post.created_at, class: 'relative' %>
             <% end %>
           </span>
