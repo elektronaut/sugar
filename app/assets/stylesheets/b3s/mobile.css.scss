@@ -357,10 +357,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 .posts .post .post_info {
   float: left;
-  color: #555;
-}
-.posts .post .post_info .permalink {
-  display: none;
+  &, .permalink {
+    color: #555;
+  }
 }
 .posts .post .post_info .username {
   font-weight: bold;

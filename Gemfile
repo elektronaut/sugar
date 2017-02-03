@@ -91,6 +91,7 @@ group :test do
 end
 
 group :test, :development do
+  gem "puma"
   gem "dotenv-rails", "~> 0.10.0"
 
   gem "sunspot_solr", "~> 2.1.0"
