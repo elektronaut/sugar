@@ -147,13 +147,25 @@
   let startUpload = (elem, file) =>
     replaceSelection(elem, "", uploadBanner(file) + "\n", "");
 
+  let uploadError = (response) => {
+    if (typeof(response) === "object" && response.error) {
+      alert("There was an error uploading the image: " + response.error);
+    }
+  }
+
   let finishUpload = (elem, file, response) => {
-    $(elem).val(
-      $(elem).val().replace(uploadBanner(file), response.embed)
-    );
+    uploadError(response);
+    if (response.embed) {
+      $(elem).val(
+        $(elem).val().replace(uploadBanner(file) + "\n", response.embed)
+      );
+    }
   };
 
-  let failedUpload = (elem, file) => {
+  let failedUpload = (elem, file, response) => {
+    console.log(typeof(response));
+    console.log(response);
+    uploadError(response);
     $(elem).val($(elem).val().replace(uploadBanner(file), ""));
   }
 
@@ -178,7 +190,7 @@
           processData: false,
           contentType: false,
           success: (json) => finishUpload(textarea, file, json),
-          error: () => failedUpload(textarea, file)
+          error: (r) => failedUpload(textarea, file, r.responseJSON)
         });
         fileInput.remove();
       }
@@ -196,7 +208,8 @@
       url: "/uploads.json",
       headers: { "X-CSRF-Token": Sugar.authToken() },
       uploadStarted: (i, file) => startUpload(elem, file),
-      uploadFinished: (i, file, response) => finishUpload(elem, file, response)
+      uploadFinished: (i, file, response) => finishUpload(elem, file, response),
+      error: (error, file, i, status) => failedUpload(elem, file, error)
     });
   };
 

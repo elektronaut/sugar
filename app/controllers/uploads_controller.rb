@@ -12,6 +12,12 @@ class UploadsController < ApplicationController
       format.json { render json: response }
       format.xml  { render xml: response }
     end
+  rescue MiniMagick::Error
+    upload_error("Unreadable image")
+  rescue DynamicImage::Errors::InvalidHeader
+    upload_error("Invalid headers")
+  rescue DynamicImage::Errors::InvalidImage
+    upload_error("Invalid image")
   end
 
   private
@@ -36,6 +42,14 @@ class UploadsController < ApplicationController
       type: post_image.content_type,
       embed: "[image:#{post_image.id}:#{post_image.content_hash}]"
     }
+  end
+
+  def upload_error(error)
+    response = { error: error }
+    respond_with(response) do |format|
+      format.json { render json: response, status: 500 }
+      format.xml  { render xml: response, status: 500 }
+    end
   end
 
   def upload_params
