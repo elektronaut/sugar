@@ -69,6 +69,10 @@
       <th>Nintendo ID</th>
       <td><%= @user.nintendo %></td>
     </tr><% end %>
+    <% if @user.nintendo_switch? %><tr>
+      <th>Nintendo Switch ID</th>
+      <td><%= @user.nintendo_switch %></td>
+    </tr><% end %>
     <% if @user.steam? %><tr>
       <th>Steam ID</th>
       <td><%= @user.steam %></td>

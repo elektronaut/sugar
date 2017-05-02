@@ -27,7 +27,7 @@ development:
   <<: *defaults
 
 test:
-  <<: *defaults
+  <<: *sqlite
 
 production:
   <<: *defaults

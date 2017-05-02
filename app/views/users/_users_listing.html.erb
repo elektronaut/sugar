@@ -24,6 +24,8 @@
         "PlayStation"
       when :nintendo
         "Nintendo ID"
+      when :nintendo_switch
+        "Nintendo Switch ID"
       when :steam
         "Steam ID"
       when :battlenet
@@ -74,6 +76,8 @@
         link_to(user.sony, "http://us.playstation.com/playstation/psn/visit/profiles/#{user.sony}") if user.sony?
       when :nintendo
         link_to(user.nintendo, "https://miiverse.nintendo.net/users/#{user.nintendo}") if user.nintendo?
+      when :nintendo_switch
+        user.nintendo_switch if user.nintendo_switch?
       when :steam
         link_to(user.steam, "http://steamcommunity.com/id/#{user.steam}") if user.steam?
       when :battlenet

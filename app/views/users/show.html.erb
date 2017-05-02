@@ -137,7 +137,7 @@
     <% end %>
   </p>
 
-  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.steam? || @user.battlenet %>
+  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.nintendo_switch? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
       <% if @user.gamertag? %>
         <strong>Xbox Live:</strong>
@@ -160,6 +160,11 @@
         </a>
         <br />
       <% end %>
+      <% if @user.nintendo_switch? %>
+        <strong>Nintendo Switch ID:</strong>
+        <%= @user.nintendo_switch %>
+        <br />
+      <% end %>
       <% if @user.steam? %>
         <strong>Steam ID:</strong>
         <a href="http://steamcommunity.com/id/<%= @user.steam %>">
@@ -167,7 +172,7 @@
         </a>
         <br />
       <% end %>
-      <% if @user.steam? %>
+      <% if @user.battlenet? %>
         <strong>Battle.net:</strong>
         <%= @user.battlenet %>
         <br />
