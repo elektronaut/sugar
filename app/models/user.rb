@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
       :moderator, :user_admin,
       :location, :gamertag, :twitter, :flickr, :instagram, :website,
       :msn, :gtalk, :last_fm, :facebook_uid, :banned_until,
-      :sony, :nintendo, :steam, :battlenet
+      :sony, :nintendo, :nintendo_switch, :steam, :battlenet
     ]
   end
 

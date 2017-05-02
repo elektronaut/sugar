@@ -15,7 +15,7 @@ describe User do
       inviter_id last_active last_fm latitude location
       longitude moderator msn realname twitter user_admin
       username website active banned
-      sony nintendo steam battlenet)
+      sony nintendo nintendo_switch steam battlenet)
   end
 
   subject { user }

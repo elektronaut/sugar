@@ -62,12 +62,13 @@ describe UserScopes do
     let!(:gamertag) { create(:user, gamertag: "example") }
     let!(:sony) { create(:user, sony: "example") }
     let!(:nintendo) { create(:user, nintendo: "example") }
+    let!(:nintendo_switch) { create(:user, nintendo_switch: "example") }
     let!(:steam) { create(:user, steam: "example") }
     let!(:battlenet) { create(:user, battlenet: 'example#1234') }
 
     it "should be a list of all gaming profiles" do
       expect(User.gaming).to match_array(
-        [gamertag, sony, nintendo, steam, battlenet]
+        [gamertag, sony, nintendo, nintendo_switch, steam, battlenet]
       )
     end
   end
