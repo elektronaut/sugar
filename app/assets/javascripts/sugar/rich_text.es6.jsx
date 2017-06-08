@@ -96,7 +96,7 @@
       }
       return [
         "",
-        "<blockquote><cite>" + cite + "</cite>" + content + "</blockquote>" +
+        "<blockquote><cite>" + cite + "</cite> " + content + "</blockquote>" +
         "\n\n",
         ""
       ];
