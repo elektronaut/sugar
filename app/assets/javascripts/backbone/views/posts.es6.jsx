@@ -11,7 +11,7 @@ Sugar.Views.Posts = Backbone.View.extend({
             var a = window.location.hash;
             window.location.hash = '#';
             window.location.hash = a;
-            twttr.events.unbind('loaded', refocus);console.log('unbound');
+            twttr.events.unbind('loaded', refocus);
           });
         }
       });
