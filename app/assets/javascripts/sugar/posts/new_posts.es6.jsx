@@ -101,6 +101,11 @@ Sugar.loadNewPosts = function() {
       $(".posts #ajaxPosts").append(data);
       var new_posts = $(".posts #ajaxPosts .post:not(.shown)");
 
+      // Update Twitter embeds
+      if (twttr && twttr.widgets) {
+        twttr.widgets.load();
+      }
+
       // Animate in the new posts
       new_posts.hide().slideDown().addClass("shown");
 
