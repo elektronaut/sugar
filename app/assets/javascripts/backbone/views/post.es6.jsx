@@ -94,6 +94,8 @@ Sugar.Views.Post = Backbone.View.extend({
                         ":$1:");
     html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g,
                         ":$1:");
+    html = html.replace(/<twitterwidget.*data-tweet-id="(\d+).*<\/twitterwidget>/g, 'https://twitter.com/statuses/$1');
+    text = text.replace(/<twitterwidget.*data-tweet-id="(\d+).*<\/twitterwidget>/g, 'https://twitter.com/statuses/$1');
 
     $(Sugar).trigger("quote", {
       username: username,
