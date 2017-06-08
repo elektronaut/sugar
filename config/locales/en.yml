@@ -4,19 +4,19 @@
 en:
   activerecord:
     attributes:
+      avatar:
+        file: Avatar
       configuration:
         google_analytics: Tracking code
         amazon_aws_key: Access Key ID
         amazon_aws_secret: Secret Access Key
         amazon_s3_bucket: S3 Bucket
         amazon_associates_id: Tracking ID
-        flickr_api: API key
       exchange:
         body: First post
         nsfw: Not safe for work
       user:
         realname: Real name
-        avatar_url: Avatar URL
         description: Profile text
         moderator: Moderator
         user_admin: User administrator
@@ -27,11 +27,14 @@ en:
         aim: AIM
         gamertag: Xbox Live Gamertag
         sony: PlayStation username
+        nintendo: Nintendo ID
+        nintendo_switch: Nintendo Switch ID
+        steam: Steam ID
+        battlenet: Battle.net BattleTag
         twitter: Twitter username
         flickr: Flickr user ID
         last_fm: Last.fm username
         instagram: Instagram username
-        openid_url: OpenID Identity URL
         email: Email address
         password: Password
         confirm_password: Confirm password
@@ -59,6 +62,7 @@ en:
     users_must_be_invited: Users must be invited
     google_analytics: Google Analytics
     google_analytics_description: Enter to enable tracking
+    emoticons: Emoticons
     facebook: Facebook
     facebook_description: "To enable this feature, set up an %{link} and enter your App ID and secret here."
     facebook_apps_link: application on Facebook
@@ -68,8 +72,6 @@ en:
     amazon_associates: Amazon Associates
     amazon_associates_id_description: Enter to enable referals
     flickr: Flickr
-    flickr_api_description: Enter to enable Flickr integration
-    xbox_live: Xbox Live
     custom_html: Custom HTML
     custom_javascript: Custom Javascript
     custom_header_description: 'Included right after &lt;body&gt;'
@@ -103,6 +105,7 @@ en:
       facebook_connected: You have connected your Facebook account.
       remove?: 'Remove?'
       flickr_description: 'Note: This is not your username'
+      steam_description: 'Note: Not your login; 64-bit integer or custom URL name<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
       account_info: Account info
       settings: Settings
       theme: Theme
@@ -111,8 +114,10 @@ en:
       warning: Warning
       missing_time_zone_link: "You haven't %{link} yet!"
       chosen_a_time_zone: chosen a time zone
+      gaming: Gaming
+      social_media: Social Media
+      messaging: Messaging
     new:
-      openid_description: "<a href=\"http://openid.net/what/\">What's this?"
       optional_fields: "The following fields are optional, but it's always nice to provide a bit more information:"
     sign_up: Sign up
     sign_up_with_facebook: Sign up with Facebook
@@ -121,6 +126,11 @@ en:
     message_description: 'Optional, will appear in the welcoming email'
     send_invite: Send invite
     new_invite: New Invite
+    sent: "Your invite has been sent to %{email}"
+    failed: "There was a problem sending your invite to %{email}, it has been cancelled."
+  flash:
+    changes_saved: Your changes were saved!
+    invalid_record: "Couldn't save your changes, did you fill in all required fields?"
   admin: Admin
   save: Save
   new: New

@@ -3,11 +3,45 @@
   pagination_params ||= {}
 %>
 <div class="pagination">
-  <% if p.total_pages > 1 %><div class="links">
-    <%= link_to_unless (p.current_page == 1),           "First",    {page: 1, anchor: anchor}.merge(pagination_params), class: :first_page_link %>
-    <%= link_to_if p.previous_page,                     "Previous", {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: :prev_page_link %>
-    <%= link_to_if p.next_page,                         "Next",     {page: p.next_page, anchor: anchor}.merge(pagination_params), class: :next_page_link %>
-    <%= link_to_unless (p.current_page == p.total_pages), "Last",   {page: p.total_pages, anchor: anchor}.merge(pagination_params), class: :last_page_link %>
-  </div><% end %>
+  <% if p.total_pages > 1 %>
+    <div class="links">
+      <span class="link">
+        <%= link_to_unless((p.current_page == 1),
+                           "First",
+                           {
+                             page: 1,
+                             anchor: anchor
+                           }.merge(pagination_params),
+                           class: :first_page_link) %>
+      </span>
+      <span class="link">
+        <%= link_to_if(p.previous_page,
+                       "Previous",
+                       {
+                         page: p.previous_page,
+                         anchor: anchor
+                       }.merge(pagination_params),
+                       class: :prev_page_link) %>
+      </span>
+      <span class="link">
+        <%= link_to_if(p.next_page,
+                       "Next",
+                       {
+                         page: p.next_page,
+                         anchor: anchor
+                       }.merge(pagination_params),
+                       class: :next_page_link) %>
+      </span>
+      <span class="link">
+        <%= link_to_unless((p.current_page == p.total_pages),
+                           "Last",
+                           {
+                             page: p.total_pages,
+                             anchor: anchor
+                           }.merge(pagination_params),
+                           class: :last_page_link) %>
+      </span>
+    </div>
+  <% end %>
   Page <%= p.current_page %>/<%= p.total_pages %>
 </div>

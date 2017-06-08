@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class CodeFilter < Filter
-
   def process(post)
     parser = Nokogiri::HTML::DocumentFragment.parse(post)
 
@@ -15,6 +14,10 @@ class CodeFilter < Filter
 
   protected
 
+  def find_lexer(language, code)
+    Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
+  end
+
   def syntax_formatter
     Rouge::Formatters::HTML.new(css_class: "highlight")
   end
@@ -22,7 +25,7 @@ class CodeFilter < Filter
   def syntax_highlight(element, code)
     if element.parent.name == "pre"
       language = element.attributes["class"].try(&:value)
-      lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
+      lexer = find_lexer(language, code)
       element.parent.swap(syntax_formatter.format(lexer.lex(code)))
     end
   end

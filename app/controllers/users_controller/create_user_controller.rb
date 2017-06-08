@@ -24,11 +24,10 @@ class UsersController < ApplicationController
 
       if @user.save
         finalize_successful_signup
-        unless initiate_openid_on_create
-          redirect_to user_profile_url(id: @user.username)
-        end
+        redirect_to user_profile_url(id: @user.username)
       else
-        flash.now[:notice] = "Could not create your account, please fill in all required fields."
+        flash.now[:notice] = "Could not create your account, " \
+                             "please fill in all required fields."
         render action: :new
       end
     end
@@ -40,9 +39,7 @@ class UsersController < ApplicationController
     end
 
     def find_invite
-      if invite_token?
-        @invite = Invite.find_by_token(invite_token)
-      end
+      @invite = Invite.find_by_token(invite_token) if invite_token?
     end
 
     def invite_token
@@ -54,32 +51,29 @@ class UsersController < ApplicationController
     end
 
     def finalize_successful_signup
-      if @user.email?
-        Mailer.new_user(@user, login_users_path(only_path: false)).deliver
-      end
+      Mailer.new_user(@user, login_users_url).deliver_now if @user.email?
       session.delete(:facebook_user_params)
       session.delete(:invite_token)
-      set_current_user(@user)
+      @current_user = @user
     end
 
     def check_for_expired_invite
       if @invite && @invite.expired?
         session.delete(:invite_token)
         flash[:notice] = "Your invite has expired"
-        redirect_to login_users_url and return
+        redirect_to login_users_url
       end
     end
 
     def check_for_signups_allowed
       if !Sugar.config.signups_allowed && User.any? && !@invite
         flash[:notice] = "Signups are not allowed"
-        redirect_to login_users_url and return
+        redirect_to login_users_url
       end
     end
 
     def facebook_user_params
       session[:facebook_user_params] || {}
     end
-
   end
 end

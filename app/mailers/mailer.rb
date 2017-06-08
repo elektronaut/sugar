@@ -1,15 +1,15 @@
 # encoding: utf-8
 
 class Mailer < ActionMailer::Base
-
-  default from: Proc.new { Sugar.config.mail_sender || 'no-reply@example.com' }
+  default from: proc { Sugar.config.mail_sender || "no-reply@example.com" }
 
   def invite(invite, login_url)
     @invite    = invite
     @login_url = login_url
     mail(
       to:      @invite.email,
-      subject: "#{@invite.user.realname_or_username} has invited you to #{Sugar.config.forum_name}!"
+      subject: "#{@invite.user.realname_or_username} has invited you to " \
+        "#{Sugar.config.forum_name}!"
     )
   end
 
@@ -30,4 +30,13 @@ class Mailer < ActionMailer::Base
     )
   end
 
+  def new_post(username, email, url, conversation)
+    @username = username
+    @url = url
+    @conversation = conversation
+    mail(
+      to: email,
+      subject: "New post in conversation at #{Sugar.config.forum_name}!"
+    )
+  end
 end

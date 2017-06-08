@@ -11,7 +11,7 @@
     <div class="links">
 
       <%# Previous page %>
-      <span class"prev_page">
+      <span class="prev_page">
         <% if p.previous_page %>
           <%= link_to({page: p.previous_page, anchor: anchor}.merge(pagination_params), class: 'prev_page_link') do %>
             <i class="icon icon-chevron-left"></i>
@@ -30,7 +30,7 @@
             <% if p.current_page == 1 %>
               1
             <% else %>
-              <%= link_to("1", {page: p.previous_page, anchor: anchor}.merge(pagination_params), class: 'first_page_link') %>
+              <%= link_to("1", {page: 1, anchor: anchor}.merge(pagination_params), class: 'first_page_link') %>
             <% end %>
           </span>
         <% end %>
@@ -69,7 +69,7 @@
       <% end %>
 
       <%# Next page %>
-      <span class"next_page">
+      <span class="next_page">
         <% if p.next_page %>
           <%= link_to({page: p.next_page, anchor: anchor}.merge(pagination_params), class: 'next_page_link') do %>
             Next

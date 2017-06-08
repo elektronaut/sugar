@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.1.0'
+lock '3.4.0'
 
 set :application, 'sugar'
 set :repo_url, 'git@github.com:elektronaut/sugar.git'
@@ -27,7 +27,7 @@ set :log_level, :info
 
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-set :linked_dirs, %w{public/cache log tmp/cache tmp/openid}
+set :linked_dirs, %w{public/cache log tmp/cache db/dis}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

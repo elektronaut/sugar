@@ -1,31 +1,33 @@
-require 'spec_helper'
+require "rails_helper"
 
 describe SimpleFilter do
-
   it "strips surrounding whitespace" do
-    SimpleFilter.new("  \n\n  foo  \n\n  ").to_html.should == "foo"
+    expect(SimpleFilter.new("  \n\n  foo  \n\n  ").to_html).to eq("foo")
   end
 
   it "converts line breaks to <br>" do
-    SimpleFilter.new("foo\n\nbar").to_html.should == "foo<br>\n<br>\nbar"
+    expect(SimpleFilter.new("foo\n\nbar").to_html).to eq("foo<br>\n<br>\nbar")
   end
 
   it "escapes left angle brackets" do
-    SimpleFilter.new("<3").to_html.should == "&lt;3"
+    expect(SimpleFilter.new("<3").to_html).to eq("&lt;3")
   end
 
   it "escapes right angle brackets" do
-    SimpleFilter.new(">:/").to_html.should == "&gt;:/"
+    expect(SimpleFilter.new(">:/").to_html).to eq("&gt;:/")
   end
 
   it "doesn't escape tags" do
-    SimpleFilter.new("<a href=\"#\">link</a>").to_html.should == "<a href=\"#\">link</a>"
+    expect(
+      SimpleFilter.new('<a href="#">link</a>').to_html
+    ).to eq('<a href="#">link</a>')
   end
 
   it "doesn't escape right angle brackets after an empty attribute" do
-    input = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe>\nfoo"
-    output = "<iframe src=\"//www.youtube.com/embed/Sq7XY_QRtzo\" allowfullscreen></iframe><br>\nfoo"
-    SimpleFilter.new(input).to_html.should == output
+    input = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
+            "allowfullscreen></iframe>\nfoo"
+    output = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
+             "allowfullscreen></iframe><br>\nfoo"
+    expect(SimpleFilter.new(input).to_html).to eq(output)
   end
-
 end

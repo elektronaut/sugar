@@ -27,42 +27,47 @@ div.errors {
   background: #fdd;
   padding: 10px 15px 1px 15px;
   margin: 0 -16px 1em -16px;
+  ul {
+    margin: 0;
+    list-style-type: disc;
+    list-style-position: inside;
+  }
 }
-div.errors ul {
-  margin: 0;
-  list-style-type: disc;
-  list-style-position: inside;
-}
+
 
 .field_with_errors {
   display: block;
+  label {
+    margin-top: 12px;
+    color: #100;
+    background: #fdd;
+    padding: 2px 8px;
+    margin-left: -8px;
+    span.description {
+      color: #633;
+    }
+  }
 }
-.field_with_errors label {
-  margin-top: 12px;
-  color: #100;
-  background: #fdd;
-  padding: 2px 8px;
-  margin-left: -8px;
-}
-.field_with_errors label span.description {
-  color: #633;
-}
+
 div.fieldWithErrors {
   display: inline;
 }
+
 fieldset {
   margin-bottom: 20px;
+  h2 {
+    border-bottom: 1px solid #E2DCBF;
+    margin-top: 20px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    color: #444;
+  }
+  p.info {
+    font-size: 1.2em;
+  }
 }
-fieldset h2 {
-  border-bottom: 1px solid #E2DCBF;
-  margin-top: 20px;
-  padding-bottom: 7px;
-  margin-bottom: 7px;
-  color: #444;
-}
-fieldset p.info {
-  font-size: 1.2em;
-}
+
+
 textarea.code {
   width: 100%;
   font-family: Menlo, Monaco, Consolas, Courier New, Courier, monospace;
@@ -83,7 +88,6 @@ span.example {
   font-weight: bold;
 }
 
-/* Pagination links */
 .pagination {
   font-size: 1.3em;
   font-weight: bold;
@@ -94,19 +98,20 @@ span.example {
   .icon {
     font-size: 0.8em;
   }
-}
-.pagination .links {
-  float: right;
+  .links {
+    float: right;
+  }
 }
 
 .content {
   font-size: 1.3em;
-}
-.content a {
-  text-decoration: underline;
+  a {
+    text-decoration: underline;
+  }
 }
 
-#button-container.posting, #napkin-submit.posting {
+#button-container.posting,
+#napkin-submit.posting {
   background: transparent image-url('default/ajax_spinner_small.gif') 0 2px no-repeat;
   padding: 2px 24px;
 }
@@ -117,11 +122,13 @@ span.example {
    ----------------------------------------------------------------------- */
 
 /* Top heading/breadcrumbs with line */
-h2.section, #sidebar h2 {
+h2.section,
+#sidebar h2 {
   padding-bottom: 7px;
   border-bottom: 1px solid #E2DCBF;
   width: 100%;
 }
+
 #sidebar h2 {
   color: #6f5a43;
   margin-bottom: 10px;
@@ -142,11 +149,10 @@ h2.section, #sidebar h2 {
   min-width: 600px;
   font-size: 1.2em;
   padding-bottom: 30px;
+  td, th {
+    padding-right: 20px;
+  }
 }
-#content td, #content th {
-  padding-right: 20px;
-}
-
 
 
 /* -----------------------------------------------------------------------
@@ -156,7 +162,6 @@ h2.section, #sidebar h2 {
 body.with_sidebar #content {
   margin-right: 230px;
 }
-
 
 
 /* -----------------------------------------------------------------------
@@ -172,46 +177,50 @@ body.with_sidebar #content {
   font-size: 1.2em;
 }
 
-#new_discussion .title_search {
-  border: 1px solid #E2DCBF;
-  padding: 2px 8px;
-  width: 100%;
-  max-width: 588px;
-  margin-top: 2px;
-}
-#new_discussion .title_search.loading {
-  background: transparent image-url('default/ajax_spinner_small.gif') 0 2px no-repeat;
-  padding: 2px 24px;
-  border: 0;
-  color: #84806d;
-}
-#new_discussion .title_search h4 {
-  margin-bottom: 0;
-  padding: 8px 0;
-  font-size: 1.2em;
-  color: #84806d;
-}
-#new_discussion .title_search a, #new_discussion .title_search a:visited {
-  border-top: 1px solid #E2DCBF;
-  padding: 4px 0;
-  font-size: 1.2em;
-  display: block;
-}
-#new_discussion .title_search a.discussion {
-  font-weight: bold;
-}
-#new_discussion .title_search a.discussion .posts_count {
-  font-weight: normal;
-  font-size: 0.8em;
-  padding-left: 4px;
-  color: #84806d;
-}
+#new_discussion {
+  .title_search {
+    border: 1px solid #E2DCBF;
+    padding: 2px 8px;
+    width: 100%;
+    max-width: 588px;
+    margin-top: 2px;
+    &.loading {
+      background: transparent image-url('default/ajax_spinner_small.gif') 0 2px no-repeat;
+      padding: 2px 24px;
+      border: 0;
+      color: #84806d;
+    }
 
+    h4 {
+      margin-bottom: 0;
+      padding: 8px 0;
+      font-size: 1.2em;
+      color: #84806d;
+    }
+
+    a,
+    a:visited {
+      border-top: 1px solid #E2DCBF;
+      padding: 4px 0;
+      font-size: 1.2em;
+      display: block;
+    }
+
+    a.discussion {
+      font-weight: bold;
+      .posts_count {
+        font-weight: normal;
+        font-size: 0.8em;
+        padding-left: 4px;
+        color: #84806d;
+      }
+    }
+  }
+}
 
 .userinfo {
   margin-bottom: 1em;
 }
-
 
 .bottomlinks {
   font-size: 1.3em;
@@ -219,9 +228,6 @@ body.with_sidebar #content {
   border-top: 1px solid #E2DCBF;
   padding: 5px 0;
 }
-
-
-
 
 
 /* -----------------------------------------------------------------------
@@ -234,48 +240,22 @@ body.with_sidebar #content {
   max-width: 600px;
   font-size: 1.1em;
   color: #444;
+  strong {
+    color: #000;
+  }
 }
-.search_tips strong {
-  color: #000;
-}
+
+
 
 /* -----------------------------------------------------------------------
    INVITES SECTION
    ----------------------------------------------------------------------- */
 
-.invites_list .email {
-  font-weight: bold;
+.invites_list {
+  .email {
+    font-weight: bold;
+  }
+  .actions {
+    width: 50%;
+  }
 }
-.invites_list .actions {
-  width: 50%;
-}
-
-
-/* -----------------------------------------------------------------------
-   LOGIN
-   ----------------------------------------------------------------------- */
-
-body.login #login {
-  font-size: 1.2em;
-}
-
-body.login #login input[type=text], body.login #login input[type=password] {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  width: 250px;
-}
-
-body.login #login a {
-  padding-left: 5px;
-  text-decoration: underline;
-}
-
-body.login #login .facebook {
-  margin-top: 20px;
-}
-
-body.login #login .facebook a {
-  padding-left: 1px;
-  text-decoration: none;
-}
-

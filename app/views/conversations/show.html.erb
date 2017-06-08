@@ -1,13 +1,17 @@
 <%
   add_body_class "discussion", "conversation", "discussion_by_user#{@exchange.poster_id}"
   add_body_class 'last_page' if @posts.last_page?
-  @page_title = h(@exchange.title)
+  @page_title = @exchange.title
   previous_post = nil
 -%>
 
 <%= content_for :sidebar do %>
   <div class="participants">
-    <%= render partial: "conversations/participants", locals: {participants: @exchange.participants} %>
+    <%= render(partial: "conversations/participants",
+               locals: {
+                 exchange: @exchange,
+                 participants: @exchange.participants
+               }) %>
   </div>
   <div class="invite">
     <h2>Invite someone</h2>
@@ -24,17 +28,26 @@
   <% if current_user? %>
     <% if @exchange.editable_by?(current_user) -%>
       <%= link_to "Edit", [:edit, @exchange], class: :edit %>
+      /
     <% end -%>
-    <% if @exchange.editable_by?(current_user) && @exchange.removeable?(current_user) %>
+    <% if @exchange.removeable?(current_user) %>
+      <%= link_to("Remove conversation",
+                  remove_participant_conversation_path(
+                    @exchange,
+                    username: current_user.username
+                  ),
+                  method: :delete,
+                  data: {
+                    confirm: "Are you sure? You'll have to ask one of the " \
+                    "other participants to invite you back if you regret it."
+                  }) %>
       /
     <% end %>
-    <% if @exchange.removeable?(current_user) %>
-      <%= link_to 'Remove conversation',
-          [:remove_participant, @exchange],
-          method: :delete,
-          confirm: "Are you sure? You'll have to ask one of the other participants to invite you back if you regret it."
-      %>
-    <% end %>
+    <% if current_user.muted_conversation?(@exchange) -%>
+      <%= link_to "Unmute", unmute_conversation_path(@exchange, page: @posts.current_page) %>
+    <% else -%>
+      <%= link_to "Mute", mute_conversation_path(@exchange, page: @posts.current_page) %>
+    <% end -%>
   <% end %>
 </div>
 

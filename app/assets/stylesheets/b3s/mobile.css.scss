@@ -1,6 +1,20 @@
 //= require default/reset
 //= require default/components/spoilers
 
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+
 a, a:visited {
   text-decoration: none;
   color: #763047;
@@ -170,15 +184,6 @@ body[orient="landscape"] #navigation .search .query {
   width: 265px;
   margin-bottom: 5px;
 }
-input#openid_url, input#user_openid_url {
-  background: #fff image-url('b3s/mobile/login_openid.gif') no-repeat 3px 4px;
-  padding-left: 20px;
-  width: 252px;
-}
-
-.login_box input#openid_url {
-
-}
 
 .login_box label {
   font-weight: normal;
@@ -200,7 +205,7 @@ body[orient="landscape"] #login-functions .separator {
 }
 
 input, textarea {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 
@@ -217,13 +222,13 @@ label {
 
 .content {
   background: #fff image-url('b3s/mobile/contentbg.gif') repeat-x;
-  padding: 25px 0 10px 0;
+  padding-bottom: 10px;
   min-height: 285px;
     -webkit-user-select: auto;
 }
 
 .page_content {
-  padding: 0 15px;
+  padding: 25px 15px 0px 15px;
 }
 .page_content textarea {
   width: 275px;
@@ -235,7 +240,7 @@ body[orient="landscape"] .page_content textarea {
 
 
 .pagination {
-  padding: 5px 10px;
+  padding: 15px 10px;
   color: #888;
   border-bottom: 1px solid #ddd;
   background: #f8f8f8;
@@ -243,13 +248,11 @@ body[orient="landscape"] .page_content textarea {
 .pagination .links {
   float: right;
   font-weight: bold;
-  word-spacing: 5px;
+  .link {
+    margin-left: 5px;
+  }
 }
 
-
-.discussions, .conversations {
-  margin-top: -25px;
-}
 .discussion, .conversation {
   padding: 8px 10px 5px 10px;
   border-bottom: 1px solid #ddd;
@@ -318,10 +321,6 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   font-size: 10px;
 }
 
-.posts {
-  margin-top: -20px;
-}
-
 .posts .discussion {
   background: #eee;
 }
@@ -358,10 +357,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 .posts .post .post_info {
   float: left;
-  color: #555;
-}
-.posts .post .post_info .permalink {
-  display: none;
+  &, .permalink {
+    color: #555;
+  }
 }
 .posts .post .post_info .username {
   font-weight: bold;
@@ -381,10 +379,14 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 
 .posts .post .body {
-  max-width: 700px;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   clear: both;
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .post .body h1,
@@ -429,7 +431,15 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   font-size: 1.1em;
 }
 .post .body ul, .post .body ol {
-  margin-left: 25px;
+  &,
+  &:before,
+  &:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  padding-left: 25px;
+  max-width: 100% !important;
 }
 .post .body ul {
   list-style-type: disc;
@@ -474,28 +484,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   width: 100%;
 }
 
-.post .body .instagram-wrapper {
-  width: 100%;
-  padding-top: 98px;
-  padding-bottom: 100%;
-  max-width: 612px;
-  min-width: 300px;
-  position: relative;
-}
-.post .body .instagram-wrapper iframe {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-}
-
 .posts .post .body a, .posts .post .body a:visited {
   color: #364077;
   text-decoration: underline;
-}
-
-.user_profile {
-  margin-top: -10px;
 }
 
 table.userinfo {
@@ -512,6 +503,11 @@ table.userinfo th {
   padding-right: 15px;
 }
 
+
+.avatar-image {
+  width: 48px;
+  height: 48px;
+}
 .avatar {
   margin-left: 60px;
   margin-bottom: 10px;
@@ -526,7 +522,6 @@ table.userinfo th {
 }
 
 .users_list {
-  margin-top: -20px;
   width: 100%;
 }
 .users_list th {
@@ -601,58 +596,68 @@ textarea.rich {
   box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
   -webkit-appearance: none;
 }
-.richTextToolbar {
+.richTextToolbar,
+.emojiBar {
   position: relative;
+  display: block;
   list-style: none;
   border: 1px solid #d7d7d7;
   border-bottom: 0px;
   background-color: #fafafa;
   margin: 0;
-  padding: 0px 2px;
-  height: 30px;
+  padding: 0px 2px 0px 0px;
+  line-height: 30px;
   margin-bottom: 0px;
   width: 98%;
   max-width: 650px;
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .formatting {
+    float: right;
+  }
+  .button {
+    float: left;
+  }
+  .button a,
+  .formatting a {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+  }
+  .button a {
+    width: 26px;
+    float: left;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #d7d7d7;
+    color: #555;
+    font-size: 12px;
+    background-color: #F6F6F6;
+  }
+  .formatting a {
+    font-size: 11px;
+    float: right;
+    width: 60px;
+    text-align: center;
+  }
+  .button span {
+    display: none;
+  }
 }
-.richTextToolbar li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.richTextToolbar .formatting {
-  float: right;
-}
-.richTextToolbar .button {
-  float: left;
-}
-.richTextToolbar .button:first-child {
-  margin-left: -2px;
-}
-.richTextToolbar .button a,
-.richTextToolbar .formatting a {
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  display: block;
-  cursor: pointer;
-}
-.richTextToolbar .button a {
-  width: 26px;
-  float: left;
-  border-left: 1px solid #fff;
-  border-right: 1px solid #d7d7d7;
-  color: #555;
-  font-size: 12px;
-  background-color: #F6F6F6;
-}
-.richTextToolbar .formatting a {
-  font-size: 11px;
-  float: right;
-  width: 60px;
-  text-align: center;
-}
-.richTextToolbar .button span {
-  display: none;
+.emojiBar {
+  .button a {
+    background-color: transparent;
+    line-height: 25px;
+    border: 0px;
+    width: 28px;
+    img {
+      vertical-align: middle;
+    }
+  }
 }
 
 /* Retina display overrides */

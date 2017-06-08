@@ -2,11 +2,10 @@ module Paginatable
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     module Inheritance
       def inherited(subclass)
         super
-        subclass.per_page = self.per_page
+        subclass.per_page = per_page
       end
     end
 
@@ -21,17 +20,14 @@ module Paginatable
       base.extend Inheritance if base.is_a?(Class)
     end
 
-    def page(page=nil, options={})
-      scope = all.extend(WithContext)
-      scope.context = page.to_i > 1 ? options[:context].to_i : 0
+    def page(page = nil, options = {})
+      scope = scope_with_context(page.to_i > 1 ? options[:context].to_i : 0)
       scope
         .limit(pagination_limit + scope.context)
         .offset(pagination_offset(page.to_i) - scope.context)
     end
 
-    def context
-      all.context
-    end
+    delegate :context, to: :all
 
     def context?
       context != 0
@@ -42,7 +38,10 @@ module Paginatable
     end
 
     def current_page
-      [(((all.offset_value || 0) + context) / (pagination_limit - context)) + 1, total_pages].min
+      [
+        ((all.offset_value || 0) + context) / (pagination_limit - context) + 1,
+        total_pages
+      ].min
     end
 
     def first_page
@@ -62,19 +61,11 @@ module Paginatable
     end
 
     def previous_page
-      if current_page > 1
-        current_page - 1
-      else
-        nil
-      end
+      current_page - 1 if current_page > 1
     end
 
     def next_page
-      if current_page < total_pages
-        current_page + 1
-      else
-        nil
-      end
+      current_page + 1 if current_page < total_pages
     end
 
     def total_count
@@ -96,14 +87,16 @@ module Paginatable
       if all.limit_value
         all.limit_value
       else
-        self.per_page
+        per_page
       end
     end
 
-    def pagination_offset(page=1)
+    def pagination_offset(page = 1)
       [(pagination_limit * (page - 1)), 0].max
     end
 
+    def scope_with_context(context)
+      all.extend(WithContext).tap { |s| s.context = context }
+    end
   end
-
 end

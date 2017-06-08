@@ -1,0 +1,23 @@
+body.login #login {
+  font-size: 1.2em;
+
+  input[type=text],
+  input[type=password] {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    width: 250px;
+  }
+
+  a {
+    padding-left: 5px;
+    text-decoration: underline;
+  }
+
+  .facebook {
+    margin-top: 20px;
+    a {
+      padding-left: 1px;
+      text-decoration: none;
+    }
+  }
+}

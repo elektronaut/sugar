@@ -1,7 +1,8 @@
-require 'spec_helper'
+# encoding: utf-8
+
+require "rails_helper"
 
 describe UsersController, redis: true do
-
   let(:invite) { create(:invite) }
 
   describe "#new" do
@@ -10,11 +11,11 @@ describe UsersController, redis: true do
         configure signups_allowed: false
         get :new, token: invite.token
       end
-      it { should respond_with(:success) }
-      it { should render_template(:new) }
-      specify { assigns(:invite).should be_a(Invite) }
-      specify { assigns(:user).should be_a(User) }
-      specify { assigns(:user).email.should == invite.email }
+      it { is_expected.to respond_with(:success) }
+      it { is_expected.to render_template(:new) }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
+      specify { expect(assigns(:user)).to be_a(User) }
+      specify { expect(assigns(:user).email).to eq(invite.email) }
     end
 
     context "without a valid invite token" do
@@ -23,29 +24,32 @@ describe UsersController, redis: true do
         configure signups_allowed: false
         get :new
       end
-      specify { flash[:notice].should match("Signups are not allowed") }
-      it { should redirect_to(login_users_url) }
+      specify { expect(flash[:notice]).to match("Signups are not allowed") }
+      it { is_expected.to redirect_to(login_users_url) }
     end
   end
 
   describe "#create" do
-    let(:params) {
+    let(:params) do
       attributes = attributes_for(:user)
       {
         username:         attributes[:username],
         email:            attributes[:email],
-        password:         'randompassword',
-        confirm_password: 'randompassword',
+        password:         "randompassword",
+        confirm_password: "randompassword",
         realname:         attributes[:realname]
       }
-    }
+    end
 
-    context 'with a valid invite token' do
+    context "with a valid invite token" do
       before { post :create, token: invite.token, user: params }
-
-      specify { assigns(:invite).should be_a(Invite) }
-      specify { assigns(:user).should be_a(User) }
-      it { should redirect_to(user_profile_url(id: assigns(:user).username)) }
+      specify { expect(assigns(:invite)).to be_a(Invite) }
+      specify { expect(assigns(:user)).to be_a(User) }
+      it "should redirect " do
+        is_expected.to redirect_to(
+          user_profile_url(id: assigns(:user).username)
+        )
+      end
     end
   end
 end

@@ -9,9 +9,7 @@ class Admin::ConfigurationsController < AdminController
   end
 
   def update
-    if configuration_params
-      @configuration.update(configuration_params)
-    end
+    @configuration.update(configuration_params) if configuration_params
     redirect_to edit_admin_configuration_url
   end
 

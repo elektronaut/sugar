@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
   respond_to :json
   before_action :find_user, only: [:show]
 
@@ -26,7 +26,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def find_user
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: "not-found" }.to_json, status: 404 and return
+    render json: { error: "not-found" }.to_json, status: 404
+    return
   end
-
 end

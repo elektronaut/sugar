@@ -1,9 +1,8 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "rails_helper"
 
 describe Inviter do
-
   # Create the first admin user
   before { create(:admin) }
 
@@ -11,98 +10,103 @@ describe Inviter do
 
   subject { user }
 
-  it { should belong_to(:inviter).class_name('User') }
-  it { should have_many(:invitees).class_name('User') }
-  it { should have_many(:invites).dependent(:destroy) }
+  it { is_expected.to belong_to(:inviter).class_name("User") }
+  it { is_expected.to have_many(:invitees).class_name("User") }
+  it { is_expected.to have_many(:invites).dependent(:destroy) }
 
   describe "active scope on invites" do
     it "returns only the user's active invites" do
       active_invite = create(:invite, user: user)
-      expired_invite = create(:invite, user: user, expires_at: 2.days.ago)
-      other_invite = create(:invite)
-      user.invites.active.should == [active_invite]
+      create(:invite, user: user, expires_at: 2.days.ago)
+      create(:invite)
+      expect(user.invites.active).to match_array([active_invite])
     end
   end
 
   describe "#invites?" do
-
     subject { user.invites? }
 
     context "when user has no invites" do
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "when user has invites" do
       before { create(:invite, user: user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
-
   end
 
   describe "#invitees?" do
-
     subject { user.invitees? }
 
     context "when user has no invitees" do
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
-
   end
 
   describe "#invites_or_invitees?" do
-
     subject { user.invites_or_invitees? }
 
     context "when user has none" do
-      it { should be_false }
+      it { is_expected.to eq(false) }
     end
 
     context "when user has invites" do
       before { create(:invite, user: user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
-      it { should be_true }
+      it { is_expected.to eq(true) }
     end
-
   end
 
   describe "#available_invites?" do
-    specify { create(:user).available_invites?.should be_false }
-    specify { create(:user_admin).available_invites?.should be_true }
-    specify { create(:user, available_invites: 2).available_invites?.should be_true }
+    specify { expect(create(:user).available_invites?).to eq(false) }
+    specify { expect(create(:user_admin).available_invites?).to eq(true) }
+    specify do
+      expect(create(:user, available_invites: 2).available_invites?).to eq(true)
+    end
   end
 
   describe "#available_invites" do
-    specify { create(:user).available_invites.should == 0 }
-    specify { create(:user, available_invites: 2).available_invites.should == 2 }
-    specify { create(:user_admin).available_invites.should == 1 }
-    specify { create(:user_admin, available_invites: 99).available_invites.should == 1 }
+    specify do
+      expect(create(:user).available_invites).to eq(0)
+    end
+    specify do
+      expect(create(:user, available_invites: 2).available_invites).to eq(2)
+    end
+    specify do
+      expect(create(:user_admin).available_invites).to eq(1)
+    end
+    specify do
+      expect(
+        create(:user_admin, available_invites: 99).available_invites
+      ).to eq(1)
+    end
   end
 
   describe "#revoke_invite!" do
-
     subject { user.revoke_invite! }
 
     context "when user is user admin" do
       let(:user) { create(:user_admin) }
       it "does not revoke any invites" do
         user.revoke_invite!(:all)
-        user.available_invites?.should be_true
+        expect(user.available_invites?).to eq(true)
       end
     end
 
     context "when user has no invites" do
       it "does not revoke any invites" do
         user.revoke_invite!
-        user.available_invites.should == 0
+        expect(user.available_invites).to eq(0)
       end
     end
 
@@ -110,52 +114,45 @@ describe Inviter do
       let(:user) { create(:user, available_invites: 3) }
       it "revokes one invite" do
         user.revoke_invite!
-        user.available_invites.should == 2
+        expect(user.available_invites).to eq(2)
       end
 
       describe "revoking two invites" do
         it "revokes one invite" do
           user.revoke_invite!(2)
-          user.available_invites.should == 1
+          expect(user.available_invites).to eq(1)
         end
       end
 
       describe "revoking all invites" do
         it "revokes one invite" do
           user.revoke_invite!(:all)
-          user.available_invites.should == 0
+          expect(user.available_invites).to eq(0)
         end
       end
-
     end
-
   end
 
   describe "#grant_invite!" do
-
     let(:user) { create(:user, available_invites: 1) }
 
     it "grants an invite to the user" do
       user.grant_invite!
-      user.available_invites.should == 2
+      expect(user.available_invites).to eq(2)
     end
 
     it "grants an invite to the user" do
       user.grant_invite!(2)
-      user.available_invites.should == 3
+      expect(user.available_invites).to eq(3)
     end
 
     context "when user is user admin" do
-
       let(:user) { create(:user_admin, available_invites: 10) }
 
       it "does not grant any invites" do
         user.grant_invite!(10)
-        user.available_invites.should == 1
+        expect(user.available_invites).to eq(1)
       end
-
     end
-
   end
-
 end

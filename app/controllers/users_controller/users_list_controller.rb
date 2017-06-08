@@ -3,16 +3,16 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     def index
-      @users = User.active
+      @users = User.active.by_username
       respond_with(@users) do |format|
-        format.mobile {
-          @online_users = @users.select{|u| u.online?}
-        }
+        format.mobile do
+          @online_users = @users.select(&:online?)
+        end
       end
     end
 
     def banned
-      @users  = User.banned.by_username
+      @users = User.banned.by_username
       respond_with(@users)
     end
 
@@ -27,22 +27,17 @@ class UsersController < ApplicationController
     end
 
     def admins
-      @users  = User.admins.by_username
-      respond_with(@users)
-    end
-
-    def xboxlive
-      @users = User.xbox_users.by_username
-      respond_with(@users)
-    end
-
-    def sony
-      @users = User.sony_users.by_username
+      @users = User.admins.by_username
       respond_with(@users)
     end
 
     def social
       @users = User.social.by_username
+      respond_with(@users)
+    end
+
+    def gaming
+      @users = User.gaming.by_username
       respond_with(@users)
     end
 
@@ -61,6 +56,5 @@ class UsersController < ApplicationController
       @users = User.trusted.by_username
       respond_with(@users)
     end
-
   end
 end

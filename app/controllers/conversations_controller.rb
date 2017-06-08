@@ -10,6 +10,7 @@ class ConversationsController < ApplicationController
   before_action :verify_editable, only: [:edit, :update, :destroy]
   before_action :find_recipient, only: [:create]
   before_action :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :find_remove_user, only: [:remove_participant]
 
   def index
     @exchanges = current_user.conversations.page(params[:page]).for_view
@@ -33,7 +34,8 @@ class ConversationsController < ApplicationController
       @exchange.add_participant(@recipient) if @recipient
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your conversation! Please make sure all required fields are filled in."
+      flash.now[:notice] = "Could not save your conversation! " \
+                           "Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
   end
@@ -48,38 +50,60 @@ class ConversationsController < ApplicationController
 
   def invite_participant
     if params[:username]
-      usernames = params[:username].split(/\s*,\s*/)
-      usernames.each do |username|
-        if user = User.find_by_username(username)
-          @exchange.add_participant(user)
-        end
-      end
+      add_participants(@exchange, params[:username].split(/\s*,\s*/))
     end
     if request.xhr?
-      render template: 'conversations/participants', layout: false
+      render template: "conversations/participants", layout: false
     else
       redirect_to @exchange
     end
   end
 
   def remove_participant
-    @exchange.remove_participant(current_user)
-    flash[:notice] = 'You have been removed from the conversation'
-    redirect_to conversations_url and return
+    @exchange.remove_participant(@user)
+
+    if @user == current_user
+      flash[:notice] = "You have been removed from the conversation"
+      redirect_to conversations_url
+    else
+      flash[:notice] = "#{@user.username} has been removed from " \
+        "the conversation"
+      redirect_to @exchange
+    end
+  end
+
+  def mute
+    current_user
+      .conversation_relationships.where(conversation: @exchange)
+      .update_all(notifications: false)
+    redirect_to conversation_url(@exchange, page: params[:page])
+  end
+
+  def unmute
+    current_user
+      .conversation_relationships.where(conversation: @exchange)
+      .update_all(notifications: true)
+    redirect_to conversation_url(@exchange, page: params[:page])
   end
 
   private
 
+  def add_participants(exchange, usernames)
+    usernames.each do |username|
+      user = User.find_by_username(username)
+      exchange.add_participant(user) if user
+    end
+  end
+
   def exchange_params
-    params.require(:conversation).permit(:recipient_id, :title, :body, :format, :recipient_id)
+    params.require(:conversation).permit(
+      :recipient_id, :title, :body, :format, :recipient_id
+    )
   end
 
   def find_exchange
     @exchange = Conversation.find(params[:id])
-
-    unless @exchange.viewable_by?(current_user)
-      render_error 403 and return
-    end
+    render_error 403 unless @exchange.viewable_by?(current_user)
   end
 
   def find_recipient
@@ -92,4 +116,10 @@ class ConversationsController < ApplicationController
     end
   end
 
+  def find_remove_user
+    @user = User.find_by_username(params[:username])
+    return if @exchange.removeable_by?(@user, current_user)
+    flash[:error] = "You can't do that!"
+    redirect_to @exchange
+  end
 end

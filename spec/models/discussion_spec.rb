@@ -1,7 +1,6 @@
-require 'spec_helper'
+require "rails_helper"
 
 describe Discussion do
-
   # Create the first admin user
   before { create(:user) }
 
@@ -13,18 +12,21 @@ describe Discussion do
   let(:moderator)          { create(:moderator) }
   let(:user_admin)         { create(:user_admin) }
   let(:admin)              { create(:admin) }
+  let(:exchange_moderator) do
+    create(:exchange_moderator, exchange: discussion).user
+  end
 
-  it { should have_many(:discussion_relationships).dependent(:destroy) }
-  it { should be_kind_of(Exchange) }
+  it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
+  it { is_expected.to be_kind_of(Exchange) }
 
-  describe 'save callbacks' do
+  describe "save callbacks" do
     it "changes the trusted status on discussions" do
       create(:post, exchange: discussion)
-      discussion.posts.first.trusted?.should == false
+      expect(discussion.posts.first.trusted?).to eq(false)
       discussion.update(trusted: true)
-      discussion.posts.first.trusted?.should == true
+      expect(discussion.posts.first.trusted?).to eq(true)
       discussion.update(trusted: false)
-      discussion.posts.first.trusted?.should == false
+      expect(discussion.posts.first.trusted?).to eq(false)
     end
   end
 
@@ -44,7 +46,7 @@ describe Discussion do
 
     context "within the last 3 days" do
       subject { Discussion.popular_in_the_last(3.days) }
-      it { should == [discussion2] }
+      it { is_expected.to eq([discussion2]) }
     end
 
     context "within the last 7 days" do
@@ -54,12 +56,12 @@ describe Discussion do
       end
 
       subject { Discussion.popular_in_the_last(7.days) }
-      it { should == [discussion2, discussion1] }
+      it { is_expected.to eq([discussion2, discussion1]) }
     end
 
     context "within the last 14 days" do
       subject { Discussion.popular_in_the_last(14.days) }
-      it { should == [discussion1, discussion2] }
+      it { is_expected.to eq([discussion1, discussion2]) }
     end
   end
 
@@ -67,75 +69,88 @@ describe Discussion do
     let!(:post) { create(:post, exchange: discussion) }
     let(:conversation) { Conversation.find(discussion.id) }
     before { discussion.convert_to_conversation! }
-    specify { discussion.type.should == "Conversation" }
-    specify { post.reload.conversation?.should be_true }
-    specify { DiscussionRelationship.where(discussion_id: discussion.id).count.should == 0 }
-    specify { ConversationRelationship.where(conversation_id: discussion.id).count.should == 2 }
-    specify { conversation.participants.should =~ [discussion.poster, post.user] }
+    specify { expect(discussion.type).to eq("Conversation") }
+    specify { expect(post.reload.conversation?).to eq(true) }
+
+    specify do
+      expect(
+        DiscussionRelationship.where(discussion_id: discussion.id).count
+      ).to eq(0)
+    end
+
+    specify do
+      expect(
+        ConversationRelationship.where(conversation_id: discussion.id).count
+      ).to eq(2)
+    end
+
+    specify do
+      expect(
+        conversation.participants
+      ).to match_array([discussion.poster, post.user])
+    end
   end
 
   describe "#participants" do
     let!(:post) { create(:post, exchange: discussion) }
     subject { discussion.participants }
-    it { should =~ [discussion.poster, post.user] }
+    it { is_expected.to match_array([discussion.poster, post.user]) }
   end
 
   describe "#viewable_by?" do
-
     context "when discussion is trusted" do
-
       context "with a regular user" do
         subject { trusted_discussion.viewable_by?(user) }
-        it { should be_false }
+        it { is_expected.to eq(false) }
       end
 
       context "with a trusted user" do
         subject { trusted_discussion.viewable_by?(trusted_user) }
-        it { should be_true }
+        it { is_expected.to eq(true) }
       end
-
     end
 
     context "when discussion isn't trusted" do
-
       context "when public browsing is on" do
         before { Sugar.config.public_browsing = true }
-        specify { discussion.viewable_by?(nil).should be_true }
+        specify { expect(discussion.viewable_by?(nil)).to eq(true) }
       end
 
       context "when public browsing is off" do
         before { Sugar.config.public_browsing = false }
-        specify { discussion.viewable_by?(nil).should be_false }
-        specify { discussion.viewable_by?(user).should be_true }
+        specify { expect(discussion.viewable_by?(nil)).to eq(false) }
+        specify { expect(discussion.viewable_by?(user)).to eq(true) }
       end
-
     end
-
   end
 
   describe "#editable_by?" do
-    specify { discussion.editable_by?(discussion.poster).should be_true }
-    specify { discussion.editable_by?(user).should be_false }
-    specify { discussion.editable_by?(moderator).should be_true }
-    specify { discussion.editable_by?(admin).should be_true }
-    specify { discussion.editable_by?(user_admin).should be_false }
-    specify { discussion.editable_by?(nil).should be_false }
+    specify { expect(discussion.editable_by?(discussion.poster)).to eq(true) }
+    specify { expect(discussion.editable_by?(user)).to eq(false) }
+    specify { expect(discussion.editable_by?(moderator)).to eq(true) }
+    specify { expect(discussion.editable_by?(exchange_moderator)).to eq(true) }
+    specify { expect(discussion.editable_by?(admin)).to eq(true) }
+    specify { expect(discussion.editable_by?(user_admin)).to eq(false) }
+    specify { expect(discussion.editable_by?(nil)).to eq(false) }
   end
 
   describe "#postable_by?" do
-
     context "when not closed" do
-      specify { discussion.postable_by?(user).should be_true }
-      specify { discussion.postable_by?(nil).should be_false }
+      specify { expect(discussion.postable_by?(user)).to eq(true) }
+      specify { expect(discussion.postable_by?(nil)).to eq(false) }
     end
 
     context "when closed" do
-      specify { closed_discussion.postable_by?(user).should be_false }
-      specify { closed_discussion.postable_by?(closed_discussion.poster).should be_false }
-      specify { closed_discussion.postable_by?(moderator).should be_true }
-      specify { closed_discussion.postable_by?(admin).should be_true }
+      specify { expect(closed_discussion.postable_by?(user)).to eq(false) }
+
+      specify do
+        expect(
+          closed_discussion.postable_by?(closed_discussion.poster)
+        ).to eq(false)
+      end
+
+      specify { expect(closed_discussion.postable_by?(moderator)).to eq(true) }
+      specify { expect(closed_discussion.postable_by?(admin)).to eq(true) }
     end
-
   end
-
 end

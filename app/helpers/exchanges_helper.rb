@@ -1,27 +1,23 @@
 # encoding: utf-8
 
 module ExchangesHelper
-
   # Returns an array of class names for an exchange
   def exchange_classes(collection, exchange)
-    @exchange_classes ||= {}
-    @exchange_classes[[collection, exchange]] ||= [
+    [
       exchange.labels.map(&:downcase),
-      %w{odd even}[collection.to_a.index(exchange) % 2],
-      (new_posts?(exchange) ? 'new_posts' : nil),
+      %w(odd even)[collection.to_a.index(exchange) % 2],
+      (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",
       "discussion#{exchange.id}"
-    ]
+    ].flatten.compact
   end
 
   def new_posts_count(exchange)
     viewed_tracker.new_posts(exchange)
   end
 
-  def new_posts?(exchange)
-    viewed_tracker.new_posts?(exchange)
-  end
+  delegate :new_posts?, to: :viewed_tracker
 
   def last_viewed_page_path(exchange)
     last_page    = viewed_tracker.last_page(exchange)
@@ -34,12 +30,13 @@ module ExchangesHelper
   end
 
   def post_page(post)
-    if controller.kind_of?(ExchangesController) && params[:action] == 'show' && @posts
-      # Speed tweak
+    # Speed optimization
+    if controller.is_a?(ExchangesController) &&
+       params[:action] == "show" &&
+       @posts
       @posts.current_page
     else
       post.page
     end
   end
-
 end

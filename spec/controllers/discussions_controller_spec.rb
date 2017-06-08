@@ -1,15 +1,14 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "rails_helper"
 
 describe DiscussionsController do
-
   let(:user) { create(:user) }
 
   # Create the first admin user
   before { create(:user) }
 
-  describe 'with public browsing off' do
+  describe "with public browsing off" do
     before { Sugar.config.update(public_browsing: false) }
 
     it_requires_login_for :index, :search, :new, :create
@@ -18,13 +17,15 @@ describe DiscussionsController do
     it_requires_login_for :follow, :unfollow, :favorite, :unfavorite
   end
 
-  describe 'with public browsing on' do
+  describe "with public browsing on" do
     before { Sugar.config.update(public_browsing: true) }
 
     it_requires_login_for :new, :create, :favorites, :following
-    it_requires_login_for :edit, :update, :follow, :unfollow, :favorite, :unfavorite
+    it_requires_login_for :edit, :update,
+                          :follow, :unfollow,
+                          :favorite, :unfavorite
 
-    it 'is open for browsing discussions and posts' do
+    it "is open for browsing discussions and posts" do
       discussion = create(:discussion)
       [:index, :show].each do |action|
         get action, id: discussion
@@ -33,30 +34,25 @@ describe DiscussionsController do
     end
   end
 
-  describe 'GET index' do
+  describe "GET index" do
     before do
-      #@discussion = create(:discussion)
       get :index
     end
 
-    specify { assigns(:exchanges).should be_a(ActiveRecord::Relation) }
-    it { should respond_with(:success) }
-    it { should render_template(:index) }
-
-    #it 'finds a discussion' do
-    #  assigns(:discussions).to_a.should include(@discussion)
-    #end
+    specify { expect(assigns(:exchanges)).to be_a(ActiveRecord::Relation) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:index) }
   end
 
-  describe 'GET show' do
+  describe "GET show" do
     before do
-      @discussion = create(:discussion)
-      get :show, id: @discussion
+      discussion = create(:discussion)
+      get :show, id: discussion
     end
 
-    specify { assigns(:exchange).should be_a(Discussion) }
-    it { should respond_with(:success) }
-    it { should render_template(:show) }
+    specify { expect(assigns(:exchange)).to be_a(Discussion) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:show) }
   end
 
   describe "GET new" do
@@ -64,8 +60,8 @@ describe DiscussionsController do
 
     context "Starting a new discussion" do
       before { get :new }
-      specify { assigns(:exchange).should be_a(Discussion) }
-      it { should render_template(:new) }
+      specify { expect(assigns(:exchange)).to be_a(Discussion) }
+      it { is_expected.to render_template(:new) }
     end
   end
 
@@ -73,16 +69,22 @@ describe DiscussionsController do
     before { login }
 
     context "with invalid params" do
-      before { post :create, discussion: { foo: 'bar' } }
-      it { should render_template(:new) }
-      specify { flash.now[:notice].should match(/Could not save your discussion! Please make sure all required fields are filled in\./) }
+      before { post :create, discussion: { foo: "bar" } }
+      it { is_expected.to render_template(:new) }
+      specify do
+        expect(flash.now[:notice]).to match(
+          Regexp.new(
+            "Could not save your discussion! " \
+            "Please make sure all required fields are filled in"
+          )
+        )
+      end
     end
 
     context "when creating a discussion" do
-      before { post :create, discussion: { title: 'Test', body: 'Test' } }
-      specify { assigns(:exchange).should be_a(Discussion) }
-      it { should redirect_to(discussion_url(assigns(:exchange))) }
+      before { post :create, discussion: { title: "Test", body: "Test" } }
+      specify { expect(assigns(:exchange)).to be_a(Discussion) }
+      it { is_expected.to redirect_to(discussion_url(assigns(:exchange))) }
     end
   end
-
 end

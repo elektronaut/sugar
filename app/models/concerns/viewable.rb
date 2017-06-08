@@ -13,11 +13,10 @@ module Viewable
 
   # Returns true if the user can view this record
   def viewable_by?(user)
-    if self.trusted?
+    if trusted?
       (user && user.trusted?) ? true : false
     else
       (Sugar.public_browsing? || user) ? true : false
     end
   end
-
 end

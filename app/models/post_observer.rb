@@ -5,10 +5,10 @@ class PostObserver < ActiveRecord::Observer
 
   def clean_cache_for(post)
     exchange_type = post.conversation ? "conversation" : "discussion"
-    cache_file = Rails.root.join("public/cache/#{exchange_type}s/#{post.exchange_id}/posts/count.json")
-    if File.exists?(cache_file)
-      File.unlink(cache_file)
-    end
+    cache_file = Rails.root.join(
+      "public/cache/#{exchange_type}s/#{post.exchange_id}/posts/count.json"
+    )
+    File.unlink(cache_file) if File.exist?(cache_file)
   end
 
   def after_create(post)
@@ -18,5 +18,4 @@ class PostObserver < ActiveRecord::Observer
   def after_destroy(post)
     clean_cache_for(post)
   end
-
 end

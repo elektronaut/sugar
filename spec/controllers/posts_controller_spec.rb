@@ -1,9 +1,8 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "rails_helper"
 
 describe PostsController do
-
   # Create the first admin user
   before { create(:user) }
 
@@ -15,45 +14,79 @@ describe PostsController do
     before { login(user) }
 
     context "with valid params" do
-      let(:post_params) { {body: "foo", format: "html"} }
+      let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
         before { post :create, discussion_id: discussion.id, post: post_params }
-        specify { assigns(:post).should be_valid }
+        specify { expect(assigns(:post)).to be_valid }
         it "redirects back to the discussion" do
-          response.should redirect_to(discussion_url(discussion, page: 1, anchor: "post-#{assigns(:post).id}"))
+          expect(response).to redirect_to(
+            discussion_url(
+              discussion,
+              page: 1,
+              anchor: "post-#{assigns(:post).id}"
+            )
+          )
         end
       end
 
       context "mobile format" do
-        before { post :create, discussion_id: discussion.id, post: post_params, format: :mobile }
+        before do
+          post(
+            :create,
+            discussion_id: discussion.id,
+            post: post_params,
+            format: :mobile
+          )
+        end
+
         it "redirects back to the discussion" do
-          response.should redirect_to(discussion_url(discussion, page: 1, anchor: "post-#{assigns(:post).id}"))
+          expect(response).to redirect_to(
+            discussion_url(
+              discussion,
+              page: 1,
+              anchor: "post-#{assigns(:post).id}"
+            )
+          )
         end
       end
 
       context "JSON format" do
-        before { post :create, discussion_id: discussion.id, post: post_params, format: :json }
-        specify { assigns(:post).should be_valid }
-        it { should respond_with(:created) }
-        specify { response.body.should be_json_eql(assigns(:post).to_json)  }
+        before do
+          post(
+            :create,
+            discussion_id: discussion.id,
+            post: post_params,
+            format: :json
+          )
+        end
+        specify { expect(assigns(:post)).to be_valid }
+        it { is_expected.to respond_with(:created) }
+        specify { expect(response.body).to be_json_eql(assigns(:post).to_json) }
       end
     end
 
     context "with invalid params" do
-      let(:post_params) { {body: "", format: "html"} }
+      let(:post_params) { { body: "", format: "html" } }
 
       context "HTML format" do
         before { post :create, discussion_id: discussion.id, post: post_params }
-        specify { assigns(:post).should_not be_valid }
-        it { should respond_with(:success) }
-        it { should render_template(:new) }
+        specify { expect(assigns(:post)).to_not be_valid }
+        it { is_expected.to respond_with(:success) }
+        it { is_expected.to render_template(:new) }
       end
 
       context "JSON format" do
-        before { post :create, discussion_id: discussion.id, post: post_params, format: :json }
-        specify { assigns(:post).should_not be_valid }
-        it { should respond_with(:unprocessable_entity) }
+        before do
+          post(
+            :create,
+            discussion_id: discussion.id,
+            post: post_params,
+            format: :json
+          )
+        end
+        specify { expect(assigns(:post)).to_not be_valid }
+        it { is_expected.to respond_with(:unprocessable_entity) }
       end
     end
   end
@@ -62,39 +95,72 @@ describe PostsController do
     before { login(user) }
 
     context "with valid params" do
-      let(:post_params) { {body: "foo", format: "html"} }
+      let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
-        before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params }
-        specify { assigns(:post).should be_valid }
+        before do
+          put(
+            :update,
+            discussion_id: existing_post.exchange_id,
+            id: existing_post.id,
+            post: post_params
+          )
+        end
+        specify { expect(assigns(:post)).to be_valid }
         it "redirects back to the discussion" do
-          response.should redirect_to(discussion_url(discussion, page: 1, anchor: "post-#{assigns(:post).id}"))
+          expect(response).to redirect_to(
+            discussion_url(
+              discussion, page: 1, anchor: "post-#{assigns(:post).id}"
+            )
+          )
         end
       end
 
       context "JSON format" do
-        before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params, format: :json }
-        specify { assigns(:post).should be_valid }
-        it { should respond_with(:no_content) }
+        before do
+          put(
+            :update,
+            discussion_id: existing_post.exchange_id,
+            id: existing_post.id,
+            post: post_params,
+            format: :json
+          )
+        end
+        specify { expect(assigns(:post)).to be_valid }
+        it { is_expected.to respond_with(:no_content) }
       end
     end
 
     context "with invalid params" do
-      let(:post_params) { {body: "", format: "wrong_format"} }
+      let(:post_params) { { body: "", format: "wrong_format" } }
 
       context "HTML format" do
-        before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params }
-        specify { assigns(:post).should_not be_valid }
-        it { should respond_with(:success) }
-        it { should render_template(:edit) }
+        before do
+          put(
+            :update,
+            discussion_id: existing_post.exchange_id,
+            id: existing_post.id,
+            post: post_params
+          )
+        end
+        specify { expect(assigns(:post)).to_not be_valid }
+        it { is_expected.to respond_with(:success) }
+        it { is_expected.to render_template(:edit) }
       end
 
       context "JSON format" do
-        before { put :update, discussion_id: existing_post.exchange_id, id: existing_post.id, post: post_params, format: :json }
-        specify { assigns(:post).should_not be_valid }
-        it { should respond_with(:unprocessable_entity) }
+        before do
+          put(
+            :update,
+            discussion_id: existing_post.exchange_id,
+            id: existing_post.id,
+            post: post_params,
+            format: :json
+          )
+        end
+        specify { expect(assigns(:post)).to_not be_valid }
+        it { is_expected.to respond_with(:unprocessable_entity) }
       end
     end
   end
-
 end

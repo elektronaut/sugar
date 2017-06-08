@@ -1,9 +1,8 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require "rails_helper"
 
 describe ConversationsController do
-
   let(:user) { create(:user) }
   let(:conversation_with_user) do
     conversation = create(:conversation)
@@ -18,42 +17,90 @@ describe ConversationsController do
   it_requires_login_for :show, :edit, :update
   it_requires_login_for :invite_participant, :remove_participant
 
-  describe 'GET index' do
+  describe "GET index" do
     before do
       login(user)
       get :index
     end
 
-    specify { assigns(:exchanges).should be_a(ActiveRecord::Relation) }
-    it { should respond_with(:success) }
-    it { should render_template(:index) }
+    specify { expect(assigns(:exchanges)).to be_a(ActiveRecord::Relation) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:index) }
   end
 
-  describe 'GET show' do
+  describe "GET show" do
     before do
       login(user)
       get :show, id: conversation_with_user
     end
 
-    specify { assigns(:exchange).should be_a(Conversation) }
-    it { should respond_with(:success) }
-    it { should render_template(:show) }
+    specify { expect(assigns(:exchange)).to be_a(Conversation) }
+    it { is_expected.to respond_with(:success) }
+    it { is_expected.to render_template(:show) }
   end
 
-  describe 'DELETE remove_participant' do
+  describe "DELETE remove_participant" do
+    let(:remover) { create(:moderator) }
+
+    before { conversation_with_user.add_participant(remover) }
+
     before do
-      login(user)
-      delete :remove_participant, id: conversation_with_user
+      login(remover)
+      delete(
+        :remove_participant,
+        id: conversation_with_user,
+        username: user.username
+      )
     end
 
-    specify { flash[:notice].should match(/You have been removed from the conversation/) }
+    context "when removing self" do
+      let(:remover) { user }
 
-    it 'redirects back to conversations' do
-      response.should redirect_to(conversations_url)
+      specify do
+        expect(flash[:notice]).to match(
+          /You have been removed from the conversation/
+        )
+      end
+
+      it "redirects back to conversations" do
+        expect(response).to redirect_to(conversations_url)
+      end
+
+      it "removes the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).not_to include(user)
+      end
     end
 
-    it 'removes the user from the conversation' do
-      assigns(:exchange).participants.to_a.should_not include(user)
+    context "when removing someone else" do
+      specify do
+        expect(flash[:notice]).to eq(
+          "#{user.username} has been removed from the conversation"
+        )
+      end
+
+      it "redirects back to the conversation" do
+        expect(response).to redirect_to(conversation_url(assigns(:exchange)))
+      end
+
+      it "removes the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).not_to include(user)
+      end
+    end
+
+    context "when removing someone else without privileges" do
+      let(:remover) { create(:user) }
+
+      specify do
+        expect(flash[:error]).to eq("You can't do that!")
+      end
+
+      it "redirects back to the conversation" do
+        expect(response).to redirect_to(conversation_url(assigns(:exchange)))
+      end
+
+      it "should not remove the user from the conversation" do
+        expect(assigns(:exchange).participants.to_a).to include(user)
+      end
     end
   end
 
@@ -62,10 +109,10 @@ describe ConversationsController do
 
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
-      before { get :new, type: 'conversation', username: recipient.username }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { assigns(:recipient).should == recipient }
-      it { should render_template(:new) }
+      before { get :new, type: "conversation", username: recipient.username }
+      specify { expect(assigns(:exchange)).to be_a(Conversation) }
+      specify { expect(assigns(:recipient)).to eq(recipient) }
+      it { is_expected.to render_template(:new) }
     end
   end
 
@@ -78,15 +125,54 @@ describe ConversationsController do
       before do
         post :create,
              recipient_id: recipient.id,
-             conversation: { title: 'Test', body: 'Test' }
+             conversation: { title: "Test", body: "Test" }
       end
 
-      specify { assigns(:recipient).should be_a(User) }
-      specify { assigns(:exchange).should be_a(Conversation) }
-      it { should redirect_to(conversation_url(assigns(:exchange))) }
-      specify { assigns(:exchange).participants.should include(recipient) }
+      specify { expect(assigns(:recipient)).to be_a(User) }
+      specify { expect(assigns(:exchange)).to be_a(Conversation) }
+      it { is_expected.to redirect_to(conversation_url(assigns(:exchange))) }
+      specify { expect(assigns(:exchange).participants).to include(recipient) }
     end
-
   end
 
+  describe "GET mute" do
+    let(:user) { create(:user) }
+    let(:conversation) { create(:conversation) }
+    before do
+      conversation.add_participant(user)
+      login(user)
+      get :mute, id: conversation.id, page: 2
+    end
+
+    it "should mute the conversation" do
+      expect(user.muted_conversation?(conversation)).to eq(true)
+    end
+
+    it "should redirect back to the conversation" do
+      expect(subject).to redirect_to(
+        conversation_url(assigns(:exchange), page: 2)
+      )
+    end
+  end
+
+  describe "GET unmute" do
+    let(:user) { create(:user) }
+    let(:conversation) { create(:conversation) }
+    before do
+      conversation.add_participant(user)
+      user.conversation_relationships.update_all(notifications: false)
+      login(user)
+      get :unmute, id: conversation.id, page: 2
+    end
+
+    it "should mute the conversation" do
+      expect(user.muted_conversation?(conversation)).to eq(false)
+    end
+
+    it "should redirect back to the conversation" do
+      expect(subject).to redirect_to(
+        conversation_url(assigns(:exchange), page: 2)
+      )
+    end
+  end
 end

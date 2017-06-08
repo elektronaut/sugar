@@ -1,22 +1,22 @@
 class CreatePosts < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :posts do |t|
-      t.text :body, :body_html
-      t.belongs_to :user, :discussion
-      t.boolean :trusted, :delta, null: false, default: false
+      t.text :body
+      t.text :body_html
+      t.references :user, index: true
+      t.references :exchange, index: true
+      t.boolean :trusted, null: false, default: false
+      t.boolean :conversation, null: false, default: false
+      t.string :format, null: false, default: "markdown"
       t.datetime :edited_at
-      t.timestamps
-    end
-    add_index :posts, :user_id
-    add_index :posts, :discussion_id
-    add_index :posts, :created_at
-    add_index :posts, :trusted
-    add_index :posts, :delta
-    add_index :posts, [:user_id, :created_at]
-    add_index :posts, [:discussion_id, :created_at]
-  end
+      t.timestamps null: false
 
-  def self.down
-    drop_table :posts
+      t.index :conversation
+      t.index :created_at
+      t.index [:exchange_id, :created_at]
+      t.index :trusted
+      t.index [:user_id, :conversation]
+      t.index [:user_id, :created_at]
+    end
   end
 end

@@ -7,18 +7,24 @@
 class Conversation < Exchange
   class RemoveParticipantError < StandardError; end
 
-  has_many :conversation_relationships, -> { order 'created_at ASC' }, dependent: :destroy
-  has_many :participants, through: :conversation_relationships, source: :user
+  has_many :conversation_relationships,
+           -> { order "created_at ASC" },
+           dependent: :destroy
+
+  has_many :participants,
+           -> { reorder("username ASC") },
+           through: :conversation_relationships,
+           source: :user
 
   after_create do |conversation|
     conversation.add_participant(conversation.poster, new_posts: false)
   end
 
-  def add_participant(user, options={})
+  def add_participant(user, options = {})
     options = {
       new_posts: true
     }.merge(options)
-    if user.kind_of?(User) && !self.participants.include?(user)
+    if user.is_a?(User) && !participants.include?(user)
       ConversationRelationship.create(
         user:         user,
         conversation: self,
@@ -28,33 +34,39 @@ class Conversation < Exchange
   end
 
   def remove_participant(user)
-    if user.kind_of?(User) && self.participants.include?(user)
-      raise RemoveParticipantError unless self.removeable?(user)
+    if user.is_a?(User) && participants.include?(user)
+      raise RemoveParticipantError unless removeable?(user)
       ConversationRelationship.where(
         user_id:         user.id,
-        conversation_id: self.id
+        conversation_id: id
       ).destroy_all
     end
   end
 
   def removeable?(user)
-    user && self.participants.include?(user) && self.participants.count > 1
+    user && participants.include?(user) && participants.count > 1
+  end
+
+  def removeable_by?(participant, remover)
+    return false unless removeable?(participant)
+    participant == remover ||
+      remover.moderator? ||
+      remover == poster
   end
 
   def viewable_by?(user)
-    user && self.participants.include?(user)
+    user && participants.include?(user)
   end
 
   def editable_by?(user)
-    user && user == self.poster
+    user && moderators.include?(user)
   end
 
   def postable_by?(user)
-    user && self.participants.include?(user)
+    user && participants.include?(user)
   end
 
-  def closeable_by?(user)
+  def closeable_by?(_user)
     false
   end
-
 end

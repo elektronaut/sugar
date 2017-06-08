@@ -1,4 +1,5 @@
 class PasswordResetsController < ApplicationController
+  before_action :find_user_by_email, only: [:create]
   before_action :find_password_reset_token, only: [:show, :update]
   before_action :check_for_expired_token, only: [:show, :update]
 
@@ -6,14 +7,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    if params[:email] && @user = User.where(email: params[:email]).first
+    if @user
       @password_reset_token = @user.password_reset_tokens.create
-      Mailer.password_reset(
-        @user.email,
-        password_reset_with_token_url(
-          @password_reset_token, @password_reset_token.token
-        )
-      ).deliver
+      deliver_password_reset(@user, @password_reset_token)
       flash[:notice] = "An email with further instructions has been sent"
       redirect_to login_users_url
     else
@@ -30,7 +26,7 @@ class PasswordResetsController < ApplicationController
     @user = @password_reset_token.user
     if !user_params[:password].blank? && @user.update_attributes(user_params)
       @password_reset_token.destroy
-      set_current_user(@user)
+      @current_user = @user
       flash[:notice] = "Your password has been changed"
       redirect_to root_url
     else
@@ -40,18 +36,30 @@ class PasswordResetsController < ApplicationController
 
   private
 
+  def deliver_password_reset(user, password_reset_token)
+    Mailer.password_reset(
+      user.email,
+      password_reset_with_token_url(
+        password_reset_token,
+        password_reset_token.token
+      )
+    ).deliver_now
+  end
+
   def user_params
     params.require(:user).permit(:password, :confirm_password)
   end
 
+  def find_user_by_email
+    @user = User.where(email: params[:email]).first if params[:email]
+  end
+
   def find_password_reset_token
-    begin
-      @password_reset_token = PasswordResetToken.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-    end
-    unless @password_reset_token && @password_reset_token.token == params[:token]
+    @password_reset_token = PasswordResetToken.where(id: params[:id]).first
+    unless @password_reset_token &&
+           @password_reset_token.token == params[:token]
       flash[:notice] = "Invalid password reset request"
-      redirect_to login_users_url and return
+      redirect_to login_users_url
     end
   end
 
@@ -59,8 +67,7 @@ class PasswordResetsController < ApplicationController
     if @password_reset_token.expired?
       @password_reset_token.destroy
       flash[:notice] = "Your password reset link has expired"
-      redirect_to login_users_url and return
+      redirect_to login_users_url
     end
   end
-
 end

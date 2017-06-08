@@ -4,7 +4,7 @@
 %>
 <% if exchanges.any? %>
   <div class="discussions">
-    <% @exchanges.each do |d| %><div class="discussion <%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
+    <% exchanges.each do |d| %><div class="discussion <%= exchange_classes(exchanges, d).flatten.compact.join(' ') %>">
       <% if new_posts?(d) %>
         <div class="new_posts_count"><%= new_posts_count(d) %></div>
       <% end %>
@@ -34,7 +34,11 @@
       </p>
     </div><% end %>
   </div>
-  <%= render partial: 'components/pagination', locals: { p: exchanges, pagination_params: pagination_params } %>
+  <%= render(partial: 'components/pagination',
+             locals: {
+               p: exchanges,
+               pagination_params: pagination_params
+             }) %>
 <% else %>
   <p><%= no_exchanges %></p>
 <% end %>
