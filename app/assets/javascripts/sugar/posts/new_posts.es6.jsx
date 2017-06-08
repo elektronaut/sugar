@@ -103,7 +103,7 @@ Sugar.loadNewPosts = function() {
 
       // Update Twitter embeds
       if (twttr && twttr.widgets) {
-        twttr.widgets.load(document.getElementById('#ajaxPosts'));
+        twttr.widgets.load(document.getElementById('ajaxPosts'));
       }
 
       // Animate in the new posts
