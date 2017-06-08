@@ -79,4 +79,19 @@ describe AutolinkFilter do
       expect(filter.to_html).to eq(twitter_json["html"])
     end
   end
+
+  context "when URL is a Twitter status without username" do
+    let(:input) { "https://twitter.com/statuses/463440424141459456" }
+    before do
+      stub_request(
+        :get,
+        "https://publish.twitter.com/oembed?" \
+        "url=https://twitter.com/twitter/status/463440424141459456"
+      ).to_return(status: 200, body: twitter_embed)
+    end
+
+    it "should convert it to an embed" do
+      expect(filter.to_html).to eq(twitter_json["html"])
+    end
+  end
 end
