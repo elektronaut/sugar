@@ -17,7 +17,7 @@ class AutolinkFilter < Filter
       "<img src=\"#{url}\">"
     elsif url =~ /\.(gifv)$/i
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
-    elsif url =~ /^https?:\/\/(mobile\.)?twitter\.com\/([\w\d_]+)\/status(es)?\/([\d]+)/
+    elsif url =~ /^https?:\/\/(mobile\.)?twitter\.com\/(([\w\d_]+)\/)?status(es)?\/([\d]+)/
       twitter_embed(url)
     elsif url =~ /(https?:\/\/(www\.)?instagram\.com\/p\/[^\/]+\/)/
       instagram_embed(url)
@@ -39,6 +39,15 @@ class AutolinkFilter < Filter
   end
 
   def twitter_embed(url)
-    oembed("https://publish.twitter.com/oembed", url)
+    oembed("https://publish.twitter.com/oembed", normalize_twitter_url(url))
+  end
+
+  def normalize_twitter_url(url)
+    if url =~ /^https?:\/\/twitter\.com\/([\w\d_]+)\/status\/([\d]+)/
+      url
+    else
+      id = url.match(/\/([\d]+)$/)[1]
+      "https://twitter.com/twitter/status/#{id}"
+    end
   end
 end
