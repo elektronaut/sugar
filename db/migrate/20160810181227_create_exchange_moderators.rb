@@ -1,4 +1,4 @@
-class CreateExchangeModerators < ActiveRecord::Migration
+class CreateExchangeModerators < ActiveRecord::Migration[4.2]
   def change
     create_table :exchange_moderators do |t|
       t.references :exchange, null: false, index: true

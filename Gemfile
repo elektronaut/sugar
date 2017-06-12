@@ -1,34 +1,34 @@
 source "http://rubygems.org"
 
-gem "rails", "~> 4.2.5"
+gem "rails", "~> 5.1.0"
 gem "bcrypt-ruby", require: "bcrypt"
 gem "actionpack-page_caching"
 gem "active_model_serializers", "~> 0.9.0"
-gem "responders", "~> 2.1.0"
+gem "responders"
 
 gem "sqlite3"
 gem "mysql2", "~> 0.4.2"
 gem "pg"
 
-gem "redis", "~> 3.2.0"
-gem "hiredis", "~> 0.6.0"
-gem "redis-rails", "~> 4.0.0"
+gem "redis"
+gem "hiredis"
+gem "redis-rails"
 
 gem "json"
-gem "sass-rails", "~> 5.0.0"
+gem "sass-rails", "~> 5.0"
 gem "coffee-rails"
 gem "uglifier"
 gem "dynamic_form"
 gem "jquery-rails"
 gem "backbone-on-rails"
-gem "react-rails"
+gem "sprockets-es6"
 
-gem "gemoji", git: "https://github.com/github/gemoji.git"
+gem "gemoji"
 gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
 
 # gem 'dynamic_image', '~> 2.0.0.beta5
 gem "fog-aws"
-gem "dynamic_image", "~> 2.0.1"
+gem "dynamic_image"
 
 # Deploy with Capistrano
 group :development do
@@ -59,16 +59,15 @@ gem "fastimage"
 gem "ruby-filemagic", require: "filemagic"
 gem "redcarpet", "~> 3.0"
 gem "rouge"
-gem "font-awesome-rails", "~> 3.2.1"
+gem "font-awesome-rails", "~> 4.7"
 
 # TODO: Remove this when the redesign is done
 gem "non-stupid-digest-assets"
+gem "activemodel-serializers-xml"
 
 group :development do
-  gem "spring"
-  gem "spring-commands-rspec"
   gem "yui-compressor", require: "yui/compressor"
-  gem "web-console", "~> 2.1.0"
+  gem "web-console"
 end
 
 group :development_mac do
@@ -78,14 +77,15 @@ end
 
 group :test do
   gem "codeclimate-test-reporter", require: false
+  gem "rails-controller-testing"
 
   # RSpec
-  gem "rspec-rails", "~> 3.4.0"
-  gem "shoulda-matchers", "~> 3.1.0"
+  gem "rspec-rails"
+  gem "shoulda-matchers"
   gem "json_spec"
   gem "capybara"
   gem "fuubar"
-  gem "database_cleaner", "~> 1.5.0"
+  gem "database_cleaner"
   gem "webmock", require: false
 end
 

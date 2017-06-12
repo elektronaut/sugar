@@ -78,31 +78,33 @@ Sugar::Application.routes.draw do
     end
   end
 
-  controller :users, constraints: { id: %r{[^\?/]+} } do
-    post "/users/profile/:id/grant_invite" => :grant_invite,
-         as: :grant_invite_user
-    post "/users/profile/:id/revoke_invites" => :revoke_invites,
-         as: :revoke_invites_user
-    get "/users/profile/:id/edit" => :edit,
-        as: :edit_user
-    get "/users/profile/:id/edit/:page" => :edit,
-        as: :edit_user_page
-    get "/users/profile/:id" => :show,
-        as: :user_profile
-    get "/users/profile/:id/discussions" => :discussions,
-        as: :discussions_user
-    get "/users/profile/:id/discussions/:page" => :discussions
-    get "/users/profile/:id/participated" => :participated,
-        as: :participated_user
-    get "/users/profile/:id/participated/:page" => :participated
-    get "/users/profile/:id/posts" => :posts,
-        as: :posts_user
-    get "/users/profile/:id/posts/:page" => :posts,
-        as: :paged_user_posts
-    get "/users/profile/:id/stats" => :stats,
-        as: :stats_user
-    get "/users/new/:token" => :new,
-        as: :new_user_by_token
+  controller :users do
+    constraints(id: %r{[^\?/]+}) do
+      post "/users/profile/:id/grant_invite" => :grant_invite,
+           as: :grant_invite_user
+      post "/users/profile/:id/revoke_invites" => :revoke_invites,
+           as: :revoke_invites_user
+      get "/users/profile/:id/edit" => :edit,
+          as: :edit_user
+      get "/users/profile/:id/edit/:page" => :edit,
+          as: :edit_user_page
+      get "/users/profile/:id" => :show,
+          as: :user_profile
+      get "/users/profile/:id/discussions" => :discussions,
+          as: :discussions_user
+      get "/users/profile/:id/discussions/:page" => :discussions
+      get "/users/profile/:id/participated" => :participated,
+          as: :participated_user
+      get "/users/profile/:id/participated/:page" => :participated
+      get "/users/profile/:id/posts" => :posts,
+          as: :posts_user
+      get "/users/profile/:id/posts/:page" => :posts,
+          as: :paged_user_posts
+      get "/users/profile/:id/stats" => :stats,
+          as: :stats_user
+      get "/users/new/:token" => :new,
+          as: :new_user_by_token
+    end
   end
 
   resources :password_resets, only: [:new, :create, :show, :update]

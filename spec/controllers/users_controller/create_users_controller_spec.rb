@@ -9,7 +9,7 @@ describe UsersController, redis: true do
     context "with a valid invite token" do
       before do
         configure signups_allowed: false
-        get :new, token: invite.token
+        get :new, params: { token: invite.token }
       end
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
@@ -42,7 +42,7 @@ describe UsersController, redis: true do
     end
 
     context "with a valid invite token" do
-      before { post :create, token: invite.token, user: params }
+      before { post :create, params: { token: invite.token, user: params } }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:user)).to be_a(User) }
       it "should redirect " do

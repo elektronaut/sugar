@@ -1,4 +1,4 @@
-class CreatePasswordResetTokens < ActiveRecord::Migration
+class CreatePasswordResetTokens < ActiveRecord::Migration[4.2]
   def change
     create_table :password_reset_tokens do |t|
       t.references :user, index: true

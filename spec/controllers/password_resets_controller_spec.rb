@@ -17,7 +17,7 @@ describe PasswordResetsController do
 
   describe "POST create" do
     context "with an existing user" do
-      before { post :create, email: user.email }
+      before { post :create, params: { email: user.email } }
       it { is_expected.to redirect_to(login_users_url) }
       it "should set the flash" do
         expect(flash[:notice]).to match(
@@ -42,7 +42,7 @@ describe PasswordResetsController do
     end
 
     context "with a non-existant user" do
-      before { post :create, email: "none@example.com" }
+      before { post :create, params: { email: "none@example.com" } }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
       specify { expect(assigns(:password_reset_token)).to eq(nil) }
@@ -59,8 +59,10 @@ describe PasswordResetsController do
       before do
         get(
           :show,
-          id: password_reset_token.id,
-          token: password_reset_token.token
+          params: {
+            id: password_reset_token.id,
+            token: password_reset_token.token
+          }
         )
       end
       it { is_expected.to respond_with(:success) }
@@ -72,7 +74,7 @@ describe PasswordResetsController do
     end
 
     context "without a valid token" do
-      before { get :show, id: password_reset_token.id }
+      before { get :show, params: { id: password_reset_token.id } }
       it { is_expected.to redirect_to(login_users_url) }
       specify do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -82,8 +84,10 @@ describe PasswordResetsController do
     context "with an expired token" do
       before do
         get :show,
-            id: expired_password_reset_token.id,
-            token: expired_password_reset_token.token
+            params: {
+              id: expired_password_reset_token.id,
+              token: expired_password_reset_token.token
+            }
       end
       specify do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
@@ -98,7 +102,7 @@ describe PasswordResetsController do
     end
 
     context "with a non-existant token" do
-      before { get :show, id: 123, token: "456" }
+      before { get :show, params: { id: 123, token: "456" } }
       it { is_expected.to redirect_to(login_users_url) }
       specify do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -110,9 +114,11 @@ describe PasswordResetsController do
     context "with valid data" do
       before do
         put :update,
-            id: password_reset_token.id,
-            token: password_reset_token.token,
-            user: { password: "new password", confirm_password: "new password" }
+            params: {
+              id: password_reset_token.id,
+              token: password_reset_token.token,
+              user: { password: "new password", confirm_password: "new password" }
+            }
       end
       specify do
         expect(flash[:notice]).to match(/Your password has been changed/)
@@ -126,11 +132,13 @@ describe PasswordResetsController do
     context "without valid data" do
       before do
         put :update,
-            id: password_reset_token.id,
-            token: password_reset_token.token,
-            user: {
-              password: "new password",
-              confirm_password: "wrong password"
+            params: {
+              id: password_reset_token.id,
+              token: password_reset_token.token,
+              user: {
+                password: "new password",
+                confirm_password: "wrong password"
+              }
             }
       end
       it { is_expected.to respond_with(:success) }
@@ -145,8 +153,10 @@ describe PasswordResetsController do
     context "without a valid token" do
       before do
         put :update,
-            id: password_reset_token.id,
-            user: { password: "new password", confirm_password: "new password" }
+            params: {
+              id: password_reset_token.id,
+              user: { password: "new password", confirm_password: "new password" }
+            }
       end
       it { is_expected.to redirect_to(login_users_url) }
       specify do
@@ -157,9 +167,11 @@ describe PasswordResetsController do
     context "with an expired token" do
       before do
         put :update,
-            id: expired_password_reset_token.id,
-            token: expired_password_reset_token.token,
-            user: { password: "new password", confirm_password: "new password" }
+            params: {
+              id: expired_password_reset_token.id,
+              token: expired_password_reset_token.token,
+              user: { password: "new password", confirm_password: "new password" }
+            }
       end
       specify do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)

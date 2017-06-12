@@ -28,7 +28,7 @@ describe DiscussionsController do
     it "is open for browsing discussions and posts" do
       discussion = create(:discussion)
       [:index, :show].each do |action|
-        get action, id: discussion
+        get action, params: { id: discussion }
         should respond_with(:success)
       end
     end
@@ -47,7 +47,7 @@ describe DiscussionsController do
   describe "GET show" do
     before do
       discussion = create(:discussion)
-      get :show, id: discussion
+      get :show, params: { id: discussion }
     end
 
     specify { expect(assigns(:exchange)).to be_a(Discussion) }
@@ -69,7 +69,7 @@ describe DiscussionsController do
     before { login }
 
     context "with invalid params" do
-      before { post :create, discussion: { foo: "bar" } }
+      before { post :create, params: { discussion: { foo: "bar" } } }
       it { is_expected.to render_template(:new) }
       specify do
         expect(flash.now[:notice]).to match(
@@ -82,7 +82,7 @@ describe DiscussionsController do
     end
 
     context "when creating a discussion" do
-      before { post :create, discussion: { title: "Test", body: "Test" } }
+      before { post :create, params: { discussion: { title: "Test", body: "Test" } } }
       specify { expect(assigns(:exchange)).to be_a(Discussion) }
       it { is_expected.to redirect_to(discussion_url(assigns(:exchange))) }
     end

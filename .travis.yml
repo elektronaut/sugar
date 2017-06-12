@@ -2,8 +2,6 @@ addons:
   apt:
     packages:
     - libmagic-dev
-  code_climate:
-    repo_token: 486bb0a91d51ad96ec90a47dced78f74bfe54ae9b913ac83fa48d69703e3f66d
 language: ruby
 sudo: false
 cache: bundler
@@ -11,18 +9,18 @@ services:
   - mysql
   - redis
 rvm:
-  - 2.1.0
-  - 2.2.3
-  - 2.3.0
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
 env:
   - SUGAR_DB=sqlite
   - SUGAR_DB=mysql
   - SUGAR_DB=postgresql
 matrix:
   exclude:
-    - rvm: 2.1.0
+    - rvm: 2.2.7
       env: SUGAR_DB=sqlite
-    - rvm: 2.1.0
+    - rvm: 2.2.7
       env: SUGAR_DB=postgresql
 script:
   - bundle exec rspec spec
@@ -31,3 +29,5 @@ before_script:
   - sh -c "if [ '$SUGAR_DB' = 'postgresql' ]; then psql -c 'create database sugar_test' -U postgres; fi"
   - sh -c "if [ '$SUGAR_DB' = 'sqlite' ]; then bundle exec rake db:create; fi"
   - bundle exec rake db:migrate
+after_script:
+  - CODECLIMATE_REPO_TOKEN=486bb0a91d51ad96ec90a47dced78f74bfe54ae9b913ac83fa48d69703e3f66d bundle exec codeclimate-test-reporter

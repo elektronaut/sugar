@@ -17,7 +17,7 @@ describe PostsController do
       let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
-        before { post :create, discussion_id: discussion.id, post: post_params }
+        before { post :create, params: { discussion_id: discussion.id, post: post_params } }
         specify { expect(assigns(:post)).to be_valid }
         it "redirects back to the discussion" do
           expect(response).to redirect_to(
@@ -34,8 +34,10 @@ describe PostsController do
         before do
           post(
             :create,
-            discussion_id: discussion.id,
-            post: post_params,
+            params: {
+              discussion_id: discussion.id,
+              post: post_params
+            },
             format: :mobile
           )
         end
@@ -55,8 +57,10 @@ describe PostsController do
         before do
           post(
             :create,
-            discussion_id: discussion.id,
-            post: post_params,
+            params: {
+              discussion_id: discussion.id,
+              post: post_params
+            },
             format: :json
           )
         end
@@ -70,7 +74,7 @@ describe PostsController do
       let(:post_params) { { body: "", format: "html" } }
 
       context "HTML format" do
-        before { post :create, discussion_id: discussion.id, post: post_params }
+        before { post :create, params: { discussion_id: discussion.id, post: post_params } }
         specify { expect(assigns(:post)).to_not be_valid }
         it { is_expected.to respond_with(:success) }
         it { is_expected.to render_template(:new) }
@@ -80,8 +84,10 @@ describe PostsController do
         before do
           post(
             :create,
-            discussion_id: discussion.id,
-            post: post_params,
+            params: {
+              discussion_id: discussion.id,
+              post: post_params
+            },
             format: :json
           )
         end
@@ -101,9 +107,11 @@ describe PostsController do
         before do
           put(
             :update,
-            discussion_id: existing_post.exchange_id,
-            id: existing_post.id,
-            post: post_params
+            params: {
+              discussion_id: existing_post.exchange_id,
+              id: existing_post.id,
+              post: post_params
+            }
           )
         end
         specify { expect(assigns(:post)).to be_valid }
@@ -120,9 +128,11 @@ describe PostsController do
         before do
           put(
             :update,
-            discussion_id: existing_post.exchange_id,
-            id: existing_post.id,
-            post: post_params,
+            params: {
+              discussion_id: existing_post.exchange_id,
+              id: existing_post.id,
+              post: post_params
+            },
             format: :json
           )
         end
@@ -138,9 +148,11 @@ describe PostsController do
         before do
           put(
             :update,
-            discussion_id: existing_post.exchange_id,
-            id: existing_post.id,
-            post: post_params
+            params: {
+              discussion_id: existing_post.exchange_id,
+              id: existing_post.id,
+              post: post_params
+            }
           )
         end
         specify { expect(assigns(:post)).to_not be_valid }
@@ -152,9 +164,11 @@ describe PostsController do
         before do
           put(
             :update,
-            discussion_id: existing_post.exchange_id,
-            id: existing_post.id,
-            post: post_params,
+            params: {
+              discussion_id: existing_post.exchange_id,
+              id: existing_post.id,
+              post: post_params
+            },
             format: :json
           )
         end

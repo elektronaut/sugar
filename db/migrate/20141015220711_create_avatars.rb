@@ -1,4 +1,4 @@
-class CreateAvatars < ActiveRecord::Migration
+class CreateAvatars < ActiveRecord::Migration[4.2]
   def change
     create_table :avatars do |t|
       t.string :content_hash

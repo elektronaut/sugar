@@ -106,6 +106,6 @@ module LoginMacros
   private
 
   def perform_login_macro_request(action, opts)
-    send(opts[:method], action, opts[:params].merge(format: opts[:format]))
+    send(opts[:method], action, params: opts[:params], format: opts[:format])
   end
 end

@@ -25,7 +25,7 @@ describe Admin::ConfigurationsController, redis: true do
     end
 
     describe "update" do
-      before { patch :update, configuration: { forum_name: "New Forum Name" } }
+      before { patch :update, params: { configuration: { forum_name: "New Forum Name" } } }
       specify { expect(flash[:notice]).to eq(nil) }
 
       it "should update the forum configuration" do

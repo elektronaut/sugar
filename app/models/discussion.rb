@@ -10,6 +10,7 @@ class Discussion < Exchange
 
   scope :for_view, -> { sorted.with_posters }
 
+  before_save :trusted_will_change
   after_save :update_trusted_status
 
   class << self
@@ -56,16 +57,19 @@ class Discussion < Exchange
 
   private
 
+  def trusted_will_change
+    @trusted_will_change = trusted_changed?
+  end
+
   def update_trusted_status
-    if trusted_changed?
-      posts.update_all(trusted: trusted?)
-      discussion_relationships.update_all(trusted: trusted?)
-      participants.each do |user|
-        user.update_column(
-          :public_posts_count,
-          user.discussion_posts.where(trusted: false).count
-        )
-      end
+    return unless @trusted_will_change
+    posts.update_all(trusted: trusted?)
+    discussion_relationships.update_all(trusted: trusted?)
+    participants.each do |user|
+      user.update_column(
+        :public_posts_count,
+        user.discussion_posts.where(trusted: false).count
+      )
     end
   end
 end

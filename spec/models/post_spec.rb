@@ -293,7 +293,7 @@ describe Post do
     context "when edited_at is set" do
       let(:timestamp) { 2.days.ago }
       let(:post) { create(:post, edited_at: timestamp) }
-      specify { expect(subject.edited_at).to eq(timestamp) }
+      specify { expect(subject.edited_at).to be_within(1.second).of(timestamp) }
     end
 
     context "when edited_at isn't set" do
