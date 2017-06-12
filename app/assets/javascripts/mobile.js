@@ -10,6 +10,7 @@
 //= require backbone/sugar
 //= require sugar
 //= require sugar/facebook
+//= require sugar/posts/embeds
 //= require sugar/rich_text
 //= require sugar/timestamps
 //= require sugar/user
