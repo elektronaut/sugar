@@ -2,7 +2,6 @@ source "http://rubygems.org"
 
 gem "rails", "~> 4.2.5"
 gem "bcrypt-ruby", require: "bcrypt"
-gem "rails-observers"
 gem "actionpack-page_caching"
 gem "active_model_serializers", "~> 0.9.0"
 gem "responders", "~> 2.1.0"

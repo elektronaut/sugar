@@ -24,9 +24,11 @@ class Post < ActiveRecord::Base
 
   after_create :update_exchange,
                :define_relationship,
-               :increment_public_posts_count
+               :increment_public_posts_count,
+               :clean_cache
 
-  after_destroy :decrement_public_posts_count
+  after_destroy :decrement_public_posts_count,
+                :clean_cache
 
   scope :sorted,                 -> { order("created_at ASC") }
   scope :for_view,               -> { sorted.includes(user: [:avatar]) }
@@ -81,6 +83,14 @@ class Post < ActiveRecord::Base
   end
 
   private
+
+  def clean_cache
+    exchange_type = conversation ? "conversation" : "discussion"
+    cache_file = Rails.root.join(
+      "public/cache/#{exchange_type}s/#{exchange_id}/posts/count.json"
+    )
+    File.unlink(cache_file) if File.exist?(cache_file)
+  end
 
   def update_public_posts_count(delta)
     return if conversation? || trusted?

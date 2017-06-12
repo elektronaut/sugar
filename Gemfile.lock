@@ -351,8 +351,6 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
     railties (4.2.8)
       actionpack (= 4.2.8)
       activesupport (= 4.2.8)
@@ -527,7 +525,6 @@ DEPENDENCIES
   pry
   puma
   rails (~> 4.2.5)
-  rails-observers
   rb-fsevent
   react-rails
   redcarpet (~> 3.0)
