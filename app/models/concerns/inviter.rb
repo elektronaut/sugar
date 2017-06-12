@@ -8,7 +8,8 @@ module Inviter
     after_create :expire_invite
 
     belongs_to :inviter,
-               class_name: "User"
+               class_name: "User",
+               optional: true
 
     has_many :invitees,
              -> { order "username ASC" },

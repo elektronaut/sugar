@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   include ExchangeParticipant
   include UserScopes
 
-  belongs_to :avatar, dependent: :destroy
+  belongs_to :avatar, dependent: :destroy, optional: true
   has_many :exchange_moderators, dependent: :destroy
   accepts_nested_attributes_for :avatar
   validates_associated :avatar
