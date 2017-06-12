@@ -22,6 +22,10 @@ describe Post do
       body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
     )
   end
+  let(:cache_path) do
+    Rails.root.join("public", "cache", "discussions", discussion.id.to_s,
+                    "posts", "count.json")
+  end
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:exchange) }
@@ -40,6 +44,20 @@ describe Post do
       specify { expect(subject.last_poster).to eq(post.user) }
       specify { expect(subject.last_post_at).to eq(post.created_at) }
     end
+
+    context "when count cache file exists" do
+      let!(:discussion) { create(:discussion) }
+      let(:post) { create(:post, exchange: discussion) }
+      it "should delete the file" do
+        allow(File).to receive(:exist?).and_return(true)
+        expect(File).to(
+          receive(:unlink)
+            .with(cache_path)
+            .exactly(1).times
+        )
+        post
+      end
+    end
   end
 
   describe "after_destroy" do
@@ -48,6 +66,19 @@ describe Post do
 
       it "should decrement public_posts_count on user" do
         expect { post.destroy }.to change { user.public_posts_count }.by(-1)
+      end
+    end
+
+    context "when count cache file exists" do
+      let!(:post) { create(:post, exchange: discussion) }
+      it "should delete the file" do
+        allow(File).to receive(:exist?).and_return(true)
+        expect(File).to(
+          receive(:unlink)
+            .with(cache_path)
+            .exactly(1).times
+        )
+        post.destroy
       end
     end
   end
@@ -262,7 +293,7 @@ describe Post do
     context "when edited_at is set" do
       let(:timestamp) { 2.days.ago }
       let(:post) { create(:post, edited_at: timestamp) }
-      specify { expect(subject.edited_at).to eq(timestamp) }
+      specify { expect(subject.edited_at).to be_within(1.second).of(timestamp) }
     end
 
     context "when edited_at isn't set" do

@@ -31,7 +31,7 @@ describe ConversationsController do
   describe "GET show" do
     before do
       login(user)
-      get :show, id: conversation_with_user
+      get :show, params: { id: conversation_with_user }
     end
 
     specify { expect(assigns(:exchange)).to be_a(Conversation) }
@@ -48,8 +48,10 @@ describe ConversationsController do
       login(remover)
       delete(
         :remove_participant,
-        id: conversation_with_user,
-        username: user.username
+        params: {
+          id: conversation_with_user,
+          username: user.username
+        }
       )
     end
 
@@ -109,7 +111,7 @@ describe ConversationsController do
 
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
-      before { get :new, type: "conversation", username: recipient.username }
+      before { get :new, params: { type: "conversation", username: recipient.username } }
       specify { expect(assigns(:exchange)).to be_a(Conversation) }
       specify { expect(assigns(:recipient)).to eq(recipient) }
       it { is_expected.to render_template(:new) }
@@ -124,8 +126,10 @@ describe ConversationsController do
 
       before do
         post :create,
-             recipient_id: recipient.id,
-             conversation: { title: "Test", body: "Test" }
+             params: {
+               recipient_id: recipient.id,
+               conversation: { title: "Test", body: "Test" }
+             }
       end
 
       specify { expect(assigns(:recipient)).to be_a(User) }
@@ -141,7 +145,7 @@ describe ConversationsController do
     before do
       conversation.add_participant(user)
       login(user)
-      get :mute, id: conversation.id, page: 2
+      get :mute, params: { id: conversation.id, page: 2 }
     end
 
     it "should mute the conversation" do
@@ -162,7 +166,7 @@ describe ConversationsController do
       conversation.add_participant(user)
       user.conversation_relationships.update_all(notifications: false)
       login(user)
-      get :unmute, id: conversation.id, page: 2
+      get :unmute, params: { id: conversation.id, page: 2 }
     end
 
     it "should mute the conversation" do

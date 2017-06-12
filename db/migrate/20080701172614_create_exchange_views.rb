@@ -1,4 +1,4 @@
-class CreateExchangeViews < ActiveRecord::Migration
+class CreateExchangeViews < ActiveRecord::Migration[4.2]
   def change
     create_table :exchange_views do |t|
       t.references :user, index: true

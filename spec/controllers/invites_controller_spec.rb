@@ -18,7 +18,7 @@ describe InvitesController do
     context "when invite exists" do
       before do
         login invite.user
-        delete :destroy, id: invite_id
+        delete :destroy, params: { id: invite_id }
       end
       let(:invite_id) { invite.id }
       specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -29,7 +29,7 @@ describe InvitesController do
       it "should raise an error" do
         login invite.user
         expect do
-          delete(:destroy, id: invite_id)
+          delete(:destroy, params: { id: invite_id })
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -89,7 +89,7 @@ describe InvitesController do
   end
 
   describe "GET accept" do
-    before { get :accept, id: token }
+    before { get :accept, params: { id: token } }
 
     context "when invite is valid" do
       let(:token) { invite.token }
@@ -136,10 +136,13 @@ describe InvitesController do
 
     context "with valid params" do
       before do
-        post :create, invite: {
-          email:   "no-reply@example.com",
-          message: "testing message"
-        }
+        post :create,
+             params: {
+               invite: {
+                 email:   "no-reply@example.com",
+                 message: "testing message"
+               }
+             }
       end
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -161,10 +164,13 @@ describe InvitesController do
         allow(Mailer).to receive(:invite) do
           raise Net::SMTPSyntaxError
         end
-        post :create, invite: {
-          email:   "totally@wrong.com",
-          message: "testing message"
-        }
+        post :create,
+             params: {
+               invite: {
+                 email:   "totally@wrong.com",
+                 message: "testing message"
+               }
+             }
       end
 
       it "should set the flash" do
@@ -186,7 +192,7 @@ describe InvitesController do
     end
 
     context "with invalid params" do
-      before { post :create, invite: { foo: "bar" } }
+      before { post :create, params: { invite: { foo: "bar" } } }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
@@ -195,7 +201,7 @@ describe InvitesController do
 
   describe "DELETE destroy" do
     context "when user owns the invite" do
-      before { login(invite.user) && delete(:destroy, id: invite.id) }
+      before { login(invite.user) && delete(:destroy, params: { id: invite.id }) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(true) }
@@ -206,7 +212,7 @@ describe InvitesController do
     end
 
     context "when user doesn't own the invite" do
-      before { login(user) && delete(:destroy, id: invite.id) }
+      before { login(user) && delete(:destroy, params: { id: invite.id }) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(false) }

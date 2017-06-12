@@ -29,7 +29,7 @@ describe UploadsController, redis: true do
       end
 
       subject { response.body }
-      before { post :create, upload: { file: png_file }, format: :json }
+      before { post :create, params: { upload: { file: png_file } }, format: :json }
 
       it "should respond with JSON" do
         expect(response.header["Content-Type"]).to match "application/json"

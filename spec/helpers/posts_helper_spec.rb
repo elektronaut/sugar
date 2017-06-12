@@ -8,8 +8,8 @@ describe PostsHelper do
 
   let(:smile_image) do
     '<img alt="smile" class="emoji" ' \
-      'src="/assets/emoji/unicode/1f604-216f3409215c9945a5bc8c83e0a586e6591' \
-      '361fb9d93492d6dd7c604f66dac5d.png" ' \
+      'src="/assets/emoji/unicode/1f604-d1b8659a19da584036329f63341bf8064a7e72' \
+      '407058a004d3c5ed156187007b.png" ' \
       'style="vertical-align:middle" ' \
       'width="16" height="16" />'
   end

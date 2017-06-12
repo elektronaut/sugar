@@ -16,9 +16,9 @@ class Exchange < ActiveRecord::Base
   attr_accessor :updated_by
 
   belongs_to(:poster, class_name: "User")
-  belongs_to(:last_poster, class_name: "User")
+  belongs_to(:last_poster, class_name: "User", optional: true)
 
-  belongs_to(:closer, class_name: "User")
+  belongs_to(:closer, class_name: "User", optional: true)
 
   has_many(:posts,
            -> { order "created_at ASC" },

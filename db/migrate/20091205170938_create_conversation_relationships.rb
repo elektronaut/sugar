@@ -1,4 +1,4 @@
-class CreateConversationRelationships < ActiveRecord::Migration
+class CreateConversationRelationships < ActiveRecord::Migration[4.2]
   def change
     create_table :conversation_relationships do |t|
       t.references :user, index: true

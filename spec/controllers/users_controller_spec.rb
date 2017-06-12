@@ -63,7 +63,7 @@ describe UsersController do
     let(:admin) { create(:user_admin) }
     before do
       login admin
-      post :grant_invite, id: user.username
+      post :grant_invite, params: { id: user.username }
       user.reload
     end
 
@@ -80,7 +80,7 @@ describe UsersController do
     let(:user) { create(:user, available_invites: 1) }
     before do
       login admin
-      post :revoke_invites, id: user.username
+      post :revoke_invites, params: { id: user.username }
       user.reload
     end
 
@@ -99,7 +99,9 @@ describe UsersController do
     before { login user }
 
     context "regular update" do
-      before { put :update, id: user.id, user: { realname: "New name" } }
+      before do
+        put :update, params: { id: user.id, user: { realname: "New name" } }
+      end
 
       specify { expect(assigns(:user)).to be_a(User) }
       specify { expect(flash[:notice]).to match("Your changes were saved!") }
@@ -116,8 +118,10 @@ describe UsersController do
     context "self banning" do
       before do
         put(:update,
-            id: user.id,
-            user: { banned_until: (Time.now.utc + 2.days) })
+            params: {
+              id: user.id,
+              user: { banned_until: (Time.now.utc + 2.days) }
+            })
       end
 
       specify { expect(user.reload.temporary_banned?).to eq(true) }
@@ -125,7 +129,7 @@ describe UsersController do
 
     context "banning a user" do
       let!(:target_user) { create(:user) }
-      before { put :update, id: target_user.id, user: { banned: true } }
+      before { put :update, params: { id: target_user.id, user: { banned: true } } }
       context "when user is a user admin" do
         let(:user) { create(:user_admin) }
         specify { expect(target_user.reload.banned?).to eq(true) }
