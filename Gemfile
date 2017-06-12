@@ -32,7 +32,7 @@ gem "dynamic_image"
 
 # Deploy with Capistrano
 group :development do
-  gem "capistrano", "~> 3.4.0"
+  gem "capistrano", "~> 3.8.0"
   gem "capistrano-bundler"
   gem "capistrano-rails"
   gem "capistrano-rbenv"
