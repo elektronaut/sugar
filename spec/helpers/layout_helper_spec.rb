@@ -45,7 +45,8 @@ describe LayoutHelper do
         {
           name: name,
           image: helper.image_path(
-            "emoji/" + Emoji.find_by_alias(name).image_filename
+            "emoji/" + Emoji.find_by_alias(name).image_filename,
+            skip_pipeline: true
           )
         }
       end

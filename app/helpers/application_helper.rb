@@ -3,6 +3,7 @@
 module ApplicationHelper
   include AvatarsHelper
   include CurrentUserHelper
+  include EmojiHelper
   include ExchangesHelper
   include IconsHelper
   include LayoutHelper

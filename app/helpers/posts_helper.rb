@@ -6,7 +6,7 @@ module PostsHelper
       emoji = Emoji.find_by_alias(Regexp.last_match(1))
       if emoji
         "<img alt=\"#{Regexp.last_match(1)}\" class=\"emoji\" src=\"" +
-          image_path("emoji/#{emoji.image_filename}") +
+          emoji_path(emoji) +
           '" style="vertical-align:middle" width="16" height="16" />'
       else
         match
