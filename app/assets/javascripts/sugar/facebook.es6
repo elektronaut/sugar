@@ -33,7 +33,7 @@ Sugar.Facebook = {
 
     window.fbAsyncInit = function () {
       FB.init({
-        version: 'v2.0',
+        version: 'v2.10',
         appId: Sugar.Facebook.appId,
         status: true,
         cookie: true,

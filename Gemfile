@@ -29,6 +29,7 @@ gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
 # gem 'dynamic_image', '~> 2.0.0.beta5
 gem "fog-aws"
 gem "dynamic_image"
+gem "sentry-raven"
 
 # Deploy with Capistrano
 group :development do

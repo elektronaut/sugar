@@ -69,6 +69,7 @@ SUGAR_DB_DATABASE     | -        | Default: `sugar_<%= Rails.env %>`
 SUGAR_DB_HOST         | -        | Default: `localhost`
 SUGAR_DB_USERNAME     | -        | Default: `rails`
 SUGAR_DB_PASSWORD     | -        | Default: `rails` for PostgreSQL, blank for MySQL
+SENTRY_DSN            | -        | Default: none, set if you want to use Sentry
 
 ## Credits
 
