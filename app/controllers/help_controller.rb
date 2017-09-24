@@ -6,7 +6,8 @@ class HelpController < ApplicationController
   end
 
   def show
-    case params[:page]
+    @page = params[:page]
+    case @page
     when "keyboard"
       render template: "help/keyboard"
     end
