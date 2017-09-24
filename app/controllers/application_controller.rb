@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   layout "application"
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   before_action :disable_xss_protection
   before_action :load_configuration
