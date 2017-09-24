@@ -14,7 +14,7 @@ rvm:
   - 2.4.1
 env:
   - SUGAR_DB=sqlite
-  - SUGAR_DB=mysql
+  - SUGAR_DB=mysql SUGAR_DB_USERNAME=travis
   - SUGAR_DB=postgresql
 matrix:
   exclude:
