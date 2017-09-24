@@ -65,7 +65,7 @@ class LinkFilter < Filter
   def relativize_local_links!
     parser.search("a").each do |link|
       href = extract_href(link)
-      next unless href
+      next unless href && href =~ /^https?:\/\//
       host = URI.parse(href).host
       next unless local_domains.detect { |d| host == d }
       link.set_attribute(
