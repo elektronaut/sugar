@@ -13,8 +13,16 @@ class PasswordResetsController < ApplicationController
       flash[:notice] = "An email with further instructions has been sent"
       redirect_to login_users_url
     else
-      flash.now[:notice] = "Couldn't find a user with that email address"
-      render action: :new
+      respond_to do |format|
+        format.html do
+          flash.now[:notice] = "Couldn't find a user with that email address"
+          render action: :new
+        end
+        format.mobile do
+          flash[:notice] = "Couldn't find a user with that email address"
+          redirect_to login_users_url
+        end
+      end
     end
   end
 

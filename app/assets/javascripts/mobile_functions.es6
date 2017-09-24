@@ -131,6 +131,15 @@ $(document).ready(function () {
     $(this).toggleClass('revealed');
   });
 
+  // Login
+  $("section.login").each(function () {
+    function forgotPassword() {
+      $('#login').toggle();
+      $('#password-reminder').toggle();
+    }
+    $('#password-reminder').hide();
+    $('.forgot-password').click(forgotPassword);
+  });
 
   // Confirm regular site
   $('a.regular_site').click(function () {
