@@ -1,6 +1,24 @@
 # encoding: utf-8
 
 namespace :sugar do
+  desc "Fix quoted post images"
+  task fix_quoted_post_images: :environment do
+    ex = /\/post_images\/([\w\d]{40})\/([\d]+x[\d]+)\/([\d]+)-[\d]+\.[\w]+/
+    Post.where("body LIKE \"%/post_images/%\"").each do |post|
+      new_body = post.body.gsub(ex) do |s|
+        digest, size, id = $1, $2, $3
+        new_digest = DynamicImage.digest_verifier.generate("show-#{id}-#{size}")
+        s.gsub(digest, new_digest)
+      end
+      if post.body != new_body
+        post.update_columns(
+          body: new_body,
+          body_html: nil
+        )
+      end
+    end
+  end
+
   desc "Scrub private data from the database"
   task scrub_private_data: :environment do
     keep_users = ENV["KEEP_USERS"].split(",").map(&:to_i)
