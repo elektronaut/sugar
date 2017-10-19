@@ -124,6 +124,9 @@ Sugar::Application.routes.draw do
 
   # Conversations
   controller :conversations do
+    get "/conversations/contact_moderators" => :new,
+        defaults: { moderators: true },
+        as: :contact_moderators
     get "/conversations/:id(/:page)(.:format)" => :show,
         as: :conversation,
         constraints: { id: %r{\d[^/\.]*}, page: /\d+/ }

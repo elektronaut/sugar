@@ -25,13 +25,16 @@ class ConversationsController < ApplicationController
   def new
     @exchange = Conversation.new
     @recipient = User.find_by_username(params[:username]) if params[:username]
+    @moderators = true if params[:moderators]
     render template: "exchanges/new"
   end
 
   def create
     @exchange = Conversation.create(exchange_params.merge(poster: current_user))
+    @moderators = true if params[:moderators]
     if @exchange.valid?
       @exchange.add_participant(@recipient) if @recipient
+      User.admins.each { |u| @exchange.add_participant(u) } if @moderators
       redirect_to @exchange
     else
       flash.now[:notice] = "Could not save your conversation! " \

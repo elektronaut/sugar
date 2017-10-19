@@ -3,11 +3,14 @@
 <% if @recipient %>
   <%= hidden_field_tag :recipient_id, @recipient.id %>
 <% end %>
+<% if @moderators %>
+  <%= hidden_field_tag :moderators, true %>
+<% end %>
 
 <% if @recipient %>
-<p>
-  Conversation with: <%= profile_link @recipient %>
-</p>
+  <p>
+    Conversation with: <%= profile_link @recipient %>
+  </p>
 <% end %>
 
 <p>
