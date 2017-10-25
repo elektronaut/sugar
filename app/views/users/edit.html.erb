@@ -1,21 +1,43 @@
 <%
   add_body_class "edit_user_profile"
-  @page_title = t('user.edit.edit_profile')
+  @page_title = t("user.edit.edit_profile")
   @google_maps_api = true
 %>
 
-<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %> &raquo; <%= link_to "Edit", edit_user_path(id: @user.username) %> </h2>
+<h2 class="section">
+  <%= link_to "Users", users_path %> &raquo;
+  <%= profile_link(@user) %> &raquo;
+  <%= link_to "Edit", edit_user_path(id: @user.username) %>
+</h2>
 
 <ul class="topTabs">
-  <li class="tab<%= ' active' if @page == 'info' %>"><%= link_to t('user.edit.tabs.info'), edit_user_page_path(@user.username, 'info') %></li>
-  <li class="tab<%= ' active' if @page == 'services' %>"><%= link_to t('user.edit.tabs.services'), edit_user_page_path(@user.username, 'services') %></li>
-  <li class="tab<%= ' active' if @page == 'location' %>"><%= link_to t('user.edit.tabs.location'), edit_user_page_path(@user.username, 'location') %></li>
-  <li class="tab<%= ' active' if @page == 'settings' %>"><%= link_to t('user.edit.tabs.settings'), edit_user_page_path(@user.username, 'settings') %></li>
+  <li class="tab<%= " active" if @page == "info" %>">
+    <%= link_to(t("user.edit.tabs.info"),
+                edit_user_page_path(@user.username, "info")) %>
+  </li>
+  <li class="tab<%= " active" if @page == "services" %>">
+    <%= link_to(t("user.edit.tabs.services"),
+                edit_user_page_path(@user.username, "services")) %>
+  </li>
+  <li class="tab<%= " active" if @page == "location" %>">
+    <%= link_to(t("user.edit.tabs.location"),
+                edit_user_page_path(@user.username, "location")) %>
+  </li>
+  <li class="tab<%= " active" if @page == "settings" %>">
+    <%= link_to(t("user.edit.tabs.settings"),
+                edit_user_page_path(@user.username, "settings")) %>
+  </li>
   <% if current_user == @user %>
-    <li class="tab<%= ' active' if @page == 'temporary_ban' %>"><%= link_to t('user.edit.tabs.temporary_ban'), edit_user_page_path(@user.username, 'temporary_ban') %></li>
+    <li class="tab<%= " active" if @page == "temporary_ban" %>">
+      <%= link_to(t("user.edit.tabs.temporary_ban"),
+                  edit_user_page_path(@user.username, "temporary_ban")) %>
+    </li>
   <% end %>
   <% if current_user.user_admin? %>
-    <li class="tab<%= ' active' if @page == 'admin' %>"><%= link_to t('user.edit.tabs.admin'), edit_user_page_path(@user.username, 'admin') %></li>
+    <li class="tab<%= " active" if @page == "admin" %>">
+      <%= link_to(t("user.edit.tabs.admin"),
+                  edit_user_page_path(@user.username, "admin")) %>
+    </li>
   <% end %>
 </ul>
 
@@ -24,7 +46,7 @@
   <%= render partial: "edit_#{@page}", locals: {f: f} %>
   <p>
     <button type="submit">
-      <%= t('save') %>
+      <%= t("save") %>
     </button>
   </p>
 <% end %>

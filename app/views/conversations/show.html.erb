@@ -1,9 +1,11 @@
 <%
-  add_body_class "discussion", "conversation", "discussion_by_user#{@exchange.poster_id}"
-  add_body_class 'last_page' if @posts.last_page?
+  add_body_class("discussion",
+                 "conversation",
+                 "discussion_by_user#{@exchange.poster_id}")
+  add_body_class "last_page" if @posts.last_page?
   @page_title = @exchange.title
   previous_post = nil
--%>
+%>
 
 <%= content_for :sidebar do %>
   <div class="participants">
@@ -15,9 +17,10 @@
   </div>
   <div class="invite">
     <h2>Invite someone</h2>
-    <%= form_for [:invite_participant, @exchange], html: {id: 'invite_participant_form'} do |f| %>
-      <%= text_field_tag 'username', '', class: :username %>
-      <%= submit_tag 'Invite' %>
+    <%= form_for([:invite_participant, @exchange],
+                 html: { id: "invite_participant_form" }) do |f| %>
+      <%= text_field_tag "username", "", class: :username %>
+      <%= submit_tag "Invite" %>
     <% end %>
   </div>
 <% end %>
@@ -26,10 +29,10 @@
 
 <div class="functions">
   <% if current_user? %>
-    <% if @exchange.editable_by?(current_user) -%>
+    <% if @exchange.editable_by?(current_user) %>
       <%= link_to "Edit", [:edit, @exchange], class: :edit %>
       /
-    <% end -%>
+    <% end %>
     <% if @exchange.removeable?(current_user) %>
       <%= link_to("Remove conversation",
                   remove_participant_conversation_path(
@@ -44,33 +47,50 @@
       /
     <% end %>
     <% if current_user.muted_conversation?(@exchange) -%>
-      <%= link_to "Unmute", unmute_conversation_path(@exchange, page: @posts.current_page) %>
-    <% else -%>
-      <%= link_to "Mute", mute_conversation_path(@exchange, page: @posts.current_page) %>
-    <% end -%>
+      <%= link_to("Unmute",
+                  unmute_conversation_path(@exchange,
+                                           page: @posts.current_page)) %>
+    <% else %>
+      <%= link_to("Mute",
+                  mute_conversation_path(@exchange,
+                                         page: @posts.current_page)) %>
+    <% end %>
   <% end %>
 </div>
 
 <h2 class="section">
-  <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
-  <%= link_to @exchange.title, @exchange, id: 'discussionLink'  %>
+  <% if @exchange.labels? %>
+    [<%= @exchange.labels.join(",") %>]
+  <% end %>
+  <%= link_to @exchange.title, @exchange, id: "discussionLink"  %>
 </h2>
 
 <% cache [@exchange, @page] do %>
-  <div id="discussion" data-id="<%= @exchange.id %>" data-posts-count="<%= @exchange.posts_count %>" data-type="<%= @exchange.class %>">
-    <%= render partial: 'posts/posts', locals: {posts: @posts, discussion: @exchange, functions: true, permalink: true, post_distance: true, new_posts_notifier: true} %>
+  <div id="discussion"
+       data-id="<%= @exchange.id %>"
+       data-posts-count="<%= @exchange.posts_count %>"
+       data-type="<%= @exchange.class %>">
+    <%= render(partial: "posts/posts",
+               locals: {
+                 posts: @posts,
+                 discussion: @exchange,
+                 functions: true,
+                 permalink: true,
+                 post_distance: true,
+                 new_posts_notifier: true }) %>
   </div>
 <% end %>
 
 <a name="bottom"></a>
 <div class="bottomlinks">
-  <%= link_to "Back to discussions", discussions_path, id: 'back_link' %>,
-  <% if current_user? && current_user.following?(@exchange) -%>
+  <%= link_to "Back to discussions", discussions_path, id: "back_link" %>,
+  <% if current_user? && current_user.following?(@exchange) %>
     <%= link_to "Back to followed", following_discussions_path %>,
   <% end %>
   <%= link_to "Top of page", "#top" %>
 </div>
 
 <% if @exchange.postable_by?(current_user) %>
-  <%= render partial: "exchanges/post_form", locals: {exchange: @exchange, posts: @posts} %>
+  <%= render(partial: "exchanges/post_form",
+             locals: { exchange: @exchange, posts: @posts }) %>
 <% end %>

@@ -5,7 +5,9 @@
 
 <% unless request.xhr? %>
   <h2 class="section">
-    <% if @exchange.labels? %>[<%= @exchange.labels.join(",") %>]<% end %>
+    <% if @exchange.labels? %>
+      [<%= @exchange.labels.join(",") %>]
+    <% end %>
     <%= link_to h(@exchange.title), @exchange %> &raquo;
     <%= link_to "Edit post", [:edit, @exchange, @post] %>
   </h2>
@@ -22,5 +24,9 @@
       "data-formats"        => "markdown html"
     ) %>
   </p>
-  <p><button type="submit">Save</button></p>
+  <p>
+    <button type="submit">
+      Save
+    </button>
+  </p>
 <% end %>

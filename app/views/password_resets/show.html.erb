@@ -9,7 +9,10 @@
 </h2>
 
 <div id="login">
-  <%= form_for(@user, url: password_reset_path(@password_reset_token, token: @password_reset_token.token), class: 'form') do |f| %>
+  <%= form_for(@user,
+               url: password_reset_path(@password_reset_token,
+                                        token: @password_reset_token.token),
+               class: 'form') do |f| %>
     <fieldset>
       <%= f.label :password %>
       <%= f.password_field :password %>
@@ -17,7 +20,11 @@
       <%= f.password_field :confirm_password %>
     </fieldset>
     <fieldset>
-      <button type="submit">Change Password</button> or <%= link_to "Return to login screen", login_users_path %>
+      <button type="submit">
+        Change Password
+      </button>
+      or
+      <%= link_to "Return to login screen", login_users_path %>
     </fieldset>
   <% end %>
 </div>

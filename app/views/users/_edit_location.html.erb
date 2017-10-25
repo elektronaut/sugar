@@ -6,8 +6,15 @@
 
 <div class="field">
   <label>
-    <%= t('user.edit.map') %>
-    <span class="description">&mdash; <%= t('user.edit.map_description') %> (<%= link_to(t('user.edit.clear_location'), "#", class: "clear-location") %>)</span>
+    <%= t("user.edit.map") %>
+    <span class="description">
+      &mdash; <%= t("user.edit.map_description") %>
+      (<%= link_to(t("user.edit.clear_location"),
+                   "#",
+                   class: "clear-location") %>)
+    </span>
   </label>
-  <div id="editProfileMap" class="map" style="min-width: 500px; min-height: 500px;"></div>
+  <div id="editProfileMap"
+       class="map"
+       style="min-width: 500px; min-height: 500px;"></div>
 </div>

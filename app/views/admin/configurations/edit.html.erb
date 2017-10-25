@@ -1,64 +1,97 @@
 <%
   add_body_class "admin configuration"
-  @page_title = t('configuration.configuration')
+  @page_title = t("configuration.configuration")
 %>
 
 <h2 class="section">
-  <%= link_to t('admin'), admin_path %> &raquo;
-  <%= link_to t('configuration.configuration'), admin_configuration_path %>
+  <%= link_to t("admin"), admin_path %> &raquo;
+  <%= link_to t("configuration.configuration"), admin_configuration_path %>
 </h2>
 
 <ul class="tabs topTabs">
   <li class="tab">
-    <a href="#general"><%= t('configuration.general_settings') %></a>
+    <a href="#general">
+      <%= t("configuration.general_settings") %>
+    </a>
   </li>
   <li class="tab">
-    <a href="#themes"><%= t('configuration.themes') %></a>
+    <a href="#themes">
+      <%= t("configuration.themes") %>
+    </a>
   </li>
   <li class="tab">
-    <a href="#integration"><%= t('configuration.services_and_integration') %></a>
+    <a href="#integration">
+      <%= t("configuration.services_and_integration") %>
+    </a>
   </li>
   <li class="tab">
-    <a href="#customization"><%= t('configuration.customization') %></a>
+    <a href="#customization">
+      <%= t("configuration.customization") %>
+    </a>
   </li>
 </ul>
 
 
-<%= form_for Sugar.config, url: admin_configuration_path, method: :patch, builder: Sugar::FormBuilder do |f| %>
+<%= form_for(Sugar.config,
+             url: admin_configuration_path,
+             method: :patch,
+             builder: Sugar::FormBuilder) do |f| %>
 
   <div id="general">
     <fieldset>
       <h2>
-        <%= t('configuration.forum_name') %>
+        <%= t("configuration.forum_name") %>
       </h2>
       <%= f.labelled_text_field :forum_name, size: 48 %>
-      <%= f.labelled_text_field :forum_title, size: 48, description: t('configuration.forum_title_description') %>
-      <%= f.labelled_text_field :forum_short_name, size: 10, description: t('configuration.forum_short_name_description') %>
+      <%= f.labelled_text_field(
+            :forum_title,
+            size: 48,
+            description: t("configuration.forum_title_description")
+      ) %>
+      <%= f.labelled_text_field(
+            :forum_short_name,
+            size: 10,
+            description: t("configuration.forum_short_name_description")
+      ) %>
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.domain_and_email') %>
+        <%= t("configuration.domain_and_email") %>
       </h2>
-      <%= f.labelled_text_field :domain_names, size: 48, description: t('configuration.domain_names_description') %>
-      <%= f.labelled_text_field :mail_sender, size: 48, description: t('configuration.mail_sender_description') %>
+      <%= f.labelled_text_field(
+            :domain_names,
+            size: 48,
+            description: t("configuration.domain_names_description")
+      ) %>
+      <%= f.labelled_text_field(
+            :mail_sender,
+            size: 48,
+            description: t("configuration.mail_sender_description")
+      ) %>
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.login_and_signup') %>
+        <%= t("configuration.login_and_signup") %>
       </h2>
       <p class="field">
         <label>
-          <%= t('configuration.access_control') %>
+          <%= t("configuration.access_control") %>
         </label>
-        <%= f.radio_button :public_browsing, true %> <%= t('configuration.anyone_can_browse') %><br>
-        <%= f.radio_button :public_browsing, false %> <%= t('configuration.browsing_requires_login') %>
+        <%= f.radio_button :public_browsing, true %>
+        <%= t("configuration.anyone_can_browse") %>
+        <br>
+        <%= f.radio_button :public_browsing, false %>
+        <%= t("configuration.browsing_requires_login") %>
       </p>
       <p class="field">
         <label>
-          <%= t('configuration.signing_up') %>
+          <%= t("configuration.signing_up") %>
         </label>
-        <%= f.radio_button :signups_allowed, true %> <%= t('configuration.users_can_sign_up') %><br>
-        <%= f.radio_button :signups_allowed, false %> <%= t('configuration.users_must_be_invited') %>
+        <%= f.radio_button :signups_allowed, true %>
+        <%= t("configuration.users_can_sign_up") %>
+        <br>
+        <%= f.radio_button :signups_allowed, false %>
+        <%= t("configuration.users_must_be_invited") %>
       </p>
     </fieldset>
   </div>
@@ -66,26 +99,33 @@
   <div id="themes">
     <fieldset>
       <h2>
-        <%= t('configuration.themes') %>
+        <%= t("configuration.themes") %>
       </h2>
-      <%= f.labelled_select :default_theme, Theme.all.map{|t| [t.full_name, t.id]} %>
-      <%= f.labelled_select :default_mobile_theme, Theme.mobile.map{|t| [t.full_name, t.id]} %>
+      <%= f.labelled_select(:default_theme,
+                            Theme.all.map { |t| [t.full_name, t.id] }) %>
+      <%= f.labelled_select(:default_mobile_theme,
+                            Theme.mobile.map { |t| [t.full_name, t.id] }) %>
     </fieldset>
   </div>
 
   <div id="integration">
     <fieldset>
       <h2>
-        <%= t('configuration.google_analytics') %>
+        <%= t("configuration.google_analytics") %>
       </h2>
-      <%= f.labelled_text_field :google_analytics, description: t('configuration.google_analytics_description') %>
+      <%= f.labelled_text_field(
+            :google_analytics,
+            description: t("configuration.google_analytics_description")
+      ) %>
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.facebook') %>
+        <%= t("configuration.facebook") %>
       </h2>
       <p class="info">
-        <%= t('configuration.facebook_description', link: link_to(t('configuration.facebook_apps_link'), 'http://www.facebook.com/developers')).html_safe %>
+        <%= t("configuration.facebook_description",
+              link: link_to(t("configuration.facebook_apps_link"),
+                            "http://www.facebook.com/developers")).html_safe %>
       </p>
       <%= f.labelled_text_field :facebook_app_id, size: 48 %>
       <%= f.labelled_text_field :facebook_api_secret, size: 48 %>
@@ -93,10 +133,12 @@
 
     <fieldset>
       <h2>
-        <%= t('configuration.amazon_aws') %>
+        <%= t("configuration.amazon_aws") %>
       </h2>
       <p class="info">
-        <%= t('configuration.amazon_aws_description', link: link_to(t('configuration.amazon_signup_link'), 'http://aws.amazon.com/s3/')).html_safe %>
+        <%= t("configuration.amazon_aws_description",
+              link: link_to(t("configuration.amazon_signup_link"),
+                            "http://aws.amazon.com/s3/")).html_safe %>
       </p>
       <%= f.labelled_text_field :amazon_aws_key, size: 48 %>
       <%= f.labelled_text_field :amazon_aws_secret, size: 48 %>
@@ -104,40 +146,55 @@
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.amazon_associates') %>
+        <%= t("configuration.amazon_associates") %>
       </h2>
-      <%= f.labelled_text_field :amazon_associates_id, description: t('configuration.amazon_associates_id_description') %>
+      <%= f.labelled_text_field(
+            :amazon_associates_id,
+            description: t("configuration.amazon_associates_id_description")
+      ) %>
     </fieldset>
   </div>
 
   <div id="customization">
     <fieldset>
       <h2>
-        <%= t('configuration.emoticons') %>
+        <%= t("configuration.emoticons") %>
       </h2>
       <%= f.labelled_text_field :emoticons, size: 48 %>
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.custom_html') %>
+        <%= t("configuration.custom_html") %>
       </h2>
-      <%= f.labelled_text_area :custom_header, size: '40x15', class: 'code', description: t('configuration.custom_header_description') %>
-      <%= f.labelled_text_area :custom_footer, size: '40x15', class: 'code', description: t('configuration.custom_footer_description') %>
+      <%= f.labelled_text_area(
+            :custom_header,
+            size: "40x15",
+            class: "code",
+            description: t("configuration.custom_header_description")
+      ) %>
+      <%= f.labelled_text_area(
+            :custom_footer,
+            size: "40x15",
+            class: "code",
+            description: t("configuration.custom_footer_description")
+      ) %>
     </fieldset>
     <fieldset>
       <h2>
-        <%= t('configuration.custom_javascript') %>
+        <%= t("configuration.custom_javascript") %>
       </h2>
       <p class="info">
-        <%= t('configuration.custom_javascript_info').html_safe %>
+        <%= t("configuration.custom_javascript_info").html_safe %>
       </p>
-      <%= f.labelled_text_area :custom_javascript, size: '40x15', class: 'code' %>
+      <%= f.labelled_text_area(:custom_javascript,
+                               size: "40x15",
+                               class: "code') %>
     </fieldset>
   </div>
 
   <p>
     <button type="submit">
-      <%= t('save') %>
+      <%= t("save") %>
     </button>
   </p>
 <% end %>

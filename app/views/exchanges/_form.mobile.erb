@@ -20,8 +20,16 @@
 
 <p>
   <label>Enter your first post</label>
-  <%= f.text_area(:body, id: 'compose-body', class: :rich, "data-format-binding" => ".format", "data-formats" => "markdown html", "data-remember-format" => @exchange.new_record?) %>
+  <%= f.text_area(:body,
+                  id: 'compose-body',
+                  class: :rich,
+                  data: {
+                    format_binding: ".format",
+                    formats: "markdown html",
+                    remember_format: @exchange.new_record?
+                  }) %>
 </p>
+
 <p>
   <%= f.check_box(:nsfw) %> Mark as NSFW<br />
   <% if @exchange.closeable_by?(current_user) %>

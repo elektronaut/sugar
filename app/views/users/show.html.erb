@@ -11,17 +11,21 @@
       <%= link_to "Edit", edit_user_path(id: @user.username) %> /
     <% end %>
     <% unless @user == current_user %>
-      <%= link_to "Start a conversation", new_conversation_with_path(username: @user.username) %>
+      <%= link_to("Start a conversation",
+                  new_conversation_with_path(username: @user.username)) %>
     <% end %>
   </div>
 <% end %>
 
-<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= profile_link(@user) %></h2>
+<h2 class="section">
+  <%= link_to "Users", users_path %> &raquo;
+  <%= profile_link(@user) %>
+</h2>
 
 <div id="userinfo">
   <p class="avatar_and_name clearfix">
     <%= avatar_image_tag @user %>
-    <%= profile_link(@user, @user.username, class: 'username') %>
+    <%= profile_link(@user, @user.username, class: "username") %>
     <% if @user.realname? || @user.location? %>
       <br />
       <% if @user.realname? %>
@@ -57,49 +61,96 @@
   </div>
   <% end %>
 
-  <% if !Sugar.config.signups_allowed && current_user? && current_user.user_admin? && !@user.user_admin? %>
+  <% if !Sugar.config.signups_allowed && current_user? &&
+        current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
-      <strong>Invites:</strong> <%= @user.available_invites %> &ndash;
-      <%= link_to "Grant one", grant_invite_user_path(id: @user.username), method: :post %>
-      or <%= link_to "revoke all", revoke_invites_user_path(id: @user.username), confirm: 'Are you sure you want to revoke all invites?', method: :post %>
+      <strong>
+        Invites:
+      </strong>
+      <%= @user.available_invites %> &ndash;
+      <%= link_to("Grant one",
+                  grant_invite_user_path(id: @user.username),
+                  method: :post) %>
+      or
+      <%= link_to("revoke all",
+                  revoke_invites_user_path(id: @user.username),
+                  method: :post,
+                  data: {
+                    confirm: "Are you sure you want to revoke all invites?"
+                  }) %>
       <br />
     </p>
   <% end %>
 
   <p class="posts_and_discussions">
     <% if @user.discussions.viewable_by(current_user).any? %>
-      <%= link_to "View discussions", discussions_user_path(id: @user.username) %>
-      (<%= @user.discussions.viewable_by(current_user).count %>)<br />
+      <%= link_to("View discussions",
+                  discussions_user_path(id: @user.username)) %>
+      (<%= @user.discussions.viewable_by(current_user).count %>)
+      <br />
     <% end %>
+
     <% if @user.participated_discussions.viewable_by(current_user).any? %>
-      <%= link_to "View participated discussions", participated_user_path(id: @user.username) %>
-      (<%= @user.participated_discussions.viewable_by(current_user).count %>)<br />
+      <%= link_to("View participated discussions",
+                  participated_user_path(id: @user.username)) %>
+      (<%= @user.participated_discussions.viewable_by(current_user).count %>)
+      <br />
     <% end %>
+
     <% if @user.discussion_posts.viewable_by(current_user).any? %>
       <%= link_to "View posts", posts_user_path(id: @user.username) %>
-      (<%= @user.discussion_posts.viewable_by(current_user).count %>)<br />
+      (<%= @user.discussion_posts.viewable_by(current_user).count %>)
+      <br />
     <% end %>
+
     <% unless !current_user? || @user == current_user %>
-      <%= link_to "Start a conversation with #{@user.username}", new_conversation_with_path(username: @user.username) %>
+      <%= link_to("Start a conversation with #{@user.username}",
+                  new_conversation_with_path(username: @user.username)) %>
     <% end %>
   </p>
 
   <p>
     <% if @user.birthday? %>
-      <strong>Birthday</strong>: <%= @user.birthday.strftime("%b %d") %><br />
+      <strong>
+        Birthday
+      </strong>:
+      <%= @user.birthday.strftime("%b %d") %>
+      <br />
     <% end %>
-    <strong>Member since</strong>:
-    <%= time_tag @user.created_at, class: 'relative' %><br />
+
+    <strong>
+      Member since
+    </strong>:
+    <%= time_tag @user.created_at, class: "relative" %>
+    <br />
+
     <% if @user.inviter %>
-      <strong>Invited by</strong>:
-      <%= profile_link(@user.inviter) %><br />
+      <strong>
+        Invited by
+      </strong>:
+      <%= profile_link(@user.inviter) %>
+      <br />
     <% end %>
-    <strong>Last active</strong>:
-    <%= @user.online? ? "<strong>Online now</strong>".html_safe : time_tag(@user.last_active, class: 'relative') %><br />
+
+    <strong>
+      Last active
+    </strong>:
+    <% if @user.online? %>
+      <strong>
+        Online now
+      </strong>
+    <% else %>
+      <%= time_tag(@user.last_active, class: "relative") %>
+    <% end %>
+
     <% if @user.banned? %>
-      <%= @user.username %> has been <span class="banned"><strong>banned!</strong></span><br />
+      <%= @user.username %> has been
+      <span class="banned"><strong>banned!</strong></span>
+      <br />
     <% elsif @user.admin? %>
-      <%= @user.username %> is an <span class="admin"><strong>admin</strong></span>.<br />
+      <%= @user.username %> is an
+      <span class="admin"><strong>admin</strong></span>.
+      <br />
     <% end %>
   </p>
 
@@ -111,7 +162,8 @@
     <% end %>
     <% if @user.gtalk? %>
       <strong>Google Talk</strong>:
-      <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %><br />
+      <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %>
+      <br />
     <% end %>
     <% if @user.msn? %>
       <strong>MSN Messenger</strong>:
@@ -119,10 +171,12 @@
     <% end %>
     <% if @user.aim? %>
       <strong>AIM</strong>:
-      <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %><br />
+      <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %>
+      <br />
     <% end %>
     <% if @user.instagram? %>
-      <strong>Instagram</strong>: <%= @user.instagram %><br />
+      <strong>Instagram</strong>: <%= @user.instagram %>
+      <br />
     <% end %>
     <% if @user.flickr? %>
       <strong>Flickr</strong>:
@@ -137,7 +191,8 @@
     <% end %>
   </p>
 
-  <% if @user.gamertag? || @user.sony? || @user.nintendo? || @user.nintendo_switch? || @user.steam? || @user.battlenet %>
+  <% if @user.gamertag? || @user.sony? || @user.nintendo? ||
+        @user.nintendo_switch? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
       <% if @user.gamertag? %>
         <strong>Xbox Live:</strong>
@@ -189,7 +244,7 @@
         <% @user.invitees.each do |invitee| %>
           <li>
             <%= profile_link(invitee) %>
-            (joined <%= time_tag invitee.created_at, class: 'relative' %>)
+            (joined <%= time_tag invitee.created_at, class: "relative" %>)
           </li>
         <% end %>
       </ul>
@@ -199,18 +254,24 @@
 </div>
 <div id="userPosts">
   <% if @posts && @posts.length > 0 %>
-    <% cache [@user, 'profile/posts', current_user.try(&:trusted?)] do %>
-      <%= render partial: 'posts/posts', locals: {posts: @posts, title: true, no_pagination: true} %>
+    <% cache [@user, "profile/posts", current_user.try(&:trusted?)] do %>
+      <%= render(partial: "posts/posts",
+                 locals: { posts: @posts, title: true, no_pagination: true }) %>
     <% end %>
   <% elsif current_user? && @user == current_user %>
     <div class="welcome">
       <h2>Welcome to <%= Sugar.config.forum_name %>!</h2>
       <p>
-        This is your user profile. Normally your posts will show up in this space, but you haven't posted anything yet.
+        This is your user profile. Normally your posts will show up in
+        this space, but you haven't posted anything yet.
       </p>
       <p>
-        Why don't you go <%= link_to "check out some discussions", discussions_path %>, and maybe introduce yourself?<br />
-        Or maybe <%= link_to "edit your profile", edit_user_path(id: @user.username) %> and add some more info about yourself?
+        Why don't you go
+        <%= link_to "check out some discussions", discussions_path %>,
+        and maybe introduce yourself?<br />
+        Or maybe
+        <%= link_to "edit your profile", edit_user_path(id: @user.username) %>
+        and add some more info about yourself?
       </p>
     </div>
   <% end %>

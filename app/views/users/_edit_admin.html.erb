@@ -1,18 +1,20 @@
 <fieldset>
   <h2>
-    <%= t('user.edit.account_status') %>
+    <%= t("user.edit.account_status") %>
   </h2>
   <%= f.labelled_check_box :banned %>
-  <%= f.labelled_check_box :trusted, description: t('user.edit.trusted_description') %>
+  <%= f.labelled_check_box(:trusted,
+                           description: t("user.edit.trusted_description")) %>
 </fieldset>
 
 <% if !Sugar.config.signups_allowed && !@user.user_admin? %>
   <fieldset>
     <h2>
-      <%= t('user.edit.invites') %>
+      <%= t("user.edit.invites") %>
     </h2>
     <p class="field">
-      <%= f.text_field(:available_invites, size: 4) %> <%= t('user.edit.invites_count') %>
+      <%= f.text_field(:available_invites, size: 4) %>
+      <%= t("user.edit.invites_count") %>
     </p>
   </fieldset>
 <% end %>
@@ -20,17 +22,28 @@
 <% if current_user.user_admin? %>
   <fieldset>
     <h2>
-      <%= t('user.edit.temporary_ban') %>
+      <%= t("user.edit.temporary_ban") %>
     </h2>
-    <%= f.labelled_datetime_select :banned_until, minute_step: 15, default: 1.minute.ago %>
+    <%= f.labelled_datetime_select(:banned_until,
+                                   minute_step: 15,
+                                   default: 1.minute.ago) %>
   </fieldset>
 
   <fieldset>
     <h2>
-      <%= t('user.edit.administator_privileges') %>
+      <%= t("user.edit.administator_privileges") %>
     </h2>
-    <%= f.labelled_check_box :moderator, description: t('user.edit.moderator_description') %>
-    <%= f.labelled_check_box :user_admin, description: t('user.edit.user_admin_description') %>
-    <%= f.labelled_check_box :admin, description: t('user.edit.admin_description') %>
+    <%= f.labelled_check_box(
+          :moderator,
+          description: t("user.edit.moderator_description")
+    ) %>
+    <%= f.labelled_check_box(
+          :user_admin,
+          description: t("user.edit.user_admin_description")
+    ) %>
+    <%= f.labelled_check_box(
+          :admin,
+          description: t("user.edit.admin_description")
+    ) %>
   </fieldset>
 <% end %>

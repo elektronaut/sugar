@@ -9,6 +9,10 @@
 </h2>
 
 <%= form_for @exchange, builder: Sugar::FormBuilder do |f| %>
-  <%= render partial: "exchanges/form", locals: {f: f} %>
-  <p><button type="submit">Save</button></p>
+  <%= render partial: "exchanges/form", locals: { f: f } %>
+  <p>
+    <button type="submit">
+      Save
+    </button>
+  </p>
 <% end %>

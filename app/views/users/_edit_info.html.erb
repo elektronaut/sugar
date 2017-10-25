@@ -1,11 +1,19 @@
 <%= f.labelled_text_field :username, disabled: !current_user.user_admin? %>
 <%= f.labelled_text_field :realname, size: 50 %>
-<%= f.labelled_date_select :birthday, end_year: 1900, start_year: Time.now.year, include_blank: true, description: t('user.edit.birthday_description') %>
+<%= f.labelled_date_select(:birthday,
+                           end_year: 1900,
+                           start_year: Time.now.year,
+                           include_blank: true,
+                           description: t("user.edit.birthday_description")) %>
 
 <%= avatar_image_tag @user %>
 
 <%= f.fields_for :avatar_attributes, @user.build_avatar do |a| %>
-  <%= a.labelled_file_field :file, note: t('user.edit.gravatar_link') %>
+  <%= a.labelled_file_field :file, note: t("user.edit.gravatar_link") %>
 <% end %>
 
-<%= f.labelled_text_area :description, rows: 12, cols: 80, class: "rich", "data-formats" => "markdown" %>
+<%= f.labelled_text_area(:description,
+                         rows: 12,
+                         cols: 80,
+                         class: "rich",
+                         data: { formats: "markdown" }) %>

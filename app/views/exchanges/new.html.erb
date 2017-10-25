@@ -12,16 +12,22 @@
     <% if @moderators %>
       <%= link_to "Contact moderators", new_conversation_path %>
     <% elsif @recipient %>
-      <%= link_to "New conversation with #{@recipient.username}", new_conversation_with_path(username: @recipient.username) %>
+      <%= link_to("New conversation with #{@recipient.username}",
+                  new_conversation_with_path(username: @recipient.username)) %>
     <% else %>
       <%= link_to "New", new_conversation_path %>
     <% end %>
   <% else %>
-    <%= link_to "Discussions", discussions_path %> &raquo; <%= link_to "New", new_discussion_path %>
+    <%= link_to "Discussions", discussions_path %> &raquo;
+    <%= link_to "New", new_discussion_path %>
   <% end %>
 </h2>
 
 <%= form_for @exchange, builder: Sugar::FormBuilder do |f| %>
   <%= render partial: "exchanges/form", locals: {f: f} %>
-  <p><button type="submit">Create <%= @exchange.class.to_s.downcase %></button></p>
+  <p>
+    <button type="submit">
+      Create <%= @exchange.class.to_s.downcase %>
+    </button>
+  </p>
 <% end %>

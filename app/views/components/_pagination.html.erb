@@ -4,7 +4,6 @@
 
   # Solr results have offset, while ARel results need offset_value
   offset = p.respond_to?(:offset_value) ? p.offset_value : p.offset
-
 %>
 <div class="pagination">
   <% if p.total_pages > 1 %>
@@ -13,7 +12,9 @@
       <%# Previous page %>
       <span class="prev_page">
         <% if p.previous_page %>
-          <%= link_to({page: p.previous_page, anchor: anchor}.merge(pagination_params), class: 'prev_page_link') do %>
+          <%= link_to({ page: p.previous_page,
+                        anchor: anchor }.merge(pagination_params),
+                      class: "prev_page_link") do %>
             <i class="icon icon-chevron-left"></i>
             Prev
           <% end %>
@@ -30,7 +31,9 @@
             <% if p.current_page == 1 %>
               1
             <% else %>
-              <%= link_to("1", {page: 1, anchor: anchor}.merge(pagination_params), class: 'first_page_link') %>
+              <%= link_to("1",
+                          { page: 1, anchor: anchor }.merge(pagination_params),
+                          class: "first_page_link") %>
             <% end %>
           </span>
         <% end %>
@@ -46,7 +49,9 @@
             <% if p.current_page == np %>
               <%= np %>
             <% else %>
-              <%= link_to(np, {page: np, anchor: anchor}.merge(pagination_params), class: 'number_page_link') %>
+              <%= link_to(np,
+                          { page: np, anchor: anchor }.merge(pagination_params),
+                          class: "number_page_link") %>
             <% end %>
           </span>
         <% end %>
@@ -62,7 +67,10 @@
             <% if p.current_page == p.total_pages %>
               <%= p.total_pages %>
             <% else %>
-              <%= link_to(p.total_pages, {page: p.total_pages, anchor: anchor}.merge(pagination_params), class: 'last_page_link') %>
+              <%= link_to(p.total_pages,
+                          { page: p.total_pages,
+                            anchor: anchor }.merge(pagination_params),
+                          class: "last_page_link") %>
             <% end %>
           </span>
         <% end %>
@@ -71,7 +79,9 @@
       <%# Next page %>
       <span class="next_page">
         <% if p.next_page %>
-          <%= link_to({page: p.next_page, anchor: anchor}.merge(pagination_params), class: 'next_page_link') do %>
+          <%= link_to({ page: p.next_page,
+                        anchor: anchor }.merge(pagination_params),
+                      class: "next_page_link") do %>
             Next
             <i class="icon icon-chevron-right"></i>
           <% end %>

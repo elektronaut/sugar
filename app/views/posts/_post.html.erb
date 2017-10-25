@@ -13,9 +13,17 @@
 
   <% if post_distance && previous_post %>
     <% if (post.created_at - previous_post.created_at) >= 12.hours %>
-      <div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> later&hellip;</div>
+      <div class="post_distance">
+        <%= distance_of_time_in_words(post.created_at,
+                                      previous_post.created_at) %>
+        later&hellip;
+      </div>
     <% elsif (previous_post.created_at - post.created_at) >= 12.hours %>
-      <div class="post_distance"><%= distance_of_time_in_words(post.created_at, previous_post.created_at) %> earlier&hellip;</div>
+      <div class="post_distance">
+        <%= distance_of_time_in_words(post.created_at,
+                                      previous_post.created_at) %>
+        earlier&hellip;
+      </div>
     <% end %>
   <% end %>
 
@@ -23,18 +31,24 @@
        data-user_id="<%= post.user.id %>"
        data-exchange_id="<%= post.exchange_id %>"
        data-exchange_type="<%= post.exchange.type %>"
-       data-post_id="<%= post.id %>"
-  >
+       data-post_id="<%= post.id %>" >
     <a name="post-<%= post.id %>" class="anchor"></a>
     <% if title %>
       <div class="title">
         <% if post.exchange.labels? %>
-          <span class="labels">[<%= post.exchange.labels.join(',') %>]</span>
+          <span class="labels">
+            [<%= post.exchange.labels.join(',') %>]
+          </span>
         <% end %>
-        <%= link_to post.exchange.title, polymorphic_path(post.exchange, page: post.page, anchor: "post-#{post.id}") %>
+        <%= link_to(post.exchange.title,
+                    polymorphic_path(post.exchange,
+                                     page: post.page,
+                                     anchor: "post-#{post.id}")) %>
         <small>
-          Started by <%= profile_link(post.exchange.poster) %>,
-          Last active <%= time_tag post.exchange.last_post_at, class: 'relative' %>,
+          Started by
+          <%= profile_link(post.exchange.poster) %>,
+          Last active
+          <%= time_tag post.exchange.last_post_at, class: "relative" %>,
           <%= post.exchange.posts_count %> posts
         </small>
       </div>
@@ -48,16 +62,24 @@
       <div class="me_post_content">
         <div class="avatar"><%= avatar_image_tag(post.user) %></div>
         <div class="body" id="postBody-<%= post.id %>">
-          <span class="content"><%= format_post post.body, post.user %></span>
+          <span class="content">
+            <%= format_post post.body, post.user %>
+          </span>
           <% if preview %>
-            <time class="relative date">Preview</time>
+            <time class="relative date">
+              Preview
+            </time>
           <% else %>
             <% if permalink %>
-              <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
-                <%= time_tag post.created_at, class: 'relative date' %>
+              <%= link_to(polymorphic_path((discussion||post.exchange),
+                                           page: post_page(post),
+                                           anchor: "post-#{post.id}"),
+                          title: "Permalink to this post",
+                          class: "permalink") do %>
+                <%= time_tag post.created_at, class: "relative date" %>
               <% end %>
             <% else %>
-              <%= time_tag post.created_at, class: 'relative date' %>
+              <%= time_tag post.created_at, class: "relative date" %>
             <% end %>
           <% end %>
         </div>
@@ -68,16 +90,24 @@
         <span class="avatar">
           <%= avatar_image_tag(post.user) %>
         </span>
-        <span class="username"><%= profile_link(post.user) %></span>
+        <span class="username">
+          <%= profile_link(post.user) %>
+        </span>
         <% if preview %>
-          <time class="relative date">Preview</time>
+          <time class="relative date">
+            Preview
+          </time>
         <% else %>
           <% if permalink %>
-            <%= link_to(polymorphic_path((discussion||post.exchange), page: post_page(post), anchor: "post-#{post.id}"), title: "Permalink to this post", class: "permalink") do %>
-              <%= time_tag post.created_at, class: 'relative date' %>
+            <%= link_to(polymorphic_path((discussion||post.exchange),
+                                         page: post_page(post),
+                                         anchor: "post-#{post.id}"),
+                        title: "Permalink to this post",
+                        class: "permalink") do %>
+              <%= time_tag post.created_at, class: "relative date" %>
             <% end %>
           <% else %>
-            <%= time_tag post.created_at, class: 'relative date' %>
+            <%= time_tag post.created_at, class: "relative date" %>
           <% end %>
         <% end %>
       </div>
@@ -85,9 +115,11 @@
         <div class="content">
           <%= format_post(post.body_html, post.user) %>
         </div>
-        <% if post.edited? %><div class="edited">
-          Edited <%= time_tag post.edited_at, class: 'relative' %>
-        </div><% end %>
+        <% if post.edited? %>
+          <div class="edited">
+            Edited <%= time_tag post.edited_at, class: "relative" %>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>

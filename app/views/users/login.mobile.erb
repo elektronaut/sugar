@@ -4,14 +4,14 @@
 
 <section class="login">
   <div id="login" class="login_box">
-    <%= form_tag(authenticate_users_path, class: 'form') do %>
+    <%= form_tag(authenticate_users_path, class: "form") do %>
       <p>
         <label>Email</label>
-        <%= text_field_tag 'email', '', class: :text %>
+        <%= text_field_tag "email", "", class: :text %>
       </p>
       <p>
         <label>Password</label>
-        <%= password_field_tag 'password', '', class: :text %>
+        <%= password_field_tag "password", "", class: :text %>
       </p>
       <p>
         <%= submit_tag "Login" %>
@@ -20,14 +20,14 @@
   </div>
 
   <div id="password-reminder" class="login_box">
-    <%= form_tag(password_resets_path, class: 'form') do %>
+    <%= form_tag(password_resets_path, class: "form") do %>
       <p>
         Enter your email address, and we'll send you a link where you
         can reset your password.
       </p>
       <p>
         <label>Email</label>
-        <%= text_field_tag 'email', '', class: :text %>
+        <%= text_field_tag "email", ", class: :text %>
       </p>
       <p>
         <%= submit_tag "Send" %>
@@ -39,7 +39,7 @@
     <p>
       <%= link_to "Password reminder", "#", class: "forgot-password" %>
       <span class="separator">|</span>
-      <%= link_to "Regular site", mobile_format: 'html' %>
+      <%= link_to "Regular site", mobile_format: "html" %>
     </p>
   </div>
 </section>

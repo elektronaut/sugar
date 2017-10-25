@@ -2,7 +2,9 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title><%= [@page_title,Sugar.config.forum_name].compact.join(' - ') %></title>
+  <title>
+    <%= [@page_title, Sugar.config.forum_name].compact.join(" - ") %>
+  </title>
 
   <%= stylesheet_link_tag "application" %>
   <% if current_user? && current_user.mobile_stylesheet_url? %>
@@ -14,47 +16,73 @@
   <%= icon_tags %>
   <%= csrf_meta_tag %>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <body>
-    <div id="header">
+  <div id="header">
     <div id="navigationToggle">
-      <%= link_to "", "#", class: (current_user? && current_user.unread_conversations? ? 'new toggle-navigation' : 'toggle-navigation') %>
+      <%= link_to("",
+                  "#",
+                  class: (current_user? && current_user.unread_conversations? ?
+                          "new toggle-navigation" : "toggle-navigation")) %>
     </div>
-        <h1 id="pageTitle" class="page_title">
-      <% if @page_title %>
-        <span class="site_name"><%= link_to "#{Sugar.config.forum_short_name}:", discussions_path %></span> <%= @page_title %>
-      <% else %>
-        <span class="site_name"><%= link_to "#{Sugar.config.forum_short_name}", discussions_path %></span>
-      <% end %>
+    <h1 id="pageTitle" class="page_title">
+      <span class="site_name">
+        <%= link_to "#{Sugar.config.forum_short_name}:", discussions_path %>
+      </span>
+      <%= @page_title if @page_title %>
     </h1>
-    </div>
+  </div>
   <% if current_user? || Sugar.public_browsing? %>
     <div id="navigation"><ul>
-      <li><%= link_to "Discussions", discussions_path %></li>
+      <li>
+        <%= link_to "Discussions", discussions_path %>
+      </li>
       <% if current_user? %>
-        <li><%= link_to "Popular", popular_discussions_path %></li>
-        <li><%= link_to "Following", following_discussions_path %></li>
-        <li><%= link_to "Favorites", favorites_discussions_path %></li>
+        <li>
+          <%= link_to "Popular", popular_discussions_path %>
+        </li>
+        <li>
+          <%= link_to "Following", following_discussions_path %>
+        </li>
+        <li>
+          <%= link_to "Favorites", favorites_discussions_path %>
+        </li>
         <% if current_user.unread_conversations? %>
-          <li><strong><%= link_to "Conversations", conversations_path %></strong></li>
+          <li>
+            <strong><%= link_to "Conversations", conversations_path %></strong>
+          </li>
         <% else %>
-          <li><%= link_to "Conversations", conversations_path %></li>
+          <li>
+            <%= link_to "Conversations", conversations_path %>
+          </li>
         <% end %>
       <% end %>
-      <li><%= link_to "Users", users_path %></li>
+      <li>
+        <%= link_to "Users", users_path %>
+      </li>
       <% if current_user? %>
-        <li><%= link_to "New discussion", new_discussion_path %></li>
-        <% if @exchange && !@exchange.new_record? && @exchange.editable_by?(current_user) %>
-          <li><%= link_to "Edit discussion", edit_discussion_path(@exchange) %></li>
+        <li>
+          <%= link_to "New discussion", new_discussion_path %>
+        </li>
+        <% if @exchange && !@exchange.new_record? &&
+              @exchange.editable_by?(current_user) %>
+          <li>
+            <%= link_to "Edit discussion", edit_discussion_path(@exchange) %>
+          </li>
         <% end %>
-        <li><%= link_to "Log out", logout_users_path, confirm: "Are you sure you want to log out?" %></li>
+        <li>
+          <%= link_to("Log out",
+                      logout_users_path,
+                      confirm: "Are you sure you want to log out?") %>
+        </li>
       <% end %>
       <li class="search">
-        <%= form_tag((@search_path || search_path), method: 'get') do %>
+        <%= form_tag((@search_path || search_path), method: "get") do %>
           Search for
-          <%= text_field_tag 'q', @search_query, class: :query %>
-          <%= select_tag 'search_mode', options_for_select(
+          <%= text_field_tag "q", @search_query, class: :query %>
+          <%= select_tag "search_mode", options_for_select(
             search_mode_options,
             @search_path || search_path
           ) %>
@@ -64,7 +92,11 @@
     </ul></div>
   <% end %>
   <% if flash[:notice] %>
-    <div id="notice"><p><%= raw flash[:notice] %></p></div>
+    <div id="notice">
+      <p>
+        <%= raw flash[:notice] %>
+      </p>
+    </div>
   <% end %>
   <div class="content">
     <%= yield %>
@@ -92,12 +124,17 @@
     <script async src="https://secure.assets.tumblr.com/post.js"></script>
   <% end %>
 
-  <% if Sugar.config.google_analytics -%>
-  <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  </script>
-  <script type="text/javascript">try{ var pageTracker = _gat._getTracker("<%= Sugar.config.google_analytics %>"); pageTracker._trackPageview(); } catch(err) {}</script>
-  <% end -%>
+  <% if Sugar.config.google_analytics %>
+    <script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '<%= Sugar.config.google_analytics %>']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  <% end %>
 </body>
 </html>

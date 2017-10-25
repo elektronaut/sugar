@@ -1,7 +1,14 @@
-<%= f.labelled_datetime_select :banned_until, minute_step: 15, default: 1.minute.ago %>
+<%= f.labelled_datetime_select(:banned_until,
+                               minute_step: 15,
+                               default: 1.minute.ago) %>
 <% unless @user.time_zone? %>
   <p>
-    <strong><%= t('user.edit.warning') %>:</strong>
-    <%= t('user.edit.missing_time_zone_link', link: link_to(t('user.edit.chosen_a_time_zone'), edit_user_page_path(@user.username, 'location'))).html_safe %>
+    <strong>
+      <%= t("user.edit.warning") %>:
+    </strong>
+    <%= t("user.edit.missing_time_zone_link",
+          link: link_to(t("user.edit.chosen_a_time_zone"),
+                        edit_user_page_path(@user.username,
+                                            "location"))).html_safe %>
   </p>
 <% end %>

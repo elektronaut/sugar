@@ -3,18 +3,22 @@
   @page_title = "Invites"
 %>
 
-<div class="functions">
+<div class="functions"></div>
 
-</div>
-
-<h2 class="section"><%= link_to "Invites", invites_path %></h2>
+<h2 class="section">
+  <%= link_to "Invites", invites_path %>
+</h2>
 
 <div class="content">
   <p>
     <% if current_user.available_invites? %>
       <% if current_user.user_admin? %>
-        You are a user admin, and can <%= link_to "invite as many people as you like", new_invite_path %>.
-        You can also grant other users invites from their profile pages. <%= link_to "Click here to view everyone's invites", all_invites_path %>.
+        You are a user admin, and can
+        <%= link_to("invite as many people as you like",
+                    new_invite_path) %>.
+        You can also grant other users invites from their profile pages.
+        <%= link_to("Click here to view everyone's invites",
+                    all_invites_path) %>.
         </p><p>
       <% elsif current_user.available_invites? %>
         You have
@@ -22,15 +26,19 @@
           <strong>one available invite</strong>,
           <%= link_to "click here to use it", new_invite_path %>.
         <% else %>
-          <strong><%= current_user.available_invites %> available invites</strong>,
+          <strong>
+            <%= current_user.available_invites %> available invites
+          </strong>,
           <%= link_to "click here to invite someone", new_invite_path %>.
         <% end %>
       <% end %>
-      Sent invites will expire after 14 days, and will be returned if unused or cancelled.
+      Sent invites will expire after 14 days, and will be returned if
+      unused or cancelled.
     <% else %>
       You don't currently have any available invites.
       <% if current_user.invites? %>
-        You can cancel one of your invites to reclaim it, or wait until they expire.
+        You can cancel one of your invites to reclaim it, or wait
+        until they expire.
       <% end %>
     <% end %>
   </p>
@@ -44,15 +52,27 @@
       <th>Expires</th>
       <th></th>
     </tr>
-    <% @invites.each do |invite| %><tr>
-      <td class="email"><%= invite.email %></td>
-      <td class="created_at">
-        <%= time_tag invite.created_at, class: 'relative' %>
-      </td>
-      <td class="expires_at"><%= invite.expires_at.strftime("%b %d, %Y") %></td>
-      <td class="actions">
-        <%= link_to "Cancel", invite_path(invite), class: :delete, method: :delete, confirm: 'Are you sure that you want to cancel this invite?' %>
-      </td>
-    </tr><% end %>
+    <% @invites.each do |invite| %>
+      <tr>
+        <td class="email">
+          <%= invite.email %>
+        </td>
+        <td class="created_at">
+          <%= time_tag invite.created_at, class: "relative" %>
+        </td>
+        <td class="expires_at">
+          <%= invite.expires_at.strftime("%b %d, %Y") %>
+        </td>
+        <td class="actions">
+          <%= link_to("Cancel",
+                      invite_path(invite),
+                      class: :delete,
+                      method: :delete,
+                      data: {
+                        confirm: "Are you sure that you want to cancel this invite?"
+                      }) %>
+        </td>
+      </tr>
+    <% end %>
   </table>
 <% end %>

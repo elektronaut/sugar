@@ -2,7 +2,10 @@
   @page_title = "Password Reset"
 %>
 
-<%= form_for(@user, url: password_reset_path(@password_reset_token, token: @password_reset_token.token), class: 'form') do |f| %>
+<%= form_for(@user,
+             url: password_reset_path(@password_reset_token,
+                                      token: @password_reset_token.token),
+             class: "form") do |f| %>
   <p>
     <%= f.label :password %>
     <%= f.password_field :password %>
@@ -12,6 +15,8 @@
     <%= f.password_field :confirm_password %>
   </p>
   <p>
-    <button type="submit">Change Password</button>
+    <button type="submit">
+      Change Password
+    </button>
   </p>
 <% end %>

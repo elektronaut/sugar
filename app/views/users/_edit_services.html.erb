@@ -1,36 +1,50 @@
 <%= f.labelled_text_field :website, size: 50 %>
+
 <% if current_user == @user && Sugar.config.facebook_app_id %>
   <p class="field">
     <label>Facebook</label>
     <% if @user.facebook_uid? %>
-      <%= t('user.edit.facebook_connected') %> <%= link_to t('user.edit.remove?'), disconnect_facebook_path, method: :post %>
+      <%= t("user.edit.facebook_connected") %>
+      <%= link_to(t("user.edit.remove?"),
+                  disconnect_facebook_path,
+                  method: :post) %>
     <% else %>
-      <%= link_to t('user.edit.connect_with_facebook'), facebook_oauth_url(connect_facebook_url), class: 'fb_button' %>
+      <%= link_to(t("user.edit.connect_with_facebook"),
+                  facebook_oauth_url(connect_facebook_url),
+                  class: "fb_button") %>
     <% end %>
   </p>
 <% end %>
 
 <fieldset id="messaging">
-  <h2><%= t('user.edit.messaging') %></h2>
+  <h2>
+    <%= t("user.edit.messaging") %>
+  </h2>
   <%= f.labelled_text_field :gtalk %>
   <%= f.labelled_text_field :msn %>
   <%= f.labelled_text_field :aim %>
 </fieldset>
 
 <fieldset id="social_media">
-  <h2><%= t('user.edit.social_media') %></h2>
+  <h2>
+    <%= t("user.edit.social_media") %>
+  </h2>
   <%= f.labelled_text_field :twitter %>
-  <%= f.labelled_text_field :flickr, description: t('user.edit.flickr_description') %>
+  <%= f.labelled_text_field(:flickr,
+                            description: t("user.edit.flickr_description")) %>
   <%= f.labelled_text_field :last_fm %>
   <%= f.labelled_text_field :instagram %>
 </fieldset>
 
 <fieldset id="gaming">
-  <h2><%= t('user.edit.gaming') %></h2>
+  <h2>
+    <%= t("user.edit.gaming") %>
+  </h2>
   <%= f.labelled_text_field :gamertag %>
   <%= f.labelled_text_field :sony %>
   <%= f.labelled_text_field :nintendo %>
   <%= f.labelled_text_field :nintendo_switch %>
-  <%= f.labelled_text_field :steam, description: t('user.edit.steam_description') %>
+  <%= f.labelled_text_field(:steam,
+                            description: t("user.edit.steam_description")) %>
   <%= f.labelled_text_field :battlenet %>
 </fieldset>

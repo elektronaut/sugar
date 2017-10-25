@@ -4,15 +4,23 @@
 %>
 
 <%= content_for :sidebar do %>
-  <%= render partial: 'discussions/sidebar'%>
+  <%= render partial: "discussions/sidebar" %>
 <% end %>
 
-<h2 class="section">Searching posts for <em><%= @search_query %></em></h2>
+<h2 class="section">
+  Searching posts for <em><%= @search_query %></em>
+</h2>
 
-<%= render partial: 'search/tips' %>
+<%= render partial: "search/tips" %>
 
 <% if @posts && @posts.length > 0 %>
-  <%= render partial: 'posts/posts', locals: {posts: @posts, title: true, pagination_params: {q: @search_query}} %>
+  <%= render(partial: "posts/posts",
+             locals: {
+               posts: @posts,
+               title: true,
+               pagination_params: { q: @search_query }}) %>
 <% else %>
-  <p>No posts were found.</p>
+  <p>
+    No posts were found.
+  </p>
 <% end %>

@@ -1,9 +1,14 @@
 <% @page_title = "Titles: \"#{@search_query}\"" %>
 
 <% if @exchanges.any? %>
-  <%= render partial: "exchanges/table", locals: {exchanges: @exchanges, pagination_params: {q: @search_query}} %>
+  <%= render(partial: "exchanges/table",
+             locals: {
+               exchanges: @exchanges,
+               pagination_params: { q: @search_query }}) %>
 <% else %>
   <div class="page_content">
-    <p>No discussions were found.</p>
+    <p>
+      No discussions were found.
+    </p>
   </div>
 <% end %>

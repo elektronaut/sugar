@@ -2,15 +2,17 @@
   <%= f.hidden_field(:format, class: "format") %>
   <div class="reply">
     <p>
-      <%= f.text_area(
-        :body,
-        id:                    "compose-body",
-        class:                 "rich",
-        "data-format-binding"  => ".format",
-        "data-formats"         => "markdown html",
-        "data-remember-format" => "true"
-      ) %>
+      <%= f.text_area(:body,
+                      id: "compose-body",
+                      class: "rich",
+                      data: {
+                        format_binding: ".format",
+                        formats: "markdown html",
+                        remember_format: true
+                      }) %>
     </p>
-    <p><%= submit_tag "Post" %></p>
+    <p>
+      <%= submit_tag "Post" %>
+    </p>
   </div>
 <% end %>

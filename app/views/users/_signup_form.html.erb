@@ -3,7 +3,7 @@
 %>
 
 <% if @invite %>
-  <%= hidden_field_tag 'token', @invite.token %>
+  <%= hidden_field_tag "token", @invite.token %>
 <% end %>
 
 <%= f.labelled_text_field :username %>
@@ -13,7 +13,7 @@
 <%= f.labelled_password_field :confirm_password %>
 
 <p>
-  <%= t('user.new.optional_fields') %>
+  <%= t("user.new.optional_fields") %>
 </p>
 
 <%= f.labelled_text_field :realname, size: 50 %>

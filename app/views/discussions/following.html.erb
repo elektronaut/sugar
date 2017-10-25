@@ -4,10 +4,12 @@
 %>
 
 <%= content_for :sidebar do %>
-  <%= render partial: 'discussions/sidebar'%>
+  <%= render partial: "discussions/sidebar" %>
 <% end %>
 
-<h2 class="section"><%= link_to "Followed Discussions", following_discussions_path %></h2>
+<h2 class="section">
+  <%= link_to "Followed Discussions", following_discussions_path %>
+</h2>
 
 <%= render partial: "exchanges/table", locals: {
   exchanges:    @exchanges,

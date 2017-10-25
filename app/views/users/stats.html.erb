@@ -9,7 +9,12 @@
   <%= link_to "Statistics", stats_user_path(id: @user.username) %>
 </h2>
 
-<h2>Posts per week</h2>
+<h2>
+  Posts per week
+</h2>
 <p>
-  <%= image_tag "http://chart.apis.google.com/chart?cht=lc&chd=t:#{@posts_per_week.map{|p| p.post_count}.join(',')}&chds=0,#{@max_posts_per_week}&chs=800x200&chxt=y&chxr=0,0,#{@max_posts_per_week}" %>
+  <%= image_tag("http://chart.apis.google.com/chart?cht=lc&chd=t:" \
+                "#{@posts_per_week.map{|p| p.post_count}.join(',')}" \
+                "&chds=0,#{@max_posts_per_week}&chs=800x200&chxt=y" \
+                "&chxr=0,0,#{@max_posts_per_week}") %>
 </p>

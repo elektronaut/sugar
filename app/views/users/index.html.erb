@@ -4,12 +4,14 @@
 %>
 
 <div class="functions">
-  <%= render partial: 'users_functions' %>
+  <%= render partial: "users_functions" %>
 </div>
 
 
-<h2 class="section"><%= link_to "Users", users_path %></h2>
+<h2 class="section">
+  <%= link_to "Users", users_path %>
+</h2>
 
-<%= render partial: 'list_navigation' %>
+<%= render partial: "list_navigation" %>
 
-<%= render partial: 'users_listing', locals: {users: @users} %>
+<%= render partial: "users_listing", locals: { users: @users } %>

@@ -4,12 +4,15 @@
 %>
 
 <div class="functions">
-  <%= render partial: 'users_functions' %>
+  <%= render partial: "users_functions" %>
 </div>
 
-<h2 class="section"><%= link_to "Users", users_path %> &raquo; <%= link_to "Online", online_users_path %></h2>
+<h2 class="section">
+  <%= link_to "Users", users_path %> &raquo;
+  <%= link_to "Online", online_users_path %>
+</h2>
 
-<%= render partial: 'list_navigation' %>
+<%= render partial: "list_navigation" %>
 
 <% if @users.length > 0 %>
   <div class="content">
@@ -21,10 +24,14 @@
       <% end %>
     </p>
   </div>
-  <%# render partial: 'users_listing', locals: {users: @users, columns: [:username, :location, :member_since, :discussions_and_posts, :status]} %>
-  <%= render partial: 'users_listing', locals: {users: @users, columns: [:username, :location, :member_since, :status]} %>
+  <%= render(partial: "users_listing",
+             locals: {
+               users: @users,
+               columns: [:username, :location, :member_since, :status] }) %>
 <% else %>
   <div class="content">
-    <p>No users are online.</p>
+    <p>
+      No users are online.
+    </p>
   </div>
 <% end %>

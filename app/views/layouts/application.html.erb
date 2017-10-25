@@ -2,7 +2,9 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title><%= [@page_title, Sugar.config.forum_name].compact.join(' - ') %></title>
+  <title>
+    <%= [@page_title, Sugar.config.forum_name].compact.join(' - ') %>
+  </title>
 
   <%# Stylesheet %>
   <%= stylesheet_link_tag "application" %>
@@ -44,7 +46,9 @@
     <div id="account">
       <% if current_user? %>
         Hello, <%= profile_link(current_user) %>!
-        (<%= link_to "Sign out", logout_users_path, data: { confirm: "Do you really want to sign out?"} %>)
+        (<%= link_to("Sign out",
+                     logout_users_path,
+                     data: { confirm: "Do you really want to sign out?" }) %>)
       <% else %>
         <% if Sugar.config.signups_allowed %>
           <%= link_to("Sign up", new_user_path) %>
@@ -151,14 +155,14 @@
   <%# Google Analytics %>
   <% if Sugar.config.google_analytics %>
     <script>
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '<%= Sugar.config.google_analytics %>']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '<%= Sugar.config.google_analytics %>']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
     </script>
   <% end %>
 

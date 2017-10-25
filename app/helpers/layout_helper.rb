@@ -14,6 +14,10 @@ module LayoutHelper
     @body_classes.uniq.join(" ")
   end
 
+  def discussion_action?(action)
+    params[:controller] == "discussions" && params[:action] == action
+  end
+
   def frontend_configuration
     {
       authToken:          form_authenticity_token,

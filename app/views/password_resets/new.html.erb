@@ -9,13 +9,17 @@
 </h2>
 
 <div id="login">
-  <%= form_tag(password_resets_path, class: 'form') do %>
+  <%= form_tag(password_resets_path, class: "form") do %>
     <fieldset>
       <label>Please enter your email address</label>
-      <%= text_field_tag 'email', '', class: :text %>
+      <%= text_field_tag "email", "", class: :text %>
     </fieldset>
     <fieldset>
-      <button type="submit">Send</button> or <%= link_to "Return to login screen", login_users_path %>
+      <button type="submit">
+        Send
+      </button>
+      or
+      <%= link_to "Return to login screen", login_users_path %>
     </fieldset>
   <% end %>
 </div>

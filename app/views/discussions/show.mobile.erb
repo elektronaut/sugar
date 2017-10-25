@@ -3,12 +3,17 @@
   previous_post = nil
 %>
 
-<%= render partial: 'components/pagination', locals: { p: @posts } %>
+<%= render partial: "components/pagination", locals: { p: @posts } %>
 <div class="posts">
-  <%= render partial: 'posts/posts', locals: { posts: @posts, post_distance: true, permalink: true } %>
+  <%= render(partial: "posts/posts",
+             locals: {
+               posts: @posts,
+               post_distance: true,
+               permalink: true }) %>
 </div>
-<%= render partial: 'components/pagination', locals: { p: @posts } %>
+<%= render partial: "components/pagination", locals: { p: @posts } %>
 
 <% if @exchange.postable_by?(current_user) %>
-  <%= render partial: "exchanges/post_form", locals: {exchange: @exchange} %>
+  <%= render(partial: "exchanges/post_form",
+             locals: { exchange: @exchange }) %>
 <% end %>

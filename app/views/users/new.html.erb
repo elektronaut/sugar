@@ -14,7 +14,7 @@
 
   <%= form_for @user, builder: Sugar::FormBuilder do |f| %>
     <% if @invite %>
-      <%= hidden_field_tag 'token', @invite.token %>
+      <%= hidden_field_tag "token", @invite.token %>
     <% end %>
     <% unless @user.errors[:email].blank? %>
       <%= f.labelled_text_field :email, size: 50 %>
@@ -27,7 +27,7 @@
 
     <p>
       <button type="submit">
-        <%= t('user.sign_up') %>
+        <%= t("user.sign_up") %>
       </button>
     </p>
   <% end %>
@@ -35,19 +35,23 @@
 <% else %>
 
   <ul id="signup-tabs" class="topTabs">
-    <li class="tab" id="regular-tab"><a href="#password">Username and password</a></li>
+    <li class="tab" id="regular-tab">
+      <a href="#password">Username and password</a>
+    </li>
     <% if Sugar.config.facebook_app_id %>
-      <li class="tab" id="facebook-tab"><a href="#facebook">Facebook</a></li>
+      <li class="tab" id="facebook-tab">
+        <a href="#facebook">Facebook</a>
+      </li>
     <% end %>
   </ul>
 
   <%# Normal signup %>
   <div id="password">
     <%= form_for @user, builder: Sugar::FormBuilder do |f| %>
-      <%= render partial: 'signup_form', locals: {f: f} %>
+      <%= render partial: "signup_form", locals: { f: f } %>
       <p>
         <button type="submit">
-          <%= t('user.sign_up') %>
+          <%= t("user.sign_up") %>
         </button>
       </p>
     <% end %>
@@ -56,8 +60,9 @@
   <%# Facebook signup %>
   <% if Sugar.config.facebook_app_id %>
     <div id="facebook">
-      <%= link_to t('user.sign_up_with_facebook'), facebook_oauth_url(signup_facebook_url), class: 'fb_button' %>
+      <%= link_to(t("user.sign_up_with_facebook"),
+                  facebook_oauth_url(signup_facebook_url),
+                  class: "fb_button") %>
     </div>
   <% end %>
-
 <% end %>

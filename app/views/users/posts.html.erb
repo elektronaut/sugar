@@ -10,7 +10,9 @@
 </h2>
 
 <% if @posts %>
-  <%= render partial: 'posts/posts', locals: {posts: @posts, title: true} %>
+  <%= render partial: "posts/posts", locals: { posts: @posts, title: true } %>
 <% else %>
-  <p>No posts were found.</p>
+  <p>
+    No posts were found.
+  </p>
 <% end %>

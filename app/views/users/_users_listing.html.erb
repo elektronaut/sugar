@@ -1,91 +1,119 @@
 <%
-  #columns ||= [:username, :location, :last_active, :member_since, :discussions_and_posts, :status]
   columns ||= [:username, :location, :last_active, :member_since, :status]
   users   ||= []
 %>
 <table class="list users_list">
   <tr>
-    <% columns.each do |column| %><th>
-    <%=
-      case column
-      when :discussions_and_posts
-        "Discussions/Posts"
-      when :twitter
-        "Twitter Account"
-      when :instagram
-        "Instagram Username"
-      when :flickr
-        "Flickr Profile"
-      when :last_fm
-        "Last.fm Username"
-      when :gamertag
-        "Xbox Live"
-      when :sony
-        "PlayStation"
-      when :nintendo
-        "Nintendo ID"
-      when :nintendo_switch
-        "Nintendo Switch ID"
-      when :steam
-        "Steam ID"
-      when :battlenet
-        "Battle.net"
-      else
-        column.to_s.humanize
-      end
-    %>
-    </th><% end %>
-  </tr>
-  <% users.each do |user| %><tr>
-    <% columns.each do |column| %><td class="<%= column.to_s %>">
-    <%=
-      case column
-      when :username
-        profile_link(user)
-      when :location
-        h(user.location)
-      when :last_active
-        (user.online?) ? "<strong>Online now</strong>".html_safe : time_tag(user.last_active, class: 'relative')
-      when :member_since
-        time_tag user.created_at, class: 'relative'
-      when :discussions_and_posts
-        user.discussions.viewable_by(current_user).count.to_s + "/" + user.discussion_posts.viewable_by(current_user).count.to_s
-      when :public_posts_count
-        user.public_posts_count
-      when :posts_per_day
-        number_with_precision(user.posts_per_day, precision: 2)
-      when :status
-        if user.banned?
-          '<span class="banned">Banned</span>'.html_safe
-        elsif user.temporary_banned?
-          ('<span class="banned">Banned</span> for '+distance_of_time_in_words(Time.now, user.banned_until)).html_safe
-        elsif user.user_admin? || user.moderator?
-          ('<span class="admin">'+user.admin_labels.to_sentence+'</span>').html_safe
+    <% columns.each do |column| %>
+      <th>
+        <%=
+        case column
+        when :discussions_and_posts
+          "Discussions/Posts"
+        when :twitter
+          "Twitter Account"
+        when :instagram
+          "Instagram Username"
+        when :flickr
+          "Flickr Profile"
+        when :last_fm
+          "Last.fm Username"
+        when :gamertag
+          "Xbox Live"
+        when :sony
+          "PlayStation"
+        when :nintendo
+          "Nintendo ID"
+        when :nintendo_switch
+          "Nintendo Switch ID"
+        when :steam
+          "Steam ID"
+        when :battlenet
+          "Battle.net"
+        else
+          column.to_s.humanize
         end
-      when :twitter
-        link_to("@#{user.twitter}", "http://twitter.com/#{user.twitter}") if user.twitter?
-      when :instagram
-        user.instagram
-      when :last_fm
-        link_to(user.last_fm, "http://www.last.fm/user/#{user.last_fm}") if user.last_fm?
-      when :flickr
-        link_to(user.flickr, "http://www.flickr.com/photos/#{user.flickr}") if user.flickr?
-      when :gamertag
-        link_to(image_tag(user.gamertag_avatar_url, size: '24x24', class: 'gaming-avatar') + " " + user.gamertag, "http://live.xbox.com/en-us/Profile?Gamertag=#{user.gamertag}") if user.gamertag?
-      when :sony
-        link_to(user.sony, "http://us.playstation.com/playstation/psn/visit/profiles/#{user.sony}") if user.sony?
-      when :nintendo
-        link_to(user.nintendo, "https://miiverse.nintendo.net/users/#{user.nintendo}") if user.nintendo?
-      when :nintendo_switch
-        user.nintendo_switch if user.nintendo_switch?
-      when :steam
-        link_to(user.steam, "http://steamcommunity.com/id/#{user.steam}") if user.steam?
-      when :battlenet
-        user.battlenet if user.battlenet?
-      else
-        "#{column} not defined"
-      end
-    %>
-    </td><% end %>
-  </tr><% end %>
+        %>
+      </th>
+    <% end %>
+  </tr>
+  <% users.each do |user| %>
+    <tr>
+      <% columns.each do |column| %>
+        <td class="<%= column.to_s %>">
+          <%=
+          case column
+          when :username
+            profile_link(user)
+          when :location
+            h(user.location)
+          when :last_active
+            user.online? ?
+              "<strong>Online now</strong>".html_safe :
+              time_tag(user.last_active, class: "relative")
+          when :member_since
+            time_tag user.created_at, class: "relative"
+          when :discussions_and_posts
+            user.discussions.viewable_by(current_user).count.to_s + "/" +
+            user.discussion_posts.viewable_by(current_user).count.to_s
+          when :public_posts_count
+            user.public_posts_count
+          when :posts_per_day
+            number_with_precision(user.posts_per_day, precision: 2)
+          when :status
+            if user.banned?
+              '<span class="banned">Banned</span>'.html_safe
+            elsif user.temporary_banned?
+              ('<span class="banned">Banned</span> for ' +
+               distance_of_time_in_words(Time.now, user.banned_until)).html_safe
+            elsif user.user_admin? || user.moderator?
+              ('<span class="admin">' +
+               user.admin_labels.to_sentence +
+               '</span>').html_safe
+            end
+          when :twitter
+            link_to("@#{user.twitter}",
+                    "http://twitter.com/#{user.twitter}") if user.twitter?
+          when :instagram
+            user.instagram
+          when :last_fm
+            link_to(user.last_fm,
+                    "http://www.last.fm/user/#{user.last_fm}") if user.last_fm?
+          when :flickr
+            link_to(
+              user.flickr,
+              "http://www.flickr.com/photos/#{user.flickr}"
+            ) if user.flickr?
+          when :gamertag
+            link_to(
+              image_tag(user.gamertag_avatar_url,
+                        size: '24x24',
+                        class: 'gaming-avatar') + " " + user.gamertag,
+              "http://live.xbox.com/en-us/Profile?Gamertag=#{user.gamertag}"
+            ) if user.gamertag?
+          when :sony
+            link_to(
+              user.sony,
+              "http://us.playstation.com/playstation/psn/visit/profiles/#{user.sony}"
+            ) if user.sony?
+          when :nintendo
+            link_to(
+              user.nintendo,
+              "https://miiverse.nintendo.net/users/#{user.nintendo}"
+            ) if user.nintendo?
+          when :nintendo_switch
+            user.nintendo_switch if user.nintendo_switch?
+          when :steam
+            link_to(user.steam,
+                    "http://steamcommunity.com/id/#{user.steam}") if user.steam?
+          when :battlenet
+            user.battlenet if user.battlenet?
+          else
+            "#{column} not defined"
+          end
+          %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
 </table>

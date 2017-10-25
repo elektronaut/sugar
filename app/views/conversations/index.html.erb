@@ -13,7 +13,9 @@
   <%= link_to "Start a conversation", new_conversation_path, class: :add %>
 </div>
 
-<h2 class="section"><%= link_to "Conversations", conversations_path %></h2>
+<h2 class="section">
+  <%= link_to "Conversations", conversations_path %>
+</h2>
 
 <%= render partial: 'exchanges/table', locals: {
   exchanges:    @exchanges,
