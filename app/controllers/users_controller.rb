@@ -150,7 +150,7 @@ class UsersController < ApplicationController
     return [] unless current_user? && current_user.user_admin?
     [
       :username, :banned, :user_admin, :moderator,
-      :trusted, :available_invites, :status
+      :trusted, :available_invites, :status, :memorialized
     ]
   end
 

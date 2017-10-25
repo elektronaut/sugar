@@ -3,6 +3,7 @@
     <%= t("user.edit.account_status") %>
   </h2>
   <%= f.labelled_check_box :banned %>
+  <%= f.labelled_check_box :memorialized %>
   <%= f.labelled_check_box(:trusted,
                            description: t("user.edit.trusted_description")) %>
 </fieldset>

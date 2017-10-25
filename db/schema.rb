@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502045600) do
+ActiveRecord::Schema.define(version: 20171025220509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 20170502045600) do
     t.string "steam"
     t.string "battlenet"
     t.string "nintendo_switch"
+    t.boolean "memorialized", default: false, null: false
     t.index ["last_active"], name: "index_users_on_last_active"
     t.index ["username"], name: "index_users_on_username"
   end

@@ -41,6 +41,7 @@ en:
         stylesheet_url: Custom stylesheet URL
         mobile_stylesheet_url: Custom mobile stylesheet URL
         banned_until: Ban me until
+        memorialized: Memorialized
   configuration:
     configuration: Configuration
     general_settings: General settings

@@ -61,7 +61,9 @@
           when :posts_per_day
             number_with_precision(user.posts_per_day, precision: 2)
           when :status
-            if user.banned?
+            if user.memorialized?
+              '<span class="memorialized">Memorialized</span>'.html_safe
+            elsif user.banned?
               '<span class="banned">Banned</span>'.html_safe
             elsif user.temporary_banned?
               ('<span class="banned">Banned</span> for ' +

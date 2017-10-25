@@ -8,6 +8,7 @@ module Authentication
 
     included do
       before_action :load_session_user,
+                    :handle_memorialized,
                     :handle_temporary_ban,
                     :handle_permanent_ban,
                     :verify_activated_account
@@ -29,6 +30,18 @@ module Authentication
 
     def ban_duration
       distance_of_time_in_words(Time.zone.now, current_user.banned_until)
+    end
+
+    def handle_memorialized
+      if current_user? && current_user.memorialized?
+        logger.info(
+          "Authentication failed for user:#{current_user.id} " \
+          "(#{current_user.username}) - memorialized"
+        )
+        flash[:notice] = "This account has been memorialized and is " \
+                         "inaccessible"
+        deauthenticate!
+      end
     end
 
     def handle_temporary_ban

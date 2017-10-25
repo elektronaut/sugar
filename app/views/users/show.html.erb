@@ -142,8 +142,12 @@
     <% else %>
       <%= time_tag(@user.last_active, class: "relative") %>
     <% end %>
+    <br>
 
-    <% if @user.banned? %>
+    <% if @user.memorialized? %>
+      This account has been memorialized.
+      <br />
+    <% elsif @user.banned? %>
       <%= @user.username %> has been
       <span class="banned"><strong>banned!</strong></span>
       <br />
