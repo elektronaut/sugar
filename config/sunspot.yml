@@ -10,14 +10,14 @@ development:
   solr:
     solr_home: solr
     hostname: localhost
-    port: 8983
+    port: 8982
     log_level: INFO
-    min_memory: 128M
-    max_memory: 2G
+    path: /solr/development
 
 test:
   solr:
-    solr_home: solr
     hostname: localhost
     port: 8981
     log_level: WARNING
+    path: /solr/test
+
