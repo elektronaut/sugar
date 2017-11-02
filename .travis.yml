@@ -29,5 +29,6 @@ before_script:
   - sh -c "if [ '$SUGAR_DB' = 'postgresql' ]; then psql -c 'create database sugar_test' -U postgres; fi"
   - sh -c "if [ '$SUGAR_DB' = 'sqlite' ]; then bundle exec rake db:create; fi"
   - bundle exec rake db:migrate
+  - bundle exec rake sunspot:solr:start RAILS_ENV=test
 after_script:
   - CODECLIMATE_REPO_TOKEN=486bb0a91d51ad96ec90a47dced78f74bfe54ae9b913ac83fa48d69703e3f66d bundle exec codeclimate-test-reporter
