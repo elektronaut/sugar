@@ -22,6 +22,9 @@ doc
 
 # Ignore Sunspot/Solr files
 sunspot-solr.pid
+solr/default
+solr/development
+solr/test
 solr/data
 solr/pids
 
