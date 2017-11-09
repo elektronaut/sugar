@@ -113,7 +113,11 @@
       </div>
       <div class="body" id="postBody-<%= post.id %>">
         <div class="content">
-          <%= format_post(post.body_html, post.user) %>
+          <% if post.exchange.nsfw && !discussion %>
+            <span class="nsfw_message"><%= t('nsfw_message') %></span>
+          <% else %>
+            <%= format_post(post.body_html, post.user) %>
+          <% end %>
         </div>
         <% if post.edited? %>
           <div class="edited">

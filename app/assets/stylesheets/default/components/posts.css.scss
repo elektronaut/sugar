@@ -215,3 +215,10 @@
 .new_posts_since_refresh p {
   margin: 0;
 }
+
+.nsfw_message {
+	font-weight: bold;
+	color: #333;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	padding: 2px 4px;
+}
