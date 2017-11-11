@@ -10,7 +10,7 @@
 </h2>
 
 <%= form_for @invite, builder: Sugar::FormBuilder do |f| %>
-  <%= f.labelled_text_field :email, size: 60 %>
+  <%= f.labelled_text_field :email, size: 60, type: 'email' %>
   <%= f.labelled_text_area(:message,
                            cols: 60,
                            rows: 10,
