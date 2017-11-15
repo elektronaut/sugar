@@ -25,6 +25,11 @@
     </a>
   </li>
   <li class="tab">
+    <a href="#documents">
+      <%= t("configuration.documents") %>
+    </a>
+  </li>
+  <li class="tab">
     <a href="#customization">
       <%= t("configuration.customization") %>
     </a>
@@ -155,6 +160,19 @@
     </fieldset>
   </div>
 
+  <div id="documents">
+    <fieldset>
+      <h2>
+        <%= t("configuration.documents") %>
+      </h2>
+      <%= f.labelled_text_area(
+            :code_of_conduct,
+            size: "40x15",
+            class: "code"
+      ) %>
+    </fieldset>
+  </div>
+
   <div id="customization">
     <fieldset>
       <h2>
@@ -188,7 +206,7 @@
       </p>
       <%= f.labelled_text_area(:custom_javascript,
                                size: "40x15",
-                               class: "code') %>
+                               class: "code") %>
     </fieldset>
   </div>
 

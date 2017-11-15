@@ -52,6 +52,7 @@ class Configuration
       setting :mail_sender, :string
 
       # Customization
+      setting :code_of_conduct, :string
       setting :custom_header, :string
       setting :custom_footer, :string
       setting :custom_javascript, :string
