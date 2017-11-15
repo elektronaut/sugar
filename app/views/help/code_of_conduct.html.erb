@@ -1,0 +1,12 @@
+<%
+  @page_title = "Code of Conduct"
+%>
+
+<h2 class="section">
+  <%= link_to "Help", help_path %> &raquo;
+  <%= link_to @page_title, code_of_conduct_help_path %>
+</h2>
+
+<div class="help_page">
+  <%= render_post @code_of_conduct %>
+</div>

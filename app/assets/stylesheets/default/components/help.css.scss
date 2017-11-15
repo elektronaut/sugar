@@ -1,9 +1,29 @@
 .help_page {
-  font-size: 1.2em;
-  max-width: 600px;
-  h3 {
-    margin: 1em 0 0.5em 0;
+  font-size: 1.3em;
+  line-height: 1.4;
+  max-width: 800px;
+
+  h1, h2, h3, p, ul, ol {
+    margin: 20px 0px;
   }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
   table {
     border-collapse: collapse;
     border: 1px solid #ddd;
