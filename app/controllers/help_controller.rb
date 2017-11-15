@@ -2,14 +2,9 @@
 
 class HelpController < ApplicationController
   def index
-    redirect_to help_page_path("keyboard")
+    redirect_to keyboard_help_url
   end
 
-  def show
-    @page = params[:page]
-    case @page
-    when "keyboard"
-      render template: "help/keyboard"
-    end
+  def keyboard
   end
 end

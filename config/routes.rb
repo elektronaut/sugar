@@ -207,7 +207,7 @@ Sugar::Application.routes.draw do
 
   # Help pages
   get "help" => 'help#index', as: :help
-  get "help/:page" => 'help#show', as: :help_page
+  get "help/keyboard" => "help#keyboard", as: :keyboard_help
 
   # Old theme redirects
   # TODO: Remove after redesign
