@@ -60,3 +60,7 @@
   -webkit-transform: rotate(2deg);
   -moz-transform: rotate(2deg);
 }
+
+.spoiler.nsfw:after {
+  content: "NSFW!";
+}
