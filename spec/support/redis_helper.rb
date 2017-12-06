@@ -2,7 +2,7 @@ module RedisHelper
   CONFIG = { url: "redis://127.0.0.1:6379/2" }.freeze
 
   def redis
-    @redis ||= ::Redis.connect(CONFIG)
+    @redis ||= ::Redis.new(CONFIG)
   end
 
   def with_watch(redis, *args)
@@ -15,7 +15,6 @@ module RedisHelper
   end
 
   def with_clean_redis(&_block)
-    redis.client.disconnect
     redis.flushdb
     begin
       yield
