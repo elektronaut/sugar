@@ -1,0 +1,143 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+zh-CN:
+  activemodel:
+    attributes:
+      configuration:
+        code_of_conduct: 行为规则
+        google_analytics: 追踪代码
+        amazon_aws_key: Access Key ID
+        amazon_aws_secret: Secret Access Key
+        amazon_s3_bucket: S3 Bucket
+        amazon_associates_id: Tracking ID
+  activerecord:
+    attributes:
+      avatar:
+        file: 头像
+      exchange:
+        body: 第一个帖子
+        nsfw: 不适合工作环境
+      user:
+        realname: 实名
+        description: 用户信息文本
+        moderator: 仲裁者
+        user_admin: 用户管理员
+        admin: 管理员
+        website: 网站
+        gtalk: Google Talk
+        msn: MSN Messenger
+        aim: AIM
+        gamertag: Xbox Live Gamertag
+        sony: PlayStation 用户名
+        nintendo: Nintendo ID
+        nintendo_switch: Nintendo Switch ID
+        steam: Steam ID
+        battlenet: Battle.net BattleTag
+        twitter: Twitter 用户名
+        flickr: Flickr 用户 ID
+        last_fm: Last.fm 用户名
+        instagram: Instagram 用户名
+        email: Email 地址
+        password: 密码
+        confirm_password: 确认密码
+        stylesheet_url: 自定义样式表网址
+        mobile_stylesheet_url: 自定义手机样式表网址
+        banned_until: 直到此日期前禁用我
+        memorialized: 纪念
+  configuration:
+    configuration: 配置
+    documents: 文档
+    general_settings: 通用设置
+    theme: 主题
+    services_and_integration: 服务和集成
+    customization: 定制
+    forum_name: 论坛名称
+    domain_and_email: 域名和电子邮件
+    login_and_signup: 登录和注册
+    access_control: 访问控制
+    signing_up: 注册
+    domain_names_description: "用逗号隔开"
+    forum_title_description: 允许HTML
+    forum_short_name_description: "在适当的时候会被使用，比如在手机版本"
+    mail_sender_description: "例如: 我的论坛 &lt;no-reply@mydomain.com&gt;"
+    anyone_can_browse: 任何人都可浏览
+    browsing_requires_login: 需要登录后才能浏览
+    users_can_sign_up: 用户可以注册
+    users_must_be_invited: 用户需要邀请
+    google_analytics: Google Analytics
+    google_analytics_description: 输入来激活追踪
+    emoticons: 表情
+    facebook: Facebook
+    facebook_description: "要想激活这项功能，请设置 %{link} 并输入你的App ID和密码。"
+    facebook_apps_link: Facebook应用程序
+    amazon_aws: Amazon AWS
+    amazon_aws_description: "想要激活图片上传功能，访问 %{link} 并输入你的 access key 和密码。"
+    amazon_signup_link: 注册 Amazon S3 帐户
+    amazon_associates: Amazon Associates
+    amazon_associates_id_description: 输入以激活推荐链接
+    flickr: Flickr
+    custom_html: 定制 HTML
+    custom_javascript: 定制 Javascript
+    custom_header_description: '在 &lt;body&gt; 之后包含'
+    custom_footer_description: '在 &lt;body&gt; 之前包含'
+    custom_javascript_info: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾, 并且 jQuery 被激活。记得把你的代码添加到这里 <span class="example">$(document).ready(function(){ /* 添加你的代码到这里 */ });</span> 。'
+  user:
+    edit:
+      tabs:
+        info: 用户信息
+        services: 链接和服务
+        location: 位置
+        settings: 设置
+        temporary_ban: 临时禁止
+        admin: 管理员
+      edit_profile: 编辑用户信息
+      account_status: 帐户状态
+      invites: 邀请
+      invites_count: 邀请
+      administator_privileges: 管理员权限
+      birthday_description: "你的年龄不会被显示，但你的生日会"
+      gravatar_link: '或者上传图片到 <a href="http://www.gravatar.com/">Gravatar</a>，使用你的注册电子邮件来获得一个头像。'
+      trusted_description: '用户可以看到标记为可信任的讨论'
+      temporary_ban: 临时禁止
+      moderator_description: '能够编辑所有讨论和帖子'
+      user_admin_description: '能够编辑其他用户并处理邀请或批准请求'
+      admin_description: '和上面两个相同，另外访问论坛配置'
+      map: 地图
+      map_description: 单击这里把你自己添加到地图。
+      clear_location: 清空位置信息
+      connect_with_facebook: 使用 Facebook 连接
+      facebook_connected: 你已经连接到你的 Facebook 帐号。
+      remove?: '删除?'
+      flickr_description: '注意：这不是你的用户名'
+      steam_description: '注意：不是你的登录; 64位整数或者定制的网址形式名字<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
+      account_info: 帐户信息
+      settings: 设置
+      theme: 主题
+      stylesheet_url_description: 输入一个网址来覆盖整个主题
+      mobile_stylesheet_url_description: 输入一个网址来覆盖整个手机主题
+      warning: 警告
+      missing_time_zone_link: "你目前还没有访问 %{link} ！"
+      chosen_a_time_zone: 选择一个时区
+      gaming: 游戏
+      social_media: 社交媒体
+      messaging: 消息
+    new:
+      optional_fields: "下面的这些字段可选，不过建议您最好提供更多信息："
+    sign_up: 注册
+    sign_up_with_facebook: 通过Facebook登录
+  invite:
+    invites: 邀请
+    message_description: '可选，会出现在欢迎电子邮件中'
+    send_invite: 发送邀请
+    new_invite: 新邀请
+    sent: "你的邀请已被发送到 %{email}"
+    failed: "再发送你的邀请给 %{email}时出现问题，已取消。"
+  flash:
+    changes_saved: 你的更改已保存！
+    invalid_record: "无法保存更改，你是否填写了所有必填字段？"
+  admin: 管理员
+  save: 保存
+  new: 新建
+  nsfw_message: "不适合工作环境的讨论
+"
