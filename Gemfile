@@ -10,7 +10,7 @@ gem "sqlite3"
 gem "mysql2", "~> 0.4.2"
 gem "pg"
 
-gem "redis"
+gem "redis", "~> 3.3.0"
 gem "hiredis"
 gem "redis-rails"
 
