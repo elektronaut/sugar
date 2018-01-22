@@ -142,31 +142,24 @@ button::-moz-focus-inner {
 a.button,
 a.button:visited,
 button {
-  border: 0px;
-  background: #fbfbfb image-url('default/button.png') top right no-repeat;
-  padding: 0 15px 0 0;
   font-family: Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
   font-size: 15px;
   font-weight: bold;
   color: #616161;
   text-shadow: 1px 1px 1px #ffffff;
-}
-
-a.button span,
-button span {
-  padding: 5px 0 0 15px;
-  display: block;
-  background: #fbfbfb image-url('default/button.png') top left no-repeat;
-  height: 24px;
-}
-
-a.button:hover,
-button:hover {
-  background-position: right -29px;
-}
-
-a.button:hover span,
-button:hover span {
-  background-position: left -29px;
-  color: #444;
+  padding: 4px 14px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fbfbfb;
+  box-shadow: inset 0px 2px 3px rgba(255, 255, 255, 1.0);
+  background-image: linear-gradient(to bottom,
+                                    #f8f8f8 0%,
+                                    #fbfbfb 20%,
+                                    #fbfbfb 50%,
+                                    #e8e8e8 100%);
+  &:hover {
+    border-color: #888;
+    cursor: pointer;
+    color: #444;
+  }
 }
