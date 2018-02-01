@@ -12,28 +12,32 @@
   .columns {
     @extend %clearfix;
 
+    .main, aside {
+      margin-bottom: 20px;
+      p, ul {
+        width: 100%;
+      }
+    }
+
     .main {
       width: 60%;
       float: left;
+      @include breakpoint-mobile {
+        float: none;
+        width: 100%;
+      }
     }
+
     aside {
       float: right;
       width: 35%;
       font-size: 0.9em;
       @include breakpoint-mobile {
+        float: none;
+        width: 100%;
         background: #f0f0f0;
         margin: 40px -10px;
         padding: 10px;
-      }
-    }
-
-    .main, aside {
-      @include breakpoint-mobile {
-        float: none;
-        width: 100%;
-      }
-      p, ul {
-        width: 100%;
       }
     }
   }
