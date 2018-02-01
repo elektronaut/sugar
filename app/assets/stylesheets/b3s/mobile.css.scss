@@ -1,5 +1,5 @@
-//= require default/reset
-//= require default/components/spoilers
+@import 'default/reset';
+@import 'default/components/spoilers';
 
 .clearfix:after {
   content: ".";

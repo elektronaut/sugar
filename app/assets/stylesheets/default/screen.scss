@@ -1,7 +1,7 @@
-//= require ./reset
-//= require ./clearfix
-//= require_tree ./components
-//= require_self
+@import 'reset';
+@import 'clearfix';
+@import 'breakpoints';
+@import 'components/**/*';
 
 html, body {
   height: 100%;
