@@ -56,12 +56,9 @@
   </div>
 <% end %>
 
-<% if current_user? && (current_user.admin? || current_user.moderator?) %>
+<% if current_user? && current_user.admin? %>
   <h2>Admin</h2>
   <p>
-    <% if current_user.admin? %>
-      <%= link_to "Forum configuration", admin_configuration_path %>
-      <br />
-    <% end %>
+    <%= link_to "Forum configuration", admin_configuration_path %>
   </p>
 <% end %>
