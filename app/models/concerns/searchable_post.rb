@@ -10,6 +10,7 @@ module SearchablePost
       time :updated_at
       boolean :trusted
       boolean :conversation
+      boolean :deleted
     end
   end
 
@@ -28,6 +29,7 @@ module SearchablePost
     def perform_search(query, page, trusted, exchange)
       Post.search do
         fulltext(query)
+        with(:deleted, false)
         with(:trusted, false) unless trusted
         with(:exchange_id, exchange.id) if exchange
         with(:conversation, false) unless exchange

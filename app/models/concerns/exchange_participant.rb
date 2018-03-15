@@ -5,7 +5,7 @@ module ExchangeParticipant
     has_many :discussions, foreign_key: "poster_id"
     has_many :posts
     has_many :discussion_posts,
-             -> { where conversation: false },
+             -> { where conversation: false, deleted: false },
              class_name: "Post"
     has_many :exchange_views, dependent: :destroy
     has_many :discussion_relationships, dependent: :destroy

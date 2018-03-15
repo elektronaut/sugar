@@ -338,6 +338,11 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   background: #f8f7f1;
   color: #84806d;
 }
+.posts .deleted-post {
+  padding: 3px 0px;
+  font-size: 11px;
+  color: #84806d;
+}
 .posts .me_post {
   background: #f8f7f1;
   color: #220;

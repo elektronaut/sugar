@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025220509) do
+ActiveRecord::Schema.define(version: 20180315195139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,8 +200,10 @@ ActiveRecord::Schema.define(version: 20171025220509) do
     t.datetime "edited_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "deleted", default: false, null: false
     t.index ["conversation"], name: "index_posts_on_conversation"
     t.index ["created_at"], name: "index_posts_on_created_at"
+    t.index ["deleted"], name: "index_posts_on_deleted"
     t.index ["exchange_id", "created_at"], name: "index_posts_on_exchange_id_and_created_at"
     t.index ["exchange_id"], name: "index_posts_on_exchange_id"
     t.index ["trusted"], name: "index_posts_on_trusted"
