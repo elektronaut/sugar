@@ -23,8 +23,11 @@ a:hover {
   color: #025;
 }
 
-strong {
+b, strong {
   font-weight: bold;
+}
+em, i {
+  font-style: italic;
 }
 
 body {
