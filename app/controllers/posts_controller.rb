@@ -49,6 +49,8 @@ class PostsController < ApplicationController
 
   def create
     create_post(post_params.merge(user: current_user))
+  rescue URI::InvalidURIError => e
+    render_post_error(e.message)
   end
 
   def update
@@ -66,7 +68,10 @@ class PostsController < ApplicationController
   def preview
     @post = @exchange.posts.new(post_params.merge(user: current_user))
     @post.fetch_images
+    @post.body_html # Render post to trigger any errors
     render layout: false if request.xhr?
+  rescue URI::InvalidURIError => e
+    render_post_error(e.message)
   end
 
   def edit
@@ -136,6 +141,10 @@ class PostsController < ApplicationController
 
   def search_query
     params[:query] || params[:q]
+  end
+
+  def render_post_error(msg)
+    render plain: msg, status: 500 if request.xhr?
   end
 
   def require_and_set_search_query

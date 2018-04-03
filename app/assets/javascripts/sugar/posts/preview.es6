@@ -43,8 +43,8 @@ $(Sugar).bind('ready', function () {
         );
       },
 
-      error: function (xhr, textStatus) {
-        alert(textStatus);
+      error: function (xhr) {
+        alert("Error: " + xhr.responseText);
       },
 
       complete: function () {

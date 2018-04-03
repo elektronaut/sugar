@@ -24,13 +24,12 @@ $(Sugar).bind('ready', function () {
         },
 
         error: function (xhr, text_status) {
-          alert(text_status);
           if (body === "") {
             alert("Your post is empty!");
           } else if (text_status === "timeout") {
             alert("Error: The request timed out.");
           } else {
-            alert("There was a problem validating your post.");
+            alert(xhr.responseText);
           }
         },
 
