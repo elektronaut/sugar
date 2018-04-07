@@ -31,6 +31,7 @@ FactoryGirl.define do
     sequence(:title)  { |n| "Exchange #{n}" }
     sequence(:body)   { |n| "First post of exchange #{n}" }
     association :poster, factory: :user
+    posts_count 1
 
     # Discussions
     factory :discussion, class: "discussion" do

@@ -8,8 +8,8 @@ class Post < ActiveRecord::Base
 
   self.per_page = 50
 
-  belongs_to :user, counter_cache: true, touch: true
-  belongs_to :exchange, counter_cache: :posts_count, touch: true
+  belongs_to :user, touch: true
+  belongs_to :exchange, touch: true
   has_many :exchange_views
 
   validates :body, :user_id, :exchange_id, presence: true
@@ -24,11 +24,11 @@ class Post < ActiveRecord::Base
 
   after_create :update_exchange,
                :define_relationship,
-               :increment_public_posts_count,
-               :clean_cache
+               :update_post_counts
 
-  after_destroy :decrement_public_posts_count,
-                :clean_cache
+  after_destroy :update_post_counts
+
+  after_commit :clean_cache, on: %i[create destroy]
 
   scope :sorted,                 -> { order("created_at ASC") }
   scope :for_view,               -> { sorted.includes(user: [:avatar]) }
@@ -92,17 +92,12 @@ class Post < ActiveRecord::Base
     File.unlink(cache_file) if File.exist?(cache_file)
   end
 
-  def update_public_posts_count(delta)
-    return if conversation? || trusted?
-    user.update_column(:public_posts_count, user.public_posts_count + delta)
-  end
-
-  def increment_public_posts_count
-    update_public_posts_count(+1)
-  end
-
-  def decrement_public_posts_count
-    update_public_posts_count(-1)
+  def update_post_counts
+    exchange.update(posts_count: exchange.posts.count)
+    user.update(
+      posts_count: user.posts.count,
+      public_posts_count: user.discussion_posts.where(trusted: false).count
+    )
   end
 
   def update_trusted_status

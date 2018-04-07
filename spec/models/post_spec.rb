@@ -45,6 +45,23 @@ describe Post do
       specify { expect(subject.last_post_at).to eq(post.created_at) }
     end
 
+    describe "updating posts count" do
+      let!(:discussion) { create(:discussion) }
+      let(:post) { create(:post, user: user, exchange: discussion) }
+
+      it "should increment public_posts_count on user" do
+        expect { post }.to change { user.public_posts_count }.by(1)
+      end
+
+      it "should increment posts_count on user" do
+        expect { post }.to change { user.posts_count }.by(1)
+      end
+
+      it "should increment posts_count on exchange" do
+        expect { post }.to change { discussion.posts_count }.by(1)
+      end
+    end
+
     context "when count cache file exists" do
       let!(:discussion) { create(:discussion) }
       let(:post) { create(:post, exchange: discussion) }
@@ -61,11 +78,19 @@ describe Post do
   end
 
   describe "after_destroy" do
-    describe "decrementing public posts count" do
-      let!(:post) { create(:post, user: user) }
+    describe "updating posts count" do
+      let!(:post) { create(:post, user: user, exchange: discussion) }
 
       it "should decrement public_posts_count on user" do
         expect { post.destroy }.to change { user.public_posts_count }.by(-1)
+      end
+
+      it "should decrement posts_count on user" do
+        expect { post.destroy }.to change { user.posts_count }.by(-1)
+      end
+
+      it "should decrement posts_count on exchange" do
+        expect { post.destroy }.to change { discussion.posts_count }.by(-1)
       end
     end
 
