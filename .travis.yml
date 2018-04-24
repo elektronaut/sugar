@@ -8,20 +8,10 @@ cache: bundler
 services:
   - mysql
   - redis
-rvm:
-  - 2.2.7
-  - 2.3.4
-  - 2.4.1
 env:
   - SUGAR_DB=sqlite
   - SUGAR_DB=mysql SUGAR_DB_USERNAME=travis
   - SUGAR_DB=postgresql
-matrix:
-  exclude:
-    - rvm: 2.2.7
-      env: SUGAR_DB=sqlite
-    - rvm: 2.2.7
-      env: SUGAR_DB=postgresql
 script:
   - bundle exec rspec spec
 before_script:
