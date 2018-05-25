@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-Sugar::Application.routes.draw do
+Rails.application.routes.draw do
   image_resources :avatars
   image_resources :post_images
 
