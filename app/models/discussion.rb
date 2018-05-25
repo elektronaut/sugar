@@ -18,7 +18,7 @@ class Discussion < Exchange
       joins(:posts)
         .where("posts.created_at > ?", days.ago)
         .group("exchanges.id")
-        .order("COUNT(posts.id) DESC")
+        .order(Arel.sql("COUNT(posts.id) DESC"))
     end
   end
 

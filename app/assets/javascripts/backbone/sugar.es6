@@ -5,7 +5,7 @@
 //= require_tree ./views
 //= require_tree ./routers
 
-Sugar = {
+window.Sugar = {
   Models: {},
   Collections: {},
   Routers: {},
