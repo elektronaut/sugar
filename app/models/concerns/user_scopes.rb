@@ -4,12 +4,12 @@ module UserScopes
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def active
-      where(banned: false)
+    def active_and_memorialized
+      where(status: %i[active memorialized])
     end
 
     def admins
-      active.where(
+      active_and_memorialized.where(
         "admin = ? OR user_admin = ? OR moderator = ?",
         true,
         true,
@@ -17,8 +17,12 @@ module UserScopes
       )
     end
 
-    def banned
-      where("banned = ? OR banned_until > ?", true, Time.now.utc)
+    def temporarily_deactivated
+      where(status: %i[hiatus time_out])
+    end
+
+    def deactivated
+      where.not(status: %i[active memorialized])
     end
 
     def by_username
@@ -26,11 +30,11 @@ module UserScopes
     end
 
     def online
-      active.where("last_active > ?", 15.minutes.ago)
+      active_and_memorialized.where("last_active > ?", 15.minutes.ago)
     end
 
     def social
-      active.where(
+      active_and_memorialized.where(
         "(twitter IS NOT NULL AND twitter != '') " \
         "OR (instagram IS NOT NULL AND instagram != '') " \
         "OR (flickr IS NOT NULL AND flickr != '')"
@@ -38,7 +42,7 @@ module UserScopes
     end
 
     def gaming
-      active.where(
+      active_and_memorialized.where(
         "(gamertag IS NOT NULL AND gamertag != '') " \
         "OR (sony IS NOT NULL AND sony != '') " \
         "OR (nintendo IS NOT NULL AND nintendo != '') " \
@@ -49,15 +53,16 @@ module UserScopes
     end
 
     def recently_joined
-      active.order("created_at DESC")
+      active_and_memorialized.order("created_at DESC")
     end
 
     def top_posters
-      active.where("public_posts_count > 0").order("public_posts_count DESC")
+      active_and_memorialized.where("public_posts_count > 0")
+                             .order("public_posts_count DESC")
     end
 
     def trusted
-      active.where(
+      active_and_memorialized.where(
         "trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?",
         true,
         true,

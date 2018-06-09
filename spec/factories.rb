@@ -95,7 +95,7 @@ FactoryGirl.define do
     admin false
     user_admin false
     moderator false
-    banned false
+    status :active
     trusted false
 
     factory :admin do
@@ -121,7 +121,7 @@ FactoryGirl.define do
     end
 
     factory :banned_user do
-      banned true
+      status :banned
     end
 
     factory :facebook_user do

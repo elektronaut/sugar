@@ -147,9 +147,8 @@
     <% if @user.memorialized? %>
       This account has been memorialized.
       <br />
-    <% elsif @user.banned? %>
-      <%= @user.username %> has been
-      <span class="banned"><strong>banned!</strong></span>
+    <% elsif @user.deactivated? %>
+      This account has been deactivated.
       <br />
     <% elsif @user.admin? %>
       <%= @user.username %> is an

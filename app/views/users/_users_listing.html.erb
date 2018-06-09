@@ -65,8 +65,13 @@
               '<span class="memorialized">Memorialized</span>'.html_safe
             elsif user.banned?
               '<span class="banned">Banned</span>'.html_safe
-            elsif user.temporary_banned?
-              ('<span class="banned">Banned</span> for ' +
+            elsif user.inactive?
+              '<span class="banned">Inactive</span>'.html_safe
+            elsif user.time_out?
+              ('<span class="banned">On time out</span> for ' +
+               distance_of_time_in_words(Time.now, user.banned_until)).html_safe
+            elsif user.hiatus?
+              ('<span class="banned">On hiatus</span> for ' +
                distance_of_time_in_words(Time.now, user.banned_until)).html_safe
             elsif user.user_admin? || user.moderator?
               ('<span class="admin">' +

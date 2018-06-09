@@ -1,12 +1,18 @@
-<fieldset>
-  <h2>
-    <%= t("user.edit.account_status") %>
-  </h2>
-  <%= f.labelled_check_box :banned %>
-  <%= f.labelled_check_box :memorialized %>
-  <%= f.labelled_check_box(:trusted,
-                           description: t("user.edit.trusted_description")) %>
-</fieldset>
+<% if current_user.user_admin? %>
+  <fieldset>
+    <h2>
+      <%= t("user.edit.account_status") %>
+    </h2>
+    <%= f.labelled_select(:status, status_options) %>
+    <div class="banned-until">
+      <%= f.labelled_datetime_select(:banned_until,
+                                     minute_step: 15,
+                                     default: 1.minute.ago) %>
+    </div>
+    <%= f.labelled_check_box(:trusted,
+                             description: t("user.edit.trusted_description")) %>
+  </fieldset>
+<% end %>
 
 <% if !Sugar.config.signups_allowed && !@user.user_admin? %>
   <fieldset>
@@ -21,15 +27,6 @@
 <% end %>
 
 <% if current_user.user_admin? %>
-  <fieldset>
-    <h2>
-      <%= t("user.edit.temporary_ban") %>
-    </h2>
-    <%= f.labelled_datetime_select(:banned_until,
-                                   minute_step: 15,
-                                   default: 1.minute.ago) %>
-  </fieldset>
-
   <fieldset>
     <h2>
       <%= t("user.edit.administator_privileges") %>

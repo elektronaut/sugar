@@ -7,6 +7,12 @@ module Authenticable
   included do
     before_validation :ensure_password, on: :create
     before_validation :encrypt_new_password
+    before_validation :go_on_hiatus
+    before_validation :clear_banned_until
+
+    attribute :hiatus_until, :datetime
+
+    enum status: %i[active inactive hiatus time_out banned memorialized]
 
     validate do |user|
       if user.new_password? && !user.new_password_confirmed?
@@ -24,7 +30,8 @@ module Authenticable
               },
               if: :facebook_uid?
 
-    before_save :clear_banned_until
+    validate :verify_banned_until
+
     before_save :update_persistence_token
 
     has_many :password_reset_tokens, dependent: :destroy
@@ -49,12 +56,12 @@ module Authenticable
     end
   end
 
-  def facebook?
-    facebook_uid?
+  def deactivated?
+    !active?
   end
 
-  def active
-    !banned?
+  def facebook?
+    facebook_uid?
   end
 
   def valid_password?(pass)
@@ -86,6 +93,12 @@ module Authenticable
     banned_until? && banned_until > Time.now.utc
   end
 
+  def check_status!
+    return unless hiatus? || time_out?
+    return if banned_until && banned_until > Time.now.utc
+    update(status: :active)
+  end
+
   protected
 
   def ensure_password
@@ -103,6 +116,18 @@ module Authenticable
 
   def clear_banned_until
     self.banned_until = nil if banned_until? && banned_until <= Time.now.utc
+  end
+
+  def go_on_hiatus
+    return unless hiatus_until && hiatus_until > Time.now.utc
+    self.status = :hiatus
+    self.banned_until = hiatus_until
+  end
+
+  def verify_banned_until
+    return unless hiatus? || time_out?
+    return if banned_until?
+    errors.add(:banned_until, "is required")
   end
 
   def update_persistence_token

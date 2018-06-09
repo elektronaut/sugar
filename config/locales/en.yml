@@ -43,8 +43,16 @@ en:
         confirm_password: Confirm password
         stylesheet_url: Custom stylesheet URL
         mobile_stylesheet_url: Custom mobile stylesheet URL
-        banned_until: Ban me until
+        banned_until: Banned until
+        hiatus_until: Go on hiatus until
         memorialized: Memorialized
+  authentication:
+    notice:
+      inactive: "Your account has been disabled due to inactivity/lack of participation. Reach out to someone to get back in if you think you'll be able to be a regular contributor to the community"
+      hiatus: "You are on hiatus for %{duration}."
+      time_out: "You are on time out for %{duration}."
+      banned: "You are banned."
+      memorialized: "This account has been memorialized and is inaccessible."
   configuration:
     configuration: Configuration
     documents: Documents
@@ -83,6 +91,13 @@ en:
     custom_footer_description: 'Included just before &lt;/body&gt;'
     custom_javascript_info: 'Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with <span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.'
   user:
+    status:
+      active: Active
+      inactive: Inactive
+      hiatus: On hiatus
+      time_out: On time out
+      banned: Banned
+      memorialized: Memorialized
     edit:
       tabs:
         info: Personal Info

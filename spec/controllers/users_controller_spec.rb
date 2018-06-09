@@ -34,23 +34,23 @@ describe UsersController do
     end
   end
 
-  describe "#banned" do
+  describe "#deactivated" do
     before do
       login
-      @user = create(:user, banned: true)
-      get :banned
+      @user = create(:banned_user)
+      get :deactivated
     end
 
     specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
     specify { expect(flash[:notice]).to eq(nil) }
-    it { is_expected.to render_template(:banned) }
+    it { is_expected.to render_template(:deactivated) }
   end
 
-  describe "#banned.json" do
+  describe "#deactivated.json" do
     before do
       login
-      @user = create(:user, banned: true)
-      get :banned, format: :json
+      @user = create(:banned_user)
+      get :deactivated, format: :json
       @json = JSON.parse(response.body)
     end
 
@@ -115,12 +115,12 @@ describe UsersController do
       specify { expect(user.reload.realname).to eq("New name") }
     end
 
-    context "self banning" do
+    context "going on hiatus" do
       before do
         put(:update,
             params: {
               id: user.id,
-              user: { banned_until: (Time.now.utc + 2.days) }
+              user: { hiatus_until: (Time.now.utc + 2.days) }
             })
       end
 
@@ -129,7 +129,10 @@ describe UsersController do
 
     context "banning a user" do
       let!(:target_user) { create(:user) }
-      before { put :update, params: { id: target_user.id, user: { banned: true } } }
+      before do
+        put :update, params: { id: target_user.id,
+                               user: { status: :banned } }
+      end
       context "when user is a user admin" do
         let(:user) { create(:user_admin) }
         specify { expect(target_user.reload.banned?).to eq(true) }

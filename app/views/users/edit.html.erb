@@ -28,9 +28,9 @@
                 edit_user_page_path(@user.username, "settings")) %>
   </li>
   <% if current_user == @user %>
-    <li class="tab<%= " active" if @page == "temporary_ban" %>">
-      <%= link_to(t("user.edit.tabs.temporary_ban"),
-                  edit_user_page_path(@user.username, "temporary_ban")) %>
+    <li class="tab<%= " active" if @page == "hiatus" %>">
+      <%= link_to(t("user.edit.tabs.hiatus"),
+                  edit_user_page_path(@user.username, "hiatus")) %>
     </li>
   <% end %>
   <% if current_user.user_admin? %>

@@ -21,6 +21,13 @@ $(Sugar).bind('ready', function() {
       }
     };
 
+    let checkUserStatus = function () {
+      let status = $("#user_status").val();
+      let disabled = !(status == "hiatus" || status == "time_out");
+      $('.banned-until select').attr("disabled", disabled);
+    }
+
+    $('#user_status').change(checkUserStatus);
     $('#user_moderator, #user_user_admin').click(checkTrusted);
     $('#user_admin').click(checkAdmin).click(checkTrusted);
     $(this).find('.clear-location').click(function() {
@@ -29,6 +36,7 @@ $(Sugar).bind('ready', function() {
     });
     checkAdmin();
     checkTrusted();
+    checkUserStatus();
   });
 
   $("#editProfileMap").each(function() {

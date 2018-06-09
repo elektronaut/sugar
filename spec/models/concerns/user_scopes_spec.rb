@@ -7,7 +7,7 @@ describe UserScopes do
   let!(:first_user) { create(:banned_user) }
 
   describe "active" do
-    let!(:banned) { create(:user, banned: true) }
+    let!(:banned) { create(:banned_user) }
     let!(:active) { create(:user) }
     subject { User.active }
     it { is_expected.to eq([active]) }
@@ -21,15 +21,15 @@ describe UserScopes do
     it { is_expected.to eq([user2, user1]) }
   end
 
-  describe "banned" do
+  describe "deactivated" do
     before { first_user.destroy }
     let!(:not_banned) { create(:user) }
-    let!(:banned) { create(:user, banned: true) }
-    let!(:temporarily_banned) do
-      create(:user, banned_until: (Time.now.utc + 2.days))
+    let!(:banned) { create(:banned_user) }
+    let!(:hiatus) do
+      create(:user, banned_until: (Time.now.utc + 2.days), status: :hiatus)
     end
-    subject { User.banned }
-    it { is_expected.to match_array([banned, temporarily_banned]) }
+    subject { User.deactivated }
+    it { is_expected.to match_array([banned, hiatus]) }
   end
 
   describe "online" do
