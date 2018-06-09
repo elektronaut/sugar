@@ -6,5 +6,5 @@ class UserSerializer < ActiveModel::Serializer
   attributes :sony, :nintendo, :nintendo_switch, :steam, :battlenet
   attributes :msn, :gtalk, :last_fm, :facebook_uid, :banned_until
 
-  attributes :active, :banned
+  attributes :status
 end

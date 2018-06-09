@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
   end
 
   def serializable_methods
-    [:active, :banned]
+    %i[status]
   end
 
   def as_json(options = {})

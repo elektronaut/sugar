@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     extend ActiveSupport::Concern
 
     def index
-      @users = User.active.by_username
+      @users = User.active_and_memorialized.by_username
       respond_with(@users) do |format|
         format.mobile do
           @online_users = @users.select(&:online?)
@@ -11,8 +11,8 @@ class UsersController < ApplicationController
       end
     end
 
-    def banned
-      @users = User.banned.by_username
+    def deactivated
+      @users = User.deactivated.by_username
       respond_with(@users)
     end
 

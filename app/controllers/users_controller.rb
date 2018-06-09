@@ -3,28 +3,27 @@
 require "open-uri"
 
 class UsersController < ApplicationController
-  requires_authentication except: [
-    :login, :authenticate, :logout, :new, :create
+  requires_authentication except: %i[
+    login authenticate logout new create
   ]
-  requires_user only: [:edit, :update]
-  requires_user_admin only: [:grant_invite, :revoke_invites]
+  requires_user only: %i[edit update]
+  requires_user_admin only: %i[grant_invite revoke_invites]
 
   include CreateUserController
   include LoginUsersController
   include UsersListController
 
+  before_action :check_status
+
   before_action :load_user,
-                only: [
-                  :show, :edit,
-                  :update, :destroy,
-                  :participated, :discussions,
-                  :posts,
-                  :grant_invite, :revoke_invites,
-                  :stats
+                only: %i[
+                  show edit update destroy
+                  participated discussions posts
+                  grant_invite revoke_invites stats
                 ]
 
-  before_action :detect_edit_page, only: [:edit, :update]
-  before_action :verify_editable,  only: [:edit, :update]
+  before_action :detect_edit_page, only: %i[edit update]
+  before_action :verify_editable,  only: %i[edit update]
 
   respond_to :html, :mobile, :xml, :json
 
@@ -115,7 +114,7 @@ class UsersController < ApplicationController
   end
 
   def detect_edit_page
-    pages = %w(admin info location services settings temporary_ban)
+    pages = %w(admin info location services settings hiatus)
     @page = params[:page] if pages.include?(params[:page])
     @page ||= "info"
   end
@@ -140,7 +139,7 @@ class UsersController < ApplicationController
       :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
       :mobile_theme, :msn, :notify_on_message, :realname,
       :stylesheet_url, :theme, :time_zone, :twitter, :website,
-      :password, :confirm_password, :banned_until, :preferred_format,
+      :password, :confirm_password, :hiatus_until, :preferred_format,
       :sony, :nintendo, :nintendo_switch, :steam, :battlenet,
       avatar_attributes: [:file]
     ] + allowed_user_admin_params + allowed_admin_params
@@ -149,9 +148,15 @@ class UsersController < ApplicationController
   def allowed_user_admin_params
     return [] unless current_user? && current_user.user_admin?
     [
-      :username, :banned, :user_admin, :moderator,
-      :trusted, :available_invites, :status, :memorialized
+      :username, :user_admin, :moderator,
+      :trusted, :available_invites, :status, :banned_until
     ]
+  end
+
+  def check_status
+    # TODO: This is a bit dirty, and should be handled by ActiveJob
+    # instead.
+    User.temporarily_deactivated.each(&:check_status!)
   end
 
   def respond_with_user(user)

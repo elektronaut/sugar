@@ -107,8 +107,8 @@ describe Authenticable do
   end
 
   describe "#active" do
-    specify { expect(user.active).to eq(true) }
-    specify { expect(banned_user.active).to eq(false) }
+    specify { expect(user.active?).to eq(true) }
+    specify { expect(banned_user.active?).to eq(false) }
   end
 
   describe "#valid_password?" do

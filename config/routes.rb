@@ -74,7 +74,7 @@ Rails.application.routes.draw do
       get "top_posters"
       get "trusted"
       get "map"
-      get "banned"
+      get "deactivated"
     end
   end
 

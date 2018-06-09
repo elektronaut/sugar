@@ -14,9 +14,9 @@
     <% end %>
   </div>
 
-  <% if @user.banned? %>
+  <% if @user.deactivated? %>
     <p class="banned">
-      <%= @user.username %> is banned!
+      This account has been deactivated.
     </p>
   <% end %>
 
