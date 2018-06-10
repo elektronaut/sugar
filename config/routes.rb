@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 Rails.application.routes.draw do
   image_resources :avatars
@@ -37,26 +37,26 @@ Rails.application.routes.draw do
   resources :uploads
 
   # Search discussions
-  get "/search/:query.:format" => 'discussions#search',
+  get "/search/:query.:format" => "discussions#search",
       as: :formatted_search_with_query
-  get "/search/:query" => 'discussions#search',
+  get "/search/:query" => "discussions#search",
       as: :search_with_query
-  match "/search" => 'discussions#search',
-        as: :search, via: [:get, :post]
+  match "/search" => "discussions#search",
+        as: :search, via: %i[get post]
 
   # Search posts
-  get "/posts/search/:query" => 'posts#search'
-  match "/posts/search" => 'posts#search',
-        as: :search_posts, via: [:get, :post]
+  get "/posts/search/:query" => "posts#search"
+  match "/posts/search" => "posts#search",
+        as: :search_posts, via: %i[get post]
 
-  match "/discussions/:id/search_posts/:query" => 'discussions#search_posts',
-        via: [:get, :post]
+  match "/discussions/:id/search_posts/:query" => "discussions#search_posts",
+        via: %i[get post]
   match "/conversations/:id/search_posts/:query" =>
-        'conversations#search_posts',
-        via: [:get, :post]
+        "conversations#search_posts",
+        via: %i[get post]
 
   # Users
-  resources :users, except: [:edit, :show] do
+  resources :users, except: %i[edit show] do
     collection do
       get "login"
       post "authenticate"
@@ -107,7 +107,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :password_resets, only: [:new, :create, :show, :update]
+  resources :password_resets, only: %i[new create show update]
   controller :password_resets do
     get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
   end
@@ -136,7 +136,7 @@ Rails.application.routes.draw do
         as: :paged_conversations
   end
 
-  [:discussions, :conversations].each do |resource_type|
+  %i[discussions conversations].each do |resource_type|
     resources resource_type, except: [:show] do
       member do
         get "search_posts"
@@ -203,10 +203,10 @@ Rails.application.routes.draw do
   namespace :admin do
     resource :configuration
   end
-  get "admin" => 'admin/configurations#show', as: :admin
+  get "admin" => "admin/configurations#show", as: :admin
 
   # Help pages
-  get "help" => 'help#index', as: :help
+  get "help" => "help#index", as: :help
   get "help/keyboard" => "help#keyboard", as: :keyboard_help
   get "help/code-of-conduct" => "help#code_of_conduct",
       as: :code_of_conduct_help
@@ -227,5 +227,5 @@ Rails.application.routes.draw do
   end
 
   # Root
-  root to: 'discussions#index'
+  root to: "discussions#index"
 end

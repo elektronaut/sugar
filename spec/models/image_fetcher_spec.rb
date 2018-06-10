@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -13,7 +13,7 @@ describe ImageFetcher do
       stub_request(:get, url)
         .to_return(
           status: 200,
-          body: File.open(Rails.root.join("spec/support/pink.png"), "rb"),
+          body: File.open(Rails.root.join("spec", "support", "pink.png"), "rb"),
           headers: { "Content-Type" => "image/png" }
         )
     end

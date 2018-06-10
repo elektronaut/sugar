@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class CodeFilter < Filter
   def process(post)
@@ -25,10 +25,9 @@ class CodeFilter < Filter
   end
 
   def syntax_highlight(element, code)
-    if element.parent.name == "pre"
-      language = element.attributes["class"].try(&:value)
-      lexer = find_lexer(language, code)
-      element.parent.swap(syntax_formatter.format(lexer.lex(code)))
-    end
+    return unless element.parent.name == "pre"
+    language = element.attributes["class"].try(&:value)
+    lexer = find_lexer(language, code)
+    element.parent.swap(syntax_formatter.format(lexer.lex(code)))
   end
 end

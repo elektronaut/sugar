@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -201,7 +201,9 @@ describe InvitesController do
 
   describe "DELETE destroy" do
     context "when user owns the invite" do
-      before { login(invite.user) && delete(:destroy, params: { id: invite.id }) }
+      before do
+        login(invite.user) && delete(:destroy, params: { id: invite.id })
+      end
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:invite).destroyed?).to eq(true) }

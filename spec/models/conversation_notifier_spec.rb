@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -24,7 +24,7 @@ describe ConversationNotifier do
       ConversationRelationship
         .where(conversation: conversation)
         .update_all(notifications: false)
-      expect { notifier.deliver_now }.not_to change { email_deliveries.length }
+      expect { notifier.deliver_now }.not_to(change { email_deliveries.length })
     end
   end
 

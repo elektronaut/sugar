@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # = Exchange
 #
 # Exchange is the base class for all threads, which both Discussion
 # and Conversation inherit from.
 
-class Exchange < ActiveRecord::Base
+class Exchange < ApplicationRecord
   include HumanizableParam
   include Paginatable
   include ExchangeScopes
@@ -45,7 +45,7 @@ class Exchange < ActiveRecord::Base
   end
 
   def labels?
-    (closed? || sticky? || nsfw? || trusted?) ? true : false
+    closed? || sticky? || nsfw? || trusted? ? true : false
   end
 
   def labels
@@ -77,7 +77,7 @@ class Exchange < ActiveRecord::Base
   end
 
   def unlabel!
-    update_attributes(
+    update(
       trusted: false,
       sticky: false,
       closed: false,
@@ -88,14 +88,13 @@ class Exchange < ActiveRecord::Base
   private
 
   def validate_closed
-    if closed_changed?
-      if !closed? && (!updated_by || !closeable_by?(updated_by))
-        errors.add(:closed, "can't be changed!")
-      elsif closed?
-        self.closer = updated_by
-      else
-        self.closer = nil
-      end
+    return unless closed_changed?
+    if !closed? && (!updated_by || !closeable_by?(updated_by))
+      errors.add(:closed, "can't be changed!")
+    elsif closed?
+      self.closer = updated_by
+    else
+      self.closer = nil
     end
   end
 end

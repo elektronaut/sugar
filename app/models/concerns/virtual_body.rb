@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module VirtualBody
   extend ActiveSupport::Concern
 
@@ -16,7 +18,7 @@ module VirtualBody
       user: poster,
       body: body
     }
-    attributes[:format] = format unless format.blank?
+    attributes[:format] = format if format.present?
     posts.create(attributes)
   end
 
@@ -33,8 +35,7 @@ module VirtualBody
   end
 
   def update_post_body
-    if body && !body.empty? && body != posts.first.body
-      posts.first.update_attributes(post_attributes)
-    end
+    return unless body.present? && body != posts.first.body
+    posts.first.update(post_attributes)
   end
 end

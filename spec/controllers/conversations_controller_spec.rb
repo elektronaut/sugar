@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -111,7 +111,9 @@ describe ConversationsController do
 
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
-      before { get :new, params: { type: "conversation", username: recipient.username } }
+      before do
+        get :new, params: { type: "conversation", username: recipient.username }
+      end
       specify { expect(assigns(:exchange)).to be_a(Conversation) }
       specify { expect(assigns(:recipient)).to eq(recipient) }
       it { is_expected.to render_template(:new) }

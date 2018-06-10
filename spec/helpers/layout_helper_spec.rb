@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -13,7 +13,7 @@ describe LayoutHelper do
     end
 
     context "when argument is an array" do
-      let(:class_name) { %w(foo bar) }
+      let(:class_name) { %w[foo bar] }
       it { is_expected.to eq("foo bar") }
     end
   end
@@ -40,8 +40,8 @@ describe LayoutHelper do
     let(:user) { nil }
     let(:config) { helper.frontend_configuration }
     let(:default_emoticons) do
-      %w(smiley laughing blush heart_eyes kissing_heart flushed worried
-         grimacing cry angry heart star +1 -1).map do |name|
+      %w[smiley laughing blush heart_eyes kissing_heart flushed worried
+         grimacing cry angry heart star +1 -1].map do |name|
         {
           name: name,
           image: helper.image_path(

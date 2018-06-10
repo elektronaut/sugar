@@ -1,13 +1,19 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe AutolinkFilter do
   let(:filter) { AutolinkFilter.new(input) }
   let(:instagram_embed) do
-    File.read(Rails.root.join("spec/support/requests/instagram_embed.json"))
+    File.read(
+      Rails.root.join("spec", "support", "requests", "instagram_embed.json")
+    )
   end
   let(:instagram_json) { JSON.parse(instagram_embed) }
   let(:twitter_embed) do
-    File.read(Rails.root.join("spec/support/requests/twitter_embed.json"))
+    File.read(
+      Rails.root.join("spec", "support", "requests", "twitter_embed.json")
+    )
   end
   let(:twitter_json) { JSON.parse(twitter_embed) }
 

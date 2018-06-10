@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class FacebookController < ApplicationController
-  requires_user only: [:connect, :disconnect]
+  requires_user only: %i[connect disconnect]
   before_action :detect_admin_signup, only: [:signup]
 
   def login
@@ -16,12 +18,10 @@ class FacebookController < ApplicationController
   end
 
   def facebook_session_data(user_info)
-    {
-      facebook_uid: user_info[:id],
+    { facebook_uid: user_info[:id],
       email:        user_info[:email],
       realname:     user_info[:name],
-      username:     (user_info[:username] || user_info[:name])
-    }
+      username:     (user_info[:username] || user_info[:name]) }
   end
 
   def signup
@@ -58,16 +58,13 @@ class FacebookController < ApplicationController
   protected
 
   def authenticate_with_facebook(facebook_uid)
-    user = User.find_by_facebook_uid(facebook_uid)
-    if user
-      @current_user = user
-    else
-      false
-    end
+    user = User.find_by(facebook_uid: facebook_uid)
+    return false unless user
+    @current_user = user
   end
 
   def detect_admin_signup
-    @admin_signup = true if User.count(:all) == 0
+    @admin_signup = true if User.count(:all).zero?
   end
 
   def fb_profile_url(access_token)
@@ -90,7 +87,7 @@ class FacebookController < ApplicationController
     begin
       response = open(fb_access_token_url(code, options[:redirect_uri])).read
       CGI.parse(response)["access_token"].first if response =~ /access_token=/
-    rescue => e
+    rescue StandardError => e
       logger.error "Facebook authentication error: #{e.message}"
       nil
     end
@@ -103,7 +100,7 @@ class FacebookController < ApplicationController
     begin
       response = open(fb_profile_url(access_token)).read
       JSON.parse(response).symbolize_keys
-    rescue => e
+    rescue StandardError => e
       logger.error "Facebook API error: #{e.message}"
       nil
     end

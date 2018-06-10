@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImageFetcher
   attr_accessor :body
 
@@ -70,7 +72,7 @@ class ImageFetcher
   end
 
   def host_whitelist?(hostname)
-    %w(i.imgur.com m.imgur.com).include?(hostname)
+    %w[i.imgur.com m.imgur.com].include?(hostname)
   end
 
   def find_image(uri)
@@ -78,7 +80,7 @@ class ImageFetcher
   end
 
   def src?(elem)
-    elem.attributes && !elem.attributes["src"].blank?
+    elem.attributes && elem.attributes["src"].present?
   end
 
   def elem_src(elem)

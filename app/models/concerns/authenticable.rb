@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authenticable
   extend ActiveSupport::Concern
 
@@ -49,8 +51,8 @@ module Authenticable
     def find_and_authenticate_with_password(email, password)
       return nil if email.blank?
       return nil if password.blank?
-      user = User.find_by_email(email)
-      return unless user && user.valid_password?(password)
+      user = User.find_by(email: email)
+      return unless user&.valid_password?(password)
       user.hash_password!(password) if user.password_needs_rehash?
       user
     end
@@ -74,15 +76,15 @@ module Authenticable
   end
 
   def hash_password!(password)
-    update_attributes(hashed_password: User.encrypt_password(password))
+    update(hashed_password: User.encrypt_password(password))
   end
 
   def new_password?
-    (password && !password.blank?) ? true : false
+    password&.present? ? true : false
   end
 
   def new_password_confirmed?
-    (new_password? && password == confirm_password) ? true : false
+    new_password? && password == confirm_password ? true : false
   end
 
   def password_needs_rehash?
@@ -102,11 +104,9 @@ module Authenticable
   protected
 
   def ensure_password
-    unless new_password? || hashed_password?
-      if facebook?
-        self.password = self.confirm_password = SecureRandom.base64(15)
-      end
-    end
+    return if new_password? || hashed_password?
+    return unless facebook?
+    self.password = self.confirm_password = SecureRandom.base64(15)
   end
 
   def encrypt_new_password

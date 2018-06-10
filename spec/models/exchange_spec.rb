@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Exchange do
@@ -30,7 +32,7 @@ describe Exchange do
   describe "#updated_by" do
     it "changes closer when updating" do
       expect do
-        exchange.update_attributes(closed: true, updated_by: moderator)
+        exchange.update(closed: true, updated_by: moderator)
       end.to change { exchange.closer }.from(nil).to(moderator)
     end
   end
@@ -71,7 +73,7 @@ describe Exchange do
         Exchange.new(
           trusted: true, sticky: true, closed: true, nsfw: true
         ).labels
-      ).to eq(%w(Trusted Sticky Closed NSFW))
+      ).to eq(%w[Trusted Sticky Closed NSFW])
     end
   end
 
@@ -131,7 +133,7 @@ describe Exchange do
       subject { exchange }
 
       before do
-        exchange.update_attributes(closed: true, updated_by: exchange.poster)
+        exchange.update(closed: true, updated_by: exchange.poster)
       end
 
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
@@ -142,7 +144,7 @@ describe Exchange do
 
     context "closed by moderator" do
       subject { exchange }
-      before { exchange.update_attributes(closed: true, updated_by: moderator) }
+      before { exchange.update(closed: true, updated_by: moderator) }
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
       specify { expect(subject.closer).to eq(moderator) }
@@ -154,7 +156,7 @@ describe Exchange do
     context "closed by exchange moderator" do
       subject { exchange }
       before do
-        exchange.update_attributes(closed: true, updated_by: exchange_moderator)
+        exchange.update(closed: true, updated_by: exchange_moderator)
       end
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
       specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
@@ -165,14 +167,14 @@ describe Exchange do
 
   describe "#validate_closed" do
     before do
-      exchange.update_attributes(closed: true, updated_by: moderator)
+      exchange.update(closed: true, updated_by: moderator)
     end
 
     subject { exchange }
 
     context "with no updated_by" do
       before do
-        exchange.update_attributes(closed: false)
+        exchange.update(closed: false)
         exchange.valid?
       end
       it { is_expected.to be_valid }
@@ -181,7 +183,7 @@ describe Exchange do
 
     context "with updated_by poster" do
       before do
-        exchange.update_attributes(closed: false, updated_by: exchange.poster)
+        exchange.update(closed: false, updated_by: exchange.poster)
         exchange.valid?
       end
       it { is_expected.to_not be_valid }
@@ -190,7 +192,7 @@ describe Exchange do
 
     context "with updated_by moderator" do
       before do
-        exchange.update_attributes(closed: false, updated_by: moderator)
+        exchange.update(closed: false, updated_by: moderator)
         exchange.valid?
       end
       it { is_expected.to be_valid }
@@ -216,7 +218,7 @@ describe Exchange do
   end
 
   describe "#update_post_body" do
-    before { exchange.update_attributes(body: "changed post") }
+    before { exchange.update(body: "changed post") }
     subject { exchange.posts.first }
     specify { expect(subject.body).to eq("changed post") }
   end

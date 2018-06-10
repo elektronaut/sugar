@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -145,7 +145,8 @@ describe Authenticable do
           create(
             :user,
             hashed_password: BCrypt::Password.create("password123")
-          ).valid_password?("password")).to eq(false)
+          ).valid_password?("password")
+        ).to eq(false)
       end
     end
   end

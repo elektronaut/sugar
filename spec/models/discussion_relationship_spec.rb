@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe DiscussionRelationship do
@@ -91,7 +93,7 @@ describe DiscussionRelationship do
 
       it "doesn't create a new record" do
         existing
-        expect { relationship }.not_to change { DiscussionRelationship.count }
+        expect { relationship }.not_to(change { DiscussionRelationship.count })
       end
     end
   end
@@ -105,7 +107,7 @@ describe DiscussionRelationship do
 
     it "updates caches when updated" do
       expect do
-        relationship.update_attributes(favorite: true)
+        relationship.update(favorite: true)
       end.to change { relationship.user.favorites_count }.by(1)
     end
 

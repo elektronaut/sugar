@@ -13,11 +13,22 @@ Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
 
-Rails:
-  Enabled: true
-
 StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/Documentation:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20080701172614_create_exchange_views.rb'
+    - 'db/migrate/20090404154958_create_discussion_relationships.rb'
+
+Rails/BulkChangeTable:
   Enabled: false

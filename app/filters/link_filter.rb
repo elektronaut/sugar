@@ -1,7 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class LinkFilter < Filter
-  HTTPS_WHITELIST = %w(
+  HTTPS_WHITELIST = %w[
     youtube.com
     *.youtube.com
     vimeo.com
@@ -9,7 +9,7 @@ class LinkFilter < Filter
     i.imgur.com
     *.cloudfront.net
     *.s3.amazonaws.com
-  ).freeze
+  ].freeze
 
   def process(post)
     @post = post
@@ -33,6 +33,10 @@ class LinkFilter < Filter
     http.start do |h|
       h.head(uri.request_uri).code
     end
+  end
+
+  def local_domain?(host)
+    local_domains.detect { |d| host == d }
   end
 
   def local_domains
@@ -65,9 +69,9 @@ class LinkFilter < Filter
   def relativize_local_links!
     parser.search("a").each do |link|
       href = extract_href(link)
-      next unless href && href =~ /^https?:\/\//
+      next unless href&.match?(%r{^https?://})
       host = URI.parse(href).host
-      next unless local_domains.detect { |d| host == d }
+      next unless local_domain?(host)
       link.set_attribute(
         "href",
         href.gsub(Regexp.new("(https?:)?//" + Regexp.escape(host)), "")

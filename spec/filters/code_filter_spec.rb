@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe CodeFilter do
@@ -12,7 +14,10 @@ describe CodeFilter do
 
   context "when input contains <code> without language" do
     let(:input) { "<pre><code>code here</code></pre>" }
-    let(:output) { "<div class=\"highlight\"><pre class=\"highlight\"><code>code here</code></pre></div>" }
+    let(:output) do
+      "<div class=\"highlight\"><pre class=\"highlight\">" \
+      "<code>code here</code></pre></div>"
+    end
     it "should syntax highlight it" do
       expect(filter.to_html).to eq(output)
     end

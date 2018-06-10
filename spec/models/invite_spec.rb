@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Invite do
@@ -55,9 +57,8 @@ describe Invite do
     context "when invite has been used" do
       before { invite.used = true }
       it "doesn't grant the user an invite" do
-        expect do
-          invite.destroy
-        end.not_to change { invite.user.available_invites }
+        expect { invite.destroy }
+          .not_to(change { invite.user.available_invites })
       end
     end
 

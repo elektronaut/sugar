@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe LinkFilter do
@@ -63,7 +65,7 @@ describe LinkFilter do
         stub_request(:head, "https://example.com/image.jpg")
           .to_raise("foo")
         expect(filter.logger).to receive(:error)
-          .with('Unexpected connection error #<StandardError: foo>')
+          .with("Unexpected connection error #<StandardError: foo>")
         expect(filter.to_html).to eq(input)
       end
     end

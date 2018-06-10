@@ -1,25 +1,28 @@
-class Admin::ConfigurationsController < AdminController
-  before_action :find_configuration
+# frozen_string_literal: true
 
-  def show
-    redirect_to edit_admin_configuration_url
-  end
+module Admin
+  class ConfigurationsController < AdminController
+    before_action :find_configuration
 
-  def edit
-  end
+    def show
+      redirect_to edit_admin_configuration_url
+    end
 
-  def update
-    @configuration.update(configuration_params) if configuration_params
-    redirect_to edit_admin_configuration_url
-  end
+    def edit; end
 
-  protected
+    def update
+      @configuration.update(configuration_params) if configuration_params
+      redirect_to edit_admin_configuration_url
+    end
 
-  def configuration_params
-    params[:configuration]
-  end
+    protected
 
-  def find_configuration
-    @configuration = Sugar.config
+    def configuration_params
+      params[:configuration]
+    end
+
+    def find_configuration
+      @configuration = Sugar.config
+    end
   end
 end

@@ -1,8 +1,8 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/sha1"
 
-class Invite < ActiveRecord::Base
+class Invite < ApplicationRecord
   belongs_to :user
   validates :email, :user_id, presence: true
 
@@ -30,10 +30,6 @@ class Invite < ActiveRecord::Base
       token
     end
 
-    def find_by_token(token)
-      find_by(token: token)
-    end
-
     def expiration_time
       DEFAULT_EXPIRATION
     end
@@ -44,7 +40,7 @@ class Invite < ActiveRecord::Base
   end
 
   def expired?
-    (Time.now.utc <= expires_at) ? false : true
+    Time.now.utc > expires_at
   end
 
   def expire!

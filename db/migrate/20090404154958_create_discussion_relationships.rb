@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDiscussionRelationships < ActiveRecord::Migration[4.2]
   def change
     create_table :discussion_relationships do |t|

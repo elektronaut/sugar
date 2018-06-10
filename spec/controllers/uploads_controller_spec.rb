@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe UploadsController, redis: true do
   let(:user) { create(:user) }
   let(:png_file) do
     Rack::Test::UploadedFile.new(
-      Rails.root.join("spec/support/pink.png"),
+      Rails.root.join("spec", "support", "pink.png"),
       "image/png"
     )
   end
@@ -29,7 +31,9 @@ describe UploadsController, redis: true do
       end
 
       subject { response.body }
-      before { post :create, params: { upload: { file: png_file } }, format: :json }
+      before do
+        post :create, params: { upload: { file: png_file } }, format: :json
+      end
 
       it "should respond with JSON" do
         expect(response.header["Content-Type"]).to match "application/json"

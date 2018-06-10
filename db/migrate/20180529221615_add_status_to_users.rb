@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStatusToUsers < ActiveRecord::Migration[5.2]
   def up
     add_column :users, :status, :integer, null: false, default: 0

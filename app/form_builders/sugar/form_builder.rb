@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module Sugar
   class FormBuilder < ActionView::Helpers::FormBuilder
@@ -24,10 +24,9 @@ module Sugar
       if errors_on?(method)
         text += content_tag(:span, " " + first_error_on(method), class: "error")
       elsif options[:description]
-        text += content_tag(
-          :span,
-          " &mdash; #{options[:description]}".html_safe, class: "description"
-        )
+        text += content_tag(:span,
+                            " &mdash; #{options[:description]}".html_safe,
+                            class: "description")
       end
       content_tag "label", text.html_safe, for: full_attribute_name(method)
     end
@@ -39,10 +38,8 @@ module Sugar
       label_tag = label(attr, label_text, description: opts[:description])
 
       if opts[:note]
-        content = safe_join(
-          [content, (opts[:note]).to_s.html_safe],
-          "<br>".html_safe
-        )
+        content = safe_join([content, (opts[:note]).to_s.html_safe],
+                            "<br>".html_safe)
       end
 
       content_tag "p", label_tag + content, class: classes.join(" ")
@@ -78,46 +75,26 @@ module Sugar
 
     def labelled_time_zone_select(attr, label = nil, priority = nil, opts = {})
       label, opts, field_opts = parse_label_and_opts(label, opts)
-      field_with_label(
-        attr,
-        time_zone_select(attr, priority, opts),
-        label,
-        field_opts
-      )
+      field_with_label(attr, time_zone_select(attr, priority, opts),
+                       label, field_opts)
     end
 
     def labelled_select(attr, choices, label = nil, opts = {})
       label, opts, field_opts = parse_label_and_opts(label, opts)
-      field_with_label(
-        attr,
-        select(attr, choices, opts),
-        label,
-        field_opts
-      )
+      field_with_label(attr, select(attr, choices, opts), label, field_opts)
     end
 
     def labelled_check_box(attr, label = nil, options = {},
                            checked = "1", unchecked = "0")
-      label, options, field_options =
-        parse_label_and_opts(label, options)
-      field_with_label(
-        attr,
-        check_box(attr, options, checked, unchecked),
-        label,
-        field_options
-      )
+      label, options, field_options = parse_label_and_opts(label, options)
+      field_with_label(attr, check_box(attr, options, checked, unchecked),
+                       label, field_options)
     end
 
     private
 
     def extract_field_options(options)
-      field_options = {}
-      [:description, :note].each do |key|
-        if options.key?(key)
-          field_options[key] = options[key]
-          options.delete(key)
-        end
-      end
+      field_options = options.extract!(:description, :note)
       [options, field_options]
     end
 
@@ -130,16 +107,10 @@ module Sugar
     end
 
     def labelled_field(type, attribute, label_text = nil, options = {})
-      label_text, options, field_options = parse_label_and_opts(
-        label_text,
-        options
-      )
-      field_with_label(
-        attribute,
-        send(type, attribute, options),
-        label_text,
-        field_options
-      )
+      label_text, options, field_options = parse_label_and_opts(label_text,
+                                                                options)
+      field_with_label(attribute, send(type, attribute, options),
+                       label_text, field_options)
     end
 
     def parse_label_and_opts(label_text = nil, options = {})

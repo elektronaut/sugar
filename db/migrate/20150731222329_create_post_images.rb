@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePostImages < ActiveRecord::Migration[4.2]
   def change
     create_table :post_images do |t|
@@ -17,7 +19,7 @@ class CreatePostImages < ActiveRecord::Migration[4.2]
       t.string :original_url, limit: 4096
       t.timestamps null: false
 
-      t.index [:id, :content_hash], unique: true, length: { content_hash: 190 }
+      t.index %i[id content_hash], unique: true, length: { content_hash: 190 }
       t.index :original_url, length: { original_url: 190 }
     end
   end

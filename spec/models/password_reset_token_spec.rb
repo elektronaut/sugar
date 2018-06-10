@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PasswordResetToken do
@@ -16,26 +18,6 @@ describe PasswordResetToken do
       PasswordResetToken.expire!
     end
     specify { expect(PasswordResetToken.all).to eq([password_reset_token]) }
-  end
-
-  describe ".find_by_token" do
-    let(:user) { password_reset_token.user }
-    let(:token) { password_reset_token.token }
-    subject { user.password_reset_tokens.find_by_token(token) }
-
-    context "when a token exists" do
-      it { is_expected.to eq(password_reset_token) }
-    end
-
-    context "when a token is expired" do
-      let(:password_reset_token) { expired_password_reset_token }
-      it { is_expected.to eq(nil) }
-    end
-
-    context "when a doesn't exist" do
-      let(:token) { "wrong token" }
-      it { is_expected.to eq(nil) }
-    end
   end
 
   describe "#expired?" do

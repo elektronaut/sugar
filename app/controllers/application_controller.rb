@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/md5"
 
@@ -30,9 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def error_messages
-    {
-      404 => "Not found"
-    }
+    { 404 => "Not found" }
   end
 
   # Renders an error
@@ -70,9 +68,9 @@ class ApplicationController < ActionController::Base
     session[:mobile_format] = params[:mobile_format] ||
                               session[:mobile_format] ||
                               "mobile"
-    if session[:mobile_format] == "mobile" && request.format == "text/html"
-      request.format = :mobile
-    end
+    return unless session[:mobile_format] == "mobile" &&
+                  request.format == "text/html"
+    request.format = :mobile
   end
 
   def require_s3

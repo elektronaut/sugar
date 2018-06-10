@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class HelpController < ApplicationController
   def index
@@ -9,6 +9,5 @@ class HelpController < ApplicationController
     @code_of_conduct = Sugar.config.code_of_conduct
   end
 
-  def keyboard
-  end
+  def keyboard; end
 end

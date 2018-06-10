@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module Authentication
   module Controller
@@ -15,13 +15,26 @@ module Authentication
 
     protected
 
-    def load_session_user
-      if session[:user_id] && session[:persistence_token] && !current_user?
-        user = User.where(id: session[:user_id]).first
-        if user && user.persistence_token == session[:persistence_token]
-          @current_user = user
-        end
+    def authentication_failure_notice
+      t("authentication.notice.#{current_user.status}", duration: ban_duration)
+    end
+
+    def authentication_log_line(user)
+      if user.active?
+        "Authenticated as user:#{user.id} (#{user.username})"
+      else
+        "Authentication failed for user:#{user.id} " \
+        "(#{user.username}) - #{user.status}"
       end
+    end
+
+    def load_session_user
+      return unless session[:user_id] &&
+                    session[:persistence_token] &&
+                    !current_user?
+      user = User.find_by(id: session[:user_id])
+      return unless user&.persistence_token == session[:persistence_token]
+      @current_user = user
     end
 
     def ban_duration
@@ -32,16 +45,10 @@ module Authentication
     def verify_active_account
       return unless current_user?
       current_user.check_status!
-      if current_user.active?
-        logger.info("Authenticated as user:#{current_user.id} " \
-                    "(#{current_user.username})")
-      else
-        logger.info("Authentication failed for user:#{current_user.id} " \
-                    "(#{current_user.username}) - #{current_user.status}")
-        flash[:notice] = t("authentication.notice.#{current_user.status}",
-                           duration: ban_duration)
-        deauthenticate!
-      end
+      logger.info(authentication_log_line(current_user))
+      return if current_user.active?
+      flash[:notice] = authentication_failure_notice
+      deauthenticate!
     end
 
     def deauthenticate!

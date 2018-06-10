@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Viewable
   extend ActiveSupport::Concern
 
   module ClassMethods
     def viewable_by(user)
-      if user && user.trusted?
+      if user&.trusted?
         all
       else
         where(trusted: false)
@@ -14,9 +16,9 @@ module Viewable
   # Returns true if the user can view this record
   def viewable_by?(user)
     if trusted?
-      (user && user.trusted?) ? true : false
+      user&.trusted? ? true : false
     else
-      (Sugar.public_browsing? || user) ? true : false
+      Sugar.public_browsing? || user ? true : false
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Discussion do
@@ -35,7 +37,7 @@ describe Discussion do
     let(:discussion2) { create(:discussion) }
 
     before do
-      discussion1.posts.first.update_attributes(created_at: 4.days.ago)
+      discussion1.posts.first.update(created_at: 4.days.ago)
       [13.days.ago, 12.days.ago].each do |t|
         create(:post, exchange: discussion1, created_at: t)
       end

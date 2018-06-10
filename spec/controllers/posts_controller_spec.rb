@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -17,7 +17,10 @@ describe PostsController do
       let(:post_params) { { body: "foo", format: "html" } }
 
       context "HTML format" do
-        before { post :create, params: { discussion_id: discussion.id, post: post_params } }
+        before do
+          post :create,
+               params: { discussion_id: discussion.id, post: post_params }
+        end
         specify { expect(assigns(:post)).to be_valid }
         it "redirects back to the discussion" do
           expect(response).to redirect_to(
@@ -74,7 +77,10 @@ describe PostsController do
       let(:post_params) { { body: "", format: "html" } }
 
       context "HTML format" do
-        before { post :create, params: { discussion_id: discussion.id, post: post_params } }
+        before do
+          post :create,
+               params: { discussion_id: discussion.id, post: post_params }
+        end
         specify { expect(assigns(:post)).to_not be_valid }
         it { is_expected.to respond_with(:success) }
         it { is_expected.to render_template(:new) }

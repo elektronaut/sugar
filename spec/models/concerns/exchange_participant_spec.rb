@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -40,7 +40,7 @@ describe ExchangeParticipant do
       .through(:conversation_relationships)
   end
 
-  describe '#unhidden_discussions' do
+  describe "#unhidden_discussions" do
     let!(:discussion) { create(:discussion) }
     let!(:hidden_discussion) { create(:discussion) }
     before do
@@ -50,7 +50,7 @@ describe ExchangeParticipant do
     it { is_expected.to match_array([discussion]) }
   end
 
-  describe '#mark_exchange_viewed' do
+  describe "#mark_exchange_viewed" do
     let(:post) { create(:post, exchange: discussion) }
 
     context "with existing exchange view" do
@@ -97,7 +97,7 @@ describe ExchangeParticipant do
     let(:conversation_relationship) do
       user.conversation_relationships.where(conversation_id: conversation).first
     end
-    before { conversation_relationship.update_attributes(new_posts: true) }
+    before { conversation_relationship.update(new_posts: true) }
     before { user.mark_conversation_viewed(conversation) }
     subject do
       user.conversation_relationships.where(conversation_id: conversation).first

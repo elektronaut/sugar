@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LoginMacros
   def self.included(base)
     base.extend ClassMethods

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -117,7 +117,8 @@ describe PasswordResetsController do
             params: {
               id: password_reset_token.id,
               token: password_reset_token.token,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       specify do
@@ -155,7 +156,8 @@ describe PasswordResetsController do
         put :update,
             params: {
               id: password_reset_token.id,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       it { is_expected.to redirect_to(login_users_url) }
@@ -170,7 +172,8 @@ describe PasswordResetsController do
             params: {
               id: expired_password_reset_token.id,
               token: expired_password_reset_token.token,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       specify do

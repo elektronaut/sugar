@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 namespace :sugar do
   desc "Delete all posts for a given user"
   task delete_posts: :environment do
     user = User.find_by(id: ENV["USER_ID"])
     unless user
-      puts "Usage: #{$0} sugar:delete_posts USER_ID=<id>"
+      puts "Usage: #{$PROGRAM_NAME} sugar:delete_posts USER_ID=<id>"
       exit
     end
     puts "Deleting #{user.discussion_posts.count} posts..."
@@ -15,19 +15,20 @@ namespace :sugar do
 
   desc "Fix quoted post images"
   task fix_quoted_post_images: :environment do
-    ex = /\/post_images\/([\w\d]{40})\/([\d]+x[\d]+)\/([\d]+)-[\d]+\.[\w]+/
+    ex = %r{/post_images/([\w\d]{40})/([\d]+x[\d]+)/([\d]+)-[\d]+\.[\w]+}
     Post.where("body LIKE \"%/post_images/%\"").each do |post|
       new_body = post.body.gsub(ex) do |s|
-        digest, size, id = $1, $2, $3
+        digest = Regexp.last_match(1)
+        size = Regexp.last_match(2)
+        id = Regexp.last_match(3)
         new_digest = DynamicImage.digest_verifier.generate("show-#{id}-#{size}")
         s.gsub(digest, new_digest)
       end
-      if post.body != new_body
-        post.update_columns(
-          body: new_body,
-          body_html: nil
-        )
-      end
+      next unless post.body != new_body
+      post.update_columns(
+        body: new_body,
+        body_html: nil
+      )
     end
   end
 
@@ -48,7 +49,7 @@ namespace :sugar do
 
   desc "Move napkin drawings to S3"
   task upload_drawings: :environment do
-    base_path = Rails.root.join("public/doodles")
+    base_path = Rails.root.join("public", "doodles")
     files = Dir.entries(base_path).select { |f| f =~ /\.jpg/ }
     posts = Post.find_by_sql(
       'SELECT * FROM posts WHERE body LIKE "%src=\"/doodles%"'
@@ -62,12 +63,12 @@ namespace :sugar do
         if upload.valid?
           pattern = "/doodles/#{filename}"
           posts.select { |p| p.body.match(pattern) }.each do |post|
-            post.update_attributes(body: post.body.gsub(pattern, upload.url))
+            post.update(body: post.body.gsub(pattern, upload.url))
           end
           File.unlink(path)
         end
       end
-      puts "Uploaded #{i}/#{files.length}..." if i > 20 && i % 20 == 0
+      puts "Uploaded #{i}/#{files.length}..." if i > 20 && (i % 20).zero?
     end
   end
 
@@ -100,7 +101,8 @@ namespace :sugar do
     template = ERB.new(template)
     File.open(
       File.join(File.dirname(__FILE__), "../../public/system/maintenance.html"),
-      "w") do |fh|
+      "w"
+    ) do |fh|
       fh.write template.result(binding)
     end
   end

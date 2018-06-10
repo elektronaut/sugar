@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class AutolinkFilter < Filter
   def process(post)
@@ -13,13 +13,11 @@ class AutolinkFilter < Filter
   private
 
   def autolink(url)
-    if url =~ /.(jpg|jpeg|gif|png)$/i
-      "<img src=\"#{url}\">"
-    elsif url =~ /\.(gifv)$/i
+    if url.match?(/.(jpg|jpeg|gif|png|gifv)$/i)
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
-    elsif url =~ /^https?:\/\/(mobile\.)?twitter\.com\/(([\w\d_]+)\/)?status(es)?\/([\d]+)/
+    elsif url.match?(twitter_expression)
       twitter_embed(url)
-    elsif url =~ /(https?:\/\/(www\.)?instagram\.com\/p\/[^\/]+\/)/
+    elsif url.match?(%r{(https?://(www\.)?instagram\.com/p\/[^/]+/)})
       instagram_embed(url)
     else
       "<a href=\"#{url}\">#{url}</a>"
@@ -42,11 +40,15 @@ class AutolinkFilter < Filter
     oembed("https://publish.twitter.com/oembed", normalize_twitter_url(url))
   end
 
+  def twitter_expression
+    %r{^https?://(mobile\.)?twitter\.com/(([\w\d_]+)/)?status(es)?/([\d]+)}
+  end
+
   def normalize_twitter_url(url)
-    if url =~ /^https?:\/\/twitter\.com\/([\w\d_]+)\/status\/([\d]+)/
+    if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/([\d]+)})
       url
     else
-      id = url.match(/\/([\d]+)$/)[1]
+      id = url.match(%r{/([\d]+)$})[1]
       "https://twitter.com/twitter/status/#{id}"
     end
   end

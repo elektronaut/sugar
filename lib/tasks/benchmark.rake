@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 namespace :benchmark do
   desc "Create random users"
@@ -32,9 +32,9 @@ namespace :benchmark do
       d = u.discussions.create(
         title:  "Hugeass PS3 thread",
         category: categories[rand(categories.length - 1)],
-        nsfw: (rand > 0.7) ? true : false,
-        sticky: (rand > 0.999) ? true : false,
-        closed: (rand > 0.9) ? true : false,
+        nsfw: rand > 0.7,
+        sticky: rand > 0.999,
+        closed: rand > 0.9,
         body: lorem
       )
       # d.create_first_post!

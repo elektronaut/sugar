@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExchangeParticipant
   extend ActiveSupport::Concern
 
@@ -51,7 +53,7 @@ module ExchangeParticipant
   def mark_conversation_viewed(conversation)
     conversation_relationships
       .find_by(conversation_id: conversation)
-      .update_attributes(new_posts: false)
+      .update(new_posts: false)
   end
 
   def posts_per_day
@@ -63,13 +65,13 @@ module ExchangeParticipant
   end
 
   def unread_conversations?
-    unread_conversations_count > 0
+    unread_conversations_count.positive?
   end
 
   def muted_conversation?(conversation)
-    !conversation_relationships
+    conversation_relationships
       .where(notifications: true, conversation: conversation)
-      .any?
+      .none?
   end
 
   def discussion_relationship_with(discussion)
@@ -77,8 +79,7 @@ module ExchangeParticipant
   end
 
   def following?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).following?
+    if discussion_relationship_with(discussion)&.following?
       true
     else
       false
@@ -86,8 +87,7 @@ module ExchangeParticipant
   end
 
   def favorite?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).favorite?
+    if discussion_relationship_with(discussion)&.favorite?
       true
     else
       false
@@ -95,8 +95,7 @@ module ExchangeParticipant
   end
 
   def hidden?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).hidden?
+    if discussion_relationship_with(discussion)&.hidden?
       true
     else
       false

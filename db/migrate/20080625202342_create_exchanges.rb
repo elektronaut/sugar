@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateExchanges < ActiveRecord::Migration[4.2]
   def change
     create_table :exchanges do |t|
@@ -16,7 +18,7 @@ class CreateExchanges < ActiveRecord::Migration[4.2]
 
       t.index :created_at
       t.index :last_post_at
-      t.index [:sticky, :last_post_at]
+      t.index %i[sticky last_post_at]
       t.index :sticky
       t.index :trusted
       t.index :type

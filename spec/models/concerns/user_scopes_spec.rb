@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -64,7 +64,7 @@ describe UserScopes do
     let!(:nintendo) { create(:user, nintendo: "example") }
     let!(:nintendo_switch) { create(:user, nintendo_switch: "example") }
     let!(:steam) { create(:user, steam: "example") }
-    let!(:battlenet) { create(:user, battlenet: 'example#1234') }
+    let!(:battlenet) { create(:user, battlenet: "example#1234") }
 
     it "should be a list of all gaming profiles" do
       expect(User.gaming).to match_array(

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ExchangesController
   extend ActiveSupport::Concern
@@ -20,7 +20,7 @@ module ExchangesController
   end
 
   def show
-    context = (request.format == :mobile) ? 0 : 3
+    context = request.format == :mobile ? 0 : 3
     @page = params[:page] || 1
     @posts = @exchange.posts.page(@page, context: context).for_view
 
@@ -39,7 +39,7 @@ module ExchangesController
   end
 
   def update
-    @exchange.update_attributes(exchange_params.merge(updated_by: current_user))
+    @exchange.update(exchange_params.merge(updated_by: current_user))
     if @exchange.valid?
       flash[:notice] = "Your changes were saved."
       redirect_to @exchange
