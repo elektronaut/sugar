@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ViewedTrackerHelper
   def viewed_tracker

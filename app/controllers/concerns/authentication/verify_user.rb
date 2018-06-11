@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module Authentication
   module VerifyUser
@@ -17,8 +17,8 @@ module Authentication
           flash[:notice] = options[:notice]
           redirect_to options[:redirect]
         end
-        format.json { render json: options[:api_notice], status: 401 }
-        format.xml { render xml: options[:api_notice], status: 401 }
+        format.json { render json: options[:api_notice], status: :unauthorized }
+        format.xml { render xml: options[:api_notice], status: :unauthorized }
       end
     end
 
@@ -84,7 +84,7 @@ module Authentication
     end
 
     def verify_current_user_flags(options = {})
-      [:admin, :moderator, :user_admin].each do |flag|
+      %i[admin moderator user_admin].each do |flag|
         return true if options[flag] && current_user.send("#{flag}?".to_sym)
       end
       false

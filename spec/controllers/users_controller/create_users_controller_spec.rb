@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -45,7 +45,7 @@ describe UsersController, redis: true do
       before { post :create, params: { token: invite.token, user: params } }
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:user)).to be_a(User) }
-      it "should redirect " do
+      it "redirects" do
         is_expected.to redirect_to(
           user_profile_url(id: assigns(:user).username)
         )

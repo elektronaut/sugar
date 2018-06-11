@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/sha1"
 
@@ -7,19 +7,20 @@ class PostsController < ApplicationController
 
   caches_page :count
 
-  requires_authentication except: [:count]
-  requires_user except: [:count, :since, :search]
-  protect_from_forgery except: [:drawing]
+  requires_authentication except: %i[count]
+  requires_user except: %i[count since search]
+  protect_from_forgery except: %i[drawing]
 
-  before_action :find_discussion, except: [:search]
-  before_action :verify_viewable, except: [:search, :count, :since]
-  before_action :find_post, only: [:show, :edit, :update, :destroy]
-  before_action :verify_editable, only: [:edit, :update, :destroy]
-  before_action :require_and_set_search_query, only: [:search]
-  before_action :verify_postable, only: [:create, :drawing]
+  before_action :find_exchange, except: %i[search]
+  before_action :verify_viewable, except: %i[search count since]
+  before_action :find_post, only: %i[show edit update destroy]
+  before_action :find_post, only: %i[show edit update destroy]
+  before_action :verify_editable, only: %i[edit update destroy]
+  before_action :require_and_set_search_query, only: %i[search]
+  before_action :verify_postable, only: %i[create drawing]
 
-  after_action :mark_exchange_viewed, only: [:since]
-  after_action :mark_conversation_viewed, only: [:since]
+  after_action :mark_exchange_viewed, only: %i[since]
+  after_action :mark_conversation_viewed, only: %i[since]
   # after_action :notify_mentioned, only: [:create]
 
   respond_to :html, :mobile, :json
@@ -27,9 +28,7 @@ class PostsController < ApplicationController
   def count
     @count = @exchange.posts_count
     respond_to do |format|
-      format.json do
-        render json: { posts_count: @count }.to_json
-      end
+      format.json { render json: { posts_count: @count }.to_json }
     end
   end
 
@@ -40,11 +39,8 @@ class PostsController < ApplicationController
 
   def search
     @search_path = search_posts_path
-    @posts = Post.search_results(
-      search_query,
-      user: current_user,
-      page: params[:page]
-    )
+    @posts = Post.search_results(search_query,
+                                 user: current_user, page: params[:page])
   end
 
   def create
@@ -54,15 +50,10 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post.update_attributes(post_params.merge(edited_at: Time.now.utc))
-    respond_with(
-      @post,
-      location: polymorphic_url(
-        @exchange,
-        page: @post.page,
-        anchor: "post-#{@post.id}"
-      )
-    )
+    @post.update(post_params.merge(edited_at: Time.now.utc))
+    respond_with(@post, location: polymorphic_url(@exchange,
+                                                  page: @post.page,
+                                                  anchor: "post-#{@post.id}"))
   end
 
   def preview
@@ -84,11 +75,9 @@ class PostsController < ApplicationController
     @post = @exchange.posts.create(create_params)
     @exchange.reload
 
-    exchange_url = polymorphic_url(
-      @exchange,
-      page: @exchange.last_page,
-      anchor: "post-#{@post.id}"
-    )
+    exchange_url = polymorphic_url(@exchange,
+                                   page: @exchange.last_page,
+                                   anchor: "post-#{@post.id}")
 
     # if @exchange.is_a?(Conversation)
     #   ConversationNotifier.new(@post, exchange_url).deliver_later
@@ -97,15 +86,14 @@ class PostsController < ApplicationController
     respond_with(@post, location: exchange_url)
   end
 
-  def find_discussion
-    @exchange = nil
-    if params[:discussion_id]
-      @exchange ||= Discussion.find(params[:discussion_id])
-    end
-    if params[:conversation_id]
-      @exchange ||= Conversation.find(params[:conversation_id])
-    end
-    @exchange ||= Exchange.find(params[:exchange_id])
+  def find_exchange
+    @exchange = if params[:discussion_id]
+                  Discussion.find(params[:discussion_id])
+                elsif params[:conversation_id]
+                  Conversation.find(params[:conversation_id])
+                else
+                  Exchange.find(params[:exchange_id])
+                end
   end
 
   def find_post
@@ -118,22 +106,19 @@ class PostsController < ApplicationController
   end
 
   def mark_exchange_viewed
-    if current_user? && @posts.any?
-      current_user.mark_exchange_viewed(
-        @exchange,
-        @posts.last,
-        (params[:index].to_i + @posts.length)
-      )
-    end
+    return unless current_user? && @posts.any?
+    current_user.mark_exchange_viewed(@exchange,
+                                      @posts.last,
+                                      (params[:index].to_i + @posts.length))
   end
 
-  def notify_mentioned
-    # if @post.valid? && @post.mentions_users?
-    #   @post.mentioned_users.each do |mentioned_user|
-    #     logger.info "Mentions: #{mentioned_user.username}"
-    #   end
-    # end
-  end
+  # def notify_mentioned
+  #   if @post.valid? && @post.mentions_users?
+  #     @post.mentioned_users.each do |mentioned_user|
+  #       logger.info "Mentions: #{mentioned_user.username}"
+  #     end
+  #   end
+  # end
 
   def post_params
     params.require(:post).permit(:body, :format)
@@ -144,7 +129,7 @@ class PostsController < ApplicationController
   end
 
   def render_post_error(msg)
-    render plain: msg, status: 500 if request.xhr?
+    render plain: msg, status: :internal_server_error if request.xhr?
   end
 
   def require_and_set_search_query
@@ -155,26 +140,21 @@ class PostsController < ApplicationController
   end
 
   def verify_editable
-    unless @post.editable_by?(current_user)
-      flash[:notice] = "You don't have permission to edit that post!"
-      redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
-      return
-    end
+    return if @post.editable_by?(current_user)
+    flash[:notice] = "You don't have permission to edit that post!"
+    redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
   end
 
   def verify_postable
-    unless @exchange.postable_by?(current_user)
-      flash[:notice] = "This discussion is closed, " \
-                       "you don't have permission to post here"
-      redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
-    end
+    return if @exchange.postable_by?(current_user)
+    flash[:notice] = "This discussion is closed, " \
+                     "you don't have permission to post here"
+    redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
   end
 
   def verify_viewable
-    unless @exchange && @exchange.viewable_by?(current_user)
-      flash[:notice] = "You don't have permission to view that discussion!"
-      redirect_to root_url
-      return
-    end
+    return if @exchange&.viewable_by?(current_user)
+    flash[:notice] = "You don't have permission to view that discussion!"
+    redirect_to root_url
   end
 end

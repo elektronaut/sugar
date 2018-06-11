@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class FacebookController < ApplicationController
-  requires_user only: [:connect, :disconnect]
+  requires_user only: %i[connect disconnect]
   before_action :detect_admin_signup, only: [:signup]
 
   def login
@@ -16,12 +18,10 @@ class FacebookController < ApplicationController
   end
 
   def facebook_session_data(user_info)
-    {
-      facebook_uid: user_info[:id],
+    { facebook_uid: user_info[:id],
       email:        user_info[:email],
       realname:     user_info[:name],
-      username:     (user_info[:username] || user_info[:name])
-    }
+      username:     (user_info[:username] || user_info[:name]) }
   end
 
   def signup
@@ -39,15 +39,13 @@ class FacebookController < ApplicationController
     require_user_info(
       redirect_url, code: params[:code], redirect_uri: connect_facebook_url
     ) do |user_info|
-      if user_info[:id]
-        current_user.update_attribute(:facebook_uid, user_info[:id])
-      end
+      current_user.update(facebook_uid: user_info[:id]) if user_info[:id]
       redirect_to redirect_url
     end
   end
 
   def disconnect
-    current_user.update_attribute(:facebook_uid, nil)
+    current_user.update(facebook_uid: nil)
     flash[:notice] = "You have disconnected your Facebook account"
     redirect_to edit_user_page_url(
       id: current_user.username,
@@ -58,16 +56,13 @@ class FacebookController < ApplicationController
   protected
 
   def authenticate_with_facebook(facebook_uid)
-    user = User.find_by_facebook_uid(facebook_uid)
-    if user
-      @current_user = user
-    else
-      false
-    end
+    user = User.find_by(facebook_uid: facebook_uid)
+    return false unless user
+    @current_user = user
   end
 
   def detect_admin_signup
-    @admin_signup = true if User.count(:all) == 0
+    @admin_signup = true if User.count(:all).zero?
   end
 
   def fb_profile_url(access_token)
@@ -88,9 +83,10 @@ class FacebookController < ApplicationController
     options[:redirect_uri] ||= login_facebook_url
 
     begin
-      response = open(fb_access_token_url(code, options[:redirect_uri])).read
+      response = HTTParty.get(fb_access_token_url(code, options[:redirect_uri]))
+                         .response.body
       CGI.parse(response)["access_token"].first if response =~ /access_token=/
-    rescue => e
+    rescue StandardError => e
       logger.error "Facebook authentication error: #{e.message}"
       nil
     end
@@ -101,9 +97,9 @@ class FacebookController < ApplicationController
                    get_access_token(options[:code], options)
     return unless access_token
     begin
-      response = open(fb_profile_url(access_token)).read
+      response = HTTParty.get(fb_profile_url(access_token)).response.body
       JSON.parse(response).symbolize_keys
-    rescue => e
+    rescue StandardError => e
       logger.error "Facebook API error: #{e.message}"
       nil
     end

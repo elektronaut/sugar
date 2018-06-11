@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -9,11 +9,13 @@ describe LayoutHelper do
 
     context "when argument is a string" do
       let(:class_name) { "foo" }
+
       it { is_expected.to include("foo") }
     end
 
     context "when argument is an array" do
-      let(:class_name) { %w(foo bar) }
+      let(:class_name) { %w[foo bar] }
+
       it { is_expected.to eq("foo bar") }
     end
   end
@@ -21,7 +23,7 @@ describe LayoutHelper do
   describe "#body_classes" do
     subject { helper.body_classes }
 
-    context "default value" do
+    context "with no classes set" do
       it { is_expected.to eq("") }
     end
 
@@ -40,8 +42,8 @@ describe LayoutHelper do
     let(:user) { nil }
     let(:config) { helper.frontend_configuration }
     let(:default_emoticons) do
-      %w(smiley laughing blush heart_eyes kissing_heart flushed worried
-         grimacing cry angry heart star +1 -1).map do |name|
+      %w[smiley laughing blush heart_eyes kissing_heart flushed worried
+         grimacing cry angry heart star +1 -1].map do |name|
         {
           name: name,
           image: helper.image_path(
@@ -75,17 +77,18 @@ describe LayoutHelper do
 
     context "when logged in" do
       let(:user) { build(:user, preferred_format: "html") }
+
       specify { expect(config[:currentUser]).to eq(user.as_json) }
       specify { expect(config[:preferredFormat]).to eq("html") }
     end
   end
 
   describe "#search_mode_options" do
-    subject { helper.search_mode_options }
+    let(:options) { helper.search_mode_options }
 
     context "with no exchange" do
       specify do
-        expect(subject).to eq([
+        expect(options).to eq([
                                 ["in discussions", helper.search_path],
                                 ["in posts", helper.search_posts_path]
                               ])
@@ -94,29 +97,26 @@ describe LayoutHelper do
 
     context "when exchange is set" do
       let(:discussion) { create(:discussion) }
+
       before { helper.instance_variable_set("@exchange", discussion) }
       specify do
-        expect(subject).to eq(
-          [
-            ["in discussions", helper.search_path],
-            ["in posts", helper.search_posts_path],
-            [
-              "in this discussion",
-              helper.polymorphic_path([:search_posts, discussion])
-            ]
-          ]
-        )
+        expect(options).to eq([["in discussions", helper.search_path],
+                               ["in posts", helper.search_posts_path],
+                               ["in this discussion",
+                                helper.polymorphic_path([:search_posts,
+                                                         discussion])]])
       end
     end
   end
 
   describe "#header_tab" do
+    let(:result) { helper.header_tab("Discussions", url) }
+
     let(:url) { "/discussions" }
-    subject { helper.header_tab("Discussions", url) }
 
     context "when not current section" do
       specify do
-        expect(subject).to eq(
+        expect(result).to eq(
           "<li class=\"discussions\"><a id=\"discussions_link\" " \
             "href=\"#{url}\">Discussions</a></li>"
         )
@@ -126,7 +126,7 @@ describe LayoutHelper do
     context "when current section" do
       before { helper.instance_variable_set("@section", :discussions) }
       specify do
-        expect(subject).to eq(
+        expect(result).to eq(
           "<li class=\"discussions current\"><a id=\"discussions_link\" " \
             "href=\"#{url}\">Discussions</a></li>"
         )

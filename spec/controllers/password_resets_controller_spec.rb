@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -19,7 +19,7 @@ describe PasswordResetsController do
     context "with an existing user" do
       before { post :create, params: { email: user.email } }
       it { is_expected.to redirect_to(login_users_url) }
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash[:notice]).to match(
           /An email with further instructions has been sent/
         )
@@ -30,14 +30,11 @@ describe PasswordResetsController do
       end
       specify { expect(last_email.to).to eq([user.email]) }
       specify do
-        expect(last_email.body.encoded).to(
-          match(
-            password_reset_with_token_url(
-              assigns(:password_reset_token).id,
-              assigns(:password_reset_token).token
-            )
-          )
+        url = password_reset_with_token_url(
+          assigns(:password_reset_token).id,
+          assigns(:password_reset_token).token
         )
+        expect(last_email.body.encoded).to(match(url))
       end
     end
 
@@ -117,7 +114,8 @@ describe PasswordResetsController do
             params: {
               id: password_reset_token.id,
               token: password_reset_token.token,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       specify do
@@ -155,7 +153,8 @@ describe PasswordResetsController do
         put :update,
             params: {
               id: password_reset_token.id,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       it { is_expected.to redirect_to(login_users_url) }
@@ -170,7 +169,8 @@ describe PasswordResetsController do
             params: {
               id: expired_password_reset_token.id,
               token: expired_password_reset_token.token,
-              user: { password: "new password", confirm_password: "new password" }
+              user: { password: "new password",
+                      confirm_password: "new password" }
             }
       end
       specify do

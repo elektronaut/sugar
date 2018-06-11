@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use.
   # Currently supported options are
@@ -7,14 +9,14 @@ Doorkeeper.configure do
   # This block will be called to check whether the
   # resource owner is authenticated or not.
   resource_owner_authenticator do
-    User.find_by_id(session[:user_id]) || redirect_to(login_users_url)
+    User.find_by(id: session[:user_id]) || redirect_to(login_users_url)
   end
 
   # If you want to restrict access to the web interface for adding oauth
   # authorized applications, you need to declare the block below.
   admin_authenticator do
-    admin_user = User.find_by_id(session[:user_id])
-    if admin_user && admin_user.admin?
+    admin_user = User.find_by(id: session[:user_id])
+    if admin_user&.admin?
       admin_user
     else
       redirect_to(login_users_url)

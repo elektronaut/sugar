@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class InvitesController < ApplicationController
   requires_authentication except: [:accept]
@@ -7,9 +7,9 @@ class InvitesController < ApplicationController
 
   respond_to :html, :mobile, :xml, :json
 
-  before_action :find_invite, only: [:show, :edit, :update, :destroy]
-  before_action :find_invite_by_token, only: [:accept]
-  before_action :verify_available_invites, only: [:new, :create]
+  before_action :find_invite, only: %i[destroy]
+  before_action :find_invite_by_token, only: %i[accept]
+  before_action :verify_available_invites, only: %i[new create]
 
   def index
     respond_with(@invites = current_user.invites.active)
@@ -51,11 +51,10 @@ class InvitesController < ApplicationController
   end
 
   def destroy
-    if verify_user(user: @invite.user, user_admin: true)
-      @invite.destroy
-      flash[:notice] = "Your invite has been cancelled."
-      redirect_to invites_url
-    end
+    return unless verify_user(user: @invite.user, user_admin: true)
+    @invite.destroy
+    flash[:notice] = "Your invite has been cancelled."
+    redirect_to invites_url
   end
 
   private
@@ -72,7 +71,7 @@ class InvitesController < ApplicationController
   end
 
   def expire_invite(invite)
-    return false unless invite && invite.expired?
+    return false unless invite&.expired?
     @invite.destroy
   end
 
@@ -80,17 +79,17 @@ class InvitesController < ApplicationController
     params.require(:invite).permit(:email, :message)
   end
 
-  # Finds the requested invite
   def find_invite
     @invite = Invite.find(params[:id])
   end
 
   def find_invite_by_token
-    @invite = Invite.find_by_token(params[:id])
+    @invite = Invite.find_by(token: params[:id])
   end
 
   def session_invite_token(invite)
-    return nil unless invite && !invite.expired?
+    return unless invite
+    return if invite.expired?
     invite.token
   end
 

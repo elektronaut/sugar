@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class Discussion < Exchange
   class InvalidExchange < StandardError; end
@@ -26,7 +26,7 @@ class Discussion < Exchange
   def convert_to_conversation!
     raise InvalidExchange unless valid?
     transaction do
-      update_attributes(type: "Conversation")
+      update(type: "Conversation")
       becomes(Conversation).tap do |conversation|
         conversation.unlabel!
         posts.update_all(conversation: true, trusted: false)
@@ -52,7 +52,7 @@ class Discussion < Exchange
   end
 
   def postable_by?(user)
-    (user && (user.moderator? || !closed?)) ? true : false
+    user && (user.moderator? || !closed?) ? true : false
   end
 
   private
@@ -66,9 +66,9 @@ class Discussion < Exchange
     posts.update_all(trusted: trusted?)
     discussion_relationships.update_all(trusted: trusted?)
     participants.each do |user|
-      user.update_column(
-        :public_posts_count,
-        user.discussion_posts.where(trusted: false).count
+      user.update(
+        public_posts_count:
+          user.discussion_posts.where(trusted: false).count
       )
     end
   end

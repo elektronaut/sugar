@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sugar
   class Responder < ActionController::Responder
     def to_mobile

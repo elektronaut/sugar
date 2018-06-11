@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -7,6 +7,7 @@ describe Configuration, redis: true do
 
   describe ".settings" do
     subject { Configuration.settings }
+
     it { is_expected.to be_a(Hash) }
   end
 
@@ -17,18 +18,21 @@ describe Configuration, redis: true do
       end
     end
 
-    it "should define a reader" do
+    it "defaults to nil" do
       expect(configuration.foo).to eq(nil)
-      expect { configuration.foo("baz") }.not_to raise_error
+    end
+
+    it "defines a reader" do
+      configuration.foo("baz")
       expect(configuration.foo).to eq("baz")
     end
 
-    it "should define a boolean reader" do
+    it "defines a boolean reader" do
       expect(configuration.foo?).to eq(false)
     end
 
-    it "should define a writer" do
-      expect { configuration.foo = "bar" }.not_to raise_error
+    it "defines a writer" do
+      configuration.foo = "bar"
       expect(configuration.foo).to eq("bar")
     end
   end
@@ -36,48 +40,35 @@ describe Configuration, redis: true do
   describe "#get" do
     subject { configuration.get(setting) }
 
-    context "when setting exists" do
-      let(:setting) { :forum_name }
-      it { is_expected.to eq("Sugar") }
-    end
+    let(:setting) { :forum_name }
 
-    context "when setting doesn't exist" do
-      let(:setting) { :inexistant }
-      it "should raise an error" do
-        expect { subject }.to raise_error(
-          Configuration::InvalidConfigurationKey
-        )
-      end
+    it { is_expected.to eq("Sugar") }
+
+    it "raises an error when setting doesn't exist" do
+      expect { configuration.get(:inexistant) }.to(
+        raise_error(Configuration::InvalidConfigurationKey)
+      )
     end
   end
 
   describe "#set" do
     subject { configuration.set(setting, value) }
 
-    context "when setting exists" do
-      let(:setting) { :forum_name }
-      let(:value) { "Foo" }
-      it { is_expected.to eq("Foo") }
+    let(:setting) { :forum_name }
+    let(:value) { "Foo" }
+
+    it { is_expected.to eq("Foo") }
+
+    it "raises an error when setting doesn't exist" do
+      expect { configuration.set(:inexistant, "Foo") }.to(
+        raise_error(Configuration::InvalidConfigurationKey)
+      )
     end
 
-    context "when setting doesn't exist" do
-      let(:setting) { :inexistant }
-      let(:value) { "Foo" }
-      it "should raise an error" do
-        expect { subject }.to raise_error(
-          Configuration::InvalidConfigurationKey
-        )
-      end
-    end
-
-    context "when value is an invalid type" do
-      let(:setting) { :forum_name }
-      let(:value) { 1.0 }
-      it "should raise an error" do
-        expect { subject }.to raise_error(
-          ArgumentError
-        )
-      end
+    it "raises an error when value is an invalid type" do
+      expect { configuration.set(:forum_name, 1.0) }.to(
+        raise_error(ArgumentError)
+      )
     end
   end
 
@@ -88,43 +79,47 @@ describe Configuration, redis: true do
       other_configuration.update(forum_name: "Test")
     end
 
-    it "should load the configuration from Redis" do
-      expect(configuration.forum_name).to eq("Sugar")
-      configuration.load
-      expect(configuration.forum_name).to eq("Test")
+    it "loads the configuration from Redis" do
+      expect { configuration.load }.to(
+        change(configuration, :forum_name).from("Sugar").to("Test")
+      )
     end
   end
 
   describe "#save" do
     let(:other_configuration) { Configuration.new }
 
-    it "should save the configuration to Redis" do
+    before do
       configuration.forum_name = "Save test"
-      expect(other_configuration.forum_name).to eq("Sugar")
       configuration.save
-      other_configuration.load
-      expect(other_configuration.forum_name).to eq("Save test")
+    end
+
+    it "saves the configuration to Redis" do
+      expect { other_configuration.load }.to(
+        change(other_configuration, :forum_name).from("Sugar").to("Save test")
+      )
     end
   end
 
   describe "#update" do
     let(:other_configuration) { Configuration.new }
 
-    it "should update the configuration" do
-      expect(other_configuration.forum_name).to eq("Sugar")
-      configuration.update(forum_name: "Update test")
-      other_configuration.load
-      expect(other_configuration.forum_name).to eq("Update test")
+    before { configuration.update(forum_name: "Update test") }
+
+    it "updates the configuration" do
+      expect { other_configuration.load }.to(
+        change(other_configuration, :forum_name).from("Sugar").to("Update test")
+      )
     end
   end
 
   describe "#reset!" do
     before { configuration.forum_name = "Reset test" }
 
-    it "should reset the configuration" do
-      expect(configuration.forum_name).to eq("Reset test")
-      configuration.reset!
-      expect(configuration.forum_name).to eq("Sugar")
+    it "resets the configuration" do
+      expect { configuration.reset! }.to(
+        change(configuration, :forum_name).from("Reset test").to("Sugar")
+      )
     end
   end
 end

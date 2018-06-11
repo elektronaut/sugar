@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   module UsersListController
     extend ActiveSupport::Concern
@@ -46,15 +48,16 @@ class UsersController < ApplicationController
       respond_with(@users)
     end
 
-    def map
-    end
+    def map; end
 
     def trusted
-      unless current_user.try(&:trusted?)
+      if current_user&.trusted?
+        @users = User.trusted.by_username
+        respond_with(@users)
+      else
         flash[:notice] = "You need to be trusted to view this page!"
+        redirect_to users_url
       end
-      @users = User.trusted.by_username
-      respond_with(@users)
     end
   end
 end

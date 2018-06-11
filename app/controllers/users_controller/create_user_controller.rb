@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   module CreateUserController
     extend ActiveSupport::Concern
 
     included do
-      before_action :find_invite,               only: [:new, :create]
-      before_action :check_for_expired_invite,  only: [:new, :create]
-      before_action :check_for_signups_allowed, only: [:new, :create]
+      before_action :find_invite,               only: %i[new create]
+      before_action :check_for_expired_invite,  only: %i[new create]
+      before_action :check_for_signups_allowed, only: %i[new create]
     end
 
     def new
@@ -39,7 +41,7 @@ class UsersController < ApplicationController
     end
 
     def find_invite
-      @invite = Invite.find_by_token(invite_token) if invite_token?
+      @invite = Invite.find_by(token: invite_token) if invite_token?
     end
 
     def invite_token
@@ -58,18 +60,16 @@ class UsersController < ApplicationController
     end
 
     def check_for_expired_invite
-      if @invite && @invite.expired?
-        session.delete(:invite_token)
-        flash[:notice] = "Your invite has expired"
-        redirect_to login_users_url
-      end
+      return unless @invite&.expired?
+      session.delete(:invite_token)
+      flash[:notice] = "Your invite has expired"
+      redirect_to login_users_url
     end
 
     def check_for_signups_allowed
-      if !Sugar.config.signups_allowed && User.any? && !@invite
-        flash[:notice] = "Signups are not allowed"
-        redirect_to login_users_url
-      end
+      return unless !Sugar.config.signups_allowed && User.any? && !@invite
+      flash[:notice] = "Signups are not allowed"
+      redirect_to login_users_url
     end
 
     def facebook_user_params

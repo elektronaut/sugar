@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # = Conversation
 #
@@ -9,7 +9,8 @@ class Conversation < Exchange
 
   has_many :conversation_relationships,
            -> { order "created_at ASC" },
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :conversation
 
   has_many :participants,
            -> { reorder("username ASC") },
@@ -24,23 +25,21 @@ class Conversation < Exchange
     options = {
       new_posts: true
     }.merge(options)
-    if user.is_a?(User) && !participants.include?(user)
-      ConversationRelationship.create(
-        user:         user,
-        conversation: self,
-        new_posts:    options[:new_posts]
-      )
-    end
+    return unless user.is_a?(User) && !participants.include?(user)
+    ConversationRelationship.create(
+      user:         user,
+      conversation: self,
+      new_posts:    options[:new_posts]
+    )
   end
 
   def remove_participant(user)
-    if user.is_a?(User) && participants.include?(user)
-      raise RemoveParticipantError unless removeable?(user)
-      ConversationRelationship.where(
-        user_id:         user.id,
-        conversation_id: id
-      ).destroy_all
-    end
+    return unless user.is_a?(User) && participants.include?(user)
+    raise RemoveParticipantError unless removeable?(user)
+    ConversationRelationship.where(
+      user_id:         user.id,
+      conversation_id: id
+    ).destroy_all
   end
 
   def removeable?(user)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Renderer
   class << self
     def filters(format)

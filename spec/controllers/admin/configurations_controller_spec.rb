@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -25,10 +25,13 @@ describe Admin::ConfigurationsController, redis: true do
     end
 
     describe "update" do
-      before { patch :update, params: { configuration: { forum_name: "New Forum Name" } } }
+      before do
+        patch :update,
+              params: { configuration: { forum_name: "New Forum Name" } }
+      end
       specify { expect(flash[:notice]).to eq(nil) }
 
-      it "should update the forum configuration" do
+      it "updates the forum configuration" do
         expect(Sugar.config.forum_name).to eq("New Forum Name")
       end
 

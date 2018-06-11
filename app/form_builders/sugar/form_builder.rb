@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 module Sugar
   class FormBuilder < ActionView::Helpers::FormBuilder
@@ -15,21 +16,20 @@ module Sugar
       errors
     end
 
-    def first_error_on(attribute)
+    def first_error(attribute)
       errors_on(attribute).first
     end
 
     def label(method, text = nil, options = {}, &_block)
-      text ||= human_attribute_name(method)
+      output = [text || human_attribute_name(method)]
       if errors_on?(method)
-        text += content_tag(:span, " " + first_error_on(method), class: "error")
+        output << content_tag(:span, " " + first_error(method), class: "error")
       elsif options[:description]
-        text += content_tag(
-          :span,
-          " &mdash; #{options[:description]}".html_safe, class: "description"
-        )
+        output << content_tag(:span,
+                              safe_join([" – ", options[:description]], ""),
+                              class: "description")
       end
-      content_tag "label", text.html_safe, for: full_attribute_name(method)
+      content_tag "label", safe_join(output), for: full_attribute_name(method)
     end
 
     def field_with_label(attr, content, label_text = nil, opts = {})
@@ -37,15 +37,9 @@ module Sugar
       classes << "field_with_errors" if errors_on?(attr)
 
       label_tag = label(attr, label_text, description: opts[:description])
+      content = safe_join([content, opts[:note]], tag(:br)) if opts[:note]
 
-      if opts[:note]
-        content = safe_join(
-          [content, (opts[:note]).to_s.html_safe],
-          "<br>".html_safe
-        )
-      end
-
-      content_tag "p", label_tag + content, class: classes.join(" ")
+      content_tag "p", safe_join([label_tag, content]), class: classes.join(" ")
     end
 
     def labelled_text_field(attribute, label_text = nil, options = {})
@@ -78,46 +72,26 @@ module Sugar
 
     def labelled_time_zone_select(attr, label = nil, priority = nil, opts = {})
       label, opts, field_opts = parse_label_and_opts(label, opts)
-      field_with_label(
-        attr,
-        time_zone_select(attr, priority, opts),
-        label,
-        field_opts
-      )
+      field_with_label(attr, time_zone_select(attr, priority, opts),
+                       label, field_opts)
     end
 
     def labelled_select(attr, choices, label = nil, opts = {})
       label, opts, field_opts = parse_label_and_opts(label, opts)
-      field_with_label(
-        attr,
-        select(attr, choices, opts),
-        label,
-        field_opts
-      )
+      field_with_label(attr, select(attr, choices, opts), label, field_opts)
     end
 
     def labelled_check_box(attr, label = nil, options = {},
                            checked = "1", unchecked = "0")
-      label, options, field_options =
-        parse_label_and_opts(label, options)
-      field_with_label(
-        attr,
-        check_box(attr, options, checked, unchecked),
-        label,
-        field_options
-      )
+      label, options, field_options = parse_label_and_opts(label, options)
+      field_with_label(attr, check_box(attr, options, checked, unchecked),
+                       label, field_options)
     end
 
     private
 
     def extract_field_options(options)
-      field_options = {}
-      [:description, :note].each do |key|
-        if options.key?(key)
-          field_options[key] = options[key]
-          options.delete(key)
-        end
-      end
+      field_options = options.extract!(:description, :note)
       [options, field_options]
     end
 
@@ -130,16 +104,10 @@ module Sugar
     end
 
     def labelled_field(type, attribute, label_text = nil, options = {})
-      label_text, options, field_options = parse_label_and_opts(
-        label_text,
-        options
-      )
-      field_with_label(
-        attribute,
-        send(type, attribute, options),
-        label_text,
-        field_options
-      )
+      label_text, options, field_options = parse_label_and_opts(label_text,
+                                                                options)
+      field_with_label(attribute, send(type, attribute, options),
+                       label_text, field_options)
     end
 
     def parse_label_and_opts(label_text = nil, options = {})

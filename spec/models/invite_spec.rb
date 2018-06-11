@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Invite do
@@ -11,37 +13,40 @@ describe Invite do
   it { is_expected.to validate_presence_of(:user_id) }
 
   describe "email validation" do
-    subject { build(:invite, email: email) }
+    subject(:invite) { build(:invite, email: email) }
+
+    before { invite.valid? }
 
     context "when not registered" do
       let(:email) { "test@example.com" }
+
       it { is_expected.to be_valid }
     end
 
     context "when already registered" do
-      before { subject.valid? }
       let(:email) { create(:user).email }
-      it { is_expected.to_not be_valid }
-      specify { expect(subject.errors[:email].length).to eq(1) }
+
+      it { is_expected.not_to be_valid }
+      specify { expect(invite.errors[:email].length).to eq(1) }
     end
 
     context "when already invited" do
-      before { subject.valid? }
       let(:email) { create(:invite).email }
-      it { is_expected.to_not be_valid }
-      specify { expect(subject.errors[:email].length).to eq(1) }
+
+      it { is_expected.not_to be_valid }
+      specify { expect(invite.errors[:email].length).to eq(1) }
     end
   end
 
   describe "before_create" do
-    subject { create(:invite) }
+    subject(:invite) { create(:invite) }
 
     specify do
-      expect(subject.expires_at).to be_within(30).of(Time.now.utc + 14.days)
+      expect(invite.expires_at).to be_within(30).of(Time.now.utc + 14.days)
     end
 
-    specify { expect(subject.token).to be_kind_of(String) }
-    specify { expect(subject.token.length >= 40).to eq(true) }
+    specify { expect(invite.token).to be_kind_of(String) }
+    specify { expect(invite.token.length >= 40).to eq(true) }
 
     it "revokes an invite from the inviter" do
       inviter = create(:user, available_invites: 1)
@@ -55,9 +60,8 @@ describe Invite do
     context "when invite has been used" do
       before { invite.used = true }
       it "doesn't grant the user an invite" do
-        expect do
-          invite.destroy
-        end.not_to change { invite.user.available_invites }
+        expect { invite.destroy }
+          .not_to(change { invite.user.available_invites })
       end
     end
 
@@ -71,39 +75,45 @@ describe Invite do
   end
 
   describe ".unique_token" do
-    subject { Invite.unique_token }
+    subject(:token) { described_class.unique_token }
+
     it { is_expected.to be_kind_of(String) }
-    specify { expect(subject.length >= 40).to eq(true) }
+    specify { expect(token.length >= 40).to eq(true) }
   end
 
   describe ".expiration_time" do
-    subject { Invite.expiration_time }
+    subject { described_class.expiration_time }
+
     it { is_expected.to eq(14.days) }
   end
 
   describe ".active" do
-    let!(:invite) { create(:invite) }
-    let!(:expired_invite) { create(:expired_invite) }
+    subject { described_class.active }
 
-    subject { Invite.active }
+    let!(:invite) { create(:invite) }
+
+    before { create(:expired_invite) }
+
     it { is_expected.to eq([invite]) }
   end
 
   describe ".expired" do
-    let!(:invite) { create(:invite) }
+    subject { described_class.expired }
+
     let!(:expired_invite) { create(:expired_invite) }
 
-    subject { Invite.expired }
+    before { create(:invite) }
+
     it { is_expected.to eq([expired_invite]) }
   end
 
   describe ".destroy_expired!" do
-    let!(:expired_invite) { create(:expired_invite) }
+    before { create(:expired_invite) }
 
     it "destroys all expired invites" do
       expect do
-        Invite.destroy_expired!
-      end.to change { Invite.count }.by(-1)
+        described_class.destroy_expired!
+      end.to change(described_class, :count).by(-1)
     end
   end
 
@@ -112,19 +122,24 @@ describe Invite do
 
     context "when invite isn't expired" do
       let(:invite) { create(:invite) }
+
       it { is_expected.to eq(false) }
     end
 
     context "when invite is expired" do
       let(:invite) { create(:expired_invite) }
+
       it { is_expected.to eq(true) }
     end
   end
 
   describe "#expire!" do
-    let!(:invite) { create(:expired_invite) }
+    before { create(:expired_invite) }
+
     it "destroys the invite" do
-      expect { Invite.destroy_expired! }.to change { Invite.count }.by(-1)
+      expect { described_class.destroy_expired! }.to(
+        change(described_class, :count).by(-1)
+      )
     end
   end
 end

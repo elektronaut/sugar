@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/sha1"
 
@@ -8,7 +8,7 @@ require "digest/sha1"
 # Users with the <tt>trusted</tt> flag can see the trusted discussions.
 # Admin users also count as trusted.
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Authenticable
   include Inviter
@@ -26,19 +26,15 @@ class User < ActiveRecord::Base
 
   validates :username,
             presence: true,
-            uniqueness: {
-              case_sensitive: false,
-              message: "is already registered"
-            },
+            uniqueness: { case_sensitive: false,
+                          message: "is already registered" },
             format: { with: /\A[^\?]+\Z/, message: "is not valid" }
 
   validates :email,
             email: true,
             presence: true,
-            uniqueness: {
-              case_sensitive: false,
-              message: "is already registered"
-            }
+            uniqueness: { case_sensitive: false,
+                          message: "is already registered" }
 
   def name_and_email
     realname? ? "#{realname} <#{email}>" : email
@@ -49,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def online?
-    (last_active && last_active > 15.minutes.ago) ? true : false
+    last_active && last_active > 15.minutes.ago ? true : false
   end
 
   def trusted?
@@ -86,7 +82,7 @@ class User < ActiveRecord::Base
 
   def mark_active!
     return if last_active && last_active > 10.minutes.ago
-    update_columns(last_active: Time.now.utc)
+    update(last_active: Time.now.utc)
   end
 
   def mobile_theme
@@ -99,18 +95,15 @@ class User < ActiveRecord::Base
 
   def gamertag_avatar_url
     return unless gamertag?
-    "http://avatar.xboxlive.com/avatar/#{URI.escape(gamertag)}/avatarpic-l.png"
+    "http://avatar.xboxlive.com/avatar/#{ERB::Util.url_encode(gamertag)}" \
+    "/avatarpic-l.png"
   end
 
   def serializable_params
-    [
-      :id, :username, :realname, :latitude, :longitude, :inviter_id,
-      :last_active, :created_at, :description, :admin,
-      :moderator, :user_admin,
-      :location, :gamertag, :twitter, :flickr, :instagram, :website,
-      :msn, :gtalk, :last_fm, :facebook_uid, :banned_until,
-      :sony, :nintendo, :nintendo_switch, :steam, :battlenet
-    ]
+    %i[id username realname latitude longitude inviter_id last_active created_at
+       description admin moderator user_admin location gamertag twitter flickr
+       instagram website msn gtalk last_fm facebook_uid banned_until sony
+       nintendo nintendo_switch steam battlenet]
   end
 
   def serializable_methods
@@ -118,19 +111,13 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super(
-      {
-        only: serializable_params, methods: serializable_methods
-      }.merge(options)
-    )
+    super({ only: serializable_params,
+            methods: serializable_methods }.merge(options))
   end
 
   def to_xml(options = {})
-    super(
-      {
-        only: serializable_params, methods: serializable_methods
-      }.merge(options)
-    )
+    super({ only: serializable_params,
+            methods: serializable_methods }.merge(options))
   end
 
   protected

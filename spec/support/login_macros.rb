@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LoginMacros
   def self.included(base)
     base.extend ClassMethods
@@ -20,10 +22,9 @@ module LoginMacros
       actions.each do |action|
         it "requires authentication for #{action}" do
           private_browsing!
-          expect(controller).to receive(:require_user_account)
-            .at_least(:once)
-            .and_return(true)
+          allow(controller).to receive(:require_user_account).and_return(true)
           perform_login_macro_request(action, opts)
+          expect(controller).to have_received(:require_user_account)
         end
       end
     end
@@ -32,10 +33,9 @@ module LoginMacros
       actions, opts = require_login_options(actions)
       actions.each do |action|
         it "requires a user for #{action}" do
-          expect(controller).to receive(:require_user_account)
-            .at_least(:once)
-            .and_return(true)
+          allow(controller).to receive(:require_user_account).and_return(true)
           perform_login_macro_request(action, opts)
+          expect(controller).to have_received(:require_user_account)
         end
       end
     end
@@ -65,13 +65,9 @@ module LoginMacros
 
     def it_requires_verify_user(action, flag, opts = {})
       it "requires a #{flag} for #{action}" do
-        received = false
-        expect(controller).to receive(:verify_user) do |o|
-          received = true if o[flag]
-          true
-        end.at_least(:once)
+        allow(controller).to receive(:verify_user)
         perform_login_macro_request(action, opts)
-        expect(received).to eq(true)
+        expect(controller).to have_received(:verify_user).with(flag => true)
       end
     end
 

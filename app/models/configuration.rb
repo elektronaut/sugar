@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Configuration
   class InvalidConfigurationKey < StandardError; end
 
@@ -19,11 +21,7 @@ class Configuration
 
     def define_reader_method(key)
       define_method key do |*args|
-        if args.any?
-          set(key, *args)
-        else
-          get(key)
-        end
+        args.any? ? set(key, *args) : get(key)
       end
     end
 
@@ -37,52 +35,6 @@ class Configuration
       define_method "#{key}=" do |value|
         set(key, value)
       end
-    end
-  end
-
-  module CustomizationSettings
-    extend ActiveSupport::Concern
-    included do
-      setting :forum_name, :string, "Sugar"
-      setting :forum_short_name, :string, "Sugar"
-      setting :forum_title, :string, "Sugar"
-      setting :public_browsing, :boolean, false
-      setting :signups_allowed, :boolean, true
-      setting :domain_names, :string
-      setting :mail_sender, :string
-
-      # Customization
-      setting :code_of_conduct, :string
-      setting :custom_header, :string
-      setting :custom_footer, :string
-      setting :custom_javascript, :string
-      setting(
-        :emoticons,
-        :string,
-        "smiley laughing blush heart_eyes kissing_heart flushed worried " \
-          "grimacing cry angry heart star +1 -1"
-      )
-    end
-  end
-
-  module IntegrationSettings
-    extend ActiveSupport::Concern
-    included do
-      setting :google_analytics, :string
-      setting :amazon_associates_id, :string
-      setting :amazon_aws_key, :string
-      setting :amazon_aws_secret, :string
-      setting :amazon_s3_bucket, :string
-      setting :facebook_app_id, :string
-      setting :facebook_api_secret, :string
-    end
-  end
-
-  module ThemeSettings
-    extend ActiveSupport::Concern
-    included do
-      setting :default_theme, :string, "default"
-      setting :default_mobile_theme, :string, "default"
     end
   end
 
@@ -150,18 +102,15 @@ class Configuration
   end
 
   def validate_setting(key)
-    unless setting?(key)
-      raise(InvalidConfigurationKey,
-            ":#{key} is not a valid configuration option")
-    end
+    return if setting?(key)
+    raise(InvalidConfigurationKey, ":#{key} is not a valid option")
   end
 
   def validate_type(key, value)
-    unless valid_type?(key, parse_value(key, value))
-      raise(ArgumentError,
-            "expected #{self.class.settings[key].type}, " \
-              "got #{value.class} (#{value.inspect})")
-    end
+    return if valid_type?(key, parse_value(key, value))
+    raise(ArgumentError,
+          "expected #{self.class.settings[key].type}, " \
+          "got #{value.class} (#{value.inspect})")
   end
 
   def parse_value(key, value)

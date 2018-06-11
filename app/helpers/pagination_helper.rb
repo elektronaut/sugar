@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaginationHelper
   def nearest_pages(collection, number = 9)
     first = [collection.current_page - (number / 2), 1].max

@@ -1,25 +1,29 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe SimpleFilter do
   it "strips surrounding whitespace" do
-    expect(SimpleFilter.new("  \n\n  foo  \n\n  ").to_html).to eq("foo")
+    expect(described_class.new("  \n\n  foo  \n\n  ").to_html).to eq("foo")
   end
 
   it "converts line breaks to <br>" do
-    expect(SimpleFilter.new("foo\n\nbar").to_html).to eq("foo<br>\n<br>\nbar")
+    expect(described_class.new("foo\n\nbar").to_html).to(
+      eq("foo<br>\n<br>\nbar")
+    )
   end
 
   it "escapes left angle brackets" do
-    expect(SimpleFilter.new("<3").to_html).to eq("&lt;3")
+    expect(described_class.new("<3").to_html).to eq("&lt;3")
   end
 
   it "escapes right angle brackets" do
-    expect(SimpleFilter.new(">:/").to_html).to eq("&gt;:/")
+    expect(described_class.new(">:/").to_html).to eq("&gt;:/")
   end
 
   it "doesn't escape tags" do
     expect(
-      SimpleFilter.new('<a href="#">link</a>').to_html
+      described_class.new('<a href="#">link</a>').to_html
     ).to eq('<a href="#">link</a>')
   end
 
@@ -28,6 +32,6 @@ describe SimpleFilter do
             "allowfullscreen></iframe>\nfoo"
     output = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
              "allowfullscreen></iframe><br>\nfoo"
-    expect(SimpleFilter.new(input).to_html).to eq(output)
+    expect(described_class.new(input).to_html).to eq(output)
   end
 end

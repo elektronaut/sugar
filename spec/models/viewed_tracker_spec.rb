@@ -1,10 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
 describe ViewedTracker do
   let(:user) { create(:user) }
-  let(:tracker) { ViewedTracker.new(user) }
+  let(:tracker) { described_class.new(user) }
   let(:discussion) { create(:discussion) }
   let(:read_discussion) do
     discussion = create(:discussion)
@@ -28,33 +28,33 @@ describe ViewedTracker do
   let(:discussion_with_post) {}
   let(:exchanges) { [discussion] }
 
+  before { tracker.exchanges = exchanges }
+
   describe "#any?" do
     subject { tracker.any? }
 
     context "without exchanges" do
+      before { tracker.exchanges = [] }
       it { is_expected.to eq(false) }
     end
 
-    context "with exchanges" do
-      before { tracker.exchanges = exchanges }
+    context "with user" do
+      it { is_expected.to eq(true) }
+    end
 
-      context "with user" do
-        it { is_expected.to eq(true) }
-      end
+    context "without user" do
+      let(:user) { nil }
 
-      context "without user" do
-        let(:user) { nil }
-        it { is_expected.to eq(false) }
-      end
+      it { is_expected.to eq(false) }
     end
   end
 
   describe "#last_page" do
-    before { tracker.exchanges = exchanges }
     subject { tracker.last_page(discussion) }
 
     context "without user" do
       let(:user) { nil }
+
       it { is_expected.to eq(1) }
     end
 
@@ -64,13 +64,15 @@ describe ViewedTracker do
 
     context "when discussion is partially read" do
       let(:discussion) { partially_read_discussion }
+
       it { is_expected.to eq(2) }
     end
 
     context "when there are no new posts" do
       let(:discussion) { read_discussion }
-      it "should return the last page" do
-        expect(discussion).to receive(:last_page).and_return(15)
+
+      it "returns the last page" do
+        allow(discussion).to receive(:last_page).and_return(15)
         expect(tracker.last_page(discussion)).to eq(15)
       end
     end
@@ -80,25 +82,24 @@ describe ViewedTracker do
     subject { tracker.last_post_id(discussion) }
 
     context "with no exchanges" do
+      before { tracker.exchanges = [] }
       it { is_expected.to eq(nil) }
     end
 
-    context "with exchanges" do
-      before { tracker.exchanges = exchanges }
+    context "when no user" do
+      let(:user) { nil }
 
-      context "and no user" do
-        let(:user) { nil }
-        it { is_expected.to eq(nil) }
-      end
+      it { is_expected.to eq(nil) }
+    end
 
-      context "but no view" do
-        it { is_expected.to eq(nil) }
-      end
+    context "without any view" do
+      it { is_expected.to eq(nil) }
+    end
 
-      context "and a view" do
-        let(:discussion) { read_discussion }
-        it { is_expected.to eq(read_discussion.posts.last.id) }
-      end
+    context "with a view" do
+      let(:discussion) { read_discussion }
+
+      it { is_expected.to eq(read_discussion.posts.last.id) }
     end
   end
 
@@ -106,25 +107,24 @@ describe ViewedTracker do
     subject { tracker.last_post_id?(discussion) }
 
     context "with no exchanges" do
+      before { tracker.exchanges = [] }
       it { is_expected.to eq(false) }
     end
 
-    context "with exchanges" do
-      before { tracker.exchanges = exchanges }
+    context "without user" do
+      let(:user) { nil }
 
-      context "and no user" do
-        let(:user) { nil }
-        it { is_expected.to eq(false) }
-      end
+      it { is_expected.to eq(false) }
+    end
 
-      context "but no view" do
-        it { is_expected.to eq(false) }
-      end
+    context "without view" do
+      it { is_expected.to eq(false) }
+    end
 
-      context "and a view" do
-        let(:discussion) { read_discussion }
-        it { is_expected.to eq(true) }
-      end
+    context "with a view" do
+      let(:discussion) { read_discussion }
+
+      it { is_expected.to eq(true) }
     end
   end
 
@@ -132,25 +132,24 @@ describe ViewedTracker do
     subject { tracker.new_posts(discussion) }
 
     context "with no exchanges" do
+      before { tracker.exchanges = [] }
       it { is_expected.to eq(0) }
     end
 
-    context "with exchanges" do
-      before { tracker.exchanges = exchanges }
+    context "without user" do
+      let(:user) { nil }
 
-      context "and no user" do
-        let(:user) { nil }
-        it { is_expected.to eq(0) }
-      end
+      it { is_expected.to eq(0) }
+    end
 
-      context "but no view" do
-        it { is_expected.to eq(1) }
-      end
+    context "without view" do
+      it { is_expected.to eq(1) }
+    end
 
-      context "and a view" do
-        let(:discussion) { partially_read_discussion }
-        it { is_expected.to eq(105 - 64) }
-      end
+    context "with a view" do
+      let(:discussion) { partially_read_discussion }
+
+      it { is_expected.to eq(105 - 64) }
     end
   end
 
@@ -158,30 +157,30 @@ describe ViewedTracker do
     subject { tracker.new_posts?(discussion) }
 
     context "with no exchanges" do
+      before { tracker.exchanges = [] }
       it { is_expected.to eq(false) }
     end
 
-    context "with exchanges" do
-      before { tracker.exchanges = exchanges }
+    context "without user" do
+      let(:user) { nil }
 
-      context "and no user" do
-        let(:user) { nil }
-        it { is_expected.to eq(false) }
-      end
+      it { is_expected.to eq(false) }
+    end
 
-      context "haven't been opened" do
-        it { is_expected.to eq(true) }
-      end
+    context "when unopened" do
+      it { is_expected.to eq(true) }
+    end
 
-      context "when discussion is fully read" do
-        let(:discussion) { read_discussion }
-        it { is_expected.to eq(false) }
-      end
+    context "when discussion is fully read" do
+      let(:discussion) { read_discussion }
 
-      context "when discussion is partially read" do
-        let(:discussion) { partially_read_discussion }
-        it { is_expected.to eq(true) }
-      end
+      it { is_expected.to eq(false) }
+    end
+
+    context "when discussion is partially read" do
+      let(:discussion) { partially_read_discussion }
+
+      it { is_expected.to eq(true) }
     end
   end
 end

@@ -1,24 +1,24 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
 describe User do
+  subject { user }
+
   let(:user) { build(:user) }
   let(:trusted_user) { build(:trusted_user) }
   let(:admin) { build(:admin) }
   let(:moderator) { build(:moderator) }
   let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
-    %w(
-      admin banned_until created_at description
-      flickr gamertag gtalk id instagram facebook_uid
-      inviter_id last_active last_fm latitude location
-      longitude moderator msn realname twitter user_admin
-      username website status
-      sony nintendo nintendo_switch steam battlenet)
+    %w[admin banned_until created_at description
+       flickr gamertag gtalk id instagram facebook_uid
+       inviter_id last_active last_fm latitude location
+       longitude moderator msn realname twitter user_admin
+       username website status
+       sony nintendo nintendo_switch steam battlenet]
   end
-
-  subject { user }
 
   it { is_expected.to be_kind_of(Authenticable) }
   it { is_expected.to be_kind_of(Inviter) }
@@ -33,8 +33,6 @@ describe User do
       .case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
-  xit { is_expected.to allow_value("فاطمة").for(:username) }
-  xit { is_expected.to allow_value("王秀英").for(:username) }
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
   it do
@@ -50,17 +48,20 @@ describe User do
 
     context "when realname is set" do
       let(:user) { build(:user, realname: "John") }
+
       it { is_expected.to eq("#{user.realname} <#{user.email}>") }
     end
 
     context "when realname isn't set" do
       let(:user) { build(:user, realname: nil) }
+
       it { is_expected.to eq(user.email.to_s) }
     end
   end
 
   describe "#previous_usernames" do
     subject { user.previous_usernames }
+
     let(:user) { create(:user, username: "originalname") }
 
     context "when username hasn't been changed" do
@@ -78,11 +79,13 @@ describe User do
 
     context "when realname is set" do
       let(:user) { build(:user, realname: "John") }
+
       it { is_expected.to eq(user.realname) }
     end
 
     context "when realname isn't set" do
       let(:user) { build(:user, realname: nil) }
+
       it { is_expected.to eq(user.username) }
     end
   end
@@ -92,11 +95,13 @@ describe User do
 
     context "when user is online" do
       let(:user) { build(:user, last_active: 2.minutes.ago) }
+
       it { is_expected.to eq(true) }
     end
 
     context "when user is offline" do
       let(:user) { build(:user, last_active: 2.days.ago) }
+
       it { is_expected.to eq(false) }
     end
   end
@@ -141,26 +146,31 @@ describe User do
 
   describe "#mark_active!" do
     subject { user.last_active }
+
     before { user.mark_active! }
 
     context "when user hasn't signed in yet" do
       let(:user) { create(:user, last_active: nil) }
+
       it { is_expected.to be_within(1.0).of(Time.now.utc) }
     end
 
     context "when user has been active" do
       let(:user) { create(:user, last_active: 2.days.ago) }
+
       it { is_expected.to be_within(1.0).of(Time.now.utc) }
     end
 
     context "when user has been active in the last 10 minutes" do
       let(:user) { create(:user, last_active: 5.minutes.ago) }
+
       it { is_expected.to be_within(1.0).of(5.minutes.ago) }
     end
   end
 
   describe "#mobile_theme" do
     subject { user.mobile_theme }
+
     before { Sugar.config.default_mobile_theme = "default_mobile" }
 
     context "when not set" do
@@ -169,6 +179,7 @@ describe User do
 
     context "when set" do
       let(:user) { build(:user, mobile_theme: "mytheme_mobile") }
+
       it { is_expected.to eq("mytheme_mobile") }
     end
   end
@@ -178,11 +189,13 @@ describe User do
 
     context "when gamertag is nil" do
       let(:user) { build(:user) }
+
       it { is_expected.to eq(nil) }
     end
 
     context "when gamertag is nil" do
       let(:user) { build(:user, gamertag: "my gamertag") }
+
       it do
         is_expected.to(
           eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
@@ -193,6 +206,7 @@ describe User do
 
   describe "#as_json" do
     let(:keys) { user.as_json.keys.map(&:to_s) }
+
     it "only includes public information" do
       expect(keys).to match_array(public_attributes)
     end
@@ -200,6 +214,7 @@ describe User do
 
   describe "#to_xml" do
     let(:keys) { Hash.from_xml(user.to_xml)["user"].keys }
+
     it "only includes public information" do
       expect(keys).to match_array(public_attributes)
     end
@@ -207,6 +222,7 @@ describe User do
 
   describe "#ensure_last_active_is_set" do
     subject { create(:user).last_active }
+
     it { is_expected.to be_kind_of(Time) }
   end
 end

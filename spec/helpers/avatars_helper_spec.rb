@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 require "digest/md5"
@@ -22,13 +22,12 @@ describe AvatarsHelper do
 
     context "when user has an avatar uploaded" do
       let(:user) { create(:user_with_avatar, username: "foo") }
+
       it do
         is_expected.to match(
-          Regexp.new(
-            '<img alt="foo" class="avatar-image" ' \
-              'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
-              'width="16" height="16" \/>'
-          )
+          Regexp.new('<img alt="foo" class="avatar-image" ' \
+                     'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
+                     'width="16" height="16" \/>')
         )
       end
     end
@@ -37,6 +36,7 @@ describe AvatarsHelper do
       let(:user) do
         build(:user, email: email, username: "foo")
       end
+
       it do
         is_expected.to eq(
           '<img alt="foo" class="avatar-image" ' \
@@ -51,6 +51,7 @@ describe AvatarsHelper do
         create(:user, username: "foo").tap { |u| u.email = nil }
       end
       let(:digest) { Digest::MD5.hexdigest("#{user.id}@test.host") }
+
       it do
         is_expected.to eq(
           '<img alt="foo" class="avatar-image" ' \

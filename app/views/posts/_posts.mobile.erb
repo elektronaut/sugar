@@ -44,7 +44,7 @@
            id="post-<%= post.id %>">
         <% if post.me_post? %>
           <div class="body">
-            <%= format_post post.body, post.user %>
+            <%= format_post post.body_html, post.user %>
             <span class="date">
               &ndash; <%= time_tag post.created_at, class: "relative" %>
             </span>

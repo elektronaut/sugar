@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class SanitizeFilter < Filter
   def process(post)
@@ -18,13 +18,13 @@ class SanitizeFilter < Filter
   private
 
   def remove_unsafe_tags(parser)
-    %w(applet base meta link script form).each do |tag_name|
+    %w[applet base meta link script form].each do |tag_name|
       parser.search(tag_name).remove
     end
   end
 
   def jquery_ujs_attributes
-    %w(
+    %w[
       data-confirm
       data-disable-with
       data-method
@@ -32,7 +32,7 @@ class SanitizeFilter < Filter
       data-remote
       data-type
       data-url
-    )
+    ]
   end
 
   def strip_event_handlers(parser)
@@ -81,7 +81,7 @@ class SanitizeFilter < Filter
   # is present.
   def change_allowscriptaccess_attribute_on(element)
     element.attributes.each do |name, _value|
-      if name.downcase =~ /^allowscriptaccess/
+      if name.downcase.match?(/^allowscriptaccess/)
         element.set_attribute name, "sameDomain"
       end
     end
@@ -105,9 +105,8 @@ class SanitizeFilter < Filter
 
   # Makes sure the element contains an allowScriptAccess param.
   def enforce_allowscriptaccess_param_in(element)
-    if element.search(">param[name=allowScriptAccess]").empty?
-      element.inner_html +=
-        '<param name="allowScriptAccess" value="sameDomain" />'
-    end
+    return unless element.search(">param[name=allowScriptAccess]").empty?
+    element.inner_html +=
+      '<param name="allowScriptAccess" value="sameDomain" />'
   end
 end

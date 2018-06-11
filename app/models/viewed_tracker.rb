@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class ViewedTracker
   def initialize(user)
     @user = user
   end
 
   def any?
-    (user && exchanges.any?) ? true : false
+    user && exchanges.any? ? true : false
   end
 
   def exchanges=(new_exchanges)
@@ -38,7 +40,7 @@ class ViewedTracker
   end
 
   def new_posts?(exchange)
-    new_posts(exchange) > 0
+    new_posts(exchange).positive?
   end
 
   private

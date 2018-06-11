@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Inviter
   extend ActiveSupport::Concern
 
@@ -14,19 +16,21 @@ module Inviter
     has_many :invitees,
              -> { order "username ASC" },
              class_name: "User",
-             foreign_key: "inviter_id"
+             foreign_key: "inviter_id",
+             inverse_of: :inviter
 
     has_many :invites,
              -> { order "created_at ASC" },
-             dependent: :destroy
+             dependent: :destroy,
+             inverse_of: :user
   end
 
   def invites?
-    invites.count > 0
+    invites.count.positive?
   end
 
   def invitees?
-    invitees.count > 0
+    invitees.count.positive?
   end
 
   def invites_or_invitees?
@@ -34,7 +38,7 @@ module Inviter
   end
 
   def available_invites?
-    user_admin? || available_invites > 0
+    user_admin? || available_invites.positive?
   end
 
   # Number of remaining invites. User admins always have at least one invite.
@@ -48,15 +52,15 @@ module Inviter
     return available_invites if user_admin?
     number = available_invites if number == :all
     new_invites = available_invites - number
-    new_invites = 0 if new_invites < 0
-    update_column(:available_invites, new_invites)
+    new_invites = 0 if new_invites.negative?
+    update(available_invites: new_invites)
     available_invites
   end
 
   def grant_invite!(number = 1)
     return available_invites if user_admin?
     new_number = (available_invites + number)
-    update_column(:available_invites, new_number)
+    update(available_invites: new_number)
     invites
   end
 
@@ -67,6 +71,6 @@ module Inviter
   end
 
   def expire_invite
-    invite.expire! if invite
+    invite&.expire!
   end
 end

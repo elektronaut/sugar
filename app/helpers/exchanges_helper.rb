@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ExchangesHelper
   # Returns an array of class names for an exchange
   def exchange_classes(collection, exchange)
     [
       exchange.labels.map(&:downcase),
-      %w(odd even)[collection.to_a.index(exchange) % 2],
+      %w[odd even][collection.to_a.index(exchange) % 2],
       (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",

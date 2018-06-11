@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   module LoginUsersController
     extend ActiveSupport::Concern
 
     included do
       before_action :detect_admin_signup,        only: [:login]
-      before_action :check_if_already_logged_in, only: [:login, :authenticate]
+      before_action :check_if_already_logged_in, only: %i[login authenticate]
     end
 
-    def login
-    end
+    def login; end
 
     def authenticate
       @current_user = User.find_and_authenticate_with_password(

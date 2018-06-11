@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RedisHelper
   CONFIG = { url: "redis://127.0.0.1:6379/2" }.freeze
 

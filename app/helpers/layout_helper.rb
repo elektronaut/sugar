@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module LayoutHelper
   def add_body_class(*class_names)
@@ -21,7 +21,7 @@ module LayoutHelper
   def frontend_configuration
     {
       authToken:          form_authenticity_token,
-      debug:              (Rails.env == "development"),
+      debug:              Rails.env.development?,
       emoticons:          enabled_emoticons,
       facebookAppId:      Sugar.config.facebook_app_id,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
@@ -33,7 +33,7 @@ module LayoutHelper
 
   def search_mode_options
     options = [["in discussions", search_path], ["in posts", search_posts_path]]
-    if @exchange && @exchange.id
+    if @exchange&.id
       options << [
         "in this #{@exchange.type.downcase}",
         polymorphic_path([:search_posts, @exchange])
@@ -60,9 +60,7 @@ module LayoutHelper
   def enabled_emoticons
     Sugar.config.emoticons.split(/\s+/).map do |name|
       emoji = Emoji.find_by_alias(name)
-      if emoji
-        { name: name, image: emoji_path(emoji) }
-      end
+      { name: name, image: emoji_path(emoji) } if emoji
     end.compact
   end
 end
