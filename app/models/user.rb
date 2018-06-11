@@ -82,7 +82,7 @@ class User < ApplicationRecord
 
   def mark_active!
     return if last_active && last_active > 10.minutes.ago
-    update_columns(last_active: Time.now.utc)
+    update(last_active: Time.now.utc)
   end
 
   def mobile_theme
@@ -95,7 +95,8 @@ class User < ApplicationRecord
 
   def gamertag_avatar_url
     return unless gamertag?
-    "http://avatar.xboxlive.com/avatar/#{URI.escape(gamertag)}/avatarpic-l.png"
+    "http://avatar.xboxlive.com/avatar/#{ERB::Util.url_encode(gamertag)}" \
+    "/avatarpic-l.png"
   end
 
   def serializable_params

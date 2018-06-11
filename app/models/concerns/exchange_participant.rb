@@ -4,30 +4,36 @@ module ExchangeParticipant
   extend ActiveSupport::Concern
 
   included do
-    has_many :discussions, foreign_key: "poster_id"
-    has_many :posts
+    has_many :discussions,
+             foreign_key: "poster_id",
+             dependent: :restrict_with_exception,
+             inverse_of: :poster
+
+    has_many :posts, dependent: :restrict_with_exception
+
     has_many :discussion_posts,
              -> { where conversation: false, deleted: false },
-             class_name: "Post"
+             class_name: "Post", inverse_of: :user
+
     has_many :exchange_views, dependent: :destroy
+
     has_many :discussion_relationships, dependent: :destroy
 
     has_many :participated_discussions,
              -> { where discussion_relationships: { participated: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :followed_discussions,
              -> { where discussion_relationships: { following: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :favorite_discussions,
              -> { where discussion_relationships: { favorite: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :hidden_discussions,
              -> { where discussion_relationships: { hidden: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships

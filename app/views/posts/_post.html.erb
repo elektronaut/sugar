@@ -71,7 +71,7 @@
           <div class="avatar"><%= avatar_image_tag(post.user) %></div>
           <div class="body" id="postBody-<%= post.id %>">
             <span class="content">
-              <%= format_post post.body, post.user %>
+              <%= format_post post.body_html, post.user %>
             </span>
             <% if preview %>
               <time class="relative date">

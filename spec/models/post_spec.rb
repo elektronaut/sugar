@@ -194,7 +194,7 @@ describe Post do
 
     context "when body_html hasn't been set" do
       before do
-        allow(Renderer).to(receive(:render).and_return("<p>Test</p>".html_safe))
+        allow(Renderer).to(receive(:render).and_return("<p>Test</p>"))
       end
 
       it "parses the post" do

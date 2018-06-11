@@ -23,11 +23,13 @@ class Exchange < ApplicationRecord
   has_many(:posts,
            -> { order "created_at ASC" },
            dependent: :destroy,
-           foreign_key: "exchange_id")
+           foreign_key: "exchange_id",
+           inverse_of: :exchange)
 
   has_many(:exchange_views,
            dependent: :destroy,
-           foreign_key: "exchange_id")
+           foreign_key: "exchange_id",
+           inverse_of: :exchange)
 
   has_many(:users, through: :posts)
 

@@ -39,15 +39,13 @@ class FacebookController < ApplicationController
     require_user_info(
       redirect_url, code: params[:code], redirect_uri: connect_facebook_url
     ) do |user_info|
-      if user_info[:id]
-        current_user.update_attribute(:facebook_uid, user_info[:id])
-      end
+      current_user.update(facebook_uid: user_info[:id]) if user_info[:id]
       redirect_to redirect_url
     end
   end
 
   def disconnect
-    current_user.update_attribute(:facebook_uid, nil)
+    current_user.update(facebook_uid: nil)
     flash[:notice] = "You have disconnected your Facebook account"
     redirect_to edit_user_page_url(
       id: current_user.username,
@@ -85,7 +83,8 @@ class FacebookController < ApplicationController
     options[:redirect_uri] ||= login_facebook_url
 
     begin
-      response = open(fb_access_token_url(code, options[:redirect_uri])).read
+      response = HTTParty.get(fb_access_token_url(code, options[:redirect_uri]))
+                         .response.body
       CGI.parse(response)["access_token"].first if response =~ /access_token=/
     rescue StandardError => e
       logger.error "Facebook authentication error: #{e.message}"
@@ -98,7 +97,7 @@ class FacebookController < ApplicationController
                    get_access_token(options[:code], options)
     return unless access_token
     begin
-      response = open(fb_profile_url(access_token)).read
+      response = HTTParty.get(fb_profile_url(access_token)).response.body
       JSON.parse(response).symbolize_keys
     rescue StandardError => e
       logger.error "Facebook API error: #{e.message}"

@@ -14,6 +14,7 @@ class PostsController < ApplicationController
   before_action :find_exchange, except: %i[search]
   before_action :verify_viewable, except: %i[search count since]
   before_action :find_post, only: %i[show edit update destroy]
+  before_action :find_post, only: %i[show edit update destroy]
   before_action :verify_editable, only: %i[edit update destroy]
   before_action :require_and_set_search_query, only: %i[search]
   before_action :verify_postable, only: %i[create drawing]

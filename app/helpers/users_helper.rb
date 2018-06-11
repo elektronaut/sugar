@@ -12,7 +12,6 @@ module UsersHelper
     if options[:action] && options[:action] == params[:action]
       classes << "active"
     end
-    ("<li class=\"#{classes.join(' ')}\">" + link_to(name, path) + "</li>")
-      .html_safe
+    content_tag(:li, link_to(name, path), class: classes.join(" "))
   end
 end

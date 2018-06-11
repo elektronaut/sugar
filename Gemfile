@@ -107,4 +107,7 @@ group :test, :development do
 
   # FactoryGirl
   gem "factory_girl_rails"
+
+  gem "rubocop", require: false
+  gem "rubocop-rspec", require: false
 end

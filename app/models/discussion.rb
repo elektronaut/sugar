@@ -66,9 +66,9 @@ class Discussion < Exchange
     posts.update_all(trusted: trusted?)
     discussion_relationships.update_all(trusted: trusted?)
     participants.each do |user|
-      user.update_column(
-        :public_posts_count,
-        user.discussion_posts.where(trusted: false).count
+      user.update(
+        public_posts_count:
+          user.discussion_posts.where(trusted: false).count
       )
     end
   end

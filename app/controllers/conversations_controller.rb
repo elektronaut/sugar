@@ -67,13 +67,13 @@ class ConversationsController < ApplicationController
 
   def mute
     current_user.conversation_relationships
-                .where(conversation: @exchange).update_all(notifications: false)
+                .find_by(conversation: @exchange).update(notifications: false)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 
   def unmute
     current_user.conversation_relationships
-                .where(conversation: @exchange).update_all(notifications: true)
+                .find_by(conversation: @exchange).update(notifications: true)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 

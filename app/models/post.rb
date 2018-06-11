@@ -10,7 +10,7 @@ class Post < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :exchange, touch: true
-  has_many :exchange_views
+  has_many :exchange_views, dependent: :restrict_with_exception
 
   validates :body, :user_id, :exchange_id, presence: true
   validates :format, inclusion: %w[markdown html]
@@ -53,7 +53,7 @@ class Post < ApplicationRecord
       unless body_html?
         update_column(:body_html, Renderer.render(body, format: format))
       end
-      self[:body_html].html_safe
+      self[:body_html]
     end
   end
 

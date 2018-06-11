@@ -16,11 +16,13 @@ module Inviter
     has_many :invitees,
              -> { order "username ASC" },
              class_name: "User",
-             foreign_key: "inviter_id"
+             foreign_key: "inviter_id",
+             inverse_of: :inviter
 
     has_many :invites,
              -> { order "created_at ASC" },
-             dependent: :destroy
+             dependent: :destroy,
+             inverse_of: :user
   end
 
   def invites?
@@ -51,14 +53,14 @@ module Inviter
     number = available_invites if number == :all
     new_invites = available_invites - number
     new_invites = 0 if new_invites.negative?
-    update_column(:available_invites, new_invites)
+    update(available_invites: new_invites)
     available_invites
   end
 
   def grant_invite!(number = 1)
     return available_invites if user_admin?
     new_number = (available_invites + number)
-    update_column(:available_invites, new_number)
+    update(available_invites: new_number)
     invites
   end
 

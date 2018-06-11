@@ -1,3 +1,4 @@
+# encoding: utf-8
 # frozen_string_literal: true
 
 module Sugar
@@ -15,20 +16,20 @@ module Sugar
       errors
     end
 
-    def first_error_on(attribute)
+    def first_error(attribute)
       errors_on(attribute).first
     end
 
     def label(method, text = nil, options = {}, &_block)
-      text ||= human_attribute_name(method)
+      output = [text || human_attribute_name(method)]
       if errors_on?(method)
-        text += content_tag(:span, " " + first_error_on(method), class: "error")
+        output << content_tag(:span, " " + first_error(method), class: "error")
       elsif options[:description]
-        text += content_tag(:span,
-                            " &mdash; #{options[:description]}".html_safe,
-                            class: "description")
+        output << content_tag(:span,
+                              safe_join([" – ", options[:description]], ""),
+                              class: "description")
       end
-      content_tag "label", text.html_safe, for: full_attribute_name(method)
+      content_tag "label", safe_join(output), for: full_attribute_name(method)
     end
 
     def field_with_label(attr, content, label_text = nil, opts = {})
@@ -36,13 +37,9 @@ module Sugar
       classes << "field_with_errors" if errors_on?(attr)
 
       label_tag = label(attr, label_text, description: opts[:description])
+      content = safe_join([content, opts[:note]], tag(:br)) if opts[:note]
 
-      if opts[:note]
-        content = safe_join([content, (opts[:note]).to_s.html_safe],
-                            "<br>".html_safe)
-      end
-
-      content_tag "p", label_tag + content, class: classes.join(" ")
+      content_tag "p", safe_join([label_tag, content]), class: classes.join(" ")
     end
 
     def labelled_text_field(attribute, label_text = nil, options = {})

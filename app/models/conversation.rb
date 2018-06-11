@@ -9,7 +9,8 @@ class Conversation < Exchange
 
   has_many :conversation_relationships,
            -> { order "created_at ASC" },
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :conversation
 
   has_many :participants,
            -> { reorder("username ASC") },
