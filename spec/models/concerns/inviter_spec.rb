@@ -6,9 +6,9 @@ describe Inviter do
   # Create the first admin user
   before { create(:admin) }
 
-  let(:user) { create(:user) }
-
   subject { user }
+
+  let(:user) { create(:user) }
 
   it { is_expected.to belong_to(:inviter).class_name("User") }
   it { is_expected.to have_many(:invitees).class_name("User") }
@@ -97,6 +97,7 @@ describe Inviter do
 
     context "when user is user admin" do
       let(:user) { create(:user_admin) }
+
       it "does not revoke any invites" do
         user.revoke_invite!(:all)
         expect(user.available_invites?).to eq(true)
@@ -112,23 +113,20 @@ describe Inviter do
 
     context "when user has invites" do
       let(:user) { create(:user, available_invites: 3) }
+
       it "revokes one invite" do
         user.revoke_invite!
         expect(user.available_invites).to eq(2)
       end
 
-      describe "revoking two invites" do
-        it "revokes one invite" do
-          user.revoke_invite!(2)
-          expect(user.available_invites).to eq(1)
-        end
+      it "revokes multiple invites" do
+        user.revoke_invite!(2)
+        expect(user.available_invites).to eq(1)
       end
 
-      describe "revoking all invites" do
-        it "revokes one invite" do
-          user.revoke_invite!(:all)
-          expect(user.available_invites).to eq(0)
-        end
+      it "revokes all invites" do
+        user.revoke_invite!(:all)
+        expect(user.available_invites).to eq(0)
       end
     end
   end
@@ -141,7 +139,7 @@ describe Inviter do
       expect(user.available_invites).to eq(2)
     end
 
-    it "grants an invite to the user" do
+    it "grants multiple invites to the user" do
       user.grant_invite!(2)
       expect(user.available_invites).to eq(3)
     end

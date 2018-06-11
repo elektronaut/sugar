@@ -13,7 +13,7 @@ describe Mailer do
   end
 
   describe "invite" do
-    let(:mail) { Mailer.invite(invite, login_url) }
+    let(:mail) { described_class.invite(invite, login_url) }
 
     specify do
       expect(
@@ -26,19 +26,17 @@ describe Mailer do
     describe "its body" do
       subject { mail.body.encoded }
 
+      let(:invite) { create(:invite, message: "My message") }
+
       it { is_expected.to match(Sugar.config.forum_name) }
       it { is_expected.to match(invite.user.realname) }
       it { is_expected.to match(login_url) }
-
-      context "when invite has message" do
-        let(:invite) { create(:invite, message: "My message") }
-        it { is_expected.to match("My message") }
-      end
+      it { is_expected.to match("My message") }
     end
   end
 
   describe "new_user" do
-    let(:mail) { Mailer.new_user(user, login_url) }
+    let(:mail) { described_class.new_user(user, login_url) }
 
     specify { expect(mail.subject).to eq("Welcome to Sugar!") }
     specify { expect(mail.to).to eq([user.email]) }
@@ -47,18 +45,17 @@ describe Mailer do
     describe "its body" do
       subject { mail.body.encoded }
 
-      context "when signed up with password" do
-        it { is_expected.to match(user.username) }
-        it { is_expected.to match(login_url) }
-      end
+      it { is_expected.to match(user.username) }
+      it { is_expected.to match(login_url) }
     end
   end
 
   describe "password_reset" do
-    let(:mail) do
-      Mailer.password_reset("user@example.com", "http://example.com")
-    end
     subject { mail }
+
+    let(:mail) do
+      described_class.password_reset("user@example.com", "http://example.com")
+    end
 
     specify { expect(mail.subject).to eq("Password reset for Sugar") }
     specify { expect(mail.to).to eq(["user@example.com"]) }

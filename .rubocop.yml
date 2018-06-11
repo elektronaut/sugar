@@ -1,3 +1,5 @@
+require: rubocop-rspec
+
 inherit_from:
   - .rubocop_todo.yml
 
@@ -8,6 +10,10 @@ AllCops:
 Metrics/AbcSize:
   Exclude:
     - "db/migrate/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "**/*_spec.rb"
 
 Metrics/MethodLength:
   Exclude:
@@ -32,3 +38,7 @@ Rails/CreateTableWithTimestamps:
 
 Rails/BulkChangeTable:
   Enabled: false
+
+RSpec/EmptyExampleGroup:
+  CustomIncludeMethods:
+    - 'it_requires_login_for'

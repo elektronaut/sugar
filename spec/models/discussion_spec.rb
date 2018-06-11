@@ -22,13 +22,9 @@ describe Discussion do
   it { is_expected.to be_kind_of(Exchange) }
 
   describe "save callbacks" do
-    it "changes the trusted status on discussions" do
-      create(:post, exchange: discussion)
-      expect(discussion.posts.first.trusted?).to eq(false)
+    it "changes the trusted status on posts" do
       discussion.update(trusted: true)
       expect(discussion.posts.first.trusted?).to eq(true)
-      discussion.update(trusted: false)
-      expect(discussion.posts.first.trusted?).to eq(false)
     end
   end
 
@@ -46,23 +42,26 @@ describe Discussion do
       end
     end
 
-    context "within the last 3 days" do
-      subject { Discussion.popular_in_the_last(3.days) }
+    context "when within the last 3 days" do
+      subject { described_class.popular_in_the_last(3.days) }
+
       it { is_expected.to eq([discussion2]) }
     end
 
-    context "within the last 7 days" do
+    context "when within the last 7 days" do
       before do
         discussion1
         discussion2
       end
 
-      subject { Discussion.popular_in_the_last(7.days) }
+      subject { described_class.popular_in_the_last(7.days) }
+
       it { is_expected.to eq([discussion2, discussion1]) }
     end
 
-    context "within the last 14 days" do
-      subject { Discussion.popular_in_the_last(14.days) }
+    context "when within the last 14 days" do
+      subject { described_class.popular_in_the_last(14.days) }
+
       it { is_expected.to eq([discussion1, discussion2]) }
     end
   end
@@ -70,6 +69,7 @@ describe Discussion do
   describe "#convert_to_conversation!" do
     let!(:post) { create(:post, exchange: discussion) }
     let(:conversation) { Conversation.find(discussion.id) }
+
     before { discussion.convert_to_conversation! }
     specify { expect(discussion.type).to eq("Conversation") }
     specify { expect(post.reload.conversation?).to eq(true) }
@@ -94,35 +94,35 @@ describe Discussion do
   end
 
   describe "#participants" do
-    let!(:post) { create(:post, exchange: discussion) }
     subject { discussion.participants }
+
+    let!(:post) { create(:post, exchange: discussion) }
+
     it { is_expected.to match_array([discussion.poster, post.user]) }
   end
 
   describe "#viewable_by?" do
-    context "when discussion is trusted" do
-      context "with a regular user" do
-        subject { trusted_discussion.viewable_by?(user) }
-        it { is_expected.to eq(false) }
-      end
+    context "with trusted discussion and a regular user" do
+      subject { trusted_discussion.viewable_by?(user) }
 
-      context "with a trusted user" do
-        subject { trusted_discussion.viewable_by?(trusted_user) }
-        it { is_expected.to eq(true) }
-      end
+      it { is_expected.to eq(false) }
     end
 
-    context "when discussion isn't trusted" do
-      context "when public browsing is on" do
-        before { Sugar.config.public_browsing = true }
-        specify { expect(discussion.viewable_by?(nil)).to eq(true) }
-      end
+    context "with trusted discussion and a trusted user" do
+      subject { trusted_discussion.viewable_by?(trusted_user) }
 
-      context "when public browsing is off" do
-        before { Sugar.config.public_browsing = false }
-        specify { expect(discussion.viewable_by?(nil)).to eq(false) }
-        specify { expect(discussion.viewable_by?(user)).to eq(true) }
-      end
+      it { is_expected.to eq(true) }
+    end
+
+    context "when public browsing is on" do
+      before { Sugar.config.public_browsing = true }
+      specify { expect(discussion.viewable_by?(nil)).to eq(true) }
+    end
+
+    context "when public browsing is off" do
+      before { Sugar.config.public_browsing = false }
+      specify { expect(discussion.viewable_by?(nil)).to eq(false) }
+      specify { expect(discussion.viewable_by?(user)).to eq(true) }
     end
   end
 

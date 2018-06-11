@@ -19,7 +19,7 @@ describe PasswordResetsController do
     context "with an existing user" do
       before { post :create, params: { email: user.email } }
       it { is_expected.to redirect_to(login_users_url) }
-      it "should set the flash" do
+      it "sets the flash" do
         expect(flash[:notice]).to match(
           /An email with further instructions has been sent/
         )
@@ -30,14 +30,11 @@ describe PasswordResetsController do
       end
       specify { expect(last_email.to).to eq([user.email]) }
       specify do
-        expect(last_email.body.encoded).to(
-          match(
-            password_reset_with_token_url(
-              assigns(:password_reset_token).id,
-              assigns(:password_reset_token).token
-            )
-          )
+        url = password_reset_with_token_url(
+          assigns(:password_reset_token).id,
+          assigns(:password_reset_token).token
         )
+        expect(last_email.body.encoded).to(match(url))
       end
     end
 

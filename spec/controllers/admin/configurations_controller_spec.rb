@@ -31,7 +31,7 @@ describe Admin::ConfigurationsController, redis: true do
       end
       specify { expect(flash[:notice]).to eq(nil) }
 
-      it "should update the forum configuration" do
+      it "updates the forum configuration" do
         expect(Sugar.config.forum_name).to eq("New Forum Name")
       end
 

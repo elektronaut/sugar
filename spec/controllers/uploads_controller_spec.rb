@@ -20,6 +20,8 @@ describe UploadsController, redis: true do
     before { login(user) }
 
     context "with a valid file" do
+      subject { response.body }
+
       let(:last_image) { PostImage.last }
       let(:expected_response) do
         {
@@ -30,12 +32,11 @@ describe UploadsController, redis: true do
         }
       end
 
-      subject { response.body }
       before do
         post :create, params: { upload: { file: png_file } }, format: :json
       end
 
-      it "should respond with JSON" do
+      it "responds with JSON" do
         expect(response.header["Content-Type"]).to match "application/json"
       end
 

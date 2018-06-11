@@ -93,7 +93,7 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.include ConfigurationMacros
 
-  config.before(:each) { reset_email }
+  config.before { reset_email }
 
   # Clean the Redis database and reload the configuration
   config.around(:each, redis: true) do |example|
@@ -114,7 +114,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.around(:each) do |example|
+  config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end

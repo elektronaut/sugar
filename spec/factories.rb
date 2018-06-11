@@ -2,10 +2,12 @@
 
 FactoryGirl.define do
   factory :avatar do
-    file Rack::Test::UploadedFile.new(
-      Rails.root.join("spec", "support", "pink.png"),
-      "image/png"
-    )
+    file do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec", "support", "pink.png"),
+        "image/png"
+      )
+    end
   end
 
   factory :conversation_relationship do
@@ -70,10 +72,12 @@ FactoryGirl.define do
   end
 
   factory :post_image do
-    file Rack::Test::UploadedFile.new(
-      Rails.root.join("spec", "support", "pink.png"),
-      "image/png"
-    )
+    file do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec", "support", "pink.png"),
+        "image/png"
+      )
+    end
   end
 
   factory :post do

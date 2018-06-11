@@ -23,22 +23,21 @@ describe ExchangesHelper do
   end
 
   describe "#exchange_classes" do
-    subject { helper.exchange_classes(collection, exchange) }
+    subject { results }
 
-    it "should result in an array" do
-      expect(subject).to match_array(
-        [
-          "odd",
-          "by_user#{exchange.poster.id}",
-          "discussion",
-          "discussion#{exchange.id}",
-          "new_posts"
-        ]
+    let(:results) { helper.exchange_classes(collection, exchange) }
+
+    it "results in an array" do
+      expect(results).to match_array(
+        ["odd", "by_user#{exchange.poster.id}",
+         "discussion", "discussion#{exchange.id}",
+         "new_posts"]
       )
     end
 
     context "when exchange is read" do
       let(:exchange) { read_exchange }
+
       it { is_expected.not_to include("new_posts") }
     end
 
@@ -48,6 +47,7 @@ describe ExchangesHelper do
           :discussion, trusted: true, nsfw: true, sticky: true, closed: true
         )
       end
+
       it { is_expected.to include("trusted") }
       it { is_expected.to include("sticky") }
       it { is_expected.to include("closed") }
@@ -56,6 +56,7 @@ describe ExchangesHelper do
 
     context "when exchange is even numbered" do
       let(:collection) { [create(:discussion), exchange] }
+
       it { is_expected.to include("even") }
       it { is_expected.not_to include("odd") }
     end
@@ -70,6 +71,7 @@ describe ExchangesHelper do
 
     context "when discussion is read" do
       let(:exchange) { read_exchange }
+
       it { is_expected.to eq(0) }
     end
   end
@@ -83,6 +85,7 @@ describe ExchangesHelper do
 
     context "when discussion is read" do
       let(:exchange) { read_exchange }
+
       it { is_expected.to eq(false) }
     end
   end
@@ -96,6 +99,7 @@ describe ExchangesHelper do
 
     context "when discussion is read" do
       let(:exchange) { read_exchange }
+
       it do
         is_expected.to eq("/discussions/#{exchange.id}-Test#post-#{post.id}")
       end
@@ -103,11 +107,15 @@ describe ExchangesHelper do
   end
 
   describe "#post_page" do
-    subject { helper.post_page(post) }
+    subject { result }
+
+    let(:result) { helper.post_page(post) }
+
     it { is_expected.to eq(1) }
 
     context "when viewing a discussion" do
-      let(:posts) { double("posts") }
+      let(:posts) { class_double(Post) }
+
       before do
         allow(helper).to receive(:controller)
           .and_return(DiscussionsController.new)
@@ -116,9 +124,9 @@ describe ExchangesHelper do
         helper.instance_variable_set("@posts", posts)
       end
 
-      it "should query the @posts instance variable" do
-        expect(posts).to receive(:current_page).and_return(15)
-        expect(subject).to eq(15)
+      it "queries the @posts instance variable" do
+        allow(posts).to receive(:current_page).and_return(15)
+        expect(result).to eq(15)
       end
     end
   end
