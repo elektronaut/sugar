@@ -42,6 +42,7 @@ Sugar.Views.Post = Backbone.View.extend({
       }
       return $(this).html(links.join(' | '));
     });
+    this.wrapEmbeds();
     this.applyAmazonReferralCode();
     this.applySpoiler();
     this.embedGifvVideos();
@@ -152,5 +153,40 @@ Sugar.Views.Post = Backbone.View.extend({
         }
       });
     }
+  },
+
+  wrapEmbeds: function () {
+    let selectors = [ 'iframe[src*="bandcamp.com"]',
+                      'iframe[src*="player.vimeo.com"]',
+                      'iframe[src*="youtube.com"]',
+                      'iframe[src*="youtube-nocookie.com"]',
+                      'iframe[src*="kickstarter.com"][src*="video.html"]' ];
+
+    let embeds = this.el.querySelectorAll(selectors.join(','));
+
+    function wrapEmbed(embed) {
+      let wrapper = document.createElement('div');
+      embed.parentNode.replaceChild(wrapper, embed);
+      wrapper.appendChild(embed);
+      return wrapper;
+    }
+
+    embeds.forEach(function (embed) {
+      let width = embed.offsetWidth;
+      let height = embed.offsetHeight;
+      let ratio = height / width;
+      let wrapper = wrapEmbed(embed);
+
+      wrapper.classList.add('responsive-embed');
+      wrapper.style.position = 'relative';
+      wrapper.style.width = '100%';
+      wrapper.style.paddingBottom = (ratio * 100) + '%';
+
+      embed.style.position = 'absolute';
+      embed.style.width = '100%';
+      embed.style.height = '100%';
+      embed.style.top = '0';
+      embed.style.left = '0';
+    });
   }
 });

@@ -79,12 +79,15 @@ class LinkFilter < Filter
     end
   end
 
+  def rewrite_for_https?(src)
+    matches_https_whitelist?(src) ||
+      (src =~ %r{\Ahttp://} && https_url_exists?(src))
+  end
+
   def rewrite_for_https_support!
     parser.css("iframe,img").each do |iframe|
       src = iframe.try(:attributes).try(:[], "src").try(:value)
-      next unless src
-      if matches_https_whitelist?(src) ||
-         (src =~ %r{\Ahttp://} && https_url_exists?(src))
+      if src && rewrite_for_https?(src)
         iframe.set_attribute "src", src.gsub(%r{\Ahttps?://}, "//")
       end
     end
