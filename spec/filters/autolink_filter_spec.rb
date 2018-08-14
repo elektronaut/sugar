@@ -67,7 +67,7 @@ describe AutolinkFilter do
     before do
       stub_request(
         :get,
-        "https://api.instagram.com/oembed?" \
+        "https://api.instagram.com/oembed?format=json&" \
         "url=https://www.instagram.com/p/8ql-VChPSZ/"
       ).to_return(status: 200, body: instagram_embed)
     end
@@ -83,7 +83,7 @@ describe AutolinkFilter do
     before do
       stub_request(
         :get,
-        "https://publish.twitter.com/oembed?" \
+        "https://publish.twitter.com/oembed?format=json&" \
         "url=https://twitter.com/Interior/status/463440424141459456"
       ).to_return(status: 200, body: twitter_embed)
     end
@@ -99,7 +99,7 @@ describe AutolinkFilter do
     before do
       stub_request(
         :get,
-        "https://publish.twitter.com/oembed?" \
+        "https://publish.twitter.com/oembed?format=json&" \
         "url=https://twitter.com/twitter/status/463440424141459456"
       ).to_return(status: 200, body: twitter_embed)
     end

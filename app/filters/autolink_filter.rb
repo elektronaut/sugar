@@ -16,28 +16,23 @@ class AutolinkFilter < Filter
     if url.match?(/.(jpg|jpeg|gif|png|gifv)$/i)
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
     elsif url.match?(twitter_expression)
-      twitter_embed(url)
-    elsif url.match?(%r{(https?://(www\.)?instagram\.com/p\/[^/]+/)})
-      instagram_embed(url)
+      oembed(normalize_twitter_url(url))
+    elsif oembeddable?(url)
+      oembed(url)
     else
       "<a href=\"#{url}\">#{url}</a>"
     end
   end
 
-  def oembed(base_url, url)
-    response = JSON.parse(HTTParty.get("#{base_url}?url=#{url}").body)
-    response["html"]
+  def oembeddable?(url)
+    OEmbed::Providers.find(url) ? true : false
+  end
+
+  def oembed(url)
+    OEmbed::Providers.get(url).html
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
     url
-  end
-
-  def instagram_embed(url)
-    oembed("https://api.instagram.com/oembed", url)
-  end
-
-  def twitter_embed(url)
-    oembed("https://publish.twitter.com/oembed", normalize_twitter_url(url))
   end
 
   def twitter_expression

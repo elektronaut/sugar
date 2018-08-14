@@ -30,6 +30,7 @@ gem "uglifier"
 
 gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
 gem "gemoji"
+gem "ruby-oembed", require: "oembed"
 
 # gem 'dynamic_image', '~> 2.0.0.beta5
 gem "dynamic_image"
