@@ -20,10 +20,6 @@
       return ["![](", url, ")"];
     }
 
-    youtube(url) {
-      return ["!y[Video title](", url, ")"];
-    }
-
     link(url, name) {
       return ["[", name, "](" + url + ")"];
     }
@@ -67,21 +63,6 @@
 
     image(url) {
       return ["<img src=\"", url, "\">"];
-    }
-
-    youtube(url) {
-      let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-      let match = url.match(regExp);
-      if (match && match[7].length === 11) {
-        let code = match[7];
-        return [
-          "<iframe src=\"https://www.youtube.com/embed/",
-          code,
-          "\" frameborder=\"0\" allowfullscreen></iframe>"
-        ];
-      } else {
-        return ["", "", ""];
-      }
     }
 
     link(url, name) {
@@ -318,11 +299,6 @@
 
     addButton("Upload Image", "upload", (s) => {
       uploadImage(textarea);
-    });
-
-    addButton("Youtube", "youtube", (s) => {
-      let url = s.length > 0 ? s : prompt("Enter video URL", "");
-      return decorator().youtube(url);
     });
 
     addButton("Block Quote", "quote-left", (s) => decorator().blockquote(s));
