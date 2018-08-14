@@ -99,7 +99,7 @@ class DiscussionsController < ApplicationController
   def define_relationship(key, value, back_to_index: false)
     DiscussionRelationship.define(current_user, @exchange, key => value)
     if back_to_index
-      redirect_todiscussions_url
+      redirect_to discussions_url
     else
       redirect_to discussion_url(@exchange, page: params[:page])
     end
