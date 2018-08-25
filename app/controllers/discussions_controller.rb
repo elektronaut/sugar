@@ -75,7 +75,7 @@ class DiscussionsController < ApplicationController
   end
 
   def unfollow
-    define_relationship(:following, true, back_to_index: true)
+    define_relationship(:following, false, back_to_index: true)
   end
 
   def favorite
