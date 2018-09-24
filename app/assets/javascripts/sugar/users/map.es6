@@ -7,8 +7,8 @@ $(Sugar).bind('ready', function() {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
-    $.getJSON('/users.json', function(response) {
-      $(response.users).each(function() {
+    $.getJSON('/users.json', function(users) {
+      $(users).each(function() {
         let user = this;
         if (user.latitude && user.longitude) {
           let marker = new google.maps.Marker({

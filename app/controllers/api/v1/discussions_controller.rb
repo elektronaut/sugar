@@ -4,7 +4,6 @@ module Api
   module V1
     class DiscussionsController < Api::V1::ApiController
       before_action :doorkeeper_authorize!
-      respond_to :json
       before_action :find_exchange, only: [:show]
 
       def index
@@ -12,11 +11,11 @@ module Api
                                            .viewable_by(current_resource_owner)
                                            .page(params[:page])
                                            .for_view
-        respond_with @exchanges
+        render json: @exchanges
       end
 
       def show
-        respond_with @exchange
+        render json: @exchange
       end
 
       def search
@@ -25,8 +24,7 @@ module Api
           user: current_resource_owner,
           page: params[:page]
         )
-        respond_with(search.results,
-                     meta: { total: search.total })
+        render json: search.results, meta: { total: search.total }
       end
 
       private

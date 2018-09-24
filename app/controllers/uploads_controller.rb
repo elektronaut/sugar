@@ -4,11 +4,9 @@ class UploadsController < ApplicationController
   requires_authentication
   requires_user
 
-  respond_to :json
-
   def create
     post_image = find_or_create_post_image(upload_params[:file])
-    respond_with(response) do |format|
+    respond_to do |format|
       format.json { render json: post_image_response(post_image) }
     end
   rescue MiniMagick::Error
@@ -45,7 +43,7 @@ class UploadsController < ApplicationController
 
   def upload_error(error)
     response = { error: error }
-    respond_with(response) do |format|
+    respond_to do |format|
       format.json { render json: response, status: :internal_server_error }
     end
   end

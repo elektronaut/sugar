@@ -33,9 +33,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_model_serializers (0.9.7)
-      activemodel (>= 3.2)
-      concurrent-ruby (~> 1.0)
     activejob (5.2.1)
       activesupport (= 5.2.1)
       globalid (>= 0.3.6)
@@ -155,6 +152,8 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
+    fast_jsonapi (1.4)
+      activesupport (>= 4.2)
     fastimage (2.1.0)
     ffi (1.9.23)
     fission (0.5.0)
@@ -456,9 +455,6 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.4.1)
       redis (>= 2.2, < 5)
-    responders (2.4.0)
-      actionpack (>= 4.2.0, < 5.3)
-      railties (>= 4.2.0, < 5.3)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -583,7 +579,6 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
-  active_model_serializers (~> 0.9.0)
   activemodel-serializers-xml
   acts_as_list
   b3s_emoticons!
@@ -604,6 +599,7 @@ DEPENDENCIES
   dynamic_form
   dynamic_image
   factory_girl_rails
+  fast_jsonapi
   fastimage
   fog-aws
   font-awesome-rails (~> 4.7)
@@ -629,7 +625,6 @@ DEPENDENCIES
   redcarpet (~> 3.0)
   redis (~> 3.3.0)
   redis-rails
-  responders
   rouge
   rspec-rails
   rubocop
@@ -651,4 +646,4 @@ DEPENDENCIES
   yui-compressor
 
 BUNDLED WITH
-   1.16.0
+   1.16.2

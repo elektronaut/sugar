@@ -3,10 +3,10 @@
 source "http://rubygems.org"
 
 gem "actionpack-page_caching"
-gem "active_model_serializers", "~> 0.9.0"
+# gem "active_model_serializers", "~> 0.10.0"
+gem "fast_jsonapi"
 gem "bcrypt", "~> 3.1.7"
 gem "rails", "~> 5.2.0"
-gem "responders"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false

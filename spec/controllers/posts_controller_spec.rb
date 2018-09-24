@@ -137,7 +137,7 @@ describe PostsController do
         )
       end
       specify { expect(assigns(:post)).to be_valid }
-      it { is_expected.to respond_with(:no_content) }
+      it { is_expected.to respond_with(:success) }
     end
   end
 
