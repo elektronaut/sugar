@@ -8,5 +8,4 @@ class ExchangeSerializer
 
   has_one :poster, record_type: :user, serializer: UserSerializer
   has_one :last_poster, record_type: :user, serializer: UserSerializer
-  has_many :posts, record_type: :post
 end
