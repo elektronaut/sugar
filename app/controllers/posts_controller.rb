@@ -12,18 +12,29 @@ class PostsController < ApplicationController
   protect_from_forgery except: %i[drawing]
 
   before_action :find_exchange, except: %i[search]
-  before_action :verify_viewable, except: %i[search count since]
+  before_action :verify_viewable, except: %i[search count]
   before_action :find_post, only: %i[show edit update destroy]
   before_action :find_post, only: %i[show edit update destroy]
   before_action :verify_editable, only: %i[edit update destroy]
   before_action :require_and_set_search_query, only: %i[search]
   before_action :verify_postable, only: %i[create drawing]
 
-  after_action :mark_exchange_viewed, only: %i[since]
-  after_action :mark_conversation_viewed, only: %i[since]
+  after_action :mark_exchange_viewed, only: %i[since index]
+  after_action :mark_conversation_viewed, only: %i[since index]
   # after_action :notify_mentioned, only: [:create]
 
   respond_to :html, :mobile, :json
+
+  def index
+    @page = params[:page] || 1
+    @posts = @exchange.posts.page(@page, context: 0).for_view
+    respond_to do |format|
+      format.json do
+        serializer = PostSerializer.new(@posts, include: %i[user])
+        render json: serializer.serialized_json
+      end
+    end
+  end
 
   def count
     @count = @exchange.posts_count

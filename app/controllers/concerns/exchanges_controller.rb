@@ -30,7 +30,15 @@ module ExchangesController
       (@posts.offset_value + @posts.count)
     )
 
-    respond_with(@exchange)
+    respond_to do |format|
+      format.html {}
+      format.mobile {}
+      format.json do
+        serializer = ExchangeSerializer.new(@exchange,
+                                            include: %i[poster last_poster])
+        render json: serializer.serialized_json
+      end
+    end
   end
 
   def edit

@@ -45,7 +45,15 @@ class ApplicationController < ActionController::Base
 
   def respond_with_exchanges(exchanges)
     viewed_tracker.exchanges = exchanges
-    respond_with(exchanges)
+    respond_to do |format|
+      format.html {}
+      format.mobile {}
+      format.json do
+        serializer = ExchangeSerializer.new(exchanges,
+                                            include: %i[poster last_poster])
+        render json: serializer.serialized_json
+      end
+    end
   end
 
   def load_configuration
