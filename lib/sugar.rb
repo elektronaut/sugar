@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "sugar/responder"
-
 module Sugar
   class << self
     attr_writer :redis

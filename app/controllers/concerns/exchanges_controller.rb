@@ -5,7 +5,6 @@ module ExchangesController
 
   included do
     protect_from_forgery except: [:mark_as_read]
-    respond_to :html, :mobile, :json
   end
 
   def search_posts

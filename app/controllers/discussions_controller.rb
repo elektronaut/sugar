@@ -32,7 +32,7 @@ class DiscussionsController < ApplicationController
     respond_to do |format|
       format.any(:html, :mobile) { respond_with_exchanges(@exchanges) }
       format.json do
-        respond_with @exchanges, meta: { total: search_results.total }
+        render json: @exchanges
       end
     end
   end

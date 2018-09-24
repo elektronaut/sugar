@@ -20,8 +20,6 @@ class UsersController < ApplicationController
   before_action :detect_edit_page, only: %i[edit update]
   before_action :verify_editable,  only: %i[edit update]
 
-  respond_to :html, :mobile, :xml, :json
-
   def show
     respond_to do |format|
       format.html { @posts = user_posts(@user).limit(15) }

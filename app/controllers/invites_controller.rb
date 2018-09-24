@@ -5,18 +5,16 @@ class InvitesController < ApplicationController
   requires_user except: [:accept]
   requires_user_admin only: [:all]
 
-  respond_to :html, :mobile, :xml, :json
-
   before_action :find_invite, only: %i[destroy]
   before_action :find_invite_by_token, only: %i[accept]
   before_action :verify_available_invites, only: %i[new create]
 
   def index
-    respond_with(@invites = current_user.invites.active)
+    @invites = current_user.invites.active
   end
 
   def all
-    respond_with(@invites = Invite.active)
+    @invites = Invite.active
   end
 
   def accept
@@ -33,7 +31,7 @@ class InvitesController < ApplicationController
   end
 
   def new
-    respond_with(@invite = current_user.invites.new)
+    @invite = current_user.invites.new
   end
 
   def create
@@ -100,7 +98,7 @@ class InvitesController < ApplicationController
         flash[:notice] = "You don't have any invites!"
         redirect_to online_users_url
       end
-      format.any(:xml, :json) do
+      format.json do
         render(text: "You don't have any invites!", status: :method_not_allowed)
       end
     end

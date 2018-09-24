@@ -23,8 +23,6 @@ class PostsController < ApplicationController
   after_action :mark_conversation_viewed, only: %i[since index]
   # after_action :notify_mentioned, only: [:create]
 
-  respond_to :html, :mobile, :json
-
   def index
     @page = params[:page] || 1
     @posts = @exchange.posts.page(@page, context: 0).for_view
@@ -62,9 +60,20 @@ class PostsController < ApplicationController
 
   def update
     @post.update(post_params.merge(edited_at: Time.now.utc))
-    respond_with(@post, location: polymorphic_url(@exchange,
-                                                  page: @post.page,
-                                                  anchor: "post-#{@post.id}"))
+
+    post_url = polymorphic_url(@exchange,
+                               page: @post.page,
+                               anchor: "post-#{@post.id}")
+
+    respond_to do |format|
+      if @post.valid?
+        format.any(:html, :mobile) { redirect_to post_url }
+        format.json { render json: @post }
+      else
+        format.any(:html, :mobile) { render action: :edit }
+        format.json { render json: @post, status: :unprocessable_entity }
+      end
+    end
   end
 
   def preview
@@ -94,7 +103,15 @@ class PostsController < ApplicationController
     #   ConversationNotifier.new(@post, exchange_url).deliver_later
     # end
 
-    respond_with(@post, location: exchange_url)
+    respond_to do |format|
+      if @post.valid?
+        format.any(:html, :mobile) { redirect_to exchange_url }
+        format.json { render json: @post, status: :created }
+      else
+        format.any(:html, :mobile) { render action: :new }
+        format.json { render json: @post, status: :unprocessable_entity }
+      end
+    end
   end
 
   def find_exchange

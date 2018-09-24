@@ -6,8 +6,6 @@ class ApplicationController < ActionController::Base
   include Authentication
   include ViewedTrackerHelper
 
-  self.responder = Sugar::Responder
-
   layout "application"
 
   protect_from_forgery with: :exception
