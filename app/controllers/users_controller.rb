@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { @posts = user_posts(@user).limit(15) }
       format.mobile {}
-      format.json { render json: UserSerializer.new(@user).serialized_json }
+      format.json { render json: UserSerializer.new(@user, params: { context: self }).serialized_json }
     end
   end
 

@@ -32,7 +32,7 @@ describe UsersController do
 
     it "renders JSON" do
       json = JSON.parse(response.body)
-      expect(json).to be_kind_of(Array)
+      expect(json["data"]).to be_kind_of(Array)
     end
   end
 
@@ -57,7 +57,7 @@ describe UsersController do
 
     it "renders JSON" do
       json = JSON.parse(response.body)
-      expect(json).to be_kind_of(Array)
+      expect(json["data"]).to be_kind_of(Array)
     end
   end
 

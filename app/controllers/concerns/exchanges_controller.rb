@@ -33,9 +33,9 @@ module ExchangesController
       format.html {}
       format.mobile {}
       format.json do
-        serializer = ExchangeSerializer.new(@exchange,
-                                            include: %i[poster last_poster])
-        render json: serializer.serialized_json
+        redirect_to(
+          polymorphic_path([@exchange, :posts], page: @page, format: :json)
+        )
       end
     end
   end

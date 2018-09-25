@@ -24,6 +24,11 @@ class ViewedTracker
     end
   end
 
+  def last_post(exchange)
+    id = last_post_id(exchange)
+    Post.find(id) if id
+  end
+
   def last_post_id(exchange)
     return nil unless any?
     view(exchange).post_id

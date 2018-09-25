@@ -14,12 +14,12 @@ $(Sugar).bind('ready', function() {
     // Load usernames from the backend on focus
     $inputField.focus(function() {
       if (usernames.length === 0) {
-        return $.getJSON('/users.json', function(users) {
+        return $.getJSON('/users.json', function(json) {
           usernames = ((() => {
             var result = [];
-            for (var i = 0, user; i < users.length; i++) {
-              user = users[i];
-              result.push(user.username);
+            for (var i = 0, user; i < json.data.length; i++) {
+              user = json.data[i];
+              result.push(user.attributes.username);
             }
             return result;
           })());

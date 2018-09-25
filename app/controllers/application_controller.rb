@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
     { 404 => "Not found" }
   end
 
+  def paginated_json_path(page)
+    page && url_for(page: page, only_path: true, format: :json)
+  end
+
   # Renders an error
   def render_error(error, options = {})
     options[:status] ||= error if error.is_a?(Numeric)
@@ -47,8 +51,14 @@ class ApplicationController < ActionController::Base
       format.html {}
       format.mobile {}
       format.json do
-        serializer = ExchangeSerializer.new(exchanges,
-                                            include: %i[poster last_poster])
+        serializer = ExchangeSerializer.new(
+          exchanges,
+          include: %i[poster last_poster],
+          links: { self: paginated_json_path(exchanges.current_page),
+                   next: paginated_json_path(exchanges.next_page),
+                   previous: paginated_json_path(exchanges.previous_page) },
+          params: { tracker: viewed_tracker }
+        )
         render json: serializer.serialized_json
       end
     end

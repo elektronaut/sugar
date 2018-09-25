@@ -28,7 +28,13 @@ class PostsController < ApplicationController
     @posts = @exchange.posts.page(@page, context: 0).for_view
     respond_to do |format|
       format.json do
-        serializer = PostSerializer.new(@posts, include: %i[user])
+        serializer = PostSerializer.new(
+          @posts,
+          links: { self: paginated_json_path(@posts.current_page),
+                   next: paginated_json_path(@posts.next_page),
+                   previous: paginated_json_path(@posts.previous_page) },
+          include: %i[user]
+        )
         render json: serializer.serialized_json
       end
     end
