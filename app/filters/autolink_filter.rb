@@ -2,7 +2,7 @@
 
 class AutolinkFilter < Filter
   def process(post)
-    post.gsub(%r{(^|\s)((ftp|https?)://[^\s]+\b/?)}) do
+    post.gsub(%r{(^|\s)((ftp|https?)://[^\s]+/?(\s|$))}) do
       space = Regexp.last_match(1)
       match = Regexp.last_match(2)
       uri = URI.extract(Regexp.last_match(2)).try(:first)
