@@ -8,6 +8,7 @@
   new_posts_notifier ||= false
   no_pagination      ||= false
   no_container       ||= false
+  hide_nsfw          ||= false
 
   previous_post = nil
   pagination_params ||= {}
@@ -37,7 +38,8 @@
                functions: functions,
                discussion: discussion,
                permalink: permalink,
-               previous_post: previous_post
+               previous_post: previous_post,
+               hide_nsfw: hide_nsfw
              }) %>
   <% previous_post = post %>
   <% if posts.kind_of?(Paginatable::ClassMethods::WithContext) &&

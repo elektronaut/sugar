@@ -7,6 +7,7 @@
   post_distance      ||= false
   title              ||= false
   preview            ||= false
+  hide_nsfw          ||= false
 
   previous_post      ||= nil
 -%>
@@ -121,7 +122,7 @@
         </div>
         <div class="body" id="postBody-<%= post.id %>">
           <div class="content">
-            <% if post.exchange.nsfw && !discussion %>
+            <% if post.exchange.nsfw && hide_nsfw %>
               <div class="spoiler nsfw"><%= format_post(post.body_html, post.user) %></div>
             <% else %>
               <%= format_post(post.body_html, post.user) %>
