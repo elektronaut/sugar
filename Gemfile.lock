@@ -370,7 +370,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (4.7.1.340)
     nio4r (2.3.1)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
