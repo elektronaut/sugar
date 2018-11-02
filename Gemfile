@@ -54,7 +54,7 @@ gem "doorkeeper" # , '~> 0.7.2'
 gem "acts_as_list"
 
 gem "daemon-spawn"
-gem "httparty", "~> 0.15.0"
+gem "httparty", "~> 0.16.2"
 gem "nokogiri"
 
 gem "progress_bar"
