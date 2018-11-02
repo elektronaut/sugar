@@ -324,7 +324,7 @@ GEM
     hiredis (0.6.1)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    httparty (0.15.6)
+    httparty (0.16.2)
       multi_xml (>= 0.5.2)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
@@ -606,7 +606,7 @@ DEPENDENCIES
   fuubar
   gemoji
   hiredis
-  httparty (~> 0.15.0)
+  httparty (~> 0.16.2)
   jquery-rails
   json
   json_spec
