@@ -392,7 +392,7 @@ GEM
       slop (~> 3.4)
     public_suffix (2.0.5)
     puma (3.9.1)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.1)
