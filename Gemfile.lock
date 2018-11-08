@@ -319,7 +319,7 @@ GEM
     gemoji (3.0.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.4)
+    hashdiff (0.3.7)
     highline (1.7.8)
     hiredis (0.6.1)
     http-cookie (1.0.3)
@@ -563,7 +563,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.0.1)
+    webmock (3.4.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
