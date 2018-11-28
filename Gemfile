@@ -102,7 +102,7 @@ group :test, :development do
   gem "puma"
 
   gem "sunspot-rails-tester"
-  gem "sunspot_solr", "~> 2.1.0"
+  gem "sunspot_solr", "~> 2.3.0"
 
   gem "pry"
 

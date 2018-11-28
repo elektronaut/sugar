@@ -547,7 +547,7 @@ GEM
       nokogiri
       rails (>= 3)
       sunspot (= 2.2.7)
-    sunspot_solr (2.1.1)
+    sunspot_solr (2.3.0)
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.8)
@@ -644,7 +644,7 @@ DEPENDENCIES
   sqlite3
   sunspot-rails-tester
   sunspot_rails (~> 2.2.0)
-  sunspot_solr (~> 2.1.0)
+  sunspot_solr (~> 2.3.0)
   uglifier
   web-console
   webmock
