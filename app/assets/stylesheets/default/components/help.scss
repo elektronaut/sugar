@@ -1,11 +1,16 @@
 .help_page {
-  font-size: 1.3em;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+
+  font-size: 18px;
   line-height: 1.5;
-  width: 60vw;
-  margin: 80px auto;
+  max-width: 900px;
+  padding: 60px 0px;
+  margin: 0px auto;
 
   @include breakpoint-mobile {
-    width: 100%;
+    padding: 40px 20px;
   }
 
   h1, h2, h3, p, ul, ol, figure {
@@ -42,6 +47,9 @@
 
   h1 {
     font-size: 64px;
+    @include breakpoint-mobile {
+      font-size: 36px;
+    }
   }
 
   h2 {
