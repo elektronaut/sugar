@@ -11,7 +11,7 @@ gem "rails", "~> 5.2.1"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem "mysql2", "~> 0.5.2"
+gem "mysql2", "~> 0.4.10"
 gem "pg"
 gem "sqlite3"
 
