@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class HelpController < ApplicationController
+  requires_authentication only: %i[code_of_conduct]
+
   def index
     redirect_to keyboard_help_url
   end
