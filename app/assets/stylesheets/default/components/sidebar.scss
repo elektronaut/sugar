@@ -26,6 +26,17 @@
     }
   }
 
+  h2 {
+    margin-top: 30px;
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+
+  ul.links {
+    line-height: 1.6;
+  }
+
   .categories {
     ul {
       margin-top: -10px;

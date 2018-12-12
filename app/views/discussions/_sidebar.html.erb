@@ -56,9 +56,27 @@
   </div>
 <% end %>
 
+<h2>
+  Help
+</h2>
+<ul class="links">
+  <% if Sugar.config.code_of_conduct? %>
+    <li>
+      <%= link_to_unless_current "Code of Conduct", code_of_conduct_help_path %>
+    </li>
+  <% end %>
+  <li>
+    <%= link_to_unless_current "Keyboard shortcuts", keyboard_help_path %>
+  </li>
+</ul>
+
 <% if current_user? && current_user.admin? %>
-  <h2>Admin</h2>
-  <p>
-    <%= link_to "Forum configuration", admin_configuration_path %>
-  </p>
+  <h2>
+    Admin
+  </h2>
+  <ul class="links">
+    <li>
+      <%= link_to "Forum configuration", admin_configuration_path %>
+    </li>
+  </ul>
 <% end %>
