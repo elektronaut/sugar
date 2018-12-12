@@ -1,56 +1,47 @@
 .help_page {
   font-size: 1.3em;
-  line-height: 1.4;
+  line-height: 1.5;
+  width: 60vw;
+  margin: 80px auto;
 
-  p, ul {
-    width: 60%;
-    @include breakpoint-mobile {
-      width: 100%;
-    }
+  @include breakpoint-mobile {
+    width: 100%;
   }
 
-  .columns {
-    @extend %clearfix;
-
-    .main, aside {
-      margin-bottom: 20px;
-      p, ul {
-        width: 100%;
-      }
-    }
-
-    .main {
-      width: 60%;
-      float: left;
-      @include breakpoint-mobile {
-        float: none;
-        width: 100%;
-      }
-    }
-
-    aside {
-      float: right;
-      width: 35%;
-      font-size: 0.9em;
-      @include breakpoint-mobile {
-        float: none;
-        width: 100%;
-        background: #f0f0f0;
-        margin: 40px -10px;
-        padding: 10px;
-      }
-    }
-  }
-
-  h1, h2, h3, p, ul, ol {
-    margin: 0px 0px 20px 0px;
+  h1, h2, h3, p, ul, ol, figure {
+    margin: 0px 0px 30px 0px;
     &:last-child {
       margin-bottom: 0px;
     }
   }
 
+  .box {
+    background: #F3F1E9;
+    margin: 60px -30px;
+    border: 1px solid #DEDCD4;
+    padding: 30px;
+
+    @include breakpoint-mobile {
+      margin: 60px -15px;
+      padding: 15px;
+    }
+  }
+
+  figure {
+    padding: 0px;
+    margin: 60px auto;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    figcaption {
+      margin-top: 8px;
+      color: #666;
+    }
+  }
+
   h1 {
-    font-size: 36px;
+    font-size: 64px;
   }
 
   h2 {
@@ -59,6 +50,13 @@
 
   h3 {
     font-size: 18px;
+  }
+
+  h2, h3 {
+    margin-top: 60px;
+    &:first-child {
+      margin-top: 0px;
+    }
   }
 
   ul {
