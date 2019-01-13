@@ -184,7 +184,7 @@
   bindKeySequence(/gd$/, () => visitPath('/discussions'));
   bindKeySequence(/gf$/, () => visitPath('/discussions/following'));
   bindKeySequence(/gF$/, () => visitPath('/discussions/favorites'));
-  bindKeySequence(/gc$/, () => visitPath('/discussions/conversations'));
+  bindKeySequence(/gc$/, () => visitPath('/conversations'));
   bindKeySequence(/gi$/, () => visitPath('/invites'));
   bindKeySequence(/gu$/, () => visitPath('/users/online'));
 
