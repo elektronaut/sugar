@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AutolinkFilter < Filter
+  include ActionView::Helpers::TagHelper
+
   def process(post)
     post.gsub(%r{(^|\s)((ftp|https?)://[^\s]+/?(\s|$))}) do
       space = Regexp.last_match(1)
@@ -29,7 +31,8 @@ class AutolinkFilter < Filter
   end
 
   def oembed(url)
-    OEmbed::Providers.get(url).html
+    embed = OEmbed::Providers.get(url).html.strip
+    "<div class=\"embed\" data-oembed-url=\"#{url}\">#{embed}</div>"
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
     url

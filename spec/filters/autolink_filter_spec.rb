@@ -73,7 +73,11 @@ describe AutolinkFilter do
     end
 
     it "converts it to an embed" do
-      expect(filter.to_html).to eq(instagram_json["html"])
+      expect(filter.to_html).to(
+        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" +
+           instagram_json["html"] +
+           "</div>")
+      )
     end
   end
 
@@ -89,12 +93,17 @@ describe AutolinkFilter do
     end
 
     it "converts it to an embed" do
-      expect(filter.to_html).to eq(twitter_json["html"])
+      expect(filter.to_html).to(
+        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" +
+           twitter_json["html"] +
+           "</div>")
+      )
     end
   end
 
   context "when URL is a Twitter status without username" do
     let(:input) { "https://twitter.com/statuses/463440424141459456" }
+    let(:oembed_url) { "https://twitter.com/twitter/status/463440424141459456" }
 
     before do
       stub_request(
@@ -105,7 +114,11 @@ describe AutolinkFilter do
     end
 
     it "converts it to an embed" do
-      expect(filter.to_html).to eq(twitter_json["html"])
+      expect(filter.to_html).to(
+        eq("<div class=\"embed\" data-oembed-url=\"#{oembed_url}\">" +
+           twitter_json["html"] +
+           "</div>")
+      )
     end
   end
 end

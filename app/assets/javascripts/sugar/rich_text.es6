@@ -122,6 +122,21 @@
     });
   };
 
+  let undoEmbeds = function (html) {
+    let elem = document.createElement("div");
+    elem.innerHTML = html;
+    Array.prototype.slice.call(
+      elem.querySelectorAll("div.embed[data-oembed-url]")
+    ).forEach(function (embed) {
+      embed.parentNode.insertBefore(
+        document.createTextNode(embed.dataset.oembedUrl),
+        embed
+      );
+      embed.parentNode.removeChild(embed);
+    });
+    return elem.innerHTML
+  }
+
   let uploadBanner = (file) =>
     "[Uploading \"" + file.name + "\"...]";
 
@@ -321,7 +336,7 @@
     $(Sugar).on("quote", function(event, data) {
       let [prefix, replacement, postfix] = decorator().quote(
         data.text,
-        data.html,
+        undoEmbeds(data.html),
         data.username,
         data.permalink
       );
