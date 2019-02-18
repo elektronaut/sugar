@@ -39,7 +39,7 @@ function wrapEmbeds() {
                     'iframe[src*="kickstarter.com"][src*="video.html"]' ];
 
   let embeds = Array.prototype.slice.call(
-    this.el.querySelectorAll(selectors.join(','))
+    document.querySelectorAll(selectors.join(','))
   );
 
   function wrapEmbed(embed) {
