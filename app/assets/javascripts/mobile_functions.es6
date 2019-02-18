@@ -38,7 +38,9 @@ function wrapEmbeds() {
                     'iframe[src*="youtube-nocookie.com"]',
                     'iframe[src*="kickstarter.com"][src*="video.html"]' ];
 
-  let embeds = document.querySelectorAll(selectors.join(','));
+  let embeds = Array.prototype.slice.call(
+    this.el.querySelectorAll(selectors.join(','))
+  );
 
   function wrapEmbed(embed) {
     let wrapper = document.createElement('div');
@@ -47,23 +49,24 @@ function wrapEmbeds() {
     return wrapper;
   }
 
-  embeds.forEach(function (embed) {
-    let width = embed.offsetWidth;
-    let height = embed.offsetHeight;
-    let ratio = height / width;
-    let wrapper = wrapEmbed(embed);
+  embeds.filter(e => !e.parentNode.classList.contains("responsive-embed"))
+        .forEach(function (embed) {
+          let width = embed.offsetWidth;
+          let height = embed.offsetHeight;
+          let ratio = height / width;
+          let wrapper = wrapEmbed(embed);
 
-    wrapper.classList.add('responsive-embed');
-    wrapper.style.position = 'relative';
-    wrapper.style.width = '100%';
-    wrapper.style.paddingBottom = (ratio * 100) + '%';
+          wrapper.classList.add('responsive-embed');
+          wrapper.style.position = 'relative';
+          wrapper.style.width = '100%';
+          wrapper.style.paddingBottom = (ratio * 100) + '%';
 
-    embed.style.position = 'absolute';
-    embed.style.width = '100%';
-    embed.style.height = '100%';
-    embed.style.top = '0';
-    embed.style.left = '0';
-  });
+          embed.style.position = 'absolute';
+          embed.style.width = '100%';
+          embed.style.height = '100%';
+          embed.style.top = '0';
+          embed.style.left = '0';
+        });
 };
 
 $(document).ready(function () {
