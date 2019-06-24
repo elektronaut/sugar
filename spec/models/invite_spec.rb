@@ -13,7 +13,7 @@ describe Invite do
   it { is_expected.to validate_presence_of(:user_id) }
 
   describe "email validation" do
-    subject(:invite) { build(:invite, email: email) }
+    subject(:invite) { build(:invite, email: email, user: User.first) }
 
     before { invite.valid? }
 

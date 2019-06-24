@@ -83,8 +83,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Use FactoryGirl shorthand
-  config.include FactoryGirl::Syntax::Methods
+  # Use FactoryBot shorthand
+  config.include FactoryBot::Syntax::Methods
 
   config.include Features, type: :feature
   config.include RedisHelper, redis: true

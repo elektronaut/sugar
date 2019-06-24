@@ -17,8 +17,8 @@ describe Exchange do
   let(:admin) { create(:admin) }
 
   it { is_expected.to belong_to(:poster).class_name("User") }
-  it { is_expected.to belong_to(:closer).class_name("User") }
-  it { is_expected.to belong_to(:last_poster).class_name("User") }
+  it { is_expected.to belong_to(:closer).class_name("User").optional }
+  it { is_expected.to belong_to(:last_poster).class_name("User").optional }
   it { is_expected.to have_many(:posts).dependent(:destroy) }
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
 

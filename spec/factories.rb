@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :avatar do
     file do
       Rack::Test::UploadedFile.new(
@@ -35,7 +35,7 @@ FactoryGirl.define do
     sequence(:title)  { |n| "Exchange #{n}" }
     sequence(:body)   { |n| "First post of exchange #{n}" }
     association :poster, factory: :user
-    posts_count 1
+    posts_count { 1 }
 
     # Discussions
     factory :discussion, class: "discussion" do
@@ -44,11 +44,11 @@ FactoryGirl.define do
 
       factory :closed_discussion do
         association :closer, factory: :user
-        closed true
+        closed { true }
       end
 
       factory :trusted_discussion do
-        trusted true
+        trusted { true }
       end
     end
 
@@ -94,45 +94,45 @@ FactoryGirl.define do
     sequence(:username) { |n| "lonelygirl#{n}" }
     sequence(:realname) { |n| "Sugar User #{n}" }
     email
-    hashed_password     { FactoryGirl.generate(:sha1hash) }
+    hashed_password     { FactoryBot.generate(:sha1hash) }
     description         { "Hi, I'm #{realname}!" }
     sequence(:location) { |n| "Location #{n}" }
 
-    admin false
-    user_admin false
-    moderator false
-    status :active
-    trusted false
+    admin { false }
+    user_admin { false }
+    moderator { false }
+    status { :active }
+    trusted { false }
 
     factory :admin do
-      admin true
+      admin { true }
     end
 
     factory :moderator do
-      moderator true
+      moderator { true }
     end
 
     factory :new_user do
-      password "foobar"
-      confirm_password "foobar"
-      hashed_password nil
+      password { "foobar" }
+      confirm_password { "foobar" }
+      hashed_password { nil }
     end
 
     factory :user_admin do
-      user_admin true
+      user_admin { true }
     end
 
     factory :trusted_user do
-      trusted true
+      trusted { true }
     end
 
     factory :banned_user do
-      status :banned
+      status { :banned }
     end
 
     factory :facebook_user do
       sequence(:facebook_uid, &:to_s)
-      hashed_password nil
+      hashed_password { nil }
     end
 
     factory :user_with_avatar do

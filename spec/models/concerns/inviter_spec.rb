@@ -10,7 +10,7 @@ describe Inviter do
 
   let(:user) { create(:user) }
 
-  it { is_expected.to belong_to(:inviter).class_name("User") }
+  it { is_expected.to belong_to(:inviter).class_name("User").optional }
   it { is_expected.to have_many(:invitees).class_name("User") }
   it { is_expected.to have_many(:invites).dependent(:destroy) }
 
