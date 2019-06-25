@@ -19,7 +19,6 @@ class Post < ApplicationRecord
 
   before_save :fetch_images,
               :set_edit_timestamp,
-              :update_trusted_status,
               :render_html
 
   after_create :update_exchange,
@@ -97,13 +96,8 @@ class Post < ApplicationRecord
     exchange.update(posts_count: exchange.posts.count)
     user.update(
       posts_count: user.posts.count,
-      public_posts_count: user.discussion_posts.where(trusted: false).count
+      public_posts_count: user.discussion_posts.count
     )
-  end
-
-  def update_trusted_status
-    self.trusted = exchange.trusted if exchange
-    true
   end
 
   def render_html

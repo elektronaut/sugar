@@ -10,9 +10,6 @@ class Discussion < Exchange
 
   scope :for_view, -> { sorted.with_posters }
 
-  before_save :trusted_will_change
-  after_save :update_trusted_status
-
   class << self
     def popular_in_the_last(days = 7.days)
       joins(:posts)
@@ -30,7 +27,7 @@ class Discussion < Exchange
       update(type: "Conversation")
       becomes(Conversation).tap do |conversation|
         conversation.unlabel!
-        posts.update_all(conversation: true, trusted: false)
+        posts.update_all(conversation: true)
         participants.each { |p| conversation.add_participant(p) }
         discussion_relationships.destroy_all
       end
@@ -55,24 +52,5 @@ class Discussion < Exchange
 
   def postable_by?(user)
     user && (user.moderator? || !closed?) ? true : false
-  end
-
-  private
-
-  def trusted_will_change
-    @trusted_will_change = trusted_changed?
-  end
-
-  def update_trusted_status
-    return unless @trusted_will_change
-
-    posts.update_all(trusted: trusted?)
-    discussion_relationships.update_all(trusted: trusted?)
-    participants.each do |user|
-      user.update(
-        public_posts_count:
-          user.discussion_posts.where(trusted: false).count
-      )
-    end
   end
 end

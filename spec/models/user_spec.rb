@@ -6,7 +6,6 @@ require "rails_helper"
 describe User do
   subject(:user) { build(:user) }
 
-  let(:trusted_user) { build(:trusted_user) }
   let(:admin) { build(:admin) }
   let(:moderator) { build(:moderator) }
   let(:user_admin) { build(:user_admin) }
@@ -104,14 +103,6 @@ describe User do
 
       it { is_expected.to eq(false) }
     end
-  end
-
-  describe "#trusted?" do
-    specify { expect(trusted_user.trusted?).to eq(true) }
-    specify { expect(moderator.trusted?).to eq(true) }
-    specify { expect(user_admin.trusted?).to eq(true) }
-    specify { expect(admin.trusted?).to eq(true) }
-    specify { expect(user.trusted?).to eq(false) }
   end
 
   describe "#user_admin?" do

@@ -4,9 +4,6 @@ require "digest/sha1"
 
 # = User accounts
 #
-# === Trusted users
-# Users with the <tt>trusted</tt> flag can see the trusted discussions.
-# Admin users also count as trusted.
 
 class User < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
@@ -46,10 +43,6 @@ class User < ApplicationRecord
 
   def online?
     last_active && last_active > 15.minutes.ago ? true : false
-  end
-
-  def trusted?
-    (self[:trusted] || admin? || user_admin? || moderator?)
   end
 
   def user_admin?

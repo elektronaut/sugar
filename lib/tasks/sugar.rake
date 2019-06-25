@@ -18,8 +18,6 @@ namespace :sugar do
     keep_users = ENV["KEEP_USERS"].split(",").map(&:to_i)
 
     Conversation.delete_all
-    Discussion.where(trusted: true).delete_all
-    Post.where(trusted: true).delete_all
     Post.where(conversation: true).delete_all
     PasswordResetToken.delete_all
 

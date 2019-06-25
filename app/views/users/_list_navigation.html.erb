@@ -19,12 +19,6 @@
                 admins_users_path,
                 action: "admins",
                 class: "AdminsTab") %>
-  <% if current_user? && current_user.trusted? %>
-    <%= users_tab("Trusted",
-                  trusted_users_path,
-                  action: "trusted",
-                  class: "TrustedUsersTab") %>
-  <% end %>
   <%= users_tab("Deactivated",
                 deactivated_users_path,
                 action: "deactivated",

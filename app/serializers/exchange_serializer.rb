@@ -2,7 +2,7 @@
 
 class ExchangeSerializer < ApplicationSerializer
   set_type :exchange
-  attributes :id, :title, :nsfw, :closed, :sticky, :trusted, :created_at,
+  attributes :id, :title, :nsfw, :closed, :sticky, :created_at,
              :last_post_at, :posts_count
 
   attribute :new_posts_count do |exchange, params|

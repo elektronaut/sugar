@@ -8,9 +8,7 @@ describe Discussion do
 
   let(:discussion)         { create(:discussion) }
   let(:closed_discussion)  { create(:discussion, closed: true) }
-  let(:trusted_discussion) { create(:discussion, trusted: true) }
   let(:user)               { create(:user) }
-  let(:trusted_user)       { create(:trusted_user) }
   let(:moderator)          { create(:moderator) }
   let(:user_admin)         { create(:user_admin) }
   let(:admin)              { create(:admin) }
@@ -20,13 +18,6 @@ describe Discussion do
 
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
   it { is_expected.to be_kind_of(Exchange) }
-
-  describe "save callbacks" do
-    it "changes the trusted status on posts" do
-      discussion.update(trusted: true)
-      expect(discussion.posts.first.trusted?).to eq(true)
-    end
-  end
 
   describe ".popular_in_the_last" do
     let(:discussion1) { create(:discussion) }
@@ -103,18 +94,6 @@ describe Discussion do
   end
 
   describe "#viewable_by?" do
-    context "with trusted discussion and a regular user" do
-      subject { trusted_discussion.viewable_by?(user) }
-
-      it { is_expected.to eq(false) }
-    end
-
-    context "with trusted discussion and a trusted user" do
-      subject { trusted_discussion.viewable_by?(trusted_user) }
-
-      it { is_expected.to eq(true) }
-    end
-
     context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
 

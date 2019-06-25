@@ -46,10 +46,6 @@ FactoryBot.define do
         association :closer, factory: :user
         closed { true }
       end
-
-      factory :trusted_discussion do
-        trusted { true }
-      end
     end
 
     # Conversations
@@ -84,10 +80,6 @@ FactoryBot.define do
     sequence(:body) { |n| "Post body #{n}" }
     association :exchange, factory: :discussion
     user
-
-    factory :trusted_post do
-      association :exchange, factory: :trusted_discussion
-    end
   end
 
   factory :user do
@@ -102,7 +94,6 @@ FactoryBot.define do
     user_admin { false }
     moderator { false }
     status { :active }
-    trusted { false }
 
     factory :admin do
       admin { true }
@@ -120,10 +111,6 @@ FactoryBot.define do
 
     factory :user_admin do
       user_admin { true }
-    end
-
-    factory :trusted_user do
-      trusted { true }
     end
 
     factory :banned_user do

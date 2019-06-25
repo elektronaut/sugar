@@ -72,7 +72,6 @@ Rails.application.routes.draw do
       get "recently_joined"
       get "admins"
       get "top_posters"
-      get "trusted"
       get "map"
       get "deactivated"
     end
