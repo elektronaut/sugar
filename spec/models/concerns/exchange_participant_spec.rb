@@ -3,9 +3,8 @@
 require "rails_helper"
 
 describe ExchangeParticipant do
-  subject { user }
+  subject(:user) { create(:user) }
 
-  let(:user)         { create(:user) }
   let(:discussion)   { create(:discussion) }
   let(:conversation) { create(:conversation) }
 
@@ -15,28 +14,28 @@ describe ExchangeParticipant do
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
 
-  it do
-    is_expected.to have_many(:followed_discussions)
+  specify do
+    expect(user).to have_many(:followed_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:favorite_discussions)
+  specify do
+    expect(user).to have_many(:favorite_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:hidden_discussions)
+  specify do
+    expect(user).to have_many(:hidden_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:conversation_relationships)
+  specify do
+    expect(user).to have_many(:conversation_relationships)
       .dependent(:destroy)
   end
 
-  it do
-    is_expected.to have_many(:conversations)
+  specify do
+    expect(user).to have_many(:conversations)
       .through(:conversation_relationships)
   end
 
@@ -186,6 +185,7 @@ describe ExchangeParticipant do
       before do
         user.conversation_relationships.update_all(notifications: false)
       end
+
       it { is_expected.to eq(true) }
     end
   end
@@ -215,6 +215,7 @@ describe ExchangeParticipant do
 
     context "when discussion is favorite" do
       before { DiscussionRelationship.define(user, discussion, favorite: true) }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -228,6 +229,7 @@ describe ExchangeParticipant do
 
     context "when discussion is hidden" do
       before { DiscussionRelationship.define(user, discussion, hidden: true) }
+
       it { is_expected.to eq(true) }
     end
   end

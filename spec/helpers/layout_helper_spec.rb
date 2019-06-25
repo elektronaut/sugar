@@ -4,8 +4,9 @@ require "rails_helper"
 
 describe LayoutHelper do
   describe "#add_body_class" do
-    before { helper.add_body_class(class_name) }
     subject { helper.body_classes }
+
+    before { helper.add_body_class(class_name) }
 
     context "when argument is a string" do
       let(:class_name) { "foo" }
@@ -29,11 +30,13 @@ describe LayoutHelper do
 
     context "when classes are added" do
       before { helper.add_body_class("foo") }
+
       it { is_expected.to eq("foo") }
     end
 
     context "when body has a sidebar" do
       before { helper.content_for :sidebar, "Sidebar" }
+
       it { is_expected.to eq("with_sidebar") }
     end
   end
@@ -99,6 +102,7 @@ describe LayoutHelper do
       let(:discussion) { create(:discussion) }
 
       before { helper.instance_variable_set("@exchange", discussion) }
+
       specify do
         expect(options).to eq([["in discussions", helper.search_path],
                                ["in posts", helper.search_posts_path],
@@ -125,6 +129,7 @@ describe LayoutHelper do
 
     context "when current section" do
       before { helper.instance_variable_set("@section", :discussions) }
+
       specify do
         expect(result).to eq(
           "<li class=\"discussions current\"><a id=\"discussions_link\" " \

@@ -34,6 +34,7 @@ class UploadsController < ApplicationController
 
   def post_image_response(post_image)
     return {} unless post_image.valid?
+
     {
       name: post_image.filename,
       type: post_image.content_type,

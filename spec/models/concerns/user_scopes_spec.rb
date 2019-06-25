@@ -17,8 +17,9 @@ describe UserScopes do
   end
 
   describe "by_username" do
-    before { first_user.destroy }
     subject { User.by_username }
+
+    before { first_user.destroy }
 
     let!(:user1) { create(:user, username: "danz") }
     let!(:user2) { create(:user, username: "adam") }

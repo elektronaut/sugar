@@ -11,40 +11,36 @@ describe UsersHelper do
     let(:options) { { action: "stuff" } }
 
     context "without options" do
-      it do
-        is_expected.to(
-          eq('<li class="tab"><a href="/users/stuff">Stuff</a></li>')
-        )
-      end
+      let(:output) { '<li class="tab"><a href="/users/stuff">Stuff</a></li>' }
+
+      it { is_expected.to eq(output) }
     end
 
     context "with class" do
       let(:options) { { class: "foo" } }
-
-      it do
-        is_expected.to(
-          eq('<li class="tab foo"><a href="/users/stuff">Stuff</a></li>')
-        )
+      let(:output) do
+        '<li class="tab foo"><a href="/users/stuff">Stuff</a></li>'
       end
+
+      it { is_expected.to eq(output) }
     end
 
     context "when action doesn't match params" do
-      it do
-        is_expected.to(
-          eq('<li class="tab"><a href="/users/stuff">Stuff</a></li>')
-        )
-      end
+      let(:output) { '<li class="tab"><a href="/users/stuff">Stuff</a></li>' }
+
+      it { is_expected.to eq(output) }
     end
 
     context "when action matches params" do
+      let(:output) do
+        '<li class="tab active"><a href="/users/stuff">Stuff</a></li>'
+      end
+
       before do
         allow(helper).to receive(:params).and_return(action: "stuff")
       end
-      it do
-        is_expected.to(
-          eq('<li class="tab active"><a href="/users/stuff">Stuff</a></li>')
-        )
-      end
+
+      it { is_expected.to eq(output) }
     end
   end
 end

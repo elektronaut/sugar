@@ -50,6 +50,7 @@ class InvitesController < ApplicationController
 
   def destroy
     return unless verify_user(user: @invite.user, user_admin: true)
+
     @invite.destroy
     flash[:notice] = "Your invite has been cancelled."
     redirect_to invites_url
@@ -70,6 +71,7 @@ class InvitesController < ApplicationController
 
   def expire_invite(invite)
     return false unless invite&.expired?
+
     @invite.destroy
   end
 
@@ -88,11 +90,13 @@ class InvitesController < ApplicationController
   def session_invite_token(invite)
     return unless invite
     return if invite.expired?
+
     invite.token
   end
 
   def verify_available_invites
     return if current_user? && current_user.available_invites?
+
     respond_to do |format|
       format.any(:html, :mobile) do
         flash[:notice] = "You don't have any invites!"

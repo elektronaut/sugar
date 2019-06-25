@@ -71,6 +71,7 @@ class Invite < ApplicationRecord
     return unless Invite.active.select do |i|
       i != self && i.email == email
     end.any?
+
     errors.add(:email, "has already been invited!")
   end
 end

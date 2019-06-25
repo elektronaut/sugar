@@ -40,6 +40,7 @@ class Theme
       theme_dir  = base_dir.join(id)
       theme_file = theme_dir.join("theme.yml")
       raise "Theme not found" unless File.exist?(theme_file)
+
       Theme.new(YAML.load_file(theme_file).merge(id: id))
     end
   end

@@ -10,11 +10,15 @@ describe Conversation do
   end
 
   it do
-    is_expected.to have_many(:conversation_relationships).dependent(:destroy)
+    expect(conversation).to(
+      have_many(:conversation_relationships).dependent(:destroy)
+    )
   end
 
   it do
-    is_expected.to have_many(:participants).through(:conversation_relationships)
+    expect(conversation).to(
+      have_many(:participants).through(:conversation_relationships)
+    )
   end
 
   it { is_expected.to be_kind_of(Exchange) }
@@ -48,10 +52,12 @@ describe Conversation do
   describe "#remove_participant" do
     context "with a second participant" do
       before { conversation.add_participant(user) }
+
       it do
         expect do
           conversation.remove_participant(user)
-        end.to change { conversation.participants.count }.by(-1) end
+        end.to change { conversation.participants.count }.by(-1)
+      end
     end
 
     context "with only one participant" do
@@ -65,8 +71,9 @@ describe Conversation do
 
   describe "#removeable?" do
     context "with a second participant" do
-      before { conversation.add_participant(user) }
       subject { conversation.removeable?(user) }
+
+      before { conversation.add_participant(user) }
 
       it { is_expected.to eq(true) }
     end
@@ -126,8 +133,9 @@ describe Conversation do
     end
 
     context "with a participant" do
-      before { conversation.add_participant(user) }
       subject { conversation.viewable_by?(user) }
+
+      before { conversation.add_participant(user) }
 
       it { is_expected.to eq(true) }
     end
@@ -141,8 +149,9 @@ describe Conversation do
     end
 
     context "with a participant" do
-      before { conversation.add_participant(user) }
       subject { conversation.editable_by?(user) }
+
+      before { conversation.add_participant(user) }
 
       it { is_expected.to eq(false) }
     end
@@ -168,8 +177,9 @@ describe Conversation do
     end
 
     context "with participant" do
-      before { conversation.add_participant(user) }
       subject { conversation.postable_by?(user) }
+
+      before { conversation.add_participant(user) }
 
       it { is_expected.to eq(true) }
     end

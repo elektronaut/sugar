@@ -62,6 +62,7 @@ class PasswordResetsController < ApplicationController
 
   def check_for_expired_token
     return unless @password_reset_token.expired?
+
     @password_reset_token.destroy
     flash[:notice] = "Your password reset link has expired"
     redirect_to login_users_url
@@ -82,6 +83,7 @@ class PasswordResetsController < ApplicationController
 
   def require_user
     return if @user
+
     render_user_not_found
   end
 end

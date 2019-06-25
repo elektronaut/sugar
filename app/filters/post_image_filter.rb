@@ -22,6 +22,7 @@ class PostImageFilter < Filter
       content_hash: content_hash
     ).first
     return nil unless image
+
     dynamic_image_tag(image)
   end
 end

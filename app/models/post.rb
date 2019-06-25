@@ -59,6 +59,7 @@ class Post < ApplicationRecord
 
   def edited?
     return false unless edited_at?
+
     ((edited_at || created_at) - created_at) > 60.seconds
   end
 
@@ -115,6 +116,7 @@ class Post < ApplicationRecord
 
   def define_relationship
     return if conversation?
+
     DiscussionRelationship.define(user, exchange, participated: true)
   end
 

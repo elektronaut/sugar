@@ -62,9 +62,7 @@ class UsersController < ApplicationController
 
     private
 
-    def serialize_users(users)
-
-    end
+    def serialize_users(users); end
 
     def respond_with_users(users)
       respond_to do |format|

@@ -59,6 +59,7 @@ describe Invite do
   describe "before_destroy" do
     context "when invite has been used" do
       before { invite.used = true }
+
       it "doesn't grant the user an invite" do
         expect { invite.destroy }
           .not_to(change { invite.user.available_invites })

@@ -9,12 +9,12 @@ describe Viewable do
   let(:trusted_user) { create(:trusted_user) }
 
   describe ".viewable_by" do
+    subject { Discussion.viewable_by(user) }
+
     before do
       discussion
       trusted_discussion
     end
-
-    subject { Discussion.viewable_by(user) }
 
     context "when user is trusted" do
       let(:user) { create(:trusted_user) }
@@ -39,12 +39,14 @@ describe Viewable do
 
     context "when public browsing is on" do
       before { configure public_browsing: true }
+
       specify { expect(discussion.viewable_by?(user)).to eq(true) }
       specify { expect(discussion.viewable_by?(nil)).to eq(true) }
     end
 
     context "when public browsing is off" do
       before { configure public_browsing: false }
+
       specify { expect(discussion.viewable_by?(user)).to eq(true) }
       specify { expect(discussion.viewable_by?(nil)).to eq(false) }
     end

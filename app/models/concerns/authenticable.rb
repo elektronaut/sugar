@@ -51,8 +51,10 @@ module Authenticable
     def find_and_authenticate_with_password(email, password)
       return nil if email.blank?
       return nil if password.blank?
+
       user = User.find_by(email: email)
       return unless user&.valid_password?(password)
+
       user.hash_password!(password) if user.password_needs_rehash?
       user
     end
@@ -98,6 +100,7 @@ module Authenticable
   def check_status!
     return unless hiatus? || time_out?
     return if banned_until && banned_until > Time.now.utc
+
     update(status: :active)
   end
 
@@ -106,11 +109,13 @@ module Authenticable
   def ensure_password
     return if new_password? || hashed_password?
     return unless facebook?
+
     self.password = self.confirm_password = SecureRandom.base64(15)
   end
 
   def encrypt_new_password
     return unless new_password? && new_password_confirmed?
+
     self.hashed_password = User.encrypt_password(password)
   end
 
@@ -120,6 +125,7 @@ module Authenticable
 
   def go_on_hiatus
     return unless hiatus_until && hiatus_until > Time.now.utc
+
     self.status = :hiatus
     self.banned_until = hiatus_until
   end
@@ -127,11 +133,13 @@ module Authenticable
   def verify_banned_until
     return unless hiatus? || time_out?
     return if banned_until?
+
     errors.add(:banned_until, "is required")
   end
 
   def update_persistence_token
     return unless !persistence_token || hashed_password_changed?
+
     self.persistence_token = self.class.generate_token
   end
 end

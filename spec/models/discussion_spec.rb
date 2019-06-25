@@ -49,12 +49,12 @@ describe Discussion do
     end
 
     context "when within the last 7 days" do
+      subject { described_class.popular_in_the_last(7.days) }
+
       before do
         discussion1
         discussion2
       end
-
-      subject { described_class.popular_in_the_last(7.days) }
 
       it { is_expected.to eq([discussion2, discussion1]) }
     end
@@ -71,6 +71,7 @@ describe Discussion do
     let(:conversation) { Conversation.find(discussion.id) }
 
     before { discussion.convert_to_conversation! }
+
     specify { expect(discussion.type).to eq("Conversation") }
     specify { expect(post.reload.conversation?).to eq(true) }
 
@@ -116,11 +117,13 @@ describe Discussion do
 
     context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
+
       specify { expect(discussion.viewable_by?(nil)).to eq(true) }
     end
 
     context "when public browsing is off" do
       before { Sugar.config.public_browsing = false }
+
       specify { expect(discussion.viewable_by?(nil)).to eq(false) }
       specify { expect(discussion.viewable_by?(user)).to eq(true) }
     end

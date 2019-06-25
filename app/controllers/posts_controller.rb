@@ -136,11 +136,13 @@ class PostsController < ApplicationController
 
   def mark_conversation_viewed
     return unless @exchange.is_a?(Conversation)
+
     current_user.mark_conversation_viewed(@exchange)
   end
 
   def mark_exchange_viewed
     return unless current_user? && @posts.any?
+
     current_user.mark_exchange_viewed(@exchange,
                                       @posts.last,
                                       (params[:index].to_i + @posts.length))
@@ -169,18 +171,21 @@ class PostsController < ApplicationController
   def require_and_set_search_query
     @search_query = search_query
     return if @search_query
+
     flash[:notice] = "No query specified!"
     redirect_to root_url
   end
 
   def verify_editable
     return if @post.editable_by?(current_user)
+
     flash[:notice] = "You don't have permission to edit that post!"
     redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
   end
 
   def verify_postable
     return if @exchange.postable_by?(current_user)
+
     flash[:notice] = "This discussion is closed, " \
                      "you don't have permission to post here"
     redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
@@ -188,6 +193,7 @@ class PostsController < ApplicationController
 
   def verify_viewable
     return if @exchange&.viewable_by?(current_user)
+
     flash[:notice] = "You don't have permission to view that discussion!"
     redirect_to root_url
   end

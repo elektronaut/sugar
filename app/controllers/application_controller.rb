@@ -81,16 +81,19 @@ class ApplicationController < ActionController::Base
 
   def detect_mobile
     return unless mobile_user_agent?
+
     session[:mobile_format] = params[:mobile_format] ||
                               session[:mobile_format] ||
                               "mobile"
     return unless session[:mobile_format] == "mobile" &&
                   request.format == "text/html"
+
     request.format = :mobile
   end
 
   def require_s3
     return if Sugar.aws_s3?
+
     flash[:notice] = "Amazon Web Services not configured!"
     redirect_to root_url
   end
@@ -108,8 +111,8 @@ class ApplicationController < ActionController::Base
 
   def set_section
     mapping = {
-      UsersController         => :users,
-      InvitesController       => :invites,
+      UsersController => :users,
+      InvitesController => :invites,
       ConversationsController => :conversations
     }
     mapping[self.class] || :discussions

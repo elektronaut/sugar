@@ -26,6 +26,7 @@ class CodeFilter < Filter
 
   def syntax_highlight(element, code)
     return unless element.parent.name == "pre"
+
     language = element.attributes["class"].try(&:value)
     lexer = find_lexer(language, code)
     element.parent.swap(syntax_formatter.format(lexer.lex(code)))

@@ -98,6 +98,7 @@ class SanitizeFilter < Filter
       # Change allowScriptAccess to sameDomain
       next unless name.casecmp("name").zero? &&
                   attr.value.casecmp("allowscriptaccess").zero?
+
       element.set_attribute "name", "allowScriptAccess"
       element.set_attribute "value", "sameDomain"
     end
@@ -106,6 +107,7 @@ class SanitizeFilter < Filter
   # Makes sure the element contains an allowScriptAccess param.
   def enforce_allowscriptaccess_param_in(element)
     return unless element.search(">param[name=allowScriptAccess]").empty?
+
     element.inner_html +=
       '<param name="allowScriptAccess" value="sameDomain" />'
   end

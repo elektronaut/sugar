@@ -152,6 +152,7 @@ describe Exchange do
 
     context "when closed by moderator" do
       before { exchange.update(closed: true, updated_by: moderator) }
+
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
       specify { expect(exchange.closer).to eq(moderator) }
@@ -164,6 +165,7 @@ describe Exchange do
       before do
         exchange.update(closed: true, updated_by: exchange_moderator)
       end
+
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
       specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
@@ -172,17 +174,18 @@ describe Exchange do
   end
 
   describe "#validate_closed" do
+    subject { exchange }
+
     before do
       exchange.update(closed: true, updated_by: moderator)
     end
-
-    subject { exchange }
 
     context "with no updated_by" do
       before do
         exchange.update(closed: false)
         exchange.valid?
       end
+
       it { is_expected.to be_valid }
       specify { expect(exchange.errors[:closed]).to eq([]) }
     end
@@ -192,6 +195,7 @@ describe Exchange do
         exchange.update(closed: false, updated_by: exchange.poster)
         exchange.valid?
       end
+
       it { is_expected.not_to be_valid }
       specify { expect(exchange.errors[:closed].length).to eq(1) }
     end
@@ -201,6 +205,7 @@ describe Exchange do
         exchange.update(closed: false, updated_by: moderator)
         exchange.valid?
       end
+
       it { is_expected.to be_valid }
       specify { expect(exchange.errors[:closed]).to eq([]) }
     end
@@ -219,6 +224,7 @@ describe Exchange do
     end
 
     before { exchange.unlabel! }
+
     specify { expect(exchange.trusted?).to eq(false) }
     specify { expect(exchange.sticky?).to eq(false) }
     specify { expect(exchange.closed?).to eq(false) }

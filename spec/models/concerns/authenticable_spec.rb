@@ -3,20 +3,17 @@
 require "rails_helper"
 
 describe Authenticable do
+  subject(:user) { create(:user, facebook_uid: 123) }
+
+  let(:banned_user) { create(:banned_user) }
+
   # Create the first admin user
   before { create(:user, facebook_uid: 345) }
-
-  subject { user }
-
-  let(:user) do
-    create(:user, facebook_uid: 123)
-  end
-  let(:banned_user) { create(:banned_user) }
 
   it { is_expected.to validate_presence_of(:hashed_password) }
 
   it "validates facebook_uid" do
-    is_expected.to validate_uniqueness_of(:facebook_uid)
+    expect(user).to validate_uniqueness_of(:facebook_uid)
       .case_insensitive
       .with_message(/is already registered/)
   end
@@ -64,10 +61,11 @@ describe Authenticable do
   end
 
   describe ".encrypt_password" do
+    subject { User.encrypt_password("password") }
+
     before do
       allow(BCrypt::Password).to receive(:create).and_return("hashed password")
     end
-    subject { User.encrypt_password("password") }
 
     it { is_expected.to eq("hashed password") }
   end
@@ -163,6 +161,7 @@ describe Authenticable do
     before do
       allow(User).to receive(:encrypt_password).and_return("encrypted password")
     end
+
     it "hashes the password" do
       user.hash_password!("new password")
       expect(user.hashed_password).to eq("encrypted password")
@@ -238,8 +237,9 @@ describe Authenticable do
   end
 
   describe "#ensure_password" do
-    before { user.valid? }
     subject { user.password }
+
+    before { user.valid? }
 
     context "when signed up with email" do
       let(:user) { build(:user, hashed_password: nil) }

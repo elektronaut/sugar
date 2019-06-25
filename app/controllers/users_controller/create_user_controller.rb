@@ -61,6 +61,7 @@ class UsersController < ApplicationController
 
     def check_for_expired_invite
       return unless @invite&.expired?
+
       session.delete(:invite_token)
       flash[:notice] = "Your invite has expired"
       redirect_to login_users_url
@@ -68,6 +69,7 @@ class UsersController < ApplicationController
 
     def check_for_signups_allowed
       return unless !Sugar.config.signups_allowed && User.any? && !@invite
+
       flash[:notice] = "Signups are not allowed"
       redirect_to login_users_url
     end

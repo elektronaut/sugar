@@ -32,21 +32,26 @@ module Authentication
       return unless session[:user_id] &&
                     session[:persistence_token] &&
                     !current_user?
+
       user = User.find_by(id: session[:user_id])
       return unless user&.persistence_token == session[:persistence_token]
+
       @current_user = user
     end
 
     def ban_duration
       return nil unless current_user.temporary_banned?
+
       distance_of_time_in_words(Time.zone.now, current_user.banned_until)
     end
 
     def verify_active_account
       return unless current_user?
+
       current_user.check_status!
       logger.info(authentication_log_line(current_user))
       return if current_user.active?
+
       flash[:notice] = authentication_failure_notice
       deauthenticate!
     end

@@ -3,6 +3,7 @@
 module PostsHelper
   def emojify(content)
     return if content.blank?
+
     h(content).to_str.gsub(/:([\w+-]+):/) do |match|
       emoji = Emoji.find_by_alias(Regexp.last_match(1))
       if emoji

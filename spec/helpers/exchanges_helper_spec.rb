@@ -99,10 +99,9 @@ describe ExchangesHelper do
 
     context "when discussion is read" do
       let(:exchange) { read_exchange }
+      let(:path) { "/discussions/#{exchange.id}-Test#post-#{post.id}" }
 
-      it do
-        is_expected.to eq("/discussions/#{exchange.id}-Test#post-#{post.id}")
-      end
+      it { is_expected.to eq(path) }
     end
   end
 

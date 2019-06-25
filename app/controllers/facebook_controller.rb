@@ -19,9 +19,9 @@ class FacebookController < ApplicationController
 
   def facebook_session_data(user_info)
     { facebook_uid: user_info[:id],
-      email:        user_info[:email],
-      realname:     user_info[:name],
-      username:     (user_info[:username] || user_info[:name]) }
+      email: user_info[:email],
+      realname: user_info[:name],
+      username: (user_info[:username] || user_info[:name]) }
   end
 
   def signup
@@ -58,6 +58,7 @@ class FacebookController < ApplicationController
   def authenticate_with_facebook(facebook_uid)
     user = User.find_by(facebook_uid: facebook_uid)
     return false unless user
+
     @current_user = user
   end
 
@@ -96,6 +97,7 @@ class FacebookController < ApplicationController
     access_token = options[:access_token] ||
                    get_access_token(options[:code], options)
     return unless access_token
+
     begin
       response = HTTParty.get(fb_profile_url(access_token)).response.body
       JSON.parse(response).symbolize_keys

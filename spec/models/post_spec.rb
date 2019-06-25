@@ -139,22 +139,26 @@ describe Post do
 
     context "when it's the first post" do
       before { allow(post).to receive(:post_number).and_return(1) }
+
       it { is_expected.to eq(1) }
     end
 
     context "when it's the last post on a page" do
       before { allow(post).to receive(:post_number).and_return(50) }
+
       it { is_expected.to eq(1) }
     end
 
     context "when it's the first post on the second page" do
       before { allow(post).to receive(:post_number).and_return(51) }
+
       it { is_expected.to eq(2) }
     end
 
     context "with :limit set" do
-      before { allow(post).to receive(:post_number).and_return(70) }
       subject { post.page(limit: 10) }
+
+      before { allow(post).to receive(:post_number).and_return(70) }
 
       it { is_expected.to eq(7) }
     end
@@ -250,11 +254,13 @@ describe Post do
 
     context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
+
       specify { expect(post.viewable_by?(nil)).to eq(true) }
     end
 
     context "when public browsing is off" do
       before { Sugar.config.public_browsing = false }
+
       specify { expect(post.viewable_by?(nil)).to eq(false) }
     end
   end
@@ -305,6 +311,7 @@ describe Post do
   describe "#render_html" do
     context "when skip_html is false" do
       before { discussion }
+
       it "parses the post" do
         allow(Renderer).to receive(:render)
         create(:post, exchange: discussion)
@@ -314,6 +321,7 @@ describe Post do
 
     context "when skip_html is true" do
       before { discussion }
+
       it "parses the post" do
         allow(Renderer).to receive(:render)
         create(:post, skip_html: true, exchange: discussion)
@@ -335,6 +343,7 @@ describe Post do
         allow(Time).to receive(:now)
           .and_return(Time.zone.parse("Oct 22 2012"))
       end
+
       specify { expect(post.edited_at).to eq(Time.now.utc) }
     end
   end
@@ -342,6 +351,7 @@ describe Post do
   describe "#define_relationship" do
     context "when it belongs to a discussion" do
       before { discussion }
+
       it "defines a relationship between the discussion and the poster" do
         allow(DiscussionRelationship).to receive(:define)
         create(:post, user: user, exchange: discussion)
@@ -353,6 +363,7 @@ describe Post do
 
     context "when it belongs to a conversation" do
       before { conversation }
+
       it "does not define a relationship" do
         allow(DiscussionRelationship).to receive(:define)
         create(:post, exchange: conversation)

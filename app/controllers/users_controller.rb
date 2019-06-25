@@ -24,7 +24,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { @posts = user_posts(@user).limit(15) }
       format.mobile {}
-      format.json { render json: UserSerializer.new(@user, params: { context: self }).serialized_json }
+      format.json do
+        serializer = UserSerializer.new(@user, params: { context: self })
+        render json: serializer.serialized_json
+      end
     end
   end
 
@@ -104,6 +107,7 @@ class UsersController < ApplicationController
 
   def allowed_admin_params
     return [] unless current_user? && current_user.admin?
+
     [:admin]
   end
 
@@ -121,6 +125,7 @@ class UsersController < ApplicationController
 
   def allowed_user_admin_params
     return [] unless current_user&.user_admin?
+
     %i[username user_admin moderator trusted available_invites
        status banned_until]
   end
@@ -140,6 +145,7 @@ class UsersController < ApplicationController
 
   def update_user
     return nil unless @user.update(user_params)
+
     current_user.reload if @user == current_user
     @user
   end

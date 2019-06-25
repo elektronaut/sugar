@@ -11,6 +11,7 @@ describe PasswordResetsController do
 
   describe "GET new" do
     before { get :new }
+
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:new) }
   end
@@ -18,6 +19,7 @@ describe PasswordResetsController do
   describe "POST create" do
     context "with an existing user" do
       before { post :create, params: { email: user.email } }
+
       it { is_expected.to redirect_to(login_users_url) }
       it "sets the flash" do
         expect(flash[:notice]).to match(
@@ -40,6 +42,7 @@ describe PasswordResetsController do
 
     context "with a non-existant user" do
       before { post :create, params: { email: "none@example.com" } }
+
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
       specify { expect(assigns(:password_reset_token)).to eq(nil) }
@@ -62,6 +65,7 @@ describe PasswordResetsController do
           }
         )
       end
+
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
       specify { expect(assigns(:user)).to be_a(User) }
@@ -72,6 +76,7 @@ describe PasswordResetsController do
 
     context "without a valid token" do
       before { get :show, params: { id: password_reset_token.id } }
+
       it { is_expected.to redirect_to(login_users_url) }
       specify do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -86,6 +91,7 @@ describe PasswordResetsController do
               token: expired_password_reset_token.token
             }
       end
+
       specify do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
@@ -100,6 +106,7 @@ describe PasswordResetsController do
 
     context "with a non-existant token" do
       before { get :show, params: { id: 123, token: "456" } }
+
       it { is_expected.to redirect_to(login_users_url) }
       specify do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -118,6 +125,7 @@ describe PasswordResetsController do
                       confirm_password: "new password" }
             }
       end
+
       specify do
         expect(flash[:notice]).to match(/Your password has been changed/)
       end
@@ -139,6 +147,7 @@ describe PasswordResetsController do
               }
             }
       end
+
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
       specify { expect(assigns(:user)).to be_a(User) }
@@ -157,6 +166,7 @@ describe PasswordResetsController do
                       confirm_password: "new password" }
             }
       end
+
       it { is_expected.to redirect_to(login_users_url) }
       specify do
         expect(flash.now[:notice]).to match(/Invalid password reset request/)
@@ -173,6 +183,7 @@ describe PasswordResetsController do
                       confirm_password: "new password" }
             }
       end
+
       specify do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end

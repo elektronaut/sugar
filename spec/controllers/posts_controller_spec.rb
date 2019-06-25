@@ -20,6 +20,7 @@ describe PostsController do
         post :create,
              params: { discussion_id: discussion.id, post: post_params }
       end
+
       specify { expect(assigns(:post)).to be_valid }
       it "redirects back to the discussion" do
         expect(response).to(
@@ -62,6 +63,7 @@ describe PostsController do
           format: :json
         )
       end
+
       specify { expect(assigns(:post)).to be_valid }
       it { is_expected.to respond_with(:created) }
       specify { expect(response.body).to be_json_eql(assigns(:post).to_json) }
@@ -70,6 +72,7 @@ describe PostsController do
 
   describe "Invalid POST" do
     before { login(user) }
+
     let(:post_params) { { body: "", format: "html" } }
 
     context "with HTML format" do
@@ -77,6 +80,7 @@ describe PostsController do
         post :create,
              params: { discussion_id: discussion.id, post: post_params }
       end
+
       specify { expect(assigns(:post)).not_to be_valid }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
@@ -93,6 +97,7 @@ describe PostsController do
           format: :json
         )
       end
+
       specify { expect(assigns(:post)).not_to be_valid }
       it { is_expected.to respond_with(:unprocessable_entity) }
     end
@@ -114,6 +119,7 @@ describe PostsController do
           }
         )
       end
+
       specify { expect(assigns(:post)).to be_valid }
       it "redirects back to the discussion" do
         expect(response).to(
@@ -136,6 +142,7 @@ describe PostsController do
           format: :json
         )
       end
+
       specify { expect(assigns(:post)).to be_valid }
       it { is_expected.to respond_with(:success) }
     end
@@ -157,6 +164,7 @@ describe PostsController do
           }
         )
       end
+
       specify { expect(assigns(:post)).not_to be_valid }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:edit) }
@@ -174,6 +182,7 @@ describe PostsController do
           format: :json
         )
       end
+
       specify { expect(assigns(:post)).not_to be_valid }
       it { is_expected.to respond_with(:unprocessable_entity) }
     end

@@ -50,6 +50,7 @@ module Inviter
   # Pass :all as an argument to revoke all invites.
   def revoke_invite!(number = 1)
     return available_invites if user_admin?
+
     number = available_invites if number == :all
     new_invites = available_invites - number
     new_invites = 0 if new_invites.negative?
@@ -59,6 +60,7 @@ module Inviter
 
   def grant_invite!(number = 1)
     return available_invites if user_admin?
+
     new_number = (available_invites + number)
     update(available_invites: new_number)
     invites

@@ -7,16 +7,15 @@ describe ApplicationHelper do
     subject { helper.facebook_oauth_url(redirect_url) }
 
     let(:redirect_url) { "http://example.com/foo" }
+    let(:url) do
+      "https://www.facebook.com/dialog/oauth?client_id=123" \
+      "&redirect_uri=http://example.com/foo" \
+      "&scope=email"
+    end
 
     before { Sugar.config.facebook_app_id = "123" }
 
-    it do
-      is_expected.to eq(
-        "https://www.facebook.com/dialog/oauth?client_id=123" \
-          "&redirect_uri=http://example.com/foo" \
-          "&scope=email"
-      )
-    end
+    it { is_expected.to eq(url) }
   end
 
   describe "#pretty_link" do
@@ -36,10 +35,9 @@ describe ApplicationHelper do
 
     context "when URL has a path" do
       let(:url) { "https://ex.com/foo/" }
+      let(:link) { '<a href="https://ex.com/foo/">ex.com/foo/</a>' }
 
-      it do
-        is_expected.to eq('<a href="https://ex.com/foo/">ex.com/foo/</a>')
-      end
+      it { is_expected.to eq(link) }
     end
   end
 
@@ -71,21 +69,21 @@ describe ApplicationHelper do
     end
 
     context "when user exists" do
-      it do
-        is_expected.to eq(
-          '<a title="foo&#39;s profile" href="/users/profile/foo">foo</a>'
-        )
+      let(:link) do
+        '<a title="foo&#39;s profile" href="/users/profile/foo">foo</a>'
       end
+
+      it { is_expected.to eq(link) }
     end
 
     context "when link text is set" do
       subject { helper.profile_link(user, "Profile") }
 
-      it do
-        is_expected.to eq(
-          '<a title="foo&#39;s profile" href="/users/profile/foo">Profile</a>'
-        )
+      let(:link) do
+        '<a title="foo&#39;s profile" href="/users/profile/foo">Profile</a>'
       end
+
+      it { is_expected.to eq(link) }
     end
   end
 end

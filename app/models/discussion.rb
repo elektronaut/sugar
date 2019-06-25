@@ -25,6 +25,7 @@ class Discussion < Exchange
   # Converts a discussion to a conversation
   def convert_to_conversation!
     raise InvalidExchange unless valid?
+
     transaction do
       update(type: "Conversation")
       becomes(Conversation).tap do |conversation|
@@ -48,6 +49,7 @@ class Discussion < Exchange
   def editable_by?(user)
     return false unless user
     return true if user.moderator?
+
     moderators.include?(user)
   end
 
@@ -63,6 +65,7 @@ class Discussion < Exchange
 
   def update_trusted_status
     return unless @trusted_will_change
+
     posts.update_all(trusted: trusted?)
     discussion_relationships.update_all(trusted: trusted?)
     participants.each do |user|

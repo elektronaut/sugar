@@ -114,6 +114,7 @@ describe ConversationsController do
       before do
         get :new, params: { type: "conversation", username: recipient.username }
       end
+
       specify { expect(assigns(:exchange)).to be_a(Conversation) }
       specify { expect(assigns(:recipient)).to eq(recipient) }
       it { is_expected.to render_template(:new) }

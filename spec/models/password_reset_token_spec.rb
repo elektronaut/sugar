@@ -17,6 +17,7 @@ describe PasswordResetToken do
       expired_password_reset_token
       described_class.expire!
     end
+
     specify { expect(described_class.all).to eq([password_reset_token]) }
   end
 

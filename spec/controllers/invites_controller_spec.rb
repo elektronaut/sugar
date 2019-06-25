@@ -20,6 +20,7 @@ describe InvitesController do
         login invite.user
         delete :destroy, params: { id: invite_id }
       end
+
       let(:invite_id) { invite.id }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -134,6 +135,7 @@ describe InvitesController do
       login(user_with_invites)
       get :new
     end
+
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:new) }
     specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -147,7 +149,7 @@ describe InvitesController do
         post :create,
              params: {
                invite: {
-                 email:   "no-reply@example.com",
+                 email: "no-reply@example.com",
                  message: "testing message"
                }
              }
@@ -175,7 +177,7 @@ describe InvitesController do
         post :create,
              params: {
                invite: {
-                 email:   "totally@wrong.com",
+                 email: "totally@wrong.com",
                  message: "testing message"
                }
              }
@@ -201,6 +203,7 @@ describe InvitesController do
 
     context "with invalid params" do
       before { post :create, params: { invite: { foo: "bar" } } }
+
       specify { expect(assigns(:invite)).to be_a(Invite) }
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }

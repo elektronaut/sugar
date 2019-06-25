@@ -4,9 +4,9 @@ require "rails_helper"
 
 describe Inviter do
   # Create the first admin user
-  before { create(:admin) }
-
   subject { user }
+
+  before { create(:admin) }
 
   let(:user) { create(:user) }
 
@@ -32,6 +32,7 @@ describe Inviter do
 
     context "when user has invites" do
       before { create(:invite, user: user) }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -45,6 +46,7 @@ describe Inviter do
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -58,11 +60,13 @@ describe Inviter do
 
     context "when user has invites" do
       before { create(:invite, user: user) }
+
       it { is_expected.to eq(true) }
     end
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
+
       it { is_expected.to eq(true) }
     end
   end

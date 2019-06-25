@@ -7,7 +7,7 @@ class Mailer < ActionMailer::Base
     @invite    = invite
     @login_url = login_url
     mail(
-      to:      @invite.email,
+      to: @invite.email,
       subject: "#{@invite.user.realname_or_username} has invited you to " \
         "#{Sugar.config.forum_name}!"
     )
@@ -17,7 +17,7 @@ class Mailer < ActionMailer::Base
     @user      = user
     @login_url = login_url
     mail(
-      to:      @user.email,
+      to: @user.email,
       subject: "Welcome to #{Sugar.config.forum_name}!"
     )
   end

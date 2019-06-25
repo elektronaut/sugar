@@ -111,7 +111,7 @@ describe UsersController do
       specify { expect(flash[:notice]).to match("Your changes were saved!") }
 
       it "redirects back to the edit page" do
-        is_expected.to redirect_to(
+        expect(response).to redirect_to(
           edit_user_page_url(user.username, page: "info")
         )
       end

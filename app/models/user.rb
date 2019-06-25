@@ -82,6 +82,7 @@ class User < ApplicationRecord
 
   def mark_active!
     return if last_active && last_active > 10.minutes.ago
+
     update(last_active: Time.now.utc)
   end
 
@@ -95,6 +96,7 @@ class User < ApplicationRecord
 
   def gamertag_avatar_url
     return unless gamertag?
+
     "http://avatar.xboxlive.com/avatar/#{ERB::Util.url_encode(gamertag)}" \
     "/avatarpic-l.png"
   end
@@ -132,6 +134,7 @@ class User < ApplicationRecord
 
   def check_username_change
     return unless username_changed?
+
     self[:previous_usernames] = ([username_was] + previous_usernames).join("\n")
   end
 end

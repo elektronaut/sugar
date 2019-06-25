@@ -4,9 +4,8 @@
 require "rails_helper"
 
 describe User do
-  subject { user }
+  subject(:user) { build(:user) }
 
-  let(:user) { build(:user) }
   let(:trusted_user) { build(:trusted_user) }
   let(:admin) { build(:admin) }
   let(:moderator) { build(:moderator) }
@@ -28,15 +27,15 @@ describe User do
   it { is_expected.to belong_to(:avatar).dependent(:destroy).optional }
   it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
-  it do
-    is_expected.to validate_uniqueness_of(:username)
+  specify do
+    expect(user).to validate_uniqueness_of(:username)
       .case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
-  it do
-    is_expected.to validate_uniqueness_of(:email)
+  specify do
+    expect(user).to validate_uniqueness_of(:email)
       .case_insensitive.with_message(/is already registered/)
   end
   it { is_expected.to allow_value("test@example.com").for(:email) }
@@ -70,6 +69,7 @@ describe User do
 
     context "when username changes" do
       before { user.update(username: "newname") }
+
       it { is_expected.to eq(["originalname"]) }
     end
   end
@@ -140,6 +140,7 @@ describe User do
 
   describe "#theme" do
     before { Sugar.config.default_theme = "default" }
+
     specify { expect(user.theme).to eq("default") }
     specify { expect(create(:user, theme: "mytheme").theme).to eq("mytheme") }
   end
@@ -195,12 +196,11 @@ describe User do
 
     context "when gamertag is nil" do
       let(:user) { build(:user, gamertag: "my gamertag") }
-
-      it do
-        is_expected.to(
-          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
-        )
+      let(:url) do
+        "http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png"
       end
+
+      it { is_expected.to eq(url) }
     end
   end
 

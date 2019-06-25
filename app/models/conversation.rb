@@ -26,18 +26,20 @@ class Conversation < Exchange
       new_posts: true
     }.merge(options)
     return unless user.is_a?(User) && !participants.include?(user)
+
     ConversationRelationship.create(
-      user:         user,
+      user: user,
       conversation: self,
-      new_posts:    options[:new_posts]
+      new_posts: options[:new_posts]
     )
   end
 
   def remove_participant(user)
     return unless user.is_a?(User) && participants.include?(user)
     raise RemoveParticipantError unless removeable?(user)
+
     ConversationRelationship.where(
-      user_id:         user.id,
+      user_id: user.id,
       conversation_id: id
     ).destroy_all
   end
@@ -48,6 +50,7 @@ class Conversation < Exchange
 
   def removeable_by?(participant, remover)
     return false unless removeable?(participant)
+
     participant == remover ||
       remover.moderator? ||
       remover == poster

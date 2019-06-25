@@ -70,6 +70,7 @@ describe ImageFetcher do
         stub_request(:get, url)
           .to_return(status: 404, body: "Not Found")
       end
+
       it { is_expected.to eq(body) }
     end
 

@@ -16,6 +16,7 @@ class ViewedTracker
 
   def last_page(exchange)
     return 1 unless user
+
     if new_posts?(exchange)
       index = view(exchange).post_index
       [(index.to_f / Post.per_page).ceil, 1].max
@@ -31,16 +32,19 @@ class ViewedTracker
 
   def last_post_id(exchange)
     return nil unless any?
+
     view(exchange).post_id
   end
 
   def last_post_id?(exchange)
     return false unless any?
+
     view(exchange).post_id?
   end
 
   def new_posts(exchange)
     return 0 unless any?
+
     exchange.posts_count - view(exchange).post_index
   end
 
@@ -60,9 +64,9 @@ class ViewedTracker
 
   def empty_view(exchange)
     ExchangeView.new(
-      user_id:     user.id,
+      user_id: user.id,
       exchange_id: exchange.id,
-      post_index:  0
+      post_index: 0
     )
   end
 
@@ -70,7 +74,7 @@ class ViewedTracker
 
   def views
     @views ||= ExchangeView.where(
-      user_id:     user.id,
+      user_id: user.id,
       exchange_id: exchanges.map(&:id).uniq
     ).to_a
   end

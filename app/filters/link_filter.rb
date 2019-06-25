@@ -50,6 +50,7 @@ class LinkFilter < Filter
   def matches_https_whitelist?(url)
     host = URI.parse(url).host
     return false unless host
+
     HTTPS_WHITELIST.detect { |domain| File.fnmatch(domain, host) }
   end
 
@@ -70,8 +71,10 @@ class LinkFilter < Filter
     parser.search("a").each do |link|
       href = extract_href(link)
       next unless href&.match?(%r{^https?://})
+
       host = URI.parse(href).host
       next unless local_domain?(host)
+
       link.set_attribute(
         "href",
         href.gsub(Regexp.new("(https?:)?//" + Regexp.escape(host)), "")

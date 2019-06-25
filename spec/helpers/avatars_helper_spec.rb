@@ -10,11 +10,11 @@ describe AvatarsHelper do
   describe "#gravatar_url" do
     subject { helper.gravatar_url(email) }
 
-    it do
-      is_expected.to eq(
-        "https://secure.gravatar.com/avatar/#{digest}?s=24&r=x&d=identicon"
-      )
+    let(:url) do
+      "https://secure.gravatar.com/avatar/#{digest}?s=24&r=x&d=identicon"
     end
+
+    it { is_expected.to eq(url) }
   end
 
   describe "#avatar_image_tag" do
@@ -22,28 +22,26 @@ describe AvatarsHelper do
 
     context "when user has an avatar uploaded" do
       let(:user) { create(:user_with_avatar, username: "foo") }
-
-      it do
-        is_expected.to match(
-          Regexp.new('<img alt="foo" class="avatar-image" ' \
-                     'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
-                     'width="16" height="16" \/>')
-        )
+      let(:expression) do
+        Regexp.new('<img alt="foo" class="avatar-image" ' \
+                   'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
+                   'width="16" height="16" \/>')
       end
+
+      it { is_expected.to match(expression) }
     end
 
     context "when user has email set" do
       let(:user) do
         build(:user, email: email, username: "foo")
       end
-
-      it do
-        is_expected.to eq(
-          '<img alt="foo" class="avatar-image" ' \
-            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
-            '&amp;d=identicon" width="96" height="96" />'
-        )
+      let(:output) do
+        '<img alt="foo" class="avatar-image" ' \
+        "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+        '&amp;d=identicon" width="96" height="96" />'
       end
+
+      it { is_expected.to eq(output) }
     end
 
     context "when user doesn't have an email set" do
@@ -51,14 +49,13 @@ describe AvatarsHelper do
         create(:user, username: "foo").tap { |u| u.email = nil }
       end
       let(:digest) { Digest::MD5.hexdigest("#{user.id}@test.host") }
-
-      it do
-        is_expected.to eq(
-          '<img alt="foo" class="avatar-image" ' \
-            "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
-            '&amp;d=identicon" width="96" height="96" />'
-        )
+      let(:output) do
+        '<img alt="foo" class="avatar-image" ' \
+        "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+        '&amp;d=identicon" width="96" height="96" />'
       end
+
+      it { is_expected.to eq(output) }
     end
   end
 end

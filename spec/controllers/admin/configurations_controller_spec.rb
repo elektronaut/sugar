@@ -12,6 +12,7 @@ describe Admin::ConfigurationsController, redis: true do
 
     describe "show" do
       before { get :show }
+
       it "redirects to edit" do
         expect(response).to redirect_to(edit_admin_configuration_url)
       end
@@ -19,6 +20,7 @@ describe Admin::ConfigurationsController, redis: true do
 
     describe "edit" do
       before { get :edit }
+
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:edit) }
       specify { expect(flash[:notice]).to eq(nil) }
@@ -29,6 +31,7 @@ describe Admin::ConfigurationsController, redis: true do
         patch :update,
               params: { configuration: { forum_name: "New Forum Name" } }
       end
+
       specify { expect(flash[:notice]).to eq(nil) }
 
       it "updates the forum configuration" do

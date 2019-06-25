@@ -35,6 +35,7 @@ describe ViewedTracker do
 
     context "without exchanges" do
       before { tracker.exchanges = [] }
+
       it { is_expected.to eq(false) }
     end
 
@@ -83,6 +84,7 @@ describe ViewedTracker do
 
     context "with no exchanges" do
       before { tracker.exchanges = [] }
+
       it { is_expected.to eq(nil) }
     end
 
@@ -108,6 +110,7 @@ describe ViewedTracker do
 
     context "with no exchanges" do
       before { tracker.exchanges = [] }
+
       it { is_expected.to eq(false) }
     end
 
@@ -133,6 +136,7 @@ describe ViewedTracker do
 
     context "with no exchanges" do
       before { tracker.exchanges = [] }
+
       it { is_expected.to eq(0) }
     end
 
@@ -158,6 +162,7 @@ describe ViewedTracker do
 
     context "with no exchanges" do
       before { tracker.exchanges = [] }
+
       it { is_expected.to eq(false) }
     end
 

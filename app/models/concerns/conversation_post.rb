@@ -17,6 +17,7 @@ module ConversationPost
 
   def notify_new_conversation_post
     return unless conversation?
+
     exchange.conversation_relationships.each do |relationship|
       relationship.update(new_posts: true) unless relationship.user == user
     end

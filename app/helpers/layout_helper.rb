@@ -20,14 +20,14 @@ module LayoutHelper
 
   def frontend_configuration
     {
-      authToken:          form_authenticity_token,
-      debug:              Rails.env.development?,
-      emoticons:          enabled_emoticons,
-      facebookAppId:      Sugar.config.facebook_app_id,
+      authToken: form_authenticity_token,
+      debug: Rails.env.development?,
+      emoticons: enabled_emoticons,
+      facebookAppId: Sugar.config.facebook_app_id,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
-      uploads:            Sugar.aws_s3?,
-      currentUser:        current_user.try(&:as_json),
-      preferredFormat:    current_user.try(&:preferred_format)
+      uploads: Sugar.aws_s3?,
+      currentUser: current_user.try(&:as_json),
+      preferredFormat: current_user.try(&:preferred_format)
     }
   end
 

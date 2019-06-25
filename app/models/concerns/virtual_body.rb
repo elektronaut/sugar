@@ -14,6 +14,7 @@ module VirtualBody
 
   def create_first_post
     return if body.blank?
+
     attributes = {
       user: poster,
       body: body
@@ -24,6 +25,7 @@ module VirtualBody
 
   def format_options
     return {} if format.blank?
+
     { format: format }
   end
 
@@ -36,6 +38,7 @@ module VirtualBody
 
   def update_post_body
     return unless body.present? && body != posts.first.body
+
     posts.first.update(post_attributes)
   end
 end

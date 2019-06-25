@@ -62,6 +62,7 @@ class Configuration
   def load
     saved_config = Sugar.redis.get("configuration")
     return unless saved_config
+
     @configuration = JSON.parse(saved_config).symbolize_keys
   end
 
@@ -94,6 +95,7 @@ class Configuration
 
   def valid_type?(key, value)
     return true if value.nil?
+
     if type_for(key) == :boolean
       value.is_a?(TrueClass) || value.is_a?(FalseClass)
     else
@@ -103,11 +105,13 @@ class Configuration
 
   def validate_setting(key)
     return if setting?(key)
+
     raise(InvalidConfigurationKey, ":#{key} is not a valid option")
   end
 
   def validate_type(key, value)
     return if valid_type?(key, parse_value(key, value))
+
     raise(ArgumentError,
           "expected #{self.class.settings[key].type}, " \
           "got #{value.class} (#{value.inspect})")

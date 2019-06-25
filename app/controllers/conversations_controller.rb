@@ -113,6 +113,7 @@ class ConversationsController < ApplicationController
   def find_remove_user
     @user = User.find_by(username: params[:username])
     return if @exchange.removeable_by?(@user, current_user)
+
     flash[:error] = "You can't do that!"
     redirect_to @exchange
   end

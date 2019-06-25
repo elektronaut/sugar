@@ -75,6 +75,7 @@ class Exchange < ApplicationRecord
     return false unless user
     return true if user.moderator?
     return false if closer && !moderators.include?(closer)
+
     moderators.include?(user)
   end
 
@@ -91,6 +92,7 @@ class Exchange < ApplicationRecord
 
   def validate_closed
     return unless closed_changed?
+
     if !closed? && (!updated_by || !closeable_by?(updated_by))
       errors.add(:closed, "can't be changed!")
     elsif closed?

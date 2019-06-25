@@ -70,6 +70,7 @@ module ExchangesController
 
   def mark_as_viewed!(exchange, last_post, count)
     return unless current_user?
+
     current_user.mark_exchange_viewed(exchange, last_post, count)
   end
 
@@ -84,6 +85,7 @@ module ExchangesController
   def require_and_set_search_query
     @search_query = search_query
     return if @search_query
+
     flash[:notice] = "No query specified!"
     redirect_to root_url
   end

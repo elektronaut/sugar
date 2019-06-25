@@ -51,6 +51,7 @@ class ImageFetcher
     Nokogiri::HTML::DocumentFragment.parse(str).css("img").each do |element|
       post_image = fetch_image(elem_src(element))
       next unless post_image
+
       [
         element.to_s,
         element.to_s.gsub(/>$/, "/>"), # Nokogiri botches self-closing tags
@@ -68,6 +69,7 @@ class ImageFetcher
     return nil unless uri
     # Only fetch imgurl URLs for now
     return nil unless host_whitelist?(URI.parse(uri).hostname)
+
     find_image(uri) || create_image(uri)
   end
 

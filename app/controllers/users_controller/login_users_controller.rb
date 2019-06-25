@@ -34,11 +34,13 @@ class UsersController < ApplicationController
 
     def detect_admin_signup
       return if User.any?
+
       redirect_to new_user_path
     end
 
     def check_if_already_logged_in
       return unless current_user?
+
       redirect_to discussions_url
     end
   end
