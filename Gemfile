@@ -15,6 +15,7 @@ gem "mysql2", "~> 0.5"
 gem "pg"
 gem "sqlite3"
 
+gem "dalli"
 gem "hiredis"
 gem "redis", "~> 4.1"
 
