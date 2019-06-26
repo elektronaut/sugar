@@ -8,7 +8,6 @@ if defined?(PhusionPassenger)
       require "redis"
 
       # The important two lines
-      Sugar.redis.client.disconnect
       Sugar.redis = Redis.new
     end
   end

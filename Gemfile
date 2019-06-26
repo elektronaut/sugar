@@ -11,12 +11,12 @@ gem "rails", "~> 5.2.1"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem "mysql2", "~> 0.4.10"
+gem "mysql2", "~> 0.5"
 gem "pg"
 gem "sqlite3"
 
 gem "hiredis"
-gem "redis", "~> 3.3.0"
+gem "redis", "~> 4.1"
 gem "redis-rails"
 
 gem "backbone-on-rails"
@@ -54,7 +54,7 @@ gem "doorkeeper" # , '~> 0.7.2'
 gem "acts_as_list"
 
 gem "daemon-spawn"
-gem "httparty", "~> 0.16.2"
+gem "httparty", "~> 0.17"
 gem "nokogiri"
 
 gem "progress_bar"
@@ -92,7 +92,7 @@ group :test do
 end
 
 group :test, :development do
-  gem "dotenv-rails", "~> 0.10.0"
+  gem "dotenv-rails"
   # gem "listen"
   gem "puma"
 
