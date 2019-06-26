@@ -13,8 +13,8 @@ Rails.application.configure do
   config.eager_load = false
 
   # Use Redis for the cache store
-  config.cache_store = :redis_store,
-                       "redis://localhost:6379/0/cache",
+  config.cache_store = :redis_cache_store,
+                       "redis://localhost:6379/0",
                        { expires_in: 90.minutes }
 
   # Show full error reports.

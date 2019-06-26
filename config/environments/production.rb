@@ -67,8 +67,8 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  config.cache_store = :redis_store,
-                       "redis://localhost:6379/4/cache",
+  config.cache_store = :redis_cache_store,
+                       "redis://localhost:6379/4",
                        { expires_in: 180.minutes }
 
   # Use a real queuing backend for Active Job (and separate queues per
