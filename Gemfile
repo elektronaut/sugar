@@ -17,7 +17,6 @@ gem "sqlite3"
 
 gem "hiredis"
 gem "redis", "~> 4.1"
-gem "redis-rails"
 
 gem "backbone-on-rails"
 gem "coffee-rails"
