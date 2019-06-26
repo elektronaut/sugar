@@ -12,10 +12,7 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Use Redis for the cache store
-  config.cache_store = :redis_cache_store,
-                       "redis://localhost:6379/0",
-                       { expires_in: 90.minutes }
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
   # Show full error reports.
   config.consider_all_requests_local = true
