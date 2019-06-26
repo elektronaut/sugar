@@ -197,10 +197,6 @@ GEM
     json_spec (1.1.5)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
-    listen (3.1.5)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-      ruby_dep (~> 1.2)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -338,8 +334,6 @@ GEM
     ruby-filemagic (0.7.2)
     ruby-oembed (0.12.0)
     ruby-progressbar (1.10.1)
-    ruby_dep (1.5.0)
-    ruby_gntp (0.3.4)
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -448,7 +442,6 @@ DEPENDENCIES
   jquery-rails
   json
   json_spec
-  listen
   mysql2 (~> 0.4.10)
   newrelic_rpm
   nokogiri
@@ -459,7 +452,6 @@ DEPENDENCIES
   puma
   rails (~> 5.2.1)
   rails-controller-testing
-  rb-fsevent
   redcarpet (~> 3.0)
   redis (~> 3.3.0)
   redis-rails
@@ -469,7 +461,6 @@ DEPENDENCIES
   rubocop-rspec
   ruby-filemagic
   ruby-oembed
-  ruby_gntp
   sass-rails (~> 5.0)
   sentry-raven
   shoulda-matchers

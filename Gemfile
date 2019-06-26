@@ -77,11 +77,6 @@ group :development do
   gem "yui-compressor", require: "yui/compressor"
 end
 
-group :development_mac do
-  gem "rb-fsevent"
-  gem "ruby_gntp"
-end
-
 group :test do
   gem "codeclimate-test-reporter", require: false
   gem "rails-controller-testing"
@@ -98,7 +93,7 @@ end
 
 group :test, :development do
   gem "dotenv-rails", "~> 0.10.0"
-  gem "listen"
+  # gem "listen"
   gem "puma"
 
   gem "sunspot-rails-tester"
