@@ -2,7 +2,7 @@
 
 class ConvertTrustedDiscussionsToConversations < ActiveRecord::Migration[5.2]
   def up
-    trusted_users = User.where(
+    trusted_users = User.active_and_memorialized.where(
       "trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?",
       true,
       true,
