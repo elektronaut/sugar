@@ -67,7 +67,8 @@ module ExchangeParticipant
   end
 
   def unread_conversations_count
-    conversation_relationships.where(new_posts: true).count
+    conversation_relationships.where(new_posts: true,
+                                     notifications: true).count
   end
 
   def unread_conversations?
