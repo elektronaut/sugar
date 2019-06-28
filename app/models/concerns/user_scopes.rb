@@ -60,15 +60,5 @@ module UserScopes
       active_and_memorialized.where("public_posts_count > 0")
                              .order("public_posts_count DESC")
     end
-
-    def trusted
-      active_and_memorialized.where(
-        "trusted = ? OR admin = ? OR user_admin = ? OR moderator = ?",
-        true,
-        true,
-        true,
-        true
-      )
-    end
   end
 end

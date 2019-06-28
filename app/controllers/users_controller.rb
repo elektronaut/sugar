@@ -126,7 +126,7 @@ class UsersController < ApplicationController
   def allowed_user_admin_params
     return [] unless current_user&.user_admin?
 
-    %i[username user_admin moderator trusted available_invites
+    %i[username user_admin moderator available_invites
        status banned_until]
   end
 

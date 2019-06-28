@@ -44,11 +44,10 @@ describe ExchangesHelper do
     context "when exchange has flags" do
       let(:exchange) do
         create(
-          :discussion, trusted: true, nsfw: true, sticky: true, closed: true
+          :discussion, nsfw: true, sticky: true, closed: true
         )
       end
 
-      it { is_expected.to include("trusted") }
       it { is_expected.to include("sticky") }
       it { is_expected.to include("closed") }
       it { is_expected.to include("nsfw") }

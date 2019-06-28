@@ -11,7 +11,6 @@ describe Exchange do
   end
   let(:nsfw_exchange) { create(:exchange, nsfw: true) }
   let(:user) { create(:user) }
-  let(:trusted_user) { create(:trusted_user) }
   let(:moderator) { create(:moderator) }
   let(:user_admin) { create(:user_admin) }
   let(:admin) { create(:admin) }
@@ -58,7 +57,6 @@ describe Exchange do
 
   describe "#labels?" do
     specify { expect(described_class.new.labels?).to eq(false) }
-    specify { expect(described_class.new(trusted: true).labels?).to eq(true) }
     specify { expect(described_class.new(sticky: true).labels?).to eq(true) }
     specify { expect(described_class.new(closed: true).labels?).to eq(true) }
     specify { expect(described_class.new(nsfw: true).labels?).to eq(true) }
@@ -66,9 +64,6 @@ describe Exchange do
 
   describe "#labels" do
     specify { expect(described_class.new.labels).to eq([]) }
-    specify do
-      expect(described_class.new(trusted: true).labels).to eq(["Trusted"])
-    end
     specify do
       expect(described_class.new(sticky: true).labels).to eq(["Sticky"])
     end
@@ -81,9 +76,9 @@ describe Exchange do
     specify do
       expect(
         described_class.new(
-          trusted: true, sticky: true, closed: true, nsfw: true
+          sticky: true, closed: true, nsfw: true
         ).labels
-      ).to eq(%w[Trusted Sticky Closed NSFW])
+      ).to eq(%w[Sticky Closed NSFW])
     end
   end
 
@@ -220,12 +215,11 @@ describe Exchange do
 
   describe "#unlabel!" do
     let(:exchange) do
-      create(:discussion, trusted: true, sticky: true, closed: true, nsfw: true)
+      create(:discussion, sticky: true, closed: true, nsfw: true)
     end
 
     before { exchange.unlabel! }
 
-    specify { expect(exchange.trusted?).to eq(false) }
     specify { expect(exchange.sticky?).to eq(false) }
     specify { expect(exchange.closed?).to eq(false) }
     specify { expect(exchange.nsfw?).to eq(false) }

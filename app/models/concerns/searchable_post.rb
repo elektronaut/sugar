@@ -10,7 +10,6 @@ module SearchablePost
       integer :exchange_id
       time :created_at
       time :updated_at
-      boolean :trusted
       boolean :conversation
       boolean :deleted
     end
@@ -22,7 +21,6 @@ module SearchablePost
       perform_search(
         query,
         options[:page],
-        (options[:user] && options[:user].trusted?),
         options[:exchange],
         user: user
       ).results
@@ -45,11 +43,10 @@ module SearchablePost
       [str.gsub(user_search_expr(users.first), ""), users.first]
     end
 
-    def perform_search(query, page, trusted, exchange, user: nil)
+    def perform_search(query, page, exchange, user: nil)
       Post.search do
         fulltext(query)
         with(:deleted, false)
-        with(:trusted, false) unless trusted
         with(:exchange_id, exchange.id) if exchange
         with(:conversation, false) unless exchange
         with(:user_id, user.id) if user

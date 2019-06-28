@@ -47,12 +47,11 @@ class Exchange < ApplicationRecord
   end
 
   def labels?
-    closed? || sticky? || nsfw? || trusted? ? true : false
+    closed? || sticky? || nsfw? ? true : false
   end
 
   def labels
     labels = []
-    labels << "Trusted" if trusted?
     labels << "Sticky"  if sticky?
     labels << "Closed"  if closed?
     labels << "NSFW"    if nsfw?
@@ -81,7 +80,6 @@ class Exchange < ApplicationRecord
 
   def unlabel!
     update(
-      trusted: false,
       sticky: false,
       closed: false,
       nsfw: false

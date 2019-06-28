@@ -1,16 +1,5 @@
 $(Sugar).bind('ready', function() {
   $('.edit_user_profile').each(function() {
-    let checkTrusted = function() {
-      let alwaysTrusted = $('#user_user_admin:checked').val() ||
-                          $('#user_moderator:checked').val();
-      if (alwaysTrusted) {
-        $('#user_trusted').attr('checked', true);
-        $('#user_trusted').attr('disabled', true);
-      } else {
-        $('#user_trusted').attr('disabled', false);
-      }
-    };
-
     let checkAdmin = function() {
       if ($('#user_admin:checked').val()) {
         $('#user_moderator').attr('checked', true).attr('disabled', true);
@@ -28,14 +17,11 @@ $(Sugar).bind('ready', function() {
     }
 
     $('#user_status').change(checkUserStatus);
-    $('#user_moderator, #user_user_admin').click(checkTrusted);
-    $('#user_admin').click(checkAdmin).click(checkTrusted);
     $(this).find('.clear-location').click(function() {
       window.clearLocation();
       return false;
     });
     checkAdmin();
-    checkTrusted();
     checkUserStatus();
   });
 

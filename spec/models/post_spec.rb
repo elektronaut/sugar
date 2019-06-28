@@ -5,12 +5,9 @@ require "rails_helper"
 
 describe Post do
   let(:discussion) { create(:discussion) }
-  let(:trusted_discussion) { create(:trusted_discussion) }
   let(:conversation) { create(:conversation) }
   let(:post) { create(:post) }
-  let(:trusted_post) { create(:trusted_post) }
   let(:user) { create(:user) }
-  let(:trusted_user) { create(:trusted_user) }
   let(:moderator) { create(:moderator) }
   let(:admin) { create(:admin) }
   let(:user_admin) { create(:user_admin) }
@@ -243,14 +240,7 @@ describe Post do
   end
 
   describe "#viewable_by?" do
-    context "when it isn't trusted" do
-      specify { expect(post.viewable_by?(user)).to eq(true) }
-    end
-
-    context "when it is trusted" do
-      specify { expect(trusted_post.viewable_by?(user)).to eq(false) }
-      specify { expect(trusted_post.viewable_by?(trusted_user)).to eq(true) }
-    end
+    specify { expect(post.viewable_by?(user)).to eq(true) }
 
     context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
@@ -290,21 +280,6 @@ describe Post do
       let(:post) { mentioning_post }
 
       it { is_expected.to match_array(mentioned_users) }
-    end
-  end
-
-  describe "#update_trusted_status" do
-    context "when in a regular discussion" do
-      let(:post) { create(:post, exchange: discussion) }
-
-      specify { expect(post.trusted?).to eq(false) }
-      specify { expect(post.conversation?).to eq(false) }
-    end
-
-    context "when in a trusted discussion" do
-      let(:post) { create(:post, exchange: trusted_discussion) }
-
-      specify { expect(post.trusted?).to eq(true) }
     end
   end
 

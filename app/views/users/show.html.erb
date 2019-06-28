@@ -257,7 +257,7 @@
 </div>
 <div id="userPosts">
   <% if @posts && @posts.length > 0 %>
-    <% cache [@user, "profile/posts", current_user.try(&:trusted?)] do %>
+    <% cache [@user, "profile/posts"] do %>
       <%= render(partial: "posts/posts",
                  locals: { posts: @posts,
                            title: true,

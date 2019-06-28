@@ -108,7 +108,6 @@ class DiscussionsController < ApplicationController
   def exchange_params
     params.require(:discussion)
           .permit(%i[title body format nsfw closed] +
-                  (current_user.trusted? ? [:trusted] : []) +
                   (current_user.moderator? ? [:sticky] : []))
   end
 

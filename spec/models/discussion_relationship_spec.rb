@@ -5,7 +5,6 @@ require "rails_helper"
 describe DiscussionRelationship do
   let(:relationship)       { create(:discussion_relationship) }
   let(:discussion)         { create(:discussion) }
-  let(:trusted_discussion) { create(:trusted_discussion) }
   let(:user)               { create(:user) }
 
   it { is_expected.to belong_to(:user) }
@@ -55,18 +54,6 @@ describe DiscussionRelationship do
   end
 
   describe ".define" do
-    context "when the discussion is trusted" do
-      let(:relationship) { described_class.define(user, trusted_discussion) }
-
-      specify { expect(relationship.trusted?).to eq(true) }
-    end
-
-    context "when the discussion isn't trusted" do
-      let(:relationship) { described_class.define(user, discussion) }
-
-      specify { expect(relationship.trusted?).to eq(false) }
-    end
-
     context "with no existing relationship" do
       let(:relationship) do
         described_class.define(user, discussion, favorite: true)

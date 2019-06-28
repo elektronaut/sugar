@@ -50,16 +50,6 @@ class UsersController < ApplicationController
 
     def map; end
 
-    def trusted
-      if current_user&.trusted?
-        @users = User.trusted.by_username
-        respond_with_users(@users)
-      else
-        flash[:notice] = "You need to be trusted to view this page!"
-        redirect_to users_url
-      end
-    end
-
     private
 
     def serialize_users(users); end

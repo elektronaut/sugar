@@ -16,7 +16,7 @@ class DiscussionRelationship < ApplicationRecord
         user_id: user.id,
         discussion_id: discussion.id
       )
-      relationship.update(options.merge(trusted: discussion.trusted))
+      relationship.update(options)
       relationship.save
       relationship
     end

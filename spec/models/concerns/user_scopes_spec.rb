@@ -113,17 +113,4 @@ describe UserScopes do
 
     it { is_expected.to eq([user2, user1]) }
   end
-
-  describe "trusted" do
-    subject { User.trusted }
-
-    let!(:trusted) { create(:trusted_user) }
-    let!(:admin) { create(:admin) }
-    let!(:moderator) { create(:moderator) }
-    let!(:user_admin) { create(:user_admin) }
-
-    before { create(:user) }
-
-    it { is_expected.to match_array([trusted, admin, moderator, user_admin]) }
-  end
 end
