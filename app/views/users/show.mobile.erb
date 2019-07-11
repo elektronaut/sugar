@@ -49,10 +49,12 @@
       </tr>
     <% end %>
 
-    <% if @user.msn? %>
+    <% if @user.twitter? %>
       <tr>
-        <th>MSN</th>
-        <td><%= @user.msn %></td>
+        <th>Twitter</th>
+        <td>
+          <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+        </td>
       </tr>
     <% end %>
 
@@ -63,11 +65,26 @@
       </tr>
     <% end %>
 
-    <% if @user.twitter? %>
+    <% if @user.msn? %>
       <tr>
-        <th>Twitter</th>
+        <th>MSN</th>
+        <td><%= @user.msn %></td>
+      </tr>
+    <% end %>
+
+    <% if @user.aim? %>
+      <tr>
+        <th>MSN</th>
+        <td><%= @user.aim %></td>
+      </tr>
+    <% end %>
+
+    <% if @user.instagram? %>
+      <tr>
+        <th>Instagram</th>
         <td>
-          <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+          <%= link_to(@user.instagram,
+                      "http://www.instagram.com/#{@user.instagram}/") %>
         </td>
       </tr>
     <% end %>
