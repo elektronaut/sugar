@@ -178,7 +178,8 @@
       <br />
     <% end %>
     <% if @user.instagram? %>
-      <strong>Instagram</strong>: <%= @user.instagram %>
+      <strong>Instagram</strong>:
+      <%= link_to @user.instagram, "https://www.instagram.com/#{@user.instagram}" %>
       <br />
     <% end %>
     <% if @user.flickr? %>
@@ -190,7 +191,7 @@
     <% if @user.last_fm? %>
       <strong>LastFM</strong>:
       <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
-      <br>
+      <br />
     <% end %>
   </p>
 
@@ -198,10 +199,7 @@
         @user.nintendo_switch? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
       <% if @user.gamertag? %>
-        <strong>Xbox Live:</strong>
-        <a href="http://gamercard.xbox.com/en-US/Profile?Gamertag=<?= @user.gamertag ?>">
-          <%= @user.gamertag %>
-        </a>
+        <strong>Xbox Live:</strong> <%= @user.gamertag %>
         <br />
       <% end %>
       <% if @user.sony? %>
