@@ -7,6 +7,7 @@ sudo: false
 cache: bundler
 services:
   - mysql
+  - postgresql
   - redis
 env:
   - SUGAR_DB=sqlite
