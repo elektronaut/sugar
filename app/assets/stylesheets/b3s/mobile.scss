@@ -594,9 +594,14 @@ blockquote cite {
 
 .reply {
   padding: 15px 10px 5px 10px;
+  &, * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }
 textarea.rich {
-  width: 98%;
+  width: 100%;
   max-width: 650px;
   height: 180px;
   margin: 0 auto;
@@ -617,7 +622,7 @@ textarea.rich {
   padding: 0px 2px 0px 0px;
   line-height: 30px;
   margin-bottom: 0px;
-  width: 98%;
+  width: 100%;
   max-width: 650px;
   li {
     list-style: none;
