@@ -215,12 +215,16 @@
 
     function addHotkey(hotkey, callback) {
       textarea.addEventListener("keydown", (evt) => {
+        var key;
         if (evt.which >= 65 && evt.which <= 90) {
-          const key = String.fromCharCode(evt.keyCode).toLowerCase();
-          if ((evt.metaKey || evt.ctrlKey) && key === hotkey) {
-            evt.preventDefault();
-            performAction(callback);
-          }
+          key = String.fromCharCode(evt.keyCode).toLowerCase();
+        } else if (evt.keyCode === 13) {
+          key = "enter";
+        }
+
+        if ((evt.metaKey || evt.ctrlKey) && key === hotkey) {
+          evt.preventDefault();
+          performAction(callback);
         }
       });
     }
@@ -258,6 +262,10 @@
       return ["", selection, ""];
     };
 
+    const submit = () => {
+      $(textarea).closest("form").submit();
+    };
+
     addButton("Bold", "bold", bold);
     addButton("Italics", "italic", italic);
     addButton("Link", "link", link);
@@ -271,6 +279,7 @@
     addHotkey("b", bold);
     addHotkey("i", italic);
     addHotkey("k", link);
+    addHotkey("enter", submit);
 
     $(Sugar).on("quote", function(event, data) {
       let [prefix, replacement, postfix] = decorator().quote(
