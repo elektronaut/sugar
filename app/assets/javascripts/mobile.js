@@ -11,6 +11,8 @@
 //= require sugar
 //= require sugar/facebook
 //= require sugar/posts/embeds
+//= require sugar/markdown_decorator
+//= require sugar/html_decorator
 //= require sugar/rich_text
 //= require sugar/timestamps
 //= require sugar/user
