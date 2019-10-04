@@ -247,7 +247,7 @@
       return !!url ? decorator().image(url) : false;
     };
 
-    const uploadImage = () => uploadImage(textarea);
+    const uploadImageAction = () => uploadImage(textarea);
 
     const code = (selection) => {
       let lang = prompt(
@@ -270,7 +270,7 @@
     addButton("Italics", "italic", italic);
     addButton("Link", "link", link);
     addButton("Image", "picture-o", imageTag);
-    addButton("Upload Image", "upload", uploadImage);
+    addButton("Upload Image", "upload", uploadImageAction);
     addButton("Block Quote", "quote-left", blockquote);
     addButton("Code", "code", code);
     addButton("Spoiler", "warning", spoiler);
