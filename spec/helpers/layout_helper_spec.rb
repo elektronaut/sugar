@@ -92,8 +92,8 @@ describe LayoutHelper do
     context "with no exchange" do
       specify do
         expect(options).to eq([
-                                ["in discussions", helper.search_path],
-                                ["in posts", helper.search_posts_path]
+                                ["Discussions", helper.search_path],
+                                ["Posts", helper.search_posts_path]
                               ])
       end
     end
@@ -104,9 +104,9 @@ describe LayoutHelper do
       before { helper.instance_variable_set("@exchange", discussion) }
 
       specify do
-        expect(options).to eq([["in discussions", helper.search_path],
-                               ["in posts", helper.search_posts_path],
-                               ["in this discussion",
+        expect(options).to eq([["Discussions", helper.search_path],
+                               ["Dosts", helper.search_posts_path],
+                               ["This discussion",
                                 helper.polymorphic_path([:search_posts,
                                                          discussion])]])
       end
