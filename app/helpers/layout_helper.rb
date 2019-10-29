@@ -32,10 +32,10 @@ module LayoutHelper
   end
 
   def search_mode_options
-    options = [["in discussions", search_path], ["in posts", search_posts_path]]
+    options = [["Discussions", search_path], ["Posts", search_posts_path]]
     if @exchange&.id
       options << [
-        "in this #{@exchange.type.downcase}",
+        "This #{@exchange.type.downcase}",
         polymorphic_path([:search_posts, @exchange])
       ]
     end
