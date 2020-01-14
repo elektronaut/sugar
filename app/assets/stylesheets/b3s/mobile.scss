@@ -439,6 +439,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .body h6 {
   font-size: 1.1em;
 }
+.post .body small {
+  font-size: 12px;
+}
 .post .body ul, .post .body ol {
   &,
   &:before,
