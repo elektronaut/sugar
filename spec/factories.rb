@@ -82,6 +82,16 @@ FactoryBot.define do
     user
   end
 
+  factory :social_service do
+    sequence(:name) { |n| "Social Service #{n}" }
+  end
+
+  factory :social_service_link do
+    user
+    social_service
+    sequence(:username) { |n| "lonelygirl#{n}" }
+  end
+
   factory :user do
     sequence(:username) { |n| "lonelygirl#{n}" }
     sequence(:realname) { |n| "Sugar User #{n}" }

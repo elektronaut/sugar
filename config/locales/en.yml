@@ -25,19 +25,6 @@ en:
         user_admin: User administrator
         admin: Administrator
         website: Web site
-        gtalk: Google Talk
-        msn: MSN Messenger
-        aim: AIM
-        gamertag: Xbox Live Gamertag
-        sony: PlayStation username
-        nintendo: Nintendo ID
-        nintendo_switch: Nintendo Switch ID
-        steam: Steam ID
-        battlenet: Battle.net BattleTag
-        twitter: Twitter username
-        flickr: Flickr user ID
-        last_fm: Last.fm username
-        instagram: Instagram username
         email: Email address
         password: Password
         confirm_password: Confirm password
@@ -133,7 +120,6 @@ en:
       warning: Warning
       missing_time_zone_link: "You haven't %{link} yet!"
       chosen_a_time_zone: chosen a time zone
-      gaming: Gaming
       social_media: Social Media
       messaging: Messaging
     new:

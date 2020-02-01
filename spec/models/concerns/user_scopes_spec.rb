@@ -65,35 +65,6 @@ describe UserScopes do
     it { is_expected.to match_array([admin, moderator, user_admin]) }
   end
 
-  describe "social" do
-    subject { User.social }
-
-    let!(:twitter) { create(:admin, twitter: "elektronaut") }
-    let!(:instagram) { create(:admin, instagram: "elektronaut") }
-    let!(:flickr) { create(:admin, flickr: "elektronaut") }
-
-    before { create(:user) }
-
-    it { is_expected.to match_array([twitter, instagram, flickr]) }
-  end
-
-  describe "gaming" do
-    let!(:gamertag) { create(:user, gamertag: "example") }
-    let!(:sony) { create(:user, sony: "example") }
-    let!(:nintendo) { create(:user, nintendo: "example") }
-    let!(:nintendo_switch) { create(:user, nintendo_switch: "example") }
-    let!(:steam) { create(:user, steam: "example") }
-    let!(:battlenet) { create(:user, battlenet: "example#1234") }
-
-    before { create(:user) }
-
-    it "is a list of all gaming profiles" do
-      expect(User.gaming).to match_array(
-        [gamertag, sony, nintendo, nintendo_switch, steam, battlenet]
-      )
-    end
-  end
-
   describe "recently_joined" do
     subject { User.recently_joined }
 
