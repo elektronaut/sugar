@@ -34,12 +34,8 @@ class UsersController < ApplicationController
     end
 
     def social
-      @users = User.social.by_username
-      respond_with_users(@users)
-    end
-
-    def gaming
-      @users = User.gaming.by_username
+      # @users = User.social.by_username
+      @users = User.active_and_memorialized.by_username
       respond_with_users(@users)
     end
 

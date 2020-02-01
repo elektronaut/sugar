@@ -1,0 +1,12 @@
+<% user.social_service_links.enabled.sorted.each do |sl| %>
+  <tr>
+    <th><%= sl.social_service.name %></th>
+    <td>
+      <% if sl.link? %>
+        <%= link_to(sl.link_text, sl.link_url) %>
+      <% else %>
+        <%= sl.username %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

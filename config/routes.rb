@@ -67,7 +67,6 @@ Rails.application.routes.draw do
       get "disconnect_facebook"
 
       get "social"
-      get "gaming"
       get "online"
       get "recently_joined"
       get "admins"
