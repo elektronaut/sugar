@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SocialServiceLink < ApplicationRecord
   belongs_to :user
   belongs_to :social_service
@@ -7,7 +9,7 @@ class SocialServiceLink < ApplicationRecord
   scope :with_service, -> { joins(:social_service) }
 
   def link?
-    !link_url.blank?
+    link_url.present?
   end
 
   def link_text

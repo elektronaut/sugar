@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SocialService < ApplicationRecord
   has_many :social_service_links, dependent: :destroy
   has_many :users, through: :social_service_links

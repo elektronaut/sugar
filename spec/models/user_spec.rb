@@ -11,7 +11,7 @@ describe User do
   let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
     %w[admin banned_until created_at description id facebook_uid inviter_id
-       last_active  latitude location longitude moderator  realname  user_admin
+       last_active latitude location longitude moderator realname user_admin
        username website status]
   end
 
