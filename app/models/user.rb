@@ -33,6 +33,9 @@ class User < ApplicationRecord
             uniqueness: { case_sensitive: false,
                           message: "is already registered" }
 
+  validates :stylesheet_url, url: { allow_blank: true }
+  validates :mobile_stylesheet_url, url: { allow_blank: true }
+
   def name_and_email
     realname? ? "#{realname} <#{email}>" : email
   end

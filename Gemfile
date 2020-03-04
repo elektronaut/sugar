@@ -27,6 +27,7 @@ gem "json"
 gem "sass-rails", "~> 5.0"
 gem "sprockets-es6"
 gem "uglifier"
+gem "validate_url"
 
 gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
 gem "gemoji"

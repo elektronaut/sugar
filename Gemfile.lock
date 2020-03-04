@@ -375,6 +375,9 @@ GEM
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.0)
+    validate_url (1.0.8)
+      activemodel (>= 3.0.0)
+      public_suffix
     vector2d (2.2.3)
       contracts (~> 0.9.0)
     web-console (3.7.0)
@@ -457,6 +460,7 @@ DEPENDENCIES
   sunspot_rails (~> 2.2.0)
   sunspot_solr (~> 2.1.0)
   uglifier
+  validate_url
   web-console
   webmock
   yui-compressor

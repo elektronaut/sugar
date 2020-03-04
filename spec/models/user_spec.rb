@@ -41,6 +41,30 @@ describe User do
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
   it { is_expected.to validate_presence_of(:email) }
 
+  it "accepts a valid url for stylesheet_url" do
+    expect(subject).to(
+      allow_value("https://example.com/stylesheet.css").for(:stylesheet_url)
+    )
+  end
+
+  it "does not accept invalid values for stylesheet_url" do
+    expect(subject).not_to(
+      allow_value("invalid").for(:stylesheet_url)
+    )
+  end
+
+  it "accepts a valid url for mobile_stylesheet_url" do
+    expect(subject).to(
+      allow_value("https://example.com/stylesheet.css").for(:mobile_stylesheet_url)
+    )
+  end
+
+  it "does not accept invalid values for mobile_stylesheet_url" do
+    expect(subject).not_to(
+      allow_value("invalid").for(:mobile_stylesheet_url)
+    )
+  end
+
   describe "#name_and_email" do
     subject { user.name_and_email }
 
