@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   before_action :load_user,
                 only: %i[show edit update destroy participated discussions posts
-                         grant_invite revoke_invites stats]
+                         grant_invite revoke_invites stats mute unmute]
 
   before_action :detect_edit_page, only: %i[edit update]
   before_action :verify_editable,  only: %i[edit update]
@@ -74,6 +74,18 @@ class UsersController < ApplicationController
         render action: :edit
       end
     end
+  end
+
+  def mute
+    current_user.mute!(@user)
+    flash[:notice] = "#{@user.username} has been muted."
+    redirect_to user_profile_url(id: @user.username)
+  end
+
+  def unmute
+    current_user.unmute!(@user)
+    flash[:notice] = "#{@user.username} has been unmuted."
+    redirect_to user_profile_url(id: @user.username)
   end
 
   def grant_invite

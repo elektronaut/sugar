@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_26_225031) do
+ActiveRecord::Schema.define(version: 2020_03_10_231312) do
 
   create_table "avatars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "content_hash"
@@ -69,6 +69,27 @@ ActiveRecord::Schema.define(version: 2019_06_26_225031) do
     t.index ["participated"], name: "participated_index"
     t.index ["trusted"], name: "trusted_index"
     t.index ["user_id"], name: "user_id_index"
+  end
+
+  create_table "dynamic_image_variants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.string "image_type", null: false
+    t.bigint "image_id", null: false
+    t.string "content_hash", null: false
+    t.string "content_type", null: false
+    t.integer "content_length", null: false
+    t.string "filename", null: false
+    t.string "format", null: false
+    t.integer "width", null: false
+    t.integer "height", null: false
+    t.integer "crop_width", null: false
+    t.integer "crop_height", null: false
+    t.integer "crop_start_x", null: false
+    t.integer "crop_start_y", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id", "image_type", "format", "width", "height", "crop_width", "crop_height", "crop_start_x", "crop_start_y"], name: "dynamic_image_variants_by_format_and_size", unique: true
+    t.index ["image_id", "image_type"], name: "dynamic_image_variants_by_image"
+    t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image_type_and_image_id"
   end
 
   create_table "exchange_moderators", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -219,6 +240,17 @@ ActiveRecord::Schema.define(version: 2019_06_26_225031) do
     t.index ["user_id"], name: "user_id_index"
   end
 
+  create_table "user_mutes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "muted_user_id"
+    t.bigint "exchange_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exchange_id"], name: "index_user_mutes_on_exchange_id"
+    t.index ["muted_user_id"], name: "index_user_mutes_on_muted_user_id"
+    t.index ["user_id"], name: "index_user_mutes_on_user_id"
+  end
+
   create_table "users", id: :integer, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "username"
     t.string "hashed_password", collation: "utf8_general_ci"
@@ -237,13 +269,6 @@ ActiveRecord::Schema.define(version: 2019_06_26_225031) do
     t.string "location"
     t.date "birthday"
     t.string "stylesheet_url", collation: "utf8mb4_general_ci"
-    t.string "gamertag", collation: "utf8mb4_general_ci"
-    t.string "msn", collation: "utf8mb4_general_ci"
-    t.string "gtalk", collation: "utf8mb4_general_ci"
-    t.string "aim", collation: "utf8mb4_general_ci"
-    t.string "twitter", collation: "utf8mb4_general_ci"
-    t.string "flickr", collation: "utf8mb4_general_ci"
-    t.string "last_fm", collation: "utf8mb4_general_ci"
     t.string "website", collation: "utf8mb4_general_ci"
     t.boolean "notify_on_message", default: true, null: false
     t.integer "available_invites", default: 0, null: false
@@ -258,19 +283,26 @@ ActiveRecord::Schema.define(version: 2019_06_26_225031) do
     t.string "mobile_stylesheet_url", collation: "utf8_general_ci"
     t.string "theme", collation: "utf8_general_ci"
     t.string "mobile_theme", collation: "utf8_general_ci"
-    t.string "instagram", collation: "utf8_general_ci"
     t.string "persistence_token", collation: "utf8_general_ci"
     t.integer "public_posts_count", default: 0, null: false
     t.integer "hidden_count", default: 0, null: false
     t.string "preferred_format", collation: "utf8_general_ci"
-    t.string "sony"
     t.integer "avatar_id"
     t.text "previous_usernames"
-    t.string "nintendo"
-    t.string "steam"
-    t.string "battlenet"
-    t.string "nintendo_switch"
     t.integer "status", default: 0, null: false
+    t.string "aim"
+    t.string "battlenet"
+    t.string "flickr"
+    t.string "gamertag"
+    t.string "gtalk"
+    t.string "instagram"
+    t.string "last_fm"
+    t.string "msn"
+    t.string "nintendo"
+    t.string "nintendo_switch"
+    t.string "sony"
+    t.string "steam"
+    t.string "twitter"
     t.index ["username"], name: "username_index", length: 250
   end
 

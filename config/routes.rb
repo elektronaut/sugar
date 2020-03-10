@@ -79,6 +79,10 @@ Rails.application.routes.draw do
 
   controller :users do
     constraints(id: %r{[^\?/]+}) do
+      post "/users/profile/:id/mute" => :mute,
+           as: :mute_user
+      post "/users/profile/:id/unmute" => :unmute,
+           as: :unmute_user
       post "/users/profile/:id/grant_invite" => :grant_invite,
            as: :grant_invite_user
       post "/users/profile/:id/revoke_invites" => :revoke_invites,
