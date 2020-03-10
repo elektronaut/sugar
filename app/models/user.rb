@@ -10,6 +10,7 @@ class User < ApplicationRecord
   include Authenticable
   include Inviter
   include ExchangeParticipant
+  include HasMutedUsers
   include UserScopes
 
   belongs_to :avatar, dependent: :destroy, optional: true
