@@ -41,6 +41,7 @@
         </div>
       <% end %>
       <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>"
+           data-user_id="<%= post.user.id %>"
            id="post-<%= post.id %>">
         <% if post.me_post? %>
           <div class="body">

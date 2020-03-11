@@ -18,4 +18,9 @@ module HasMutedUsers
     user_mutes.where(muted_user: user,
                      exchange: exchange).destroy_all
   end
+
+  def muted_user_ids(exchange: nil)
+    user_mutes.where(exchange_id: [exchange&.id, nil].uniq)
+              .pluck(:muted_user_id)
+  end
 end
