@@ -29,6 +29,12 @@ module ExchangesHelper
     polymorphic_path(exchange, options)
   end
 
+  def muted_user_ids(exchange)
+    return [] unless current_user?
+
+    current_user.muted_user_ids(exchange: exchange)
+  end
+
   def post_page(post)
     # Speed optimization
     if controller.is_a?(ExchangesController) &&

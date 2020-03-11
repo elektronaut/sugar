@@ -141,6 +141,28 @@ $(document).ready(function () {
     return false;
   });
 
+  // Muted posts
+  $(".post").each(function () {
+    const userId = $(this).data("user_id");
+    if (window.mutedUsers && window.mutedUsers.indexOf(userId) !== -1) {
+      const notice = document.createElement("div");
+      const showLink = document.createElement("a");
+
+      showLink.innerHTML = "Show";
+      showLink.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        this.classList.remove("muted");
+      });
+
+      notice.classList.add("muted-notice");
+      notice.innerHTML = "This post has been muted. "
+      notice.appendChild(showLink);
+
+      this.classList.add("muted");
+      this.appendChild(notice);
+    }
+  })
+
   // Posting
   $('form.new_post').submit(function () {
     let body = $(this).find('#compose-body');

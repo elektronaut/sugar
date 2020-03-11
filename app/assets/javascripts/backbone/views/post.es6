@@ -44,6 +44,7 @@ Sugar.Views.Post = Backbone.View.extend({
     });
     this.wrapEmbeds();
     this.applyAmazonReferralCode();
+    this.applyMuted();
     this.applySpoiler();
     this.embedGifvVideos();
     return this;
@@ -128,6 +129,28 @@ Sugar.Views.Post = Backbone.View.extend({
           link.href += 'tag=' + referralId;
         }
       });
+    }
+  },
+
+  applyMuted: function () {
+    if (window.mutedUsers &&
+        window.mutedUsers.indexOf(this.model.attributes.user_id) !== -1) {
+
+      const notice = document.createElement("div");
+      const showLink = document.createElement("a");
+
+      showLink.innerHTML = "Show";
+      showLink.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        this.el.classList.remove("muted");
+      });
+
+      notice.classList.add("muted-notice");
+      notice.innerHTML = "This post has been muted. "
+      notice.appendChild(showLink);
+
+      this.el.classList.add("muted");
+      this.el.append(notice);
     }
   },
 

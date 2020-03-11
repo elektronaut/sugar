@@ -133,6 +133,11 @@
     Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
   </script>
 
+  <%# Muted users %>
+  <script>
+    window.mutedUsers = <%= muted_user_ids(@exchange).to_json %>;
+  </script>
+
   <%# Custom javascript %>
   <% unless Sugar.config.custom_javascript.blank? %>
     <script>

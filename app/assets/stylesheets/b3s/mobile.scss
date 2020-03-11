@@ -333,6 +333,31 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .posts .post {
   padding: 5px 10px;
   border-bottom: 1px solid #ddd;
+
+  .muted-notice {
+    display: none;
+  }
+
+  &.muted {
+    .functions,
+    .post_info,
+    .body {
+      display: none;
+    }
+    .muted-notice {
+      display: block;
+      color: #888;
+      font-size: 0.9em;
+      padding: 5px 0px;
+      &, a, a:visited {
+        color: #888;
+      }
+      a, a:visited {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .posts .post_distance {

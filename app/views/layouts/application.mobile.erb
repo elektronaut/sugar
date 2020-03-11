@@ -117,6 +117,11 @@
     Sugar.Configuration = <%= frontend_configuration.to_json.html_safe %>;
   </script>
 
+  <%# Muted users %>
+  <script>
+    window.mutedUsers = <%= muted_user_ids(@exchange).to_json %>;
+  </script>
+
   <%# External embeds %>
   <% if @posts && @posts.any? %>
     <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
