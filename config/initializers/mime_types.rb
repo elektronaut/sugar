@@ -6,3 +6,4 @@
 # Mime::Type.register "text/richtext", :rtf
 
 Mime::Type.register_alias "text/html", :mobile
+Mime::Type.register "image/webp", :webp

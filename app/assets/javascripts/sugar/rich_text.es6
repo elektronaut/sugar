@@ -65,6 +65,7 @@
 
   function finishUpload(elem, file, response) {
     uploadError(response);
+    console.log(response);
     if (response.embed) {
       $(elem).val(
         $(elem).val().replace(uploadBanner(file) + "\n", response.embed)
@@ -73,8 +74,6 @@
   }
 
   function failedUpload(elem, file, response) {
-    console.log(typeof(response));
-    console.log(response);
     uploadError(response);
     $(elem).val($(elem).val().replace(uploadBanner(file), ""));
   }
@@ -82,7 +81,7 @@
   function uploadImage(textarea) {
     let fileInput = $(
       "<input type=\"file\" name=\"file\" " +
-      "accept=\"image/gif, image/png, image/jpeg\" " +
+      "accept=\"image/gif, image/png, image/jpeg, image/webp\" " +
       "style=\"display: none;\"/>"
     );
     fileInput.insertBefore(textarea);
@@ -111,7 +110,8 @@
 
   function bindUploads(elem) {
     $(elem).filedrop({
-      allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff'],
+      allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif',
+                         'image/tiff', 'image/webp'],
       maxfiles: 25,
       maxfilesize: 20,
       paramname: "upload[file]",
