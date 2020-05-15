@@ -10,13 +10,23 @@
       <p>
         <%= link_to("Start a conversation",
                     new_conversation_with_path(username: @user.username)) %>
+        <br />
+        <% if current_user.muted?(@user) %>
+          <%= link_to("Unmute user",
+                      unmute_user_path(id: @user.username),
+                      method: :post) %>
+        <% else %>
+          <%= link_to("Mute user",
+                      mute_user_path(id: @user.username),
+                      method: :post) %>
+        <% end %>
       </p>
     <% end %>
   </div>
 
-  <% if @user.banned? %>
+  <% if @user.deactivated? %>
     <p class="banned">
-      <%= @user.username %> is banned!
+      This account has been deactivated.
     </p>
   <% end %>
 
@@ -49,10 +59,12 @@
       </tr>
     <% end %>
 
-    <% if @user.msn? %>
+    <% if @user.twitter? %>
       <tr>
-        <th>MSN</th>
-        <td><%= @user.msn %></td>
+        <th>Twitter</th>
+        <td>
+          <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+        </td>
       </tr>
     <% end %>
 
@@ -63,11 +75,26 @@
       </tr>
     <% end %>
 
-    <% if @user.twitter? %>
+    <% if @user.msn? %>
       <tr>
-        <th>Twitter</th>
+        <th>MSN</th>
+        <td><%= @user.msn %></td>
+      </tr>
+    <% end %>
+
+    <% if @user.aim? %>
+      <tr>
+        <th>MSN</th>
+        <td><%= @user.aim %></td>
+      </tr>
+    <% end %>
+
+    <% if @user.instagram? %>
+      <tr>
+        <th>Instagram</th>
         <td>
-          <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+          <%= link_to(@user.instagram,
+                      "http://www.instagram.com/#{@user.instagram}/") %>
         </td>
       </tr>
     <% end %>

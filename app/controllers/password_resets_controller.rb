@@ -1,29 +1,18 @@
-class PasswordResetsController < ApplicationController
-  before_action :find_user_by_email, only: [:create]
-  before_action :find_password_reset_token, only: [:show, :update]
-  before_action :check_for_expired_token, only: [:show, :update]
+# frozen_string_literal: true
 
-  def new
-  end
+class PasswordResetsController < ApplicationController
+  before_action :find_user_by_email, only: %i[create]
+  before_action :require_user, only: %i[create]
+  before_action :find_password_reset_token, only: %i[show update]
+  before_action :check_for_expired_token, only: %i[show update]
+
+  def new; end
 
   def create
-    if @user
-      @password_reset_token = @user.password_reset_tokens.create
-      deliver_password_reset(@user, @password_reset_token)
-      flash[:notice] = "An email with further instructions has been sent"
-      redirect_to login_users_url
-    else
-      respond_to do |format|
-        format.html do
-          flash.now[:notice] = "Couldn't find a user with that email address"
-          render action: :new
-        end
-        format.mobile do
-          flash[:notice] = "Couldn't find a user with that email address"
-          redirect_to login_users_url
-        end
-      end
-    end
+    @password_reset_token = @user.password_reset_tokens.create
+    deliver_password_reset(@user, @password_reset_token)
+    flash[:notice] = "An email with further instructions has been sent"
+    redirect_to login_users_url
   end
 
   def show
@@ -32,7 +21,7 @@ class PasswordResetsController < ApplicationController
 
   def update
     @user = @password_reset_token.user
-    if !user_params[:password].blank? && @user.update_attributes(user_params)
+    if user_params[:password].present? && @user.update(user_params)
       @password_reset_token.destroy
       @current_user = @user
       flash[:notice] = "Your password has been changed"
@@ -63,7 +52,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def find_password_reset_token
-    @password_reset_token = PasswordResetToken.where(id: params[:id]).first
+    @password_reset_token = PasswordResetToken.find_by(id: params[:id])
     unless @password_reset_token &&
            @password_reset_token.token == params[:token]
       flash[:notice] = "Invalid password reset request"
@@ -72,10 +61,29 @@ class PasswordResetsController < ApplicationController
   end
 
   def check_for_expired_token
-    if @password_reset_token.expired?
-      @password_reset_token.destroy
-      flash[:notice] = "Your password reset link has expired"
-      redirect_to login_users_url
+    return unless @password_reset_token.expired?
+
+    @password_reset_token.destroy
+    flash[:notice] = "Your password reset link has expired"
+    redirect_to login_users_url
+  end
+
+  def render_user_not_found
+    respond_to do |format|
+      format.html do
+        flash.now[:notice] = "Couldn't find a user with that email address"
+        render action: :new
+      end
+      format.mobile do
+        flash[:notice] = "Couldn't find a user with that email address"
+        redirect_to login_users_url
+      end
     end
+  end
+
+  def require_user
+    return if @user
+
+    render_user_not_found
   end
 end

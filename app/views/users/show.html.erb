@@ -56,13 +56,13 @@
   <% end %>
 
   <% if @user.description? %>
-  <div class="description">
-    <%= render_post @user.description %>
-  </div>
+    <div class="description">
+      <%= render_post @user.description %>
+    </div>
   <% end %>
 
   <% if !Sugar.config.signups_allowed && current_user? &&
-        current_user.user_admin? && !@user.user_admin? %>
+    current_user.user_admin? && !@user.user_admin? %>
     <p class="grant_invites">
       <strong>
         Invites:
@@ -77,7 +77,7 @@
                   method: :post,
                   data: {
                     confirm: "Are you sure you want to revoke all invites?"
-                  }) %>
+      }) %>
       <br />
     </p>
   <% end %>
@@ -106,6 +106,16 @@
     <% unless !current_user? || @user == current_user %>
       <%= link_to("Start a conversation with #{@user.username}",
                   new_conversation_with_path(username: @user.username)) %>
+      <br />
+      <% if current_user.muted?(@user) %>
+        <%= link_to("Unmute user",
+                    unmute_user_path(id: @user.username),
+                    method: :post) %>
+      <% else %>
+        <%= link_to("Mute user",
+                    mute_user_path(id: @user.username),
+                    method: :post) %>
+      <% end %>
     <% end %>
   </p>
 
@@ -147,9 +157,8 @@
     <% if @user.memorialized? %>
       This account has been memorialized.
       <br />
-    <% elsif @user.banned? %>
-      <%= @user.username %> has been
-      <span class="banned"><strong>banned!</strong></span>
+    <% elsif @user.deactivated? %>
+      This account has been deactivated.
       <br />
     <% elsif @user.admin? %>
       <%= @user.username %> is an
@@ -179,7 +188,8 @@
       <br />
     <% end %>
     <% if @user.instagram? %>
-      <strong>Instagram</strong>: <%= @user.instagram %>
+      <strong>Instagram</strong>:
+      <%= link_to @user.instagram, "https://www.instagram.com/#{@user.instagram}" %>
       <br />
     <% end %>
     <% if @user.flickr? %>
@@ -191,18 +201,15 @@
     <% if @user.last_fm? %>
       <strong>LastFM</strong>:
       <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
-      <br>
+      <br />
     <% end %>
   </p>
 
   <% if @user.gamertag? || @user.sony? || @user.nintendo? ||
-        @user.nintendo_switch? || @user.steam? || @user.battlenet %>
+    @user.nintendo_switch? || @user.steam? || @user.battlenet %>
     <div class="social gaming">
       <% if @user.gamertag? %>
-        <strong>Xbox Live:</strong>
-        <a href="http://gamercard.xbox.com/en-US/Profile?Gamertag=<?= @user.gamertag ?>">
-          <%= @user.gamertag %>
-        </a>
+        <strong>Xbox Live:</strong> <%= @user.gamertag %>
         <br />
       <% end %>
       <% if @user.sony? %>
@@ -258,9 +265,12 @@
 </div>
 <div id="userPosts">
   <% if @posts && @posts.length > 0 %>
-    <% cache [@user, "profile/posts", current_user.try(&:trusted?)] do %>
+    <% cache [@user, "profile/posts"] do %>
       <%= render(partial: "posts/posts",
-                 locals: { posts: @posts, title: true, no_pagination: true }) %>
+                 locals: { posts: @posts,
+                   title: true,
+                   no_pagination: true,
+                   hide_nsfw: true }) %>
     <% end %>
   <% elsif current_user? && @user == current_user %>
     <div class="welcome">

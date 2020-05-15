@@ -1,16 +1,13 @@
+# frozen_string_literal: true
+
 class UploadsController < ApplicationController
   requires_authentication
   requires_user
 
-  respond_to :xml, :json
-
   def create
     post_image = find_or_create_post_image(upload_params[:file])
-    response = post_image_response(post_image)
-
-    respond_with(response) do |format|
-      format.json { render json: response }
-      format.xml  { render xml: response }
+    respond_to do |format|
+      format.json { render json: post_image_response(post_image) }
     end
   rescue MiniMagick::Error
     upload_error("Unreadable image")
@@ -37,6 +34,7 @@ class UploadsController < ApplicationController
 
   def post_image_response(post_image)
     return {} unless post_image.valid?
+
     {
       name: post_image.filename,
       type: post_image.content_type,
@@ -46,9 +44,8 @@ class UploadsController < ApplicationController
 
   def upload_error(error)
     response = { error: error }
-    respond_with(response) do |format|
-      format.json { render json: response, status: 500 }
-      format.xml  { render xml: response, status: 500 }
+    respond_to do |format|
+      format.json { render json: response, status: :internal_server_error }
     end
   end
 

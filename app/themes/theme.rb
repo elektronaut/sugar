@@ -1,7 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class Theme
-  ATTRIBUTES = [:id, :name, :author, :stylesheet, :mobile_stylesheet].freeze
+  ATTRIBUTES = %i[id name author stylesheet mobile_stylesheet].freeze
   attr_accessor(*ATTRIBUTES)
 
   class << self
@@ -40,6 +40,7 @@ class Theme
       theme_dir  = base_dir.join(id)
       theme_file = theme_dir.join("theme.yml")
       raise "Theme not found" unless File.exist?(theme_file)
+
       Theme.new(YAML.load_file(theme_file).merge(id: id))
     end
   end
@@ -78,10 +79,15 @@ class Theme
 
   private
 
+  def respond_to_missing?(method)
+    base_method = method.to_s.gsub(/\?$/, "").to_sym
+    method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)
+  end
+
   def method_missing(method, *args, &block)
     base_method = method.to_s.gsub(/\?$/, "").to_sym
     if method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)
-      !send(base_method).blank?
+      send(base_method).present?
     else
       super
     end

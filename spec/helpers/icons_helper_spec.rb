@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -55,7 +55,7 @@ describe IconsHelper do
         'b353f0d9c95973a2ce1368ceb64da60.png" />'
     end
 
-    it "should render the icons" do
+    it "renders the icons" do
       expect(helper.icon_tags).to eq(
         icon_tags + apple_icon_tags + windows_icon_tags
       )

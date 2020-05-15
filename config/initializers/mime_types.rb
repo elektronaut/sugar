@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # Be sure to restart your server when you modify this file.
 
@@ -6,3 +6,4 @@
 # Mime::Type.register "text/richtext", :rtf
 
 Mime::Type.register_alias "text/html", :mobile
+Mime::Type.register "image/webp", :webp

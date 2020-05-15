@@ -1,12 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/md5"
 
 class ApplicationController < ActionController::Base
   include Authentication
   include ViewedTrackerHelper
-
-  self.responder = Sugar::Responder
 
   layout "application"
 
@@ -30,9 +28,11 @@ class ApplicationController < ActionController::Base
   end
 
   def error_messages
-    {
-      404 => "Not found"
-    }
+    { 404 => "Not found" }
+  end
+
+  def paginated_json_path(page)
+    page && url_for(page: page, only_path: true, format: :json)
   end
 
   # Renders an error
@@ -47,7 +47,21 @@ class ApplicationController < ActionController::Base
 
   def respond_with_exchanges(exchanges)
     viewed_tracker.exchanges = exchanges
-    respond_with(exchanges)
+    respond_to do |format|
+      format.html {}
+      format.mobile {}
+      format.json do
+        serializer = ExchangeSerializer.new(
+          exchanges,
+          include: %i[poster last_poster],
+          links: { self: paginated_json_path(exchanges.current_page),
+                   next: paginated_json_path(exchanges.next_page),
+                   previous: paginated_json_path(exchanges.previous_page) },
+          params: { tracker: viewed_tracker }
+        )
+        render json: serializer.serialized_json
+      end
+    end
   end
 
   def load_configuration
@@ -67,16 +81,19 @@ class ApplicationController < ActionController::Base
 
   def detect_mobile
     return unless mobile_user_agent?
+
     session[:mobile_format] = params[:mobile_format] ||
                               session[:mobile_format] ||
                               "mobile"
-    if session[:mobile_format] == "mobile" && request.format == "text/html"
-      request.format = :mobile
-    end
+    return unless session[:mobile_format] == "mobile" &&
+                  request.format == "text/html"
+
+    request.format = :mobile
   end
 
   def require_s3
     return if Sugar.aws_s3?
+
     flash[:notice] = "Amazon Web Services not configured!"
     redirect_to root_url
   end
@@ -94,8 +111,8 @@ class ApplicationController < ActionController::Base
 
   def set_section
     mapping = {
-      UsersController         => :users,
-      InvitesController       => :invites,
+      UsersController => :users,
+      InvitesController => :invites,
       ConversationsController => :conversations
     }
     mapping[self.class] || :discussions

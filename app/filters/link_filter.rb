@@ -1,7 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class LinkFilter < Filter
-  HTTPS_WHITELIST = %w(
+  HTTPS_WHITELIST = %w[
     youtube.com
     *.youtube.com
     vimeo.com
@@ -9,7 +9,7 @@ class LinkFilter < Filter
     i.imgur.com
     *.cloudfront.net
     *.s3.amazonaws.com
-  ).freeze
+  ].freeze
 
   def process(post)
     @post = post
@@ -35,6 +35,10 @@ class LinkFilter < Filter
     end
   end
 
+  def local_domain?(host)
+    local_domains.detect { |d| host == d }
+  end
+
   def local_domains
     Sugar.config.domain_names.try(:strip).try(:split, /\s*,\s*/) || []
   end
@@ -46,6 +50,7 @@ class LinkFilter < Filter
   def matches_https_whitelist?(url)
     host = URI.parse(url).host
     return false unless host
+
     HTTPS_WHITELIST.detect { |domain| File.fnmatch(domain, host) }
   end
 
@@ -65,9 +70,11 @@ class LinkFilter < Filter
   def relativize_local_links!
     parser.search("a").each do |link|
       href = extract_href(link)
-      next unless href && href =~ /^https?:\/\//
+      next unless href&.match?(%r{^https?://})
+
       host = URI.parse(href).host
-      next unless local_domains.detect { |d| host == d }
+      next unless local_domain?(host)
+
       link.set_attribute(
         "href",
         href.gsub(Regexp.new("(https?:)?//" + Regexp.escape(host)), "")
@@ -75,12 +82,15 @@ class LinkFilter < Filter
     end
   end
 
+  def rewrite_for_https?(src)
+    matches_https_whitelist?(src) ||
+      (src =~ %r{\Ahttp://} && https_url_exists?(src))
+  end
+
   def rewrite_for_https_support!
     parser.css("iframe,img").each do |iframe|
       src = iframe.try(:attributes).try(:[], "src").try(:value)
-      next unless src
-      if matches_https_whitelist?(src) ||
-         (src =~ %r{\Ahttp://} && https_url_exists?(src))
+      if src && rewrite_for_https?(src)
         iframe.set_attribute "src", src.gsub(%r{\Ahttps?://}, "//")
       end
     end

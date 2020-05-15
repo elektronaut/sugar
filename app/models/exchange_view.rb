@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-class ExchangeView < ActiveRecord::Base
+class ExchangeView < ApplicationRecord
   belongs_to :user
   belongs_to :exchange
   belongs_to :post

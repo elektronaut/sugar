@@ -1,31 +1,39 @@
+# frozen_string_literal: true
+
 module ExchangeParticipant
   extend ActiveSupport::Concern
 
   included do
-    has_many :discussions, foreign_key: "poster_id"
-    has_many :posts
+    has_many :discussions,
+             foreign_key: "poster_id",
+             dependent: :restrict_with_exception,
+             inverse_of: :poster
+
+    has_many :posts, dependent: :restrict_with_exception
+
     has_many :discussion_posts,
              -> { where conversation: false, deleted: false },
-             class_name: "Post"
+             class_name: "Post", inverse_of: :user
+
     has_many :exchange_views, dependent: :destroy
+
     has_many :discussion_relationships, dependent: :destroy
 
     has_many :participated_discussions,
              -> { where discussion_relationships: { participated: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :followed_discussions,
              -> { where discussion_relationships: { following: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :favorite_discussions,
              -> { where discussion_relationships: { favorite: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
+
     has_many :hidden_discussions,
              -> { where discussion_relationships: { hidden: true } },
-             through: :discussion_relationships,
-             source: :discussion
+             through: :discussion_relationships, source: :discussion
 
     has_many :conversation_relationships, dependent: :destroy
     has_many :conversations, through: :conversation_relationships
@@ -51,7 +59,7 @@ module ExchangeParticipant
   def mark_conversation_viewed(conversation)
     conversation_relationships
       .find_by(conversation_id: conversation)
-      .update_attributes(new_posts: false)
+      .update(new_posts: false)
   end
 
   def posts_per_day
@@ -59,17 +67,18 @@ module ExchangeParticipant
   end
 
   def unread_conversations_count
-    conversation_relationships.where(new_posts: true).count
+    conversation_relationships.where(new_posts: true,
+                                     notifications: true).count
   end
 
   def unread_conversations?
-    unread_conversations_count > 0
+    unread_conversations_count.positive?
   end
 
   def muted_conversation?(conversation)
-    !conversation_relationships
+    conversation_relationships
       .where(notifications: true, conversation: conversation)
-      .any?
+      .none?
   end
 
   def discussion_relationship_with(discussion)
@@ -77,8 +86,7 @@ module ExchangeParticipant
   end
 
   def following?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).following?
+    if discussion_relationship_with(discussion)&.following?
       true
     else
       false
@@ -86,8 +94,7 @@ module ExchangeParticipant
   end
 
   def favorite?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).favorite?
+    if discussion_relationship_with(discussion)&.favorite?
       true
     else
       false
@@ -95,8 +102,7 @@ module ExchangeParticipant
   end
 
   def hidden?(discussion)
-    if discussion_relationship_with(discussion) &&
-       discussion_relationship_with(discussion).hidden?
+    if discussion_relationship_with(discussion)&.hidden?
       true
     else
       false

@@ -1,10 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module EmojiHelper
   def emoji_path(emoji)
     if File.exist?(
-         Rails.root.join("public", "images", "emoji", emoji.image_filename)
-       )
+      Rails.root.join("public", "images", "emoji", emoji.image_filename)
+    )
       image_path("emoji/#{emoji.image_filename}", skip_pipeline: true)
     else
       image_path("emoji/#{emoji.image_filename}")

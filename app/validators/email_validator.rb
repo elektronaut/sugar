@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "mail"
 
 class EmailValidator < ActiveModel::EachValidator
@@ -6,7 +8,7 @@ class EmailValidator < ActiveModel::EachValidator
       email = Mail::Address.new(value)
       valid = email.domain && email.address == value
       valid &&= email.domain =~ /\./
-    rescue
+    rescue StandardError
       valid = false
     end
     record.errors[attribute] << (options[:message] || "is invalid") unless valid

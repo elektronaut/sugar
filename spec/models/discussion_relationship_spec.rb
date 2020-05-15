@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe DiscussionRelationship do
   let(:relationship)       { create(:discussion_relationship) }
   let(:discussion)         { create(:discussion) }
-  let(:trusted_discussion) { create(:trusted_discussion) }
   let(:user)               { create(:user) }
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:discussion) }
 
-  specify { expect(subject.favorite?).to eq(false) }
-  specify { expect(subject.following?).to eq(true) }
-  specify { expect(subject.participated?).to eq(false) }
+  # Default values
+  specify { expect(relationship.favorite?).to eq(false) }
+  specify { expect(relationship.following?).to eq(true) }
+  specify { expect(relationship.participated?).to eq(false) }
 
   describe "mutual exclusive flags" do
     context "when a discussion is being hidden" do
@@ -21,44 +23,40 @@ describe DiscussionRelationship do
 
       before { relationship.update(hidden: true) }
 
-      it "should unset following" do
+      it "unsets following" do
         expect(relationship.following?).to eq(false)
       end
 
-      it "should unset favorite" do
-        expect(relationship.following?).to eq(false)
+      it "unsets favorite" do
+        expect(relationship.favorite?).to eq(false)
       end
     end
 
     context "when following a hidden discussion" do
-      let(:relationship) { create(:discussion_relationship, hidden: true) }
-      before { relationship.update(following: true) }
       subject { relationship.hidden? }
+
+      let(:relationship) { create(:discussion_relationship, hidden: true) }
+
+      before { relationship.update(following: true) }
+
       it { is_expected.to eq(false) }
     end
 
     context "when favoriting a hidden discussion" do
-      let(:relationship) { create(:discussion_relationship, hidden: true) }
-      before { relationship.update(favorite: true) }
       subject { relationship.hidden? }
+
+      let(:relationship) { create(:discussion_relationship, hidden: true) }
+
+      before { relationship.update(favorite: true) }
+
       it { is_expected.to eq(false) }
     end
   end
 
   describe ".define" do
-    context "when the discussion is trusted" do
-      subject { DiscussionRelationship.define(user, trusted_discussion) }
-      specify { expect(subject.trusted?).to eq(true) }
-    end
-
-    context "when the discussion isn't trusted" do
-      subject { DiscussionRelationship.define(user, discussion) }
-      specify { expect(subject.trusted?).to eq(false) }
-    end
-
     context "with no existing relationship" do
       let(:relationship) do
-        DiscussionRelationship.define(user, discussion, favorite: true)
+        described_class.define(user, discussion, favorite: true)
       end
 
       specify { expect(relationship.valid?).to eq(true) }
@@ -73,7 +71,7 @@ describe DiscussionRelationship do
         # Creating a discussion also creates a separate relationship,
         # so this needs to happen first.
         discussion
-        expect { relationship }.to change { DiscussionRelationship.count }.by(1)
+        expect { relationship }.to change(described_class, :count).by(1)
       end
     end
 
@@ -81,7 +79,7 @@ describe DiscussionRelationship do
       let(:existing) { create(:discussion_relationship) }
 
       let(:relationship) do
-        DiscussionRelationship.define(
+        described_class.define(
           existing.user, existing.discussion, favorite: true
         )
       end
@@ -91,7 +89,7 @@ describe DiscussionRelationship do
 
       it "doesn't create a new record" do
         existing
-        expect { relationship }.not_to change { DiscussionRelationship.count }
+        expect { relationship }.not_to(change(described_class, :count))
       end
     end
   end
@@ -100,12 +98,12 @@ describe DiscussionRelationship do
     it "updates caches when created" do
       expect do
         create(:discussion_relationship, user: user, favorite: true)
-      end.to change { user.favorites_count }.by(1)
+      end.to change(user, :favorites_count).by(1)
     end
 
     it "updates caches when updated" do
       expect do
-        relationship.update_attributes(favorite: true)
+        relationship.update(favorite: true)
       end.to change { relationship.user.favorites_count }.by(1)
     end
 

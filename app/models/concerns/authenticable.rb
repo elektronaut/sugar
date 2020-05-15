@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authenticable
   extend ActiveSupport::Concern
 
@@ -7,6 +9,12 @@ module Authenticable
   included do
     before_validation :ensure_password, on: :create
     before_validation :encrypt_new_password
+    before_validation :go_on_hiatus
+    before_validation :clear_banned_until
+
+    attribute :hiatus_until, :datetime
+
+    enum status: %i[active inactive hiatus time_out banned memorialized]
 
     validate do |user|
       if user.new_password? && !user.new_password_confirmed?
@@ -24,7 +32,8 @@ module Authenticable
               },
               if: :facebook_uid?
 
-    before_save :clear_banned_until
+    validate :verify_banned_until
+
     before_save :update_persistence_token
 
     has_many :password_reset_tokens, dependent: :destroy
@@ -42,19 +51,21 @@ module Authenticable
     def find_and_authenticate_with_password(email, password)
       return nil if email.blank?
       return nil if password.blank?
-      user = User.find_by_email(email)
-      return unless user && user.valid_password?(password)
+
+      user = User.find_by(email: email)
+      return unless user&.valid_password?(password)
+
       user.hash_password!(password) if user.password_needs_rehash?
       user
     end
   end
 
-  def facebook?
-    facebook_uid?
+  def deactivated?
+    !active?
   end
 
-  def active
-    !banned?
+  def facebook?
+    facebook_uid?
   end
 
   def valid_password?(pass)
@@ -67,15 +78,15 @@ module Authenticable
   end
 
   def hash_password!(password)
-    update_attributes(hashed_password: User.encrypt_password(password))
+    update(hashed_password: User.encrypt_password(password))
   end
 
   def new_password?
-    (password && !password.blank?) ? true : false
+    password&.present? ? true : false
   end
 
   def new_password_confirmed?
-    (new_password? && password == confirm_password) ? true : false
+    new_password? && password == confirm_password ? true : false
   end
 
   def password_needs_rehash?
@@ -86,18 +97,25 @@ module Authenticable
     banned_until? && banned_until > Time.now.utc
   end
 
+  def check_status!
+    return unless hiatus? || time_out?
+    return if banned_until && banned_until > Time.now.utc
+
+    update(status: :active)
+  end
+
   protected
 
   def ensure_password
-    unless new_password? || hashed_password?
-      if facebook?
-        self.password = self.confirm_password = SecureRandom.base64(15)
-      end
-    end
+    return if new_password? || hashed_password?
+    return unless facebook?
+
+    self.password = self.confirm_password = SecureRandom.base64(15)
   end
 
   def encrypt_new_password
     return unless new_password? && new_password_confirmed?
+
     self.hashed_password = User.encrypt_password(password)
   end
 
@@ -105,8 +123,23 @@ module Authenticable
     self.banned_until = nil if banned_until? && banned_until <= Time.now.utc
   end
 
+  def go_on_hiatus
+    return unless hiatus_until && hiatus_until > Time.now.utc
+
+    self.status = :hiatus
+    self.banned_until = hiatus_until
+  end
+
+  def verify_banned_until
+    return unless hiatus? || time_out?
+    return if banned_until?
+
+    errors.add(:banned_until, "is required")
+  end
+
   def update_persistence_token
     return unless !persistence_token || hashed_password_changed?
+
     self.persistence_token = self.class.generate_token
   end
 end

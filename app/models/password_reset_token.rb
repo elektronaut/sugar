@@ -1,4 +1,6 @@
-class PasswordResetToken < ActiveRecord::Base
+# frozen_string_literal: true
+
+class PasswordResetToken < ApplicationRecord
   belongs_to :user
   before_create :ensure_token
   before_create :ensure_expiration
@@ -13,10 +15,6 @@ class PasswordResetToken < ActiveRecord::Base
   class << self
     def expire!
       expired.delete_all
-    end
-
-    def find_by_token(token)
-      active.find_by(token: token)
     end
   end
 

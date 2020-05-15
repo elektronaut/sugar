@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Features
   def login_as(user = nil)
     user ||= create(:new_user)

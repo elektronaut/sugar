@@ -1,5 +1,5 @@
 <%
-  add_body_class "posts"
+  add_body_class "user_profile", "posts"
   @page_title = "#{@user.username}'s Posts"
 %>
 
@@ -10,7 +10,8 @@
 </h2>
 
 <% if @posts %>
-  <%= render partial: "posts/posts", locals: { posts: @posts, title: true } %>
+  <%= render(partial: "posts/posts",
+             locals: { posts: @posts, title: true, hide_nsfw: true }) %>
 <% else %>
   <p>
     No posts were found.

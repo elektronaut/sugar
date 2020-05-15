@@ -1,8 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class AutolinkFilter < Filter
+  include ActionView::Helpers::TagHelper
+
   def process(post)
-    post.gsub(%r{(^|\s)((ftp|https?)://[^\s]+\b/?)}) do
+    post.gsub(%r{(^|\s)((ftp|https?)://[^\s]+/?(\s|$))}) do
       space = Regexp.last_match(1)
       match = Regexp.last_match(2)
       uri = URI.extract(Regexp.last_match(2)).try(:first)
@@ -13,40 +15,38 @@ class AutolinkFilter < Filter
   private
 
   def autolink(url)
-    if url =~ /.(jpg|jpeg|gif|png)$/i
-      "<img src=\"#{url}\">"
-    elsif url =~ /\.(gifv)$/i
+    if url.match?(/.(jpg|jpeg|gif|png|gifv)$/i)
       '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
-    elsif url =~ /^https?:\/\/(mobile\.)?twitter\.com\/(([\w\d_]+)\/)?status(es)?\/([\d]+)/
-      twitter_embed(url)
-    elsif url =~ /(https?:\/\/(www\.)?instagram\.com\/p\/[^\/]+\/)/
-      instagram_embed(url)
+    elsif url.match?(twitter_expression)
+      oembed(normalize_twitter_url(url))
+    elsif oembeddable?(url)
+      oembed(url)
     else
       "<a href=\"#{url}\">#{url}</a>"
     end
   end
 
-  def oembed(base_url, url)
-    response = JSON.parse(HTTParty.get("#{base_url}?url=#{url}").body)
-    response["html"]
+  def oembeddable?(url)
+    OEmbed::Providers.find(url) ? true : false
+  end
+
+  def oembed(url)
+    embed = OEmbed::Providers.get(url).html.strip
+    "<div class=\"embed\" data-oembed-url=\"#{url}\">#{embed}</div>"
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
     url
   end
 
-  def instagram_embed(url)
-    oembed("https://api.instagram.com/oembed", url)
-  end
-
-  def twitter_embed(url)
-    oembed("https://publish.twitter.com/oembed", normalize_twitter_url(url))
+  def twitter_expression
+    %r{^https?://(mobile\.)?twitter\.com/(([\w\d_]+)/)?status(es)?/([\d]+)}
   end
 
   def normalize_twitter_url(url)
-    if url =~ /^https?:\/\/twitter\.com\/([\w\d_]+)\/status\/([\d]+)/
+    if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/([\d]+)})
       url
     else
-      id = url.match(/\/([\d]+)$/)[1]
+      id = url.match(%r{/([\d]+)$})[1]
       "https://twitter.com/twitter/status/#{id}"
     end
   end

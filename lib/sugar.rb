@@ -1,10 +1,8 @@
-# encoding: utf-8
-
-require_relative "sugar/responder"
+# frozen_string_literal: true
 
 module Sugar
   class << self
-    attr_accessor :redis
+    attr_writer :redis
 
     def aws_s3?
       if config.amazon_aws_key &&

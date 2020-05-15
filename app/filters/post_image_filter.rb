@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class PostImageFilter < Filter
   include ActionView::Helpers::AssetTagHelper
@@ -22,6 +22,7 @@ class PostImageFilter < Filter
       content_hash: content_hash
     ).first
     return nil unless image
+
     dynamic_image_tag(image)
   end
 end

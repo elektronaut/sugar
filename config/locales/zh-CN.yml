@@ -60,7 +60,7 @@ zh-CN:
     domain_names_description: "用逗号隔开"
     forum_title_description: 允许HTML
     forum_short_name_description: "在适当的时候会被使用，比如在手机版本"
-    mail_sender_description: "例如: 我的论坛 &lt;no-reply@mydomain.com&gt;"
+    mail_sender_description: "例如: 我的论坛 <no-reply@mydomain.com>"
     anyone_can_browse: 任何人都可浏览
     browsing_requires_login: 需要登录后才能浏览
     users_can_sign_up: 用户可以注册
@@ -79,9 +79,9 @@ zh-CN:
     flickr: Flickr
     custom_html: 定制 HTML
     custom_javascript: 定制 Javascript
-    custom_header_description: '在 &lt;body&gt; 之后包含'
-    custom_footer_description: '在 &lt;body&gt; 之前包含'
-    custom_javascript_info: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾, 并且 jQuery 被激活。记得把你的代码添加到这里 <span class="example">$(document).ready(function(){ /* 添加你的代码到这里 */ });</span> 。'
+    custom_header_description: '在 <body> 之后包含'
+    custom_footer_description: '在 <body> 之前包含'
+    custom_javascript_html: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾, 并且 jQuery 被激活。记得把你的代码添加到这里 <span class="example">$(document).ready(function(){ /* 添加你的代码到这里 */ });</span> 。'
   user:
     edit:
       tabs:
@@ -97,8 +97,7 @@ zh-CN:
       invites_count: 邀请
       administator_privileges: 管理员权限
       birthday_description: "你的年龄不会被显示，但你的生日会"
-      gravatar_link: '或者上传图片到 <a href="http://www.gravatar.com/">Gravatar</a>，使用你的注册电子邮件来获得一个头像。'
-      trusted_description: '用户可以看到标记为可信任的讨论'
+      gravatar_link_html: '或者上传图片到 <a href="http://www.gravatar.com/">Gravatar</a>，使用你的注册电子邮件来获得一个头像。'
       temporary_ban: 临时禁止
       moderator_description: '能够编辑所有讨论和帖子'
       user_admin_description: '能够编辑其他用户并处理邀请或批准请求'
@@ -110,7 +109,7 @@ zh-CN:
       facebook_connected: 你已经连接到你的 Facebook 帐号。
       remove?: '删除?'
       flickr_description: '注意：这不是你的用户名'
-      steam_description: '注意：不是你的登录; 64位整数或者定制的网址形式名字<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
+      steam_description_html: '注意：不是你的登录; 64位整数或者定制的网址形式名字<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
       account_info: 帐户信息
       settings: 设置
       theme: 主题

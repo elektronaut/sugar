@@ -2,7 +2,7 @@
  * Handlers for scripted embed (social) quirks
  */
 $(Sugar).bind('ready', function(){
-  
+
   // Re-establish anchor position on initial page's twitter widgets load
   if ($('.twitter-tweet,twitterwidget').length && window.twttr && window.twttr.events) {
     var anchor = $('a[name="' + window.location.hash.substr(1) + '"]');
@@ -25,5 +25,4 @@ $(Sugar).bind('ready', function(){
       window.twttr.widgets.load(posts[0].parentNode);
     }
   });
-
 });

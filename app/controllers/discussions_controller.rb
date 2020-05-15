@@ -1,83 +1,57 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class DiscussionsController < ApplicationController
   include ExchangesController
 
   requires_authentication
-  requires_user except: [:index, :search, :search_posts, :show]
+  requires_user except: %i[index search search_posts show]
 
-  before_action :find_exchange, except: [
-    :index, :new, :create, :popular, :search, :favorites, :following, :hidden
+  before_action :find_exchange, except: %i[
+    index new create popular search favorites following hidden
   ]
-  before_action :verify_editable, only: [:edit, :update, :destroy]
-  before_action :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :verify_editable, only: %i[edit update destroy]
+  before_action :require_and_set_search_query, only: %i[search search_posts]
 
   def index
-    scope = if current_user?
-              current_user.unhidden_discussions.viewable_by(current_user)
-            else
-              Discussion.viewable_by(nil)
-            end
-    @exchanges = scope.page(params[:page]).for_view
+    scope = current_user&.unhidden_discussions || Discussion
+    @exchanges = scope.viewable_by(current_user).page(params[:page]).for_view
     respond_with_exchanges(@exchanges)
   end
 
   def popular
     @days = params[:days].to_i
-    unless (1..180).cover?(@days)
-      redirect_to popular_discussions_url(days: 7)
-      return
-    end
-    @exchanges = Discussion.viewable_by(current_user)
-                           .popular_in_the_last(@days.days)
-                           .page(params[:page])
+    @days = 180 if @days > 180
+    @exchanges = Discussion.popular_in_the_last(@days.days)
+                           .viewable_by(current_user).page(params[:page])
     respond_with_exchanges(@exchanges)
   end
 
   def search
     @exchanges = search_results.results
+    @search_path = search_path
     respond_to do |format|
-      format.any(:html, :mobile) do
-        @search_path = search_path
-        respond_with_exchanges(@exchanges)
-      end
+      format.any(:html, :mobile) { respond_with_exchanges(@exchanges) }
       format.json do
-        respond_with @exchanges, meta: { total: search_results.total }
+        render json: @exchanges
       end
     end
   end
 
   def favorites
     @section = :favorites
-    @exchanges = current_user
-                 .favorite_discussions
-                 .viewable_by(current_user)
-                 .page(params[:page])
-                 .for_view
+    @exchanges = user_discussions(:favorite_discussions)
     respond_with_exchanges(@exchanges)
   end
 
   def following
     @section = :following
-    @exchanges = current_user
-                 .followed_discussions
-                 .viewable_by(current_user)
-                 .page(params[:page])
-                 .for_view
+    @exchanges = user_discussions(:followed_discussions)
     respond_with_exchanges(@exchanges)
   end
 
   def hidden
-    @exchanges = current_user
-                 .hidden_discussions
-                 .viewable_by(current_user)
-                 .page(params[:page])
-                 .for_view
+    @exchanges = user_discussions(:hidden_discussions)
     respond_with_exchanges(@exchanges)
-  end
-
-  def show
-    super
   end
 
   def new
@@ -96,80 +70,65 @@ class DiscussionsController < ApplicationController
     end
   end
 
-  def edit
-    super
-  end
-
-  def update
-    super
-  end
-
   def follow
-    DiscussionRelationship.define(current_user, @exchange, following: true)
-    redirect_to discussion_url(@exchange, page: params[:page])
+    define_relationship(:following, true)
   end
 
   def unfollow
-    DiscussionRelationship.define(current_user, @exchange, following: false)
-    redirect_to discussions_url
+    define_relationship(:following, false, back_to_index: true)
   end
 
   def favorite
-    DiscussionRelationship.define(current_user, @exchange, favorite: true)
-    redirect_to discussion_url(@exchange, page: params[:page])
+    define_relationship(:favorite, true)
   end
 
   def unfavorite
-    DiscussionRelationship.define(current_user, @exchange, favorite: false)
-    redirect_to discussions_url
+    define_relationship(:favorite, false, back_to_index: true)
   end
 
   def hide
-    DiscussionRelationship.define(current_user, @exchange, hidden: true)
-    redirect_to discussions_url
+    define_relationship(:hidden, true, back_to_index: true)
   end
 
   def unhide
-    DiscussionRelationship.define(current_user, @exchange, hidden: false)
-    redirect_to discussion_url(@exchange, page: params[:page])
+    define_relationship(:hidden, false)
   end
 
   private
 
-  def trusted_exchange_params
-    return [] unless current_user.trusted?
-    [:trusted]
-  end
-
-  def moderator_exchange_params
-    return [] unless current_user.moderator?
-    [:sticky]
+  def define_relationship(key, value, back_to_index: false)
+    DiscussionRelationship.define(current_user, @exchange, key => value)
+    if back_to_index
+      redirect_to discussions_url
+    else
+      redirect_to discussion_url(@exchange, page: params[:page])
+    end
   end
 
   def exchange_params
-    params.require(:discussion).permit(
-      [:title, :body, :format, :nsfw, :closed] +
-        trusted_exchange_params +
-        moderator_exchange_params
-    )
+    params.require(:discussion)
+          .permit(%i[title body format nsfw closed] +
+                  (current_user.moderator? ? [:sticky] : []))
   end
 
   def find_exchange
     @exchange = Exchange.find(params[:id])
 
-    unless @exchange.is_a?(Discussion)
+    if !@exchange.is_a?(Discussion)
       redirect_to @exchange
-      return
+    elsif !@exchange.viewable_by?(current_user)
+      render_error 403
     end
-
-    render_error 403 unless @exchange.viewable_by?(current_user)
   end
 
   def search_results
-    @search_results ||= Discussion.search_results(
-      search_query,
-      user: current_user,
-      page: params[:page]
-    )
+    @search_results ||= Discussion.search_results(search_query,
+                                                  user: current_user,
+                                                  page: params[:page])
+  end
+
+  def user_discussions(method)
+    current_user.send(method)
+                .viewable_by(current_user).page(params[:page]).for_view
   end
 end

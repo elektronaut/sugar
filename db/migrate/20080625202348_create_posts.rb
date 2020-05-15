@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePosts < ActiveRecord::Migration[4.2]
   def change
     create_table :posts do |t|
@@ -13,10 +15,10 @@ class CreatePosts < ActiveRecord::Migration[4.2]
 
       t.index :conversation
       t.index :created_at
-      t.index [:exchange_id, :created_at]
+      t.index %i[exchange_id created_at]
       t.index :trusted
-      t.index [:user_id, :conversation]
-      t.index [:user_id, :created_at]
+      t.index %i[user_id conversation]
+      t.index %i[user_id created_at]
     end
   end
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -25,12 +25,18 @@ describe DiscussionsController do
                           :follow, :unfollow,
                           :favorite, :unfavorite
 
-    it "is open for browsing discussions and posts" do
-      discussion = create(:discussion)
-      [:index, :show].each do |action|
-        get action, params: { id: discussion }
-        should respond_with(:success)
-      end
+    describe "browsing discussions" do
+      before { get :index }
+
+      it { is_expected.to respond_with(:success) }
+    end
+
+    describe "browsing a discussion" do
+      let(:discussion) { create(:discussion) }
+
+      before { get :show, params: { id: discussion } }
+
+      it { is_expected.to respond_with(:success) }
     end
   end
 
@@ -58,8 +64,9 @@ describe DiscussionsController do
   describe "GET new" do
     before { login }
 
-    context "Starting a new discussion" do
+    context "when starting a new discussion" do
       before { get :new }
+
       specify { expect(assigns(:exchange)).to be_a(Discussion) }
       it { is_expected.to render_template(:new) }
     end
@@ -70,19 +77,21 @@ describe DiscussionsController do
 
     context "with invalid params" do
       before { post :create, params: { discussion: { foo: "bar" } } }
+
       it { is_expected.to render_template(:new) }
       specify do
         expect(flash.now[:notice]).to match(
-          Regexp.new(
-            "Could not save your discussion! " \
-            "Please make sure all required fields are filled in"
-          )
+          Regexp.new("Could not save your discussion! " \
+                     "Please make sure all required fields are filled in")
         )
       end
     end
 
     context "when creating a discussion" do
-      before { post :create, params: { discussion: { title: "Test", body: "Test" } } }
+      before do
+        post :create, params: { discussion: { title: "Test", body: "Test" } }
+      end
+
       specify { expect(assigns(:exchange)).to be_a(Discussion) }
       it { is_expected.to redirect_to(discussion_url(assigns(:exchange))) }
     end

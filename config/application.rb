@@ -1,7 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require_relative "boot"
-require File.expand_path("../../app/themes/theme", __FILE__)
+require File.expand_path("../app/themes/theme", __dir__)
 
 require "rails/all"
 
@@ -24,9 +24,9 @@ module Sugar
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(
+    config.autoload_paths += %W[
       #{config.root}/lib
-    )
+    ]
 
     # Only load the plugins named here, in the order given
     # (default is alphabetical).
@@ -56,4 +56,4 @@ module Sugar
   end
 end
 
-require Rails.root.join("lib/sugar.rb")
+require Rails.root.join("lib", "sugar.rb")

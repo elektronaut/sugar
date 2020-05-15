@@ -1,13 +1,12 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
 describe ExchangeParticipant do
-  let(:user)         { create(:user) }
+  subject(:user) { create(:user) }
+
   let(:discussion)   { create(:discussion) }
   let(:conversation) { create(:conversation) }
-
-  subject { user }
 
   it { is_expected.to have_many(:discussions) }
   it { is_expected.to have_many(:posts) }
@@ -15,64 +14,67 @@ describe ExchangeParticipant do
   it { is_expected.to have_many(:exchange_views).dependent(:destroy) }
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
 
-  it do
-    is_expected.to have_many(:followed_discussions)
+  specify do
+    expect(user).to have_many(:followed_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:favorite_discussions)
+  specify do
+    expect(user).to have_many(:favorite_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:hidden_discussions)
+  specify do
+    expect(user).to have_many(:hidden_discussions)
       .through(:discussion_relationships)
   end
 
-  it do
-    is_expected.to have_many(:conversation_relationships)
+  specify do
+    expect(user).to have_many(:conversation_relationships)
       .dependent(:destroy)
   end
 
-  it do
-    is_expected.to have_many(:conversations)
+  specify do
+    expect(user).to have_many(:conversations)
       .through(:conversation_relationships)
   end
 
-  describe '#unhidden_discussions' do
+  describe "#unhidden_discussions" do
+    subject { user.unhidden_discussions }
+
     let!(:discussion) { create(:discussion) }
     let!(:hidden_discussion) { create(:discussion) }
+
     before do
       DiscussionRelationship.define(user, hidden_discussion, hidden: true)
     end
-    subject { user.unhidden_discussions }
+
     it { is_expected.to match_array([discussion]) }
   end
 
-  describe '#mark_exchange_viewed' do
+  describe "#mark_exchange_viewed" do
     let(:post) { create(:post, exchange: discussion) }
+    let(:exchange_view) { user.exchange_views.last }
 
     context "with existing exchange view" do
-      let!(:exchange_view) do
+      before do
         create(:exchange_view, user: user, exchange: discussion)
       end
 
       it "does not create a new view" do
         expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        end.to change { ExchangeView.count }.by(0)
+        end.to change(ExchangeView, :count).by(0)
       end
 
-      describe "the new view" do
-        before do
-          user.mark_exchange_viewed(discussion, post, 2)
-          exchange_view.reload
-        end
+      it "sets the post index" do
+        user.mark_exchange_viewed(discussion, post, 2)
+        expect(exchange_view.post_index).to eq(2)
+      end
 
-        subject { exchange_view }
-        specify { expect(subject.post_index).to eq(2) }
-        specify { expect(subject.post).to eq(post) }
+      it "sets the post" do
+        user.mark_exchange_viewed(discussion, post, 2)
+        expect(exchange_view.post).to eq(post)
       end
     end
 
@@ -80,40 +82,50 @@ describe ExchangeParticipant do
       it "creates a new view" do
         expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        end.to change { ExchangeView.count }.by(1)
+        end.to change(ExchangeView, :count).by(1)
       end
 
-      describe "the new discussion view" do
-        before { user.mark_exchange_viewed(discussion, post, 2) }
-        subject { user.exchange_views.last }
-        specify { expect(subject.post_index).to eq(2) }
-        specify { expect(subject.post).to eq(post) }
+      it "sets the post index" do
+        user.mark_exchange_viewed(discussion, post, 2)
+        expect(exchange_view.post_index).to eq(2)
+      end
+
+      it "sets the post" do
+        user.mark_exchange_viewed(discussion, post, 2)
+        expect(exchange_view.post).to eq(post)
       end
     end
   end
 
   describe "#mark_conversation_viewed" do
+    let(:relationship) do
+      user.conversation_relationships.where(conversation_id: conversation).first
+    end
+
     let(:user) { conversation.poster }
     let(:conversation_relationship) do
       user.conversation_relationships.where(conversation_id: conversation).first
     end
-    before { conversation_relationship.update_attributes(new_posts: true) }
-    before { user.mark_conversation_viewed(conversation) }
-    subject do
-      user.conversation_relationships.where(conversation_id: conversation).first
+
+    before do
+      conversation_relationship.update(new_posts: true)
+      user.mark_conversation_viewed(conversation)
     end
-    specify { expect(subject.new_posts?).to eq(false) }
+
+    it "marks the conversation as viewed" do
+      expect(relationship.new_posts?).to eq(false)
+    end
   end
 
   describe "#posts_per_day" do
+    subject { user.posts_per_day }
+
     let(:user) { create(:user, created_at: 3.days.ago) }
 
     before do
       create(:post, user: user)
       user.reload
     end
-
-    subject { user.posts_per_day }
 
     it { is_expected.to be_within(0.001).of(1.0 / 3.0) }
   end
@@ -159,9 +171,11 @@ describe ExchangeParticipant do
   end
 
   describe "#muted_conversation?" do
-    let(:conversation) { create(:conversation) }
-    before { conversation.add_participant(user) }
     subject { user.muted_conversation?(conversation) }
+
+    let(:conversation) { create(:conversation) }
+
+    before { conversation.add_participant(user) }
 
     context "when conversation isn't muted" do
       it { is_expected.to eq(false) }
@@ -171,6 +185,7 @@ describe ExchangeParticipant do
       before do
         user.conversation_relationships.update_all(notifications: false)
       end
+
       it { is_expected.to eq(true) }
     end
   end
@@ -200,6 +215,7 @@ describe ExchangeParticipant do
 
     context "when discussion is favorite" do
       before { DiscussionRelationship.define(user, discussion, favorite: true) }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -213,6 +229,7 @@ describe ExchangeParticipant do
 
     context "when discussion is hidden" do
       before { DiscussionRelationship.define(user, discussion, hidden: true) }
+
       it { is_expected.to eq(true) }
     end
   end

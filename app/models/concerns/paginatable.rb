@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Paginatable
   extend ActiveSupport::Concern
 
@@ -10,7 +12,8 @@ module Paginatable
     end
 
     module WithContext
-      attr_accessor :context
+      attr_writer :context
+
       def context
         @context || 0
       end
@@ -84,11 +87,7 @@ module Paginatable
     private
 
     def pagination_limit
-      if all.limit_value
-        all.limit_value
-      else
-        per_page
-      end
+      all.limit_value || per_page
     end
 
     def pagination_offset(page = 1)

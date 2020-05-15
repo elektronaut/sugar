@@ -1,5 +1,10 @@
-body, input, textarea {
-  font-family: Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
+body,
+input,
+textarea,
+a.button,
+a.button:visited,
+button {
+  font-family: -apple-system, BlinkMacSystemFont, Calibri, sans-serif;
 }
 
 input, textarea {
@@ -142,7 +147,6 @@ button::-moz-focus-inner {
 a.button,
 a.button:visited,
 button {
-  font-family: Calibri, Trebuchet MS, Arial, Verdana, sans-serif;
   font-size: 15px;
   font-weight: bold;
   color: #616161;

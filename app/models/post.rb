@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
   include ConversationPost
   include SearchablePost
   include Paginatable
@@ -10,16 +10,15 @@ class Post < ActiveRecord::Base
 
   belongs_to :user, touch: true
   belongs_to :exchange, touch: true
-  has_many :exchange_views
+  has_many :exchange_views, dependent: :restrict_with_exception
 
   validates :body, :user_id, :exchange_id, presence: true
-  validates :format, inclusion: %w(markdown html)
+  validates :format, inclusion: %w[markdown html]
 
   attr_accessor :skip_html
 
   before_save :fetch_images,
               :set_edit_timestamp,
-              :update_trusted_status,
               :render_html
 
   after_create :update_exchange,
@@ -35,7 +34,7 @@ class Post < ActiveRecord::Base
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
 
   def me_post?
-    @me_post ||= (body.strip =~ %r{^/me} && !(body =~ /\n/)) ? true : false
+    @me_post ||= body.strip =~ %r{^/me} && body !~ /\n/ ? true : false
   end
 
   def post_number
@@ -47,23 +46,24 @@ class Post < ActiveRecord::Base
   end
 
   def body_html
-    if new_record? || Rails.env == "development"
+    if new_record? || Rails.env.development?
       Renderer.render(body, format: format)
     else
       unless body_html?
         update_column(:body_html, Renderer.render(body, format: format))
       end
-      self[:body_html].html_safe
+      self[:body_html]
     end
   end
 
   def edited?
     return false unless edited_at?
-    (((edited_at || created_at) - created_at) > 60.seconds) ? true : false
+
+    ((edited_at || created_at) - created_at) > 60.seconds
   end
 
   def editable_by?(user)
-    (user && (user.moderator? || user == self.user)) ? true : false
+    user && (user.moderator? || user == self.user) ? true : false
   end
 
   def fetch_images
@@ -78,7 +78,7 @@ class Post < ActiveRecord::Base
     @mentioned_users ||= User.all.select do |user|
       user_expression = Regexp.new("@" + Regexp.quote(user.username),
                                    Regexp::IGNORECASE)
-      body.match(user_expression) ? true : false
+      body.match?(user_expression)
     end
   end
 
@@ -96,13 +96,8 @@ class Post < ActiveRecord::Base
     exchange.update(posts_count: exchange.posts.count)
     user.update(
       posts_count: user.posts.count,
-      public_posts_count: user.discussion_posts.where(trusted: false).count
+      public_posts_count: user.discussion_posts.count
     )
-  end
-
-  def update_trusted_status
-    self.trusted = exchange.trusted if exchange
-    true
   end
 
   def render_html
@@ -115,11 +110,12 @@ class Post < ActiveRecord::Base
 
   def define_relationship
     return if conversation?
+
     DiscussionRelationship.define(user, exchange, participated: true)
   end
 
   def update_exchange
-    exchange.update_attributes(
+    exchange.update(
       last_poster_id: user.id,
       last_post_at: created_at
     )

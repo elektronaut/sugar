@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImageFetcher
   attr_accessor :body
 
@@ -49,6 +51,7 @@ class ImageFetcher
     Nokogiri::HTML::DocumentFragment.parse(str).css("img").each do |element|
       post_image = fetch_image(elem_src(element))
       next unless post_image
+
       [
         element.to_s,
         element.to_s.gsub(/>$/, "/>"), # Nokogiri botches self-closing tags
@@ -66,11 +69,12 @@ class ImageFetcher
     return nil unless uri
     # Only fetch imgurl URLs for now
     return nil unless host_whitelist?(URI.parse(uri).hostname)
+
     find_image(uri) || create_image(uri)
   end
 
   def host_whitelist?(hostname)
-    %w(i.imgur.com m.imgur.com).include?(hostname)
+    %w[i.imgur.com m.imgur.com].include?(hostname)
   end
 
   def find_image(uri)
@@ -78,7 +82,7 @@ class ImageFetcher
   end
 
   def src?(elem)
-    elem.attributes && !elem.attributes["src"].blank?
+    elem.attributes && elem.attributes["src"].present?
   end
 
   def elem_src(elem)

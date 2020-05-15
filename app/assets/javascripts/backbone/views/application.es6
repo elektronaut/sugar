@@ -3,7 +3,8 @@ Sugar.Views.Application = Backbone.View.extend({
 
   initialize: function () {
     let postsSelector = 'body.discussion div.posts, ' +
-                        'body.search_posts div.posts';
+                        'body.search div.posts, ' +
+                        'body.user_profile div.posts';
     $(postsSelector).each(function() {
       this.view = new Sugar.Views.Posts({
         el: this

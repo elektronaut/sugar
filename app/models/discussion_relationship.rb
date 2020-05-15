@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-class DiscussionRelationship < ActiveRecord::Base
+class DiscussionRelationship < ApplicationRecord
   belongs_to :user
   belongs_to :discussion
 
@@ -16,7 +16,7 @@ class DiscussionRelationship < ActiveRecord::Base
         user_id: user.id,
         discussion_id: discussion.id
       )
-      relationship.update_attributes(options.merge(trusted: discussion.trusted))
+      relationship.update(options)
       relationship.save
       relationship
     end

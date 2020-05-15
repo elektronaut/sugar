@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
-RSpec.feature "Contact moderators", type: :feature do
+RSpec.describe "Contact moderators", type: :feature do
   let!(:admin) { create(:admin) }
   let!(:user) { create(:new_user) }
 
   before do
     login_with(user.email, user.password)
+    visit conversations_url
   end
 
-  scenario "User contacts moderators" do
-    click_link "Conversations"
+  it "User contacts moderators" do
     click_link "Contact moderators"
     fill_in "conversation[title]", with: "Title"
     fill_in "conversation[body]", with: "Body"

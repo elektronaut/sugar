@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -42,9 +42,8 @@ describe ConversationsController do
   describe "DELETE remove_participant" do
     let(:remover) { create(:moderator) }
 
-    before { conversation_with_user.add_participant(remover) }
-
     before do
+      conversation_with_user.add_participant(remover)
       login(remover)
       delete(
         :remove_participant,
@@ -100,7 +99,7 @@ describe ConversationsController do
         expect(response).to redirect_to(conversation_url(assigns(:exchange)))
       end
 
-      it "should not remove the user from the conversation" do
+      it "does not remove the user from the conversation" do
         expect(assigns(:exchange).participants.to_a).to include(user)
       end
     end
@@ -111,7 +110,11 @@ describe ConversationsController do
 
     context "when starting a conversation with someone" do
       let(:recipient) { create(:user) }
-      before { get :new, params: { type: "conversation", username: recipient.username } }
+
+      before do
+        get :new, params: { type: "conversation", username: recipient.username }
+      end
+
       specify { expect(assigns(:exchange)).to be_a(Conversation) }
       specify { expect(assigns(:recipient)).to eq(recipient) }
       it { is_expected.to render_template(:new) }
@@ -142,18 +145,19 @@ describe ConversationsController do
   describe "GET mute" do
     let(:user) { create(:user) }
     let(:conversation) { create(:conversation) }
+
     before do
       conversation.add_participant(user)
       login(user)
       get :mute, params: { id: conversation.id, page: 2 }
     end
 
-    it "should mute the conversation" do
+    it "mutes the conversation" do
       expect(user.muted_conversation?(conversation)).to eq(true)
     end
 
-    it "should redirect back to the conversation" do
-      expect(subject).to redirect_to(
+    it "redirects back to the conversation" do
+      expect(controller).to redirect_to(
         conversation_url(assigns(:exchange), page: 2)
       )
     end
@@ -162,6 +166,7 @@ describe ConversationsController do
   describe "GET unmute" do
     let(:user) { create(:user) }
     let(:conversation) { create(:conversation) }
+
     before do
       conversation.add_participant(user)
       user.conversation_relationships.update_all(notifications: false)
@@ -169,12 +174,12 @@ describe ConversationsController do
       get :unmute, params: { id: conversation.id, page: 2 }
     end
 
-    it "should mute the conversation" do
+    it "mutes the conversation" do
       expect(user.muted_conversation?(conversation)).to eq(false)
     end
 
-    it "should redirect back to the conversation" do
-      expect(subject).to redirect_to(
+    it "redirects back to the conversation" do
+      expect(controller).to redirect_to(
         conversation_url(assigns(:exchange), page: 2)
       )
     end

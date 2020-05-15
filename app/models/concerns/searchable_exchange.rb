@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SearchableExchange
   extend ActiveSupport::Concern
 
@@ -7,7 +9,6 @@ module SearchableExchange
       string :type
       integer :poster_id
       integer :last_poster_id
-      boolean :trusted
       boolean :closed
       boolean :sticky
       time :created_at
@@ -20,7 +21,6 @@ module SearchableExchange
     def search_results(query, options = {})
       search = Discussion.search do
         fulltext query
-        with :trusted, false unless options[:user] && options[:user].trusted?
         order_by :last_post_at, :desc
         paginate page: options[:page], per_page: Exchange.per_page
       end

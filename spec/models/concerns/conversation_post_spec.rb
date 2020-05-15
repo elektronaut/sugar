@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -7,16 +7,18 @@ describe ConversationPost do
   let(:conversation) { create(:conversation) }
 
   describe "#flag_conversation" do
-    subject { post }
+    subject { post.conversation? }
 
     context "when in a conversation" do
       let(:post) { create(:post, exchange: conversation) }
-      specify { expect(subject.conversation?).to eq(true) }
+
+      it { is_expected.to eq(true) }
     end
 
     context "when in a regular discussion" do
       let(:post) { create(:post, exchange: discussion) }
-      specify { expect(subject.conversation?).to eq(false) }
+
+      it { is_expected.to eq(false) }
     end
   end
 end

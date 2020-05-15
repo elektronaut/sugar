@@ -1,9 +1,13 @@
-FactoryGirl.define do
+# frozen_string_literal: true
+
+FactoryBot.define do
   factory :avatar do
-    file Rack::Test::UploadedFile.new(
-      Rails.root.join("spec/support/pink.png"),
-      "image/png"
-    )
+    file do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec", "support", "pink.png"),
+        "image/png"
+      )
+    end
   end
 
   factory :conversation_relationship do
@@ -31,7 +35,7 @@ FactoryGirl.define do
     sequence(:title)  { |n| "Exchange #{n}" }
     sequence(:body)   { |n| "First post of exchange #{n}" }
     association :poster, factory: :user
-    posts_count 1
+    posts_count { 1 }
 
     # Discussions
     factory :discussion, class: "discussion" do
@@ -40,11 +44,7 @@ FactoryGirl.define do
 
       factory :closed_discussion do
         association :closer, factory: :user
-        closed true
-      end
-
-      factory :trusted_discussion do
-        trusted true
+        closed { true }
       end
     end
 
@@ -68,65 +68,58 @@ FactoryGirl.define do
   end
 
   factory :post_image do
-    file Rack::Test::UploadedFile.new(
-      Rails.root.join("spec/support/pink.png"),
-      "image/png"
-    )
+    file do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec", "support", "pink.png"),
+        "image/png"
+      )
+    end
   end
 
   factory :post do
     sequence(:body) { |n| "Post body #{n}" }
     association :exchange, factory: :discussion
     user
-
-    factory :trusted_post do
-      association :exchange, factory: :trusted_discussion
-    end
   end
 
   factory :user do
     sequence(:username) { |n| "lonelygirl#{n}" }
     sequence(:realname) { |n| "Sugar User #{n}" }
     email
-    hashed_password     { FactoryGirl.generate(:sha1hash) }
+    hashed_password     { FactoryBot.generate(:sha1hash) }
     description         { "Hi, I'm #{realname}!" }
     sequence(:location) { |n| "Location #{n}" }
 
-    admin false
-    user_admin false
-    moderator false
-    banned false
-    trusted false
+    admin { false }
+    user_admin { false }
+    moderator { false }
+    status { :active }
 
     factory :admin do
-      admin true
+      admin { true }
     end
 
     factory :moderator do
-      moderator true
+      moderator { true }
     end
 
     factory :new_user do
-      password "foobar"
-      confirm_password "foobar"
-      hashed_password nil
+      password { "foobar" }
+      confirm_password { "foobar" }
+      hashed_password { nil }
     end
 
     factory :user_admin do
-      user_admin true
-    end
-
-    factory :trusted_user do
-      trusted true
+      user_admin { true }
     end
 
     factory :banned_user do
-      banned true
+      status { :banned }
     end
 
     factory :facebook_user do
       sequence(:facebook_uid, &:to_s)
-      hashed_password nil
+      hashed_password { nil }
     end
 
     factory :user_with_avatar do

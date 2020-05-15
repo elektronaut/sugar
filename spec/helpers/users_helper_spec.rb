@@ -1,52 +1,46 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
 describe UsersHelper do
   describe "#users_tab" do
-    let(:name) { "Stuff" }
-    let(:path) { "/users/stuff" }
-    let(:options) { {} }
     subject { helper.users_tab(name, path, options) }
 
+    let(:name) { "Stuff" }
+    let(:path) { "/users/stuff" }
+    let(:options) { { action: "stuff" } }
+
     context "without options" do
-      it do
-        is_expected.to eq(
-          '<li class="tab"><a href="/users/stuff">Stuff</a></li>'
-        )
-      end
+      let(:output) { '<li class="tab"><a href="/users/stuff">Stuff</a></li>' }
+
+      it { is_expected.to eq(output) }
     end
 
     context "with class" do
       let(:options) { { class: "foo" } }
-      it do
-        is_expected.to eq(
-          '<li class="tab foo"><a href="/users/stuff">Stuff</a></li>'
-        )
+      let(:output) do
+        '<li class="tab foo"><a href="/users/stuff">Stuff</a></li>'
       end
+
+      it { is_expected.to eq(output) }
     end
 
-    context "with action" do
-      let(:options) { { action: "stuff" } }
+    context "when action doesn't match params" do
+      let(:output) { '<li class="tab"><a href="/users/stuff">Stuff</a></li>' }
 
-      context "and action doesn't match params" do
-        it do
-          is_expected.to eq(
-            '<li class="tab"><a href="/users/stuff">Stuff</a></li>'
-          )
-        end
+      it { is_expected.to eq(output) }
+    end
+
+    context "when action matches params" do
+      let(:output) do
+        '<li class="tab active"><a href="/users/stuff">Stuff</a></li>'
       end
 
-      context "and action matches params" do
-        before do
-          allow(helper).to receive(:params).and_return(action: "stuff")
-        end
-        it do
-          is_expected.to eq(
-            '<li class="tab active"><a href="/users/stuff">Stuff</a></li>'
-          )
-        end
+      before do
+        allow(helper).to receive(:params).and_return(action: "stuff")
       end
+
+      it { is_expected.to eq(output) }
     end
   end
 end

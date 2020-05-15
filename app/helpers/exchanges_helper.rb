@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ExchangesHelper
   # Returns an array of class names for an exchange
   def exchange_classes(collection, exchange)
     [
       exchange.labels.map(&:downcase),
-      %w(odd even)[collection.to_a.index(exchange) % 2],
+      %w[odd even][collection.to_a.index(exchange) % 2],
       (new_posts?(exchange) ? "new_posts" : nil),
       "by_user#{exchange.poster_id}",
       "discussion",
@@ -27,6 +27,12 @@ module ExchangesHelper
     options[:anchor] = "post-#{last_post_id}" if last_post_id
 
     polymorphic_path(exchange, options)
+  end
+
+  def muted_user_ids(exchange)
+    return [] unless current_user?
+
+    current_user.muted_user_ids(exchange: exchange)
   end
 
   def post_page(post)

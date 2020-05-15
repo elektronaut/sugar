@@ -1,178 +1,87 @@
 (function() {
-  class MarkdownDecorator {
-    blockquote(str) {
-      return ["", str.split("\n").map(l => `> ${l}`).join("\n"), ""];
-    }
-
-    bold(str) {
-      return ["**", str, "**"];
-    }
-
-    code(str, language) {
-      return ["```" + language + "\n", str, "\n```"];
-    }
-
-    emphasis(str) {
-      return ["_", str, "_"];
-    }
-
-    image(url) {
-      return ["![](", url, ")"];
-    }
-
-    youtube(url) {
-      return ["!y[Video title](", url, ")"];
-    }
-
-    link(url, name) {
-      return ["[", name, "](" + url + ")"];
-    }
-
-    quote(text, html, username, permalink) {
-      var cite;
-      let wrapInBlockquote = (str) =>
-        str.split("\n").map(l => `> ${l}`).join("\n");
-      var cite = `Posted by ${username}:`;
-      if (permalink) {
-        cite = `Posted by [${username}](${permalink}):`;
-      }
-      return [
-        "",
-        wrapInBlockquote("<cite>" + cite + "</cite>\n\n" + html) + "\n\n",
-        ""
-      ];
-    };
-
-    spoiler(str) {
-      return ["<div class=\"spoiler\">", str, "</div>"];
-    }
+  function getSelection(elem) {
+    return $(elem).getSelection().text;
   }
 
-  class HtmlDecorator {
-    blockquote(str) {
-      return ["<blockquote>", str, "</blockquote>"];
-    }
-
-    bold(str) {
-      return ["<b>", str, "</b>"];
-    }
-
-    code(str, language) {
-      return ["```" + language + "\n", str, "\n```"];
-    }
-
-    emphasis(str) {
-      return ["<i>", str, "</i>"];
-    }
-
-    image(url) {
-      return ["<img src=\"", url, "\">"];
-    }
-
-    youtube(url) {
-      let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-      let match = url.match(regExp);
-      if (match && match[7].length === 11) {
-        let code = match[7];
-        return [
-          "<iframe src=\"https://www.youtube.com/embed/",
-          code,
-          "\" frameborder=\"0\" allowfullscreen></iframe>"
-        ];
-      } else {
-        return ["", "", ""];
-      }
-    }
-
-    link(url, name) {
-      return ["<a href=\"" + url + "\">", name, "</a>"];
-    }
-
-    quote(text, html, username, permalink) {
-      let content = html.replace(/\n/g, "").replace(/<br[\s\/]*>/g, "\n");
-      var cite = `Posted by ${username}:`;
-      if (permalink) {
-        cite = `Posted by <a href="${permalink}">${username}</a>:`;
-      }
-      return [
-        "",
-        "<blockquote><cite>" + cite + "</cite> " + content + "</blockquote>" +
-        "\n\n",
-        ""
-      ];
-    }
-
-    spoiler(str) {
-      return ["<div class=\"spoiler\">", str, "</div>"];
-    }
-  }
-
-  let getSelection = (elem) =>
-    $(elem).getSelection().text;
-
-  let getSelectionRange = (elem) => {
+  function getSelectionRange(elem) {
     if (typeof elem.selectionStart !== "undefined") {
       return [elem.selectionStart, elem.selectionEnd];
     } else {
       return [0, 0];
     }
-  };
+  }
 
-  let setSelectionRange = (elem, start, end) => {
+  function setSelectionRange(elem, start, end) {
     if (typeof elem.setSelectionRange !== "undefined") {
       return elem.setSelectionRange(start, end);
     }
-  };
+  }
 
-  let adjustSelection = (elem, callback) => {
+  function adjustSelection(elem, callback) {
     let selectionLength = getSelection(elem).length;
     let [start, end] = getSelectionRange(elem);
     let [replacementLength, prefixLength] = callback();
     let newEnd = end + (replacementLength - selectionLength) + prefixLength;
     let newStart = start === end ? newEnd : start + prefixLength;
     return setSelectionRange(elem, newStart, newEnd);
-  };
+  }
 
-  let replaceSelection = (elem, prefix, replacement, postfix) => {
+  function replaceSelection(elem, prefix, replacement, postfix) {
     return adjustSelection(elem, () => {
       $(elem).replaceSelection(prefix + replacement + postfix);
       $(elem).focus();
       return [replacement.length, prefix.length];
     });
-  };
+  }
 
-  let uploadBanner = (file) =>
-    "[Uploading \"" + file.name + "\"...]";
+  function undoEmbeds(html) {
+    let elem = document.createElement("div");
+    elem.innerHTML = html;
+    Array.prototype.slice.call(
+      elem.querySelectorAll("div.embed[data-oembed-url]")
+    ).forEach(function (embed) {
+      embed.parentNode.insertBefore(
+        document.createTextNode(embed.dataset.oembedUrl),
+        embed
+      );
+      embed.parentNode.removeChild(embed);
+    });
+    return elem.innerHTML
+  }
 
-  let startUpload = (elem, file) =>
-    replaceSelection(elem, "", uploadBanner(file) + "\n", "");
+  function uploadBanner(file) {
+    return "[Uploading \"" + file.name + "\"...]";
+  }
 
-  let uploadError = (response) => {
+  function startUpload(elem, file) {
+    return replaceSelection(elem, "", uploadBanner(file) + "\n", "");
+  }
+
+  function uploadError(response) {
     if (typeof(response) === "object" && response.error) {
       alert("There was an error uploading the image: " + response.error);
     }
   }
 
-  let finishUpload = (elem, file, response) => {
+  function finishUpload(elem, file, response) {
     uploadError(response);
+    console.log(response);
     if (response.embed) {
       $(elem).val(
         $(elem).val().replace(uploadBanner(file) + "\n", response.embed)
       );
     }
-  };
+  }
 
-  let failedUpload = (elem, file, response) => {
-    console.log(typeof(response));
-    console.log(response);
+  function failedUpload(elem, file, response) {
     uploadError(response);
     $(elem).val($(elem).val().replace(uploadBanner(file), ""));
   }
 
-  let uploadImage = (textarea) => {
+  function uploadImage(textarea) {
     let fileInput = $(
       "<input type=\"file\" name=\"file\" " +
-      "accept=\"image/gif, image/png, image/jpeg\" " +
+      "accept=\"image/gif, image/png, image/jpeg, image/webp\" " +
       "style=\"display: none;\"/>"
     );
     fileInput.insertBefore(textarea);
@@ -197,11 +106,12 @@
       reader.readAsDataURL(file);
     }, false)
     fileInput.click();
-  };
+  }
 
-  let bindUploads = (elem) => {
+  function bindUploads(elem) {
     $(elem).filedrop({
-      allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'image/tiff'],
+      allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif',
+                         'image/tiff', 'image/webp'],
       maxfiles: 25,
       maxfilesize: 20,
       paramname: "upload[file]",
@@ -211,7 +121,7 @@
       uploadFinished: (i, file, response) => finishUpload(elem, file, response),
       error: (error, file, i, status) => failedUpload(elem, file, error)
     });
-  };
+  }
 
   Sugar.RichTextArea = function(textarea) {
     if (textarea.richtext) {
@@ -250,7 +160,7 @@
     }
     format || (format = formats[0]);
 
-    let setFormat = (newFormat, skipUpdate) => {
+    function setFormat(newFormat, skipUpdate) {
       var label;
       format = newFormat;
 
@@ -276,76 +186,105 @@
           currentUser.save("preferred_format", newFormat, { patch: true });
         }
       }
-    };
+    }
 
-    let nextFormat = () =>
-      setFormat(formats[(formats.indexOf(format) + 1) % formats.length]);
+    function nextFormat() {
+      return setFormat(formats[(formats.indexOf(format) + 1) % formats.length]);
+    }
 
     setFormat(format, true);
 
     formatButton.find("a").click(() => nextFormat());
 
-    let addButton = (name, className, callback) => {
+    function performAction(callback) {
+      let result = callback(getSelection(textarea));
+      if (result) {
+        let [prefix, replacement, postfix] = result;
+        replaceSelection(textarea, prefix, replacement, postfix);
+      }
+    }
+
+    function addButton(name, className, callback) {
       let link = $(
         `<a title="${name}" class="${className}">` +
         `<i class="fa fa-${className}"></i></a>`
       );
-      link.click(function() {
-        let result = callback(getSelection(textarea));
-        if (result) {
-          let [prefix, replacement, postfix] = result;
-          replaceSelection(textarea, prefix, replacement, postfix);
+      link.click(() => performAction(callback));
+      $("<li class=\"button\"></li>").append(link).insertBefore(formatButton);
+    }
+
+    function addHotkey(hotkey, callback) {
+      textarea.addEventListener("keydown", (evt) => {
+        var key;
+        if (evt.which >= 65 && evt.which <= 90) {
+          key = String.fromCharCode(evt.keyCode).toLowerCase();
+        } else if (evt.keyCode === 13) {
+          key = "enter";
+        }
+
+        if ((evt.metaKey || evt.ctrlKey) && key === hotkey) {
+          evt.preventDefault();
+          performAction(callback);
         }
       });
-      $("<li class=\"button\"></li>").append(link).insertBefore(formatButton);
-    };
+    }
 
-    addButton("Bold", "bold", (s) => decorator().bold(s));
-    addButton("Italics", "italic", (s) => decorator().emphasis(s));
+    const bold = (s) => decorator().bold(s);
+    const italic = (s) => decorator().emphasis(s);
+    const blockquote = (s) => decorator().blockquote(s);
+    const spoiler = (s) => decorator().spoiler(s);
 
-    addButton("Link", "link", (s) => {
+    const link = (s) => {
       let name = s.length > 0 ? s : "Link text";
       var url = prompt("Enter link URL", "");
       url = url.length > 0 ? url : "http://example.com/";
       url = url.replace(/^(?!(f|ht)tps?:\/\/)/, 'http://');
       return decorator().link(url, name);
-    });
+    };
 
-    addButton("Image", "picture-o", (s) => {
+    const imageTag = (s) => {
       let url = s.length > 0 ? s : prompt("Enter image URL", "");
       return !!url ? decorator().image(url) : false;
-    });
+    };
 
-    addButton("Upload Image", "upload", (s) => {
-      uploadImage(textarea);
-    });
+    const uploadImageAction = () => uploadImage(textarea);
 
-    addButton("Youtube", "youtube", (s) => {
-      let url = s.length > 0 ? s : prompt("Enter video URL", "");
-      return decorator().youtube(url);
-    });
-
-    addButton("Block Quote", "quote-left", (s) => decorator().blockquote(s));
-
-    addButton("Code", "code", (selection) => {
+    const code = (selection) => {
       let lang = prompt(
         "Enter language (leave blank for no syntax highlighting)",
         ""
       );
       return decorator().code(selection, lang);
-    });
+    };
 
-    addButton("Spoiler", "warning", (s) => decorator().spoiler(s));
-
-    addButton("Emoticons", "smile-o", (selection) => {
+    const showEmojiBar = (selection) => {
       emojiBar.slideToggle(100);
       return ["", selection, ""];
-    });
+    };
+
+    const submit = () => {
+      $(textarea).closest("form").submit();
+    };
+
+    addButton("Bold", "bold", bold);
+    addButton("Italics", "italic", italic);
+    addButton("Link", "link", link);
+    addButton("Image", "picture-o", imageTag);
+    addButton("Upload Image", "upload", uploadImageAction);
+    addButton("Block Quote", "quote-left", blockquote);
+    addButton("Code", "code", code);
+    addButton("Spoiler", "warning", spoiler);
+    addButton("Emoticons", "smile-o", showEmojiBar);
+
+    addHotkey("b", bold);
+    addHotkey("i", italic);
+    addHotkey("k", link);
+    addHotkey("enter", submit);
 
     $(Sugar).on("quote", function(event, data) {
       let [prefix, replacement, postfix] = decorator().quote(
         data.text,
-        data.html,
+        undoEmbeds(data.html),
         data.username,
         data.permalink
       );
@@ -353,7 +292,7 @@
       textarea.scrollTop = textarea.scrollHeight;
     });
 
-    let addEmojiButton = (name, image) => {
+    function addEmojiButton(name, image) {
       let link = $(
         `<a title="${name}"><img alt="${name}" class="emoji" ` +
         `src="${image}" width="16" height="16"></a>`
@@ -363,7 +302,6 @@
       });
       $("<li class=\"button\"></li>").append(link).appendTo(emojiBar);
     };
-
 
     for (var j = 0; j < icons.length; j++) {
       addEmojiButton(icons[j].name, icons[j].image);

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DrawingsController
   extend ActiveSupport::Concern
 
@@ -12,6 +14,7 @@ module DrawingsController
                                   content_type: "image/jpeg",
                                   filename: "drawing.jpg")
     return {} unless post_image.valid?
+
     {
       body: '<div class="drawing">' \
         "[image:#{post_image.id}:#{post_image.content_hash}]" \

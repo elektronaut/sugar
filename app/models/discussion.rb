@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class Discussion < Exchange
   class InvalidExchange < StandardError; end
@@ -9,9 +9,6 @@ class Discussion < Exchange
   has_many :discussion_relationships, dependent: :destroy
 
   scope :for_view, -> { sorted.with_posters }
-
-  before_save :trusted_will_change
-  after_save :update_trusted_status
 
   class << self
     def popular_in_the_last(days = 7.days)
@@ -25,11 +22,12 @@ class Discussion < Exchange
   # Converts a discussion to a conversation
   def convert_to_conversation!
     raise InvalidExchange unless valid?
+
     transaction do
-      update_attributes(type: "Conversation")
+      update(type: "Conversation")
       becomes(Conversation).tap do |conversation|
         conversation.unlabel!
-        posts.update_all(conversation: true, trusted: false)
+        posts.update_all(conversation: true)
         participants.each { |p| conversation.add_participant(p) }
         discussion_relationships.destroy_all
       end
@@ -48,28 +46,11 @@ class Discussion < Exchange
   def editable_by?(user)
     return false unless user
     return true if user.moderator?
+
     moderators.include?(user)
   end
 
   def postable_by?(user)
-    (user && (user.moderator? || !closed?)) ? true : false
-  end
-
-  private
-
-  def trusted_will_change
-    @trusted_will_change = trusted_changed?
-  end
-
-  def update_trusted_status
-    return unless @trusted_will_change
-    posts.update_all(trusted: trusted?)
-    discussion_relationships.update_all(trusted: trusted?)
-    participants.each do |user|
-      user.update_column(
-        :public_posts_count,
-        user.discussion_posts.where(trusted: false).count
-      )
-    end
+    user && (user.moderator? || !closed?) ? true : false
   end
 end

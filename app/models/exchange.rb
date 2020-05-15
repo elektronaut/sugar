@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # = Exchange
 #
 # Exchange is the base class for all threads, which both Discussion
 # and Conversation inherit from.
 
-class Exchange < ActiveRecord::Base
+class Exchange < ApplicationRecord
   include HumanizableParam
   include Paginatable
   include ExchangeScopes
@@ -23,11 +23,13 @@ class Exchange < ActiveRecord::Base
   has_many(:posts,
            -> { order "created_at ASC" },
            dependent: :destroy,
-           foreign_key: "exchange_id")
+           foreign_key: "exchange_id",
+           inverse_of: :exchange)
 
   has_many(:exchange_views,
            dependent: :destroy,
-           foreign_key: "exchange_id")
+           foreign_key: "exchange_id",
+           inverse_of: :exchange)
 
   has_many(:users, through: :posts)
 
@@ -45,12 +47,11 @@ class Exchange < ActiveRecord::Base
   end
 
   def labels?
-    (closed? || sticky? || nsfw? || trusted?) ? true : false
+    closed? || sticky? || nsfw? ? true : false
   end
 
   def labels
     labels = []
-    labels << "Trusted" if trusted?
     labels << "Sticky"  if sticky?
     labels << "Closed"  if closed?
     labels << "NSFW"    if nsfw?
@@ -73,12 +74,12 @@ class Exchange < ActiveRecord::Base
     return false unless user
     return true if user.moderator?
     return false if closer && !moderators.include?(closer)
+
     moderators.include?(user)
   end
 
   def unlabel!
-    update_attributes(
-      trusted: false,
+    update(
       sticky: false,
       closed: false,
       nsfw: false
@@ -88,14 +89,14 @@ class Exchange < ActiveRecord::Base
   private
 
   def validate_closed
-    if closed_changed?
-      if !closed? && (!updated_by || !closeable_by?(updated_by))
-        errors.add(:closed, "can't be changed!")
-      elsif closed?
-        self.closer = updated_by
-      else
-        self.closer = nil
-      end
+    return unless closed_changed?
+
+    if !closed? && (!updated_by || !closeable_by?(updated_by))
+      errors.add(:closed, "can't be changed!")
+    elsif closed?
+      self.closer = updated_by
+    else
+      self.closer = nil
     end
   end
 end

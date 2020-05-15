@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ApplicationHelper
   include AvatarsHelper
@@ -25,7 +25,7 @@ module ApplicationHelper
   end
 
   def possessive(noun)
-    (noun =~ /s$/) ? "#{noun}'" : "#{noun}'s"
+    noun.match?(/s$/) ? "#{noun}'" : "#{noun}'s"
   end
 
   # Generates a link to the users profile

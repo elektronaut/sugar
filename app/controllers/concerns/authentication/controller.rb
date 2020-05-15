@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module Authentication
   module Controller
@@ -8,83 +8,56 @@ module Authentication
 
     included do
       before_action :load_session_user,
-                    :handle_memorialized,
-                    :handle_temporary_ban,
-                    :handle_permanent_ban,
-                    :verify_activated_account
-      after_action :cleanup_temporary_ban,
-                   :update_last_active,
+                    :verify_active_account
+      after_action :update_last_active,
                    :store_session_authentication
     end
 
     protected
 
-    def load_session_user
-      if session[:user_id] && session[:persistence_token] && !current_user?
-        user = User.where(id: session[:user_id]).first
-        if user && user.persistence_token == session[:persistence_token]
-          @current_user = user
-        end
+    def authentication_failure_notice
+      t("authentication.notice.#{current_user.status}", duration: ban_duration)
+    end
+
+    def authentication_log_line(user)
+      if user.active?
+        "Authenticated as user:#{user.id} (#{user.username})"
+      else
+        "Authentication failed for user:#{user.id} " \
+        "(#{user.username}) - #{user.status}"
       end
+    end
+
+    def load_session_user
+      return unless session[:user_id] &&
+                    session[:persistence_token] &&
+                    !current_user?
+
+      user = User.find_by(id: session[:user_id])
+      return unless user&.persistence_token == session[:persistence_token]
+
+      @current_user = user
     end
 
     def ban_duration
+      return nil unless current_user.temporary_banned?
+
       distance_of_time_in_words(Time.zone.now, current_user.banned_until)
     end
 
-    def handle_memorialized
-      if current_user? && current_user.memorialized?
-        logger.info(
-          "Authentication failed for user:#{current_user.id} " \
-          "(#{current_user.username}) - memorialized"
-        )
-        flash[:notice] = "This account has been memorialized and is " \
-                         "inaccessible"
-        deauthenticate!
-      end
-    end
+    def verify_active_account
+      return unless current_user?
 
-    def handle_temporary_ban
-      if current_user? && current_user.temporary_banned?
-        logger.info(
-          "Authentication failed for user:#{current_user.id} " \
-            "(#{current_user.username}) - temporary ban"
-        )
-        flash[:notice] = "You have been banned for #{ban_duration}!"
-        deauthenticate!
-      end
-    end
+      current_user.check_status!
+      logger.info(authentication_log_line(current_user))
+      return if current_user.active?
 
-    def handle_permanent_ban
-      if current_user && current_user.banned?
-        logger.info(
-          "Authentication failed for user:#{current_user.id} " \
-            "(#{current_user.username}) - permanent ban"
-        )
-        flash[:notice] = "You have been banned!"
-        deauthenticate!
-      end
-    end
-
-    def verify_activated_account
-      if current_user?
-        logger.info(
-          "Authenticated as user:#{current_user.id} " \
-            "(#{current_user.username})"
-        )
-      end
+      flash[:notice] = authentication_failure_notice
+      deauthenticate!
     end
 
     def deauthenticate!
       @current_user = nil
-    end
-
-    def cleanup_temporary_ban
-      if current_user? &&
-         current_user.banned_until? &&
-         !current_user.temporary_banned?
-        current_user.update_attributes(banned_until: nil)
-      end
     end
 
     def update_last_active

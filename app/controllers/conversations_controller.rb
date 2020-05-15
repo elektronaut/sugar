@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class ConversationsController < ApplicationController
   include ExchangesController
@@ -6,10 +6,10 @@ class ConversationsController < ApplicationController
   requires_authentication
   requires_user
 
-  before_action :find_exchange, except: [:index, :new, :create]
-  before_action :verify_editable, only: [:edit, :update, :destroy]
+  before_action :find_exchange, except: %i[index new create]
+  before_action :verify_editable, only: %i[edit update destroy]
   before_action :find_recipient, only: [:create]
-  before_action :require_and_set_search_query, only: [:search, :search_posts]
+  before_action :require_and_set_search_query, only: %i[search search_posts]
   before_action :find_remove_user, only: [:remove_participant]
 
   def index
@@ -24,31 +24,21 @@ class ConversationsController < ApplicationController
 
   def new
     @exchange = Conversation.new
-    @recipient = User.find_by_username(params[:username]) if params[:username]
+    @recipient = User.find_by(username: params[:username]) if params[:username]
     @moderators = true if params[:moderators]
     render template: "exchanges/new"
   end
 
   def create
-    @exchange = Conversation.create(exchange_params.merge(poster: current_user))
     @moderators = true if params[:moderators]
+    @exchange = create_exchange(recipient: @recipient, moderators: @moderators)
     if @exchange.valid?
-      @exchange.add_participant(@recipient) if @recipient
-      User.admins.each { |u| @exchange.add_participant(u) } if @moderators
       redirect_to @exchange
     else
       flash.now[:notice] = "Could not save your conversation! " \
                            "Please make sure all required fields are filled in."
       render template: "exchanges/new"
     end
-  end
-
-  def edit
-    super
-  end
-
-  def update
-    super
   end
 
   def invite_participant
@@ -76,16 +66,14 @@ class ConversationsController < ApplicationController
   end
 
   def mute
-    current_user
-      .conversation_relationships.where(conversation: @exchange)
-      .update_all(notifications: false)
+    current_user.conversation_relationships
+                .find_by(conversation: @exchange).update(notifications: false)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 
   def unmute
-    current_user
-      .conversation_relationships.where(conversation: @exchange)
-      .update_all(notifications: true)
+    current_user.conversation_relationships
+                .find_by(conversation: @exchange).update(notifications: true)
     redirect_to conversation_url(@exchange, page: params[:page])
   end
 
@@ -93,9 +81,18 @@ class ConversationsController < ApplicationController
 
   def add_participants(exchange, usernames)
     usernames.each do |username|
-      user = User.find_by_username(username)
+      user = User.find_by(username: username)
       exchange.add_participant(user) if user
     end
+  end
+
+  def create_exchange(recipient:, moderators:)
+    exchange = Conversation.create(exchange_params.merge(poster: current_user))
+    if exchange.valid?
+      exchange.add_participant(recipient) if recipient
+      User.admins.each { |u| exchange.add_participant(u) } if moderators
+    end
+    exchange
   end
 
   def exchange_params
@@ -110,18 +107,13 @@ class ConversationsController < ApplicationController
   end
 
   def find_recipient
-    if params[:recipient_id]
-      begin
-        @recipient = User.find(params[:recipient_id])
-      rescue ActiveRecord::RecordNotFound
-        @recipient = nil
-      end
-    end
+    @recipient = User.find_by(id: params[:recipient_id])
   end
 
   def find_remove_user
-    @user = User.find_by_username(params[:username])
+    @user = User.find_by(username: params[:username])
     return if @exchange.removeable_by?(@user, current_user)
+
     flash[:error] = "You can't do that!"
     redirect_to @exchange
   end

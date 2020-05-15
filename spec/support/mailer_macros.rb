@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MailerMacros
   def email_deliveries
     ActionMailer::Base.deliveries

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -11,6 +11,7 @@ describe UsersController, redis: true do
         configure signups_allowed: false
         get :new, params: { token: invite.token }
       end
+
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
       specify { expect(assigns(:invite)).to be_a(Invite) }
@@ -24,6 +25,7 @@ describe UsersController, redis: true do
         configure signups_allowed: false
         get :new
       end
+
       specify { expect(flash[:notice]).to match("Signups are not allowed") }
       it { is_expected.to redirect_to(login_users_url) }
     end
@@ -33,20 +35,22 @@ describe UsersController, redis: true do
     let(:params) do
       attributes = attributes_for(:user)
       {
-        username:         attributes[:username],
-        email:            attributes[:email],
-        password:         "randompassword",
+        username: attributes[:username],
+        email: attributes[:email],
+        password: "randompassword",
         confirm_password: "randompassword",
-        realname:         attributes[:realname]
+        realname: attributes[:realname]
       }
     end
 
     context "with a valid invite token" do
       before { post :create, params: { token: invite.token, user: params } }
+
       specify { expect(assigns(:invite)).to be_a(Invite) }
       specify { expect(assigns(:user)).to be_a(User) }
-      it "should redirect " do
-        is_expected.to redirect_to(
+
+      it "redirects" do
+        expect(response).to redirect_to(
           user_profile_url(id: assigns(:user).username)
         )
       end

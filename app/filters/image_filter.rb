@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class ImageFilter < Filter
   def process(post)
@@ -12,7 +12,7 @@ class ImageFilter < Filter
   private
 
   def src?(elem)
-    elem.attributes && !elem.attributes["src"].blank?
+    elem.attributes && elem.attributes["src"].present?
   end
 
   def image_src(elem)
@@ -26,13 +26,13 @@ class ImageFilter < Filter
 
   def process_image(elem)
     url = image_src(elem)
-    if url && needs_dimensions?(elem)
-      dimensions = FastImage.size(url, timeout: 2.0)
-      if dimensions
-        width, height = dimensions
-        elem.set_attribute "width", width.to_s
-        elem.set_attribute "height", height.to_s
-      end
-    end
+    return unless url && needs_dimensions?(elem)
+
+    dimensions = FastImage.size(url, timeout: 2.0)
+    return unless dimensions
+
+    width, height = dimensions
+    elem.set_attribute "width", width.to_s
+    elem.set_attribute "height", height.to_s
   end
 end

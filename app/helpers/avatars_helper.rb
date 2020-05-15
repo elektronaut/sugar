@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require "digest/md5"
 
@@ -25,8 +25,8 @@ module AvatarsHelper
 
   def avatar_options(user)
     {
-      size:  "96x96",
-      alt:   user.username,
+      size: "96x96",
+      alt: user.username,
       class: "avatar-image"
     }
   end

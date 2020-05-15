@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ConversationPost
   extend ActiveSupport::Concern
@@ -16,12 +16,10 @@ module ConversationPost
   end
 
   def notify_new_conversation_post
-    if conversation?
-      exchange.conversation_relationships.each do |relationship|
-        unless relationship.user == user
-          relationship.update_attributes(new_posts: true)
-        end
-      end
+    return unless conversation?
+
+    exchange.conversation_relationships.each do |relationship|
+      relationship.update(new_posts: true) unless relationship.user == user
     end
   end
 end

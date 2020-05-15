@@ -43,8 +43,16 @@ en:
         confirm_password: Confirm password
         stylesheet_url: Custom stylesheet URL
         mobile_stylesheet_url: Custom mobile stylesheet URL
-        banned_until: Ban me until
+        banned_until: Banned until
+        hiatus_until: Go on hiatus until
         memorialized: Memorialized
+  authentication:
+    notice:
+      inactive: "Your account has been disabled due to inactivity/lack of participation. Reach out to someone to get back in if you think you'll be able to be a regular contributor to the community"
+      hiatus: "You are on hiatus for %{duration}."
+      time_out: "You are on time out for %{duration}."
+      banned: "You are banned."
+      memorialized: "This account has been memorialized and is inaccessible."
   configuration:
     configuration: Configuration
     documents: Documents
@@ -60,7 +68,7 @@ en:
     domain_names_description: "Comma separated"
     forum_title_description: HTML allowed
     forum_short_name_description: "Will be used where applicable, ie. on the mobile version"
-    mail_sender_description: "Example: My Forum &lt;no-reply@mydomain.com&gt;"
+    mail_sender_description: "Example: My Forum <no-reply@mydomain.com>"
     anyone_can_browse: Anyone can browse
     browsing_requires_login: Browsing requires login
     users_can_sign_up: Users can sign up
@@ -79,10 +87,17 @@ en:
     flickr: Flickr
     custom_html: Custom HTML
     custom_javascript: Custom Javascript
-    custom_header_description: 'Included right after &lt;body&gt;'
-    custom_footer_description: 'Included just before &lt;/body&gt;'
-    custom_javascript_info: 'Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with <span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.'
+    custom_header_description: 'Included right after <body>'
+    custom_footer_description: 'Included just before <body>'
+    custom_javascript_html: 'Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with <span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.'
   user:
+    status:
+      active: Active
+      inactive: Inactive
+      hiatus: On hiatus
+      time_out: On time out
+      banned: Banned
+      memorialized: Memorialized
     edit:
       tabs:
         info: Personal Info
@@ -97,8 +112,7 @@ en:
       invites_count: invites
       administator_privileges: Administator privileges
       birthday_description: "Your age won't be shown, but your birthday will"
-      gravatar_link: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
-      trusted_description: 'User will be able to see discussions marked as trusted'
+      gravatar_link_html: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
       temporary_ban: Temporary ban
       moderator_description: 'Can edit all discussions and posts'
       user_admin_description: 'Can edit other users and handle invites or approvals'
@@ -110,7 +124,7 @@ en:
       facebook_connected: You have connected your Facebook account.
       remove?: 'Remove?'
       flickr_description: 'Note: This is not your username'
-      steam_description: 'Note: Not your login; 64-bit integer or custom URL name<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
+      steam_description_html: 'Note: Not your login; 64-bit integer or custom URL name<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
       account_info: Account info
       settings: Settings
       theme: Theme

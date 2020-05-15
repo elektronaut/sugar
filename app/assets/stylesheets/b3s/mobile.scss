@@ -1,5 +1,7 @@
 @import 'default/reset';
+@import 'default/breakpoints';
 @import 'default/components/spoilers';
+@import 'default/components/help';
 
 .clearfix:after {
   content: ".";
@@ -32,7 +34,7 @@ em, i {
 
 body {
   margin: 0;
-  font-family: Helvetica;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
   background: #FFFFFF;
   color: #000000;
   overflow-x: hidden;
@@ -166,12 +168,11 @@ body[orient="landscape"] #navigation .search .query {
 }
 
 #footer {
-  padding: 5px 10px;
-  border-top: 1px solid #ddd;
-  background: #f8f8f8;
+  padding: 20px 10px;
   color: #888;
   font-size: 13px;
-  background: #eee;
+  text-align: center;
+  background: #f8f8f8;
 }
 #footer .separator {
   color: #aaa;
@@ -332,6 +333,31 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .posts .post {
   padding: 5px 10px;
   border-bottom: 1px solid #ddd;
+
+  .muted-notice {
+    display: none;
+  }
+
+  &.muted {
+    .functions,
+    .post_info,
+    .body {
+      display: none;
+    }
+    .muted-notice {
+      display: block;
+      color: #888;
+      font-size: 0.9em;
+      padding: 5px 0px;
+      &, a, a:visited {
+        color: #888;
+      }
+      a, a:visited {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .posts .post_distance {
@@ -437,6 +463,9 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 .post .body h6 {
   font-size: 1.1em;
+}
+.post .body small {
+  font-size: 12px;
 }
 .post .body ul, .post .body ol {
   &,
@@ -593,9 +622,14 @@ blockquote cite {
 
 .reply {
   padding: 15px 10px 5px 10px;
+  &, * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }
 textarea.rich {
-  width: 98%;
+  width: 100%;
   max-width: 650px;
   height: 180px;
   margin: 0 auto;
@@ -616,7 +650,7 @@ textarea.rich {
   padding: 0px 2px 0px 0px;
   line-height: 30px;
   margin-bottom: 0px;
-  width: 98%;
+  width: 100%;
   max-width: 650px;
   li {
     list-style: none;

@@ -1,11 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module ExchangesController
   extend ActiveSupport::Concern
 
   included do
     protect_from_forgery except: [:mark_as_read]
-    respond_to :html, :mobile, :json
   end
 
   def search_posts
@@ -20,7 +19,7 @@ module ExchangesController
   end
 
   def show
-    context = (request.format == :mobile) ? 0 : 3
+    context = request.format == :mobile ? 0 : 3
     @page = params[:page] || 1
     @posts = @exchange.posts.page(@page, context: context).for_view
 
@@ -30,7 +29,15 @@ module ExchangesController
       (@posts.offset_value + @posts.count)
     )
 
-    respond_with(@exchange)
+    respond_to do |format|
+      format.html {}
+      format.mobile {}
+      format.json do
+        redirect_to(
+          polymorphic_path([@exchange, :posts], page: @page, format: :json)
+        )
+      end
+    end
   end
 
   def edit
@@ -39,7 +46,7 @@ module ExchangesController
   end
 
   def update
-    @exchange.update_attributes(exchange_params.merge(updated_by: current_user))
+    @exchange.update(exchange_params.merge(updated_by: current_user))
     if @exchange.valid?
       flash[:notice] = "Your changes were saved."
       redirect_to @exchange
@@ -63,6 +70,7 @@ module ExchangesController
 
   def mark_as_viewed!(exchange, last_post, count)
     return unless current_user?
+
     current_user.mark_exchange_viewed(exchange, last_post, count)
   end
 
@@ -77,6 +85,7 @@ module ExchangesController
   def require_and_set_search_query
     @search_query = search_query
     return if @search_query
+
     flash[:notice] = "No query specified!"
     redirect_to root_url
   end

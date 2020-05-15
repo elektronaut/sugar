@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require "simplecov"
 SimpleCov.start
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../config/environment", __dir__)
 
 # Prevent database truncation if the environment is production
 if Rails.env.production?
@@ -30,7 +32,7 @@ require "webmock/rspec"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
@@ -40,7 +42,7 @@ WebMock.disable_net_connect!(
 original_sunspot_session = Sunspot.session
 Sunspot::Rails::Tester.start_original_sunspot_session
 
-Sugar.redis = Redis.connect(RedisHelper::CONFIG)
+Sugar.redis = Redis.new(RedisHelper::CONFIG)
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -81,8 +83,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Use FactoryGirl shorthand
-  config.include FactoryGirl::Syntax::Methods
+  # Use FactoryBot shorthand
+  config.include FactoryBot::Syntax::Methods
 
   config.include Features, type: :feature
   config.include RedisHelper, redis: true
@@ -91,7 +93,7 @@ RSpec.configure do |config|
   config.include MailerMacros
   config.include ConfigurationMacros
 
-  config.before(:each) { reset_email }
+  config.before { reset_email }
 
   # Clean the Redis database and reload the configuration
   config.around(:each, redis: true) do |example|
@@ -112,7 +114,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.around(:each) do |example|
+  config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end

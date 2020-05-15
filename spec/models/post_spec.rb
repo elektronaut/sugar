@@ -1,15 +1,13 @@
-# encoding: utf-8
+# coding: utf-8
+# frozen_string_literal: true
 
 require "rails_helper"
 
 describe Post do
   let(:discussion) { create(:discussion) }
-  let(:trusted_discussion) { create(:trusted_discussion) }
   let(:conversation) { create(:conversation) }
   let(:post) { create(:post) }
-  let(:trusted_post) { create(:trusted_post) }
   let(:user) { create(:user) }
-  let(:trusted_user) { create(:trusted_user) }
   let(:moderator) { create(:moderator) }
   let(:admin) { create(:admin) }
   let(:user_admin) { create(:user_admin) }
@@ -40,39 +38,39 @@ describe Post do
 
     describe "the discussion it belongs to" do
       before { post }
-      subject { discussion }
-      specify { expect(subject.last_poster).to eq(post.user) }
-      specify { expect(subject.last_post_at).to eq(post.created_at) }
+
+      specify { expect(discussion.last_poster).to eq(post.user) }
+      specify { expect(discussion.last_post_at).to eq(post.created_at) }
     end
 
     describe "updating posts count" do
       let!(:discussion) { create(:discussion) }
       let(:post) { create(:post, user: user, exchange: discussion) }
 
-      it "should increment public_posts_count on user" do
-        expect { post }.to change { user.public_posts_count }.by(1)
+      it "increments public_posts_count on user" do
+        expect { post }.to change(user, :public_posts_count).by(1)
       end
 
-      it "should increment posts_count on user" do
-        expect { post }.to change { user.posts_count }.by(1)
+      it "increments posts_count on user" do
+        expect { post }.to change(user, :posts_count).by(1)
       end
 
-      it "should increment posts_count on exchange" do
-        expect { post }.to change { discussion.posts_count }.by(1)
+      it "increments posts_count on exchange" do
+        expect { post }.to change(discussion, :posts_count).by(1)
       end
     end
 
     context "when count cache file exists" do
       let!(:discussion) { create(:discussion) }
-      let(:post) { create(:post, exchange: discussion) }
-      it "should delete the file" do
+
+      before do
         allow(File).to receive(:exist?).and_return(true)
-        expect(File).to(
-          receive(:unlink)
-            .with(cache_path)
-            .exactly(1).times
-        )
-        post
+        allow(File).to receive(:unlink)
+      end
+
+      it "deletes the file" do
+        create(:post, exchange: discussion)
+        expect(File).to have_received(:unlink).with(cache_path).once
       end
     end
   end
@@ -81,29 +79,27 @@ describe Post do
     describe "updating posts count" do
       let!(:post) { create(:post, user: user, exchange: discussion) }
 
-      it "should decrement public_posts_count on user" do
-        expect { post.destroy }.to change { user.public_posts_count }.by(-1)
+      it "decrements public_posts_count on user" do
+        expect { post.destroy }.to change(user, :public_posts_count).by(-1)
       end
 
-      it "should decrement posts_count on user" do
-        expect { post.destroy }.to change { user.posts_count }.by(-1)
+      it "decrements posts_count on user" do
+        expect { post.destroy }.to change(user, :posts_count).by(-1)
       end
 
-      it "should decrement posts_count on exchange" do
-        expect { post.destroy }.to change { discussion.posts_count }.by(-1)
+      it "decrements posts_count on exchange" do
+        expect { post.destroy }.to change(discussion, :posts_count).by(-1)
       end
     end
 
     context "when count cache file exists" do
       let!(:post) { create(:post, exchange: discussion) }
-      it "should delete the file" do
+
+      it "deletes the file" do
         allow(File).to receive(:exist?).and_return(true)
-        expect(File).to(
-          receive(:unlink)
-            .with(cache_path)
-            .exactly(1).times
-        )
+        allow(File).to receive(:unlink)
         post.destroy
+        expect(File).to have_received(:unlink).with(cache_path).once
       end
     end
   end
@@ -113,16 +109,19 @@ describe Post do
 
     context "when post starts with /me" do
       let(:post) { create(:post, body: "/me shuffles") }
+
       it { is_expected.to eq(true) }
     end
 
     context "when post starts with /me and contains a line break" do
       let(:post) { create(:post, body: "/me shuffles\noh yeah") }
+
       it { is_expected.to eq(false) }
     end
 
     context "when post doesn't start with /me" do
       let(:post) { create(:post, body: "Start with /me") }
+
       it { is_expected.to eq(false) }
     end
   end
@@ -137,41 +136,47 @@ describe Post do
 
     context "when it's the first post" do
       before { allow(post).to receive(:post_number).and_return(1) }
+
       it { is_expected.to eq(1) }
     end
 
     context "when it's the last post on a page" do
       before { allow(post).to receive(:post_number).and_return(50) }
+
       it { is_expected.to eq(1) }
     end
 
     context "when it's the first post on the second page" do
       before { allow(post).to receive(:post_number).and_return(51) }
+
       it { is_expected.to eq(2) }
     end
 
     context "with :limit set" do
-      before { allow(post).to receive(:post_number).and_return(70) }
       subject { post.page(limit: 10) }
+
+      before { allow(post).to receive(:post_number).and_return(70) }
+
       it { is_expected.to eq(7) }
     end
   end
 
   describe "#body_html" do
-    let!(:discussion) { create(:discussion) }
+    subject { post.body_html }
+
+    let(:discussion) { create(:discussion) }
     let!(:post) { create(:post, exchange: discussion) }
 
-    subject { post.body_html }
     it { is_expected.to eq(Renderer.render(post.body)) }
 
     context "when not saved" do
       let!(:post) { build(:post, exchange: discussion) }
 
+      before { allow(Renderer).to receive(:render) }
+
       it "parses the post" do
-        expect(Renderer).to receive(:render)
-          .exactly(1).times
-          .and_return(double(to_html: "<p>Test</p>"))
         post.body_html
+        expect(Renderer).to have_received(:render).once
       end
     end
 
@@ -180,19 +185,23 @@ describe Post do
         create(:post, exchange: discussion, body_html: "<p>Test</p>")
       end
 
+      before { allow(Renderer).to receive(:render) }
+
       it "uses the cached version" do
-        expect(Renderer).to receive(:render).exactly(0).times
         post.body_html
+        expect(Renderer).to have_received(:render).exactly(0).times
       end
     end
 
     context "when body_html hasn't been set" do
+      before do
+        allow(Renderer).to(receive(:render).and_return("<p>Test</p>"))
+      end
+
       it "parses the post" do
         post.body_html = nil
-        expect(Renderer).to receive(:render)
-          .exactly(1).times
-          .and_return("<p>Test</p>".html_safe)
         post.body_html
+        expect(Renderer).to have_received(:render).once
       end
     end
   end
@@ -231,22 +240,17 @@ describe Post do
   end
 
   describe "#viewable_by?" do
-    context "when it isn't trusted" do
-      specify { expect(post.viewable_by?(user)).to eq(true) }
-    end
+    specify { expect(post.viewable_by?(user)).to eq(true) }
 
-    context "when it is trusted" do
-      specify { expect(trusted_post.viewable_by?(user)).to eq(false) }
-      specify { expect(trusted_post.viewable_by?(trusted_user)).to eq(true) }
-    end
-
-    context "and public browsing is on" do
+    context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
+
       specify { expect(post.viewable_by?(nil)).to eq(true) }
     end
 
-    context "and public browsing is of" do
+    context "when public browsing is off" do
       before { Sugar.config.public_browsing = false }
+
       specify { expect(post.viewable_by?(nil)).to eq(false) }
     end
   end
@@ -260,6 +264,7 @@ describe Post do
 
     context "when it mentions users" do
       let(:post) { mentioning_post }
+
       it { is_expected.to eq(true) }
     end
   end
@@ -273,52 +278,39 @@ describe Post do
 
     context "when it mentions users" do
       let(:post) { mentioning_post }
+
       it { is_expected.to match_array(mentioned_users) }
-    end
-  end
-
-  describe "#update_trusted_status" do
-    subject { post }
-
-    context "when in a regular discussion" do
-      let(:post) { create(:post, exchange: discussion) }
-      specify { expect(subject.trusted?).to eq(false) }
-      specify { expect(subject.conversation?).to eq(false) }
-    end
-
-    context "when in a trusted discussion" do
-      let(:post) { create(:post, exchange: trusted_discussion) }
-      specify { expect(subject.trusted?).to eq(true) }
     end
   end
 
   describe "#render_html" do
     context "when skip_html is false" do
       before { discussion }
+
       it "parses the post" do
-        expect(Renderer).to receive(:render)
-          .exactly(1).times
-          .and_return("<p>Test</p>".html_safe)
+        allow(Renderer).to receive(:render)
         create(:post, exchange: discussion)
+        expect(Renderer).to have_received(:render).once
       end
     end
 
     context "when skip_html is true" do
       before { discussion }
+
       it "parses the post" do
-        expect(Renderer).to receive(:render).exactly(0).times
+        allow(Renderer).to receive(:render)
         create(:post, skip_html: true, exchange: discussion)
+        expect(Renderer).not_to have_received(:render)
       end
     end
   end
 
   describe "#set_edit_timestamp" do
-    subject { post }
-
     context "when edited_at is set" do
       let(:timestamp) { 2.days.ago }
       let(:post) { create(:post, edited_at: timestamp) }
-      specify { expect(subject.edited_at).to be_within(1.second).of(timestamp) }
+
+      specify { expect(post.edited_at).to be_within(1.second).of(timestamp) }
     end
 
     context "when edited_at isn't set" do
@@ -326,35 +318,39 @@ describe Post do
         allow(Time).to receive(:now)
           .and_return(Time.zone.parse("Oct 22 2012"))
       end
-      specify { expect(subject.edited_at).to eq(Time.now.utc) }
+
+      specify { expect(post.edited_at).to eq(Time.now.utc) }
     end
   end
 
   describe "#define_relationship" do
     context "when it belongs to a discussion" do
       before { discussion }
+
       it "defines a relationship between the discussion and the poster" do
-        expect(
-          DiscussionRelationship
-        ).to receive(:define)
-          .exactly(1).times
-          .with(user, discussion, participated: true)
+        allow(DiscussionRelationship).to receive(:define)
         create(:post, user: user, exchange: discussion)
+        expect(DiscussionRelationship).to(
+          have_received(:define).once.with(user, discussion, participated: true)
+        )
       end
     end
 
     context "when it belongs to a conversation" do
       before { conversation }
+
       it "does not define a relationship" do
-        expect(DiscussionRelationship).to receive(:define).exactly(0).times
+        allow(DiscussionRelationship).to receive(:define)
         create(:post, exchange: conversation)
+        expect(DiscussionRelationship).not_to have_received(:define)
       end
     end
   end
 
   describe "#update_exchange" do
-    subject { post.exchange }
-    specify { expect(subject.last_poster_id).to eq(post.user_id) }
-    specify { expect(subject.last_post_at).to eq(post.created_at) }
+    subject(:exchange) { post.exchange }
+
+    specify { expect(exchange.last_poster_id).to eq(post.user_id) }
+    specify { expect(exchange.last_post_at).to eq(post.created_at) }
   end
 end
