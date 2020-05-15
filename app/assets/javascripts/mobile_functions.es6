@@ -144,7 +144,10 @@ $(document).ready(function () {
   // Muted posts
   $(".post").each(function () {
     const userId = $(this).data("user_id");
-    if (window.mutedUsers && window.mutedUsers.indexOf(userId) !== -1) {
+    if (
+      window.mutedUsers &&
+      window.mutedUsers.indexOf(userId) !== -1) {
+
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
 
@@ -155,7 +158,7 @@ $(document).ready(function () {
       });
 
       notice.classList.add("muted-notice");
-      notice.innerHTML = "This post has been muted. "
+      notice.innerHTML = `This post by <strong>${this.el.querySelector('.username a').textContent}</strong> has been muted. `
       notice.appendChild(showLink);
 
       this.classList.add("muted");
