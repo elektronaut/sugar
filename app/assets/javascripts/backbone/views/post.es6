@@ -146,7 +146,7 @@ Sugar.Views.Post = Backbone.View.extend({
       });
 
       notice.classList.add("muted-notice");
-      notice.innerHTML = "This post has been muted. "
+      notice.innerHTML = `This post by <strong>${this.el.querySelector('.username a').textContent}</strong> has been muted. `
       notice.appendChild(showLink);
 
       this.el.classList.add("muted");
