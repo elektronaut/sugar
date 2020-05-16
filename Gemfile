@@ -6,7 +6,7 @@ gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
 gem "bcrypt", "~> 3.1.12"
 gem "fast_jsonapi"
-gem "rails", "~> 5.2.1"
+gem "rails", "~> 6.0.3"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -24,12 +24,12 @@ gem "coffee-rails"
 gem "dynamic_form"
 gem "jquery-rails"
 gem "json"
-gem "sass-rails", "~> 5.0"
+gem "sass-rails", ">= 6.0"
 gem "sprockets-es6"
 gem "uglifier"
 gem "validate_url"
 
-gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git"
+gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git", branch: :master
 gem "gemoji"
 gem "ruby-oembed", require: "oembed"
 
@@ -59,7 +59,7 @@ gem "httparty", "~> 0.17"
 gem "nokogiri"
 
 gem "progress_bar"
-gem "sunspot_rails", "~> 2.2.0"
+gem "sunspot_rails", "~> 2.5.0"
 
 gem "newrelic_rpm", group: "newrelic"
 
@@ -74,6 +74,7 @@ gem "activemodel-serializers-xml"
 gem "non-stupid-digest-assets"
 
 group :development do
+  gem "listen"
   gem "web-console"
   gem "yui-compressor", require: "yui/compressor"
 end
@@ -98,7 +99,7 @@ group :test, :development do
   gem "puma"
 
   gem "sunspot-rails-tester"
-  gem "sunspot_solr", "~> 2.1.0"
+  gem "sunspot_solr"
 
   gem "pry"
 
