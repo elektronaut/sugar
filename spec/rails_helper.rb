@@ -40,7 +40,6 @@ WebMock.disable_net_connect!(
 )
 
 original_sunspot_session = Sunspot.session
-Sunspot::Rails::Tester.start_original_sunspot_session
 
 Sugar.redis = Redis.new(RedisHelper::CONFIG)
 

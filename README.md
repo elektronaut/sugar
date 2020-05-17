@@ -40,7 +40,7 @@ differs.
 
 Now you can start Solr and the development server:
 
-    $ bin/sunspot-solr start
+    $ bin/rails sunspot:solr:start
     $ bin/rails server
 
 Sugar is now running on [localhost:3000](http://localhost:3000/).
