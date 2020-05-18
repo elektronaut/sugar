@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
