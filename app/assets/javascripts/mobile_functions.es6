@@ -150,6 +150,7 @@ $(document).ready(function () {
 
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
+      const username = this.querySelector('.username a').textContent;
 
       showLink.innerHTML = "Show";
       showLink.addEventListener("click", (evt) => {
@@ -158,7 +159,7 @@ $(document).ready(function () {
       });
 
       notice.classList.add("muted-notice");
-      notice.innerHTML = `This post by <strong>${this.el.querySelector('.username a').textContent}</strong> has been muted. `
+      notice.innerHTML = `This post by <strong>${username}</strong> has been muted. `
       notice.appendChild(showLink);
 
       this.classList.add("muted");

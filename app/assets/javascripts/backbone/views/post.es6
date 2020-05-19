@@ -138,6 +138,7 @@ Sugar.Views.Post = Backbone.View.extend({
 
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
+      const username = this.el.querySelector('.username a').textContent;
 
       showLink.innerHTML = "Show";
       showLink.addEventListener("click", (evt) => {
@@ -146,7 +147,7 @@ Sugar.Views.Post = Backbone.View.extend({
       });
 
       notice.classList.add("muted-notice");
-      notice.innerHTML = `This post by <strong>${this.el.querySelector('.username a').textContent}</strong> has been muted. `
+      notice.innerHTML = `This post by <strong>${username}</strong> has been muted. `
       notice.appendChild(showLink);
 
       this.el.classList.add("muted");
