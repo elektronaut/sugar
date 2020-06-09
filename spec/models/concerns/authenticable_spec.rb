@@ -170,6 +170,7 @@ describe Authenticable do
 
   describe "#new_password?" do
     specify { expect(user.new_password?).to eq(false) }
+
     specify do
       expect(build(:user, password: "New password").new_password?).to eq(true)
     end
@@ -177,9 +178,11 @@ describe Authenticable do
 
   describe "#new_password_confirmed?" do
     specify { expect(user.new_password_confirmed?).to eq(false) }
+
     specify do
       expect(build(:user, password: "new").new_password_confirmed?).to eq(false)
     end
+
     specify do
       expect(
         build(
@@ -187,6 +190,7 @@ describe Authenticable do
         ).new_password_confirmed?
       ).to eq(false)
     end
+
     specify do
       expect(
         build(
@@ -220,6 +224,7 @@ describe Authenticable do
 
   describe "#temporary_banned?" do
     specify { expect(user.temporary_banned?).to eq(false) }
+
     specify do
       expect(
         create(
@@ -227,6 +232,7 @@ describe Authenticable do
         ).temporary_banned?
       ).to eq(false)
     end
+
     specify do
       expect(
         create(
@@ -280,6 +286,7 @@ describe Authenticable do
         create(:user, banned_until: 2.seconds.ago).banned_until
       ).to eq(nil)
     end
+
     specify do
       expect(
         create(:user, banned_until: (Time.now.utc + 2.days)).banned_until

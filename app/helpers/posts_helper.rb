@@ -28,7 +28,7 @@ module PostsHelper
   end
 
   def meify(string, user)
-    string.gsub(%r{(^|\<[\w]+\s?/?\>|[\s])/me}) do
+    string.gsub(%r{(^|<\w+\s?/?>|\s)/me}) do
       Regexp.last_match(1).to_s + profile_link(user, nil, class: :poster)
     end.html_safe
   end

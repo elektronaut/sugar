@@ -8,7 +8,7 @@ class SimpleFilter < Filter
   private
 
   def convert_line_breaks(str)
-    str.gsub(/[\r]?\n/, "<br>\n")
+    str.gsub(/\r?\n/, "<br>\n")
   end
 
   def escape_angle_brackets(str)

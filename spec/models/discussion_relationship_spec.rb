@@ -61,6 +61,7 @@ describe DiscussionRelationship do
 
       specify { expect(relationship.valid?).to eq(true) }
       specify { expect(relationship.favorite?).to eq(true) }
+
       specify do
         expect(
           relationship.user.discussion_relationships

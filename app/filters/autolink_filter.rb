@@ -39,14 +39,14 @@ class AutolinkFilter < Filter
   end
 
   def twitter_expression
-    %r{^https?://(mobile\.)?twitter\.com/(([\w\d_]+)/)?status(es)?/([\d]+)}
+    %r{^https?://(mobile\.)?twitter\.com/(([\w\d_]+)/)?status(es)?/(\d+)}
   end
 
   def normalize_twitter_url(url)
-    if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/([\d]+)})
+    if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/(\d+)})
       url
     else
-      id = url.match(%r{/([\d]+)$})[1]
+      id = url.match(%r{/(\d+)$})[1]
       "https://twitter.com/twitter/status/#{id}"
     end
   end

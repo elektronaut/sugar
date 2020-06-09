@@ -5,7 +5,7 @@ require "rails_helper"
 describe SanitizeFilter do
   let(:filter) { described_class.new(input) }
 
-  context "when input contains a script tag" do
+  context "when input contains a form tag" do
     let(:input) { '<form action="/" method="post"></form>' }
 
     it "strips the tag" do

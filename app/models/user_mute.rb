@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserMute < ApplicationRecord
   belongs_to :user
   belongs_to :muted_user, class_name: "User"

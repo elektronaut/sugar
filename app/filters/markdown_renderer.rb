@@ -34,11 +34,11 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   def separate_adjacent_blockquotes(document)
-    document.gsub(/[\n]+\n(?=[\s]*>)/, "\n\n<div class=\"strip-me\"></div>\n\n")
+    document.gsub(/\n+\n(?=\s*>)/, "\n\n<div class=\"strip-me\"></div>\n\n")
   end
 
   def escape_leading_gts_without_space(document)
-    document.gsub(/^([\s]*)([>]+)([^\s>])/) do
+    document.gsub(/^(\s*)(>+)([^\s>])/) do
       Regexp.last_match(1) +
         ("&gt;" * Regexp.last_match(2).length) +
         Regexp.last_match(3)
@@ -46,10 +46,10 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   end
 
   def youtube_id(url)
-    if url =~ %r{youtu\.be/([^\?]*)}
+    if url =~ %r{youtu\.be/([^?]*)}
       Regexp.last_match(1)
     else
-      url.match(%r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^\&\?]*).*})[5]
+      url.match(%r{^.*((v/)|(embed/)|(watch\?))\??v?=?([^&?]*).*})[5]
     end
   end
 

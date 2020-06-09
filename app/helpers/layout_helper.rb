@@ -8,9 +8,7 @@ module LayoutHelper
 
   def body_classes
     @body_classes ||= []
-    if content_for?(:sidebar) && !@body_classes.include?("with_sidebar")
-      @body_classes << "with_sidebar"
-    end
+    @body_classes << "with_sidebar" if content_for?(:sidebar) && !@body_classes.include?("with_sidebar")
     @body_classes.uniq.join(" ")
   end
 

@@ -64,15 +64,19 @@ describe Exchange do
 
   describe "#labels" do
     specify { expect(described_class.new.labels).to eq([]) }
+
     specify do
       expect(described_class.new(sticky: true).labels).to eq(["Sticky"])
     end
+
     specify do
       expect(described_class.new(closed: true).labels).to eq(["Closed"])
     end
+
     specify do
       expect(described_class.new(nsfw: true).labels).to eq(["NSFW"])
     end
+
     specify do
       expect(
         described_class.new(
@@ -118,7 +122,7 @@ describe Exchange do
   describe "#to_param" do
     subject { exchange.to_param }
 
-    it { is_expected.to match(/^[\d]+-This\-is\-my\-Discussion$/) }
+    it { is_expected.to match(/^\d+-This-is-my-Discussion$/) }
   end
 
   describe "#closeable_by?" do
@@ -151,6 +155,7 @@ describe Exchange do
       specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
       specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
       specify { expect(exchange.closer).to eq(moderator) }
+
       it "is not closeable by an exchange moderator" do
         expect(exchange.closeable_by?(exchange_moderator)).to eq(false)
       end

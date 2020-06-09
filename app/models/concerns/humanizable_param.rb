@@ -5,10 +5,10 @@ module HumanizableParam
 
   def humanized_param(slug)
     "#{id}-" + slug
-               .gsub(/[\[\{]/, "(")
-               .gsub(/[\]\}]/, ")")
+               .gsub(/[\[{]/, "(")
+               .gsub(/}\]/, ")")
                .gsub(/[^\w\d!$&'()*,;=\-]+/, "-")
-               .gsub(/[\-]{2,}/, "-")
-               .gsub(/(^\-|\-$)/, "")
+               .gsub(/-{2,}/, "-")
+               .gsub(/(^-|-$)/, "")
   end
 end

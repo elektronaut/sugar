@@ -17,9 +17,7 @@ module Authenticable
     enum status: %i[active inactive hiatus time_out banned memorialized]
 
     validate do |user|
-      if user.new_password? && !user.new_password_confirmed?
-        user.errors.add(:password, "must be confirmed")
-      end
+      user.errors.add(:password, "must be confirmed") if user.new_password? && !user.new_password_confirmed?
     end
 
     validates :hashed_password,

@@ -102,6 +102,7 @@ describe InvitesController do
 
       specify { expect(flash[:notice]).to eq(nil) }
       specify { expect(session[:invite_token]).to eq(invite.token) }
+
       it "redirects to the signup page" do
         expect(response).to(
           redirect_to(new_user_by_token_url(token: invite.token))
@@ -114,6 +115,7 @@ describe InvitesController do
 
       specify { expect(flash[:notice]).to match(/Your invite has expired!/) }
       specify { expect(session[:invite_token]).to eq(nil) }
+
       it "redirects to the login page" do
         expect(response).to redirect_to(login_users_url)
       end
@@ -124,6 +126,7 @@ describe InvitesController do
 
       specify { expect(flash[:notice]).to match(/That's not a valid invite!/) }
       specify { expect(session[:invite_token]).to eq(nil) }
+
       it "redirects to the login page" do
         expect(response).to redirect_to(login_users_url)
       end
@@ -159,7 +162,7 @@ describe InvitesController do
 
       it "sets the flash" do
         expect(flash[:notice]).to match(
-          /Your invite has been sent to no\-reply@example\.com/
+          /Your invite has been sent to no-reply@example\.com/
         )
       end
 

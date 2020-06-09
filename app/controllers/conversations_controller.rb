@@ -42,9 +42,7 @@ class ConversationsController < ApplicationController
   end
 
   def invite_participant
-    if params[:username]
-      add_participants(@exchange, params[:username].split(/\s*,\s*/))
-    end
+    add_participants(@exchange, params[:username].split(/\s*,\s*/)) if params[:username]
     if request.xhr?
       render template: "conversations/participants", layout: false
     else

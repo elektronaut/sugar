@@ -78,7 +78,7 @@ Rails.application.routes.draw do
   end
 
   controller :users do
-    constraints(id: %r{[^\?/]+}) do
+    constraints(id: %r{[^?/]+}) do
       post "/users/profile/:id/mute" => :mute,
            as: :mute_user
       post "/users/profile/:id/unmute" => :unmute,
@@ -119,7 +119,7 @@ Rails.application.routes.draw do
   controller :discussions do
     get "/discussions/:id(/:page)(.:format)" => :show,
         as: :discussion,
-        constraints: { id: %r{\d[^/\.]*}, page: /\d+/ }
+        constraints: { id: %r{\d[^/.]*}, page: /\d+/ }
     get "/discussions/popular/:days/:page" => :popular
     get "/discussions/popular/:days" => :popular
     get "/discussions/archive/:page" => :index, as: :paged_discussions
@@ -132,7 +132,7 @@ Rails.application.routes.draw do
         as: :contact_moderators
     get "/conversations/:id(/:page)(.:format)" => :show,
         as: :conversation,
-        constraints: { id: %r{\d[^/\.]*}, page: /\d+/ }
+        constraints: { id: %r{\d[^/.]*}, page: /\d+/ }
     get "/conversations/new/with/:username" => :new,
         as: :new_conversation_with
     get "/conversations/archive/:page" => :index,

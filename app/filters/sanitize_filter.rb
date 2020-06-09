@@ -40,7 +40,7 @@ class SanitizeFilter < Filter
       elem.attributes.each do |name, attr|
         # XSS fix
         if attr.value &&
-           attr.value.downcase.gsub(/[\\]*/, "") =~ /^[\s]*javascript\:/
+           attr.value.downcase.gsub(/\\*/, "") =~ /^\s*javascript:/
           elem.remove_attribute(name)
         end
         # Strip out event handlers
@@ -52,9 +52,7 @@ class SanitizeFilter < Filter
   def strip_ujs_attributes(parser)
     parser.search("*").each do |elem|
       elem.attributes.each do |name, _|
-        if jquery_ujs_attributes.include?(name.downcase)
-          elem.remove_attribute(name)
-        end
+        elem.remove_attribute(name) if jquery_ujs_attributes.include?(name.downcase)
       end
     end
   end
@@ -81,9 +79,7 @@ class SanitizeFilter < Filter
   # is present.
   def change_allowscriptaccess_attribute_on(element)
     element.attributes.each do |name, _value|
-      if name.downcase.match?(/^allowscriptaccess/)
-        element.set_attribute name, "sameDomain"
-      end
+      element.set_attribute name, "sameDomain" if name.downcase.match?(/^allowscriptaccess/)
     end
   end
 

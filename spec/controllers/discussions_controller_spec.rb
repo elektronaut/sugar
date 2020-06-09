@@ -79,6 +79,7 @@ describe DiscussionsController do
       before { post :create, params: { discussion: { foo: "bar" } } }
 
       it { is_expected.to render_template(:new) }
+
       specify do
         expect(flash.now[:notice]).to match(
           Regexp.new("Could not save your discussion! " \

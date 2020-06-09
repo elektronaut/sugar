@@ -6,7 +6,7 @@ class PostImageFilter < Filter
   include Rails.application.routes.url_helpers
 
   def process(post)
-    post.gsub(/(\[image:([\d]+):([\w\d]+)\])/) do
+    post.gsub(/(\[image:(\d+):([\w\d]+)\])/) do
       tag = Regexp.last_match(1)
       id = Regexp.last_match(2)
       content_hash = Regexp.last_match(3)

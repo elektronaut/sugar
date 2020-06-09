@@ -49,9 +49,7 @@ class Post < ApplicationRecord
     if new_record? || Rails.env.development?
       Renderer.render(body, format: format)
     else
-      unless body_html?
-        update_column(:body_html, Renderer.render(body, format: format))
-      end
+      update_column(:body_html, Renderer.render(body, format: format)) unless body_html?
       self[:body_html]
     end
   end

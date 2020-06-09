@@ -4,6 +4,7 @@ inherit_from:
   - .rubocop_todo.yml
 
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.5
   Exclude:
     - 'db/schema.rb'
@@ -25,7 +26,11 @@ Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
 
-StringLiterals:
+Style/FormatStringToken:
+  Exclude:
+    - "config/routes.rb"
+
+Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/Documentation:
@@ -36,37 +41,6 @@ Style/Encoding:
 
 Rails:
   Enabled: true
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/DynamicFindBy:
-  Whitelist:
-    - find_by_alias
-    - find_by_sql
-
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - 'db/migrate/20080701172614_create_exchange_views.rb'
-    - 'db/migrate/20090404154958_create_discussion_relationships.rb'
-
-Rails/OutputSafety:
-  Exclude:
-    - 'app/filters/renderer.rb'
-    - 'app/helpers/posts_helper.rb'
-
-Rails/SkipsModelValidations:
-  Blacklist:
-    - decrement!
-    - decrement_counter
-    - increment!
-    - increment_counter
-    - toggle!
-    - touch
-    - update_attribute
-    - update_column
-    - update_columns
-    - update_counters
 
 RSpec/EmptyExampleGroup:
   CustomIncludeMethods:

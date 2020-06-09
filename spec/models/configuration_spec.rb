@@ -3,17 +3,17 @@
 require "rails_helper"
 
 describe Configuration, redis: true do
-  let(:configuration) { Configuration.new }
+  let(:configuration) { described_class.new }
 
   describe ".settings" do
-    subject { Configuration.settings }
+    subject { described_class.settings }
 
     it { is_expected.to be_a(Hash) }
   end
 
   describe ".setting" do
     before do
-      Configuration.class_eval do
+      described_class.class_eval do
         setting :foo, :string
       end
     end
@@ -73,7 +73,7 @@ describe Configuration, redis: true do
   end
 
   describe "#load" do
-    let(:other_configuration) { Configuration.new }
+    let(:other_configuration) { described_class.new }
 
     before do
       other_configuration.update(forum_name: "Test")
@@ -87,7 +87,7 @@ describe Configuration, redis: true do
   end
 
   describe "#save" do
-    let(:other_configuration) { Configuration.new }
+    let(:other_configuration) { described_class.new }
 
     before do
       configuration.forum_name = "Save test"
@@ -102,7 +102,7 @@ describe Configuration, redis: true do
   end
 
   describe "#update" do
-    let(:other_configuration) { Configuration.new }
+    let(:other_configuration) { described_class.new }
 
     before { configuration.update(forum_name: "Update test") }
 

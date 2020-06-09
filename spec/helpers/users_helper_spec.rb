@@ -25,12 +25,6 @@ describe UsersHelper do
       it { is_expected.to eq(output) }
     end
 
-    context "when action doesn't match params" do
-      let(:output) { '<li class="tab"><a href="/users/stuff">Stuff</a></li>' }
-
-      it { is_expected.to eq(output) }
-    end
-
     context "when action matches params" do
       let(:output) do
         '<li class="tab active"><a href="/users/stuff">Stuff</a></li>'

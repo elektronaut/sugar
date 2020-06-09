@@ -33,7 +33,7 @@ module Api
         @exchange = Discussion.find(params[:id])
         unless @exchange.viewable_by?(current_resource_owner)
           render json: { error: "forbidden" }.to_json, status: :forbidden
-          return
+          nil
         end
       rescue ActiveRecord::RecordNotFound
         render json: { error: "not-found" }.to_json, status: :not_found

@@ -22,6 +22,7 @@ describe PostsController do
       end
 
       specify { expect(assigns(:post)).to be_valid }
+
       it "redirects back to the discussion" do
         expect(response).to(
           redirect_to(discussion_url(discussion,
@@ -121,6 +122,7 @@ describe PostsController do
       end
 
       specify { expect(assigns(:post)).to be_valid }
+
       it "redirects back to the discussion" do
         expect(response).to(
           redirect_to(discussion_url(discussion,

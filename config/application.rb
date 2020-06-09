@@ -1,7 +1,9 @@
-require_relative 'boot'
+# frozen_string_literal: true
+
+require_relative "boot"
 
 require File.expand_path("../app/themes/theme", __dir__)
-require 'rails/all'
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

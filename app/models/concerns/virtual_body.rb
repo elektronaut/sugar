@@ -5,6 +5,7 @@ module VirtualBody
 
   included do
     attr_accessor :body, :format
+
     after_create :create_first_post
     after_update :update_post_body
     validates :body, presence: true, on: :create

@@ -9,9 +9,7 @@ module UsersHelper
 
   def users_tab(name, path, options = {})
     classes = ["tab", options[:class]].compact
-    if options[:action] && options[:action] == params[:action]
-      classes << "active"
-    end
+    classes << "active" if options[:action] && options[:action] == params[:action]
     content_tag(:li, link_to(name, path), class: classes.join(" "))
   end
 end

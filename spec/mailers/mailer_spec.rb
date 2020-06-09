@@ -20,6 +20,7 @@ describe Mailer do
         mail.subject
       ).to eq("#{invite.user.realname} has invited you to Sugar!")
     end
+
     specify { expect(mail.to).to eq([invite.email]) }
     specify { expect(mail.from).to eq(["test@example.com"]) }
 

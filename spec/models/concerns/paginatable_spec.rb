@@ -85,6 +85,7 @@ describe Paginatable do
     it "ignores limit" do
       expect(Exchange.limit(1).total_count).to eq(3)
     end
+
     it "ignores offset" do
       expect(Exchange.offset(1).total_count).to eq(3)
     end

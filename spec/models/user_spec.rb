@@ -26,41 +26,45 @@ describe User do
   it { is_expected.to belong_to(:avatar).dependent(:destroy).optional }
   it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
+
   specify do
     expect(user).to validate_uniqueness_of(:username)
       .case_insensitive.with_message(/is already registered/)
   end
+
   it { is_expected.to allow_value("Gustave Moíre").for(:username) }
   it { is_expected.not_to allow_value("").for(:username) }
   it { is_expected.not_to allow_value("elektronaut?admin=1").for(:username) }
+
   specify do
     expect(user).to validate_uniqueness_of(:email)
       .case_insensitive.with_message(/is already registered/)
   end
+
   it { is_expected.to allow_value("test@example.com").for(:email) }
   it { is_expected.not_to allow_value("test.example.com").for(:email) }
   it { is_expected.to validate_presence_of(:email) }
 
   it "accepts a valid url for stylesheet_url" do
-    expect(subject).to(
+    expect(user).to(
       allow_value("https://example.com/stylesheet.css").for(:stylesheet_url)
     )
   end
 
   it "does not accept invalid values for stylesheet_url" do
-    expect(subject).not_to(
+    expect(user).not_to(
       allow_value("invalid").for(:stylesheet_url)
     )
   end
 
   it "accepts a valid url for mobile_stylesheet_url" do
-    expect(subject).to(
+    expect(user).to(
       allow_value("https://example.com/stylesheet.css").for(:mobile_stylesheet_url)
     )
   end
 
   it "does not accept invalid values for mobile_stylesheet_url" do
-    expect(subject).not_to(
+    expect(user).not_to(
       allow_value("invalid").for(:mobile_stylesheet_url)
     )
   end
@@ -145,11 +149,13 @@ describe User do
     specify { expect(admin.admin_labels).to eq(["Admin"]) }
     specify { expect(user_admin.admin_labels).to eq(["User Admin"]) }
     specify { expect(moderator.admin_labels).to eq(["Moderator"]) }
+
     specify do
       expect(
         build(:user, moderator: true, user_admin: true).admin_labels
       ).to eq(["User Admin", "Moderator"])
     end
+
     specify { expect(user.admin_labels).to eq([]) }
   end
 
@@ -209,7 +215,7 @@ describe User do
       it { is_expected.to eq(nil) }
     end
 
-    context "when gamertag is nil" do
+    context "when gamertag is set" do
       let(:user) { build(:user, gamertag: "my gamertag") }
       let(:url) do
         "http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png"

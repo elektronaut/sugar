@@ -74,6 +74,7 @@ describe Inviter do
   describe "#available_invites?" do
     specify { expect(create(:user).available_invites?).to eq(false) }
     specify { expect(create(:user_admin).available_invites?).to eq(true) }
+
     specify do
       expect(create(:user, available_invites: 2).available_invites?).to eq(true)
     end
@@ -83,12 +84,15 @@ describe Inviter do
     specify do
       expect(create(:user).available_invites).to eq(0)
     end
+
     specify do
       expect(create(:user, available_invites: 2).available_invites).to eq(2)
     end
+
     specify do
       expect(create(:user_admin).available_invites).to eq(1)
     end
+
     specify do
       expect(
         create(:user_admin, available_invites: 99).available_invites

@@ -19,15 +19,11 @@ module ExchangesController
   end
 
   def show
-    context = request.format == :mobile ? 0 : 3
     @page = params[:page] || 1
     @posts = @exchange.posts.page(@page, context: context).for_view
 
-    mark_as_viewed!(
-      @exchange,
-      @posts.last,
-      (@posts.offset_value + @posts.count)
-    )
+    mark_as_viewed!(@exchange, @posts.last,
+                    (@posts.offset_value + @posts.count))
 
     respond_to do |format|
       format.html {}
@@ -67,6 +63,10 @@ module ExchangesController
   end
 
   protected
+
+  def context
+    request.format == :mobile ? 0 : 3
+  end
 
   def mark_as_viewed!(exchange, last_post, count)
     return unless current_user?

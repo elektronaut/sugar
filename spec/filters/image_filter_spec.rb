@@ -6,9 +6,6 @@ describe ImageFilter do
   let(:image_url) { "http://example.com/image.jpg" }
   let(:filter) { described_class.new(input) }
 
-  before do
-  end
-
   context "when img has no src" do
     let(:input) { '<img class="foo">' }
 
