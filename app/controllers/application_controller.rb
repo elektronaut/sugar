@@ -4,6 +4,7 @@ require "digest/md5"
 
 class ApplicationController < ActionController::Base
   include Authentication
+  include ExchangeResponder
   include ViewedTrackerHelper
 
   layout "application"
