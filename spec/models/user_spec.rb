@@ -3,7 +3,7 @@
 
 require "rails_helper"
 
-describe User do
+describe User, type: :model do
   subject(:user) { build(:user) }
 
   let(:admin) { build(:admin) }

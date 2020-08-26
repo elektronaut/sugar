@@ -89,7 +89,7 @@ group :test do
   gem "fuubar"
   gem "json_spec"
   gem "rspec-rails"
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", [">= 4.3.0", "!= 4.4.0"]
   gem "webmock", require: false
 end
 
