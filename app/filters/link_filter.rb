@@ -77,7 +77,7 @@ class LinkFilter < Filter
 
       link.set_attribute(
         "href",
-        href.gsub(Regexp.new("(https?:)?//" + Regexp.escape(host)), "")
+        href.gsub(Regexp.new("(https?:)?//#{Regexp.escape(host)}"), "")
       )
     end
   end

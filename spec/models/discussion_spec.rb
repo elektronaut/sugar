@@ -6,15 +6,7 @@ describe Discussion do
   # Create the first admin user
   before { create(:user) }
 
-  let(:discussion)         { create(:discussion) }
-  let(:closed_discussion)  { create(:discussion, closed: true) }
-  let(:user)               { create(:user) }
-  let(:moderator)          { create(:moderator) }
-  let(:user_admin)         { create(:user_admin) }
-  let(:admin)              { create(:admin) }
-  let(:exchange_moderator) do
-    create(:exchange_moderator, exchange: discussion).user
-  end
+  let(:discussion) { create(:discussion) }
 
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
   it { is_expected.to be_kind_of(Exchange) }
@@ -104,37 +96,46 @@ describe Discussion do
       before { Sugar.config.public_browsing = false }
 
       specify { expect(discussion.viewable_by?(nil)).to eq(false) }
-      specify { expect(discussion.viewable_by?(user)).to eq(true) }
+      specify { expect(discussion.viewable_by?(create(:user))).to eq(true) }
     end
   end
 
   describe "#editable_by?" do
+    let(:exchange_moderator) do
+      create(:exchange_moderator, exchange: discussion).user
+    end
+    let(:user_admin) { create(:user_admin) }
+
     specify { expect(discussion.editable_by?(discussion.poster)).to eq(true) }
-    specify { expect(discussion.editable_by?(user)).to eq(false) }
-    specify { expect(discussion.editable_by?(moderator)).to eq(true) }
+    specify { expect(discussion.editable_by?(create(:user))).to eq(false) }
+    specify { expect(discussion.editable_by?(create(:moderator))).to eq(true) }
     specify { expect(discussion.editable_by?(exchange_moderator)).to eq(true) }
-    specify { expect(discussion.editable_by?(admin)).to eq(true) }
+    specify { expect(discussion.editable_by?(create(:admin))).to eq(true) }
     specify { expect(discussion.editable_by?(user_admin)).to eq(false) }
     specify { expect(discussion.editable_by?(nil)).to eq(false) }
   end
 
   describe "#postable_by?" do
+    let(:user) { create(:user) }
+
     context "when not closed" do
       specify { expect(discussion.postable_by?(user)).to eq(true) }
       specify { expect(discussion.postable_by?(nil)).to eq(false) }
     end
 
     context "when closed" do
-      specify { expect(closed_discussion.postable_by?(user)).to eq(false) }
+      let(:discussion) { create(:discussion, closed: true) }
+
+      specify { expect(discussion.postable_by?(user)).to eq(false) }
 
       specify do
         expect(
-          closed_discussion.postable_by?(closed_discussion.poster)
+          discussion.postable_by?(discussion.poster)
         ).to eq(false)
       end
 
-      specify { expect(closed_discussion.postable_by?(moderator)).to eq(true) }
-      specify { expect(closed_discussion.postable_by?(admin)).to eq(true) }
+      specify { expect(discussion.postable_by?(create(:moderator))).to eq(true) }
+      specify { expect(discussion.postable_by?(create(:admin))).to eq(true) }
     end
   end
 end

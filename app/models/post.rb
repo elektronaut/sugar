@@ -74,7 +74,7 @@ class Post < ApplicationRecord
 
   def mentioned_users
     @mentioned_users ||= User.all.select do |user|
-      user_expression = Regexp.new("@" + Regexp.quote(user.username),
+      user_expression = Regexp.new("@#{Regexp.quote(user.username)}",
                                    Regexp::IGNORECASE)
       body.match?(user_expression)
     end

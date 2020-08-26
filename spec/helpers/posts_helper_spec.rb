@@ -43,7 +43,7 @@ describe PostsHelper do
     context "when string starts with /me" do
       let(:input) { "/me blushes" }
 
-      it { is_expected.to eq(profile_link + " blushes") }
+      it { is_expected.to eq("#{profile_link} blushes") }
     end
 
     context "when string includes /me" do

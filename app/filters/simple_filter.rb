@@ -12,9 +12,8 @@ class SimpleFilter < Filter
   end
 
   def escape_angle_brackets(str)
-    str
-      .gsub(Regexp.new("<(?!/|" + html_tags.join("|") + ")"), "&lt;")
-      .gsub(Regexp.new("(?<!\"|'|" + html_tags.join("|") + ")>"), "&gt;")
+    str.gsub(Regexp.new("<(?!/|#{html_tags.join('|')})"), "&lt;")
+       .gsub(Regexp.new("(?<!\"|'|#{html_tags.join('|')})>"), "&gt;")
   end
 
   def strip(post)

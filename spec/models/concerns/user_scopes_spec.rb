@@ -78,19 +78,19 @@ describe UserScopes do
   end
 
   describe "gaming" do
-    let!(:gamertag) { create(:user, gamertag: "example") }
-    let!(:sony) { create(:user, sony: "example") }
-    let!(:nintendo) { create(:user, nintendo: "example") }
-    let!(:nintendo_switch) { create(:user, nintendo_switch: "example") }
-    let!(:steam) { create(:user, steam: "example") }
-    let!(:battlenet) { create(:user, battlenet: "example#1234") }
+    let!(:profiles) do
+      [create(:user, gamertag: "example"),
+       create(:user, sony: "example"),
+       create(:user, nintendo: "example"),
+       create(:user, nintendo_switch: "example"),
+       create(:user, steam: "example"),
+       create(:user, battlenet: "example#1234")]
+    end
 
     before { create(:user) }
 
     it "is a list of all gaming profiles" do
-      expect(User.gaming).to match_array(
-        [gamertag, sony, nintendo, nintendo_switch, steam, battlenet]
-      )
+      expect(User.gaming).to match_array(profiles)
     end
   end
 

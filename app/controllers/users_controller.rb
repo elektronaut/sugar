@@ -131,7 +131,7 @@ class UsersController < ApplicationController
      :stylesheet_url, :theme, :time_zone, :twitter, :website,
      :password, :confirm_password, :hiatus_until, :preferred_format,
      :sony, :nintendo, :nintendo_switch, :steam, :battlenet,
-     avatar_attributes: [:file]] +
+     { avatar_attributes: [:file] }] +
       allowed_user_admin_params + allowed_admin_params
   end
 
@@ -148,9 +148,9 @@ class UsersController < ApplicationController
     User.temporarily_deactivated.each(&:check_status!)
   end
 
-  def respond_with_user(user)
+  def respond_with_user(user, &block)
     respond_to do |format|
-      format.any(:html, :mobile) { yield }
+      format.any(:html, :mobile) { block.call }
       format.json { render json: UserSerializer.new(user).serialized_json }
     end
   end

@@ -25,10 +25,8 @@ describe ViewedTracker do
     allow(discussion).to receive(:posts_count).and_return(105)
     discussion
   end
-  let(:discussion_with_post) {}
-  let(:exchanges) { [discussion] }
 
-  before { tracker.exchanges = exchanges }
+  before { tracker.exchanges = [discussion] }
 
   describe "#any?" do
     subject { tracker.any? }

@@ -81,7 +81,7 @@ class Theme
 
   def respond_to_missing?(method)
     base_method = method.to_s.gsub(/\?$/, "").to_sym
-    method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)
+    method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method) || super
   end
 
   def method_missing(method, *args, &block)

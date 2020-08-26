@@ -4,7 +4,6 @@ require "rails_helper"
 
 describe ExchangesHelper do
   let(:user) { create(:user) }
-  let(:viewed_tracker) { ViewedTracker.new(user) }
   let(:exchange) { create(:discussion, title: "Test") }
 
   let(:read_exchange) do
@@ -14,18 +13,18 @@ describe ExchangesHelper do
   end
 
   let(:post) { exchange.posts.first }
-  let(:collection) { [exchange] }
 
   before do
-    allow(viewed_tracker).to receive(:exchanges).and_return(collection)
+    viewed_tracker = ViewedTracker.new(user)
+    allow(viewed_tracker).to receive(:exchanges).and_return([exchange])
     allow(helper).to receive(:viewed_tracker)
       .and_return(viewed_tracker)
   end
 
   describe "#exchange_classes" do
-    subject { results }
+    subject(:results) { helper.exchange_classes(collection, exchange) }
 
-    let(:results) { helper.exchange_classes(collection, exchange) }
+    let(:collection) { [exchange] }
 
     it "results in an array" do
       expect(results).to match_array(
@@ -105,9 +104,7 @@ describe ExchangesHelper do
   end
 
   describe "#post_page" do
-    subject { result }
-
-    let(:result) { helper.post_page(post) }
+    subject(:result) { helper.post_page(post) }
 
     it { is_expected.to eq(1) }
 

@@ -12,8 +12,7 @@ module Sugar
 
     def errors_on(attribute)
       errors = object.errors[attribute] || []
-      errors = [errors] unless errors.is_a?(Array)
-      errors
+      Array(errors)
     end
 
     def first_error(attribute)
@@ -23,7 +22,7 @@ module Sugar
     def label(method, text = nil, options = {}, &_block)
       output = [text || human_attribute_name(method)]
       if errors_on?(method)
-        output << content_tag(:span, " " + first_error(method), class: "error")
+        output << content_tag(:span, " #{first_error(method)}", class: "error")
       elsif options[:description]
         output << content_tag(:span,
                               safe_join([" – ", options[:description]], ""),

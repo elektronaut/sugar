@@ -16,7 +16,7 @@ class AutolinkFilter < Filter
 
   def autolink(url)
     if url.match?(/.(jpg|jpeg|gif|png|gifv)$/i)
-      '<img src="' + url.gsub(/\.gifv$/, ".gif") + '">'
+      "<img src=\"#{url.gsub(/\.gifv$/, '.gif')}\">"
     elsif url.match?(twitter_expression)
       oembed(normalize_twitter_url(url))
     elsif oembeddable?(url)

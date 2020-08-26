@@ -9,10 +9,8 @@ describe Exchange do
   let(:exchange) do
     create(:exchange, title: "This is my Discussion", body: "First post!")
   end
-  let(:nsfw_exchange) { create(:exchange, nsfw: true) }
   let(:user) { create(:user) }
   let(:moderator) { create(:moderator) }
-  let(:user_admin) { create(:user_admin) }
   let(:admin) { create(:admin) }
 
   it { is_expected.to belong_to(:poster).class_name("User") }

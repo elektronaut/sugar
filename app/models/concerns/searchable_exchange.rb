@@ -19,12 +19,11 @@ module SearchableExchange
 
   module ClassMethods
     def search_results(query, options = {})
-      search = Discussion.search do
+      Discussion.search do
         fulltext query
         order_by :last_post_at, :desc
         paginate page: options[:page], per_page: Exchange.per_page
       end
-      search
     end
   end
 end

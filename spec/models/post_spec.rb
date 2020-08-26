@@ -4,24 +4,11 @@
 require "rails_helper"
 
 describe Post do
-  let(:discussion) { create(:discussion) }
-  let(:conversation) { create(:conversation) }
+  let(:exchange) { create(:discussion) }
   let(:post) { create(:post) }
   let(:user) { create(:user) }
-  let(:moderator) { create(:moderator) }
-  let(:admin) { create(:admin) }
-  let(:user_admin) { create(:user_admin) }
-  let(:mentioned_users) do
-    ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
-  end
-  let(:mentioning_post) do
-    create(
-      :post,
-      body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
-    )
-  end
   let(:cache_path) do
-    Rails.root.join("public", "cache", "discussions", discussion.id.to_s,
+    Rails.root.join("public", "cache", "discussions", exchange.id.to_s,
                     "posts", "count.json")
   end
 
@@ -30,22 +17,22 @@ describe Post do
   it { is_expected.to have_many(:exchange_views) }
 
   describe "after_create" do
-    let(:post) { create(:post, exchange: discussion) }
+    let(:post) { create(:post, exchange: exchange) }
 
     specify do
-      expect(post.user.participated_discussions).to include(discussion)
+      expect(post.user.participated_discussions).to include(exchange)
     end
 
     describe "the discussion it belongs to" do
       before { post }
 
-      specify { expect(discussion.last_poster).to eq(post.user) }
-      specify { expect(discussion.last_post_at).to eq(post.created_at) }
+      specify { expect(exchange.last_poster).to eq(post.user) }
+      specify { expect(exchange.last_post_at).to eq(post.created_at) }
     end
 
     describe "updating posts count" do
-      let!(:discussion) { create(:discussion) }
-      let(:post) { create(:post, user: user, exchange: discussion) }
+      let!(:exchange) { create(:discussion) }
+      let(:post) { create(:post, user: user, exchange: exchange) }
 
       it "increments public_posts_count on user" do
         expect { post }.to change(user, :public_posts_count).by(1)
@@ -56,12 +43,12 @@ describe Post do
       end
 
       it "increments posts_count on exchange" do
-        expect { post }.to change(discussion, :posts_count).by(1)
+        expect { post }.to change(exchange, :posts_count).by(1)
       end
     end
 
     context "when count cache file exists" do
-      let!(:discussion) { create(:discussion) }
+      let!(:exchange) { create(:discussion) }
 
       before do
         allow(File).to receive(:exist?).and_return(true)
@@ -69,7 +56,7 @@ describe Post do
       end
 
       it "deletes the file" do
-        create(:post, exchange: discussion)
+        create(:post, exchange: exchange)
         expect(File).to have_received(:unlink).with(cache_path).once
       end
     end
@@ -77,7 +64,7 @@ describe Post do
 
   describe "after_destroy" do
     describe "updating posts count" do
-      let!(:post) { create(:post, user: user, exchange: discussion) }
+      let!(:post) { create(:post, user: user, exchange: exchange) }
 
       it "decrements public_posts_count on user" do
         expect { post.destroy }.to change(user, :public_posts_count).by(-1)
@@ -88,12 +75,12 @@ describe Post do
       end
 
       it "decrements posts_count on exchange" do
-        expect { post.destroy }.to change(discussion, :posts_count).by(-1)
+        expect { post.destroy }.to change(exchange, :posts_count).by(-1)
       end
     end
 
     context "when count cache file exists" do
-      let!(:post) { create(:post, exchange: discussion) }
+      let!(:post) { create(:post, exchange: exchange) }
 
       it "deletes the file" do
         allow(File).to receive(:exist?).and_return(true)
@@ -127,8 +114,8 @@ describe Post do
   end
 
   describe "#post_number" do
-    specify { expect(discussion.posts.first.post_number).to eq(1) }
-    specify { expect(create(:post, exchange: discussion).post_number).to eq(2) }
+    specify { expect(exchange.posts.first.post_number).to eq(1) }
+    specify { expect(create(:post, exchange: exchange).post_number).to eq(2) }
   end
 
   describe "#page" do
@@ -164,13 +151,12 @@ describe Post do
   describe "#body_html" do
     subject { post.body_html }
 
-    let(:discussion) { create(:discussion) }
-    let!(:post) { create(:post, exchange: discussion) }
+    let!(:post) { create(:post, exchange: exchange) }
 
     it { is_expected.to eq(Renderer.render(post.body)) }
 
     context "when not saved" do
-      let!(:post) { build(:post, exchange: discussion) }
+      let!(:post) { build(:post, exchange: exchange) }
 
       before { allow(Renderer).to receive(:render) }
 
@@ -182,7 +168,7 @@ describe Post do
 
     context "when body_html has been set" do
       let!(:post) do
-        create(:post, exchange: discussion, body_html: "<p>Test</p>")
+        create(:post, exchange: exchange, body_html: "<p>Test</p>")
       end
 
       before { allow(Renderer).to receive(:render) }
@@ -232,10 +218,10 @@ describe Post do
 
   describe "#editable_by?" do
     specify { expect(post.editable_by?(post.user)).to eq(true) }
-    specify { expect(post.editable_by?(moderator)).to eq(true) }
-    specify { expect(post.editable_by?(admin)).to eq(true) }
+    specify { expect(post.editable_by?(create(:moderator))).to eq(true) }
+    specify { expect(post.editable_by?(create(:admin))).to eq(true) }
     specify { expect(post.editable_by?(user)).to eq(false) }
-    specify { expect(post.editable_by?(user_admin)).to eq(false) }
+    specify { expect(post.editable_by?(create(:user_admin))).to eq(false) }
     specify { expect(post.editable_by?(nil)).to eq(false) }
   end
 
@@ -263,7 +249,16 @@ describe Post do
     end
 
     context "when it mentions users" do
-      let(:post) { mentioning_post }
+      let(:mentioned_users) do
+        ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
+      end
+
+      let(:post) do
+        create(
+          :post,
+          body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
+        )
+      end
 
       it { is_expected.to eq(true) }
     end
@@ -277,29 +272,35 @@ describe Post do
     end
 
     context "when it mentions users" do
-      let(:post) { mentioning_post }
+      let(:mentioned_users) do
+        ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
+      end
+      let(:post) do
+        create(
+          :post,
+          body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
+        )
+      end
 
       it { is_expected.to match_array(mentioned_users) }
     end
   end
 
   describe "#render_html" do
-    context "when skip_html is false" do
-      before { discussion }
+    let!(:exchange) { create(:discussion) }
 
+    context "when skip_html is false" do
       it "parses the post" do
         allow(Renderer).to receive(:render)
-        create(:post, exchange: discussion)
+        create(:post, exchange: exchange)
         expect(Renderer).to have_received(:render).once
       end
     end
 
     context "when skip_html is true" do
-      before { discussion }
-
       it "parses the post" do
         allow(Renderer).to receive(:render)
-        create(:post, skip_html: true, exchange: discussion)
+        create(:post, skip_html: true, exchange: exchange)
         expect(Renderer).not_to have_received(:render)
       end
     end
@@ -325,23 +326,23 @@ describe Post do
 
   describe "#define_relationship" do
     context "when it belongs to a discussion" do
-      before { discussion }
+      let!(:exchange) { create(:discussion) }
 
       it "defines a relationship between the discussion and the poster" do
         allow(DiscussionRelationship).to receive(:define)
-        create(:post, user: user, exchange: discussion)
+        create(:post, user: user, exchange: exchange)
         expect(DiscussionRelationship).to(
-          have_received(:define).once.with(user, discussion, participated: true)
+          have_received(:define).once.with(user, exchange, participated: true)
         )
       end
     end
 
     context "when it belongs to a conversation" do
-      before { conversation }
+      let!(:exchange) { create(:conversation) }
 
       it "does not define a relationship" do
         allow(DiscussionRelationship).to receive(:define)
-        create(:post, exchange: conversation)
+        create(:post, exchange: exchange)
         expect(DiscussionRelationship).not_to have_received(:define)
       end
     end

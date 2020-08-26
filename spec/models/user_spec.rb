@@ -207,7 +207,7 @@ describe User, type: :model do
   end
 
   describe "#gamertag_avatar_url" do
-    subject { user.gamertag_avatar_url }
+    subject(:avatar_url) { user.gamertag_avatar_url }
 
     context "when gamertag is nil" do
       let(:user) { build(:user) }
@@ -217,11 +217,12 @@ describe User, type: :model do
 
     context "when gamertag is set" do
       let(:user) { build(:user, gamertag: "my gamertag") }
-      let(:url) do
-        "http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png"
-      end
 
-      it { is_expected.to eq(url) }
+      it "returns the URL" do
+        expect(avatar_url).to(
+          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
+        )
+      end
     end
   end
 

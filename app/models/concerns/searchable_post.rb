@@ -29,8 +29,7 @@ module SearchablePost
     private
 
     def user_search_expr(user)
-      Regexp.new("user:" + Regexp.quote(user.username),
-                 Regexp::IGNORECASE)
+      Regexp.new("user:#{Regexp.quote(user.username)}", Regexp::IGNORECASE)
     end
 
     def parse_search_query(str)

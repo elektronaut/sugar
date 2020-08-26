@@ -3,13 +3,8 @@
 require "rails_helper"
 
 describe AutolinkFilter do
-  let(:filter) { described_class.new(input) }
-  let(:instagram_embed) do
-    File.read(
-      Rails.root.join("spec", "support", "requests", "instagram_embed.json")
-    )
-  end
-  let(:instagram_json) { JSON.parse(instagram_embed) }
+  subject(:filter) { described_class.new(input) }
+
   let(:twitter_embed) do
     File.read(
       Rails.root.join("spec", "support", "requests", "twitter_embed.json")
@@ -62,6 +57,12 @@ describe AutolinkFilter do
   end
 
   context "when URL is an Instagram photo" do
+    let(:instagram_embed) do
+      File.read(
+        Rails.root.join("spec", "support", "requests", "instagram_embed.json")
+      )
+    end
+    let(:instagram_json) { JSON.parse(instagram_embed) }
     let(:input) { "https://www.instagram.com/p/8ql-VChPSZ/" }
 
     before do
@@ -74,9 +75,8 @@ describe AutolinkFilter do
 
     it "converts it to an embed" do
       expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" +
-           instagram_json["html"] +
-           "</div>")
+        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" \
+           "#{instagram_json['html']}</div>")
       )
     end
   end
@@ -94,9 +94,8 @@ describe AutolinkFilter do
 
     it "converts it to an embed" do
       expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" +
-           twitter_json["html"] +
-           "</div>")
+        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" \
+           "#{twitter_json['html']}</div>")
       )
     end
   end
@@ -115,9 +114,8 @@ describe AutolinkFilter do
 
     it "converts it to an embed" do
       expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{oembed_url}\">" +
-           twitter_json["html"] +
-           "</div>")
+        eq("<div class=\"embed\" data-oembed-url=\"#{oembed_url}\">" \
+           "#{twitter_json['html']}</div>")
       )
     end
   end
