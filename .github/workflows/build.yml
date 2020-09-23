@@ -1,0 +1,129 @@
+env:
+  RUBY_VERSION: 2.7
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: sugar_test
+  CC_TEST_REPORTER_ID: 486bb0a91d51ad96ec90a47dced78f74bfe54ae9b913ac83fa48d69703e3f66d
+
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+jobs:
+  rubocop-test:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install Rubocop
+        run: gem install rubocop rubocop-rails rubocop-rspec
+      - name: Check code
+        run: rubocop
+
+  # eslint-test:
+  #   name: ESLint
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Node modules cache
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install Node modules
+  #       run: |
+  #         yarn install
+  #     - name: Check code
+  #       run: yarn lint-javascript
+
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install system dependencies
+        run: sudo apt-get install -y libmagic-dev libpq-dev
+      - name: Ruby gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Install Ruby gems
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install
+      # - name: Node modules cache
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: node_modules
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+      # - name: Install Node modules
+      #   run: |
+      #     yarn install
+      - name: Create database
+        env:
+          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: |
+          bundle exec rails db:migrate
+      - name: Run tests
+        env:
+          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          SUGAR_DB: postgresql
+        run: bundle exec rspec
+      - name: Send results to Code Climate
+        uses: paambaati/codeclimate-action@v2.6.0
+        if: ${{ env.CC_TEST_REPORTER_ID }}
+        env:
+          CC_TEST_REPORTER_ID: ${{ env.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: ls
