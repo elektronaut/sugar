@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/elektronaut/sugar.svg?branch=master)](https://travis-ci.org/elektronaut/sugar)
+[![Build](https://github.com/elektronaut/sugar/workflows/Build/badge.svg)](https://github.com/elektronaut/sugar/actions)
 [![Code Climate](https://codeclimate.com/github/elektronaut/sugar/badges/gpa.svg)](https://codeclimate.com/github/elektronaut/sugar)
 [![Test Coverage](https://codeclimate.com/github/elektronaut/sugar/badges/coverage.svg)](https://codeclimate.com/github/elektronaut/sugar)
-[![Security](https://hakiri.io/github/elektronaut/sugar/master.svg)](https://hakiri.io/github/elektronaut/sugar/master)
 
 # Sugar
 
