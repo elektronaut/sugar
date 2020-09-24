@@ -8,8 +8,7 @@
 /db/dis
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
-/log/sunspot-solr*
+/log/*
 /public/cache
 /tmp
 

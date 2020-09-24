@@ -2,17 +2,20 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_03_10_231312) do
 
-  create_table "avatars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "avatars", id: :serial, force: :cascade do |t|
     t.string "content_hash"
     t.string "content_type"
     t.integer "content_length"
@@ -30,7 +33,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "conversation_relationships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "conversation_relationships", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "conversation_id"
     t.boolean "notifications", default: true, null: false
@@ -41,7 +44,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_conversation_relationships_on_user_id"
   end
 
-  create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
     t.text "handler"
@@ -54,7 +57,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "discussion_relationships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "discussion_relationships", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "discussion_id"
     t.boolean "participated", default: false, null: false
@@ -71,7 +74,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_discussion_relationships_on_user_id"
   end
 
-  create_table "dynamic_image_variants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "dynamic_image_variants", force: :cascade do |t|
     t.string "image_type", null: false
     t.bigint "image_id", null: false
     t.string "content_hash", null: false
@@ -92,7 +95,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image_type_and_image_id"
   end
 
-  create_table "exchange_moderators", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "exchange_moderators", id: :serial, force: :cascade do |t|
     t.integer "exchange_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
@@ -101,7 +104,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_exchange_moderators_on_user_id"
   end
 
-  create_table "exchange_views", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "exchange_views", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "exchange_id"
     t.integer "post_id"
@@ -112,7 +115,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_exchange_views_on_user_id"
   end
 
-  create_table "exchanges", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "exchanges", id: :serial, force: :cascade do |t|
     t.string "title"
     t.boolean "sticky", default: false, null: false
     t.boolean "closed", default: false, null: false
@@ -135,7 +138,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["type"], name: "index_exchanges_on_type"
   end
 
-  create_table "invites", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "invites", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "email"
     t.string "token"
@@ -145,7 +148,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "oauth_access_grants", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
     t.string "token", null: false
@@ -156,7 +159,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.string "scopes"
   end
 
-  create_table "oauth_access_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "oauth_access_tokens", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id"
     t.integer "application_id", null: false
     t.string "token", null: false
@@ -168,7 +171,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
   end
 
-  create_table "oauth_applications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "oauth_applications", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "uid", null: false
     t.string "secret", null: false
@@ -177,7 +180,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "password_reset_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "password_reset_tokens", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "token"
     t.datetime "expires_at"
@@ -186,7 +189,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
   end
 
-  create_table "post_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "post_images", id: :serial, force: :cascade do |t|
     t.string "content_hash"
     t.string "content_type"
     t.integer "content_length"
@@ -203,11 +206,11 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.string "original_url", limit: 4096
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id", "content_hash"], name: "index_post_images_on_id_and_content_hash", unique: true, length: { content_hash: 190 }
-    t.index ["original_url"], name: "index_post_images_on_original_url", length: 190
+    t.index ["id", "content_hash"], name: "index_post_images_on_id_and_content_hash", unique: true
+    t.index ["original_url"], name: "index_post_images_on_original_url"
   end
 
-  create_table "posts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "posts", id: :serial, force: :cascade do |t|
     t.text "body"
     t.text "body_html"
     t.integer "user_id"
@@ -230,7 +233,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "user_mutes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "user_mutes", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "muted_user_id"
     t.bigint "exchange_id"
@@ -241,7 +244,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_231312) do
     t.index ["user_id"], name: "index_user_mutes_on_user_id"
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "username", limit: 100
     t.string "realname"
     t.string "email"

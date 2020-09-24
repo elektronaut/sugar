@@ -377,7 +377,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     sshkit (1.21.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -482,7 +481,6 @@ DEPENDENCIES
   sentry-raven
   shoulda-matchers (>= 4.3.0, != 4.4.0)
   sprockets-es6
-  sqlite3
   sunspot-rails-tester
   sunspot_rails (~> 2.5.0)
   sunspot_solr

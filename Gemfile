@@ -13,7 +13,6 @@ gem "bootsnap", ">= 1.1.0", require: false
 
 gem "mysql2", "~> 0.5"
 gem "pg"
-gem "sqlite3"
 
 gem "dalli"
 gem "hiredis"

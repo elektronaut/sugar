@@ -20,26 +20,14 @@ are supported.
 
 ## Installation
 
-If you want to hack on Sugar, the easiest way to get up and running is with
-[sugar-dev-box](https://github.com/elektronaut/sugar-dev-box). It provides a
-virtual development environment, and only requires VirtualBox and Vagrant.
+If you want to hack on Sugar, the easiest way to get up and running is using
+Docker Compose:
 
-Otherwise:
-
-    $ git clone https://github.com/elektronaut/sugar.git
-    $ cd sugar
-    $ bundle
-    $ bin/rake db:create
-    $ bin/rake db:migrate
-
-This assumes you have MySQL running on localhost, with a user named `rails`
-with no password. See [Configuring Sugar](#configuration) if your setup
-differs.
-
-Now you can start Solr and the development server:
-
-    $ bin/rails sunspot:solr:start
-    $ bin/rails server
+    $ docker-compose build
+    $ docker-compose run runner bundle install
+    $ docker-compose run runner bin/rails db:create
+    $ docker-compose run runner bin/rails db:migrate
+    $ docker-compose up rails
 
 Sugar is now running on [localhost:3000](http://localhost:3000/).
 
