@@ -97,7 +97,6 @@ group :test, :development do
   # gem "listen"
   gem "puma"
 
-  gem "sunspot-rails-tester"
   gem "sunspot_solr"
 
   gem "pry"
