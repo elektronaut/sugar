@@ -54,6 +54,7 @@ jobs:
     timeout-minutes: 15
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     strategy:
+      fail-fast: false
       matrix:
         sugar_db: ["postgresql", "mysql"]
     services:
@@ -126,7 +127,7 @@ jobs:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           RAILS_ENV: test
           SUGAR_DB: ${{ matrix.sugar_db }}
-          SUGAR_DB_HOST: localhost
+          SUGAR_DB_HOST: 127.0.0.1
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
           REDIS_URL: redis://localhost:6379/1
@@ -141,7 +142,7 @@ jobs:
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           SUGAR_DB: ${{ matrix.sugar_db }}
-          SUGAR_DB_HOST: localhost
+          SUGAR_DB_HOST: 127.0.0.1
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
           REDIS_URL: redis://localhost:6379/1
