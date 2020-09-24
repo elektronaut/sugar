@@ -114,7 +114,12 @@ jobs:
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
           REDIS_URL: redis://localhost:6379/1
         run: |
-          bundle exec rails db:migrate
+          bin/rails db:migrate
+      - name: Start Solr
+        env:
+          RAILS_ENV: test
+        run: |
+          bin/rails sunspot:solr:start RAILS_ENV=test
       - name: Run tests
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
