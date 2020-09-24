@@ -61,7 +61,7 @@ jobs:
       mysql:
         image: mysql:latest
         ports:
-          - 3306
+          - 3306:3306
         env:
           MYSQL_USER: ${{ env.DB_USER }}
           MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
