@@ -117,7 +117,7 @@ jobs:
           SUGAR_DB: postgresql
           SUGAR_DB_USERNAME: ${{ env.POSTGRES_USER }}
           SUGAR_DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          REDIS_HOST: redis
+          REDIS_URL: redis://redis:6379/1
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0

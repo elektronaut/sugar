@@ -15,7 +15,10 @@ module Sugar
     end
 
     def redis
-      @redis ||= Redis.new(driver: :hiredis)
+      @redis ||= Redis.new(
+        driver: :hiredis,
+        url: ENV.fetch("REDIS_URL", "redis://127.0.0.1:6379/1")
+      )
     end
 
     def config(_key = nil, *_args)
