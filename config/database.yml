@@ -12,22 +12,23 @@ mysql: &mysql
 
 postgresql: &postgresql
   adapter: postgresql
+  encoding: unicode
   username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
   password: <%= ENV['SUGAR_DB_PASSWORD'] || "rails" %>
   database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
   min_messages: ERROR
 
-defaults: &defaults
-  pool: 5
+defaults: &default
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
   host: <%= ENV['SUGAR_DB_HOST'] || "localhost" %>
-  <<: *<%= ENV['SUGAR_DB'] || "mysql" %>
+  <<: *<%= ENV.fetch("SUGAR_DB", "mysql") %>
 
 development:
-  <<: *defaults
+  <<: *default
 
 test:
-  <<: *defaults
+  <<: *default
 
 production:
-  <<: *defaults
+  <<: *default

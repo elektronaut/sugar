@@ -79,8 +79,6 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - name: Install system dependencies
-        run: sudo apt-get install -y libmagic-dev libpq-dev
       - name: Ruby gem cache
         uses: actions/cache@v1
         with:
@@ -116,9 +114,10 @@ jobs:
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           PGHOST: localhost
-          PGUSER: ${{ env.POSTGRES_USER }}
-          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
           SUGAR_DB: postgresql
+          SUGAR_DB_USERNAME: ${{ env.POSTGRES_USER }}
+          SUGAR_DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          REDIS_HOST: redis
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0
