@@ -74,6 +74,9 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
@@ -109,7 +112,7 @@ jobs:
           SUGAR_DB_HOST: localhost
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
-          REDIS_URL: redis://redis:6379/1
+          REDIS_URL: redis://localhost:6379/1
         run: |
           bundle exec rails db:migrate
       - name: Run tests
@@ -119,7 +122,7 @@ jobs:
           SUGAR_DB_HOST: localhost
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
-          REDIS_URL: redis://redis:6379/1
+          REDIS_URL: redis://localhost:6379/1
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0
