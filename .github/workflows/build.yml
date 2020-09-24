@@ -155,7 +155,6 @@ jobs:
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0
-        if: ${{ secrets.CC_TEST_REPORTER_ID }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
