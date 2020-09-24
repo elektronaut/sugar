@@ -15,9 +15,8 @@ written in Ruby on Rails.
 * [Java](http://www.java.com/en/download/index.jsp)
 * libmagic
 
-SQLite is supported, but you probably want
-[PostgreSQL](http://www.postgresql.org/) or [MySQL](http://www.mysql.com/) for
-production use.
+Both [PostgreSQL](http://www.postgresql.org/) and [MySQL](http://www.mysql.com/)
+are supported.
 
 ## Installation
 
@@ -68,11 +67,11 @@ Environment variable  | Required | Info
 SUGAR_SECRET_KEY_BASE | Yes      | Set to a long, random string
 SUGAR_SECRET_TOKEN    | -        | Use if you are upgrading from Rails 3
 SUGAR_SESSION_KEY     | -        | Default: `_sugar_session`
-SUGAR_DB              | -        | Database backend. Default: `mysql`, also valid: `postgresql`, `sqlite`
+SUGAR_DB              | -        | Database backend. Default: `mysql`, also valid: `postgresql`
 SUGAR_DB_DATABASE     | -        | Default: `sugar_<%= Rails.env %>`
 SUGAR_DB_HOST         | -        | Default: `localhost`
 SUGAR_DB_USERNAME     | -        | Default: `rails`
-SUGAR_DB_PASSWORD     | -        | Default: `rails` for PostgreSQL, blank for MySQL
+SUGAR_DB_PASSWORD     | -        | Default: ``
 SENTRY_DSN            | -        | Default: none, set if you want to use Sentry
 
 ## Credits

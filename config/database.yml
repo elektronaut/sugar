@@ -1,28 +1,20 @@
-sqlite: &sqlite
-  adapter: sqlite3
-  database: db/<%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>.sqlite3
+postgres: &postgresql
+  adapter:  postgresql
+  encoding: unicode
 
 mysql: &mysql
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter:   mysql2
+  encoding:  utf8mb4
   collation: utf8mb4_unicode_ci
-  username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
-  password: <%= ENV['SUGAR_DB_PASSWORD'] || "" %>
-  database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
-
-postgresql: &postgresql
-  adapter: postgresql
-  encoding: unicode
-  username: <%= ENV['SUGAR_DB_USERNAME'] || "rails" %>
-  password: <%= ENV['SUGAR_DB_PASSWORD'] || "rails" %>
-  database: <%= ENV['SUGAR_DB_DATABASE'] || "sugar_#{Rails.env}" %>
-  min_messages: ERROR
 
 defaults: &default
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-  host: <%= ENV['SUGAR_DB_HOST'] || "localhost" %>
-  <<: *<%= ENV.fetch("SUGAR_DB", "mysql") %>
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_#{Rails.env}") %>
+  host:     <%= ENV.fetch("SUGAR_DB_HOST",     "localhost") %>
+  username: <%= ENV.fetch("SUGAR_DB_USERNAME", "rails") %>
+  password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
+  pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  timeout:   5000
+  <<: <%= "*#{ENV.fetch('SUGAR_DB', 'mysql')}" %>
 
 development:
   <<: *default
