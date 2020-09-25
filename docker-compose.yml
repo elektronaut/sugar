@@ -38,6 +38,8 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    SOLR_HOST: solr
+    SOLR_PORT: 8983
     SUGAR_DB: postgresql
     SUGAR_DB_USERNAME: postgres
     SUGAR_DB_PASSWORD: postgres
@@ -47,20 +49,23 @@ x-backend: &backend
       condition: service_healthy
     redis:
       condition: service_healthy
+    solr:
+      condition: service_started
 
 services:
-  runner:
-    <<: *backend
-    command: /bin/bash
-    ports:
-      - '3000:3000'
-      - '3002:3002'
+  # runner:
+  #   <<: *backend
+  #   command: /bin/bash
+  #   ports:
+  #     - '3000:3000'
+  #     - '3002:3002'
 
   rails:
     <<: *backend
     command: bundle exec rails server -b 0.0.0.0
     ports:
       - '3000:3000'
+      - '3002:3002'
 
   # sidekiq:
   #   <<: *backend
@@ -94,7 +99,22 @@ services:
       timeout: 3s
       retries: 30
 
-  # webpacker:
+  solr:
+    image: solr:8
+    ports:
+      - 8983
+    volumes:
+      - ./solr/init:/docker-entrypoint-initdb.d/
+      - solr:/var/solr
+    # healthcheck:
+    #   test: >-
+    #     curl -s -A 'healthcheck'  http://localhost:8983/solr/test/admin/ping?wt=json \
+    #     | grep -q '"status":"OK"'
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 5
+
+# webpacker:
   #   <<: *app
   #   command: ./bin/webpack-dev-server
   #   ports:
@@ -115,3 +135,4 @@ volumes:
   node_modules:
   rails_cache:
   packs:
+  solr:

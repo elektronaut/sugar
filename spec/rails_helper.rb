@@ -33,7 +33,7 @@ Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f 
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
-  allow: "codeclimate.com"
+  allow: ["codeclimate.com", "solr"]
 )
 
 original_sunspot_session = Sunspot.session
