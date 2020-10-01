@@ -13,6 +13,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 
 gem "mysql2", "~> 0.5"
 gem "pg"
+gem "puma"
 
 gem "dalli"
 gem "hiredis"
@@ -95,7 +96,6 @@ end
 group :test, :development do
   gem "dotenv-rails"
   # gem "listen"
-  gem "puma"
 
   gem "sunspot_solr"
 
