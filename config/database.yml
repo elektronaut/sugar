@@ -8,7 +8,6 @@ mysql: &mysql
   collation: utf8mb4_unicode_ci
 
 defaults: &default
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_#{Rails.env}") %>
   host:     <%= ENV.fetch("SUGAR_DB_HOST",     "localhost") %>
   username: <%= ENV.fetch("SUGAR_DB_USERNAME", "rails") %>
   password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
@@ -17,10 +16,13 @@ defaults: &default
   <<: <%= "*#{ENV.fetch('SUGAR_DB', 'mysql')}" %>
 
 development:
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>
   <<: *default
 
 test:
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_test") %>
   <<: *default
 
 production:
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_production") %>
   <<: *default
