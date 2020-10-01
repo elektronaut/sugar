@@ -1,9 +1,9 @@
 production:
   solr:
-    hostname: localhost
-    port: 8080
+    hostname: <%= ENV.fetch("SOLR_HOST", "localhost") %>
+    port: <%= ENV.fetch("SOLR_PORT", "8980") %>
     log_level: WARNING
-    path: /solr
+    path: <%= ENV.fetch("SOLR_PATH", "/solr") %>
     # read_timeout: 2
     # open_timeout: 0.5
 
@@ -12,11 +12,11 @@ development:
     hostname: <%= ENV.fetch("SOLR_HOST", "localhost") %>
     port: <%= ENV.fetch("SOLR_PORT", "8982") %>
     log_level: INFO
-    path: /solr/development
+    path: <%= ENV.fetch("SOLR_PATH", "/solr/development") %>
 
 test:
   solr:
     hostname: <%= ENV.fetch("SOLR_HOST", "localhost") %>
     port: <%= ENV.fetch("SOLR_PORT", "8981") %>
     log_level: WARNING
-    path: /solr/test
+    path: <%= ENV.fetch("SOLR_PATH", "/solr/test") %>
