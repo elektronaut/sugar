@@ -14,9 +14,7 @@ written in Ruby on Rails.
 * [Redis](http://redis.io/)
 * [Java](http://www.java.com/en/download/index.jsp)
 * libmagic
-
-Both [PostgreSQL](http://www.postgresql.org/) and [MySQL](http://www.mysql.com/)
-are supported.
+* [PostgreSQL](http://www.postgresql.org/)
 
 ## Installation
 
@@ -61,7 +59,6 @@ Environment variable  | Required | Info
 SUGAR_SECRET_KEY_BASE | Yes      | Set to a long, random string
 SUGAR_SECRET_TOKEN    | -        | Use if you are upgrading from Rails 3
 SUGAR_SESSION_KEY     | -        | Default: `_sugar_session`
-SUGAR_DB              | -        | Database backend. Default: `postgresql`, also valid: `mysql`
 SUGAR_DB_DATABASE     | -        | Default: `sugar_<%= Rails.env %>`
 SUGAR_DB_HOST         | -        | Default: `localhost`
 SUGAR_DB_USERNAME     | -        | Default: `rails`

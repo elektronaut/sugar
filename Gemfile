@@ -11,7 +11,6 @@ gem "rails", "~> 6.0.3"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem "mysql2", "~> 0.5"
 gem "pg"
 gem "puma"
 
