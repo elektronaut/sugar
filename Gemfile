@@ -7,6 +7,7 @@ gem "actionpack-page_caching"
 gem "bcrypt", "~> 3.1.12"
 gem "fast_jsonapi"
 gem "rails", "~> 6.0.3"
+gem "sidekiq"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
