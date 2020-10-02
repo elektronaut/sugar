@@ -40,7 +40,7 @@ class PasswordResetsController < ApplicationController
         password_reset_token,
         password_reset_token.token
       )
-    ).deliver_now
+    ).deliver_later
   end
 
   def user_params
