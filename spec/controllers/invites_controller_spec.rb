@@ -149,13 +149,15 @@ describe InvitesController do
 
     context "with valid params" do
       before do
-        post :create,
-             params: {
-               invite: {
-                 email: "no-reply@example.com",
-                 message: "testing message"
+        perform_enqueued_jobs do
+          post :create,
+               params: {
+                 invite: {
+                   email: "no-reply@example.com",
+                   message: "testing message"
+                 }
                }
-             }
+        end
       end
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
