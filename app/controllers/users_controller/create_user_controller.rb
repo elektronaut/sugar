@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     end
 
     def finalize_successful_signup
-      Mailer.new_user(@user, login_users_url).deliver_now if @user.email?
+      Mailer.new_user(@user, login_users_url).deliver_later if @user.email?
       session.delete(:facebook_user_params)
       session.delete(:invite_token)
       @current_user = @user

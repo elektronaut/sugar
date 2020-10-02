@@ -82,6 +82,7 @@ RSpec.configure do |config|
   # Use FactoryBot shorthand
   config.include FactoryBot::Syntax::Methods
 
+  config.include ActiveJob::TestHelper, type: :controller
   config.include Features, type: :feature
   config.include RedisHelper, redis: true
   config.include JsonSpec::Helpers

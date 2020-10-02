@@ -18,7 +18,11 @@ describe PasswordResetsController do
 
   describe "POST create" do
     context "with an existing user" do
-      before { post :create, params: { email: user.email } }
+      before do
+        perform_enqueued_jobs do
+          post :create, params: { email: user.email }
+        end
+      end
 
       it { is_expected.to redirect_to(login_users_url) }
 
