@@ -544,13 +544,13 @@
       <!-- change field to textSpell and use copyField in schema.xml
       to spellcheck multiple fields -->
       <str name="field">textSpell</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
     </lst>
 
     <lst name="spellchecker">
       <str name="name">example</str>
       <str name="field">title_text</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
       <!-- the spellcheck distance measure used, the default is the internal levenshtein -->
       <str name="distanceMeasure">internal</str>
