@@ -1,19 +1,11 @@
-postgres: &postgresql
+defaults: &default
   adapter:  postgresql
   encoding: unicode
-
-mysql: &mysql
-  adapter:   mysql2
-  encoding:  utf8mb4
-  collation: utf8mb4_unicode_ci
-
-defaults: &default
   host:     <%= ENV.fetch("SUGAR_DB_HOST",     "localhost") %>
   username: <%= ENV.fetch("SUGAR_DB_USERNAME", "rails") %>
   password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
   pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
   timeout:   5000
-  <<: <%= "*#{ENV.fetch('SUGAR_DB', 'postgresql')}" %>
 
 development:
   database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>

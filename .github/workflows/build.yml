@@ -52,25 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    strategy:
-      fail-fast: false
-      matrix:
-        sugar_db: ["postgresql", "mysql"]
     services:
-      mysql:
-        image: mysql:latest
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_USER: ${{ env.DB_USER }}
-          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
-          MYSQL_DATABASE: ${{ env.DB_NAME }}
-          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=5s
-          --health-timeout=2s
-          --health-retries=5
       postgres:
         image: postgres:latest
         ports:
@@ -121,18 +103,10 @@ jobs:
       # - name: Install Node modules
       #   run: |
       #     yarn install
-      - name: Verify MySQL connection
-        env:
-          PORT: ${{ job.services.mysql.ports[3306] }}
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
       - name: Create database
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           RAILS_ENV: test
-          SUGAR_DB: ${{ matrix.sugar_db }}
           SUGAR_DB_HOST: 127.0.0.1
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
@@ -147,7 +121,6 @@ jobs:
       - name: Run tests
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          SUGAR_DB: ${{ matrix.sugar_db }}
           SUGAR_DB_HOST: 127.0.0.1
           SUGAR_DB_USERNAME: ${{ env.DB_USER }}
           SUGAR_DB_PASSWORD: ${{ env.DB_PASSWORD }}
