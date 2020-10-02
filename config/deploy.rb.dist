@@ -45,16 +45,22 @@ set :linked_dirs, %w{public/cache log tmp/cache db/dis}
 #set :rbenv_custom_path, '/path/to/rbenv'
 
 namespace :deploy do
-
-  desc 'Restart application'
+  desc "Restart application"
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      #execute :touch, release_path.join('tmp/restart.txt')
+      execute :sudo, :systemctl, "restart puma-#{fetch(:application)}.service"
+    end
+  end
+
+  task :restart_sidekiq do
+    on roles(:app), in: :sequence, wait: 5 do
+      execute :sudo, :systemctl, "restart sidekiq-#{fetch(:application)}.service"
     end
   end
 
   after :publishing, :restart
+  after :publishing, :restart_sidekiq
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -64,5 +70,4 @@ namespace :deploy do
       # end
     end
   end
-
 end
