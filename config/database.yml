@@ -13,7 +13,7 @@ defaults: &default
   password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
   pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
   timeout:   5000
-  <<: <%= "*#{ENV.fetch('SUGAR_DB', 'mysql')}" %>
+  <<: <%= "*#{ENV.fetch('SUGAR_DB', 'postgresql')}" %>
 
 development:
   database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>
