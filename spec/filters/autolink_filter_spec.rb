@@ -82,7 +82,8 @@ describe AutolinkFilter do
   end
 
   context "when URL is a Twitter status" do
-    let(:input) { "https://twitter.com/Interior/status/463440424141459456" }
+    let(:status_url) { "https://twitter.com/Interior/status/463440424141459456" }
+    let(:input) { status_url }
 
     before do
       stub_request(
@@ -94,9 +95,20 @@ describe AutolinkFilter do
 
     it "converts it to an embed" do
       expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" \
+        eq("<div class=\"embed\" data-oembed-url=\"#{status_url}\">" \
            "#{twitter_json['html']}</div>")
       )
+    end
+
+    context "with a photo direct link" do
+      let(:input) { "#{status_url}/photo/1" }
+
+      it "converts it to an embed" do
+        expect(filter.to_html).to(
+          eq("<div class=\"embed\" data-oembed-url=\"#{status_url}\">" \
+             "#{twitter_json['html']}</div>")
+        )
+      end
     end
   end
 
