@@ -43,6 +43,8 @@ class AutolinkFilter < Filter
   end
 
   def normalize_twitter_url(url)
+    url = url.gsub(%r{/photo/\d+}, "") # Ignore photo path
+
     if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/(\d+)})
       url
     else
