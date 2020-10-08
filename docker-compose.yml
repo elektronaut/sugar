@@ -62,7 +62,7 @@ services:
 
   rails:
     <<: *backend
-    command: bundle exec rails server -b 0.0.0.0
+    command: ./docker-run.sh
     ports:
       - '3000:3000'
       - '3002:3002'

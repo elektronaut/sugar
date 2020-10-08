@@ -21,16 +21,12 @@ written in Ruby on Rails.
 If you want to hack on Sugar, the easiest way to get up and running is using
 Docker Compose:
 
-    $ docker-compose build
-    $ docker-compose run rails bundle install
-    $ docker-compose run rails bin/rails db:prepare
     $ docker-compose up
 
 Sugar is now running on [localhost:3000](http://localhost:3000/).
 
 You can run the tests and linters with:
 
-    $ docker-compose run rails RAILS_ENV=test bin/rails db:prepare
     $ docker-compose run rails bin/rspec
     $ docker-compose run rails bin/rubocop
 
