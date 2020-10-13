@@ -2,9 +2,11 @@
 
 module SearchablePost
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    searchable do
+    searchable(auto_index: false,
+               auto_remove: false) do
       text :body
       integer :user_id
       integer :exchange_id
