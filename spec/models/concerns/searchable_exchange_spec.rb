@@ -3,15 +3,20 @@
 require "rails_helper"
 
 describe SearchableExchange, solr: true do
-  let!(:discussion) { create(:discussion, title: "testing discussion") }
-  let(:user) { create(:user) }
-
-  before do
-    create(:conversation, title: "testing conversation")
+  around do |each|
+    perform_enqueued_jobs do
+      each.run
+    end
   end
 
   describe ".search_results" do
-    before { Sunspot.commit }
+    let!(:discussion) { create(:discussion, title: "testing discussion") }
+    let(:user) { create(:user) }
+
+    before do
+      create(:conversation, title: "testing conversation")
+      Sunspot.commit
+    end
 
     context "when not logged in" do
       subject do

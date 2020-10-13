@@ -2,14 +2,22 @@
 
 require "rails_helper"
 
-describe SearchablePost, solr: true do
-  let(:exchange) { create(:discussion, body: "testing discussion") }
-  let!(:post) { create(:post, body: "testing post") }
-  let!(:exchange_post) { exchange.posts.first }
-  let(:user) { create(:user) }
+describe SearchablePost, solr: true, type: :model do
+  around do |each|
+    perform_enqueued_jobs do
+      each.run
+    end
+  end
 
   describe ".search_results" do
-    before { Sunspot.commit }
+    let(:exchange) { create(:discussion, body: "testing discussion") }
+    let!(:post) { create(:post, body: "testing post") }
+    let!(:exchange_post) { exchange.posts.first }
+    let(:user) { create(:user) }
+
+    before do
+      Sunspot.commit
+    end
 
     describe "searching all posts when logged in as nobody" do
       subject { Post.search_results("testing", user: nil, page: 1) }

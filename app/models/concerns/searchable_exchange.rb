@@ -2,9 +2,11 @@
 
 module SearchableExchange
   extend ActiveSupport::Concern
+  include Searchable
 
   included do
-    searchable do
+    searchable(auto_index: false,
+               auto_remove: false) do
       text :title
       string :type
       integer :poster_id
