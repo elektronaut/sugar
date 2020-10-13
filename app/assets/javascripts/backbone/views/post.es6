@@ -138,7 +138,12 @@ Sugar.Views.Post = Backbone.View.extend({
 
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
-      const username = this.el.querySelector('.username a').textContent;
+      let username = null;
+      if (this.el.classList.contains("me_post")) {
+        username = this.el.querySelector('.content a.poster').textContent;
+      } else {
+        username = this.el.querySelector('.username a').textContent;
+      }
 
       showLink.innerHTML = "Show";
       showLink.addEventListener("click", (evt) => {
