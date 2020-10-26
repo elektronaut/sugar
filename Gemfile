@@ -31,7 +31,10 @@ gem "validate_url"
 
 gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git", branch: :master
 gem "gemoji"
-gem "ruby-oembed", require: "oembed"
+gem "ruby-oembed",
+    git: "https://github.com/elektronaut/ruby-oembed.git",
+    branch: "new-facebook-apis",
+    require: "oembed"
 
 # gem 'dynamic_image', '~> 2.0.0.beta5
 gem "dynamic_image"
