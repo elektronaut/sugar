@@ -22,10 +22,13 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - name: Install Rubocop
-        run: gem install rubocop rubocop-rails rubocop-rspec
+      - name: Install Ruby gems
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install
       - name: Check code
-        run: rubocop
+        run: bundle exec rubocop
 
   # eslint-test:
   #   name: ESLint
