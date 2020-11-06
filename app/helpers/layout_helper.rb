@@ -8,7 +8,7 @@ module LayoutHelper
 
   def body_classes
     @body_classes ||= []
-    @body_classes << "with_sidebar" if content_for?(:sidebar) && !@body_classes.include?("with_sidebar")
+    @body_classes << "with_sidebar" if content_for?(:sidebar) && @body_classes.exclude?("with_sidebar")
     @body_classes.uniq.join(" ")
   end
 
@@ -46,11 +46,7 @@ module LayoutHelper
     classes = [section.to_s] + Array(options[:class])
     classes << "current" if @section == section
 
-    content_tag(
-      :li,
-      link_to(name, url, id: (options[:id] || "#{section}_link")),
-      class: classes
-    )
+    tag.li(link_to(name, url, id: (options[:id] || "#{section}_link")), class: classes)
   end
 
   private

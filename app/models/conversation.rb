@@ -25,7 +25,7 @@ class Conversation < Exchange
     options = {
       new_posts: true
     }.merge(options)
-    return unless user.is_a?(User) && !participants.include?(user)
+    return unless user.is_a?(User) && participants.exclude?(user)
 
     ConversationRelationship.create(
       user: user,

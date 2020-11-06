@@ -13,9 +13,9 @@ describe ConversationsController do
   # Create the first admin user
   before { create(:user) }
 
-  it_requires_login_for :index, :search_posts, :new, :create
-  it_requires_login_for :show, :edit, :update
-  it_requires_login_for :invite_participant, :remove_participant
+  it_requires_login_for %w[index search_posts new create]
+  it_requires_login_for %w[show edit update]
+  it_requires_login_for %w[invite_participant remove_participant]
 
   describe "GET index" do
     before do

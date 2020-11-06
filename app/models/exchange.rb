@@ -28,7 +28,6 @@ class Exchange < ApplicationRecord
 
   has_many(:exchange_views,
            dependent: :destroy,
-           foreign_key: "exchange_id",
            inverse_of: :exchange)
 
   has_many(:users, through: :posts)
@@ -73,7 +72,7 @@ class Exchange < ApplicationRecord
   def closeable_by?(user)
     return false unless user
     return true if user.moderator?
-    return false if closer && !moderators.include?(closer)
+    return false if closer && moderators.exclude?(closer)
 
     moderators.include?(user)
   end

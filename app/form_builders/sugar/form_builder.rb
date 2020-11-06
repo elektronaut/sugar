@@ -22,13 +22,11 @@ module Sugar
     def label(method, text = nil, options = {}, &_block)
       output = [text || human_attribute_name(method)]
       if errors_on?(method)
-        output << content_tag(:span, " #{first_error(method)}", class: "error")
+        output << tag.span(" #{first_error(method)}", class: "error")
       elsif options[:description]
-        output << content_tag(:span,
-                              safe_join([" – ", options[:description]], ""),
-                              class: "description")
+        output << tag.span(safe_join([" – ", options[:description]], ""), class: "description")
       end
-      content_tag "label", safe_join(output), for: full_attribute_name(method)
+      tag.label(safe_join(output), for: full_attribute_name(method))
     end
 
     def field_with_label(attr, content, label_text = nil, opts = {})
@@ -38,7 +36,7 @@ module Sugar
       label_tag = label(attr, label_text, description: opts[:description])
       content = safe_join([content, opts[:note]], tag(:br)) if opts[:note]
 
-      content_tag "p", safe_join([label_tag, content]), class: classes.join(" ")
+      tag.p(safe_join([label_tag, content]), class: classes.join(" "))
     end
 
     def labelled_text_field(attribute, label_text = nil, options = {})

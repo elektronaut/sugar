@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :avatar do
     file do
       Rack::Test::UploadedFile.new(
-        Rails.root.join("spec", "support", "pink.png"),
+        Rails.root.join("spec/support/pink.png"),
         "image/png"
       )
     end
@@ -70,7 +70,7 @@ FactoryBot.define do
   factory :post_image do
     file do
       Rack::Test::UploadedFile.new(
-        Rails.root.join("spec", "support", "pink.png"),
+        Rails.root.join("spec/support/pink.png"),
         "image/png"
       )
     end

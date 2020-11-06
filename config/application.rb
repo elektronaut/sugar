@@ -24,4 +24,4 @@ module Sugar
   end
 end
 
-require Rails.root.join("lib", "sugar.rb")
+require Rails.root.join("lib/sugar.rb")

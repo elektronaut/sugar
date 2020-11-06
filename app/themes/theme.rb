@@ -27,7 +27,7 @@ class Theme
     end
 
     def base_dir
-      Rails.root.join("app", "themes")
+      Rails.root.join("app/themes")
     end
 
     private

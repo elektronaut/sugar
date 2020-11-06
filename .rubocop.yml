@@ -1,11 +1,13 @@
-require: rubocop-rspec
+require:
+  - rubocop-rails
+  - rubocop-rspec
 
 inherit_from:
   - .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   Exclude:
     - 'bin/**/*'
     - 'db/schema.rb'
@@ -40,9 +42,21 @@ Style/Documentation:
 Style/Encoding:
   Enabled: false
 
-Rails:
-  Enabled: true
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20080701172614_create_exchange_views.rb'
+    - 'db/migrate/20090404154958_create_discussion_relationships.rb'
 
-RSpec/EmptyExampleGroup:
-  CustomIncludeMethods:
-    - 'it_requires_login_for'
+Rails/DynamicFindBy:
+  AllowedReceivers:
+    - Emoji
+
+RSpec:
+  Language:
+    Includes:
+      Examples:
+        - it_requires_admin_for
+        - it_requires_authentication_for
+        - it_requires_login_for
+        - it_requires_moderator_for
+        - it_requires_user_admin_for

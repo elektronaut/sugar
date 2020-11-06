@@ -18,8 +18,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :avatar
   validates_associated :avatar
 
-  before_create :check_for_first_user
   before_validation :ensure_last_active_is_set
+  before_create :check_for_first_user
   before_update :check_username_change
 
   validates :username,

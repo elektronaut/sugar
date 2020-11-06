@@ -8,10 +8,10 @@ module LoginMacros
   module ClassMethods
     def it_requires_login_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it "requires login for #{action} action" do
           logout
-          perform_login_macro_request(action, opts)
+          perform_login_macro_request(action.to_sym, opts)
           expect(response).to redirect_to(login_users_url)
         end
       end
@@ -19,7 +19,7 @@ module LoginMacros
 
     def it_requires_authentication_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it "requires authentication for #{action}" do
           private_browsing!
           allow(controller).to receive(:require_user_account).and_return(true)
@@ -31,7 +31,7 @@ module LoginMacros
 
     def it_requires_user_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it "requires a user for #{action}" do
           allow(controller).to receive(:require_user_account).and_return(true)
           perform_login_macro_request(action, opts)
@@ -42,21 +42,21 @@ module LoginMacros
 
     def it_requires_admin_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it_requires_verify_user(action, :admin, opts)
       end
     end
 
     def it_requires_moderator_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it_requires_verify_user(action, :moderator, opts)
       end
     end
 
     def it_requires_user_admin_for(*actions)
       actions, opts = require_login_options(actions)
-      actions.each do |action|
+      Array(*actions).each do |action|
         it_requires_verify_user(action, :user_admin, opts)
       end
     end

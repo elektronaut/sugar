@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Mailer < ActionMailer::Base
-  default from: proc { Sugar.config.mail_sender || "no-reply@example.com" }
-
+class Mailer < ApplicationMailer
   def invite(invite, login_url)
     @invite    = invite
     @login_url = login_url

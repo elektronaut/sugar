@@ -6,8 +6,8 @@ class DiscussionRelationship < ApplicationRecord
 
   before_validation :ensure_flags_are_mutually_exclusive
 
-  after_save :update_user_caches!
   after_destroy :update_user_caches!
+  after_save :update_user_caches!
 
   class << self
     def define(user, discussion, options = {})

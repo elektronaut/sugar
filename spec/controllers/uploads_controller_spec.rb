@@ -6,7 +6,7 @@ describe UploadsController, redis: true do
   let(:user) { create(:user) }
   let(:png_file) do
     Rack::Test::UploadedFile.new(
-      Rails.root.join("spec", "support", "pink.png"),
+      Rails.root.join("spec/support/pink.png"),
       "image/png"
     )
   end

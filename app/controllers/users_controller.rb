@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   before_action :check_status
 
   before_action :load_user,
-                only: %i[show edit update destroy participated discussions posts
+                only: %i[show edit update participated discussions posts
                          grant_invite revoke_invites stats mute unmute]
 
   before_action :detect_edit_page, only: %i[edit update]
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   def show
     respond_to do |format|
       format.html { @posts = user_posts(@user).limit(15) }
-      format.mobile {}
+      format.mobile
       format.json do
         serializer = UserSerializer.new(@user, params: { context: self })
         render json: serializer.serialized_json

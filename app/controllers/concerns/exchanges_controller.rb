@@ -26,8 +26,8 @@ module ExchangesController
                     (@posts.offset_value + @posts.count))
 
     respond_to do |format|
-      format.html {}
-      format.mobile {}
+      format.html
+      format.mobile
       format.json do
         redirect_to(
           polymorphic_path([@exchange, :posts], page: @page, format: :json)

@@ -6,8 +6,8 @@ module ExchangeResponder
   def respond_with_exchanges(exchanges)
     viewed_tracker.exchanges = exchanges
     respond_to do |format|
-      format.html {}
-      format.mobile {}
+      format.html
+      format.mobile
       format.json do
         serializer = ExchangeSerializer.new(
           exchanges,

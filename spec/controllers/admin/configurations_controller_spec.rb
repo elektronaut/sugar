@@ -5,7 +5,7 @@ require "rails_helper"
 describe Admin::ConfigurationsController, redis: true do
   let(:admin) { create(:admin) }
 
-  it_requires_admin_for :show, :edit, :update
+  it_requires_admin_for %w[show edit update]
 
   context "when logged in as admin" do
     before { login(admin) }

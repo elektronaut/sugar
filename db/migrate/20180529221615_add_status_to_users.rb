@@ -8,13 +8,17 @@ class AddStatusToUsers < ActiveRecord::Migration[5.2]
     User.where(banned: true).update_all(status: :banned)
     User.where(memorialized: true).update_all(status: :memorialized)
 
-    remove_column :users, :memorialized
-    remove_column :users, :banned
+    change_table(:users, bulk: true) do |t|
+      t.remove :memorialized
+      t.remove :banned
+    end
   end
 
   def down
-    add_column :users, :banned, :boolean, null: false, default: false
-    add_column :users, :memorialized, :boolean, null: false, default: false
+    change_table(:users, bulk: true) do |t|
+      t.boolean :banned, null: false, default: false
+      t.boolean :memorialized, null: false, default: false
+    end
     User.reset_column_information
 
     User.all.each do |user|

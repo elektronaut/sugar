@@ -11,19 +11,17 @@ describe DiscussionsController do
   describe "with public browsing off" do
     before { Sugar.config.update(public_browsing: false) }
 
-    it_requires_login_for :index, :search, :new, :create
-    it_requires_login_for :favorites, :following
-    it_requires_login_for :show, :edit, :update
-    it_requires_login_for :follow, :unfollow, :favorite, :unfavorite
+    it_requires_login_for %w[index search new create]
+    it_requires_login_for %w[favorites following]
+    it_requires_login_for %w[show edit update]
+    it_requires_login_for %w[follow unfollow favorite unfavorite]
   end
 
   describe "with public browsing on" do
     before { Sugar.config.update(public_browsing: true) }
 
-    it_requires_login_for :new, :create, :favorites, :following
-    it_requires_login_for :edit, :update,
-                          :follow, :unfollow,
-                          :favorite, :unfavorite
+    it_requires_login_for %w[new create favorites following]
+    it_requires_login_for %w[edit update follow unfollow favorite unfavorite]
 
     describe "browsing discussions" do
       before { get :index }

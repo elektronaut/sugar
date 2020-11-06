@@ -11,8 +11,8 @@ describe InvitesController do
   let(:user) { create(:user) }
   let(:user_with_invites) { create(:user, available_invites: 1) }
 
-  it_requires_login_for :index, :all, :new, :create, :destroy
-  it_requires_user_admin_for :all
+  it_requires_login_for %w[index all new create destroy]
+  it_requires_user_admin_for "all"
 
   describe "#load_invite" do
     context "when invite exists" do

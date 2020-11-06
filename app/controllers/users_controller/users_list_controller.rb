@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     def index
       @users = User.active_and_memorialized.by_username
       respond_to do |format|
-        format.html {}
+        format.html
         format.mobile { @online_users = @users.select(&:online?) }
         format.json { render json: UserSerializer.new(@users).serialized_json }
       end
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
     def respond_with_users(users)
       respond_to do |format|
-        format.any(:html, :mobile) {}
+        format.any(:html, :mobile)
         format.json { render json: UserSerializer.new(users).serialized_json }
       end
     end
