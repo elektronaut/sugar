@@ -5,13 +5,6 @@ GIT
   specs:
     b3s_emoticons (0.0.2)
 
-GIT
-  remote: https://github.com/elektronaut/ruby-oembed.git
-  revision: dbf581c796eef15fe9ecff2558756bbfab9c9a91
-  branch: new-facebook-apis
-  specs:
-    ruby-oembed (0.13.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -352,6 +345,7 @@ GEM
     rubocop-rspec (1.43.2)
       rubocop (~> 0.87)
     ruby-filemagic (0.7.2)
+    ruby-oembed (0.14.0)
     ruby-progressbar (1.10.1)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -482,7 +476,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   ruby-filemagic
-  ruby-oembed!
+  ruby-oembed
   sass-rails (>= 6.0)
   sentry-raven
   shoulda-matchers (>= 4.3.0, != 4.4.0)
