@@ -5,6 +5,10 @@ require "rails_helper"
 describe AutolinkFilter do
   subject(:filter) { described_class.new(input) }
 
+  before do
+    OEmbed::Providers.register_all(access_tokens: { facebook: "my-token" })
+  end
+
   let(:twitter_embed) do
     File.read(
       Rails.root.join("spec/support/requests/twitter_embed.json")
@@ -68,8 +72,8 @@ describe AutolinkFilter do
     before do
       stub_request(
         :get,
-        "https://api.instagram.com/oembed?format=json&" \
-        "url=https://www.instagram.com/p/8ql-VChPSZ/"
+        "https://graph.facebook.com/v8.0/instagram_oembed?access_token=" \
+        "my-token&format=json&url=https://www.instagram.com/p/8ql-VChPSZ/"
       ).to_return(status: 200, body: instagram_embed)
     end
 
