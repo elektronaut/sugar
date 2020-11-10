@@ -65,7 +65,7 @@ class Post < ApplicationRecord
   end
 
   def fetch_images
-    self.body = ImageFetcher.fetch(body)
+    self.body = ImageFetcher.fetch(body) unless skip_html
   end
 
   def mentions_users?

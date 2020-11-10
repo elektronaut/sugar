@@ -9,7 +9,7 @@ namespace :sugar do
       exit
     end
     puts "Deleting #{user.discussion_posts.count} posts..."
-    user.discussion_posts.update(deleted: true)
+    user.discussion_posts.update(deleted: true, skip_html: true)
     user.update(public_posts_count: 0)
   end
 
