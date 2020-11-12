@@ -32,12 +32,4 @@
                   class: "password_reset") %>
     </fieldset>
   <% end %>
-
-  <% if Sugar.config.facebook_app_id %>
-    <div class="facebook">
-      <%= link_to("Login with Facebook",
-                  facebook_oauth_url(login_facebook_url),
-                  class: "fb_button") %>
-    </div>
-  <% end %>
 </div>
