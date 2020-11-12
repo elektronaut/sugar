@@ -88,6 +88,12 @@ describe Authenticable do
       it { is_expected.to eq(user) }
     end
 
+    context "when email has the wrong case" do
+      let(:email) { "Test@example.com" }
+
+      it { is_expected.to eq(user) }
+    end
+
     context "when email is wrong" do
       let(:email) { "wrong@example.com" }
 

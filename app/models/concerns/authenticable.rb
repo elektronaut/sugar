@@ -50,7 +50,7 @@ module Authenticable
       return nil if email.blank?
       return nil if password.blank?
 
-      user = User.find_by(email: email)
+      user = User.find_by("LOWER(email) = ?", email.downcase.strip)
       return unless user&.valid_password?(password)
 
       user.hash_password!(password) if user.password_needs_rehash?
