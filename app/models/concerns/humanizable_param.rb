@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 module HumanizableParam
+  include ActiveSupport::Inflector
   extend ActiveSupport::Concern
 
   def humanized_param(slug)
-    "#{id}-" + slug
-               .gsub(/[\[{]/, "(")
-               .gsub(/}\]/, ")")
-               .gsub(/[^\w\d!$&'()*,;=\-]+/, "-")
-               .gsub(/-{2,}/, "-")
-               .gsub(/(^-|-$)/, "")
+    return id.to_s unless slug&.present?
+
+    "#{id}-" + transliterate(slug).split(/[^\w\d]+/).reject(&:blank?).join("-")
   end
 end
