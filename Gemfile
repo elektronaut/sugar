@@ -6,7 +6,7 @@ gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
 gem "bcrypt", "~> 3.1.12"
 gem "fast_jsonapi"
-gem "rails", "~> 6.0.3"
+gem "rails", "~> 6.1.0"
 gem "sidekiq"
 
 # Reduces boot times through caching; required in config/boot.rb
