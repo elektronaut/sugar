@@ -46,7 +46,7 @@ class User < ApplicationRecord
   end
 
   def online?
-    last_active && last_active > 15.minutes.ago ? true : false
+    last_active && last_active > 15.minutes.ago
   end
 
   def user_admin?

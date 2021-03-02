@@ -46,7 +46,7 @@ class Exchange < ApplicationRecord
   end
 
   def labels?
-    closed? || sticky? || nsfw? ? true : false
+    closed? || sticky? || nsfw?
   end
 
   def labels

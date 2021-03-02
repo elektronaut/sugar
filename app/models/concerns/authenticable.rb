@@ -84,7 +84,7 @@ module Authenticable
   end
 
   def new_password_confirmed?
-    new_password? && password == confirm_password ? true : false
+    new_password? && password == confirm_password
   end
 
   def password_needs_rehash?
