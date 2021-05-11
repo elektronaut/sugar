@@ -19,7 +19,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -87,8 +87,9 @@ jobs:
         options: solr:8 solr-precreate test
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
+          bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
       - name: Ruby gem cache
         uses: actions/cache@v1
