@@ -1,5 +1,5 @@
 default-jre
-imagemagick
+libvips42
 vim
 libmagic-dev
 unzip

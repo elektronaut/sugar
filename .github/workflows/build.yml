@@ -23,6 +23,9 @@ jobs:
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install -y libvips42
       - name: Install Ruby gems
         run: |
           gem install bundler
@@ -95,6 +98,9 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install -y libvips42
       - name: Install Ruby gems
         run: |
           gem install bundler
