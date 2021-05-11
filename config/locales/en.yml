@@ -19,7 +19,8 @@ en:
         body: First post
         nsfw: Not safe for work
       user:
-        realname: Real name
+        realname: Name
+        pronouns: Pronouns
         description: Profile text
         moderator: Moderator
         user_admin: User administrator

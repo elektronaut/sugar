@@ -35,6 +35,9 @@
         <small>from</small> <%= h @user.location %>
       <% end %>
     <% end %>
+    <% if @user.pronouns? %>
+      <br /><%= @user.pronouns %>
+    <% end %>
     <% if @user.website? %>
       <br /><%= pretty_link(@user.website) %>
     <% end %>

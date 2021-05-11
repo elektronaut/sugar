@@ -33,8 +33,15 @@
   <table class="userinfo">
     <% if @user.realname? %>
       <tr>
-        <th>Real name</th>
+        <th>Name</th>
         <td><%= @user.realname %></td>
+      </tr>
+    <% end %>
+
+    <% if @user.pronouns? %>
+      <tr>
+        <th>Pronouns</th>
+        <td><%= @user.pronouns %></td>
       </tr>
     <% end %>
 
