@@ -12,7 +12,7 @@ Bundler.require(*Rails.groups)
 module Sugar
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.eager_load_paths += %W[#{config.root}/lib]
