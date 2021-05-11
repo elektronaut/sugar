@@ -83,6 +83,8 @@ jobs:
         image: solr:8
         ports:
           - 8983
+        volumes:
+          - ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
@@ -134,7 +136,6 @@ jobs:
           REDIS_URL: redis://localhost:6379/1
           SOLR_HOST: localhost
           SOLR_PORT: 8983
-          SOLR_PATH: /solr
         run: bundle exec rspec
       - name: Send results to Code Climate
         uses: paambaati/codeclimate-action@v2.6.0
