@@ -81,10 +81,9 @@ jobs:
           # Maps port 6379 on service container to the host
           - 6379:6379
       solr:
-        image: solr:8
+        image: solr:8 solr-precreate test
         ports:
           - 8983:8983
-        options: solr:8 solr-precreate test
     steps:
       - uses: actions/checkout@v1
       - uses: ruby/setup-ruby@v1
