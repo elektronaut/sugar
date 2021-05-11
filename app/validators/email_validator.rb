@@ -11,6 +11,8 @@ class EmailValidator < ActiveModel::EachValidator
     rescue StandardError
       valid = false
     end
-    record.errors[attribute] << (options[:message] || "is invalid") unless valid
+    return if valid
+
+    record.errors.add(attribute, (options[:message] || "is invalid"))
   end
 end
