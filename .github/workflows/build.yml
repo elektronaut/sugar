@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
         with:
+          bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
       - name: Install Ruby gems
         run: |
@@ -82,7 +83,7 @@ jobs:
       solr:
         image: solr:8
         ports:
-          - 8983
+          - 8983:8983
         options: solr:8 solr-precreate test
     steps:
       - uses: actions/checkout@v1
