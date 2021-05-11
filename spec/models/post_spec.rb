@@ -250,13 +250,17 @@ describe Post do
 
     context "when it mentions users" do
       let(:mentioned_users) do
-        ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
+        ["eléktronaut", "#1", "With space"].map do |u|
+          create(:user, username: u)
+        end
       end
 
       let(:post) do
         create(
           :post,
-          body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
+          body: mentioned_users.map do |u|
+                  "@#{u.username.downcase}"
+                end.join(" and ")
         )
       end
 
@@ -273,12 +277,16 @@ describe Post do
 
     context "when it mentions users" do
       let(:mentioned_users) do
-        ["eléktronaut", "#1", "With space"].map { |u| create(:user, username: u) }
+        ["eléktronaut", "#1", "With space"].map do |u|
+          create(:user, username: u)
+        end
       end
       let(:post) do
         create(
           :post,
-          body: mentioned_users.map { |u| "@#{u.username.downcase}" }.join(" and ")
+          body: mentioned_users.map do |u|
+                  "@#{u.username.downcase}"
+                end.join(" and ")
         )
       end
 

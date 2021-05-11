@@ -13,9 +13,9 @@ AllCops:
     - 'db/schema.rb'
     - 'vendor/**/*'
 
-# Layout/LineLength:
-#   AutoCorrect: true
-#   Max: 80
+Layout/LineLength:
+  AutoCorrect: true
+  Max: 80
 
 Metrics/AbcSize:
   Exclude:

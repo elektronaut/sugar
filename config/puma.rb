@@ -12,7 +12,8 @@ max_threads_count = ENV.fetch("RAILS_MAX_THREADS", 5)
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS", max_threads_count)
 threads min_threads_count, max_threads_count
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+# Specifies the `port` that Puma will listen on to receive requests;
+# default is 3000.
 #
 puma_port = ENV.fetch("PUMA_PORT", 3000)
 if ENV["PUMA_HOST"]
@@ -59,7 +60,8 @@ if ENV["PUMA_PRODUCTION"]
   shared_dir = "#{app_dir}/shared"
 
   # Logging
-  stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
+  stdout_redirect "#{shared_dir}/log/puma.stdout.log",
+                  "#{shared_dir}/log/puma.stderr.log", true
 
   # Set master PID and state locations
   pidfile "#{shared_dir}/tmp/pids/puma.pid"
@@ -80,10 +82,3 @@ end
 #   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 # end
 #
-
-# From other example:
-# on_worker_boot do
-#   require "active_record"
-#   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-#   ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
-# end

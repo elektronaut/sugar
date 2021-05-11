@@ -24,7 +24,9 @@ class Invite < ApplicationRecord
     # Makes a unique random token.
     def unique_token
       token = nil
-      token = Digest::SHA1.hexdigest(rand(65_535).to_s + Time.now.utc.to_s) until token && !exists?(token: token)
+      until token && !exists?(token: token)
+        token = Digest::SHA1.hexdigest(rand(65_535).to_s + Time.now.utc.to_s)
+      end
       token
     end
 

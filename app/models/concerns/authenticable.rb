@@ -14,10 +14,13 @@ module Authenticable
 
     attribute :hiatus_until, :datetime
 
-    enum status: { active: 0, inactive: 1, hiatus: 2, time_out: 3, banned: 4, memorialized: 5 }
+    enum status: { active: 0, inactive: 1, hiatus: 2, time_out: 3, banned: 4,
+                   memorialized: 5 }
 
     validate do |user|
-      user.errors.add(:password, "must be confirmed") if user.new_password? && !user.new_password_confirmed?
+      if user.new_password? && !user.new_password_confirmed?
+        user.errors.add(:password, "must be confirmed")
+      end
     end
 
     validates :hashed_password,

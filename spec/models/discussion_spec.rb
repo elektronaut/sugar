@@ -134,7 +134,10 @@ describe Discussion do
         ).to eq(false)
       end
 
-      specify { expect(discussion.postable_by?(create(:moderator))).to eq(true) }
+      specify do
+        expect(discussion.postable_by?(create(:moderator))).to eq(true)
+      end
+
       specify { expect(discussion.postable_by?(create(:admin))).to eq(true) }
     end
   end

@@ -29,7 +29,9 @@ gem "sprockets-es6"
 gem "uglifier"
 gem "validate_url"
 
-gem "b3s_emoticons", git: "https://github.com/b3s/b3s_emoticons.git", branch: :master
+gem "b3s_emoticons",
+    git: "https://github.com/b3s/b3s_emoticons.git",
+    branch: :master
 gem "gemoji"
 gem "ruby-oembed", require: "oembed"
 

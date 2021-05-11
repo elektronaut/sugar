@@ -24,7 +24,8 @@ module Sugar
       if errors_on?(method)
         output << tag.span(" #{first_error(method)}", class: "error")
       elsif options[:description]
-        output << tag.span(safe_join([" – ", options[:description]], ""), class: "description")
+        output << tag.span(safe_join([" – ", options[:description]], ""),
+                           class: "description")
       end
       tag.label(safe_join(output), for: full_attribute_name(method))
     end

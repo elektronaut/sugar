@@ -86,7 +86,9 @@ describe AutolinkFilter do
   end
 
   context "when URL is a Twitter status" do
-    let(:status_url) { "https://twitter.com/Interior/status/463440424141459456" }
+    let(:status_url) do
+      "https://twitter.com/Interior/status/463440424141459456"
+    end
     let(:input) { status_url }
 
     before do
