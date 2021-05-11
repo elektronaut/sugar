@@ -61,7 +61,7 @@ class Post < ApplicationRecord
   end
 
   def editable_by?(user)
-    user && (user.moderator? || user == self.user)
+    user.present? && (user.moderator? || user == self.user)
   end
 
   def fetch_images
