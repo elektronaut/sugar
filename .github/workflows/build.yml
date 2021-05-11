@@ -83,8 +83,7 @@ jobs:
         image: solr:8
         ports:
           - 8983
-        volumes:
-          - ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/
+        options: solr-precreate test
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
