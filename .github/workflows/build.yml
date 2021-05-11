@@ -80,16 +80,14 @@ jobs:
         ports:
           # Maps port 6379 on service container to the host
           - 6379:6379
-      solr:
-        image: solr:8 solr-precreate test
-        ports:
-          - 8983:8983
     steps:
       - uses: actions/checkout@v1
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Start Solr
+        run: /usr/bin/docker run -d -v ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/ -p 8983:8983 --name solr solr:8
       - name: Ruby gem cache
         uses: actions/cache@v1
         with:
@@ -122,11 +120,6 @@ jobs:
           REDIS_URL: redis://localhost:6379/1
         run: |
           bin/rails db:migrate
-      # - name: Start Solr
-      #   env:
-      #     RAILS_ENV: test
-      #   run: |
-      #     bin/rails sunspot:solr:start RAILS_ENV=test
       - name: Run tests
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
