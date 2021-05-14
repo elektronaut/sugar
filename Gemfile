@@ -36,7 +36,7 @@ gem "gemoji"
 gem "ruby-oembed", require: "oembed"
 
 # gem 'dynamic_image', '~> 2.0.0.beta5
-gem "dynamic_image"
+gem "dynamic_image", "~> 2.1"
 gem "fog-aws"
 gem "sentry-raven"
 
