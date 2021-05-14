@@ -17,9 +17,15 @@ class ApplicationController < ActionController::Base
   before_action :detect_mobile
   before_action :set_section
   before_action :set_theme
-  before_action :set_raven_context
+  before_action :set_sentry_context
 
   protected
+
+  def current_user_context
+    return {} unless current_user?
+
+    { id: current_user.id, username: current_user.username }
+  end
 
   def disable_xss_protection
     # Disabling this is probably not a good idea, but the header
@@ -80,15 +86,9 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
-  def set_raven_context
-    if current_user?
-      Raven.user_context(id: current_user.id,
-                         username: current_user.username)
-    else
-      Raven.user_context({})
-    end
-    Raven.extra_context(params: params.to_unsafe_h,
-                        url: request.url)
+  def set_sentry_context
+    Sentry.set_user(current_user_context)
+    Sentry.set_extras(params: params.to_unsafe_h)
   end
 
   def set_section
