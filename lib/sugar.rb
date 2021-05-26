@@ -20,6 +20,7 @@ module Sugar
 
     def redis_url=(new_url)
       @redis = nil
+      @config = nil
       @redis_url = new_url
     end
 
