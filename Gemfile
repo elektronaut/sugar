@@ -19,7 +19,6 @@ gem "dalli"
 gem "hiredis"
 gem "redis", "~> 4.1"
 
-gem "backbone-on-rails"
 gem "coffee-rails"
 gem "dynamic_form"
 gem "jquery-rails"

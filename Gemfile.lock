@@ -84,11 +84,6 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    backbone-on-rails (1.2.0.0)
-      eco
-      ejs
-      jquery-rails
-      railties
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.7.5)
@@ -159,12 +154,6 @@ GEM
       mini_magick (~> 4.9)
       rails (> 5.0)
       vector2d (~> 2.2, >= 2.2.1)
-    eco (1.0.0)
-      coffee-script
-      eco-source
-      execjs
-    eco-source (1.1.0.rc.1)
-    ejs (1.1.1)
     erubi (1.10.0)
     excon (0.81.0)
     execjs (2.7.0)
@@ -459,7 +448,6 @@ DEPENDENCIES
   activemodel-serializers-xml
   acts_as_list
   b3s_emoticons!
-  backbone-on-rails
   bcrypt (~> 3.1.12)
   bootsnap (>= 1.1.0)
   capistrano (~> 3.11.0)
