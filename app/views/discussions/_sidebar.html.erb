@@ -12,7 +12,7 @@
     <% if current_user? %>
       <% if current_user.following_count > 0 %>
         <li class="<%= "current" if discussion_action?("following") %>">
-          <%= link_to "Followed", following_discussions_path %>
+          <%= link_to "Following", following_discussions_path %>
           <span class="count">
             <%= current_user.following_count %>
           </span>
