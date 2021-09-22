@@ -53,10 +53,10 @@ class UsersController < ApplicationController
   def stats
     @posts_per_week = Post.find_by_sql(
       "SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, " \
-        "WEEK(created_at) AS week " \
-        "FROM posts " \
-        "WHERE user_id = #{@user.id} " \
-        "GROUP BY YEAR(created_at), WEEK(created_at);"
+      "WEEK(created_at) AS week " \
+      "FROM posts " \
+      "WHERE user_id = #{@user.id} " \
+      "GROUP BY YEAR(created_at), WEEK(created_at);"
     )
     @max_posts_per_week = @posts_per_week.map { |p| p.post_count.to_i }.max
   end

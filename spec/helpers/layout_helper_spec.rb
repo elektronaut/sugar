@@ -120,7 +120,7 @@ describe LayoutHelper do
       specify do
         expect(result).to eq(
           "<li class=\"discussions\"><a id=\"discussions_link\" " \
-            "href=\"#{url}\">Discussions</a></li>"
+          "href=\"#{url}\">Discussions</a></li>"
         )
       end
     end
@@ -131,7 +131,7 @@ describe LayoutHelper do
       specify do
         expect(result).to eq(
           "<li class=\"discussions current\"><a id=\"discussions_link\" " \
-            "href=\"#{url}\">Discussions</a></li>"
+          "href=\"#{url}\">Discussions</a></li>"
         )
       end
     end

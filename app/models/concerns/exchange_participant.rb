@@ -13,7 +13,8 @@ module ExchangeParticipant
 
     has_many :discussion_posts,
              -> { where conversation: false, deleted: false },
-             class_name: "Post", inverse_of: :user
+             class_name: "Post", inverse_of: :user,
+             dependent: :restrict_with_exception
 
     has_many :exchange_views, dependent: :destroy
 

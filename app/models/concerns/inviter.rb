@@ -17,7 +17,8 @@ module Inviter
              -> { order "username ASC" },
              class_name: "User",
              foreign_key: "inviter_id",
-             inverse_of: :inviter
+             inverse_of: :inviter,
+             dependent: :nullify
 
     has_many :invites,
              -> { order "created_at ASC" },

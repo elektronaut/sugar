@@ -60,7 +60,7 @@ class ConversationsController < ApplicationController
       redirect_to conversations_url
     else
       flash[:notice] = "#{@user.username} has been removed from " \
-        "the conversation"
+                       "the conversation"
       redirect_to @exchange
     end
   end

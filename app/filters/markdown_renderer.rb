@@ -21,7 +21,7 @@ class MarkdownRenderer < Redcarpet::Render::HTML
   def render_spoiler(str)
     if str.strip =~ %r{\A<div class="spoiler">(.*)</div>\n?\z}m
       "<div class=\"spoiler\">" \
-      "#{MarkdownFilter.new(Regexp.last_match(1)).to_html}</div>\n"
+        "#{MarkdownFilter.new(Regexp.last_match(1)).to_html}</div>\n"
     else
       str
     end
@@ -56,8 +56,8 @@ class MarkdownRenderer < Redcarpet::Render::HTML
       title = Regexp.last_match(1)
       youtube_url = Regexp.last_match(2)
       "<iframe title=\"#{title}\" " \
-      "src=\"https://www.youtube.com/embed/#{youtube_id(youtube_url)}\" " \
-      'frameborder="0" allowfullscreen></iframe>'
+        "src=\"https://www.youtube.com/embed/#{youtube_id(youtube_url)}\" " \
+        'frameborder="0" allowfullscreen></iframe>'
     end
   end
 end

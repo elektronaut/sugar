@@ -42,7 +42,8 @@ module Paginatable
 
     def current_page
       [
-        ((all.offset_value || 0) + context) / (pagination_limit - context) + 1,
+        (((all.offset_value || 0) + context) /
+         (pagination_limit - context)) + 1,
         total_pages
       ].min
     end

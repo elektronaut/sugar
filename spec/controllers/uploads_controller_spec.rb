@@ -28,7 +28,7 @@ describe UploadsController, redis: true do
           type: "image/png",
           name: "pink.png",
           embed: "[image:#{last_image.id}:" \
-            "76a68c6a781ef4919bd4352b880b7c9e50de3d96]"
+                 "76a68c6a781ef4919bd4352b880b7c9e50de3d96]"
         }
       end
 

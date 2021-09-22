@@ -7,7 +7,7 @@ class Mailer < ApplicationMailer
     mail(
       to: @invite.email,
       subject: "#{@invite.user.realname_or_username} has invited you to " \
-        "#{Sugar.config.forum_name}!"
+               "#{Sugar.config.forum_name}!"
     )
   end
 

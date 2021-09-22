@@ -9,8 +9,8 @@ describe ApplicationHelper do
     let(:redirect_url) { "http://example.com/foo" }
     let(:url) do
       "https://www.facebook.com/dialog/oauth?client_id=123" \
-      "&redirect_uri=http://example.com/foo" \
-      "&scope=email"
+        "&redirect_uri=http://example.com/foo" \
+        "&scope=email"
     end
 
     before { Sugar.config.facebook_app_id = "123" }

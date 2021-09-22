@@ -17,7 +17,7 @@ describe CodeFilter do
     let(:input) { "<pre><code>code here</code></pre>" }
     let(:output) do
       "<div class=\"highlight\"><pre class=\"highlight\">" \
-      "<code>code here</code></pre></div>"
+        "<code>code here</code></pre></div>"
     end
 
     it "syntaxes highlight it" do

@@ -95,7 +95,7 @@ class User < ApplicationRecord
     return unless gamertag?
 
     "http://avatar.xboxlive.com/avatar/#{ERB::Util.url_encode(gamertag)}" \
-    "/avatarpic-l.png"
+      "/avatarpic-l.png"
   end
 
   def serializable_params

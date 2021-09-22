@@ -37,8 +37,8 @@ describe AvatarsHelper do
       end
       let(:output) do
         '<img alt="foo" class="avatar-image" ' \
-        "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
-        '&amp;d=identicon" width="96" height="96" />'
+          "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+          '&amp;d=identicon" width="96" height="96" />'
       end
 
       it { is_expected.to eq(output) }
@@ -51,8 +51,8 @@ describe AvatarsHelper do
       let(:digest) { Digest::MD5.hexdigest("#{user.id}@test.host") }
       let(:output) do
         '<img alt="foo" class="avatar-image" ' \
-        "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
-        '&amp;d=identicon" width="96" height="96" />'
+          "src=\"https://secure.gravatar.com/avatar/#{digest}?s=96&amp;r=x" \
+          '&amp;d=identicon" width="96" height="96" />'
       end
 
       it { is_expected.to eq(output) }

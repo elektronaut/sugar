@@ -24,7 +24,7 @@ module Authentication
         "Authenticated as user:#{user.id} (#{user.username})"
       else
         "Authentication failed for user:#{user.id} " \
-        "(#{user.username}) - #{user.status}"
+          "(#{user.username}) - #{user.status}"
       end
     end
 
