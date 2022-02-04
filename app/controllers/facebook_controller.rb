@@ -59,7 +59,7 @@ class FacebookController < ApplicationController
     user = User.find_by(facebook_uid: facebook_uid)
     return false unless user
 
-    @current_user = user
+    authenticate!(user)
   end
 
   def detect_admin_signup

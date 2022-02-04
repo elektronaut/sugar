@@ -87,9 +87,9 @@ module LoginMacros
   end
 
   def login(user = nil)
-    @current_user = user || create(:user)
-    session[:user_id] = @current_user.id
-    session[:persistence_token] = @current_user.persistence_token
+    login_user = user || create(:user)
+    session[:user_id] = login_user.id
+    session[:persistence_token] = login_user.persistence_token
     session[:ips] = ["0.0.0.0"]
   end
 

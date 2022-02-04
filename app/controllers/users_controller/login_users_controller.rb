@@ -12,10 +12,11 @@ class UsersController < ApplicationController
     def login; end
 
     def authenticate
-      @current_user = User.find_and_authenticate_with_password(
+      user = User.find_and_authenticate_with_password(
         params[:email],
         params[:password]
       )
+      authenticate!(user)
       if current_user?
         redirect_to discussions_url
       else

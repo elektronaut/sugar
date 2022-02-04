@@ -56,7 +56,7 @@ class UsersController < ApplicationController
       Mailer.new_user(@user, login_users_url).deliver_later if @user.email?
       session.delete(:facebook_user_params)
       session.delete(:invite_token)
-      @current_user = @user
+      authenticate!(@user)
     end
 
     def check_for_expired_invite

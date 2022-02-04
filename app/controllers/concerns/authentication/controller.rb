@@ -36,7 +36,7 @@ module Authentication
       user = User.find_by(id: session[:user_id])
       return unless user&.persistence_token == session[:persistence_token]
 
-      @current_user = user
+      authenticate!(user)
     end
 
     def ban_duration
@@ -56,7 +56,17 @@ module Authentication
       deauthenticate!
     end
 
+    def authenticate!(user)
+      raise "Already authenticated" if authenticated?
+
+      @authenticated_session = {
+        user_id: user.id,
+        persistence_token: user.persistence_token
+      }.freeze
+    end
+
     def deauthenticate!
+      @authenticated_session = {}.freeze
       @current_user = nil
     end
 
@@ -65,13 +75,13 @@ module Authentication
     end
 
     def store_session_authentication
-      if current_user
-        session[:user_id] = current_user.id
-        session[:persistence_token] = current_user.persistence_token
-      else
-        session[:user_id] = nil
-        session[:persistence_token] = nil
+      unless authenticated_session[:user_id] == current_user&.id
+        raise "Authentication mismatch between authenticated_session and " \
+              "current_user. Has current_user been mutated?"
       end
+
+      session[:user_id] = authenticated_session[:user_id]
+      session[:persistence_token] = authenticated_session[:persistence_token]
     end
   end
 end
