@@ -11,12 +11,9 @@ namespace :web do
     template = ""
     File.open(template_file) { |fh| template = fh.read }
     template = ERB.new(template)
-    File.open(
-      File.join(File.dirname(__FILE__), "../../public/system/maintenance.html"),
-      "w"
-    ) do |fh|
-      fh.write template.result(binding)
-    end
+    File.write(File.join(File.dirname(__FILE__),
+                         "../../public/system/maintenance.html"),
+               template.result(binding))
   end
 
   desc "Enable web"

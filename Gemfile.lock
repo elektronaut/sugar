@@ -136,7 +136,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
-    digest (3.1.0)
     dis (1.1.11)
       fog-core (~> 2.1.2)
       fog-local
@@ -207,7 +206,6 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.9.1)
       concurrent-ruby (~> 1.0)
-    io-wait (0.2.1)
     ipaddress (0.8.3)
     jquery-rails (4.4.0)
       rails-dom-testing (>= 1, < 3)
@@ -236,23 +234,8 @@ GEM
     msgpack (1.4.4)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    net-imap (0.2.3)
-      digest
-      net-protocol
-      strscan
-    net-pop (0.1.1)
-      digest
-      net-protocol
-      timeout
-    net-protocol (0.1.2)
-      io-wait
-      timeout
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
-    net-smtp (0.3.1)
-      digest
-      net-protocol
-      timeout
     net-ssh (6.1.0)
     newrelic_rpm (8.4.0)
     nio4r (2.5.8)
@@ -409,7 +392,6 @@ GEM
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    strscan (3.0.1)
     sunspot (2.5.0)
       pr_geohash (~> 1.0)
       rsolr (>= 1.1.1, < 3)
@@ -419,7 +401,6 @@ GEM
     sunspot_solr (2.5.0)
     thor (1.2.1)
     tilt (2.0.10)
-    timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
@@ -483,9 +464,6 @@ DEPENDENCIES
   jquery-rails
   json
   json_spec
-  net-imap
-  net-pop
-  net-smtp
   newrelic_rpm
   nokogiri
   non-stupid-digest-assets

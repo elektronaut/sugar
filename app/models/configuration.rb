@@ -5,13 +5,15 @@ class Configuration
 
   include ActiveModel::Model
 
+  Setting = Struct.new(:type, :default)
+
   class << self
     def settings
       @settings ||= {}
     end
 
     def setting(key, type, default = nil)
-      settings[key] = OpenStruct.new(type: type, default: default)
+      settings[key] = Setting.new(type, default)
       define_reader_method(key)
       define_boolean_reader_method(key)
       define_writer_method(key)

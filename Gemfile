@@ -45,9 +45,9 @@ gem "sentry-ruby"
 gem "sentry-sidekiq"
 
 # Ruby 3.1 compatibility, remove when mail gem is updated
-gem "net-imap", require: false
-gem "net-pop", require: false
-gem "net-smtp", require: false
+# gem "net-imap", require: false
+# gem "net-pop", require: false
+# gem "net-smtp", require: false
 
 # Deploy with Capistrano
 group :development do

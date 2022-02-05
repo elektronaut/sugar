@@ -7,6 +7,6 @@ module HumanizableParam
   def humanized_param(slug)
     return id.to_s unless slug&.present?
 
-    "#{id}-" + transliterate(slug).split(/[^\w\d]+/).reject(&:blank?).join("-")
+    "#{id}-" + transliterate(slug).split(/[^\w\d]+/).compact_blank.join("-")
   end
 end
