@@ -177,7 +177,7 @@ describe InvitesController do
     context "when email is invalid" do
       before do
         allow(Mailer).to receive(:invite) do
-          raise Net::SMTPSyntaxError
+          raise Net::SMTPSyntaxError.new(nil), "mock error"
         end
         post :create,
              params: {
