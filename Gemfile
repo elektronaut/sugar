@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+gem "rails", "~> 6.1.0"
 
 gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
 gem "bcrypt", "~> 3.1.12"
 gem "fast_jsonapi"
-gem "rails", "~> 6.1.0"
 gem "sidekiq"
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -41,6 +43,11 @@ gem "fog-aws"
 gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
+
+# Ruby 3.1 compatibility, remove when mail gem is updated
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "net-smtp", require: false
 
 # Deploy with Capistrano
 group :development do
@@ -78,7 +85,6 @@ gem "activemodel-serializers-xml"
 gem "non-stupid-digest-assets"
 
 group :development do
-  gem "listen"
   gem "web-console"
   gem "yui-compressor", require: "yui/compressor"
 end
@@ -99,7 +105,6 @@ end
 
 group :test, :development do
   gem "dotenv-rails"
-  # gem "listen"
 
   gem "sunspot_solr"
 
