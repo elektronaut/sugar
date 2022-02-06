@@ -58,6 +58,7 @@ module Authentication
 
     def authenticate!(user)
       raise "Already authenticated" if authenticated?
+      return unless user
 
       @authenticated_session = {
         user_id: user.id,
