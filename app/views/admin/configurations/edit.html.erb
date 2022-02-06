@@ -135,20 +135,6 @@
       <%= f.labelled_text_field :facebook_app_id, size: 48 %>
       <%= f.labelled_text_field :facebook_api_secret, size: 48 %>
     </fieldset>
-
-    <fieldset>
-      <h2>
-        <%= t("configuration.amazon_aws") %>
-      </h2>
-      <p class="info">
-        <%= t("configuration.amazon_aws_description",
-              link: link_to(t("configuration.amazon_signup_link"),
-                            "http://aws.amazon.com/s3/")).html_safe %>
-      </p>
-      <%= f.labelled_text_field :amazon_aws_key, size: 48 %>
-      <%= f.labelled_text_field :amazon_aws_secret, size: 48 %>
-      <%= f.labelled_text_field :amazon_s3_bucket, size: 48 %>
-    </fieldset>
     <fieldset>
       <h2>
         <%= t("configuration.amazon_associates") %>

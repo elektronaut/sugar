@@ -7,9 +7,6 @@ zh-CN:
       configuration:
         code_of_conduct: 行为规则
         google_analytics: 追踪代码
-        amazon_aws_key: Access Key ID
-        amazon_aws_secret: Secret Access Key
-        amazon_s3_bucket: S3 Bucket
         amazon_associates_id: Tracking ID
   activerecord:
     attributes:
