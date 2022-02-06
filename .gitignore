@@ -36,3 +36,5 @@ config/newrelic.yml
 
 # Ignore zipped themes
 public/themes/*.zip
+
+.env.*.local
