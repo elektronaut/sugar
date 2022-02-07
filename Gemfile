@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 6.1.0"
+gem "rails", "~> 7.0.0"
 
 gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
@@ -27,7 +27,8 @@ gem "jquery-rails"
 gem "json"
 gem "sass-rails", ">= 6.0"
 gem "sprockets-es6"
-gem "uglifier"
+gem "sprockets-rails"
+gem "terser"
 gem "validate_url"
 
 gem "b3s_emoticons",

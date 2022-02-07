@@ -74,7 +74,7 @@ class User < ApplicationRecord
   end
 
   def theme
-    theme? ? attributes["theme"] : Sugar.config.default_theme
+    super || Sugar.config.default_theme
   end
 
   def mark_active!
@@ -84,11 +84,7 @@ class User < ApplicationRecord
   end
 
   def mobile_theme
-    if mobile_theme?
-      attributes["mobile_theme"]
-    else
-      Sugar.config.default_mobile_theme
-    end
+    super || Sugar.config.default_mobile_theme
   end
 
   def gamertag_avatar_url

@@ -49,7 +49,7 @@ class Post < ApplicationRecord
     if new_record? || Rails.env.development?
       Renderer.render(body, format: format)
     else
-      unless body_html?
+      if super.blank?
         update_column(:body_html, Renderer.render(body, format: format))
       end
       self[:body_html]
