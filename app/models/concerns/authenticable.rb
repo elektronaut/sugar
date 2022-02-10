@@ -42,7 +42,7 @@ module Authenticable
 
   module ClassMethods
     def generate_token
-      Digest::SHA1.hexdigest(rand(65_535).to_s + Time.now.utc.to_s)
+      SecureRandom.hex(20)
     end
 
     def encrypt_password(password)
