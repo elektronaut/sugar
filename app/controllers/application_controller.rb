@@ -16,8 +16,9 @@ class ApplicationController < ActionController::Base
   before_action :set_time_zone
   before_action :detect_mobile
   before_action :set_section
-  before_action :set_theme
   before_action :set_sentry_context
+
+  helper_method :mobile_user_agent?, :theme, :mobile_theme
 
   protected
 
@@ -65,7 +66,6 @@ class ApplicationController < ActionController::Base
       (request.env["HTTP_USER_AGENT"] &&
       request.env["HTTP_USER_AGENT"][%r{(Mobile/.+Safari|Android|IEMobile)}])
   end
-  helper_method :mobile_user_agent?
 
   def detect_mobile
     return unless mobile_user_agent?
@@ -101,29 +101,10 @@ class ApplicationController < ActionController::Base
   end
 
   def mobile_theme
-    if current_user?
-      Theme.find(current_user.mobile_theme)
-    else
-      Theme.find(Sugar.config.default_mobile_theme)
-    end
+    Theme.find(current_user&.mobile_theme || Sugar.config.default_mobile_theme)
   end
 
   def theme
-    if current_user?
-      Theme.find(current_user.theme)
-    else
-      Theme.find(Sugar.config.default_theme)
-    end
-  end
-
-  def set_theme
-    respond_to do |format|
-      format.mobile do
-        @theme = mobile_theme
-      end
-      format.any do
-        @theme = theme
-      end
-    end
+    Theme.find(current_user&.theme || Sugar.config.default_theme)
   end
 end

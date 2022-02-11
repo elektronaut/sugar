@@ -10,7 +10,7 @@
   <% if current_user? && current_user.mobile_stylesheet_url? %>
     <%= stylesheet_link_tag current_user.mobile_stylesheet_url %>
   <% else %>
-    <%= stylesheet_link_tag @theme.mobile_stylesheet_path %>
+    <%= stylesheet_link_tag mobile_theme.mobile_stylesheet_path %>
   <% end %>
 
   <%= icon_tags %>
