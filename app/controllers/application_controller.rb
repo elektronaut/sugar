@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
   before_action :disable_xss_protection
   before_action :load_configuration
   before_action :set_time_zone
-  before_action :detect_mobile
   before_action :set_section
   before_action :set_sentry_context
+  before_action :set_variant
 
   helper_method :mobile_user_agent?, :theme, :mobile_theme
 
@@ -67,17 +67,14 @@ class ApplicationController < ActionController::Base
       request.env["HTTP_USER_AGENT"][%r{(Mobile/.+Safari|Android|IEMobile)}])
   end
 
-  def detect_mobile
-    return unless mobile_user_agent?
+  def mobile_variant?
+    return false unless mobile_user_agent?
 
     session[:mobile_format] = params[:mobile_format] ||
                               session[:mobile_format] ||
                               "mobile"
 
-    return unless session[:mobile_format] == "mobile" &&
-                  request.format == "text/html"
-
-    request.variant = :mobile
+    session[:mobile_format] == "mobile" && request.format == "text/html"
   end
 
   def require_s3
@@ -99,6 +96,10 @@ class ApplicationController < ActionController::Base
       ConversationsController => :conversations
     }
     mapping[self.class] || :discussions
+  end
+
+  def set_variant
+    request.variant = :mobile if mobile_variant?
   end
 
   def mobile_theme

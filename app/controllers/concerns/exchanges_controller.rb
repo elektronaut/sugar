@@ -64,7 +64,7 @@ module ExchangesController
   protected
 
   def context
-    request.variant == :mobile ? 0 : 3
+    mobile_variant? ? 0 : 3
   end
 
   def mark_as_viewed!(exchange, last_post, count)
