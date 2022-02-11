@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       @users = User.active_and_memorialized.by_username
       respond_to do |format|
         format.html
-        format.mobile { @online_users = @users.select(&:online?) }
+        format.html.mobile { @online_users = @users.select(&:online?) }
         format.json { render json: UserSerializer.new(@users).serialized_json }
       end
     end
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
     def respond_with_users(users)
       respond_to do |format|
-        format.any(:html, :mobile)
+        format.html
         format.json { render json: UserSerializer.new(users).serialized_json }
       end
     end

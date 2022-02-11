@@ -70,13 +70,13 @@ class PasswordResetsController < ApplicationController
 
   def render_user_not_found
     respond_to do |format|
-      format.html do
-        flash.now[:notice] = "Couldn't find a user with that email address"
-        render action: :new
-      end
-      format.mobile do
+      format.html.mobile do
         flash[:notice] = "Couldn't find a user with that email address"
         redirect_to login_users_url
+      end
+      format.html.none do
+        flash.now[:notice] = "Couldn't find a user with that email address"
+        render action: :new
       end
     end
   end

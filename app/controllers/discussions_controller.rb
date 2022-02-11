@@ -30,10 +30,8 @@ class DiscussionsController < ApplicationController
     @exchanges = search_results.results
     @search_path = search_path
     respond_to do |format|
-      format.any(:html, :mobile) { respond_with_exchanges(@exchanges) }
-      format.json do
-        render json: @exchanges
-      end
+      format.html { respond_with_exchanges(@exchanges) }
+      format.json { render json: @exchanges }
     end
   end
 

@@ -13,7 +13,7 @@ module Authentication
 
     def handle_unverified_user(options)
       respond_to do |format|
-        format.any(:html, :mobile) do
+        format.html do
           flash[:notice] = options[:notice]
           redirect_to options[:redirect]
         end

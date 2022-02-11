@@ -73,10 +73,10 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.valid?
-        format.any(:html, :mobile) { redirect_to post_url }
+        format.html { redirect_to post_url }
         format.json { render json: @post }
       else
-        format.any(:html, :mobile) { render action: :edit }
+        format.html { render action: :edit }
         format.json { render json: @post, status: :unprocessable_entity }
       end
     end
@@ -111,10 +111,10 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.valid?
-        format.any(:html, :mobile) { redirect_to exchange_url }
+        format.html { redirect_to exchange_url }
         format.json { render json: @post, status: :created }
       else
-        format.any(:html, :mobile) { render action: :new }
+        format.html { render action: :new }
         format.json { render json: @post, status: :unprocessable_entity }
       end
     end

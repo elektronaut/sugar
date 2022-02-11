@@ -32,27 +32,6 @@ describe PostsController do
       end
     end
 
-    context "with mobile format" do
-      before do
-        post(
-          :create,
-          params: {
-            discussion_id: discussion.id,
-            post: post_params
-          },
-          format: :mobile
-        )
-      end
-
-      it "redirects back to the discussion" do
-        expect(response).to(
-          redirect_to(discussion_url(discussion,
-                                     page: 1,
-                                     anchor: "post-#{assigns(:post).id}"))
-        )
-      end
-    end
-
     context "with JSON format" do
       before do
         post(

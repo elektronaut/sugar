@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
   def render_error(error, options = {})
     options[:status] ||= error if error.is_a?(Numeric)
     respond_to do |format|
-      format.any(:html, :mobile) { options[:template] ||= "errors/#{error}" }
+      format.html { options[:template] ||= "errors/#{error}" }
       format.any(:xml, :json) { options[:text] ||= error_messages[error] }
     end
     render options
@@ -73,10 +73,11 @@ class ApplicationController < ActionController::Base
     session[:mobile_format] = params[:mobile_format] ||
                               session[:mobile_format] ||
                               "mobile"
+
     return unless session[:mobile_format] == "mobile" &&
                   request.format == "text/html"
 
-    request.format = :mobile
+    request.variant = :mobile
   end
 
   def require_s3

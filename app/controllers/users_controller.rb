@@ -23,7 +23,6 @@ class UsersController < ApplicationController
   def show
     respond_to do |format|
       format.html { @posts = user_posts(@user).limit(15) }
-      format.mobile
       format.json do
         serializer = UserSerializer.new(@user, params: { context: self })
         render json: serializer.serialized_json
@@ -150,7 +149,7 @@ class UsersController < ApplicationController
 
   def respond_with_user(user, &block)
     respond_to do |format|
-      format.any(:html, :mobile) { block.call }
+      format.html { block.call }
       format.json { render json: UserSerializer.new(user).serialized_json }
     end
   end

@@ -27,7 +27,6 @@ module ExchangesController
 
     respond_to do |format|
       format.html
-      format.mobile
       format.json do
         redirect_to(
           polymorphic_path([@exchange, :posts], page: @page, format: :json)
@@ -65,7 +64,7 @@ module ExchangesController
   protected
 
   def context
-    request.format == :mobile ? 0 : 3
+    request.variant == :mobile ? 0 : 3
   end
 
   def mark_as_viewed!(exchange, last_post, count)

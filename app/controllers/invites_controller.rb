@@ -98,7 +98,7 @@ class InvitesController < ApplicationController
     return if current_user? && current_user.available_invites?
 
     respond_to do |format|
-      format.any(:html, :mobile) do
+      format.html do
         flash[:notice] = "You don't have any invites!"
         redirect_to online_users_url
       end
