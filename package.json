@@ -1,0 +1,24 @@
+{
+  "name": "app",
+  "dependencies": {
+    "@rails/ujs": "^7.0.3-1",
+    "backbone": "^1.4.1",
+    "dropzone": "^6.0.0-beta.2",
+    "esbuild": "^0.15.7",
+    "esbuild-plugin-import-glob": "^0.1.1",
+    "esbuild-rails": "^1.0.3",
+    "jquery": "^3.6.1",
+    "timeago": "^1.6.7",
+    "underscore": "^1.13.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  },
+  "scripts": {
+    "lint-javascript": "eslint 'app/javascript/**/*.js*'",
+    "build": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --minify --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12"
+  },
+  "packageManager": "yarn@3.2.3"
+}
