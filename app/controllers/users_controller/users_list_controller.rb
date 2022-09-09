@@ -48,8 +48,6 @@ class UsersController < ApplicationController
       respond_with_users(@users)
     end
 
-    def map; end
-
     private
 
     def serialize_users(users); end
