@@ -172,7 +172,6 @@ Rails.application.routes.draw do
       # Posts
       resources :posts do
         collection do
-          post "drawing"
           get "count"
           get "since"
           post "preview"

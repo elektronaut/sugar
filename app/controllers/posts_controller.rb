@@ -3,13 +3,10 @@
 require "digest/sha1"
 
 class PostsController < ApplicationController
-  include DrawingsController
-
   caches_page :count
 
   requires_authentication except: %i[count]
   requires_user except: %i[count since search]
-  protect_from_forgery except: %i[drawing]
 
   before_action :find_exchange, except: %i[search]
   before_action :verify_viewable, except: %i[search count]
@@ -17,7 +14,7 @@ class PostsController < ApplicationController
   before_action :find_post, only: %i[edit update]
   before_action :verify_editable, only: %i[edit update]
   before_action :require_and_set_search_query, only: %i[search]
-  before_action :verify_postable, only: %i[create drawing]
+  before_action :verify_postable, only: %i[create]
 
   after_action :mark_exchange_viewed, only: %i[since index]
   after_action :mark_conversation_viewed, only: %i[since index]
