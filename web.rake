@@ -20,6 +20,6 @@ namespace :web do
   task enable: :environment do
     maintenance_file = File.join(File.dirname(__FILE__),
                                  "../../public/system/maintenance.html")
-    File.unlink(maintenance_file) if File.exist?(maintenance_file)
+    FileUtils.rm_f(maintenance_file)
   end
 end

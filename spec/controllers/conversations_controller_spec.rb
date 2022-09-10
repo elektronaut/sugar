@@ -153,7 +153,7 @@ describe ConversationsController do
     end
 
     it "mutes the conversation" do
-      expect(user.muted_conversation?(conversation)).to eq(true)
+      expect(user.muted_conversation?(conversation)).to be(true)
     end
 
     it "redirects back to the conversation" do
@@ -169,13 +169,14 @@ describe ConversationsController do
 
     before do
       conversation.add_participant(user)
-      user.conversation_relationships.update_all(notifications: false)
+      user.conversation_relationships
+          .each { |cr| cr.update(notifications: false) }
       login(user)
       get :unmute, params: { id: conversation.id, page: 2 }
     end
 
     it "mutes the conversation" do
-      expect(user.muted_conversation?(conversation)).to eq(false)
+      expect(user.muted_conversation?(conversation)).to be(false)
     end
 
     it "redirects back to the conversation" do

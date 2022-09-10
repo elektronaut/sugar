@@ -51,11 +51,11 @@ describe Authenticable do
       let(:user) { create(:facebook_user) }
 
       it "generates a password" do
-        expect(user.password.blank?).to eq(false)
+        expect(user.password.blank?).to be(false)
       end
 
       it "creates a valid user" do
-        expect(user.valid?).to eq(true)
+        expect(user.valid?).to be(true)
       end
     end
   end
@@ -97,36 +97,36 @@ describe Authenticable do
     context "when email is wrong" do
       let(:email) { "wrong@example.com" }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when email is blank" do
       let(:email) { nil }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when password is wrong" do
       let(:password) { "password456" }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when password is blank" do
       let(:password) { nil }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
   end
 
   describe "#facebook?" do
-    specify { expect(create(:user, facebook_uid: 123).facebook?).to eq(true) }
-    specify { expect(create(:user, facebook_uid: nil).facebook?).to eq(false) }
+    specify { expect(create(:user, facebook_uid: 123).facebook?).to be(true) }
+    specify { expect(create(:user, facebook_uid: nil).facebook?).to be(false) }
   end
 
   describe "#active" do
-    specify { expect(user.active?).to eq(true) }
-    specify { expect(banned_user.active?).to eq(false) }
+    specify { expect(user.active?).to be(true) }
+    specify { expect(banned_user.active?).to be(false) }
   end
 
   describe "#valid_password?" do
@@ -135,14 +135,14 @@ describe Authenticable do
         expect(
           create(:user, hashed_password: Digest::SHA1.hexdigest("password123"))
             .valid_password?("password123")
-        ).to eq(true)
+        ).to be(true)
       end
 
       specify do
         expect(
           create(:user, hashed_password: Digest::SHA1.hexdigest("password123"))
             .valid_password?("password")
-        ).to eq(false)
+        ).to be(false)
       end
     end
 
@@ -151,14 +151,14 @@ describe Authenticable do
         expect(
           create(:user, hashed_password: BCrypt::Password.create("password123"))
             .valid_password?("password123")
-        ).to eq(true)
+        ).to be(true)
       end
 
       specify do
         expect(
           create(:user, hashed_password: BCrypt::Password.create("password123"))
             .valid_password?("password")
-        ).to eq(false)
+        ).to be(false)
       end
     end
   end
@@ -175,18 +175,18 @@ describe Authenticable do
   end
 
   describe "#new_password?" do
-    specify { expect(user.new_password?).to eq(false) }
+    specify { expect(user.new_password?).to be(false) }
 
     specify do
-      expect(build(:user, password: "New password").new_password?).to eq(true)
+      expect(build(:user, password: "New password").new_password?).to be(true)
     end
   end
 
   describe "#new_password_confirmed?" do
-    specify { expect(user.new_password_confirmed?).to eq(false) }
+    specify { expect(user.new_password_confirmed?).to be(false) }
 
     specify do
-      expect(build(:user, password: "new").new_password_confirmed?).to eq(false)
+      expect(build(:user, password: "new").new_password_confirmed?).to be(false)
     end
 
     specify do
@@ -194,7 +194,7 @@ describe Authenticable do
         build(
           :user, password: "new", confirm_password: "wrong"
         ).new_password_confirmed?
-      ).to eq(false)
+      ).to be(false)
     end
 
     specify do
@@ -202,7 +202,7 @@ describe Authenticable do
         build(
           :user, password: "new", confirm_password: "new"
         ).new_password_confirmed?
-      ).to eq(true)
+      ).to be(true)
     end
   end
 
@@ -213,7 +213,7 @@ describe Authenticable do
           create(
             :user, hashed_password: Digest::SHA1.hexdigest("password123")
           ).password_needs_rehash?
-        ).to eq(true)
+        ).to be(true)
       end
     end
 
@@ -223,20 +223,20 @@ describe Authenticable do
           create(
             :user, hashed_password: BCrypt::Password.create("password123")
           ).password_needs_rehash?
-        ).to eq(false)
+        ).to be(false)
       end
     end
   end
 
   describe "#temporary_banned?" do
-    specify { expect(user.temporary_banned?).to eq(false) }
+    specify { expect(user.temporary_banned?).to be(false) }
 
     specify do
       expect(
         create(
           :user, banned_until: 2.days.ago
         ).temporary_banned?
-      ).to eq(false)
+      ).to be(false)
     end
 
     specify do
@@ -244,7 +244,7 @@ describe Authenticable do
         create(
           :user, banned_until: (Time.now.utc + 2.days)
         ).temporary_banned?
-      ).to eq(true)
+      ).to be(true)
     end
   end
 
@@ -290,7 +290,7 @@ describe Authenticable do
     specify do
       expect(
         create(:user, banned_until: 2.seconds.ago).banned_until
-      ).to eq(nil)
+      ).to be_nil
     end
 
     specify do

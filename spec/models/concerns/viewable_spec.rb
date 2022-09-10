@@ -20,15 +20,15 @@ describe Viewable do
     context "when public browsing is on" do
       before { configure public_browsing: true }
 
-      specify { expect(discussion.viewable_by?(user)).to eq(true) }
-      specify { expect(discussion.viewable_by?(nil)).to eq(true) }
+      specify { expect(discussion.viewable_by?(user)).to be(true) }
+      specify { expect(discussion.viewable_by?(nil)).to be(true) }
     end
 
     context "when public browsing is off" do
       before { configure public_browsing: false }
 
-      specify { expect(discussion.viewable_by?(user)).to eq(true) }
-      specify { expect(discussion.viewable_by?(nil)).to eq(false) }
+      specify { expect(discussion.viewable_by?(user)).to be(true) }
+      specify { expect(discussion.viewable_by?(nil)).to be(false) }
     end
   end
 end

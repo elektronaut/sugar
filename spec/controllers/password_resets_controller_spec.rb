@@ -54,7 +54,7 @@ describe PasswordResetsController do
 
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:new) }
-      specify { expect(assigns(:password_reset_token)).to eq(nil) }
+      specify { expect(assigns(:password_reset_token)).to be_nil }
 
       specify do
         expect(flash.now[:notice]).to match(
@@ -116,7 +116,7 @@ describe PasswordResetsController do
         )
       end
 
-      specify { expect(assigns(:password_reset_token).destroyed?).to eq(true) }
+      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
     end
 
     context "with a non-existant token" do
@@ -149,7 +149,7 @@ describe PasswordResetsController do
       specify { expect(assigns(:current_user)).to be_a(User) }
       it { is_expected.to redirect_to(root_url) }
       specify { expect(session[:user_id]).to eq(password_reset_token.user.id) }
-      specify { expect(assigns(:password_reset_token).destroyed?).to eq(true) }
+      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
     end
 
     context "without valid data" do
@@ -173,7 +173,7 @@ describe PasswordResetsController do
         expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
-      specify { expect(assigns(:password_reset_token).destroyed?).to eq(false) }
+      specify { expect(assigns(:password_reset_token).destroyed?).to be(false) }
     end
 
     context "without a valid token" do
@@ -216,7 +216,7 @@ describe PasswordResetsController do
         )
       end
 
-      specify { expect(assigns(:password_reset_token).destroyed?).to eq(true) }
+      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
     end
   end
 end

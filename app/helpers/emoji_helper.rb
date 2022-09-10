@@ -2,9 +2,7 @@
 
 module EmojiHelper
   def emoji_path(emoji)
-    if File.exist?(
-      Rails.root.join("public", "images", "emoji", emoji.image_filename)
-    )
+    if Rails.public_path.join("images", "emoji", emoji.image_filename).exist?
       image_path("emoji/#{emoji.image_filename}", skip_pipeline: true)
     else
       image_path("emoji/#{emoji.image_filename}")

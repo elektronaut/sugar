@@ -123,26 +123,26 @@ describe User, type: :model do
     context "when user is online" do
       let(:user) { build(:user, last_active: 2.minutes.ago) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when user is offline" do
       let(:user) { build(:user, last_active: 2.days.ago) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
   describe "#user_admin?" do
-    specify { expect(user_admin.user_admin?).to eq(true) }
-    specify { expect(admin.user_admin?).to eq(true) }
-    specify { expect(moderator.user_admin?).to eq(false) }
+    specify { expect(user_admin.user_admin?).to be(true) }
+    specify { expect(admin.user_admin?).to be(true) }
+    specify { expect(moderator.user_admin?).to be(false) }
   end
 
   describe "#moderator?" do
-    specify { expect(moderator.moderator?).to eq(true) }
-    specify { expect(admin.moderator?).to eq(true) }
-    specify { expect(user_admin.moderator?).to eq(false) }
+    specify { expect(moderator.moderator?).to be(true) }
+    specify { expect(admin.moderator?).to be(true) }
+    specify { expect(user_admin.moderator?).to be(false) }
   end
 
   describe "#admin_labels" do
@@ -212,7 +212,7 @@ describe User, type: :model do
     context "when gamertag is nil" do
       let(:user) { build(:user) }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when gamertag is set" do

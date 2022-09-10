@@ -16,7 +16,7 @@ class ConvertTrustedDiscussionsToConversations < ActiveRecord::Migration[5.2]
       d.update(type: "Conversation")
       d.becomes(Conversation).tap do |conversation|
         conversation.unlabel!
-        d.posts.update_all(conversation: true)
+        d.posts.each { |p| p.update(conversation: true) }
         trusted_users.each do |p|
           conversation.add_participant(p, new_posts: false)
         end
@@ -31,7 +31,7 @@ class ConvertTrustedDiscussionsToConversations < ActiveRecord::Migration[5.2]
 
       c.update(type: "Discussion")
       c.becomes(Conversation).tap do |discussion|
-        c.posts.update_all(conversation: false)
+        d.posts.each { |p| p.update(conversation: false) }
         c.participants.each do |p|
           DiscussionRelationship.define(p, discussion, participated: true)
         end

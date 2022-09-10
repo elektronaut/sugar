@@ -9,7 +9,9 @@ class AddServiceNameToActiveStorageBlobs < ActiveRecord::Migration[6.0]
 
     configured_service = ActiveStorage::Blob.service.name
     if configured_service
-      ActiveStorage::Blob.unscoped.update_all(service_name: configured_service)
+      ActiveStorage::Blob.unscoped.each do |s|
+        s.update(service_name: configured_service)
+      end
     end
 
     change_column :active_storage_blobs, :service_name, :string, null: false

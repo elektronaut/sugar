@@ -10,7 +10,6 @@ describe Invite do
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to validate_presence_of(:email) }
-  it { is_expected.to validate_presence_of(:user_id) }
 
   describe "email validation" do
     subject(:invite) { build(:invite, email: email, user: User.first) }
@@ -46,7 +45,7 @@ describe Invite do
     end
 
     specify { expect(invite.token).to be_kind_of(String) }
-    specify { expect(invite.token.length >= 40).to eq(true) }
+    specify { expect(invite.token.length >= 40).to be(true) }
 
     it "revokes an invite from the inviter" do
       inviter = create(:user, available_invites: 1)
@@ -79,7 +78,7 @@ describe Invite do
     subject(:token) { described_class.unique_token }
 
     it { is_expected.to be_kind_of(String) }
-    specify { expect(token.length >= 40).to eq(true) }
+    specify { expect(token.length >= 40).to be(true) }
   end
 
   describe ".expiration_time" do
@@ -124,13 +123,13 @@ describe Invite do
     context "when invite isn't expired" do
       let(:invite) { create(:invite) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when invite is expired" do
       let(:invite) { create(:expired_invite) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 

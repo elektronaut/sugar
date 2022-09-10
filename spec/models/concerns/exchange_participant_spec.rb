@@ -64,7 +64,7 @@ describe ExchangeParticipant do
       it "does not create a new view" do
         expect do
           user.mark_exchange_viewed(discussion, post, 2)
-        end.to change(ExchangeView, :count).by(0)
+        end.not_to change(ExchangeView, :count)
       end
 
       it "sets the post index" do
@@ -113,7 +113,7 @@ describe ExchangeParticipant do
     end
 
     it "marks the conversation as viewed" do
-      expect(relationship.new_posts?).to eq(false)
+      expect(relationship.new_posts?).to be(false)
     end
   end
 
@@ -154,7 +154,7 @@ describe ExchangeParticipant do
     subject { user.unread_conversations? }
 
     context "with no unread conversations" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with unread conversations" do
@@ -166,7 +166,7 @@ describe ExchangeParticipant do
         )
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -178,15 +178,16 @@ describe ExchangeParticipant do
     before { conversation.add_participant(user) }
 
     context "when conversation isn't muted" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when conversation is muted" do
       before do
-        user.conversation_relationships.update_all(notifications: false)
+        user.conversation_relationships
+            .each { |cr| cr.update(notifications: false) }
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -194,7 +195,7 @@ describe ExchangeParticipant do
     subject { user.following?(discussion) }
 
     context "when discussion isn't followed" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when discussion is followed" do
@@ -202,7 +203,7 @@ describe ExchangeParticipant do
         DiscussionRelationship.define(user, discussion, following: true)
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -210,13 +211,13 @@ describe ExchangeParticipant do
     subject { user.favorite?(discussion) }
 
     context "when discussion isn't favorite" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when discussion is favorite" do
       before { DiscussionRelationship.define(user, discussion, favorite: true) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -224,13 +225,13 @@ describe ExchangeParticipant do
     subject { user.hidden?(discussion) }
 
     context "when discussion isn't hidden" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when discussion is hidden" do
       before { DiscussionRelationship.define(user, discussion, hidden: true) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 end

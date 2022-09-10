@@ -3,7 +3,7 @@
 namespace :sugar do
   desc "Delete all posts for a given user"
   task delete_posts: :environment do
-    user = User.find_by(id: ENV["USER_ID"])
+    user = User.find_by(id: ENV.fetch("USER_ID", nil))
     unless user
       puts "Usage: #{$PROGRAM_NAME} sugar:delete_posts USER_ID=<id>"
       exit

@@ -44,7 +44,7 @@ describe Conversation do
       specify do
         expect do
           conversation.add_participant(conversation.poster)
-        end.to change { conversation.participants.count }.by(0)
+        end.not_to(change { conversation.participants.count })
       end
     end
   end
@@ -75,13 +75,13 @@ describe Conversation do
 
       before { conversation.add_participant(user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "with only one participant" do
       subject { conversation.removeable?(conversation.poster) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -96,32 +96,32 @@ describe Conversation do
     context "when remover is self" do
       let(:remover) { user }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when remover is a moderator" do
       let(:remover) { create(:moderator) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when remover is the poster" do
       let(:remover) { conversation.poster }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when remover is a regular user" do
       let(:remover) { create(:user) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with only one participant" do
       let(:user) { conversation.poster }
       let(:remover) { conversation.poster }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -129,7 +129,7 @@ describe Conversation do
     context "with a non-participant" do
       subject { conversation.viewable_by?(user) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a participant" do
@@ -137,7 +137,7 @@ describe Conversation do
 
       before { conversation.add_participant(user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -145,7 +145,7 @@ describe Conversation do
     context "with a non-participant" do
       subject { conversation.editable_by?(user) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a participant" do
@@ -153,19 +153,19 @@ describe Conversation do
 
       before { conversation.add_participant(user) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with the poster" do
       subject { conversation.editable_by?(conversation.poster) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "with an exchange moderator" do
       subject { conversation.editable_by?(exchange_moderator) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -173,7 +173,7 @@ describe Conversation do
     context "with non-participant" do
       subject { conversation.postable_by?(user) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with participant" do
@@ -181,13 +181,13 @@ describe Conversation do
 
       before { conversation.add_participant(user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
   describe "#closeable_by?" do
     specify do
-      expect(conversation.closeable_by?(conversation.poster)).to eq(false)
+      expect(conversation.closeable_by?(conversation.poster)).to be(false)
     end
   end
 end

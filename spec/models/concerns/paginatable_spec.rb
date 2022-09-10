@@ -20,9 +20,9 @@ describe Paginatable do
   end
 
   describe ".context?" do
-    specify { expect(Exchange.page(1).context?).to eq(false) }
-    specify { expect(Exchange.page(1, context: 3).context?).to eq(false) }
-    specify { expect(Exchange.page(2, context: 3).context?).to eq(true) }
+    specify { expect(Exchange.page(1).context?).to be(false) }
+    specify { expect(Exchange.page(1, context: 3).context?).to be(false) }
+    specify { expect(Exchange.page(2, context: 3).context?).to be(true) }
   end
 
   describe ".total_pages" do
@@ -54,29 +54,29 @@ describe Paginatable do
   describe ".first_page?" do
     before { create_list(:exchange, 3) }
 
-    specify { expect(Exchange.page(1).first_page?).to eq(true) }
-    specify { expect(Exchange.page(2).first_page?).to eq(false) }
+    specify { expect(Exchange.page(1).first_page?).to be(true) }
+    specify { expect(Exchange.page(2).first_page?).to be(false) }
   end
 
   describe ".last_page?" do
     before { create_list(:exchange, 3) }
 
-    specify { expect(Exchange.page(1).last_page?).to eq(false) }
-    specify { expect(Exchange.page(2).last_page?).to eq(true) }
+    specify { expect(Exchange.page(1).last_page?).to be(false) }
+    specify { expect(Exchange.page(2).last_page?).to be(true) }
   end
 
   describe ".previous_page" do
     before { create_list(:exchange, 3) }
 
     specify { expect(Exchange.page(2).previous_page).to eq(1) }
-    specify { expect(Exchange.page(1).previous_page).to eq(nil) }
+    specify { expect(Exchange.page(1).previous_page).to be_nil }
   end
 
   describe ".next_page" do
     before { create_list(:exchange, 3) }
 
     specify { expect(Exchange.page(1).next_page).to eq(2) }
-    specify { expect(Exchange.page(2).next_page).to eq(nil) }
+    specify { expect(Exchange.page(2).next_page).to be_nil }
   end
 
   describe ".total_count" do

@@ -4,7 +4,7 @@ require "digest/sha1"
 
 class Invite < ApplicationRecord
   belongs_to :user
-  validates :email, :user_id, presence: true
+  validates :email, presence: true
 
   attr_accessor :used
 

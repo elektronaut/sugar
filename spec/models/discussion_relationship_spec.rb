@@ -11,9 +11,9 @@ describe DiscussionRelationship do
   it { is_expected.to belong_to(:discussion) }
 
   # Default values
-  specify { expect(relationship.favorite?).to eq(false) }
-  specify { expect(relationship.following?).to eq(true) }
-  specify { expect(relationship.participated?).to eq(false) }
+  specify { expect(relationship.favorite?).to be(false) }
+  specify { expect(relationship.following?).to be(true) }
+  specify { expect(relationship.participated?).to be(false) }
 
   describe "mutual exclusive flags" do
     context "when a discussion is being hidden" do
@@ -24,11 +24,11 @@ describe DiscussionRelationship do
       before { relationship.update(hidden: true) }
 
       it "unsets following" do
-        expect(relationship.following?).to eq(false)
+        expect(relationship.following?).to be(false)
       end
 
       it "unsets favorite" do
-        expect(relationship.favorite?).to eq(false)
+        expect(relationship.favorite?).to be(false)
       end
     end
 
@@ -39,7 +39,7 @@ describe DiscussionRelationship do
 
       before { relationship.update(following: true) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when favoriting a hidden discussion" do
@@ -49,7 +49,7 @@ describe DiscussionRelationship do
 
       before { relationship.update(favorite: true) }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -59,8 +59,8 @@ describe DiscussionRelationship do
         described_class.define(user, discussion, favorite: true)
       end
 
-      specify { expect(relationship.valid?).to eq(true) }
-      specify { expect(relationship.favorite?).to eq(true) }
+      specify { expect(relationship.valid?).to be(true) }
+      specify { expect(relationship.favorite?).to be(true) }
 
       specify do
         expect(
@@ -85,8 +85,8 @@ describe DiscussionRelationship do
         )
       end
 
-      specify { expect(relationship.valid?).to eq(true) }
-      specify { expect(relationship.favorite?).to eq(true) }
+      specify { expect(relationship.valid?).to be(true) }
+      specify { expect(relationship.favorite?).to be(true) }
 
       it "doesn't create a new record" do
         existing

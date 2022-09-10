@@ -12,7 +12,7 @@ class Post < ApplicationRecord
   belongs_to :exchange, touch: true
   has_many :exchange_views, dependent: :restrict_with_exception
 
-  validates :body, :user_id, :exchange_id, presence: true
+  validates :body, presence: true
   validates :format, inclusion: %w[markdown html]
 
   attr_accessor :skip_html
@@ -89,7 +89,7 @@ class Post < ApplicationRecord
     cache_file = Rails.root.join(
       "public/cache/#{exchange_type}s/#{exchange_id}/posts/count.json"
     )
-    File.unlink(cache_file) if File.exist?(cache_file)
+    FileUtils.rm_f(cache_file)
   end
 
   def update_post_counts

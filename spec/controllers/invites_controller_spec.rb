@@ -48,14 +48,14 @@ describe InvitesController do
       let(:user) { create(:user, available_invites: 1) }
 
       it { is_expected.to respond_with(:success) }
-      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(flash[:notice]).to be_nil }
     end
 
     context "when user is user admin" do
       let(:user) { create(:user_admin) }
 
       it { is_expected.to respond_with(:success) }
-      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(flash[:notice]).to be_nil }
     end
 
     context "when user doesn't have any invites" do
@@ -76,7 +76,7 @@ describe InvitesController do
 
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:index) }
-    specify { expect(flash[:notice]).to eq(nil) }
+    specify { expect(flash[:notice]).to be_nil }
     specify { expect(assigns(:invites)).to match_array([invites.first]) }
   end
 
@@ -100,7 +100,7 @@ describe InvitesController do
     context "when invite is valid" do
       let(:token) { invite.token }
 
-      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(flash[:notice]).to be_nil }
       specify { expect(session[:invite_token]).to eq(invite.token) }
 
       it "redirects to the signup page" do
@@ -114,7 +114,7 @@ describe InvitesController do
       let(:token) { expired_invite.token }
 
       specify { expect(flash[:notice]).to match(/Your invite has expired!/) }
-      specify { expect(session[:invite_token]).to eq(nil) }
+      specify { expect(session[:invite_token]).to be_nil }
 
       it "redirects to the login page" do
         expect(response).to redirect_to(login_users_url)
@@ -125,7 +125,7 @@ describe InvitesController do
       let(:token) { "invalid token" }
 
       specify { expect(flash[:notice]).to match(/That's not a valid invite!/) }
-      specify { expect(session[:invite_token]).to eq(nil) }
+      specify { expect(session[:invite_token]).to be_nil }
 
       it "redirects to the login page" do
         expect(response).to redirect_to(login_users_url)
@@ -198,7 +198,7 @@ describe InvitesController do
       it { is_expected.to redirect_to(invites_url) }
 
       it "does not send an email" do
-        expect(last_email).to eq(nil)
+        expect(last_email).to be_nil
       end
 
       it "does not create an invite" do
@@ -222,7 +222,7 @@ describe InvitesController do
       end
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
-      specify { expect(assigns(:invite).destroyed?).to eq(true) }
+      specify { expect(assigns(:invite).destroyed?).to be(true) }
 
       it "redirects to the invites page" do
         expect(response).to redirect_to(invites_url)
@@ -233,7 +233,7 @@ describe InvitesController do
       before { login(user) && delete(:destroy, params: { id: invite.id }) }
 
       specify { expect(assigns(:invite)).to be_a(Invite) }
-      specify { expect(assigns(:invite).destroyed?).to eq(false) }
+      specify { expect(assigns(:invite).destroyed?).to be(false) }
 
       it "redirects to the discussions page" do
         expect(response).to redirect_to(discussions_url)

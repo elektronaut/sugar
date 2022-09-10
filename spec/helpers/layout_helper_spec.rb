@@ -65,15 +65,15 @@ describe LayoutHelper do
       allow(Sugar).to receive(:aws_s3?).and_return(true)
     end
 
-    specify { expect(config[:debug]).to eq(false) }
+    specify { expect(config[:debug]).to be(false) }
     specify { expect(config[:facebookAppId]).to eq("facebook") }
     specify { expect(config[:amazonAssociatesId]).to eq("amazon") }
-    specify { expect(config[:uploads]).to eq(true) }
+    specify { expect(config[:uploads]).to be(true) }
     specify { expect(config[:emoticons]).to eq(default_emoticons) }
 
     context "when not logged in" do
-      specify { expect(config[:currentUser]).to eq(nil) }
-      specify { expect(config[:preferredFormat]).to eq(nil) }
+      specify { expect(config[:currentUser]).to be_nil }
+      specify { expect(config[:preferredFormat]).to be_nil }
     end
 
     context "when logged in" do

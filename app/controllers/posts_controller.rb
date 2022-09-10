@@ -25,13 +25,7 @@ class PostsController < ApplicationController
     @posts = @exchange.posts.page(@page, context: 0).for_view
     respond_to do |format|
       format.json do
-        serializer = PostSerializer.new(
-          @posts,
-          links: { self: paginated_json_path(@posts.current_page),
-                   next: paginated_json_path(@posts.next_page),
-                   previous: paginated_json_path(@posts.previous_page) },
-          include: %i[user]
-        )
+        serializer = posts_serializer(@posts)
         render json: serializer.serialized_json
       end
     end
@@ -155,6 +149,16 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:body, :format)
+  end
+
+  def posts_serializer(posts)
+    PostSerializer.new(
+      posts,
+      links: { self: paginated_json_path(posts.current_page),
+               next: paginated_json_path(posts.next_page),
+               previous: paginated_json_path(posts.previous_page) },
+      include: %i[user]
+    )
   end
 
   def search_query

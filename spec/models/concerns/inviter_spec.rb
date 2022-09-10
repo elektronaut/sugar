@@ -27,13 +27,13 @@ describe Inviter do
     subject { user.invites? }
 
     context "when user has no invites" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when user has invites" do
       before { create(:invite, user: user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -41,13 +41,13 @@ describe Inviter do
     subject { user.invitees? }
 
     context "when user has no invitees" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -55,28 +55,28 @@ describe Inviter do
     subject { user.invites_or_invitees? }
 
     context "when user has none" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when user has invites" do
       before { create(:invite, user: user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when user has invitees" do
       before { create(:user, inviter: user) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
   describe "#available_invites?" do
-    specify { expect(create(:user).available_invites?).to eq(false) }
-    specify { expect(create(:user_admin).available_invites?).to eq(true) }
+    specify { expect(create(:user).available_invites?).to be(false) }
+    specify { expect(create(:user_admin).available_invites?).to be(true) }
 
     specify do
-      expect(create(:user, available_invites: 2).available_invites?).to eq(true)
+      expect(create(:user, available_invites: 2).available_invites?).to be(true)
     end
   end
 
@@ -108,7 +108,7 @@ describe Inviter do
 
       it "does not revoke any invites" do
         user.revoke_invite!(:all)
-        expect(user.available_invites?).to eq(true)
+        expect(user.available_invites?).to be(true)
       end
     end
 

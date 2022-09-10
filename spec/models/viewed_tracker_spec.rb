@@ -34,17 +34,17 @@ describe ViewedTracker do
     context "without exchanges" do
       before { tracker.exchanges = [] }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with user" do
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "without user" do
       let(:user) { nil }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -83,17 +83,17 @@ describe ViewedTracker do
     context "with no exchanges" do
       before { tracker.exchanges = [] }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "when no user" do
       let(:user) { nil }
 
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "without any view" do
-      it { is_expected.to eq(nil) }
+      it { is_expected.to be_nil }
     end
 
     context "with a view" do
@@ -109,23 +109,23 @@ describe ViewedTracker do
     context "with no exchanges" do
       before { tracker.exchanges = [] }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "without user" do
       let(:user) { nil }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "without view" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with a view" do
       let(:discussion) { read_discussion }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -161,29 +161,29 @@ describe ViewedTracker do
     context "with no exchanges" do
       before { tracker.exchanges = [] }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "without user" do
       let(:user) { nil }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when unopened" do
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when discussion is fully read" do
       let(:discussion) { read_discussion }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when discussion is partially read" do
       let(:discussion) { partially_read_discussion }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 end

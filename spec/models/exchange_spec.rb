@@ -54,10 +54,10 @@ describe Exchange do
   end
 
   describe "#labels?" do
-    specify { expect(described_class.new.labels?).to eq(false) }
-    specify { expect(described_class.new(sticky: true).labels?).to eq(true) }
-    specify { expect(described_class.new(closed: true).labels?).to eq(true) }
-    specify { expect(described_class.new(nsfw: true).labels?).to eq(true) }
+    specify { expect(described_class.new.labels?).to be(false) }
+    specify { expect(described_class.new(sticky: true).labels?).to be(true) }
+    specify { expect(described_class.new(closed: true).labels?).to be(true) }
+    specify { expect(described_class.new(nsfw: true).labels?).to be(true) }
   end
 
   describe "#labels" do
@@ -107,13 +107,13 @@ describe Exchange do
     subject { exchange.moderators? }
 
     context "without any moderators" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "with moderators" do
       before { create(:exchange_moderator, exchange: exchange) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -128,12 +128,12 @@ describe Exchange do
       create(:exchange_moderator, exchange: exchange).user
     end
 
-    specify { expect(exchange.closeable_by?(user)).to eq(false) }
+    specify { expect(exchange.closeable_by?(user)).to be(false) }
 
     context "when not closed" do
-      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
-      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
-      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to be(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to be(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to be(true) }
     end
 
     context "when closed by the poster" do
@@ -141,21 +141,21 @@ describe Exchange do
         exchange.update(closed: true, updated_by: exchange.poster)
       end
 
-      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
-      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
-      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to be(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to be(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to be(true) }
       specify { expect(exchange.closer).to eq(exchange.poster) }
     end
 
     context "when closed by moderator" do
       before { exchange.update(closed: true, updated_by: moderator) }
 
-      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(false) }
-      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to be(false) }
+      specify { expect(exchange.closeable_by?(moderator)).to be(true) }
       specify { expect(exchange.closer).to eq(moderator) }
 
       it "is not closeable by an exchange moderator" do
-        expect(exchange.closeable_by?(exchange_moderator)).to eq(false)
+        expect(exchange.closeable_by?(exchange_moderator)).to be(false)
       end
     end
 
@@ -164,9 +164,9 @@ describe Exchange do
         exchange.update(closed: true, updated_by: exchange_moderator)
       end
 
-      specify { expect(exchange.closeable_by?(exchange.poster)).to eq(true) }
-      specify { expect(exchange.closeable_by?(exchange_moderator)).to eq(true) }
-      specify { expect(exchange.closeable_by?(moderator)).to eq(true) }
+      specify { expect(exchange.closeable_by?(exchange.poster)).to be(true) }
+      specify { expect(exchange.closeable_by?(exchange_moderator)).to be(true) }
+      specify { expect(exchange.closeable_by?(moderator)).to be(true) }
       specify { expect(exchange.closer).to eq(exchange_moderator) }
     end
   end
@@ -223,9 +223,9 @@ describe Exchange do
 
     before { exchange.unlabel! }
 
-    specify { expect(exchange.sticky?).to eq(false) }
-    specify { expect(exchange.closed?).to eq(false) }
-    specify { expect(exchange.nsfw?).to eq(false) }
+    specify { expect(exchange.sticky?).to be(false) }
+    specify { expect(exchange.closed?).to be(false) }
+    specify { expect(exchange.nsfw?).to be(false) }
   end
 
   describe "#update_post_body" do

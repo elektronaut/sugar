@@ -16,7 +16,7 @@ describe UsersController do
     end
 
     specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
-    specify { expect(flash[:notice]).to eq(nil) }
+    specify { expect(flash[:notice]).to be_nil }
     it { is_expected.to render_template(:index) }
   end
 
@@ -28,7 +28,7 @@ describe UsersController do
     end
 
     specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
-    specify { expect(flash[:notice]).to eq(nil) }
+    specify { expect(flash[:notice]).to be_nil }
 
     it "renders JSON" do
       json = JSON.parse(response.body)
@@ -44,7 +44,7 @@ describe UsersController do
     end
 
     specify { expect(assigns(:users)).to be_a(ActiveRecord::Relation) }
-    specify { expect(flash[:notice]).to eq(nil) }
+    specify { expect(flash[:notice]).to be_nil }
     it { is_expected.to render_template(:deactivated) }
   end
 
@@ -128,7 +128,7 @@ describe UsersController do
             })
       end
 
-      specify { expect(user.reload.temporary_banned?).to eq(true) }
+      specify { expect(user.reload.temporary_banned?).to be(true) }
     end
 
     context "when banning a user" do
@@ -140,7 +140,7 @@ describe UsersController do
                                user: { status: :banned } }
       end
 
-      specify { expect(target_user.reload.banned?).to eq(true) }
+      specify { expect(target_user.reload.banned?).to be(true) }
     end
   end
 end

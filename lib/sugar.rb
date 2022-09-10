@@ -5,7 +5,13 @@ module Sugar
     attr_writer :redis
 
     def aws_s3?
-      ENV["S3_BUCKET"] && ENV["S3_KEY_ID"] && ENV["S3_SECRET"] ? true : false
+      if ENV.fetch("S3_BUCKET", nil) &&
+         ENV.fetch("S3_KEY_ID", nil) &&
+         ENV["S3_SECRET"]
+        true
+      else
+        false
+      end
     end
 
     def redis

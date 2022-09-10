@@ -4,9 +4,9 @@ class AddStatusToUsers < ActiveRecord::Migration[5.2]
   def up
     add_column :users, :status, :integer, null: false, default: 0
 
-    User.where.not(banned_until: nil).update_all(status: :hiatus)
-    User.where(banned: true).update_all(status: :banned)
-    User.where(memorialized: true).update_all(status: :memorialized)
+    User.where.not(banned_until: nil).each { |u| u.update(status: :hiatus) }
+    User.where(banned: true).each { |u| u.update(status: :banned) }
+    User.where(memorialized: true).each { |u| u.update(status: :memorialized) }
 
     change_table(:users, bulk: true) do |t|
       t.remove :memorialized

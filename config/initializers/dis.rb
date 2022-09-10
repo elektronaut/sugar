@@ -13,10 +13,10 @@ if Sugar.aws_s3? && !Rails.env.test?
   Dis::Storage.layers << Dis::Layer.new(
     Fog::Storage.new(
       provider: "AWS",
-      aws_access_key_id: ENV["S3_KEY_ID"],
-      aws_secret_access_key: ENV["S3_SECRET"]
+      aws_access_key_id: ENV.fetch("S3_KEY_ID", nil),
+      aws_secret_access_key: ENV.fetch("S3_SECRET", nil)
     ),
-    path: ENV["S3_BUCKET"],
+    path: ENV.fetch("S3_BUCKET", nil),
     delayed: true,
     readonly: !Rails.env.production?
   )

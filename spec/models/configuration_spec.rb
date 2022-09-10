@@ -19,7 +19,7 @@ describe Configuration, redis: true do
     end
 
     it "defaults to nil" do
-      expect(configuration.foo).to eq(nil)
+      expect(configuration.foo).to be_nil
     end
 
     it "defines a reader" do
@@ -28,7 +28,7 @@ describe Configuration, redis: true do
     end
 
     it "defines a boolean reader" do
-      expect(configuration.foo?).to eq(false)
+      expect(configuration.foo?).to be(false)
     end
 
     it "defines a writer" do

@@ -78,13 +78,13 @@ describe ExchangesHelper do
     subject { helper.new_posts?(exchange) }
 
     context "when discussion is unread" do
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when discussion is read" do
       let(:exchange) { read_exchange }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 

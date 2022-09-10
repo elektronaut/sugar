@@ -7,6 +7,6 @@ describe Sugar, redis: true do
   before { described_class.config.load }
 
   it "has access to redis" do
-    expect(described_class.redis).not_to eq(nil)
+    expect(described_class.redis).not_to be_nil
   end
 end

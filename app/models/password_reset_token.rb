@@ -5,8 +5,6 @@ class PasswordResetToken < ApplicationRecord
   before_create :ensure_token
   before_create :ensure_expiration
 
-  validates :user_id, presence: true
-
   DEFAULT_EXPIRATION = 48.hours
 
   scope :active,  -> { where("expires_at >= ?", Time.now.utc) }

@@ -23,7 +23,7 @@ describe Admin::ConfigurationsController, redis: true do
 
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:edit) }
-      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(flash[:notice]).to be_nil }
     end
 
     describe "update" do
@@ -32,7 +32,7 @@ describe Admin::ConfigurationsController, redis: true do
               params: { configuration: { forum_name: "New Forum Name" } }
       end
 
-      specify { expect(flash[:notice]).to eq(nil) }
+      specify { expect(flash[:notice]).to be_nil }
 
       it "updates the forum configuration" do
         expect(Sugar.config.forum_name).to eq("New Forum Name")

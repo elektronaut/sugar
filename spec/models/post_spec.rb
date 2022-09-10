@@ -8,8 +8,8 @@ describe Post do
   let(:post) { create(:post) }
   let(:user) { create(:user) }
   let(:cache_path) do
-    Rails.root.join("public", "cache", "discussions", exchange.id.to_s,
-                    "posts", "count.json")
+    Rails.public_path.join("cache", "discussions", exchange.id.to_s, "posts",
+                           "count.json")
   end
 
   it { is_expected.to belong_to(:user) }
@@ -51,13 +51,12 @@ describe Post do
       let!(:exchange) { create(:discussion) }
 
       before do
-        allow(File).to receive(:exist?).and_return(true)
-        allow(File).to receive(:unlink)
+        allow(FileUtils).to receive(:rm_f)
       end
 
       it "deletes the file" do
         create(:post, exchange: exchange)
-        expect(File).to have_received(:unlink).with(cache_path).once
+        expect(FileUtils).to have_received(:rm_f).with(cache_path).once
       end
     end
   end
@@ -83,10 +82,9 @@ describe Post do
       let!(:post) { create(:post, exchange: exchange) }
 
       it "deletes the file" do
-        allow(File).to receive(:exist?).and_return(true)
-        allow(File).to receive(:unlink)
+        allow(FileUtils).to receive(:rm_f)
         post.destroy
-        expect(File).to have_received(:unlink).with(cache_path).once
+        expect(FileUtils).to have_received(:rm_f).with(cache_path).once
       end
     end
   end
@@ -97,19 +95,19 @@ describe Post do
     context "when post starts with /me" do
       let(:post) { create(:post, body: "/me shuffles") }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when post starts with /me and contains a line break" do
       let(:post) { create(:post, body: "/me shuffles\noh yeah") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when post doesn't start with /me" do
       let(:post) { create(:post, body: "Start with /me") }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -196,7 +194,7 @@ describe Post do
     subject { post.edited? }
 
     context "when post hasn't been edited" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when post has been edited" do
@@ -204,7 +202,7 @@ describe Post do
         create(:post, created_at: 5.minutes.ago, edited_at: 2.minutes.ago)
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "when post has been edited less than five seconds ago" do
@@ -212,32 +210,32 @@ describe Post do
         create(:post, created_at: 14.seconds.ago, edited_at: 10.seconds.ago)
       end
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
   end
 
   describe "#editable_by?" do
-    specify { expect(post.editable_by?(post.user)).to eq(true) }
-    specify { expect(post.editable_by?(create(:moderator))).to eq(true) }
-    specify { expect(post.editable_by?(create(:admin))).to eq(true) }
-    specify { expect(post.editable_by?(user)).to eq(false) }
-    specify { expect(post.editable_by?(create(:user_admin))).to eq(false) }
-    specify { expect(post.editable_by?(nil)).to eq(false) }
+    specify { expect(post.editable_by?(post.user)).to be(true) }
+    specify { expect(post.editable_by?(create(:moderator))).to be(true) }
+    specify { expect(post.editable_by?(create(:admin))).to be(true) }
+    specify { expect(post.editable_by?(user)).to be(false) }
+    specify { expect(post.editable_by?(create(:user_admin))).to be(false) }
+    specify { expect(post.editable_by?(nil)).to be(false) }
   end
 
   describe "#viewable_by?" do
-    specify { expect(post.viewable_by?(user)).to eq(true) }
+    specify { expect(post.viewable_by?(user)).to be(true) }
 
     context "when public browsing is on" do
       before { Sugar.config.public_browsing = true }
 
-      specify { expect(post.viewable_by?(nil)).to eq(true) }
+      specify { expect(post.viewable_by?(nil)).to be(true) }
     end
 
     context "when public browsing is off" do
       before { Sugar.config.public_browsing = false }
 
-      specify { expect(post.viewable_by?(nil)).to eq(false) }
+      specify { expect(post.viewable_by?(nil)).to be(false) }
     end
   end
 
@@ -245,7 +243,7 @@ describe Post do
     subject { post.mentions_users? }
 
     context "when it doesn't mention users" do
-      it { is_expected.to eq(false) }
+      it { is_expected.to be(false) }
     end
 
     context "when it mentions users" do
@@ -264,7 +262,7 @@ describe Post do
         )
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
