@@ -44,7 +44,7 @@ describe Invite do
       expect(invite.expires_at).to be_within(30).of(Time.now.utc + 14.days)
     end
 
-    specify { expect(invite.token).to be_kind_of(String) }
+    specify { expect(invite.token).to be_a(String) }
     specify { expect(invite.token.length >= 40).to be(true) }
 
     it "revokes an invite from the inviter" do
@@ -77,7 +77,7 @@ describe Invite do
   describe ".unique_token" do
     subject(:token) { described_class.unique_token }
 
-    it { is_expected.to be_kind_of(String) }
+    it { is_expected.to be_a(String) }
     specify { expect(token.length >= 40).to be(true) }
   end
 

@@ -18,10 +18,10 @@ describe User, type: :model do
        sony nintendo nintendo_switch steam battlenet]
   end
 
-  it { is_expected.to be_kind_of(Authenticable) }
-  it { is_expected.to be_kind_of(Inviter) }
-  it { is_expected.to be_kind_of(ExchangeParticipant) }
-  it { is_expected.to be_kind_of(UserScopes) }
+  it { is_expected.to be_a(Authenticable) }
+  it { is_expected.to be_a(Inviter) }
+  it { is_expected.to be_a(ExchangeParticipant) }
+  it { is_expected.to be_a(UserScopes) }
 
   it { is_expected.to belong_to(:avatar).dependent(:destroy).optional }
   it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
@@ -245,6 +245,6 @@ describe User, type: :model do
   describe "#ensure_last_active_is_set" do
     subject { create(:user).last_active }
 
-    it { is_expected.to be_kind_of(Time) }
+    it { is_expected.to be_a(Time) }
   end
 end

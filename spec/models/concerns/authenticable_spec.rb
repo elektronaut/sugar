@@ -296,7 +296,7 @@ describe Authenticable do
     specify do
       expect(
         create(:user, banned_until: (Time.now.utc + 2.days)).banned_until
-      ).to be_kind_of(Time)
+      ).to be_a(Time)
     end
   end
 

@@ -21,7 +21,7 @@ describe Conversation do
     )
   end
 
-  it { is_expected.to be_kind_of(Exchange) }
+  it { is_expected.to be_a(Exchange) }
 
   describe "after_create hook" do
     subject { conversation }

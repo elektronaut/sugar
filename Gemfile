@@ -42,14 +42,9 @@ gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
 
-# Ruby 3.1 compatibility, remove when mail gem is updated
-# gem "net-imap", require: false
-# gem "net-pop", require: false
-# gem "net-smtp", require: false
-
 # Deploy with Capistrano
 group :development do
-  gem "capistrano"#{}, "~> 3.11.0"
+  gem "capistrano"
   gem "capistrano-bundler"
   gem "capistrano-rails"
   gem "capistrano-rbenv"
@@ -68,7 +63,7 @@ gem "httparty", "~> 0.17"
 gem "nokogiri"
 
 gem "progress_bar"
-gem "sunspot_rails", "~> 2.5.0"
+gem "sunspot_rails", "~> 2.6.0"
 
 gem "newrelic_rpm", group: "newrelic"
 

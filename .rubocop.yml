@@ -24,6 +24,7 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Exclude:
+    - "config/deploy.rb"
     - "config/environments/*"
     - "config/routes.rb"
     - "db/migrate/*"
@@ -67,6 +68,8 @@ Rails/DynamicFindBy:
 
 RSpec:
   Language:
+    Expectations:
+      - user_is_logged_in
     Includes:
       Examples:
         - it_requires_admin_for

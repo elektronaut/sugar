@@ -9,7 +9,7 @@ describe Discussion do
   let(:discussion) { create(:discussion) }
 
   it { is_expected.to have_many(:discussion_relationships).dependent(:destroy) }
-  it { is_expected.to be_kind_of(Exchange) }
+  it { is_expected.to be_a(Exchange) }
 
   describe ".popular_in_the_last" do
     let(:discussion1) { create(:discussion) }
