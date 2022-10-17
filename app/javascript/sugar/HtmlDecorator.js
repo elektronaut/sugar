@@ -30,9 +30,9 @@ export default class HtmlDecorator {
       cite = `Posted by <a href="${permalink}">${username}</a>:`;
     }
     return [
-      "",
       "<blockquote><cite>" + cite + "</cite> " + content + "</blockquote>" +
       "\n\n",
+      "",
       ""
     ];
   }

@@ -31,8 +31,8 @@ export default class MarkdownDecorator {
       cite = `Posted by [${username}](${permalink}):`;
     }
     return [
-      "",
       wrapInBlockquote("<cite>" + cite + "</cite>\n\n" + html) + "\n\n",
+      "",
       ""
     ];
   }
