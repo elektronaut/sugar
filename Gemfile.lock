@@ -238,7 +238,7 @@ GEM
     net-ssh (7.0.1)
     newrelic_rpm (8.10.1)
     nio4r (2.5.8)
-    nokogiri (1.13.8)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     non-stupid-digest-assets (1.0.9)
