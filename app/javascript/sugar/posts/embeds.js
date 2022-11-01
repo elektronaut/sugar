@@ -18,21 +18,22 @@ $(Sugar).bind("ready", function(){
   });
 
   // Handle updating scroll position to anchor for twitter embed loads
+  var disableTwitterAnchorScroll = false;
   function updateAnchorScroll() {
     if (disableTwitterAnchorScroll) {
       return;
     }
-    var postId = window.location.hash.match(/(post\-\d+)/);
+    var postId = window.location.hash.match(/(post-\d+)/);
     if (postId.length) {
-      var rPost = document.querySelector('a[name="' + postId[1] + '"].anchor');
+      var rPost = document.querySelector("a[name='" + postId[1] + "'].anchor");
       if (rPost) {
         rPost.scrollIntoView();
       }
     }
   }
   if (window.twttr) {
-    twttr.ready(function (twttr) {
-      twttr.events.bind('rendered', updateAnchorScroll);
+    window.twttr.ready(function (twttr) {
+      twttr.events.bind("rendered", updateAnchorScroll);
     });
   }
 });
