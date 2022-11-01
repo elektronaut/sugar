@@ -18,7 +18,6 @@ $(Sugar).bind("ready", function(){
   });
 
   // Handle updating scroll position to anchor for twitter embed loads
-  var disableTwitterAnchorScroll = false;
   function updateAnchorScroll() {
     if (disableTwitterAnchorScroll) {
       return;
