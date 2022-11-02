@@ -8,6 +8,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "parser": "@babel/eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
     "ecmaFeatures": {
