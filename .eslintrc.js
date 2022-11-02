@@ -8,8 +8,9 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended"
   ],
-  "parser": "@babel/eslint/parser",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
+    "requireConfigFile": false,
     "ecmaVersion": 2018,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
