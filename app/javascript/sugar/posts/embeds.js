@@ -16,7 +16,7 @@ $(Sugar).bind("ready", function(){
       scrollY: window.scrollY
     };
     let anchorPost = window.location.hash.match(/post-(\d+)/);
-    if (anchorPost?.length) {
+    if (anchorPost && anchorPost.length) {
       cache.anchorPost = anchorPost[1];
     }
 
@@ -25,7 +25,7 @@ $(Sugar).bind("ready", function(){
         const postId = post.target.dataset.post_id;
         const pCache = cache.posts[postId];
         let boxSize = pCache.height;
-        if (post?.borderBoxSize?.length) {
+        if (post.borderBoxSize && post.borderBoxSize.length) {
           boxSize = post.borderBoxSize[0].blockSize;
         } else {
           boxSize = post.contentRect.height;
