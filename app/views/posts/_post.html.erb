@@ -29,7 +29,7 @@
   <% end %>
 
   <% if post.deleted? %>
-    <div class="post">
+    <div class="post" data-post_id="<%= post.id %>">
       <a name="post-<%= post.id %>" class="anchor"></a>
       <div class="deleted-post">
         This post has been deleted.

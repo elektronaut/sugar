@@ -12,7 +12,7 @@
 <div class="posts">
   <% posts.each do |post| %>
     <% if post.deleted? %>
-      <div class="post">
+      <div class="post" data-post_id="<%= post.id %>">
         <a name="post-<%= post.id %>" class="anchor"></a>
         <div class="deleted-post">
           This post has been deleted.
@@ -42,6 +42,7 @@
       <% end %>
       <div class="post post_by_user<%= post.user.id %><%= " me_post" if post.me_post? %>"
            data-user_id="<%= post.user.id %>"
+           data-post_id="<%= post.id %>"
            id="post-<%= post.id %>">
         <% if post.me_post? %>
           <div class="body">
