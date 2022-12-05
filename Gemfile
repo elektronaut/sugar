@@ -14,6 +14,7 @@ gem "sidekiq"
 gem "bootsnap", ">= 1.1.0", require: false
 
 gem "pg"
+gem "pg_search"
 gem "puma"
 
 gem "dalli"
@@ -49,7 +50,7 @@ gem "acts_as_list"
 gem "httparty", "~> 0.17"
 gem "nokogiri"
 
-gem "sunspot_rails", "~> 2.6.0"
+gem "progress_bar"
 
 gem "newrelic_rpm", group: "newrelic"
 
@@ -87,8 +88,6 @@ end
 
 group :test, :development do
   gem "dotenv-rails"
-
-  gem "sunspot_solr"
 
   gem "pry"
 
