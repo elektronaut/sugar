@@ -77,8 +77,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Start Solr
-        run: /usr/bin/docker run -d -v ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/ -p 8983:8983 --name solr solr:8
       - name: Create database
         run: |
           bin/rails db:migrate

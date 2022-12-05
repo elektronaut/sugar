@@ -2,30 +2,28 @@
 
 module SearchableExchange
   extend ActiveSupport::Concern
-  include Searchable
+  include PgSearch::Model
 
   included do
-    searchable(auto_index: false,
-               auto_remove: false) do
-      text :title
-      string :type
-      integer :poster_id
-      integer :last_poster_id
-      boolean :closed
-      boolean :sticky
-      time :created_at
-      time :updated_at
-      time :last_post_at
-    end
+    pg_search_scope(
+      :search_by_title,
+      against: :title,
+      ignoring: :accents,
+      using: {
+        tsearch: {
+          negation: true,
+          dictionary: "english",
+          tsvector_column: "tsv"
+        }
+      }
+    )
   end
 
   module ClassMethods
-    def search_results(query, options = {})
-      Discussion.search do
-        fulltext query
-        order_by :last_post_at, :desc
-        paginate page: options[:page], per_page: Exchange.per_page
-      end
+    def search(search_query)
+      search_by_title(search_query)
+        .reorder("last_post_at DESC")
+        .for_view
     end
   end
 end
