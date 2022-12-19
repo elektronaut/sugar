@@ -61,8 +61,6 @@ Rails.application.routes.draw do
       get "login"
       post "authenticate"
       get "logout"
-      get "password_reset"
-      post "deliver_password"
       get "connect_facebook"
       get "disconnect_facebook"
 
@@ -109,10 +107,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :password_resets, only: %i[new create show update]
-  controller :password_resets do
-    get "/password_resets/:id/:token" => :show, as: :password_reset_with_token
-  end
+  resource :password_reset, only: %i[new create show update]
 
   # Discussions
   controller :discussions do

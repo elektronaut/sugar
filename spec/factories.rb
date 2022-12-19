@@ -63,10 +63,6 @@ FactoryBot.define do
     end
   end
 
-  factory :password_reset_token do
-    user
-  end
-
   factory :post_image do
     file do
       Rack::Test::UploadedFile.new(
