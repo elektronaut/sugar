@@ -3,8 +3,7 @@
 %>
 
 <%= form_for(@user,
-             url: password_reset_path(@password_reset_token,
-                                      token: @password_reset_token.token),
+             url: password_reset_path(token: @token),
              class: "form") do |f| %>
   <p>
     <%= f.label :password %>

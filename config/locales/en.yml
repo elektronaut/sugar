@@ -148,6 +148,11 @@ en:
   flash:
     changes_saved: Your changes were saved!
     invalid_record: "Couldn't save your changes, did you fill in all required fields?"
+  password_reset:
+    changed: Your password has been changed
+    expired: Sorry, this link has expired
+    invalid: Not a valid URL
+    sent: An email with further instructions has been sent
   admin: Admin
   save: Save
   new: New

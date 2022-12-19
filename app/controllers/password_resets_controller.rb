@@ -1,30 +1,23 @@
 # frozen_string_literal: true
 
 class PasswordResetsController < ApplicationController
-  before_action :find_user_by_email, only: %i[create]
-  before_action :require_user, only: %i[create]
-  before_action :find_password_reset_token, only: %i[show update]
-  before_action :check_for_expired_token, only: %i[show update]
+  before_action :find_by_token, only: %i[show update]
+
+  def show; end
 
   def new; end
 
   def create
-    @password_reset_token = @user.password_reset_tokens.create
-    deliver_password_reset(@user, @password_reset_token)
-    flash[:notice] = "An email with further instructions has been sent"
+    @user = User.where(email: params[:email]).first if params[:email]
+    deliver_password_reset(@user) if @user
+    flash[:notice] = t("password_reset.sent")
     redirect_to login_users_url
   end
 
-  def show
-    @user = @password_reset_token.user
-  end
-
   def update
-    @user = @password_reset_token.user
     if user_params[:password].present? && @user.update(user_params)
-      @password_reset_token.destroy
       authenticate!(@user)
-      flash[:notice] = "Your password has been changed"
+      flash[:notice] = t("password_reset.changed")
       redirect_to root_url
     else
       render action: :show
@@ -33,57 +26,50 @@ class PasswordResetsController < ApplicationController
 
   private
 
-  def deliver_password_reset(user, password_reset_token)
+  def deliver_password_reset(user)
     Mailer.password_reset(
       user.email,
-      password_reset_with_token_url(
-        password_reset_token,
-        password_reset_token.token
-      )
+      recovery_url(user)
     ).deliver_later
+  end
+
+  def fail_reset(message)
+    flash[:notice] = message
+    redirect_to login_users_url
+  end
+
+  def find_by_token
+    @token = params[:token]
+    @user = validate_token(@token)
+    return if @user
+
+    fail_reset(t("password_reset.expired"))
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    fail_reset(t("password_reset.invalid"))
   end
 
   def user_params
     params.require(:user).permit(:password, :confirm_password)
   end
 
-  def find_user_by_email
-    @user = User.where(email: params[:email]).first if params[:email]
+  def reset_message_verifier
+    Rails.application.message_verifier(:password_reset)
   end
 
-  def find_password_reset_token
-    @password_reset_token = PasswordResetToken.find_by(id: params[:id])
-    unless @password_reset_token &&
-           @password_reset_token.token == params[:token]
-      flash[:notice] = "Invalid password reset request"
-      redirect_to login_users_url
-    end
+  def recovery_token(user)
+    reset_message_verifier.generate(
+      { id: user.id, valid_until: 24.hours.from_now }
+    )
   end
 
-  def check_for_expired_token
-    return unless @password_reset_token.expired?
-
-    @password_reset_token.destroy
-    flash[:notice] = "Your password reset link has expired"
-    redirect_to login_users_url
+  def recovery_url(user)
+    password_reset_url(token: recovery_token(user))
   end
 
-  def render_user_not_found
-    respond_to do |format|
-      format.html.mobile do
-        flash[:notice] = "Couldn't find a user with that email address"
-        redirect_to login_users_url
-      end
-      format.html.none do
-        flash.now[:notice] = "Couldn't find a user with that email address"
-        render action: :new
-      end
-    end
-  end
+  def validate_token(token)
+    message = reset_message_verifier.verify(token)
+    return unless message[:valid_until] >= Time.zone.now
 
-  def require_user
-    return if @user
-
-    render_user_not_found
+    User.find(message[:id])
   end
 end

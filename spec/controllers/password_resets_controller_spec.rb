@@ -4,9 +4,11 @@ require "rails_helper"
 
 describe PasswordResetsController do
   let(:user) { create(:user) }
-  let(:password_reset_token) { create(:password_reset_token) }
-  let(:expired_password_reset_token) do
-    create(:password_reset_token, expires_at: 2.days.ago)
+  let(:valid_until) { 24.hours.from_now }
+
+  let(:token) do
+    Rails.application.message_verifier(:password_reset)
+         .generate({ id: user.id, valid_until: valid_until })
   end
 
   describe "GET new" do
@@ -34,31 +36,17 @@ describe PasswordResetsController do
 
       specify { expect(assigns(:user)).to be_a(User) }
 
-      specify do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
-
       specify { expect(last_email.to).to eq([user.email]) }
-
-      specify do
-        url = password_reset_with_token_url(
-          assigns(:password_reset_token).id,
-          assigns(:password_reset_token).token
-        )
-        expect(last_email.body.encoded).to(match(url))
-      end
     end
 
     context "with a non-existant user" do
       before { post :create, params: { email: "none@example.com" } }
 
-      it { is_expected.to respond_with(:success) }
-      it { is_expected.to render_template(:new) }
-      specify { expect(assigns(:password_reset_token)).to be_nil }
+      it { is_expected.to redirect_to(login_users_url) }
 
       specify do
         expect(flash.now[:notice]).to match(
-          /Couldn't find a user with that email address/
+          /An email with further instructions has been sent/
         )
       end
     end
@@ -67,65 +55,47 @@ describe PasswordResetsController do
   describe "GET show" do
     context "with a valid token" do
       before do
-        get(
-          :show,
-          params: {
-            id: password_reset_token.id,
-            token: password_reset_token.token
-          }
-        )
+        get(:show, params: { token: token })
       end
 
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
       specify { expect(assigns(:user)).to be_a(User) }
-
-      specify do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
     end
 
     context "without a valid token" do
-      before { get :show, params: { id: password_reset_token.id } }
+      before { get :show }
 
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash[:notice]).to match(/Not a valid URL/)
       end
     end
 
     context "with an expired token" do
-      before do
-        get :show,
-            params: {
-              id: expired_password_reset_token.id,
-              token: expired_password_reset_token.token
-            }
-      end
+      let(:valid_until) { 2.days.ago }
 
-      specify do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
+      before do
+        get :show, params: { token: token }
       end
 
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash.now[:notice]).to match(
-          /Your password reset link has expired/
+        expect(flash[:notice]).to match(
+          /Sorry, this link has expired/
         )
       end
-
-      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
     end
 
-    context "with a non-existant token" do
-      before { get :show, params: { id: 123, token: "456" } }
+    context "with an invalid token" do
+      before { get :show, params: { token: "456" } }
 
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash.now[:notice]).to match(/Not a valid URL/)
       end
     end
   end
@@ -135,8 +105,7 @@ describe PasswordResetsController do
       before do
         put :update,
             params: {
-              id: password_reset_token.id,
-              token: password_reset_token.token,
+              token: token,
               user: { password: "new password",
                       confirm_password: "new password" }
             }
@@ -148,16 +117,14 @@ describe PasswordResetsController do
 
       specify { expect(assigns(:current_user)).to be_a(User) }
       it { is_expected.to redirect_to(root_url) }
-      specify { expect(session[:user_id]).to eq(password_reset_token.user.id) }
-      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
+      specify { expect(session[:user_id]).to eq(user.id) }
     end
 
     context "without valid data" do
       before do
         put :update,
             params: {
-              id: password_reset_token.id,
-              token: password_reset_token.token,
+              token: token,
               user: {
                 password: "new password",
                 confirm_password: "wrong password"
@@ -168,19 +135,12 @@ describe PasswordResetsController do
       it { is_expected.to respond_with(:success) }
       it { is_expected.to render_template(:show) }
       specify { expect(assigns(:user)).to be_a(User) }
-
-      specify do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
-      end
-
-      specify { expect(assigns(:password_reset_token).destroyed?).to be(false) }
     end
 
     context "without a valid token" do
       before do
         put :update,
             params: {
-              id: password_reset_token.id,
               user: { password: "new password",
                       confirm_password: "new password" }
             }
@@ -189,34 +149,29 @@ describe PasswordResetsController do
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash.now[:notice]).to match(/Invalid password reset request/)
+        expect(flash.now[:notice]).to match(/Not a valid URL/)
       end
     end
 
     context "with an expired token" do
+      let(:valid_until) { 2.days.ago }
+
       before do
         put :update,
             params: {
-              id: expired_password_reset_token.id,
-              token: expired_password_reset_token.token,
+              token: token,
               user: { password: "new password",
                       confirm_password: "new password" }
             }
-      end
-
-      specify do
-        expect(assigns(:password_reset_token)).to be_a(PasswordResetToken)
       end
 
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
         expect(flash.now[:notice]).to match(
-          /Your password reset link has expired/
+          /Sorry, this link has expired/
         )
       end
-
-      specify { expect(assigns(:password_reset_token).destroyed?).to be(true) }
     end
   end
 end

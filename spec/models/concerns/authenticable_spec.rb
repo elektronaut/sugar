@@ -18,8 +18,6 @@ describe Authenticable do
       .with_message(/is already registered/)
   end
 
-  it { is_expected.to have_many(:password_reset_tokens).dependent(:destroy) }
-
   describe "password validation" do
     subject { user.errors[:password] }
 

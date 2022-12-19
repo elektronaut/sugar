@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_201335) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -32,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -57,8 +58,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "crop_start_y"
     t.integer "crop_gravity_x"
     t.integer "crop_gravity_y"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "conversation_relationships", id: :serial, force: :cascade do |t|
@@ -66,8 +67,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "conversation_id"
     t.boolean "notifications", default: true, null: false
     t.boolean "new_posts", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["conversation_id"], name: "index_conversation_relationships_on_conversation_id"
     t.index ["user_id"], name: "index_conversation_relationships_on_user_id"
   end
@@ -77,12 +78,12 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "attempts", default: 0
     t.text "handler"
     t.string "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "discussion_relationships", id: :serial, force: :cascade do |t|
@@ -116,8 +117,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "crop_height", null: false
     t.integer "crop_start_x", null: false
     t.integer "crop_start_y", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["image_id", "image_type", "format", "width", "height", "crop_width", "crop_height", "crop_start_x", "crop_start_y"], name: "dynamic_image_variants_by_format_and_size", unique: true
     t.index ["image_id", "image_type"], name: "dynamic_image_variants_by_image"
     t.index ["image_type", "image_id"], name: "index_dynamic_image_variants_on_image_type_and_image_id"
@@ -126,8 +127,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
   create_table "exchange_moderators", id: :serial, force: :cascade do |t|
     t.integer "exchange_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["exchange_id"], name: "index_exchange_moderators_on_exchange_id"
     t.index ["user_id"], name: "index_exchange_moderators_on_user_id"
   end
@@ -153,16 +154,18 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "last_poster_id"
     t.integer "closer_id"
     t.integer "posts_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "last_post_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "last_post_at", precision: nil
     t.string "type", limit: 100
+    t.tsvector "tsv"
     t.index ["created_at"], name: "index_exchanges_on_created_at"
     t.index ["last_post_at"], name: "index_exchanges_on_last_post_at"
     t.index ["poster_id"], name: "index_exchanges_on_poster_id"
     t.index ["sticky", "last_post_at"], name: "index_exchanges_on_sticky_and_last_post_at"
     t.index ["sticky"], name: "index_exchanges_on_sticky"
     t.index ["trusted"], name: "index_exchanges_on_trusted"
+    t.index ["tsv"], name: "index_exchanges_on_tsv", using: :gin
     t.index ["type"], name: "index_exchanges_on_type"
   end
 
@@ -171,9 +174,9 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.string "email"
     t.string "token"
     t.text "message"
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "expires_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
@@ -182,8 +185,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.string "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
     t.string "scopes"
   end
 
@@ -193,8 +196,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
+    t.datetime "revoked_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
     t.string "scopes"
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
   end
@@ -204,17 +207,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.string "uid", null: false
     t.string "secret", null: false
     t.string "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "password_reset_tokens", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.string "token"
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "post_images", id: :serial, force: :cascade do |t|
@@ -232,8 +226,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.integer "crop_gravity_x"
     t.integer "crop_gravity_y"
     t.string "original_url", limit: 4096
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["id", "content_hash"], name: "index_post_images_on_id_and_content_hash", unique: true
     t.index ["original_url"], name: "index_post_images_on_original_url"
   end
@@ -246,16 +240,18 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.boolean "trusted", default: false, null: false
     t.boolean "conversation", default: false, null: false
     t.string "format", default: "markdown", null: false
-    t.datetime "edited_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "edited_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "deleted", default: false, null: false
+    t.tsvector "tsv"
     t.index ["conversation"], name: "index_posts_on_conversation"
     t.index ["created_at"], name: "index_posts_on_created_at"
     t.index ["deleted"], name: "index_posts_on_deleted"
     t.index ["exchange_id", "created_at"], name: "index_posts_on_exchange_id_and_created_at"
     t.index ["exchange_id"], name: "index_posts_on_exchange_id"
     t.index ["trusted"], name: "index_posts_on_trusted"
+    t.index ["tsv"], name: "index_posts_on_tsv", using: :gin
     t.index ["user_id", "conversation"], name: "index_posts_on_user_id_and_conversation"
     t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -265,8 +261,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.bigint "user_id"
     t.bigint "muted_user_id"
     t.bigint "exchange_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["exchange_id"], name: "index_user_mutes_on_exchange_id"
     t.index ["muted_user_id"], name: "index_user_mutes_on_muted_user_id"
     t.index ["user_id"], name: "index_user_mutes_on_user_id"
@@ -286,7 +282,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.boolean "user_admin", default: false, null: false
     t.boolean "moderator", default: false, null: false
     t.boolean "notify_on_message", default: true, null: false
-    t.datetime "last_active"
+    t.datetime "last_active", precision: nil
     t.date "birthday"
     t.integer "posts_count", default: 0, null: false
     t.integer "inviter_id"
@@ -299,15 +295,15 @@ ActiveRecord::Schema.define(version: 2021_05_11_201335) do
     t.string "website"
     t.float "longitude"
     t.float "latitude"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "available_invites", default: 0, null: false
     t.string "facebook_uid"
     t.integer "participated_count", default: 0, null: false
     t.integer "favorites_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false
     t.string "time_zone"
-    t.datetime "banned_until"
+    t.datetime "banned_until", precision: nil
     t.string "mobile_stylesheet_url"
     t.string "theme"
     t.string "mobile_theme"

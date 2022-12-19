@@ -36,8 +36,6 @@ module Authenticable
     validate :verify_banned_until
 
     before_save :update_persistence_token
-
-    has_many :password_reset_tokens, dependent: :destroy
   end
 
   module ClassMethods
