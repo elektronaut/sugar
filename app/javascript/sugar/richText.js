@@ -70,6 +70,29 @@ import { csrfToken, putJson } from "../lib/request";
     $(elem).val($(elem).val().replace(uploadBanner(file), ""));
   }
 
+  function uploadImageFile(textarea, file, callback) {
+    let reader = new FileReader();
+    reader.onload = function () {
+      startUpload(textarea, file);
+      var formData = new FormData();
+      formData.append("upload[file]", file);
+      $.ajax({
+        url: "/uploads.json",
+        type: "POST",
+        headers: { "X-CSRF-Token": csrfToken() },
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: (json) => finishUpload(textarea, file, json),
+        error: (r) => failedUpload(textarea, file, r.responseJSON)
+      });
+      if (callback) {
+        callback();
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
   function uploadImage(textarea) {
     let fileInput = $(
       "<input type=\"file\" name=\"file\" " +
@@ -79,24 +102,9 @@ import { csrfToken, putJson } from "../lib/request";
     fileInput.insertBefore(textarea);
     fileInput.get(0).addEventListener("change", function () {
       let file = fileInput.get(0).files[0];
-      let reader = new FileReader();
-      reader.onload = function () {
-        startUpload(textarea, file);
-        var formData = new FormData();
-        formData.append("upload[file]", file);
-        $.ajax({
-          url: "/uploads.json",
-          type: "POST",
-          headers: { "X-CSRF-Token": csrfToken() },
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: (json) => finishUpload(textarea, file, json),
-          error: (r) => failedUpload(textarea, file, r.responseJSON)
-        });
+      uploadImageFile(textarea, file, () => {
         fileInput.remove();
-      };
-      reader.readAsDataURL(file);
+      });
     }, false);
     fileInput.click();
   }
@@ -115,6 +123,16 @@ import { csrfToken, putJson } from "../lib/request";
     dropzone.on("success",
                 file => finishUpload(elem, file, JSON.parse(file.xhr.responseText)));
     dropzone.on("error", (file, message) => failedUpload(elem, file, message));
+
+    elem.addEventListener("paste", (evt) => {
+      const items = (evt.clipboardData || evt.originalEvent.clipboardData).items;
+      for (var i in items) {
+        const item = items[i];
+        if (item.kind == "file" && item.type.match(/^image\//)) {
+          uploadImageFile(elem, item.getAsFile());
+        }
+      }
+    });
   }
 
   Sugar.RichTextArea = function(textarea) {
