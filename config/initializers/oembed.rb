@@ -23,7 +23,8 @@ MASTODON_PROVIDERS = [
   "ruby.social",
   "snabelen.no",
   "techhub.social",
-  "news.twtr.plus"
+  "news.twtr.plus",
+  "bne.social"
 ].freeze
 
 MASTODON_PROVIDERS.each do |host|
