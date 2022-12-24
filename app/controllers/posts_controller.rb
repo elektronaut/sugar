@@ -49,6 +49,10 @@ class PostsController < ApplicationController
                                  user: current_user, page: params[:page])
   end
 
+  def edit
+    render layout: false if request.xhr?
+  end
+
   def create
     create_post(post_params.merge(user: current_user))
   rescue URI::InvalidURIError => e
@@ -80,10 +84,6 @@ class PostsController < ApplicationController
     render layout: false if request.xhr?
   rescue URI::InvalidURIError => e
     render_post_error(e.message)
-  end
-
-  def edit
-    render layout: false if request.xhr?
   end
 
   private

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Logging in", type: :feature do
+RSpec.describe "Logging in" do
   let(:user) { create(:new_user) }
 
   it "User logs in" do

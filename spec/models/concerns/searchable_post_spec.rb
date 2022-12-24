@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe SearchablePost, solr: true, type: :model do
+describe SearchablePost, solr: true do
   around do |each|
     perform_enqueued_jobs do
       each.run

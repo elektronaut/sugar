@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExchangeModerator, type: :model do
+RSpec.describe ExchangeModerator do
   subject { build(:exchange_moderator) }
 
   it { is_expected.to belong_to(:exchange) }

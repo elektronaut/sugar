@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Contact moderators", type: :feature do
+RSpec.describe "Contact moderators" do
   let!(:admin) { create(:admin) }
   let!(:user) { create(:new_user) }
 
