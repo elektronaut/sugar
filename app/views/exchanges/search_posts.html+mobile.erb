@@ -1,6 +1,4 @@
-<%
-  @page_title = "\"#{@search_query}\" in " + @exchange.title
-%>
+<% content_for(:page_title, "\"#{@search_query}\" in " + @exchange.title) %>
 
 <% if @posts %>
   <%= render(partial: "posts/posts",

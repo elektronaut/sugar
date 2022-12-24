@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "admin configuration")
-  @page_title = t("configuration.configuration")
-%>
+<% content_for(:body_class, "admin configuration") %>
+<% content_for(:page_title, t("configuration.configuration")) %>
 
 <h2 class="section">
   <%= link_to t("admin"), admin_path %> &raquo;

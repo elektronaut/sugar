@@ -1,4 +1,5 @@
-<% @page_title = "#{@user.username}" %>
+<% content_for(:page_title, "#{@user.username}") %>
+
 <div class="page_content user_profile">
   <div class="avatar">
     <%= avatar_image_tag @user %>

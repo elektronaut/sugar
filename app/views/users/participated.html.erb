@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "participated discussions")
-  @page_title = "#{@user.username}'s Participated Discussions"
-%>
+<% content_for(:body_class, "participated discussions") %>
+<% content_for(:page_title, "#{@user.username}'s Participated Discussions") %>
 
 <div class="functions">
   <%= link_to "New Discussion +", new_discussion_path, class: :create %>

@@ -1,4 +1,4 @@
-<% @page_title = "Titles: \"#{@search_query}\"" %>
+<% content_for(:page_title, "Titles: \"#{@search_query}\"") %>
 
 <% if @exchanges.any? %>
   <%= render(partial: "exchanges/table",

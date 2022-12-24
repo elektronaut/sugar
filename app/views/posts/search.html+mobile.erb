@@ -1,4 +1,4 @@
-<% @page_title = "Posts: \"#{@search_query}\"" %>
+<% content_for(:page_title, "Posts: \"#{@search_query}\"") %>
 
 <% if @posts %>
   <%= render(partial: "posts/posts",

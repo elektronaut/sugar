@@ -1,10 +1,8 @@
-<%
-  content_for(:body_class, "new_discussion discussion_form")
-  @page_title = "New #{@exchange.class.to_s.downcase}"
-  if @recipient
-    @page_title += " with #{@recipient.username}"
-  end
-%>
+<% content_for(:body_class, "new_discussion discussion_form") %>
+<% content_for :page_title do %>
+  <%= "New #{@exchange.class.to_s.downcase}" %>
+  <%= " with #{@recipient.username}" if @recipient %>
+<% end %>
 
 <h2 class="section">
   <% if @exchange.kind_of?(Conversation) %>

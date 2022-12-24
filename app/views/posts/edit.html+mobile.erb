@@ -1,6 +1,4 @@
-<%
-  @page_title = "Edit post"
-%>
+<% content_for(:page_title, "Edit post") %>
 
 <div class="page_content">
   <%= form_for([@exchange, @post]) do |f| %>

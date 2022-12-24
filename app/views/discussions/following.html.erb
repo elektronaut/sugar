@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "discussions followed_discussions")
-  @page_title = "Followed Discussions"
-%>
+<% content_for(:body_class, "discussions followed_discussions") %>
+<% content_for(:page_title, "Followed Discussions") %>
 
 <%= content_for :sidebar do %>
   <%= render partial: "discussions/sidebar" %>

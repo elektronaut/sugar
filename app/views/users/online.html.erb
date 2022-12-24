@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "users")
-  @page_title = "Online Users"
-%>
+<% content_for(:body_class, "users") %>
+<% content_for(:page_title, "Online Users") %>
 
 <div class="functions">
   <%= render partial: "users_functions" %>

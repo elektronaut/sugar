@@ -1,6 +1,4 @@
-<%
-  @page_title = "New #{@exchange.class.to_s.downcase}"
-%>
+<% content_for(:page_title, "New #{@exchange.class.to_s.downcase}") %>
 
 <div class="page_content">
   <%= form_for(@exchange) do |f| %>

@@ -1,6 +1,4 @@
-<%
-  @page_title = "Password Reset"
-%>
+<% content_for(:page_title, "Password Reset") %>
 
 <%= form_for(@user,
              url: password_reset_path(token: @token),

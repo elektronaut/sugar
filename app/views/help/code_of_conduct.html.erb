@@ -1,6 +1,4 @@
-<%
-  @page_title = "Code of Conduct"
-%>
+<% content_for(:page_title, "Code of Conduct") %>
 
 <%= content_for :sidebar do %>
   <%= render partial: "discussions/sidebar" %>
@@ -8,7 +6,7 @@
 
 <h2 class="section">
   <%= link_to "Help", help_path %> &raquo;
-  <%= link_to @page_title, code_of_conduct_help_path %>
+  <%= link_to "Code of Conduct", code_of_conduct_help_path %>
 </h2>
 
 <div class="help_page">

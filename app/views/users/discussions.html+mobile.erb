@@ -1,6 +1,4 @@
-<%
-  content_for(:body_class, "participated discussions")
-  @page_title = "#{@user.username}'s Discussions"
-%>
+<% content_for(:body_class, "participated discussions") %>
+<% content_for(:page_title, "#{@user.username}'s Discussions") %>
 
 <%= render partial: "exchanges/table", locals: { exchanges: @discussions } %>

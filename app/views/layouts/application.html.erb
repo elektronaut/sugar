@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>
-    <%= [@page_title, Sugar.config.forum_name].compact.join(' - ') %>
+    <%= [content_for(:page_title), Sugar.config.forum_name].compact.join(' - ') %>
   </title>
 
   <%# Stylesheet %>

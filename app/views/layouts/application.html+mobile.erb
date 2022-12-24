@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>
-    <%= [@page_title, Sugar.config.forum_name].compact.join(" - ") %>
+    <%= [content_for(:page_title), Sugar.config.forum_name].compact.join(" - ") %>
   </title>
 
   <%= stylesheet_link_tag "application" %>
@@ -31,7 +31,7 @@
       <span class="site_name">
         <%= link_to "#{Sugar.config.forum_short_name}:", discussions_path %>
       </span>
-      <%= @page_title if @page_title %>
+      <%= content_for(:page_title) %>
     </h1>
   </div>
   <% if current_user? || Sugar.public_browsing? %>

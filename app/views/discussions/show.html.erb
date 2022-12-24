@@ -5,10 +5,9 @@
   <%= "last_page" if @posts.last_page? %>
 <% end %>
 
-<%
-  @page_title = @exchange.title
-  previous_post = nil
-%>
+<%= content_for(:page_title, @exchange.title) %>
+
+<% previous_post = nil %>
 
 <a name="top" class="anchor"></a>
 

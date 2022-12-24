@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "stats")
-  @page_title = "#{@user.username}'s Statistics"
-%>
+<% content_for(:body_class, "stats") %>
+<% content_for(:page_title, "#{@user.username}'s Statistics") %>
 
 <h2 class="section">
   <%= link_to "Users", users_path %> &raquo;

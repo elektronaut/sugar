@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "discussions favorite_discussions")
-  @page_title = "Favorite Discussions"
-%>
+<% content_for(:body_class, "discussions favorite_discussions") %>
+<% content_for(:page_title, "Favorite Discussions") %>
 
 <%= render partial: "exchanges/table", locals: {
   exchanges:    @exchanges,

@@ -1,7 +1,6 @@
-<%
-  @page_title = @exchange.title
-  previous_post = nil
-%>
+<% content_for(:page_title, @exchange.title) %>
+
+<% previous_post = nil %>
 
 <%= render partial: "components/pagination", locals: { p: @posts } %>
 <div class="posts">

@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "new_invite")
-  @page_title = t("invite.new_invite")
-%>
+<% content_for(:body_class, "new_invite") %>
+<% content_for(:page_title, t("invite.new_invite")) %>
 
 <h2 class="section">
   <%= link_to t("invites.invites"), invites_path %>

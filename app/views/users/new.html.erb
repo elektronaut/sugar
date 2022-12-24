@@ -1,13 +1,11 @@
-<%
-  content_for(:body_class, "signup")
-  @page_title = t('user.sign_up')
-%>
+<% content_for(:body_class, "signup") %>
+<% content_for(:page_title, t("user.sign_up")) %>
 
 <h2 class="section">
   <% if current_user? || Sugar.public_browsing? -%>
     <%= link_to "Users", users_path %> &raquo;
   <% end -%>
-  <%= link_to @page_title, new_user_path %>
+  <%= link_to t("user.sign_up"), new_user_path %>
 </h2>
 
 <% if @user.facebook? %>

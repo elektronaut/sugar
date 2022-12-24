@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "edit_discussion discussion_form")
-  @page_title = @exchange.title
-%>
+<% content_for(:body_class, "edit_discussion discussion_form") %>
+<% content_for(:page_title, @exchange.title) %>
 
 <h2 class="section">
   <%= link_to @exchange.title, @exchange %> &raquo;

@@ -1,7 +1,5 @@
-<%
-  content_for(:body_class, "login")
-  @page_title = "Login"
-%>
+<% content_for(:body_class, "login") %>
+<% content_for(:page_title, "Login") %>
 
 <h2 class="section">
   <%= link_to "Login", login_users_path %>
