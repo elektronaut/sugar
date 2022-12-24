@@ -18,9 +18,13 @@ class ApplicationController < ActionController::Base
   before_action :set_sentry_context
   before_action :set_variant
 
-  helper_method :mobile_user_agent?, :theme, :mobile_theme
+  helper_method :current_section, :mobile_user_agent?, :theme, :mobile_theme
 
   protected
+
+  def current_section
+    params[:controller].to_sym
+  end
 
   def current_user_context
     return {} unless current_user?

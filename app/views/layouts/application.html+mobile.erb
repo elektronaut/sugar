@@ -83,7 +83,7 @@
           Search for
           <%= text_field_tag "q", @search_query, class: :query %>
           <%= select_tag "search_mode", options_for_select(
-            search_mode_options,
+            search_mode_options(@exchange),
             @search_path || search_path
           ) %>
           <%= submit_tag "Go", name: nil %>

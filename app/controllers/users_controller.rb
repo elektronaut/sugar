@@ -38,7 +38,6 @@ class UsersController < ApplicationController
   end
 
   def participated
-    @section = :participated if @user == current_user
     @discussions = @user.participated_discussions
                         .viewable_by(current_user)
                         .page(params[:page]).for_view

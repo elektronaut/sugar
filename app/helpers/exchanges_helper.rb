@@ -35,12 +35,12 @@ module ExchangesHelper
     current_user.muted_user_ids(exchange: exchange)
   end
 
-  def post_page(post)
+  def post_page(post, posts = nil)
     # Speed optimization
     if controller.is_a?(ExchangesController) &&
        params[:action] == "show" &&
-       @posts
-      @posts.current_page
+       posts
+      posts.current_page
     else
       post.page
     end

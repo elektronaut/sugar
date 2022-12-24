@@ -25,13 +25,12 @@ module LayoutHelper
     }
   end
 
-  def search_mode_options
-    options = [["Discussions", search_path], ["Posts", search_posts_path]]
-    if @exchange&.id
-      options << [
-        "This #{@exchange.type.downcase}",
-        polymorphic_path([:search_posts, @exchange])
-      ]
+  def search_mode_options(exchange)
+    options = [["Discussions", search_path],
+               ["Posts", search_posts_path]]
+    if exchange&.id
+      options << ["This #{exchange.type.downcase}",
+                  polymorphic_path([:search_posts, exchange])]
     end
     options
   end
@@ -40,7 +39,9 @@ module LayoutHelper
     section = options[:section] || name.downcase.to_sym
 
     classes = [section.to_s] + Array(options[:class])
-    classes << "current" if @section == section
+    if respond_to?(:current_section) && section == current_section
+      classes << "current"
+    end
 
     tag.li(link_to(name, url, id: (options[:id] || "#{section}_link")),
            class: classes)

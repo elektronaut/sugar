@@ -107,22 +107,5 @@ describe ExchangesHelper do
     subject(:result) { helper.post_page(post) }
 
     it { is_expected.to eq(1) }
-
-    context "when viewing a discussion" do
-      let(:posts) { class_double(Post) }
-
-      before do
-        allow(helper).to receive(:controller)
-          .and_return(DiscussionsController.new)
-        allow(helper).to receive(:params)
-          .and_return(action: "show")
-        helper.instance_variable_set("@posts", posts)
-      end
-
-      it "queries the @posts instance variable" do
-        allow(posts).to receive(:current_page).and_return(15)
-        expect(result).to eq(15)
-      end
-    end
   end
 end

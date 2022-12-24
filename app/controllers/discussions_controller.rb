@@ -36,13 +36,11 @@ class DiscussionsController < ApplicationController
   end
 
   def favorites
-    @section = :favorites
     @exchanges = user_discussions(:favorite_discussions)
     respond_with_exchanges(@exchanges)
   end
 
   def following
-    @section = :following
     @exchanges = user_discussions(:followed_discussions)
     respond_with_exchanges(@exchanges)
   end
@@ -93,6 +91,17 @@ class DiscussionsController < ApplicationController
   end
 
   private
+
+  def current_section
+    case params[:action]
+    when "favorites"
+      :favorites
+    when "following"
+      :following
+    else
+      super
+    end
+  end
 
   def define_relationship(key, value, back_to_index: false)
     DiscussionRelationship.define(current_user, @exchange, key => value)

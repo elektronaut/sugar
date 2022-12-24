@@ -59,7 +59,7 @@
             </span>
             <span class="date">
               <%= link_to(polymorphic_path((discussion||post.exchange),
-                                           page: post_page(post),
+                                           page: post_page(post, @posts),
                                            anchor: "post-#{post.id}"),
                           title: "Permalink to this post",
                           class: "permalink") do %>

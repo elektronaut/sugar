@@ -67,7 +67,8 @@ describe LayoutHelper do
   end
 
   describe "#search_mode_options" do
-    let(:options) { helper.search_mode_options }
+    let(:options) { helper.search_mode_options(exchange) }
+    let(:exchange) { nil }
 
     context "with no exchange" do
       specify do
@@ -79,16 +80,14 @@ describe LayoutHelper do
     end
 
     context "when exchange is set" do
-      let(:discussion) { create(:discussion) }
-
-      before { helper.instance_variable_set("@exchange", discussion) }
+      let(:exchange) { create(:discussion) }
 
       specify do
         expect(options).to eq([["Discussions", helper.search_path],
                                ["Posts", helper.search_posts_path],
                                ["This discussion",
                                 helper.polymorphic_path([:search_posts,
-                                                         discussion])]])
+                                                         exchange])]])
       end
     end
   end
@@ -98,24 +97,11 @@ describe LayoutHelper do
 
     let(:url) { "/discussions" }
 
-    context "when not current section" do
-      specify do
-        expect(result).to eq(
-          "<li class=\"discussions\"><a id=\"discussions_link\" " \
-          "href=\"#{url}\">Discussions</a></li>"
-        )
-      end
-    end
-
-    context "when current section" do
-      before { helper.instance_variable_set("@section", :discussions) }
-
-      specify do
-        expect(result).to eq(
-          "<li class=\"discussions current\"><a id=\"discussions_link\" " \
-          "href=\"#{url}\">Discussions</a></li>"
-        )
-      end
+    specify do
+      expect(result).to(
+        eq("<li class=\"discussions\"><a id=\"discussions_link\" " \
+           "href=\"#{url}\">Discussions</a></li>")
+      )
     end
   end
 end
