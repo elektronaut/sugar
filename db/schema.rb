@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.boolean "new_posts", default: false, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["conversation_id", "user_id"], name: "index_conversation_relationships_on_conversation_id_and_user_id", unique: true
     t.index ["conversation_id"], name: "index_conversation_relationships_on_conversation_id"
     t.index ["user_id"], name: "index_conversation_relationships_on_user_id"
   end
@@ -129,6 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["exchange_id", "user_id"], name: "index_exchange_moderators_on_exchange_id_and_user_id", unique: true
     t.index ["exchange_id"], name: "index_exchange_moderators_on_exchange_id"
     t.index ["user_id"], name: "index_exchange_moderators_on_user_id"
   end
@@ -158,14 +160,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "last_post_at", precision: nil
     t.string "type", limit: 100
-    t.tsvector "tsv"
     t.index ["created_at"], name: "index_exchanges_on_created_at"
     t.index ["last_post_at"], name: "index_exchanges_on_last_post_at"
     t.index ["poster_id"], name: "index_exchanges_on_poster_id"
     t.index ["sticky", "last_post_at"], name: "index_exchanges_on_sticky_and_last_post_at"
     t.index ["sticky"], name: "index_exchanges_on_sticky"
     t.index ["trusted"], name: "index_exchanges_on_trusted"
-    t.index ["tsv"], name: "index_exchanges_on_tsv", using: :gin
     t.index ["type"], name: "index_exchanges_on_type"
   end
 
@@ -244,14 +244,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "deleted", default: false, null: false
-    t.tsvector "tsv"
     t.index ["conversation"], name: "index_posts_on_conversation"
     t.index ["created_at"], name: "index_posts_on_created_at"
     t.index ["deleted"], name: "index_posts_on_deleted"
     t.index ["exchange_id", "created_at"], name: "index_posts_on_exchange_id_and_created_at"
     t.index ["exchange_id"], name: "index_posts_on_exchange_id"
     t.index ["trusted"], name: "index_posts_on_trusted"
-    t.index ["tsv"], name: "index_posts_on_tsv", using: :gin
     t.index ["user_id", "conversation"], name: "index_posts_on_user_id_and_conversation"
     t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -264,6 +262,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["exchange_id"], name: "index_user_mutes_on_exchange_id"
+    t.index ["muted_user_id", "user_id", "exchange_id"], name: "index_user_mutes_on_muted_user_id_and_user_id_and_exchange_id", unique: true
     t.index ["muted_user_id"], name: "index_user_mutes_on_muted_user_id"
     t.index ["user_id"], name: "index_user_mutes_on_user_id"
   end
@@ -321,8 +320,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_034728) do
     t.string "nintendo_switch"
     t.integer "status", default: 0, null: false
     t.string "pronouns"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["last_active"], name: "index_users_on_last_active"
-    t.index ["username"], name: "index_users_on_username"
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
