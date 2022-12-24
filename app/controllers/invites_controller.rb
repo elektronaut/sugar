@@ -20,12 +20,12 @@ class InvitesController < ApplicationController
   def accept
     session[:invite_token] = session_invite_token(@invite)
     if expire_invite(@invite)
-      flash[:notice] ||= "Your invite has expired!"
+      flash[:notice] ||= t("invite.expired")
     elsif @invite
       redirect_to new_user_by_token_url(token: @invite.token)
       return
     else
-      flash[:notice] ||= "That's not a valid invite!"
+      flash[:notice] ||= t("invite.invalid")
     end
     redirect_to login_users_url
   end
@@ -52,7 +52,7 @@ class InvitesController < ApplicationController
     return unless verify_user(user: @invite.user, user_admin: true)
 
     @invite.destroy
-    flash[:notice] = "Your invite has been cancelled."
+    flash[:notice] = t("invite.cancelled")
     redirect_to invites_url
   end
 
@@ -99,11 +99,11 @@ class InvitesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        flash[:notice] = "You don't have any invites!"
+        flash[:notice] = t("invite.no_invites")
         redirect_to online_users_url
       end
       format.json do
-        render(text: "You don't have any invites!", status: :method_not_allowed)
+        render(text: t("invite.no_invites"), status: :method_not_allowed)
       end
     end
   end

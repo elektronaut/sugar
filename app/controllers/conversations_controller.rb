@@ -35,8 +35,7 @@ class ConversationsController < ApplicationController
     if @exchange.valid?
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your conversation! " \
-                           "Please make sure all required fields are filled in."
+      flash.now[:notice] = t("conversation.invalid")
       render template: "exchanges/new"
     end
   end
@@ -56,11 +55,10 @@ class ConversationsController < ApplicationController
     @exchange.remove_participant(@user)
 
     if @user == current_user
-      flash[:notice] = "You have been removed from the conversation"
+      flash[:notice] = t("conversation.you_have_been_removed")
       redirect_to conversations_url
     else
-      flash[:notice] = "#{@user.username} has been removed from " \
-                       "the conversation"
+      flash[:notice] = t("conversation.user_removed", username: @user.username)
       redirect_to @exchange
     end
   end
@@ -114,7 +112,7 @@ class ConversationsController < ApplicationController
     @user = User.find_by(username: params[:username])
     return if @exchange.removeable_by?(@user, current_user)
 
-    flash[:error] = "You can't do that!"
+    flash[:error] = t("conversation.not_removeable")
     redirect_to @exchange
   end
 end

@@ -43,11 +43,10 @@ module ExchangesController
   def update
     @exchange.update(exchange_params.merge(updated_by: current_user))
     if @exchange.valid?
-      flash[:notice] = "Your changes were saved."
+      flash[:notice] = t("changes_saved")
       redirect_to @exchange
     else
-      flash.now[:notice] = "Could not save your discussion! " \
-                           "Please make sure all required fields are filled in."
+      flash.now[:notice] = t("exchange.invalid")
       render template: "exchanges/edit"
     end
   end
@@ -85,7 +84,7 @@ module ExchangesController
     @search_query = search_query
     return if @search_query
 
-    flash[:notice] = "No query specified!"
+    flash[:notice] = t("exchange.no_query")
     redirect_to root_url
   end
 end

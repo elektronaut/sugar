@@ -18,14 +18,14 @@ class UsersController < ApplicationController
       if current_user?
         redirect_to discussions_url
       else
-        flash[:notice] ||= "That's not a valid email or password."
+        flash[:notice] ||= t("authentication.invalid")
         redirect_to login_users_url
       end
     end
 
     def logout
       deauthenticate!
-      flash[:notice] = "You have been logged out."
+      flash[:notice] = t("authentication.logged_out")
       redirect_to Sugar.public_browsing? ? discussions_url : login_users_url
     end
 

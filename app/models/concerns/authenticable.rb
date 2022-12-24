@@ -19,7 +19,7 @@ module Authenticable
 
     validate do |user|
       if user.new_password? && !user.new_password_confirmed?
-        user.errors.add(:password, "must be confirmed")
+        user.errors.add(:password, :confirmation)
       end
     end
 
@@ -27,10 +27,7 @@ module Authenticable
               presence: true
 
     validates :facebook_uid,
-              uniqueness: {
-                message: "is already registered",
-                case_sensitive: false
-              },
+              uniqueness: { case_sensitive: false },
               if: :facebook_uid?
 
     validate :verify_banned_until

@@ -24,15 +24,13 @@ class User < ApplicationRecord
 
   validates :username,
             presence: true,
-            uniqueness: { case_sensitive: false,
-                          message: "is already registered" },
-            format: { with: /\A[^?]+\Z/, message: "is not valid" }
+            uniqueness: { case_sensitive: false },
+            format: { with: /\A[^?]+\Z/ }
 
   validates :email,
             email: true,
             presence: true,
-            uniqueness: { case_sensitive: false,
-                          message: "is already registered" }
+            uniqueness: { case_sensitive: false }
 
   validates :stylesheet_url, url: { allow_blank: true }
   validates :mobile_stylesheet_url, url: { allow_blank: true }

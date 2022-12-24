@@ -173,29 +173,28 @@ class PostsController < ApplicationController
     @search_query = search_query
     return if @search_query
 
-    flash[:notice] = "No query specified!"
+    flash[:notice] = t("exchange.no_query")
     redirect_to root_url
   end
 
   def verify_editable
     return if @post.editable_by?(current_user)
 
-    flash[:notice] = "You don't have permission to edit that post!"
+    flash[:notice] = t("post.not_editable")
     redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
   end
 
   def verify_postable
     return if @exchange.postable_by?(current_user)
 
-    flash[:notice] = "This discussion is closed, " \
-                     "you don't have permission to post here"
+    flash[:notice] = t("exchange.closed")
     redirect_to polymorphic_url(@exchange, page: @exchange.last_page)
   end
 
   def verify_viewable
     return if @exchange&.viewable_by?(current_user)
 
-    flash[:notice] = "You don't have permission to view that discussion!"
+    flash[:notice] = t("exchange.not_viewable")
     redirect_to root_url
   end
 end

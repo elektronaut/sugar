@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
   def require_s3
     return if Sugar.aws_s3?
 
-    flash[:notice] = "Amazon Web Services not configured!"
+    flash[:notice] = t("s3_required")
     redirect_to root_url
   end
 

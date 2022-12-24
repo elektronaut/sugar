@@ -11,7 +11,7 @@ class FacebookController < ApplicationController
       elsif Sugar.config.signups_allowed
         signup
       else
-        flash[:notice] = "Could not find your Facebook account"
+        flash[:notice] = t("facebook.not_found")
         redirect_to login_users_url
       end
     end
@@ -46,7 +46,7 @@ class FacebookController < ApplicationController
 
   def disconnect
     current_user.update(facebook_uid: nil)
-    flash[:notice] = "You have disconnected your Facebook account"
+    flash[:notice] = t("facebook.disconnected")
     redirect_to edit_user_page_url(
       id: current_user.username,
       page: "services"
@@ -112,7 +112,7 @@ class FacebookController < ApplicationController
     if @user_info
       yield @user_info
     else
-      flash[:error] = "Failed to verify your Facebook account"
+      flash[:error] = t("facebook.failed")
       redirect_to redirect_url
     end
   end

@@ -28,8 +28,7 @@ class UsersController < ApplicationController
         finalize_successful_signup
         redirect_to user_profile_url(id: @user.username)
       else
-        flash.now[:notice] = "Could not create your account, " \
-                             "please fill in all required fields."
+        flash.now[:notice] = t("signup.invalid")
         render action: :new
       end
     end
@@ -63,14 +62,14 @@ class UsersController < ApplicationController
       return unless @invite&.expired?
 
       session.delete(:invite_token)
-      flash[:notice] = "Your invite has expired"
+      flash[:notice] = t("invite.expired")
       redirect_to login_users_url
     end
 
     def check_for_signups_allowed
       return unless !Sugar.config.signups_allowed && User.any? && !@invite
 
-      flash[:notice] = "Signups are not allowed"
+      flash[:notice] = t("signup.not_allowed")
       redirect_to login_users_url
     end
 

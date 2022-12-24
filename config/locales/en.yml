@@ -1,6 +1,4 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
+---
 en:
   activemodel:
     attributes:
@@ -44,9 +42,27 @@ en:
         banned_until: Banned until
         hiatus_until: Go on hiatus until
         memorialized: Memorialized
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: is already registered
+            facebook_uid:
+              taken: is already registered
+            password:
+              confirmation: must be confirmed
+            username:
+              taken: is already registered
   authentication:
+    invalid: That's not a valid email or password.
+    logged_out: You have been logged out.
     notice:
-      inactive: "Your account has been disabled due to inactivity/lack of participation. Reach out to someone to get back in if you think you'll be able to be a regular contributor to the community"
+      inactive: >-
+        Your account has been disabled due to inactivity/lack of
+        participation. Reach out to someone to get back in if you
+        think you'll be able to be a regular contributor to the
+        community
       hiatus: "You are on hiatus for %{duration}."
       time_out: "You are on time out for %{duration}."
       banned: "You are banned."
@@ -65,7 +81,8 @@ en:
     signing_up: Signing up
     domain_names_description: "Comma separated"
     forum_title_description: HTML allowed
-    forum_short_name_description: "Will be used where applicable, ie. on the mobile version"
+    forum_short_name_description: >-
+      Will be used where applicable, ie. on the mobile version
     mail_sender_description: "Example: My Forum <no-reply@mydomain.com>"
     anyone_can_browse: Anyone can browse
     browsing_requires_login: Browsing requires login
@@ -75,10 +92,14 @@ en:
     google_analytics_description: Enter to enable tracking
     emoticons: Emoticons
     facebook: Facebook
-    facebook_description: "To enable this feature, set up an %{link} and enter your App ID and secret here."
+    facebook_description: >-
+      To enable this feature, set up an %{link} and enter your App ID
+      and secret here.
     facebook_apps_link: application on Facebook
     amazon_aws: Amazon AWS
-    amazon_aws_description: "To enable image uploads, %{link} and enter your access key and secret here."
+    amazon_aws_description: >-
+      To enable image uploads, %{link} and enter your access key and
+      secret here.
     amazon_signup_link: sign up for Amazon S3
     amazon_associates: Amazon Associates
     amazon_associates_id_description: Enter to enable referals
@@ -87,7 +108,18 @@ en:
     custom_javascript: Custom Javascript
     custom_header_description: 'Included right after <body>'
     custom_footer_description: 'Included just before <body>'
-    custom_javascript_html: 'Custom JavaScript will be included at the end of the &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your code with <span class="example">$(document).ready(function(){ /* Your code here */ });</span> where necessary.'
+    custom_javascript_html: >-
+      Custom JavaScript will be included at the end of the
+      &lt;head&gt; tag, and jQuery is enabled. Remember to wrap your
+      code with <span class="example">$(document).ready(function(){ /*
+      Your code here */ });</span> where necessary.
+  conversation:
+    invalid: >-
+      Could not save your conversation! Please make sure all required
+      fields are filled in.
+    not_removeable: You can't do that!
+    user_removed: "%{username} has been removed from the conversation"
+    you_have_been_removed: You have been removed from the conversation
   user:
     status:
       active: Active
@@ -110,11 +142,16 @@ en:
       invites_count: invites
       administator_privileges: Administator privileges
       birthday_description: "Your age won't be shown, but your birthday will"
-      gravatar_link_html: 'Alternatively, upload a picture to <a href="http://www.gravatar.com/">Gravatar</a> using your registered email to get an avatar.'
+      gravatar_link_html: >-
+        Alternatively, upload a picture to
+        <a href="http://www.gravatar.com/">Gravatar</a> using your
+        registered email to get an avatar.
       temporary_ban: Temporary ban
       moderator_description: 'Can edit all discussions and posts'
-      user_admin_description: 'Can edit other users and handle invites or approvals'
-      admin_description: 'Same as the two above, plus access to forum configuration'
+      user_admin_description: >-
+        Can edit other users and handle invites or approvals
+      admin_description: >-
+        Same as the two above, plus access to forum configuration
       map: Map
       map_description: Click to place yourself on the map.
       clear_location: Clear location
@@ -122,12 +159,15 @@ en:
       facebook_connected: You have connected your Facebook account.
       remove?: 'Remove?'
       flickr_description: 'Note: This is not your username'
-      steam_description_html: 'Note: Not your login; 64-bit integer or custom URL name<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
+      steam_description_html: >-
+        Note: Not your login; 64-bit integer or custom URL name<br />
+        http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>
       account_info: Account info
       settings: Settings
       theme: Theme
       stylesheet_url_description: Enter a URL here to override the theme
-      mobile_stylesheet_url_description: Enter a URL here to override the mobile theme
+      mobile_stylesheet_url_description: >-
+        Enter a URL here to override the mobile theme
       warning: Warning
       missing_time_zone_link: "You haven't %{link} yet!"
       chosen_a_time_zone: chosen a time zone
@@ -135,25 +175,53 @@ en:
       social_media: Social Media
       messaging: Messaging
     new:
-      optional_fields: "The following fields are optional, but it's always nice to provide a bit more information:"
+      optional_fields: >-
+        The following fields are optional, but it's always nice to
+        provide a bit more information:
     sign_up: Sign up
     sign_up_with_facebook: Sign up with Facebook
+  facebook:
+    disconnected: You have disconnected your Facebook account
+    failed: Failed to verify your Facebook account
+    not_found: Could not find your Facebook account
   invite:
+    cancelled: Your invite has been cancelled.
+    expired: Your invite has expired!
+    failed: >-
+      There was a problem sending your invite to %{email}, it has been
+      cancelled.
+    invalid: That's not a valid invite!
     invites: Invites
     message_description: 'Optional, will appear in the welcoming email'
+    no_invites: You don't have any invites!
     send_invite: Send invite
     new_invite: New Invite
     sent: "Your invite has been sent to %{email}"
-    failed: "There was a problem sending your invite to %{email}, it has been cancelled."
+  exchange:
+    closed: This discussion is closed, you don't have permission to post here.
+    invalid: >-
+      Could not save your discussion! Please make sure all required
+      fields are filled in.
+    no_query: No query specified!
+    not_viewable: You don't have permission to view that discussion!
   flash:
     changes_saved: Your changes were saved!
-    invalid_record: "Couldn't save your changes, did you fill in all required fields?"
+    invalid_record: >-
+      Couldn't save your changes, did you fill in all required fields?
   password_reset:
     changed: Your password has been changed
     expired: Sorry, this link has expired
     invalid: Not a valid URL
     sent: An email with further instructions has been sent
+  post:
+    not_editable: You don't have permission to edit that post!
+  signup:
+    invalid: >-
+      Could not create your account, please fill in all required fields.
+    not_allowed: Signups are not allowed
   admin: Admin
+  changes_saved: Your changes were saved.
+  s3_required: Amazon Web Services not configured!
   save: Save
   new: New
   nsfw_message: "Discussion is NSFW"
