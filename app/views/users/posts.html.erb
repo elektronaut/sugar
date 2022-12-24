@@ -1,5 +1,5 @@
 <%
-  add_body_class "user_profile", "posts"
+  content_for(:body_class, "user_profile posts")
   @page_title = "#{@user.username}'s Posts"
 %>
 

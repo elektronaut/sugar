@@ -1,17 +1,10 @@
 # frozen_string_literal: true
 
 module LayoutHelper
-  def add_body_class(*class_names)
-    @body_classes ||= []
-    @body_classes += Array(class_names)
-  end
-
-  def body_classes
-    @body_classes ||= []
-    if content_for?(:sidebar) && @body_classes.exclude?("with_sidebar")
-      @body_classes << "with_sidebar"
-    end
-    @body_classes.uniq.join(" ")
+  def body_class
+    classes = (content_for(:body_class) || "").split(/\s+/)
+    classes << "with_sidebar" if content_for?(:sidebar)
+    classes.uniq.join(" ")
   end
 
   def discussion_action?(action)

@@ -3,33 +3,15 @@
 require "rails_helper"
 
 describe LayoutHelper do
-  describe "#add_body_class" do
-    subject { helper.body_classes }
-
-    before { helper.add_body_class(class_name) }
-
-    context "when argument is a string" do
-      let(:class_name) { "foo" }
-
-      it { is_expected.to include("foo") }
-    end
-
-    context "when argument is an array" do
-      let(:class_name) { %w[foo bar] }
-
-      it { is_expected.to eq("foo bar") }
-    end
-  end
-
-  describe "#body_classes" do
-    subject { helper.body_classes }
+  describe "#body_class" do
+    subject { helper.body_class }
 
     context "with no classes set" do
       it { is_expected.to eq("") }
     end
 
-    context "when classes are added" do
-      before { helper.add_body_class("foo") }
+    context "when class is set" do
+      before { helper.content_for :body_class, "foo" }
 
       it { is_expected.to eq("foo") }
     end

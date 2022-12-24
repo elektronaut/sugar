@@ -1,7 +1,6 @@
 <%
-  @page_title = "Posts Search"
   @page_title = @exchange.title + " - Search: " + h(@search_query)
-  add_body_class "search", "search_posts_in_discussion"
+  content_for(:body_class, "search", "search_posts_in_discussion")
 %>
 
 <h2 class="section">
