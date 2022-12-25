@@ -12,8 +12,7 @@ module LayoutHelper
   end
 
   def frontend_configuration
-    {
-      authToken: form_authenticity_token,
+    { authToken: form_authenticity_token,
       debug: Rails.env.development?,
       emoticons: enabled_emoticons,
       facebookAppId: Sugar.config.facebook_app_id,
@@ -21,8 +20,7 @@ module LayoutHelper
       uploads: Sugar.aws_s3?,
       currentUserId: current_user&.id,
       currentUser: current_user.try(&:as_json),
-      preferredFormat: current_user.try(&:preferred_format)
-    }
+      preferredFormat: current_user.try(&:preferred_format) }
   end
 
   def search_mode_options(exchange)

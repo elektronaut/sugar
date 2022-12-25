@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   before_action :load_user,
                 only: %i[show edit update participated discussions posts
-                         grant_invite revoke_invites stats mute unmute]
+                         grant_invite revoke_invites mute unmute]
 
   before_action :detect_edit_page, only: %i[edit update]
   before_action :verify_editable,  only: %i[edit update]
@@ -31,32 +31,19 @@ class UsersController < ApplicationController
   end
 
   def discussions
-    @discussions = @user.discussions
-                        .viewable_by(current_user)
+    @discussions = @user.discussions.viewable_by(current_user)
                         .page(params[:page]).for_view
     respond_with_exchanges(@discussions)
   end
 
   def participated
-    @discussions = @user.participated_discussions
-                        .viewable_by(current_user)
+    @discussions = @user.participated_discussions.viewable_by(current_user)
                         .page(params[:page]).for_view
     respond_with_exchanges(@discussions)
   end
 
   def posts
     @posts = user_posts(@user)
-  end
-
-  def stats
-    @posts_per_week = Post.find_by_sql(
-      "SELECT COUNT(*) AS post_count, YEAR(created_at) AS year, " \
-      "WEEK(created_at) AS week " \
-      "FROM posts " \
-      "WHERE user_id = #{@user.id} " \
-      "GROUP BY YEAR(created_at), WEEK(created_at);"
-    )
-    @max_posts_per_week = @posts_per_week.map { |p| p.post_count.to_i }.max
   end
 
   def edit; end
@@ -116,28 +103,23 @@ class UsersController < ApplicationController
   end
 
   def allowed_admin_params
-    return [] unless current_user? && current_user.admin?
-
-    [:admin]
+    current_user? && current_user.admin? ? [:admin] : []
   end
 
   def allowed_params
-    [:aim, :birthday, :description, :email, :pronouns,
-     :facebook_uid, :flickr, :gamertag, :gtalk, :instagram,
-     :last_fm, :latitude, :location, :longitude, :mobile_stylesheet_url,
-     :mobile_theme, :msn, :notify_on_message, :realname,
-     :stylesheet_url, :theme, :time_zone, :twitter, :website,
-     :password, :confirm_password, :hiatus_until, :preferred_format,
-     :sony, :nintendo, :nintendo_switch, :steam, :battlenet,
-     { avatar_attributes: [:file] }] +
+    [:aim, :birthday, :description, :email, :pronouns, :facebook_uid, :flickr,
+     :gamertag, :gtalk, :instagram, :last_fm, :latitude, :location, :longitude,
+     :mobile_stylesheet_url, :mobile_theme, :msn, :notify_on_message, :realname,
+     :stylesheet_url, :theme, :time_zone, :twitter, :website, :password,
+     :confirm_password, :hiatus_until, :preferred_format, :sony, :nintendo,
+     :nintendo_switch, :steam, :battlenet, { avatar_attributes: [:file] }] +
       allowed_user_admin_params + allowed_admin_params
   end
 
   def allowed_user_admin_params
     return [] unless current_user&.user_admin?
 
-    %i[username user_admin moderator available_invites
-       status banned_until]
+    %i[username user_admin moderator available_invites status banned_until]
   end
 
   def check_status
@@ -165,8 +147,7 @@ class UsersController < ApplicationController
   end
 
   def user_posts(user)
-    user.discussion_posts
-        .viewable_by(current_user)
+    user.discussion_posts.viewable_by(current_user)
         .page(params[:page]).for_view_with_exchange.reverse_order
   end
 end

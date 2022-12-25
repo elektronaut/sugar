@@ -114,9 +114,8 @@ class Configuration
   def validate_type(key, value)
     return if valid_type?(key, parse_value(key, value))
 
-    raise(ArgumentError,
-          "expected #{self.class.settings[key].type}, " \
-          "got #{value.class} (#{value.inspect})")
+    raise(ArgumentError, "expected #{self.class.settings[key].type}, " \
+                         "got #{value.class} (#{value.inspect})")
   end
 
   def parse_value(key, value)

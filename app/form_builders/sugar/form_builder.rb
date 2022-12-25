@@ -79,12 +79,16 @@ module Sugar
       field_with_label(attr, select(attr, choices, opts), label, field_opts)
     end
 
+    # rubocop:disable Metrics/ParameterLists
+
     def labelled_check_box(attr, label = nil, options = {},
                            checked = "1", unchecked = "0")
       label, options, field_options = parse_label_and_opts(label, options)
       field_with_label(attr, check_box(attr, options, checked, unchecked),
                        label, field_options)
     end
+
+    # rubocop:enable Metrics/ParameterLists
 
     private
 

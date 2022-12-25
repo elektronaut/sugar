@@ -25,14 +25,7 @@ module ExchangesController
     mark_as_viewed!(@exchange, @posts.last,
                     (@posts.offset_value + @posts.count))
 
-    respond_to do |format|
-      format.html
-      format.json do
-        redirect_to(
-          polymorphic_path([@exchange, :posts], page: @page, format: :json)
-        )
-      end
-    end
+    respond_with_exchange(@exchange, @page)
   end
 
   def edit
@@ -78,6 +71,16 @@ module ExchangesController
 
   def search_query
     params[:query] || params[:q]
+  end
+
+  def respond_with_exchange(exchange, page)
+    respond_to do |format|
+      format.html
+      format.json do
+        redirect_to(polymorphic_path([exchange, :posts],
+                                     page: page, format: :json))
+      end
+    end
   end
 
   def require_and_set_search_query

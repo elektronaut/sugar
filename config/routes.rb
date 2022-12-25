@@ -100,8 +100,6 @@ Rails.application.routes.draw do
           as: :posts_user
       get "/users/profile/:id/posts/:page" => :posts,
           as: :paged_user_posts
-      get "/users/profile/:id/stats" => :stats,
-          as: :stats_user
       get "/users/new/:token" => :new,
           as: :new_user_by_token
     end
