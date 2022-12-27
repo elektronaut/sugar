@@ -63,7 +63,7 @@ span.admin {
       font-weight: bold;
     }
   }
-  .social, .invitees {
+  .user-links, .invitees {
     border-top: 1px solid #E2DCBF;
     padding-top: 1em;
     margin-bottom: 1em;
@@ -75,13 +75,18 @@ span.admin {
       }
     }
   }
-  .xboxlive {
-    p {
-      margin-left: 76px;
-      .avatar {
-        float: left;
-        margin-left: -76px;
+  .user-links {
+    .user-link {
+      margin-bottom: 8px;
+      &:last-child {
+        margin-bottom: 0px;
       }
+    }
+    .label {
+      font-weight: bold;
+    }
+    .link {
+      font-size: 1.2em;
     }
   }
   .invitees li a {

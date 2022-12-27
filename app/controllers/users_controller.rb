@@ -107,12 +107,11 @@ class UsersController < ApplicationController
   end
 
   def allowed_params
-    [:aim, :birthday, :description, :email, :pronouns, :facebook_uid, :flickr,
-     :gamertag, :gtalk, :instagram, :last_fm, :latitude, :location, :longitude,
-     :mobile_stylesheet_url, :mobile_theme, :msn, :notify_on_message, :realname,
-     :stylesheet_url, :theme, :time_zone, :twitter, :website, :password,
-     :confirm_password, :hiatus_until, :preferred_format, :sony, :nintendo,
-     :nintendo_switch, :steam, :battlenet, { avatar_attributes: [:file] }] +
+    [:birthday, :description, :email, :pronouns, :facebook_uid, :latitude,
+     :location, :longitude, :mobile_stylesheet_url, :mobile_theme,
+     :notify_on_message, :realname, :stylesheet_url, :theme, :time_zone,
+     :password, :confirm_password, :hiatus_until, :preferred_format,
+     { avatar_attributes: [:file] }] +
       allowed_user_admin_params + allowed_admin_params
   end
 

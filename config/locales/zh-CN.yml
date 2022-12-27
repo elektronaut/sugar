@@ -21,20 +21,6 @@ zh-CN:
         moderator: 仲裁者
         user_admin: 用户管理员
         admin: 管理员
-        website: 网站
-        gtalk: Google Talk
-        msn: MSN Messenger
-        aim: AIM
-        gamertag: Xbox Live Gamertag
-        sony: PlayStation 用户名
-        nintendo: Nintendo ID
-        nintendo_switch: Nintendo Switch ID
-        steam: Steam ID
-        battlenet: Battle.net BattleTag
-        twitter: Twitter 用户名
-        flickr: Flickr 用户 ID
-        last_fm: Last.fm 用户名
-        instagram: Instagram 用户名
         email: Email 地址
         password: 密码
         confirm_password: 确认密码

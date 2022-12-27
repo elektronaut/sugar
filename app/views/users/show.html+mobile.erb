@@ -60,112 +60,18 @@
       </tr>
     <% end %>
 
-    <% if @user.website? %>
+    <% @user.user_links.sorted.each do |user_link| %>
       <tr>
-        <th>Web site</th>
-        <td><%= link_to @user.website, @user.website %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.twitter? %>
-      <tr>
-        <th>Twitter</th>
+        <th>
+          <%= user_link.label %>
+        </th>
         <td>
-          <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+          <% if user_link.url? %>
+            <%= link_to(user_link.name_or_pretty_url, user_link.url) %>
+          <% else %>
+            <%= user_link.name_or_pretty_url %>
+          <% end %>
         </td>
-      </tr>
-    <% end %>
-
-    <% if @user.gtalk? %>
-      <tr>
-        <th>Gtalk</th>
-        <td><%= @user.gtalk %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.msn? %>
-      <tr>
-        <th>MSN</th>
-        <td><%= @user.msn %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.aim? %>
-      <tr>
-        <th>MSN</th>
-        <td><%= @user.aim %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.instagram? %>
-      <tr>
-        <th>Instagram</th>
-        <td>
-          <%= link_to(@user.instagram,
-                      "http://www.instagram.com/#{@user.instagram}/") %>
-        </td>
-      </tr>
-    <% end %>
-
-    <% if @user.flickr? %>
-      <tr>
-        <th>Flickr</th>
-        <td>
-          <%= link_to(@user.flickr,
-                      "http://www.flickr.com/photos/#{@user.flickr}/") %>
-        </td>
-      </tr>
-    <% end %>
-
-    <% if @user.last_fm? %>
-      <tr>
-        <th>Last.fm</th>
-        <td>
-          <%= link_to(@user.last_fm,
-                      "http://www.last.fm/user/#{@user.last_fm}") %>
-        </td>
-      </tr>
-    <% end %>
-
-    <% if @user.gamertag? %>
-      <tr>
-        <th>Xbox Live</th>
-        <td><%= @user.gamertag %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.sony? %>
-      <tr>
-        <th>PlayStation</th>
-        <td><%= @user.sony %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.nintendo? %>
-      <tr>
-        <th>Nintendo ID</th>
-        <td><%= @user.nintendo %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.nintendo_switch? %>
-      <tr>
-        <th>Nintendo Switch ID</th>
-        <td><%= @user.nintendo_switch %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.steam? %>
-      <tr>
-        <th>Steam ID</th>
-        <td><%= @user.steam %></td>
-      </tr>
-    <% end %>
-
-    <% if @user.battlenet? %>
-      <tr>
-        <th>Battle.net BattleTag</th>
-        <td><%= @user.battlenet %></td>
       </tr>
     <% end %>
 

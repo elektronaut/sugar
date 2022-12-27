@@ -33,16 +33,6 @@ class UsersController < ApplicationController
       respond_with_users(@users)
     end
 
-    def social
-      @users = User.social.by_username
-      respond_with_users(@users)
-    end
-
-    def gaming
-      @users = User.gaming.by_username
-      respond_with_users(@users)
-    end
-
     def top_posters
       @users = User.top_posters.limit(50)
       respond_with_users(@users)
