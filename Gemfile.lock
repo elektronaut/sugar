@@ -86,6 +86,10 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.18)
     bindex (0.8.1)
     bootsnap (1.15.0)
@@ -300,6 +304,12 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    react-rails (2.6.2)
+      babel-transpiler (>= 0.7.0)
+      connection_pool
+      execjs
+      railties (>= 3.2)
+      tilt
     redcarpet (3.5.1)
     redis (4.8.0)
     redis-client (0.11.2)
@@ -474,6 +484,7 @@ DEPENDENCIES
   puma
   rails (~> 7.0.0)
   rails-controller-testing
+  react-rails
   redcarpet (~> 3.5)
   redis (~> 4.1)
   rouge
