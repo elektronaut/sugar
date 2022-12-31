@@ -17,6 +17,7 @@ class User < ApplicationRecord
   has_many :exchange_moderators, dependent: :destroy
   has_many :user_links, dependent: :destroy
   accepts_nested_attributes_for :avatar
+  accepts_nested_attributes_for :user_links, allow_destroy: true
   validates_associated :avatar
 
   before_validation :ensure_last_active_is_set

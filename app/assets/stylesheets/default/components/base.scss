@@ -166,4 +166,9 @@ button {
     cursor: pointer;
     color: #444;
   }
+
+  &:disabled {
+    color: #888;
+    background: #e8e8e8;
+  }
 }

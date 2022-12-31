@@ -10,9 +10,9 @@ describe User do
   let(:moderator) { build(:moderator) }
   let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
-    %w[admin banned_until created_at description id facebook_uid inviter_id
-       last_active latitude location longitude moderator realname user_admin
-       username status]
+    %w[admin banned_until created_at description id inviter_id last_active
+       latitude location longitude moderator realname user_admin username
+       status]
   end
 
   it { is_expected.to be_a(Authenticable) }

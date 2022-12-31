@@ -111,7 +111,8 @@ class UsersController < ApplicationController
      :location, :longitude, :mobile_stylesheet_url, :mobile_theme,
      :notify_on_message, :realname, :stylesheet_url, :theme, :time_zone,
      :password, :confirm_password, :hiatus_until, :preferred_format,
-     { avatar_attributes: [:file] }] +
+     { avatar_attributes: [:file],
+       user_links_attributes: %i[id position label name url _destroy] }] +
       allowed_user_admin_params + allowed_admin_params
   end
 

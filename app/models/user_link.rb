@@ -14,6 +14,12 @@ class UserLink < ApplicationRecord
 
   scope :sorted, -> { order("position ASC") }
 
+  class << self
+    def labels
+      pluck(:label).uniq.sort
+    end
+  end
+
   def label=(new_label)
     super(new_label&.strip)
   end

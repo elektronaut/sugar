@@ -1,7 +1,9 @@
 @import 'reset';
 @import 'clearfix';
+@import 'vars';
 @import 'breakpoints';
 @import 'components/**/*';
+
 
 html, body {
   height: 100%;

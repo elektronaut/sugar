@@ -32,6 +32,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dnd-kit/accessibility@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@dnd-kit/accessibility@npm:3.0.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 0afc2c0fce9a1c107453620ca0da1778f182d340e74ffbc6e369ef0ac8943cafb929d3a6c0891d9b915aa23b2b92137ff4fad958f43118466586d8129a3359d5
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/core@npm:^6.0.6":
+  version: 6.0.6
+  resolution: "@dnd-kit/core@npm:6.0.6"
+  dependencies:
+    "@dnd-kit/accessibility": ^3.0.0
+    "@dnd-kit/utilities": ^3.2.1
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 2945bd5438630748fa3c11390afd9919eb9836cb64bf4c4c3afae0ccb99d32e1df56a387e59cb16800ec0ae047222fb9e40ecb9363ec4cca375c2b81d4e9784d
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/sortable@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@dnd-kit/sortable@npm:7.0.1"
+  dependencies:
+    "@dnd-kit/utilities": ^3.2.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@dnd-kit/core": ^6.0.4
+    react: ">=16.8.0"
+  checksum: b8b5ae504d57d6afb847c3ac8a865a3623c5915f4f0dd767017a17e6d1d36e144b74f6f90a17c07d5f8ddc83395a2db8bb90c420f017aee15bd88538b6f3f226
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^3.2.0, @dnd-kit/utilities@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "@dnd-kit/utilities@npm:3.2.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 038fd5cc1328bf4c9dca17cd48046e5a687bbf9d904c7197f851aab869ab52d9dee2734b2e255256fd6158245acd00063a23deed962c7673c0fadfbf061f04ca
+  languageName: node
+  linkType: hard
+
 "@esbuild/linux-loong64@npm:0.15.7":
   version: 0.15.7
   resolution: "@esbuild/linux-loong64@npm:0.15.7"
@@ -193,6 +242,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:."
   dependencies:
+    "@dnd-kit/core": ^6.0.6
+    "@dnd-kit/sortable": ^7.0.1
     "@rails/ujs": ^7.0.3-1
     backbone: ^1.4.1
     dropzone: ^6.0.0-beta.2
@@ -209,6 +260,7 @@ __metadata:
     react_ujs: ^2.6.2
     timeago: ^1.6.7
     underscore: ^1.13.4
+    uuid: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -1992,6 +2044,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.0.0":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
+  languageName: node
+  linkType: hard
+
 "type-check@npm:^0.4.0, type-check@npm:~0.4.0":
   version: 0.4.0
   resolution: "type-check@npm:0.4.0"
@@ -2033,6 +2092,15 @@ __metadata:
   dependencies:
     punycode: ^2.1.0
   checksum: 7167432de6817fe8e9e0c9684f1d2de2bb688c94388f7569f7dbdb1587c9f4ca2a77962f134ec90be0cc4d004c939ff0d05acc9f34a0db39a3c797dada262633
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 

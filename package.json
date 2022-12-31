@@ -1,6 +1,8 @@
 {
   "name": "app",
   "dependencies": {
+    "@dnd-kit/core": "^6.0.6",
+    "@dnd-kit/sortable": "^7.0.1",
     "@rails/ujs": "^7.0.3-1",
     "backbone": "^1.4.1",
     "dropzone": "^6.0.0-beta.2",
@@ -13,7 +15,8 @@
     "react-dom": "^18.2.0",
     "react_ujs": "^2.6.2",
     "timeago": "^1.6.7",
-    "underscore": "^1.13.4"
+    "underscore": "^1.13.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^7.29.0",

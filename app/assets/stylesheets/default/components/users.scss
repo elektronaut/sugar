@@ -64,7 +64,7 @@ span.admin {
     }
   }
   .user-links, .invitees {
-    border-top: 1px solid #E2DCBF;
+    border-top: 1px solid $c-border;
     padding-top: 1em;
     margin-bottom: 1em;
     h3 {
@@ -73,20 +73,6 @@ span.admin {
       a {
         font-weight: bold;
       }
-    }
-  }
-  .user-links {
-    .user-link {
-      margin-bottom: 8px;
-      &:last-child {
-        margin-bottom: 0px;
-      }
-    }
-    .label {
-      font-weight: bold;
-    }
-    .link {
-      font-size: 1.2em;
     }
   }
   .invitees li a {
@@ -109,7 +95,7 @@ span.admin {
 
   #userPosts {
     margin-left: 437px;
-    border-left: 1px solid #E2DCBF;
+    border-left: 1px solid $c-border;
     padding-left: 12px;
     padding-top: 15px;
     .posts {
@@ -123,6 +109,52 @@ span.admin {
       }
       .post:last-child {
         border-bottom: 0;
+      }
+    }
+  }
+}
+
+.user-links,
+.edit-user-links {
+  .user-link {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  .label {
+    font-weight: bold;
+  }
+  .link {
+    font-size: 1.2em;
+  }
+}
+
+.edit-user-links {
+  .list {
+    margin-bottom: 20px;
+    max-width: 800px;
+    .user-link {
+      display: flex;
+      border-top: 1px solid $c-border;
+      margin: 0px;
+      padding: 8px 0px;
+      &:first-child {
+        border-top: 0px;
+      }
+    }
+    .drag-handle {
+      background: blue;
+      width: 40px;
+      margin-right: 12px;
+    }
+    .info {
+      flex-grow: 1;
+    }
+    .buttons {
+      align-self: center;
+      button {
+        margin-left: 8px;
       }
     }
   }
