@@ -7,7 +7,6 @@ module Authenticable
   attr_accessor :password, :confirm_password
 
   included do
-    before_validation :ensure_password, on: :create
     before_validation :encrypt_new_password
     before_validation :go_on_hiatus
     before_validation :clear_banned_until
@@ -25,10 +24,6 @@ module Authenticable
 
     validates :hashed_password,
               presence: true
-
-    validates :facebook_uid,
-              uniqueness: { case_sensitive: false },
-              if: :facebook_uid?
 
     validate :verify_banned_until
 
@@ -58,10 +53,6 @@ module Authenticable
 
   def deactivated?
     !active?
-  end
-
-  def facebook?
-    facebook_uid?
   end
 
   def valid_password?(pass)
@@ -101,13 +92,6 @@ module Authenticable
   end
 
   protected
-
-  def ensure_password
-    return if new_password? || hashed_password?
-    return unless facebook?
-
-    self.password = self.confirm_password = SecureRandom.base64(15)
-  end
 
   def encrypt_new_password
     return unless new_password? && new_password_confirmed?

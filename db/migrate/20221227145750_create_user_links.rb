@@ -4,6 +4,8 @@ class CreateUserLinks < ActiveRecord::Migration[7.0]
   def services
     { aim: { name: "AIM" },
       battlenet: { name: "Battle.net BattleTag" },
+      facebook_uid: { name: "Facebook",
+                      pattern: "https://www.facebook.com/%username%" },
       flickr: { name: "Flickr",
                 pattern: "https://www.flickr.com/photos/%username%/" },
       gamertag: { name: "Xbox Live",
@@ -44,14 +46,6 @@ class CreateUserLinks < ActiveRecord::Migration[7.0]
         url = service[:pattern].gsub("%username%", name) if service[:pattern]
         user.user_links.create(label: service[:name], name: name, url: url)
       end
-
-      next unless user.facebook_uid?
-
-      UserLink.create(
-        label: "Facebook",
-        url: "https://www.facebook.com/%username%".gsub("%username%",
-                                                        user.facebook_uid)
-      )
     end
 
     change_table :users, bulk: true do |t|

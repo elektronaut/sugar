@@ -3,10 +3,6 @@ Hi <%= @user.username %>,
 thanks for signing up! This email is just a note to let you know that
 your account has been successfully created.
 
-<% if @user.facebook? -%>
-You've signed up using your Facebook account.
-<% end -%>
-
 You can log in here:
 <%= @login_url %>
 

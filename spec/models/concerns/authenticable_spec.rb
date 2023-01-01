@@ -3,20 +3,14 @@
 require "rails_helper"
 
 describe Authenticable do
-  subject(:user) { create(:user, facebook_uid: 123) }
+  subject(:user) { create(:user) }
 
   let(:banned_user) { create(:banned_user) }
 
   # Create the first admin user
-  before { create(:user, facebook_uid: 345) }
+  before { create(:user) }
 
   it { is_expected.to validate_presence_of(:hashed_password) }
-
-  it "validates facebook_uid" do
-    expect(user).to validate_uniqueness_of(:facebook_uid)
-      .case_insensitive
-      .with_message(/is already registered/)
-  end
 
   describe "password validation" do
     subject { user.errors[:password] }
@@ -41,20 +35,6 @@ describe Authenticable do
       let(:user) { build(:user, password: "new", confirm_password: "new") }
 
       it { is_expected.to eq([]) }
-    end
-  end
-
-  describe "password generation" do
-    context "when user is a Facebook user" do
-      let(:user) { create(:facebook_user) }
-
-      it "generates a password" do
-        expect(user.password.blank?).to be(false)
-      end
-
-      it "creates a valid user" do
-        expect(user.valid?).to be(true)
-      end
     end
   end
 
@@ -115,11 +95,6 @@ describe Authenticable do
 
       it { is_expected.to be_nil }
     end
-  end
-
-  describe "#facebook?" do
-    specify { expect(create(:user, facebook_uid: 123).facebook?).to be(true) }
-    specify { expect(create(:user, facebook_uid: nil).facebook?).to be(false) }
   end
 
   describe "#active" do
@@ -255,12 +230,6 @@ describe Authenticable do
       let(:user) { build(:user, hashed_password: nil) }
 
       it { is_expected.to be_blank }
-    end
-
-    context "when signed up with Facebook" do
-      let(:user) { build(:user, hashed_password: nil, facebook_uid: 1) }
-
-      it { is_expected.not_to be_blank }
     end
 
     context "when password is set" do

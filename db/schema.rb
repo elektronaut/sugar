@@ -301,7 +301,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_27_145750) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "available_invites", default: 0, null: false
-    t.string "facebook_uid"
     t.integer "participated_count", default: 0, null: false
     t.integer "favorites_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false

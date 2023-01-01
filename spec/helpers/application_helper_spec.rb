@@ -3,21 +3,6 @@
 require "rails_helper"
 
 describe ApplicationHelper do
-  describe "#facebook_oauth_url" do
-    subject { helper.facebook_oauth_url(redirect_url) }
-
-    let(:redirect_url) { "http://example.com/foo" }
-    let(:url) do
-      "https://www.facebook.com/dialog/oauth?client_id=123" \
-        "&redirect_uri=http://example.com/foo" \
-        "&scope=email"
-    end
-
-    before { Sugar.config.facebook_app_id = "123" }
-
-    it { is_expected.to eq(url) }
-  end
-
   describe "#pretty_link" do
     subject { helper.pretty_link(url) }
 

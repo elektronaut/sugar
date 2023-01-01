@@ -23,16 +23,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Facebook
-  resource :facebook, controller: "facebook" do
-    member do
-      get "login"
-      get "signup"
-      get "connect"
-      post "disconnect"
-    end
-  end
-
   # Uploads
   resources :uploads
 
@@ -61,9 +51,6 @@ Rails.application.routes.draw do
       get "login"
       post "authenticate"
       get "logout"
-      get "connect_facebook"
-      get "disconnect_facebook"
-
       get "online"
       get "recently_joined"
       get "admins"

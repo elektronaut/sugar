@@ -13,10 +13,10 @@ class UsersController < ApplicationController
     def new
       if @invite
         session[:invite_token] = @invite.token
-        @user = @invite.user.invitees.new(facebook_user_params)
+        @user = @invite.user.invitees.new
         @user.email = @invite.email
       else
-        @user = User.new(facebook_user_params)
+        @user = User.new
       end
     end
 
@@ -53,7 +53,6 @@ class UsersController < ApplicationController
 
     def finalize_successful_signup
       Mailer.new_user(@user, login_users_url).deliver_later if @user.email?
-      session.delete(:facebook_user_params)
       session.delete(:invite_token)
       authenticate!(@user)
     end
@@ -71,10 +70,6 @@ class UsersController < ApplicationController
 
       flash[:notice] = t("signup.not_allowed")
       redirect_to login_users_url
-    end
-
-    def facebook_user_params
-      session[:facebook_user_params] || {}
     end
   end
 end

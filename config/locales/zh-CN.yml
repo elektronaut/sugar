@@ -88,8 +88,6 @@ zh-CN:
       map: 地图
       map_description: 单击这里把你自己添加到地图。
       clear_location: 清空位置信息
-      connect_with_facebook: 使用 Facebook 连接
-      facebook_connected: 你已经连接到你的 Facebook 帐号。
       remove?: '删除?'
       flickr_description: '注意：这不是你的用户名'
       steam_description_html: '注意：不是你的登录; 64位整数或者定制的网址形式名字<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
@@ -107,7 +105,6 @@ zh-CN:
     new:
       optional_fields: "下面的这些字段可选，不过建议您最好提供更多信息："
     sign_up: 注册
-    sign_up_with_facebook: 通过Facebook登录
   invite:
     invites: 邀请
     message_description: '可选，会出现在欢迎电子邮件中'
