@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+import TypeaheadTextField from "../Input/TypeaheadTextField";
+
+function preventSubmit(evt) {
+  if (evt.key === "Enter") {
+    evt.preventDefault();
+  }
+}
 export default function Editor(props) {
-  const { dispatch } = props;
+  const { dispatch, newLink } = props;
 
   const [userLink, setUserLink] = useState(props.userLink);
 
+  const updateAttribute = (attr) => (value) => {
+    setUserLink({ ...userLink, [attr]: value });
+  };
+
   const handleChange = (attr) => (evt) => {
-    setUserLink({ ...userLink, [attr]: evt.target.value });
+    updateAttribute(attr)(evt.target.value);
   };
 
   const handleCancel = (evt) => {
@@ -30,35 +41,45 @@ export default function Editor(props) {
 
   return (
     <div className="editor">
+      <TypeaheadTextField
+        label="Label"
+        name="label"
+        autoFocus={true}
+        onChange={updateAttribute("label")}
+        onKeyDown={preventSubmit}
+        options={props.labels}
+        size={40}
+        value={userLink.label} />
       <div className="field">
-        <label>Label</label>
-        <input type="text"
-               name="label"
-               size={50}
-               onChange={handleChange("label")}
-               value={userLink.label} />
-      </div>
-      <div className="field">
-        <label>Name</label>
+        <label htmlFor="name">
+          Name
+          <div className="description">
+            E.g. Link text, username, code or similar
+          </div>
+        </label>
         <input type="text"
                name="name"
                size={50}
                onChange={handleChange("name")}
+               onKeyDown={preventSubmit}
                value={userLink.name} />
       </div>
       <div className="field">
-        <label>URL</label>
+        <label htmlFor="url">
+          URL
+        </label>
         <input type="text"
                name="url"
                size={50}
                onChange={handleChange("url")}
+               onKeyDown={preventSubmit}
                value={userLink.url} />
       </div>
       <div className="buttons">
         <button type="button"
                 onClick={handleSave}
                 disabled={!validUserLink()}>
-          Save
+          {newLink ? "Add" : "Update"}
         </button>
         <button type="button" onClick={handleCancel}>
           Cancel
@@ -71,5 +92,6 @@ export default function Editor(props) {
 Editor.propTypes = {
   dispatch: PropTypes.func,
   labels: PropTypes.array,
+  newLink: PropTypes.bool,
   userLink: PropTypes.object
 };

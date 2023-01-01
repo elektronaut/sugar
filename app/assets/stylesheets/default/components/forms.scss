@@ -1,0 +1,71 @@
+input, textarea {
+  font-size: 1.2em;
+}
+
+#content {
+  input[type=text],
+  input[type=email],
+  input[type=password] {
+    border-radius: 3px;
+    padding: 8px 10px;
+    border: 1px solid #d7d7d7;
+    box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.05);
+  }
+}
+
+textarea {
+  width: 100%;
+  max-width: 780px;
+  height: 300px;
+  padding: 10px;
+  border: 1px solid #d7d7d7;
+  box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.05);
+}
+
+label {
+  display: block;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 0.4em;
+}
+
+label .description {
+  font-weight: normal;
+  color: #555;
+}
+
+.typeahead-input {
+  display: flex;
+  #content & input[type=text] {
+    padding-right: 40px;
+  }
+  button {
+    box-shadow: none;
+    border: none;
+    background: none;
+    padding: 8px 0px;
+    width: 40px;
+    margin-left: -40px;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid #d7d7d7;
+  margin-top: -1px;
+  min-width: 350px;
+  max-height: 300px;
+  overflow: scroll;
+  li {
+    padding: 4px 10px;
+  }
+  .active {
+    background-color: #622;
+    color: #fff;
+  }
+  .selected {
+    font-weight: bold;
+  }
+}

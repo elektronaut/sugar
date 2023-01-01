@@ -7,25 +7,12 @@ button {
   font-family: -apple-system, BlinkMacSystemFont, Calibri, sans-serif;
 }
 
-input, textarea {
-  font-size: 1.2em;
-}
-
-textarea {
-  width: 100%;
-  max-width: 780px;
-  height: 300px;
-  padding: 10px;
-  border: 1px solid #d7d7d7;
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 /* Set 1em == 10px */
 body       { font-size: 10px; }
 * html     { font-size: 125%; }
 * html body{ font-size: 50%; }
 
-h2, h3, h4, h5, h6, p, ul, ol, pre {
+h2, h3, h4, h5, h6, p, ul, ol, pre, div.field {
   margin-bottom: 1em;
 }
 
@@ -117,18 +104,6 @@ pre code {
   padding: 5px;
 }
 
-label {
-  display: block;
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-bottom: 0.2em;
-}
-
-label .description {
-  font-weight: normal;
-  color: #555;
-}
-
 a, a:visited {
   text-decoration: none;
   color: #622;
@@ -142,6 +117,11 @@ a:hover {
 button::-moz-focus-inner {
   border: 0;
   padding: 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
 }
 
 a.button,

@@ -21,6 +21,7 @@ export default function EditUserLinks(props) {
       {state.editing &&
        <Editor dispatch={dispatch}
                labels={props.labels}
+               newLink={enabledLinks.indexOf(state.editing) == -1}
                userLink={state.editing} />}
       {!state.editing &&
        <React.Fragment>
