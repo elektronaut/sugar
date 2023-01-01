@@ -131,20 +131,29 @@ span.admin {
 }
 
 .edit-user-links {
+  margin-bottom: 40px;
   .list {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     max-width: 800px;
     .user-link {
       display: flex;
-      border-top: 1px solid $c-border;
+      border-bottom: 1px solid $c-border;
       margin: 0px;
       padding: 8px 0px;
-      &:first-child {
-        border-top: 0px;
+      &.dragging {
+        border: none;
       }
     }
     .drag-handle {
-      background: blue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+      font-size: 18px;
+      color: #888;
       width: 40px;
       margin-right: 12px;
     }
