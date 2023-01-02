@@ -13,7 +13,7 @@
       </td>
       <td class="user-links">
         <ul>
-          <% user.user_links.where(label: @label).each do |ul| %>
+          <% user.user_links.sorted.where(label: @label).each do |ul| %>
             <li>
               <%= user_link(ul) %>
             </li>
