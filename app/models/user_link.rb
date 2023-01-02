@@ -16,7 +16,9 @@ class UserLink < ApplicationRecord
 
   class << self
     def labels
-      pluck(:label).uniq.sort
+      joins(:user)
+        .where(user: { status: %i[active memorialized] })
+        .pluck(:label).uniq.sort
     end
   end
 
