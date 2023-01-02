@@ -122,6 +122,7 @@ button::-moz-focus-inner {
 .buttons {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 a.button,
