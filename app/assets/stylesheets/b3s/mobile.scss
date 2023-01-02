@@ -558,22 +558,23 @@ table.userinfo th {
   margin-left: -60px;
 }
 
-.users_list {
+.users_list,
+.user-links-list {
   width: 100%;
-}
-.users_list th {
-  font-size: 13px;
-  font-weight: bold;
-  color: #888;
-}
-.users_list th, .users_list td {
-  border-bottom: 1px solid #ddd;
-  padding: 3px 0px 3px 15px;
-}
-.users_list .last_active {
-  color: #888;
-  font-size: 11px;
-  padding-right: 15px;
+  th {
+    font-size: 13px;
+    font-weight: bold;
+    color: #888;
+  }
+  th, td {
+    border-bottom: 1px solid #ddd;
+    padding: 3px 0px 3px 15px;
+  }
+  .last_active {
+    color: #888;
+    font-size: 11px;
+    padding-right: 15px;
+  }
 }
 
 

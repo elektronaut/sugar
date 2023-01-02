@@ -15,10 +15,12 @@ class UserLink < ApplicationRecord
   scope :sorted, -> { order("position ASC") }
 
   class << self
+    def active
+      joins(:user).where(user: { status: %i[active memorialized] })
+    end
+
     def labels
-      joins(:user)
-        .where(user: { status: %i[active memorialized] })
-        .pluck(:label).uniq.sort
+      active.pluck(:label).uniq.sort
     end
   end
 

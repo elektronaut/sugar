@@ -59,6 +59,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :user_links, only: %i[index] do
+    collection do
+      get "all"
+    end
+  end
+
   controller :users do
     constraints(id: %r{[^?/]+}) do
       post "/users/profile/:id/mute" => :mute,

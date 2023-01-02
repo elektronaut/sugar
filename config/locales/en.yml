@@ -115,7 +115,7 @@ en:
     edit:
       tabs:
         info: Personal Info
-        services: Links and Services
+        links: Links
         location: Location
         settings: Settings
         temporary_ban: Temporary ban

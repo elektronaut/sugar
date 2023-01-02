@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   end
 
   def detect_edit_page
-    pages = %w[admin info location services settings hiatus]
+    pages = %w[admin info location links settings hiatus]
     @page = pages.include?(params[:page]) ? params[:page] : "info"
   end
 

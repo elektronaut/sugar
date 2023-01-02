@@ -34,4 +34,10 @@ module ApplicationHelper
       "Unknown"
     end
   end
+
+  def user_link(link)
+    return link.name_or_pretty_url unless link.url?
+
+    link_to(link.name_or_pretty_url, link.url)
+  end
 end

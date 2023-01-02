@@ -3,11 +3,28 @@
   height: 32px;
 }
 
-.users_list .username {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-.users_list .status {
+.users_list,
+.user-links-list {
+  .label,
+  .username,
+  .user-links {
+    font-size: 1.2em;
+  }
+  .label,
+  .username {
+    font-weight: bold;
+  }
+  .user-links {
+    ul {
+      margin: 0px;
+    }
+    li {
+      margin-bottom: 8px;
+      &:last-child {
+        margin: 0px;
+      }
+    }
+  }
 }
 
 .banned {

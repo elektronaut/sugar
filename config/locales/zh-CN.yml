@@ -69,7 +69,7 @@ zh-CN:
     edit:
       tabs:
         info: 用户信息
-        services: 链接和服务
+        links: 链接和服务
         location: 位置
         settings: 设置
         temporary_ban: 临时禁止

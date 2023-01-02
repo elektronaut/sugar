@@ -166,17 +166,13 @@
   </p>
 
   <div class="user-links">
-    <% @user.user_links.sorted.each do |user_link| %>
+    <% @user.user_links.sorted.each do |ul| %>
       <div class="user-link">
         <div class="label">
-          <%= user_link.label %>
+          <%= ul.label %>
         </div>
         <div class="link">
-          <% if user_link.url? %>
-            <%= link_to(user_link.name_or_pretty_url, user_link.url) %>
-          <% else %>
-            <%= user_link.name_or_pretty_url %>
-          <% end %>
+          <%= user_link(ul) %>
         </div>
       </div>
     <% end %>

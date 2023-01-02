@@ -60,17 +60,13 @@
       </tr>
     <% end %>
 
-    <% @user.user_links.sorted.each do |user_link| %>
+    <% @user.user_links.sorted.each do |ul| %>
       <tr>
         <th>
-          <%= user_link.label %>
+          <%= ul.label %>
         </th>
         <td>
-          <% if user_link.url? %>
-            <%= link_to(user_link.name_or_pretty_url, user_link.url) %>
-          <% else %>
-            <%= user_link.name_or_pretty_url %>
-          <% end %>
+          <%= user_link(ul) %>
         </td>
       </tr>
     <% end %>
