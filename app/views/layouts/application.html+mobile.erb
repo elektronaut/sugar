@@ -2,9 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>
-    <%= [content_for(:page_title), Sugar.config.forum_name].compact.join(" - ") %>
-  </title>
+  <%= page_title_tag %>
 
   <%= stylesheet_link_tag "application" %>
   <% if current_user? && current_user.mobile_stylesheet_url? %>

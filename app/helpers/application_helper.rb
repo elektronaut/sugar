@@ -11,6 +11,11 @@ module ApplicationHelper
   include PostsHelper
   include DynamicImage::Helper
 
+  def page_title_tag
+    tag.title(safe_join([content_for(:page_title),
+                         Sugar.config.forum_name].compact, " - "))
+  end
+
   def pretty_link(url)
     url = "http://#{url}" unless url =~ %r{^(f|ht)tps?://}
     url = url.gsub(%r{/$}, "") if url =~ %r{^(f|ht)tps?://[\w\d\-.]*/$}
