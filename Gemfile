@@ -54,9 +54,6 @@ end
 # To use debugger
 # gem 'ruby-debug'
 
-# OAuth
-gem "doorkeeper" # , '~> 0.7.2'
-
 gem "acts_as_list"
 
 gem "daemon-spawn"

@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   image_resources :avatars
   image_resources :post_images
 
-  use_doorkeeper
-
   # API routes
   namespace :api, defaults: { format: "json" } do
     scope module: :v1 do

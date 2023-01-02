@@ -142,8 +142,6 @@ GEM
       pmap (~> 1.1.0)
       rails (> 5.0)
     docile (1.1.5)
-    doorkeeper (5.6.2)
-      railties (>= 5)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -459,7 +457,6 @@ DEPENDENCIES
   daemon-spawn
   dalli
   database_cleaner
-  doorkeeper
   dotenv-rails
   dynamic_form
   dynamic_image (~> 2.1)
