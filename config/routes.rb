@@ -4,23 +4,6 @@ Rails.application.routes.draw do
   image_resources :avatars
   image_resources :post_images
 
-  # API routes
-  namespace :api, defaults: { format: "json" } do
-    scope module: :v1 do
-      resources :discussions do
-        collection do
-          get "search"
-        end
-      end
-      resources :users do
-        collection do
-          get "me"
-          get "banned"
-        end
-      end
-    end
-  end
-
   # Uploads
   resources :uploads
 
