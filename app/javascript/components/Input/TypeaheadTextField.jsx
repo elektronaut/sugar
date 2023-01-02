@@ -64,8 +64,8 @@ export default function TypeaheadTextField(props) {
                  <Menu {...getMenuProps()}>
                    {matchSorter(options, inputValue).map((item, index) => (
                      <MenuItem
+                       key={item.handle}
                        {...getItemProps({
-                         key: item,
                          index,
                          item,
                          isActive: highlightedIndex === index,
