@@ -113,11 +113,6 @@ FactoryBot.define do
       status { :banned }
     end
 
-    factory :facebook_user do
-      sequence(:facebook_uid, &:to_s)
-      hashed_password { nil }
-    end
-
     factory :user_with_avatar do
       association :avatar, factory: :avatar
     end

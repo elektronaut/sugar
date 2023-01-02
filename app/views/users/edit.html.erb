@@ -12,9 +12,9 @@
     <%= link_to(t("user.edit.tabs.info"),
                 edit_user_page_path(@user.username, "info")) %>
   </li>
-  <li class="tab<%= " active" if @page == "services" %>">
-    <%= link_to(t("user.edit.tabs.services"),
-                edit_user_page_path(@user.username, "services")) %>
+  <li class="tab<%= " active" if @page == "links" %>">
+    <%= link_to(t("user.edit.tabs.links"),
+                edit_user_page_path(@user.username, "links")) %>
   </li>
   <li class="tab<%= " active" if @page == "location" %>">
     <%= link_to(t("user.edit.tabs.location"),

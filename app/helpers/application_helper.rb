@@ -11,13 +11,6 @@ module ApplicationHelper
   include PostsHelper
   include DynamicImage::Helper
 
-  def facebook_oauth_url(redirect_uri)
-    "https://www.facebook.com/dialog/oauth?client_id=" \
-      "#{Sugar.config.facebook_app_id}" \
-      "&redirect_uri=#{redirect_uri}" \
-      "&scope=email"
-  end
-
   def pretty_link(url)
     url = "http://#{url}" unless url =~ %r{^(f|ht)tps?://}
     url = url.gsub(%r{/$}, "") if url =~ %r{^(f|ht)tps?://[\w\d\-.]*/$}
@@ -40,5 +33,11 @@ module ApplicationHelper
     else
       "Unknown"
     end
+  end
+
+  def user_link(link)
+    return link.name_or_pretty_url unless link.url?
+
+    link_to(link.name_or_pretty_url, link.url)
   end
 end

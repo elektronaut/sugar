@@ -31,7 +31,9 @@ describe UsersHelper do
       end
 
       before do
-        allow(helper).to receive(:params).and_return(action: "stuff")
+        allow(helper).to(
+          receive(:params).and_return(controller: "users", action: "stuff")
+        )
       end
 
       it { is_expected.to eq(output) }

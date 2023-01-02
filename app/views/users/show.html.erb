@@ -36,9 +36,6 @@
     <% if @user.pronouns? %>
       <br /><%= @user.pronouns %>
     <% end %>
-    <% if @user.website? %>
-      <br /><%= pretty_link(@user.website) %>
-    <% end %>
   </p>
 
   <% if @user.previous_usernames.any? %>
@@ -168,84 +165,18 @@
     <% end %>
   </p>
 
-  <p>
-    <% if @user.twitter? %>
-      <strong>Twitter</strong>:
-      <%= link_to "#{@user.twitter}", "http://twitter.com/#{@user.twitter}" %>
-      <br>
+  <div class="user-links">
+    <% @user.user_links.sorted.each do |ul| %>
+      <div class="user-link">
+        <div class="label">
+          <%= ul.label %>
+        </div>
+        <div class="link">
+          <%= user_link(ul) %>
+        </div>
+      </div>
     <% end %>
-    <% if @user.gtalk? %>
-      <strong>Google Talk</strong>:
-      <%= link_to @user.gtalk, "gtalk:chat?jid=#{CGI.escape(@user.gtalk)}" %>
-      <br />
-    <% end %>
-    <% if @user.msn? %>
-      <strong>MSN Messenger</strong>:
-      <%= @user.msn %><br />
-    <% end %>
-    <% if @user.aim? %>
-      <strong>AIM</strong>:
-      <%= link_to @user.aim, "aim:GoIM?screenname=#{CGI.escape(@user.aim)}" %>
-      <br />
-    <% end %>
-    <% if @user.instagram? %>
-      <strong>Instagram</strong>:
-      <%= link_to @user.instagram, "https://www.instagram.com/#{@user.instagram}" %>
-      <br />
-    <% end %>
-    <% if @user.flickr? %>
-      <strong>Flickr</strong>:
-      <%= link_to("Photos on Flickr",
-                  "http://www.flickr.com/photos/#{@user.flickr}") %>
-      <br />
-    <% end %>
-    <% if @user.last_fm? %>
-      <strong>LastFM</strong>:
-      <%= link_to @user.last_fm, "http://www.last.fm/user/#{@user.last_fm}" %>
-      <br />
-    <% end %>
-  </p>
-
-  <% if @user.gamertag? || @user.sony? || @user.nintendo? ||
-    @user.nintendo_switch? || @user.steam? || @user.battlenet %>
-    <div class="social gaming">
-      <% if @user.gamertag? %>
-        <strong>Xbox Live:</strong> <%= @user.gamertag %>
-        <br />
-      <% end %>
-      <% if @user.sony? %>
-        <strong>PlayStation:</strong>
-        <a href="http://us.playstation.com/playstation/psn/visit/profiles/<%= @user.sony %>">
-          <%= @user.sony %>
-        </a>
-        <br />
-      <% end %>
-      <% if @user.nintendo? %>
-        <strong>Nintendo ID:</strong>
-        <a href="https://miiverse.nintendo.net/users/<%= @user.nintendo %>">
-          <%= @user.nintendo %>
-        </a>
-        <br />
-      <% end %>
-      <% if @user.nintendo_switch? %>
-        <strong>Nintendo Switch ID:</strong>
-        <%= @user.nintendo_switch %>
-        <br />
-      <% end %>
-      <% if @user.steam? %>
-        <strong>Steam ID:</strong>
-        <a href="http://steamcommunity.com/id/<%= @user.steam %>">
-          <%= @user.steam %>
-        </a>
-        <br />
-      <% end %>
-      <% if @user.battlenet? %>
-        <strong>Battle.net:</strong>
-        <%= @user.battlenet %>
-        <br />
-      <% end %>
-    </div>
-  <% end %>
+  </div>
 
   <% if @user.invitees.count > 0 %>
     <div class="invitees">

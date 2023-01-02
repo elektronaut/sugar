@@ -33,25 +33,6 @@ module UserScopes
       active_and_memorialized.where("last_active > ?", 15.minutes.ago)
     end
 
-    def social
-      active_and_memorialized.where(
-        "(twitter IS NOT NULL AND twitter != '') " \
-        "OR (instagram IS NOT NULL AND instagram != '') " \
-        "OR (flickr IS NOT NULL AND flickr != '')"
-      )
-    end
-
-    def gaming
-      active_and_memorialized.where(
-        "(gamertag IS NOT NULL AND gamertag != '') " \
-        "OR (sony IS NOT NULL AND sony != '') " \
-        "OR (nintendo IS NOT NULL AND nintendo != '') " \
-        "OR (nintendo_switch IS NOT NULL AND nintendo_switch != '') " \
-        "OR (steam IS NOT NULL AND steam != '')" \
-        "OR (battlenet IS NOT NULL AND battlenet != '')"
-      )
-    end
-
     def recently_joined
       active_and_memorialized.order("created_at DESC")
     end

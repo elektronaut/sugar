@@ -21,20 +21,6 @@ zh-CN:
         moderator: 仲裁者
         user_admin: 用户管理员
         admin: 管理员
-        website: 网站
-        gtalk: Google Talk
-        msn: MSN Messenger
-        aim: AIM
-        gamertag: Xbox Live Gamertag
-        sony: PlayStation 用户名
-        nintendo: Nintendo ID
-        nintendo_switch: Nintendo Switch ID
-        steam: Steam ID
-        battlenet: Battle.net BattleTag
-        twitter: Twitter 用户名
-        flickr: Flickr 用户 ID
-        last_fm: Last.fm 用户名
-        instagram: Instagram 用户名
         email: Email 地址
         password: 密码
         confirm_password: 确认密码
@@ -83,7 +69,7 @@ zh-CN:
     edit:
       tabs:
         info: 用户信息
-        services: 链接和服务
+        links: 链接和服务
         location: 位置
         settings: 设置
         temporary_ban: 临时禁止
@@ -102,8 +88,6 @@ zh-CN:
       map: 地图
       map_description: 单击这里把你自己添加到地图。
       clear_location: 清空位置信息
-      connect_with_facebook: 使用 Facebook 连接
-      facebook_connected: 你已经连接到你的 Facebook 帐号。
       remove?: '删除?'
       flickr_description: '注意：这不是你的用户名'
       steam_description_html: '注意：不是你的登录; 64位整数或者定制的网址形式名字<br />http://www.steamcommunity.com/id/<em>&lt;SteamID&gt;</em>'
@@ -121,7 +105,6 @@ zh-CN:
     new:
       optional_fields: "下面的这些字段可选，不过建议您最好提供更多信息："
     sign_up: 注册
-    sign_up_with_facebook: 通过Facebook登录
   invite:
     invites: 邀请
     message_description: '可选，会出现在欢迎电子邮件中'

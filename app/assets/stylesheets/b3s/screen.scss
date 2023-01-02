@@ -83,7 +83,8 @@ a:hover, #account a:hover,
   border: 1px solid $link-color;
 }
 
-.ac_results .ac_over {
+.ac_results .ac_over,
+.dropdown-menu .active {
   background-color: $link-color;
   color: #fff;
 }

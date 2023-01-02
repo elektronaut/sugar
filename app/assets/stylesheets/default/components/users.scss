@@ -3,11 +3,28 @@
   height: 32px;
 }
 
-.users_list .username {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-.users_list .status {
+.users_list,
+.user-links-list {
+  .label,
+  .username,
+  .user-links {
+    font-size: 1.2em;
+  }
+  .label,
+  .username {
+    font-weight: bold;
+  }
+  .user-links {
+    ul {
+      margin: 0px;
+    }
+    li {
+      margin-bottom: 8px;
+      &:last-child {
+        margin: 0px;
+      }
+    }
+  }
 }
 
 .banned {
@@ -63,8 +80,8 @@ span.admin {
       font-weight: bold;
     }
   }
-  .social, .invitees {
-    border-top: 1px solid #E2DCBF;
+  .user-links, .invitees {
+    border-top: 1px solid $c-border;
     padding-top: 1em;
     margin-bottom: 1em;
     h3 {
@@ -72,15 +89,6 @@ span.admin {
       margin-bottom: 4px;
       a {
         font-weight: bold;
-      }
-    }
-  }
-  .xboxlive {
-    p {
-      margin-left: 76px;
-      .avatar {
-        float: left;
-        margin-left: -76px;
       }
     }
   }
@@ -104,7 +112,7 @@ span.admin {
 
   #userPosts {
     margin-left: 437px;
-    border-left: 1px solid #E2DCBF;
+    border-left: 1px solid $c-border;
     padding-left: 12px;
     padding-top: 15px;
     .posts {
@@ -119,6 +127,58 @@ span.admin {
       .post:last-child {
         border-bottom: 0;
       }
+    }
+  }
+}
+
+.user-links,
+.edit-user-links {
+  .user-link {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  .label {
+    font-weight: bold;
+  }
+  .link {
+    font-size: 1.2em;
+  }
+}
+
+.edit-user-links {
+  margin-bottom: 40px;
+  .list {
+    margin-bottom: 12px;
+    max-width: 800px;
+    .user-link {
+      display: flex;
+      border-bottom: 1px solid $c-border;
+      margin: 0px;
+      padding: 8px 0px;
+      &.dragging {
+        border: none;
+      }
+    }
+    .drag-handle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+      font-size: 18px;
+      color: #888;
+      width: 40px;
+      margin-right: 12px;
+    }
+    .info {
+      flex-grow: 1;
+    }
+    .buttons {
+      align-self: center;
     }
   }
 }

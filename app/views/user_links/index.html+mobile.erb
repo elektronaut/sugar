@@ -1,0 +1,25 @@
+<% content_for(:body_class, "users") %>
+<% content_for(:page_title, "User links") %>
+
+<table class="list users_list">
+  <tr>
+    <th>Username</th>
+    <th><%= @label %></th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td class="username">
+        <%= profile_link(user) %>
+      </td>
+      <td class="user-links">
+        <ul>
+          <% user.user_links.where(label: @label).each do |ul| %>
+            <li>
+              <%= user_link(ul) %>
+            </li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+  <% end %>
+</table>

@@ -15,7 +15,9 @@ class User < ApplicationRecord
 
   belongs_to :avatar, dependent: :destroy, optional: true
   has_many :exchange_moderators, dependent: :destroy
+  has_many :user_links, dependent: :destroy
   accepts_nested_attributes_for :avatar
+  accepts_nested_attributes_for :user_links, allow_destroy: true
   validates_associated :avatar
 
   before_validation :ensure_last_active_is_set
@@ -85,18 +87,9 @@ class User < ApplicationRecord
     super || Sugar.config.default_mobile_theme
   end
 
-  def gamertag_avatar_url
-    return unless gamertag?
-
-    "http://avatar.xboxlive.com/avatar/#{ERB::Util.url_encode(gamertag)}" \
-      "/avatarpic-l.png"
-  end
-
   def serializable_params
     %i[id username realname latitude longitude inviter_id last_active created_at
-       description admin moderator user_admin location gamertag twitter flickr
-       instagram website msn gtalk last_fm facebook_uid banned_until sony
-       nintendo nintendo_switch steam battlenet]
+       description admin moderator user_admin location banned_until]
   end
 
   def serializable_methods

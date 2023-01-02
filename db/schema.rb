@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_27_145750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -255,6 +255,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "user_links", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "label"
+    t.string "name"
+    t.text "url"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["label"], name: "index_user_links_on_label"
+    t.index ["user_id"], name: "index_user_links_on_user_id"
+  end
+
   create_table "user_mutes", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "muted_user_id"
@@ -273,7 +285,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
     t.string "email"
     t.string "hashed_password"
     t.string "location"
-    t.string "gamertag"
     t.string "stylesheet_url"
     t.text "description"
     t.boolean "admin", default: false, null: false
@@ -285,19 +296,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
     t.date "birthday"
     t.integer "posts_count", default: 0, null: false
     t.integer "inviter_id"
-    t.string "msn"
-    t.string "gtalk"
-    t.string "aim"
-    t.string "twitter"
-    t.string "flickr"
-    t.string "last_fm"
-    t.string "website"
     t.float "longitude"
     t.float "latitude"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "available_invites", default: 0, null: false
-    t.string "facebook_uid"
     t.integer "participated_count", default: 0, null: false
     t.integer "favorites_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false
@@ -306,18 +309,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_24_122008) do
     t.string "mobile_stylesheet_url"
     t.string "theme"
     t.string "mobile_theme"
-    t.string "instagram"
     t.string "persistence_token"
     t.integer "public_posts_count", default: 0, null: false
     t.integer "hidden_count", default: 0, null: false
     t.string "preferred_format"
-    t.string "sony"
     t.integer "avatar_id"
     t.text "previous_usernames"
-    t.string "nintendo"
-    t.string "steam"
-    t.string "battlenet"
-    t.string "nintendo_switch"
     t.integer "status", default: 0, null: false
     t.string "pronouns"
     t.index ["email"], name: "index_users_on_email", unique: true

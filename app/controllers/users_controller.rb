@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   end
 
   def detect_edit_page
-    pages = %w[admin info location services settings hiatus]
+    pages = %w[admin info location links settings hiatus]
     @page = pages.include?(params[:page]) ? params[:page] : "info"
   end
 
@@ -107,12 +107,12 @@ class UsersController < ApplicationController
   end
 
   def allowed_params
-    [:aim, :birthday, :description, :email, :pronouns, :facebook_uid, :flickr,
-     :gamertag, :gtalk, :instagram, :last_fm, :latitude, :location, :longitude,
-     :mobile_stylesheet_url, :mobile_theme, :msn, :notify_on_message, :realname,
-     :stylesheet_url, :theme, :time_zone, :twitter, :website, :password,
-     :confirm_password, :hiatus_until, :preferred_format, :sony, :nintendo,
-     :nintendo_switch, :steam, :battlenet, { avatar_attributes: [:file] }] +
+    [:birthday, :description, :email, :pronouns, :latitude,
+     :location, :longitude, :mobile_stylesheet_url, :mobile_theme,
+     :notify_on_message, :realname, :stylesheet_url, :theme, :time_zone,
+     :password, :confirm_password, :hiatus_until, :preferred_format,
+     { avatar_attributes: [:file],
+       user_links_attributes: %i[id position label name url _destroy] }] +
       allowed_user_admin_params + allowed_admin_params
   end
 

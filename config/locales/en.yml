@@ -20,20 +20,6 @@ en:
         moderator: Moderator
         user_admin: User administrator
         admin: Administrator
-        website: Web site
-        gtalk: Google Talk
-        msn: MSN Messenger
-        aim: AIM
-        gamertag: Xbox Live Gamertag
-        sony: PlayStation username
-        nintendo: Nintendo ID
-        nintendo_switch: Nintendo Switch ID
-        steam: Steam ID
-        battlenet: Battle.net BattleTag
-        twitter: Twitter username
-        flickr: Flickr user ID
-        last_fm: Last.fm username
-        instagram: Instagram username
         email: Email address
         password: Password
         confirm_password: Confirm password
@@ -47,8 +33,6 @@ en:
         user:
           attributes:
             email:
-              taken: is already registered
-            facebook_uid:
               taken: is already registered
             password:
               confirmation: must be confirmed
@@ -131,7 +115,7 @@ en:
     edit:
       tabs:
         info: Personal Info
-        services: Links and Services
+        links: Links
         location: Location
         settings: Settings
         temporary_ban: Temporary ban
@@ -155,8 +139,6 @@ en:
       map: Map
       map_description: Click to place yourself on the map.
       clear_location: Clear location
-      connect_with_facebook: Connect with Facebook
-      facebook_connected: You have connected your Facebook account.
       remove?: 'Remove?'
       flickr_description: 'Note: This is not your username'
       steam_description_html: >-
@@ -179,11 +161,6 @@ en:
         The following fields are optional, but it's always nice to
         provide a bit more information:
     sign_up: Sign up
-    sign_up_with_facebook: Sign up with Facebook
-  facebook:
-    disconnected: You have disconnected your Facebook account
-    failed: Failed to verify your Facebook account
-    not_found: Could not find your Facebook account
   invite:
     cancelled: Your invite has been cancelled.
     expired: Your invite has expired!

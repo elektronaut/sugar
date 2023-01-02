@@ -7,11 +7,17 @@ module UsersHelper
     end
   end
 
+  def current_users_tab?(options)
+    controller = options[:controller] || "users"
+    return false unless controller == params[:controller]
+
+    (options[:action] && options[:action] == params[:action]) ||
+      options[:controller]
+  end
+
   def users_tab(name, path, options = {})
     classes = ["tab", options[:class]].compact
-    if options[:action] && options[:action] == params[:action]
-      classes << "active"
-    end
+    classes << "active" if current_users_tab?(options)
     tag.li(link_to(name, path), class: classes.join(" "))
   end
 end

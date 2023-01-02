@@ -10,12 +10,9 @@ describe User do
   let(:moderator) { build(:moderator) }
   let(:user_admin) { build(:user_admin) }
   let(:public_attributes) do
-    %w[admin banned_until created_at description
-       flickr gamertag gtalk id instagram facebook_uid
-       inviter_id last_active last_fm latitude location
-       longitude moderator msn realname twitter user_admin
-       username website status
-       sony nintendo nintendo_switch steam battlenet]
+    %w[admin banned_until created_at description id inviter_id last_active
+       latitude location longitude moderator realname user_admin username
+       status]
   end
 
   it { is_expected.to be_a(Authenticable) }
@@ -25,6 +22,7 @@ describe User do
 
   it { is_expected.to belong_to(:avatar).dependent(:destroy).optional }
   it { is_expected.to have_many(:exchange_moderators).dependent(:destroy) }
+  it { is_expected.to have_many(:user_links).dependent(:destroy) }
   it { is_expected.to validate_presence_of(:username) }
 
   specify do
@@ -203,26 +201,6 @@ describe User do
       let(:user) { build(:user, mobile_theme: "mytheme_mobile") }
 
       it { is_expected.to eq("mytheme_mobile") }
-    end
-  end
-
-  describe "#gamertag_avatar_url" do
-    subject(:avatar_url) { user.gamertag_avatar_url }
-
-    context "when gamertag is nil" do
-      let(:user) { build(:user) }
-
-      it { is_expected.to be_nil }
-    end
-
-    context "when gamertag is set" do
-      let(:user) { build(:user, gamertag: "my gamertag") }
-
-      it "returns the URL" do
-        expect(avatar_url).to(
-          eq("http://avatar.xboxlive.com/avatar/my%20gamertag/avatarpic-l.png")
-        )
-      end
     end
   end
 
