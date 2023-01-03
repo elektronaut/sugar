@@ -53,12 +53,12 @@ export default function TypeaheadTextField(props) {
                        })} />
                 {selectedItem ?
                  <button onClick={clearSelection}>
-                   <i className="fa fa-remove" />
+                   <i className="fa-solid fa-xmark" />
                  </button> :
                  <button {...getToggleButtonProps()}>
                    {isOpen ?
-                    <i className="fa fa-chevron-up" /> :
-                    <i className="fa fa-chevron-down" />}
+                    <i className="fa-solid fa-chevron-up" /> :
+                    <i className="fa-solid fa-chevron-down" />}
                  </button>}
                 {isOpen &&
                  <Menu {...getMenuProps()}>

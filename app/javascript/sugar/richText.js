@@ -219,7 +219,7 @@ import { csrfToken, putJson } from "../lib/request";
     function addButton(name, className, callback) {
       let link = $(
         `<a title="${name}" class="${className}">` +
-        `<i class="fa fa-${className}"></i></a>`
+        `<i class="fa-solid fa-${className}"></i></a>`
       );
       link.click(() => performAction(callback));
       $("<li class=\"button\"></li>").append(link).insertBefore(formatButton);
@@ -281,12 +281,12 @@ import { csrfToken, putJson } from "../lib/request";
     addButton("Bold", "bold", bold);
     addButton("Italics", "italic", italic);
     addButton("Link", "link", link);
-    addButton("Image", "picture-o", imageTag);
+    addButton("Image", "image", imageTag);
     addButton("Upload Image", "upload", uploadImageAction);
     addButton("Block Quote", "quote-left", blockquote);
     addButton("Code", "code", code);
     addButton("Spoiler", "warning", spoiler);
-    addButton("Emoticons", "smile-o", showEmojiBar);
+    addButton("Emoticons", "face-smile", showEmojiBar);
 
     addHotkey("b", bold);
     addHotkey("i", italic);

@@ -41,7 +41,7 @@ export default function UserLink(props) {
          style={style}
          {...attributes}>
       <div className="drag-handle" {...listeners}>
-        <i className="fa fa-arrows"></i>
+        <i className="fa-solid fa-grip-lines"></i>
       </div>
       <div className="info">
         <div className="label">
