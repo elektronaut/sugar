@@ -18,7 +18,6 @@ module Authentication
           redirect_to options[:redirect]
         end
         format.json { render json: options[:api_notice], status: :unauthorized }
-        format.xml { render xml: options[:api_notice], status: :unauthorized }
       end
     end
 

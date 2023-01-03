@@ -212,14 +212,6 @@ describe User do
     end
   end
 
-  describe "#to_xml" do
-    let(:keys) { Hash.from_xml(user.to_xml)["user"].keys }
-
-    it "only includes public information" do
-      expect(keys).to match_array(public_attributes)
-    end
-  end
-
   describe "#ensure_last_active_is_set" do
     subject { create(:user).last_active }
 

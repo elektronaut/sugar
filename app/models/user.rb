@@ -101,11 +101,6 @@ class User < ApplicationRecord
             methods: serializable_methods }.merge(options))
   end
 
-  def to_xml(options = {})
-    super({ only: serializable_params,
-            methods: serializable_methods }.merge(options))
-  end
-
   protected
 
   def ensure_last_active_is_set

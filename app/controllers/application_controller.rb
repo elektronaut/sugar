@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
     options[:status] ||= error if error.is_a?(Numeric)
     respond_to do |format|
       format.html { options[:template] ||= "errors/#{error}" }
-      format.any(:xml, :json) { options[:text] ||= error_messages[error] }
+      format.json { options[:text] ||= error_messages[error] }
     end
     render options
   end

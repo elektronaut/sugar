@@ -72,7 +72,6 @@ gem "rouge"
 gem "ruby-filemagic", require: "filemagic"
 
 # TODO: Remove this when the redesign is done
-gem "activemodel-serializers-xml"
 gem "non-stupid-digest-assets"
 
 group :development do
