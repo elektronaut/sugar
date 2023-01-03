@@ -30,10 +30,7 @@ class DiscussionsController < ApplicationController
   def search
     @exchanges = search_results.results
     @search_path = search_path
-    respond_to do |format|
-      format.html { respond_with_exchanges(@exchanges) }
-      format.json { render json: @exchanges }
-    end
+    respond_with_exchanges(@exchanges)
   end
 
   def favorites

@@ -8,7 +8,6 @@ gem "rails", "~> 7.0.0"
 gem "actionpack-page_caching"
 # gem "active_model_serializers", "~> 0.10.0"
 gem "bcrypt", "~> 3.1.12"
-gem "fast_jsonapi"
 gem "sidekiq"
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -21,6 +20,7 @@ gem "dalli"
 gem "hiredis"
 gem "redis", "~> 4.1"
 
+gem "alba"
 gem "dynamic_form"
 gem "jsbundling-rails"
 gem "json"

@@ -85,6 +85,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
+    alba (2.1.0)
     ast (2.4.2)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -165,8 +166,6 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    fast_jsonapi (1.5)
-      activesupport (>= 4.2)
     fastimage (2.2.6)
     ffi (1.15.5)
     fog-aws (3.15.0)
@@ -445,6 +444,7 @@ DEPENDENCIES
   actionpack-page_caching
   activemodel-serializers-xml
   acts_as_list
+  alba
   b3s_emoticons!
   bcrypt (~> 3.1.12)
   bootsnap (>= 1.1.0)
@@ -461,7 +461,6 @@ DEPENDENCIES
   dynamic_form
   dynamic_image (~> 2.1)
   factory_bot_rails
-  fast_jsonapi
   fastimage
   fog-aws
   font-awesome-rails (~> 4.7)

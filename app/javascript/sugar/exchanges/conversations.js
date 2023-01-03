@@ -20,14 +20,7 @@ $(Sugar).bind("ready", function() {
     $inputField.focus(function() {
       if (usernames.length === 0) {
         return $.getJSON("/users.json", function(json) {
-          usernames = ((() => {
-            var result = [];
-            for (var i = 0, user; i < json.data.length; i++) {
-              user = json.data[i];
-              result.push(user.attributes.username);
-            }
-            return result;
-          })());
+          usernames = json.map(u => u.username);
           $inputField.setOptions({data: usernames});
         });
       }

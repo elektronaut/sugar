@@ -135,7 +135,7 @@ Rails.application.routes.draw do
       end
 
       # Posts
-      resources :posts do
+      resources :posts, only: %i[edit create update] do
         collection do
           get "count"
           get "since"

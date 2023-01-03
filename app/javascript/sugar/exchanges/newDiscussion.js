@@ -54,8 +54,7 @@ $(Sugar).bind("ready", function () {
 
                 if (discussions.length > 10) {
                   output += "<a href=\"/search?q=" + encodeURIComponent(query) +
-                            "\">Show all " + (discussions.total_entries) +
-                            " results</a>";
+                            "\">Show all results</a>";
                 }
                 $(searchResults).html(output).hide().slideDown("fast");
               } else {

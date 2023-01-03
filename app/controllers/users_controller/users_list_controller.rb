@@ -9,7 +9,7 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.html
         format.html.mobile { @online_users = @users.select(&:online?) }
-        format.json { render json: UserSerializer.new(@users).serialized_json }
+        format.json { render json: UserResource.new(@users) }
       end
     end
 
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     def respond_with_users(users)
       respond_to do |format|
         format.html
-        format.json { render json: UserSerializer.new(users).serialized_json }
+        format.json { render json: UserResource.new(users) }
       end
     end
   end

@@ -17,19 +17,9 @@ class PostsController < ApplicationController
   before_action :verify_viewable, except: %i[search count]
   before_action :require_and_set_search_query, only: %i[search]
 
-  after_action :mark_exchange_viewed, only: %i[since index]
-  after_action :mark_conversation_viewed, only: %i[since index]
+  after_action :mark_exchange_viewed, only: %i[since]
+  after_action :mark_conversation_viewed, only: %i[since]
   # after_action :notify_mentioned, only: [:create]
-
-  def index
-    @page = params[:page] || 1
-    @posts = @exchange.posts.page(@page, context: 0).for_view
-    respond_to do |format|
-      format.json do
-        render json: posts_serializer(@posts).serialized_json
-      end
-    end
-  end
 
   def count
     @count = @exchange.posts_count
@@ -108,16 +98,6 @@ class PostsController < ApplicationController
   #     end
   #   end
   # end
-
-  def posts_serializer(posts)
-    PostSerializer.new(
-      posts,
-      links: { self: paginated_json_path(posts.current_page),
-               next: paginated_json_path(posts.next_page),
-               previous: paginated_json_path(posts.previous_page) },
-      include: %i[user]
-    )
-  end
 
   def search_query
     params[:query] || params[:q]
