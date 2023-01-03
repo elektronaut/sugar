@@ -21,9 +21,7 @@ gem "hiredis"
 gem "redis", "~> 4.1"
 
 gem "alba"
-gem "dynamic_form"
 gem "jsbundling-rails"
-gem "json"
 gem "react-rails"
 gem "sass-rails", ">= 6.0"
 gem "terser"
@@ -35,7 +33,6 @@ gem "b3s_emoticons",
 gem "gemoji"
 gem "ruby-oembed", require: "oembed"
 
-# gem 'dynamic_image', '~> 2.0.0.beta5
 gem "dynamic_image", "~> 2.1"
 gem "fog-aws"
 
@@ -56,11 +53,9 @@ end
 
 gem "acts_as_list"
 
-gem "daemon-spawn"
 gem "httparty", "~> 0.17"
 gem "nokogiri"
 
-gem "progress_bar"
 gem "sunspot_rails", "~> 2.6.0"
 
 gem "newrelic_rpm", group: "newrelic"
@@ -71,7 +66,7 @@ gem "redcarpet", "~> 3.5"
 gem "rouge"
 gem "ruby-filemagic", require: "filemagic"
 
-# TODO: Remove this when the redesign is done
+# Used to generate non-digested assets for inclusion in third-party themes.
 gem "non-stupid-digest-assets"
 
 group :development do

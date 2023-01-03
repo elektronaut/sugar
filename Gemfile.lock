@@ -123,7 +123,6 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    daemon-spawn (0.4.2)
     dalli (3.2.3)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
@@ -143,7 +142,6 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
-    dynamic_form (1.1.4)
     dynamic_image (2.1.4)
       dis (~> 1.1, >= 1.0.6)
       mini_exiftool (~> 2.10)
@@ -191,10 +189,9 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
-    highline (2.0.3)
     hiredis (0.6.3)
-    httparty (0.20.0)
-      mime-types (~> 3.0)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
@@ -221,8 +218,8 @@ GEM
     mini_exiftool (2.10.2)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    mini_portile2 (2.8.1)
+    minitest (5.17.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -245,24 +242,20 @@ GEM
       racc (~> 1.4)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
-    options (2.3.2)
     parallel (1.22.1)
     parser (3.1.3.0)
       ast (~> 2.4.1)
     pg (1.4.5)
     pmap (1.1.1)
     pr_geohash (1.0.0)
-    progress_bar (1.3.3)
-      highline (>= 1.6, < 3)
-      options (~> 2.3.0)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
-    puma (6.0.1)
+    puma (6.0.2)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.4)
+    rack (2.2.5)
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (7.0.4)
@@ -334,19 +327,19 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
-    rubocop (1.41.1)
+    rubocop (1.42.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.23.0, < 2.0)
+      rubocop-ast (>= 1.24.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.24.0)
+    rubocop-ast (1.24.1)
       parser (>= 3.1.1.0)
-    rubocop-rails (2.17.3)
+    rubocop-rails (2.17.4)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -438,7 +431,6 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
-  activemodel-serializers-xml
   acts_as_list
   alba
   b3s_emoticons!
@@ -450,11 +442,9 @@ DEPENDENCIES
   capistrano-rbenv
   capybara
   codeclimate-test-reporter
-  daemon-spawn
   dalli
   database_cleaner
   dotenv-rails
-  dynamic_form
   dynamic_image (~> 2.1)
   factory_bot_rails
   fastimage
@@ -465,13 +455,11 @@ DEPENDENCIES
   hiredis
   httparty (~> 0.17)
   jsbundling-rails
-  json
   json_spec
   newrelic_rpm
   nokogiri
   non-stupid-digest-assets
   pg
-  progress_bar
   pry
   puma
   rails (~> 7.0.0)
