@@ -1,8 +1,6 @@
 <%= react_component(
   "EditUserLinks", {
     labels: UserLink.labels,
-    userLinks: @user.user_links.sorted.map do |ul|
-      { id: ul.id, label: ul.label, name: ul.name, url: ul.url }
-    end
+    userLinks: UserLinkResource.new(@user.user_links.sorted).to_h
   }
 ) %>
