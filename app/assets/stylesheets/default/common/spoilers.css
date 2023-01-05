@@ -1,10 +1,6 @@
 .spoiler,
 .spoiler *,
 .spoiler:after {
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  -ms-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
@@ -46,7 +42,6 @@
   padding: 8px;
   content: "Spoiler!";
   color: #fff;
-  -webkit-font-smoothing: subpixel-antialiased;
   font-smoothing: subpixel-antialiased;
   font-weight: bold;
   font-size: 1.2em;
@@ -57,8 +52,7 @@
   opacity: 0;
   visibility: hidden;
   left: -5px;
-  -webkit-transform: rotate(2deg);
-  -moz-transform: rotate(2deg);
+  transform: rotate(2deg);
 }
 
 .spoiler.nsfw:after {

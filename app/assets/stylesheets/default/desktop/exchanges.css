@@ -60,3 +60,53 @@ table.discussions {
     }
   }
 }
+
+.new_discussion input.text, .edit_discussion input.text {
+  width: 100%;
+  max-width: 800px;
+}
+
+#new_discussion input.title, #edit_discussion input.title {
+  font-size: 1.2em;
+}
+
+#new_discussion {
+  .title_search {
+    border: 1px solid #E2DCBF;
+    padding: 2px 8px;
+    width: 100%;
+    max-width: 588px;
+    margin-top: 2px;
+    &.loading {
+      background: transparent url('default/ajax_spinner_small.gif') 0 2px no-repeat;
+      padding: 2px 24px;
+      border: 0;
+      color: #84806d;
+    }
+
+    h4 {
+      margin-bottom: 0;
+      padding: 8px 0;
+      font-size: 1.2em;
+      color: #84806d;
+    }
+
+    a,
+    a:visited {
+      border-top: 1px solid #E2DCBF;
+      padding: 4px 0;
+      font-size: 1.2em;
+      display: block;
+    }
+
+    a.discussion {
+      font-weight: bold;
+      .posts_count {
+        font-weight: normal;
+        font-size: 0.8em;
+        padding-left: 4px;
+        color: #84806d;
+      }
+    }
+  }
+}

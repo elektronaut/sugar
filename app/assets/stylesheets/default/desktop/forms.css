@@ -69,3 +69,55 @@ label .description {
     font-weight: bold;
   }
 }
+
+div.errors {
+  color: #100;
+  border: 1px solid #d88;
+  background: #fdd;
+  padding: 10px 15px 1px 15px;
+  margin: 0 -16px 1em -16px;
+  ul {
+    margin: 0;
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+}
+
+
+.field_with_errors {
+  display: block;
+  label {
+    margin-top: 12px;
+    color: #100;
+    background: #fdd;
+    padding: 2px 8px;
+    margin-left: -8px;
+    span.description {
+      color: #633;
+    }
+  }
+}
+
+div.fieldWithErrors {
+  display: inline;
+}
+
+fieldset {
+  margin-bottom: 20px;
+  h2 {
+    border-bottom: 1px solid #E2DCBF;
+    margin-top: 20px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    color: #444;
+  }
+  p.info {
+    font-size: 1.2em;
+  }
+}
+
+
+textarea.code {
+  width: 100%;
+  font-family: Menlo, Monaco, Consolas, Courier New, Courier, monospace;
+}

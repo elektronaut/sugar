@@ -1,3 +1,7 @@
+body.with_sidebar #content {
+  margin-right: 250px;
+}
+
 #sidebar {
   position: absolute;
   right: 0;

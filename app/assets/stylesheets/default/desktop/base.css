@@ -1,0 +1,300 @@
+body,
+input,
+textarea,
+a.button,
+a.button:visited,
+button {
+  font-family: -apple-system, BlinkMacSystemFont, Calibri, sans-serif;
+}
+
+/* Set 1em == 10px */
+body       { font-size: 10px; }
+* html     { font-size: 125%; }
+* html body{ font-size: 50%; }
+
+h2, h3, h4, h5, h6, p, ul, ol, pre, div.field {
+  margin-bottom: 1em;
+}
+
+h1 {
+  font-size: 2.0em;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 0em;
+}
+
+h4 {
+  font-size: 1.3em;
+}
+
+h5 {
+  font-size: 1.2em;
+}
+
+h6 {
+  font-size: 1.1em;
+}
+
+h2 em {
+  font-weight: normal;
+  font-style: normal;
+  color: #555;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+small {
+  font-size: 0.8em;
+  color: #444;
+}
+
+blockquote {
+  margin: 0;
+  padding: 10px 10px;
+  background: #F3F1E9;
+  color: #3C392C;
+  border: 1px solid #DEDCD4;
+  border-left: 5px solid #CCC9BC;
+}
+
+/* Posted by.. inside blockquotes */
+blockquote cite {
+  display: block;
+  color: #7E7B70;
+  border-bottom: 1px solid #CCC9BC;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  margin-top: -5px;
+}
+
+code, pre.highlight {
+  font-family: Menlo, Monaco, Consolas, Courier, monospace;
+  font-size: 12px;
+}
+
+pre.highlight {
+  padding: 10px;
+  border-radius: 5px;
+  line-height: 1.5;
+}
+
+code {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  padding: 0px 3px;
+}
+
+pre code {
+  display: block;
+  padding: 5px;
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: #622;
+}
+
+a:hover {
+  color: #c22;
+}
+
+/* Damn you, Firefox */
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+a.button,
+a.button:visited,
+button {
+  font-size: 15px;
+  font-weight: bold;
+  color: #616161;
+  text-shadow: 1px 1px 1px #ffffff;
+  padding: 4px 14px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fbfbfb;
+  box-shadow: inset 0px 2px 3px rgba(255, 255, 255, 1.0);
+  background-image: linear-gradient(to bottom,
+                                    #f8f8f8 0%,
+                                    #fbfbfb 20%,
+                                    #fbfbfb 50%,
+                                    #e8e8e8 100%);
+  &:hover {
+    border-color: #888;
+    cursor: pointer;
+    color: #444;
+  }
+
+  &:disabled {
+    color: #888;
+    background: #e8e8e8;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  color: #000000;
+  line-height: 1.3;
+}
+
+
+/* Contextual links, ie. "New Discussion" */
+.functions {
+  font-size: 1.5em;
+  float: right;
+  font-weight: bold;
+  color: #888;
+}
+
+span.example {
+  font-family: Menlo, Monaco, Consolas, Courier, monospace;
+  font-size: 11px;
+  background: #F3F1E9;
+  padding: 2px 4px;
+  white-space: nowrap;
+  color: #000;
+}
+
+.mobile_link {
+  font-size: 15px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.pagination {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #888;
+  margin-top: -1em;
+  margin-bottom: 5px;
+  clear: both;
+  .icon {
+    font-size: 0.8em;
+  }
+  .links {
+    float: right;
+  }
+}
+
+.content {
+  font-size: 1.3em;
+  a {
+    text-decoration: underline;
+  }
+}
+
+#button-container.posting {
+  background: transparent url('default/ajax_spinner_small.gif') 0 2px no-repeat;
+  padding: 2px 24px;
+}
+
+
+/* -----------------------------------------------------------------------
+   LAYOUT
+   ----------------------------------------------------------------------- */
+
+/* Top heading/breadcrumbs with line */
+h2.section,
+#sidebar h2 {
+  padding-bottom: 7px;
+  border-bottom: 1px solid #E2DCBF;
+  width: 100%;
+}
+
+#sidebar h2 {
+  color: #6f5a43;
+  margin-bottom: 10px;
+}
+
+.error_message {
+  font-size: 1.4em;
+}
+
+#wrapper {
+  position: absolute;
+  top: 116px;
+  left: 30px;
+  right: 30px;
+}
+
+#content {
+  min-width: 600px;
+  font-size: 1.2em;
+  padding-bottom: 30px;
+  td, th {
+    padding-right: 20px;
+  }
+}
+
+
+/* -----------------------------------------------------------------------
+   NEW DISCUSSION
+   ----------------------------------------------------------------------- */
+
+.userinfo {
+  margin-bottom: 1em;
+}
+
+.bottomlinks {
+  font-size: 1.3em;
+  font-weight: bold;
+  border-top: 1px solid #E2DCBF;
+  padding: 5px 0;
+}
+
+
+/* -----------------------------------------------------------------------
+   SEARCH
+   ----------------------------------------------------------------------- */
+
+.search_tips {
+  margin-top: -10px;
+  margin-bottom: 30px;
+  max-width: 600px;
+  font-size: 1.1em;
+  color: #444;
+  strong {
+    color: #000;
+  }
+}
+
+
+
+/* -----------------------------------------------------------------------
+   INVITES SECTION
+   ----------------------------------------------------------------------- */
+
+.invites_list {
+  .email {
+    font-weight: bold;
+  }
+  .actions {
+    width: 50%;
+  }
+}

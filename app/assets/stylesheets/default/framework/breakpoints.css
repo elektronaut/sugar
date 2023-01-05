@@ -1,0 +1,7 @@
+$breakpoint-mobile: 900px;
+
+@define-mixin mobile {
+  @media screen and (max-width: $breakpoint-mobile) {
+    @mixin-content;
+  }
+}

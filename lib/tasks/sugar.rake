@@ -13,6 +13,13 @@ namespace :sugar do
     user.update(public_posts_count: 0)
   end
 
+  desc "Update syntax highlighting theme"
+  task update_rouge_theme: :environment do
+    Rails.root.join("app/assets/stylesheets/vendor/rouge.css").open("w") do |fh|
+      fh.write(Rouge::Themes::Github.render(scope: "pre.highlight"))
+    end
+  end
+
   desc "Scrub private data from the database"
   task scrub_private_data: :environment do
     keep_users = ENV["KEEP_USERS"].split(",").map(&:to_i)
