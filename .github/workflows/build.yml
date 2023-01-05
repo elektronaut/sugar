@@ -119,6 +119,7 @@ jobs:
       - name: Build frontend
         run: |
           yarn build
+          yarn build:css
       - name: Create database
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}

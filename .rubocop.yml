@@ -29,6 +29,7 @@ Metrics/BlockLength:
     - "config/routes.rb"
     - "db/migrate/*"
     - "**/*_spec.rb"
+    - "**/*.rake"
     - "spec/factories.rb"
     - "spec/rails_helper.rb"
 
