@@ -7,14 +7,14 @@
     "@rails/ujs": "^7.0.3-1",
     "autoprefixer": "^10.4.13",
     "backbone": "^1.4.1",
-    "downshift": "^7.0.5",
+    "downshift": "^7.1.2",
     "dropzone": "^6.0.0-beta.2",
-    "esbuild": "^0.15.7",
+    "esbuild": "^0.16.17",
     "esbuild-plugin-import-glob": "^0.1.1",
     "esbuild-rails": "^1.0.3",
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.3",
     "match-sorter": "^6.3.1",
-    "postcss": "^8.4.20",
+    "postcss": "^8.4.21",
     "postcss-cli": "^10.1.0",
     "postcss-comment": "^2.0.0",
     "postcss-import": "^15.1.0",
@@ -27,13 +27,13 @@
     "react-dom": "^18.2.0",
     "react_ujs": "^2.6.2",
     "timeago": "^1.6.7",
-    "underscore": "^1.13.4",
+    "underscore": "^1.13.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "^7.29.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint": "^8.31.0",
+    "eslint-plugin-react": "^7.32.0",
+    "eslint-plugin-react-hooks": "^4.6.0"
   },
   "scripts": {
     "lint-javascript": "eslint 'app/javascript/**/*.js*'",
