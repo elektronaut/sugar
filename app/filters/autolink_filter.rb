@@ -44,12 +44,12 @@ class AutolinkFilter < Filter
 
   def normalize_twitter_url(url)
     url = url.gsub(%r{/photo/\d+}, "") # Ignore photo path
+             .gsub(%r{/mediaViewer\?(.*)\b}, "")
 
-    if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/(\d+)})
-      url
-    else
-      id = url.match(%r{/(\d+)$})[1]
-      "https://twitter.com/twitter/status/#{id}"
-    end
+    return url if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/(\d+)})
+    return url unless url.match?(%r{/(\d+)$})
+
+    id = url.match(%r{/(\d+)$})[1]
+    "https://twitter.com/twitter/status/#{id}"
   end
 end
