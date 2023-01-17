@@ -21,7 +21,7 @@
     }
   }
 
-  // Small block between posts that say "2 days later..."
+  /* Small block between posts that say "2 days later..." */
   .post_distance {
     border-bottom: 1px solid #E2DCBF;
     padding: 2px 0 2px 45px;
@@ -30,7 +30,7 @@
   }
 }
 
-// Container for posts loaded via AJAX
+/* Container for posts loaded via AJAX */
 #ajaxPosts .post:first-child, #previewPost {
   border-top: 3px solid #E2DCBF;
 }

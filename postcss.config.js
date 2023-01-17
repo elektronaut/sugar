@@ -1,5 +1,4 @@
 module.exports = {
-  parser: require("postcss-comment"),
   plugins: [
     require("postcss-import-ext-glob"),
     require("postcss-import"),
