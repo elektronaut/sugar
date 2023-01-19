@@ -185,7 +185,7 @@ GEM
       rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
     gemoji (4.0.1)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     hiredis (0.6.3)
