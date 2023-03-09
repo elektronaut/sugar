@@ -31,7 +31,7 @@ describe CodeFilter do
 
     it "syntaxes highlight it" do
       expect(output).to(
-        match(%r{<pre class="highlight"><code>.*<span class="nx">alert</span>})
+        match(%r{<pre class="highlight"><code>.*<span class="nf">alert</span>})
       )
     end
   end
