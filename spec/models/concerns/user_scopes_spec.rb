@@ -40,7 +40,7 @@ describe UserScopes do
       create(:user, banned_until: (Time.now.utc + 2.days), status: :hiatus)
     end
 
-    it { is_expected.to match_array([banned, hiatus]) }
+    it { is_expected.to contain_exactly(banned, hiatus) }
   end
 
   describe "online" do
@@ -62,7 +62,7 @@ describe UserScopes do
 
     before { create(:user) }
 
-    it { is_expected.to match_array([admin, moderator, user_admin]) }
+    it { is_expected.to contain_exactly(admin, moderator, user_admin) }
   end
 
   describe "recently_joined" do

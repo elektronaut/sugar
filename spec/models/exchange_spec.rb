@@ -88,7 +88,7 @@ describe Exchange do
     subject { exchange.moderators }
 
     context "without any moderators" do
-      it { is_expected.to match_array([exchange.poster]) }
+      it { is_expected.to contain_exactly(exchange.poster) }
     end
 
     context "with moderators" do
@@ -99,7 +99,7 @@ describe Exchange do
         exchange.exchange_moderators.create(user: moderator)
       end
 
-      it { is_expected.to match_array([exchange.poster, moderator]) }
+      it { is_expected.to contain_exactly(exchange.poster, moderator) }
     end
   end
 

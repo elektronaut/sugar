@@ -31,7 +31,7 @@ describe UsersController do
     specify { expect(flash[:notice]).to be_nil }
 
     it "renders JSON" do
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json).to be_a(Array)
     end
   end
@@ -56,7 +56,7 @@ describe UsersController do
     end
 
     it "renders JSON" do
-      json = JSON.parse(response.body)
+      json = response.parsed_body
       expect(json).to be_a(Array)
     end
   end

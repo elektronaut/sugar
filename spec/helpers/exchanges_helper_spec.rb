@@ -27,10 +27,9 @@ describe ExchangesHelper do
     let(:collection) { [exchange] }
 
     it "results in an array" do
-      expect(results).to match_array(
-        ["odd", "by_user#{exchange.poster.id}",
-         "discussion", "discussion#{exchange.id}",
-         "new_posts"]
+      expect(results).to(
+        contain_exactly("odd", "by_user#{exchange.poster.id}",
+                        "discussion", "discussion#{exchange.id}", "new_posts")
       )
     end
 

@@ -22,13 +22,13 @@ describe SearchablePost, solr: true do
     describe "searching all posts when logged in as nobody" do
       subject { Post.search_results("testing", user: nil, page: 1) }
 
-      it { is_expected.to match_array([post, exchange_post]) }
+      it { is_expected.to contain_exactly(post, exchange_post) }
     end
 
     describe "searching all posts when logged in as a regular user" do
       subject { Post.search_results("testing", user: user, page: 1) }
 
-      it { is_expected.to match_array([post, exchange_post]) }
+      it { is_expected.to contain_exactly(post, exchange_post) }
     end
 
     describe "searching in a discussion when logged in as nobody" do
@@ -38,7 +38,7 @@ describe SearchablePost, solr: true do
         )
       end
 
-      it { is_expected.to match_array([exchange_post]) }
+      it { is_expected.to contain_exactly(exchange_post) }
     end
 
     describe "searching in a discussion when logged in as a regular user" do
@@ -48,7 +48,7 @@ describe SearchablePost, solr: true do
         )
       end
 
-      it { is_expected.to match_array([exchange_post]) }
+      it { is_expected.to contain_exactly(exchange_post) }
     end
 
     describe "searching in a conversation" do
@@ -61,7 +61,7 @@ describe SearchablePost, solr: true do
       let(:exchange) { create(:conversation, body: "testing conversation") }
       let!(:exchange_post) { exchange.posts.first }
 
-      it { is_expected.to match_array([exchange_post]) }
+      it { is_expected.to contain_exactly(exchange_post) }
     end
   end
 end

@@ -13,7 +13,7 @@ describe Viewable do
       discussion
     end
 
-    it { is_expected.to match_array([discussion]) }
+    it { is_expected.to contain_exactly(discussion) }
   end
 
   describe "#viewable_by?" do

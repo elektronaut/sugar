@@ -23,7 +23,7 @@ describe SearchableExchange, solr: true do
         Discussion.search_results("testing", user: nil, page: 1).results
       end
 
-      it { is_expected.to match_array([discussion]) }
+      it { is_expected.to contain_exactly(discussion) }
     end
 
     context "when logged in as a regular user" do
@@ -31,7 +31,7 @@ describe SearchableExchange, solr: true do
         Discussion.search_results("testing", user: user, page: 1).results
       end
 
-      it { is_expected.to match_array([discussion]) }
+      it { is_expected.to contain_exactly(discussion) }
     end
   end
 end

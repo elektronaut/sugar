@@ -37,7 +37,7 @@ class InvitesController < ApplicationController
   def create
     @invite = create_invite(invite_params)
 
-    if !@invite.valid?
+    if @invite.invalid?
       render action: :new
       return
     elsif deliver_invite!(@invite)

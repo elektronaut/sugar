@@ -73,7 +73,7 @@ describe Discussion do
     specify do
       expect(
         conversation.participants
-      ).to match_array([discussion.poster, post.user])
+      ).to contain_exactly(discussion.poster, post.user)
     end
   end
 
@@ -82,7 +82,7 @@ describe Discussion do
 
     let!(:post) { create(:post, exchange: discussion) }
 
-    it { is_expected.to match_array([discussion.poster, post.user]) }
+    it { is_expected.to contain_exactly(discussion.poster, post.user) }
   end
 
   describe "#viewable_by?" do

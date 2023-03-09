@@ -19,7 +19,7 @@ describe Inviter do
       active_invite = create(:invite, user: user)
       create(:invite, user: user, expires_at: 2.days.ago)
       create(:invite)
-      expect(user.invites.active).to match_array([active_invite])
+      expect(user.invites.active).to contain_exactly(active_invite)
     end
   end
 

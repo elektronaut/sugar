@@ -49,7 +49,7 @@ describe ExchangeParticipant do
       DiscussionRelationship.define(user, hidden_discussion, hidden: true)
     end
 
-    it { is_expected.to match_array([discussion]) }
+    it { is_expected.to contain_exactly(discussion) }
   end
 
   describe "#mark_exchange_viewed" do

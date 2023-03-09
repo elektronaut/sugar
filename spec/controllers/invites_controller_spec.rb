@@ -77,7 +77,7 @@ describe InvitesController do
     it { is_expected.to respond_with(:success) }
     it { is_expected.to render_template(:index) }
     specify { expect(flash[:notice]).to be_nil }
-    specify { expect(assigns(:invites)).to match_array([invites.first]) }
+    specify { expect(assigns(:invites)).to contain_exactly(invites.first) }
   end
 
   describe "GET all" do
