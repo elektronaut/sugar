@@ -1,25 +1,35 @@
 import React from "react";
-import PropTypes from "prop-types";
-import Downshift from "downshift";
+import Downshift, { DownshiftState } from "downshift";
 import { matchSorter } from "match-sorter";
 
 import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 
-export default function TypeaheadTextField(props) {
+interface TypeaheadTextFieldProps {
+  autoFocus: boolean,
+  label: string,
+  name: string,
+  onChange: (value: string) => void,
+  onKeyDown: (evt: KeyboardEvent) => void,
+  options: string[],
+  size: number,
+  value: string
+}
+
+export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
   const { label, name, onChange, options, size, value } = props;
 
-  const handleKeyDown = (evt) => {
+  const handleKeyDown = (evt: KeyboardEvent) => {
     if (props.onKeyDown) {
       props.onKeyDown(evt);
     }
   };
 
-  const handleStateChange = (changes) => {
-    if (Object.prototype.hasOwnProperty.call(changes, "selectedItem")) {
+  const handleStateChange = (changes: DownshiftState<string>) => {
+    if ("selectedItem" in changes) {
       onChange(changes.selectedItem);
-    } else if (Object.prototype.hasOwnProperty.call(changes, "inputValue")) {
-      onChange(changes.inputValue);
+    } else if (changes.inputValue) {
+      onChange(changes.inputValue as string);
     }
   };
 
@@ -64,7 +74,7 @@ export default function TypeaheadTextField(props) {
                  <Menu {...getMenuProps()}>
                    {matchSorter(options, inputValue).map((item, index) => (
                      <MenuItem
-                       key={item.handle}
+                       key={item}
                        {...getItemProps({
                          index,
                          item,
@@ -80,14 +90,3 @@ export default function TypeaheadTextField(props) {
     </Downshift>
   );
 }
-
-TypeaheadTextField.propTypes = {
-  autoFocus: PropTypes.bool,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  options: PropTypes.array,
-  size: PropTypes.number,
-  value: PropTypes.string
-};

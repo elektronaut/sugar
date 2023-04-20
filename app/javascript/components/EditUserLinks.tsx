@@ -1,17 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-import useUserLinks from "./EditUserLinks/useUserLinks";
+import useUserLinks, { UserLink } from "./EditUserLinks/useUserLinks";
 import Editor from "./EditUserLinks/Editor";
 import List from "./EditUserLinks/List";
 import Param from "./EditUserLinks/Param";
 
-export default function EditUserLinks(props) {
+interface EditUserLinksProps {
+  labels: string[],
+  userLinks: UserLink[]
+}
+
+export default function EditUserLinks(props: EditUserLinksProps) {
   const [state, dispatch] = useUserLinks(props.userLinks);
 
   const enabledLinks = state.userLinks.filter(ul => !ul.deleted);
 
-  const handleAdd = (evt) => {
+  const handleAdd = (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "add" });
   };
@@ -41,8 +45,3 @@ export default function EditUserLinks(props) {
     </div>
   );
 }
-
-EditUserLinks.propTypes = {
-  labels: PropTypes.array,
-  userLinks: PropTypes.array
-};

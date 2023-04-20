@@ -8,17 +8,30 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "overrides": [
+    {
+      "files": ["**/*.+(ts|tsx)"],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ]
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": 2018,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
       "jsx": true
     },
-    "sourceType": "module"
+    "project": true,
+    "sourceType": "module",
+    "tsconfigRootDir": __dirname
   },
   "plugins": [
-    "react", "react-hooks"
+    "react", "react-hooks", "@typescript-eslint"
   ],
+  "root": true,
   "rules": {
     "linebreak-style": [
       "error",
@@ -32,6 +45,10 @@ module.exports = {
       "error",
       "always"
     ],
-
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 };

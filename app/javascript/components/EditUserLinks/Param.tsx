@@ -1,10 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export default function Param(props) {
+import { UserLink } from "./useUserLinks";
+
+interface ParamProps {
+  position: number,
+  userLink: UserLink
+}
+
+export default function Param(props: ParamProps) {
   const { position, userLink } = props;
 
-  const name = (property) => {
+  const name = (property: string) => {
     return `user[user_links_attributes][${position}][${property}]`;
   };
 
@@ -27,8 +33,3 @@ export default function Param(props) {
     );
   }
 }
-
-Param.propTypes = {
-  position: PropTypes.number,
-  userLink: PropTypes.object
-};

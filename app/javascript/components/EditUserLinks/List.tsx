@@ -1,11 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -13,14 +13,23 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
+import {
+  UserLink as UserLinkRecord,
+  UserLinksAction
+} from "./useUserLinks";
 import UserLink from "./UserLink";
 
-export default function List(props) {
+interface ListProps {
+  dispatch: (action: UserLinksAction) => void,
+  userLinks: UserLinkRecord[]
+}
+
+export default function List(props: ListProps) {
   const { dispatch, userLinks } = props;
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const handleDragEnd = (evt) => {
+  const handleDragEnd = (evt: DragEndEvent) => {
     const { active, over } = evt;
 
     if (active.id !== over.id) {
@@ -51,8 +60,3 @@ export default function List(props) {
     </div>
   );
 }
-
-List.propTypes = {
-  dispatch: PropTypes.func,
-  userLinks: PropTypes.array
-};

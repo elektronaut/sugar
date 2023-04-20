@@ -1,13 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-function label(userLink) {
+import { UserLink as UserLinkRecord, UserLinksAction } from "./useUserLinks";
+
+interface UserLinkProps {
+  dispatch: (action: UserLinksAction) => void,
+  labels: string[],
+  position: number,
+  userLink: UserLinkRecord
+}
+
+function label(userLink: UserLinkRecord) {
   return userLink.name || userLink.url.replace(/^(f|ht)tps?:\/\//, "");
 }
 
-export default function UserLink(props) {
+export default function UserLink(props: UserLinkProps) {
   const { dispatch, userLink } = props;
 
   const { attributes,
@@ -20,17 +28,17 @@ export default function UserLink(props) {
   const style = { transform: CSS.Transform.toString(transform),
                   transition };
 
-  const handleEdit = (evt) => {
+  const handleEdit = (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "edit", payload: userLink });
   };
 
-  const handleDelete = (evt) => {
+  const handleDelete = (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "delete", payload: userLink });
   };
 
-  let classNames = ["user-link"];
+  const classNames = ["user-link"];
   if (isDragging) {
     classNames.push("dragging");
   }
@@ -65,10 +73,3 @@ export default function UserLink(props) {
     </div>
   );
 }
-
-UserLink.propTypes = {
-  dispatch: PropTypes.func,
-  labels: PropTypes.array,
-  position: PropTypes.number,
-  userLink: PropTypes.object
-};

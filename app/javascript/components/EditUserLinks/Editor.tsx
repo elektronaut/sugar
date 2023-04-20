@@ -1,32 +1,40 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, ChangeEvent } from "react";
 
+import { UserLink, UserLinksAction } from "./useUserLinks";
 import TypeaheadTextField from "../Input/TypeaheadTextField";
 
-function preventSubmit(evt) {
+interface EditorProps {
+  dispatch: (action: UserLinksAction) => void,
+  labels: string[],
+  newLink: boolean,
+  userLink: UserLink
+}
+
+function preventSubmit(evt: Event) {
   if (evt.key === "Enter") {
     evt.preventDefault();
   }
 }
-export default function Editor(props) {
+
+export default function Editor(props: EditorProps) {
   const { dispatch, newLink } = props;
 
   const [userLink, setUserLink] = useState(props.userLink);
 
-  const updateAttribute = (attr) => (value) => {
+  const updateAttribute = (attr: string) => (value: string) => {
     setUserLink({ ...userLink, [attr]: value });
   };
 
-  const handleChange = (attr) => (evt) => {
+  const handleChange = (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
     updateAttribute(attr)(evt.target.value);
   };
 
-  const handleCancel = (evt) => {
+  const handleCancel = (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "cancel" });
   };
 
-  const handleSave = (evt) => {
+  const handleSave = (evt: Event) => {
     evt.preventDefault();
     dispatch({ type: "save", payload: userLink });
   };
@@ -88,10 +96,3 @@ export default function Editor(props) {
     </div>
   );
 }
-
-Editor.propTypes = {
-  dispatch: PropTypes.func,
-  labels: PropTypes.array,
-  newLink: PropTypes.bool,
-  userLink: PropTypes.object
-};
