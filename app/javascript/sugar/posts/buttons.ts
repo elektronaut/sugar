@@ -2,9 +2,9 @@ import $ from "jquery";
 import Sugar from "../../sugar";
 
 $(Sugar).bind("ready", function () {
-  var $buttons = $("#button-container");
+  const $buttons = $("#button-container");
 
-  function showStatus(message) {
+  function showStatus(message: string) {
     $buttons.find(".status").html(message);
     $buttons.find("button").hide();
     return $buttons.addClass("posting");
@@ -21,7 +21,7 @@ $(Sugar).bind("ready", function () {
     }
   }
 
-  $(Sugar).bind("posting-status", function(event, message) {
+  $(Sugar).bind("posting-status", function(_, message: string) {
     showStatus(message);
   });
 

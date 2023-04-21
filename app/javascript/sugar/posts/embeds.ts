@@ -2,6 +2,22 @@ import $ from "jquery";
 import Sugar from "../../sugar";
 import handleMastodonEmbeds from "./handleMastodonEmbeds";
 
+interface PostCache {
+  height: number,
+  order: number
+}
+
+interface Cache {
+  posts: Record<number, PostCache>,
+  anchorPostId: number,
+  anchorPostOrder: number,
+  scrollY: number
+}
+
+interface Twitter {
+  widgets: { load: (elem: HTMLElement) => void }
+}
+
 /**
  * Handlers for scripted embed (social) quirks
  */
@@ -16,8 +32,8 @@ $(Sugar).bind("ready", function(){
      * @param {string} idString
      * @returns {number}
      */
-    const parsePostIdString = idString => {
-      let idNum = idString.match(/(post-)?(\d+)/i);
+    const parsePostIdString = (idString: string): number => {
+      const idNum = idString.match(/(post-)?(\d+)/i);
       if (idNum && idNum.length) {
         return parseInt(idNum[2]);
       }
@@ -30,7 +46,7 @@ $(Sugar).bind("ready", function(){
      * @param {Element} post
      * @returns {number}
      */
-    const getPostId = post => {
+    const getPostId = (post: HTMLElement) => {
       let postId = 0;
       if (post.dataset.post_id) {
         postId = parseInt(post.dataset.post_id);
@@ -48,15 +64,15 @@ $(Sugar).bind("ready", function(){
       return postId;
     };
 
-    const cache = {
+    const cache: Cache = {
       posts: {},
       anchorPostId: parsePostIdString(window.location.hash),
       anchorPostOrder: 0,
       scrollY: window.scrollY
     };
 
-    const resizeObserver = new ResizeObserver(posts => {
-      posts.forEach(post => {
+    const resizeObserver = new ResizeObserver((posts) => {
+      posts.forEach((post) => {
         const postId = getPostId(post.target);
         const pCache = cache.posts[postId];
 
@@ -113,14 +129,13 @@ $(Sugar).bind("ready", function(){
       }
       resizeObserver.observe(post);
     });
-
   }
 
-
-  $(Sugar).bind("postsloaded", function (event, posts) {
+  $(Sugar).bind("postsloaded", function (event: Event, posts: HTMLElement[]) {
     // Initialize twitter embeds when new posts load or previewed
-    if (posts.length && window.twttr && window.twttr.widgets) {
-      window.twttr.widgets.load(posts[0].parentNode);
+    if (posts.length && window.twttr) {
+      const twitter = window.twttr as Twitter;
+      twitter.widgets.load(posts[0].parentNode);
     }
 
     handleMastodonEmbeds();

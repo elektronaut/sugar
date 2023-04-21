@@ -1,79 +1,80 @@
 import $ from "jquery";
 import Sugar from "../sugar";
 
-window.toggleNavigation = function () {
+function toggleNavigation() {
   $("#navigation").toggleClass("active");
-  return false;
-};
+}
 
 // Amazon Associates referral code
 function addReferralIds() {
-  let referralId = Sugar.Configuration.amazonAssociatesId;
-  let ptrn = /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
+  const referralId = Sugar.Configuration.amazonAssociatesId as string;
+  const ptrn = /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
 
-  let needsReferral = function (link) {
+  const needsReferral = function (link: HTMLLinkElement): boolean {
     return (
       !$.data(link, "amazon_associates_referral_id") &&
       link.href.match(ptrn)
     );
   };
 
-  if (referralId) {
-    $(".post .body a").each(function () {
-      let link = this;
-      if (needsReferral(link)) {
-        $.data(link, "amazon_associates_referral_id", referralId);
-        if (link.href.match(/(\?|&)tag=/)) {
-          return;
-        }
-
-        link.href += link.href.match(/\?/) ? "&" : "?";
-        link.href += "tag=" + referralId;
+  const applyReferral = (_, link: HTMLLinkElement) => {
+    if (needsReferral(link)) {
+      $.data(link, "amazon_associates_referral_id", referralId);
+      if (link.href.match(/(\?|&)tag=/)) {
+        return;
       }
-    });
+      link.href += link.href.match(/\?/) ? "&" : "?";
+      link.href += "tag=" + referralId;
+    }
+  };
+
+  if (referralId) {
+    $(".post .body a").each(applyReferral);
   }
 }
 
 function wrapEmbeds() {
-  let selectors = [ "iframe[src*=\"bandcamp.com\"]",
+  const selectors: string[] = [ "iframe[src*=\"bandcamp.com\"]",
                     "iframe[src*=\"player.vimeo.com\"]",
                     "iframe[src*=\"youtube.com\"]",
                     "iframe[src*=\"youtube-nocookie.com\"]",
                     "iframe[src*=\"kickstarter.com\"][src*=\"video.html\"]" ];
 
-  let embeds = Array.prototype.slice.call(
-    document.querySelectorAll(selectors.join(","))
-  );
+  const embeds = [...document.querySelectorAll(selectors.join(","))];
 
-  function wrapEmbed(embed) {
-    let wrapper = document.createElement("div");
+  function wrapEmbed(embed: HTMLElement): HTMLDivElement {
+    const wrapper = document.createElement("div");
     embed.parentNode.replaceChild(wrapper, embed);
     wrapper.appendChild(embed);
     return wrapper;
   }
 
-  embeds.filter(e => !e.parentNode.classList.contains("responsive-embed"))
-        .forEach(function (embed) {
-          let width = embed.offsetWidth;
-          let height = embed.offsetHeight;
-          let ratio = height / width;
-          let wrapper = wrapEmbed(embed);
+  embeds.forEach(function (embed: HTMLElement) {
+    const parent = embed.parentNode as HTMLElement;
+    if (parent && parent.classList.contains("responsive-embed")) {
+      return;
+    }
 
-          wrapper.classList.add("responsive-embed");
-          wrapper.style.position = "relative";
-          wrapper.style.width = "100%";
-          wrapper.style.paddingBottom = (ratio * 100) + "%";
+    const width = embed.offsetWidth;
+    const height = embed.offsetHeight;
+    const ratio = height / width;
+    const wrapper = wrapEmbed(embed);
 
-          embed.style.position = "absolute";
-          embed.style.width = "100%";
-          embed.style.height = "100%";
-          embed.style.top = "0";
-          embed.style.left = "0";
-        });
+    wrapper.classList.add("responsive-embed");
+    wrapper.style.position = "relative";
+    wrapper.style.width = "100%";
+    wrapper.style.paddingBottom = `${ratio * 100}%`;
+
+    embed.style.position = "absolute";
+    embed.style.width = "100%";
+    embed.style.height = "100%";
+    embed.style.top = "0";
+    embed.style.left = "0";
+  });
 }
 
 $(document).ready(function () {
-  let updateLayout = function () {
+  const updateLayout = function () {
     if ((window.orientation != null)) {
       if (window.orientation === 90 || window.orientation === -90) {
         document.body.setAttribute("orient", "landscape");
@@ -88,19 +89,18 @@ $(document).ready(function () {
   updateLayout();
 
   $(".toggle-navigation").click(function () {
-    window.toggleNavigation();
+    toggleNavigation();
   });
 
   // Open images when clicked
-  $(".post .body img").click(function () {
-    document.location = this.src;
+  $(".post .body img").click(function (_, img: HTMLImageElement) {
+    document.location = img.src;
   });
 
   // Larger click targets on discussion overview
-  $(".discussions .discussion h2 a").each(function () {
-    var url = this.href;
+  $(".discussions .discussion h2 a").each(function (_, link: HTMLLinkElement) {
     $(this.parentNode.parentNode).click(function () {
-      document.location = url;
+      document.location = link.href;
     });
   });
 
@@ -110,25 +110,24 @@ $(document).ready(function () {
   }
 
   // Search mode
-  $("#search_mode").change(function () {
-    this.parentNode.action = this.value;
+  $("#search_mode").change(function (_, elem: HTMLSelectElement) {
+    const parent = elem.parentNode as HTMLFormElement;
+    parent.action = elem.value;
   });
 
   // Post quoting
   $(".post .functions a.quote_post").click(function () {
-    let stripWhitespace = function (string) {
-      return string.replace(/^[\s]*/, "").replace(/[\s]*$/, "");
+    const stripWhitespace = function (str: string) {
+      return str.replace(/^[\s]*/, "").replace(/[\s]*$/, "");
     };
 
-    let post = $(this).closest(".post");
-    let username = post.find(".post_info .username a").text();
-    let permalink = post.find(".post_info .permalink")
-                        .get()[0]
-                        .href
-                        .replace(/^https?:\/\/([\w\d.:-]*)/, "");
+    const post = $(this).closest(".post");
+    const username = post.find(".post_info .username a").text();
+    const permalinkElem = post.find(".post_info .permalink").get()[0] as HTMLLinkElement;
+    const permalink = permalinkElem.href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
 
-    var text = stripWhitespace(post.find(".body").text());
-    var html = stripWhitespace(post.find(".body").html());
+    let text = stripWhitespace(post.find(".body").text());
+    let html = stripWhitespace(post.find(".body").html());
 
     // Hide spoilers
     text = text.replace(/class="spoiler revealed"/g, "class=\"spoiler\"");
@@ -146,11 +145,9 @@ $(document).ready(function () {
 
   // Muted posts
   $(".post").each(function () {
-    const userId = $(this).data("user_id");
-    if (
-      window.mutedUsers &&
-      window.mutedUsers.indexOf(userId) !== -1) {
-
+    const userId = $(this).data("user_id") as string;
+    const mutedUsers = window.mutedUsers as number[] | null;
+    if (mutedUsers && mutedUsers.indexOf(userId) !== -1) {
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
       const username = this.querySelector(".username a").textContent;

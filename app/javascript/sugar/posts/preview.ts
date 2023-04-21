@@ -3,14 +3,14 @@ import Sugar from "../../sugar";
 
 $(Sugar).bind("ready", function () {
   function previewPost() {
-    let postBody   = $("#compose-body").val();
-    let format     = $("#compose-body").closest("form").find(".format").val();
-    let previewUrl = $("#compose-body").closest("form").data("preview-url");
+    const postBody   = $("#compose-body").val();
+    const format     = $("#compose-body").closest("form").find(".format").val();
+    const previewUrl = $("#compose-body").closest("form").data("preview-url") as string;
 
     $(Sugar).trigger("posting-status", ["Loading preview&hellip;"]);
 
     $(".posts #previewPost").animate({opacity: 0.1}, "fast");
-    $.ajax({
+    void $.ajax({
       url: previewUrl,
       type: "POST",
       data: {
@@ -19,7 +19,7 @@ $(Sugar).bind("ready", function () {
         authenticity_token: Sugar.authToken()
       },
 
-      success: function (previewPost) {
+      success: function (previewPost: string) {
         // Inject the #ajaxPosts container so new posts
         // will be loaded above the prewview
         if ($(".posts #ajaxPosts").length < 1) {

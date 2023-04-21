@@ -1,9 +1,14 @@
 import $ from "jquery";
+import Backbone from "backbone";
 
 import Application from "./views/Application";
 
+interface SugarConfiguration {
+  authToken: string
+}
+
 const Sugar = {
-  Configuration: {},
+  Configuration: {} as SugarConfiguration,
 
   stopwords: [
     "i", "a", "about", "an", "and", "are", "as", "at", "by", "for", "from",
@@ -13,24 +18,14 @@ const Sugar = {
   ],
 
   init() {
-    this.Application = new Application();
+    this.Application = new (Application as Backbone.View)() as Backbone.View;
   },
 
   extend(extension) {
     $.extend(Sugar, extension);
   },
 
-  log() {
-    if (this.Configuration.debug && (typeof console !== "undefined")) {
-      if (arguments.length === 1) {
-        return console.log(arguments[0]);
-      } else {
-        return console.log(arguments);
-      }
-    }
-  },
-
-  authToken() {
+  authToken(): string {
     return this.Configuration.authToken;
   }
 };

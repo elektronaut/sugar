@@ -3,14 +3,14 @@ import Sugar from "../../sugar";
 
 $(Sugar).bind("ready", function () {
   // Submit post via AJAX
-  function submitPost(form) {
+  function submitPost(form: HTMLFormElement) {
     $(Sugar).trigger("posting-status", ["Posting, please wait&hellip;"]);
 
     if ($(form).hasClass("livePost")) {
-      let body = $("#compose-body").val();
-      let format = $("#compose-body").closest("form").find(".format").val();
+      const body = $("#compose-body").val();
+      const format = $("#compose-body").closest("form").find(".format").val();
 
-      $.ajax({
+      void $.ajax({
         url: form.action,
         type: "POST",
         data: {
@@ -23,7 +23,9 @@ $(Sugar).bind("ready", function () {
         success: function () {
           $("#compose-body").val("");
           $(".posts #previewPost").remove();
-          Sugar.loadNewPosts();
+          if ("loadNewPosts" in Sugar) {
+            Sugar.loadNewPosts();
+          }
         },
 
         error: function (xhr, text_status) {
@@ -46,9 +48,10 @@ $(Sugar).bind("ready", function () {
   }
 
   // Form event handler
-  $("#replyText form").submit(function() {
-    if (!($(this).find("#compose-body").val().replace(/\s+/, "") === "")) {
-      submitPost(this);
+  $("#replyText form").submit(function(_, form: HTMLFormElement) {
+    const composeBody = $(form).find("#compose-body").val() as string;
+    if (!(composeBody.replace(/\s+/, "") === "")) {
+      submitPost(form);
     }
     return false;
   });

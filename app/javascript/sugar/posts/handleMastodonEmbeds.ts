@@ -1,5 +1,10 @@
+interface EventData {
+  id: string,
+  height: number
+}
+
 export default function handleMastodonEmbeds () {
-  const iframes = new Map();
+  const iframes = new Map<string, HTMLIFrameElement>();
 
   const iframeId = () => {
     const idBuffer = new Uint32Array(1);
@@ -10,14 +15,14 @@ export default function handleMastodonEmbeds () {
     return id;
   };
 
-  const receiveMessage = (evt) => {
-    var data = evt.data || {};
+  const receiveMessage = (evt: Event) => {
+    const data = (evt.data || {}) as EventData;
 
     if (typeof data !== "object" || data.type !== "setHeight" || !iframes.has(data.id)) {
       return;
     }
 
-    var iframe = iframes.get(data.id);
+    const iframe = iframes.get(data.id);
 
     if ("source" in evt && iframe.contentWindow !== evt.source) {
       return;
@@ -28,7 +33,7 @@ export default function handleMastodonEmbeds () {
 
   window.addEventListener("message", receiveMessage);
 
-  document.querySelectorAll("iframe.mastodon-embed").forEach(iframe => {
+  document.querySelectorAll("iframe.mastodon-embed").forEach((iframe: HTMLIFrameElement) => {
     const id = iframeId();
 
     iframes.set(id, iframe);

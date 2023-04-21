@@ -15,7 +15,7 @@ $(Sugar).bind("ready", function () {
   });
 
   $("#sidebar").each(function () {
-    let minWidth = $("#content").outerWidth() + $("#sidebar").outerWidth();
+    const minWidth = $("#content").outerWidth() + $("#sidebar").outerWidth();
     $("#wrapper").css("min-width", minWidth + "px");
   });
 

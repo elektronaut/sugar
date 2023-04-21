@@ -3,7 +3,7 @@ import Sugar from "../../sugar";
 
 $(Sugar).bind("ready", function() {
   $(".edit_user_profile").each(function() {
-    let checkAdmin = function() {
+    const checkAdmin = function() {
       if ($("#user_admin:checked").val()) {
         $("#user_moderator").attr("checked", true).attr("disabled", true);
         $("#user_user_admin").attr("checked", true).attr("disabled", true);
@@ -13,9 +13,9 @@ $(Sugar).bind("ready", function() {
       }
     };
 
-    let checkUserStatus = function () {
-      let status = $("#user_status").val();
-      let disabled = !(status == "hiatus" || status == "time_out");
+    const checkUserStatus = function () {
+      const status = $("#user_status").val();
+      const disabled = !(status == "hiatus" || status == "time_out");
       $(".banned-until select").attr("disabled", disabled);
     };
 
