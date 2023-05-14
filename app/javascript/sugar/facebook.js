@@ -36,7 +36,7 @@ Sugar.Facebook = {
 
     window.fbAsyncInit = function () {
       window.FB.init({
-        version: "v2.10",
+        version: "v16.0",
         appId: Sugar.Facebook.appId,
         status: true,
         cookie: true,
@@ -46,11 +46,14 @@ Sugar.Facebook = {
     };
 
     $("body").append("<div id=\"fb-root\" />");
-    let fjs = document.getElementsByTagName("script")[0];
-    let js = document.createElement("script");
-    js.id = "facebook-jssdk";
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
+
+    let script = document.createElement("script");
+    script.id = "facebook-scriptsdk";
+    script.src = "//connect.facebook.net/en_US/sdk.js";
+    script.crossorigin = "anonymous";
+    script.async = true;
+    script.defer = true;
+    document.body.append(script);
   },
 
   parsePosts: function (posts) {
