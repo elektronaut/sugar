@@ -1,26 +1,7 @@
 import { useReducer } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export interface UserLink {
-  id: number | null,
-  label: string,
-  name: string,
-  url: string,
-  deleted: boolean,
-  handle: string
-}
-
-export interface UserLinksState {
-  editing: boolean,
-  userLinks: UserLink[]
-}
-
-interface UserLinksAction {
-  type: string,
-  payload?: UserLinks[] | UserLink
-}
-
-function updateLink(state: UserLinksState, link: UserLink) {
+function updateLink(state: UserLink.State, link: UserLink.Link) {
   return { ...state,
            userLinks: state.userLinks.map(ul => {
              if (ul.handle === link.handle) {
@@ -31,12 +12,12 @@ function updateLink(state: UserLinksState, link: UserLink) {
            }) };
 }
 
-function newUserLink(): UserLink {
+function newUserLink(): UserLink.Link {
   return({ id: null, label: "", name: "", url: "",
            deleted: false, handle: uuidv4() });
 }
 
-function saveUserLink(state: UserLinksState, userLink: UserLink) {
+function saveUserLink(state: UserLink.State, userLink: UserLink.Link) {
   let userLinks = state.userLinks;
   if (userLinks.filter(a => a.handle == userLink.handle).length > 0) {
     userLinks = userLinks.map(a => {
@@ -52,7 +33,7 @@ function saveUserLink(state: UserLinksState, userLink: UserLink) {
   return { ...state, userLinks: userLinks, editing: null };
 }
 
-function reducer(state: UserLinksState, action: UserLinksAction): UserLinksState {
+function reducer(state: UserLink.State, action: UserLink.Action): UserLink.State {
   switch (action.type) {
   case "add":
     return { ...state, editing: newUserLink() };
@@ -80,7 +61,7 @@ function reducer(state: UserLinksState, action: UserLinksAction): UserLinksState
   }
 }
 
-function createInitialState(userLinks: UserLink[]): UserLinksState {
+function createInitialState(userLinks: UserLink.Link[]): UserLink.State {
   return {
     editing: null,
     userLinks: userLinks.map(ul => {
@@ -90,8 +71,8 @@ function createInitialState(userLinks: UserLink[]): UserLinksState {
 }
 
 function ensureDeletedLastReducer(
-  state: UserLinksState, action: UserLinksAction
-): UserLinksState {
+  state: UserLink.State, action: UserLink.Action
+): UserLink.State {
   const nextState = reducer(state, action);
   return { ...nextState,
            userLinks: [...nextState.userLinks.filter(l => !l.deleted),
@@ -99,8 +80,8 @@ function ensureDeletedLastReducer(
 }
 
 export default function useUserLinks(
-  userLinks: UserLink[]
-): [UserLinksState, (UserLinksAction) => void] {
+  userLinks: UserLink.Link[]
+): [UserLink.State, (action: UserLink.Action) => void] {
   const [state, dispatch] =
         useReducer(ensureDeletedLastReducer, userLinks, createInitialState);
   return [state, dispatch];

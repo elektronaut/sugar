@@ -1,10 +1,9 @@
 import React from "react";
 
-import { UserLink } from "./useUserLinks";
 
 interface ParamProps {
   position: number,
-  userLink: UserLink
+  userLink: UserLink.Link
 }
 
 export default function Param(props: ParamProps) {

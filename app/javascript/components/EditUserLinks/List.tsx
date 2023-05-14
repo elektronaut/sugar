@@ -13,15 +13,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import {
-  UserLink as UserLinkRecord,
-  UserLinksAction
-} from "./useUserLinks";
 import UserLink from "./UserLink";
 
 interface ListProps {
-  dispatch: (action: UserLinksAction) => void,
-  userLinks: UserLinkRecord[]
+  dispatch: (action: UserLink.Action) => void,
+  userLinks: UserLink.Link[]
 }
 
 export default function List(props: ListProps) {

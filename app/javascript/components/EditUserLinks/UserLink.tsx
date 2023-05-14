@@ -2,16 +2,14 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { UserLink as UserLinkRecord, UserLinksAction } from "./useUserLinks";
-
 interface UserLinkProps {
-  dispatch: (action: UserLinksAction) => void,
+  dispatch: (action: UserLink.Action) => void,
   labels: string[],
   position: number,
-  userLink: UserLinkRecord
+  userLink: UserLink.Link
 }
 
-function label(userLink: UserLinkRecord) {
+function label(userLink: UserLink.Link) {
   return userLink.name || userLink.url.replace(/^(f|ht)tps?:\/\//, "");
 }
 

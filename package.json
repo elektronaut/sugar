@@ -42,7 +42,7 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "lint-javascript": "eslint 'app/javascript'",
+    "lint": "eslint 'app/javascript'",
     "build": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --minify --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css"
   },

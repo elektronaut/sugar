@@ -1,13 +1,13 @@
 import React from "react";
 
-import useUserLinks, { UserLink } from "./EditUserLinks/useUserLinks";
+import useUserLinks from "./EditUserLinks/useUserLinks";
 import Editor from "./EditUserLinks/Editor";
 import List from "./EditUserLinks/List";
 import Param from "./EditUserLinks/Param";
 
 interface EditUserLinksProps {
   labels: string[],
-  userLinks: UserLink[]
+  userLinks: UserLink.Link[]
 }
 
 export default function EditUserLinks(props: EditUserLinksProps) {

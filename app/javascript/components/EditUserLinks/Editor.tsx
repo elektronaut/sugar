@@ -1,13 +1,12 @@
 import React, { useState, ChangeEvent } from "react";
 
-import { UserLink, UserLinksAction } from "./useUserLinks";
 import TypeaheadTextField from "../Input/TypeaheadTextField";
 
 interface EditorProps {
-  dispatch: (action: UserLinksAction) => void,
+  dispatch: (action: UserLink.Action) => void,
   labels: string[],
   newLink: boolean,
-  userLink: UserLink
+  userLink: UserLink.Link
 }
 
 function preventSubmit(evt: Event) {
