@@ -110,9 +110,11 @@ $(document).ready(function () {
   }
 
   // Search mode
-  $("#search_mode").change(function (_, elem: HTMLSelectElement) {
+  document.querySelectorAll("#search_mode").forEach((elem: HTMLSelectElement) => {
     const parent = elem.parentNode as HTMLFormElement;
-    parent.action = elem.value;
+    elem.addEventListener("change", () => {
+      parent.action = elem.value;
+    });
   });
 
   // Post quoting

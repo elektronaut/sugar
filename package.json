@@ -43,7 +43,8 @@
   },
   "scripts": {
     "lint": "eslint 'app/javascript'",
-    "build": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --minify --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12",
+    "build": "run build-dev --minify",
+    "build-dev": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12",
     "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css"
   },
   "packageManager": "yarn@3.2.3"
