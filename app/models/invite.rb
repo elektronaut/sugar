@@ -66,9 +66,9 @@ class Invite < ApplicationRecord
 
   def validate_email_registered
     errors.add(:email, "is already registered!") if User.exists?(email: email)
-    return unless Invite.active.select do |i|
+    return unless Invite.active.any? do |i|
       i != self && i.email == email
-    end.any?
+    end
 
     errors.add(:email, "has already been invited!")
   end

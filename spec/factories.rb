@@ -21,7 +21,7 @@ FactoryBot.define do
   end
 
   factory :exchange_moderator do
-    association :exchange, factory: :discussion
+    exchange factory: %i[discussion]
     user
   end
 
@@ -34,7 +34,7 @@ FactoryBot.define do
   factory :exchange do
     sequence(:title)  { |n| "Exchange #{n}" }
     sequence(:body)   { |n| "First post of exchange #{n}" }
-    association :poster, factory: :user
+    poster factory: %i[user]
     posts_count { 1 }
 
     # Discussions
@@ -43,7 +43,7 @@ FactoryBot.define do
       sequence(:body)   { |n| "First post of discussion #{n}" }
 
       factory :closed_discussion do
-        association :closer, factory: :user
+        closer factory: %i[user]
         closed { true }
       end
     end
@@ -74,7 +74,7 @@ FactoryBot.define do
 
   factory :post do
     sequence(:body) { |n| "Post body #{n}" }
-    association :exchange, factory: :discussion
+    exchange factory: %i[discussion]
     user
   end
 
@@ -114,7 +114,7 @@ FactoryBot.define do
     end
 
     factory :user_with_avatar do
-      association :avatar, factory: :avatar
+      avatar
     end
   end
 

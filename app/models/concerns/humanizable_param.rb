@@ -5,7 +5,7 @@ module HumanizableParam
   extend ActiveSupport::Concern
 
   def humanized_param(slug)
-    return id.to_s unless slug&.present?
+    return id.to_s if slug.blank?
 
     "#{id}-" + transliterate(slug).split(/[^\w\d]+/).compact_blank.join("-")
   end

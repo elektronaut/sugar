@@ -69,7 +69,7 @@ module Authenticable
   end
 
   def new_password?
-    password&.present? ? true : false
+    password.present?
   end
 
   def new_password_confirmed?
