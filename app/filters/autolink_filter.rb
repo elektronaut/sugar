@@ -22,8 +22,12 @@ class AutolinkFilter < Filter
     elsif oembeddable?(url)
       oembed(url)
     else
-      "<a href=\"#{url}\">#{url}</a>"
+      link(url)
     end
+  end
+
+  def link(url)
+    "<a href=\"#{url}\">#{url}</a>"
   end
 
   def oembeddable?(url)
@@ -35,7 +39,7 @@ class AutolinkFilter < Filter
     "<div class=\"embed\" data-oembed-url=\"#{url}\">#{embed}</div>"
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
-    url
+    link(url)
   end
 
   def twitter_expression
