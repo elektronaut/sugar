@@ -17,12 +17,12 @@
 
 /* Top tabs: users list and editing profiles */
 .topTabs {
-  border-bottom: 1px solid #E2DCBF;
+  border-bottom: 1px solid #e2dcbf;
   padding-bottom: 1px;
   li {
     display: inline;
     a {
-      border: 1px solid #E2DCBF;
+      border: 1px solid #e2dcbf;
       padding: 2px 7px;
       background: #f8f7f1;
       color: #484030;

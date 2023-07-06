@@ -1,9 +1,8 @@
 import React from "react";
 
-
 interface ParamProps {
-  position: number,
-  userLink: UserLink.Link
+  position: number;
+  userLink: UserLink.Link;
 }
 
 export default function Param(props: ParamProps) {
@@ -14,7 +13,7 @@ export default function Param(props: ParamProps) {
   };
 
   if (!userLink.deleted) {
-    return(
+    return (
       <React.Fragment>
         <input name={name("id")} type="hidden" value={userLink.id} />
         <input name={name("position")} type="hidden" value={position} />
@@ -24,7 +23,7 @@ export default function Param(props: ParamProps) {
       </React.Fragment>
     );
   } else {
-    return(
+    return (
       <React.Fragment>
         <input name={name("id")} type="hidden" value={userLink.id} />
         <input name={name("_destroy")} type="hidden" value={true} />

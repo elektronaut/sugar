@@ -2,22 +2,22 @@
 
 namespace UserLink {
   interface Link {
-    id: number | null,
-    label: string,
-    name: string,
-    url: string,
-    deleted: boolean,
-    handle: string
+    id: number | null;
+    label: string;
+    name: string;
+    url: string;
+    deleted: boolean;
+    handle: string;
   }
 
   interface State {
-    editing: boolean,
-    userLinks: Link[]
+    editing: boolean;
+    userLinks: Link[];
   }
 
   interface Action {
-    type: string,
-    payload?: Link[] | Link
+    type: string;
+    payload?: Link[] | Link;
   }
 }
 

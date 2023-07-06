@@ -8,8 +8,8 @@ export default Backbone.View.extend({
   el: $("div.posts"),
 
   initialize: function () {
-    $(Sugar).bind("postsloaded", function(event, posts) {
-      posts.each(function() {
+    $(Sugar).bind("postsloaded", function (event, posts) {
+      posts.each(function () {
         new Post({ el: this }).render();
       });
     });

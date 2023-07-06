@@ -21,11 +21,11 @@ $(Sugar).bind("ready", function () {
     }
   }
 
-  $(Sugar).bind("posting-status", function(_, message: string) {
+  $(Sugar).bind("posting-status", function (_, message: string) {
     showStatus(message);
   });
 
-  $(Sugar).bind("posting-complete", function() {
+  $(Sugar).bind("posting-complete", function () {
     clearStatus();
   });
 });

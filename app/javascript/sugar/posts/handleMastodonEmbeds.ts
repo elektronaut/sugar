@@ -1,9 +1,9 @@
 interface EventData {
-  id: string,
-  height: number
+  id: string;
+  height: number;
 }
 
-export default function handleMastodonEmbeds () {
+export default function handleMastodonEmbeds() {
   const iframes = new Map<string, HTMLIFrameElement>();
 
   const iframeId = () => {
@@ -18,7 +18,11 @@ export default function handleMastodonEmbeds () {
   const receiveMessage = (evt: Event) => {
     const data = (evt.data || {}) as EventData;
 
-    if (typeof data !== "object" || data.type !== "setHeight" || !iframes.has(data.id)) {
+    if (
+      typeof data !== "object" ||
+      data.type !== "setHeight" ||
+      !iframes.has(data.id)
+    ) {
       return;
     }
 
@@ -33,21 +37,26 @@ export default function handleMastodonEmbeds () {
 
   window.addEventListener("message", receiveMessage);
 
-  document.querySelectorAll("iframe.mastodon-embed").forEach((iframe: HTMLIFrameElement) => {
-    const id = iframeId();
+  document
+    .querySelectorAll("iframe.mastodon-embed")
+    .forEach((iframe: HTMLIFrameElement) => {
+      const id = iframeId();
 
-    iframes.set(id, iframe);
+      iframes.set(id, iframe);
 
-    iframe.scrolling = "no";
-    iframe.style.overflow = "hidden";
+      iframe.scrolling = "no";
+      iframe.style.overflow = "hidden";
 
-    iframe.onload = function () {
-      iframe.contentWindow.postMessage({
-        type: "setHeight",
-        id: id,
-      }, "*");
-    };
+      iframe.onload = function () {
+        iframe.contentWindow.postMessage(
+          {
+            type: "setHeight",
+            id: id
+          },
+          "*"
+        );
+      };
 
-    iframe.onload();
-  });
+      iframe.onload();
+    });
 }

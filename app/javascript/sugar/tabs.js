@@ -1,25 +1,28 @@
 import $ from "jquery";
 import Sugar from "../sugar";
 
-Sugar.Tabs = function(controls, options) {
+Sugar.Tabs = function (controls, options) {
   controls.tabs = [];
 
-  let settings = $.extend({
-    showFirstTab: true
-  }, options);
+  let settings = $.extend(
+    {
+      showFirstTab: true
+    },
+    options
+  );
 
   var anchorTab = false;
   var tabShown = false;
 
-  controls.hideAllTabs = function() {
-    $(this.tabs).each(function() {
+  controls.hideAllTabs = function () {
+    $(this.tabs).each(function () {
       $(this.tabId).hide();
       return $(this.parentNode).removeClass("active");
     });
   };
 
-  controls.showTab = function(tab) {
-    $(this.tabs).each(function() {
+  controls.showTab = function (tab) {
+    $(this.tabs).each(function () {
       if (this.tabId !== tab.tabId) {
         $(this.tabId).hide();
         return $(this.parentNode).removeClass("active");
@@ -29,15 +32,17 @@ Sugar.Tabs = function(controls, options) {
     $(tab.parentNode).addClass("active");
   };
 
-  $(controls).find("a").each(function() {
-    this.container = controls;
-    this.tabId = this.href.match(/(#[\w\d\-_]+)$/)[1];
-    controls.tabs.push(this);
-    return $(this).click(function() {
-      this.container.showTab(this);
-      return false;
+  $(controls)
+    .find("a")
+    .each(function () {
+      this.container = controls;
+      this.tabId = this.href.match(/(#[\w\d\-_]+)$/)[1];
+      controls.tabs.push(this);
+      return $(this).click(function () {
+        this.container.showTab(this);
+        return false;
+      });
     });
-  });
 
   controls.hideAllTabs();
 

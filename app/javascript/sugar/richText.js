@@ -6,10 +6,10 @@ import MarkdownDecorator from "./MarkdownDecorator";
 
 import { csrfToken, putJson } from "../lib/request";
 
-(function() {
+(function () {
   function getSelection(elem) {
     let { selectionStart, selectionEnd, value } = elem;
-    return value.substr(selectionStart, (selectionEnd - selectionStart));
+    return value.substr(selectionStart, selectionEnd - selectionStart);
   }
 
   function replaceSelection(textarea, prefix, replacement, postfix) {
@@ -17,7 +17,9 @@ import { csrfToken, putJson } from "../lib/request";
 
     textarea.value =
       value.substr(0, selectionStart) +
-      prefix + replacement + postfix +
+      prefix +
+      replacement +
+      postfix +
       value.substr(selectionEnd, value.length);
 
     textarea.focus({ preventScroll: true });
@@ -30,20 +32,20 @@ import { csrfToken, putJson } from "../lib/request";
   function undoEmbeds(html) {
     let elem = document.createElement("div");
     elem.innerHTML = html;
-    Array.prototype.slice.call(
-      elem.querySelectorAll("div.embed[data-oembed-url]")
-    ).forEach(function (embed) {
-      embed.parentNode.insertBefore(
-        document.createTextNode(embed.dataset.oembedUrl),
-        embed
-      );
-      embed.parentNode.removeChild(embed);
-    });
+    Array.prototype.slice
+      .call(elem.querySelectorAll("div.embed[data-oembed-url]"))
+      .forEach(function (embed) {
+        embed.parentNode.insertBefore(
+          document.createTextNode(embed.dataset.oembedUrl),
+          embed
+        );
+        embed.parentNode.removeChild(embed);
+      });
     return elem.innerHTML;
   }
 
   function uploadBanner(file) {
-    return "[Uploading \"" + file.name + "\"...]";
+    return '[Uploading "' + file.name + '"...]';
   }
 
   function startUpload(elem, file) {
@@ -51,7 +53,7 @@ import { csrfToken, putJson } from "../lib/request";
   }
 
   function uploadError(response) {
-    if (typeof(response) === "object" && response.error) {
+    if (typeof response === "object" && response.error) {
       alert("There was an error uploading the image: " + response.error);
     }
   }
@@ -60,7 +62,9 @@ import { csrfToken, putJson } from "../lib/request";
     uploadError(response);
     if (response && response.embed) {
       $(elem).val(
-        $(elem).val().replace(uploadBanner(file) + "\n", response.embed)
+        $(elem)
+          .val()
+          .replace(uploadBanner(file) + "\n", response.embed)
       );
     }
   }
@@ -95,17 +99,21 @@ import { csrfToken, putJson } from "../lib/request";
 
   function uploadImage(textarea) {
     let fileInput = $(
-      "<input type=\"file\" name=\"file\" " +
-      "accept=\"image/gif, image/png, image/jpeg, image/webp\" " +
-      "style=\"display: none;\"/>"
+      '<input type="file" name="file" ' +
+        'accept="image/gif, image/png, image/jpeg, image/webp" ' +
+        'style="display: none;"/>'
     );
     fileInput.insertBefore(textarea);
-    fileInput.get(0).addEventListener("change", function () {
-      let file = fileInput.get(0).files[0];
-      uploadImageFile(textarea, file, () => {
-        fileInput.remove();
-      });
-    }, false);
+    fileInput.get(0).addEventListener(
+      "change",
+      function () {
+        let file = fileInput.get(0).files[0];
+        uploadImageFile(textarea, file, () => {
+          fileInput.remove();
+        });
+      },
+      false
+    );
     fileInput.click();
   }
 
@@ -119,13 +127,15 @@ import { csrfToken, putJson } from "../lib/request";
       createImageThumbnails: false
     });
 
-    dropzone.on("addedfile", file => startUpload(elem, file));
-    dropzone.on("success",
-                file => finishUpload(elem, file, JSON.parse(file.xhr.responseText)));
+    dropzone.on("addedfile", (file) => startUpload(elem, file));
+    dropzone.on("success", (file) =>
+      finishUpload(elem, file, JSON.parse(file.xhr.responseText))
+    );
     dropzone.on("error", (file, message) => failedUpload(elem, file, message));
 
     elem.addEventListener("paste", (evt) => {
-      const items = (evt.clipboardData || evt.originalEvent.clipboardData).items;
+      const items = (evt.clipboardData || evt.originalEvent.clipboardData)
+        .items;
       for (var i in items) {
         const item = items[i];
         if (item.kind == "file" && item.type.match(/^image\//)) {
@@ -135,21 +145,21 @@ import { csrfToken, putJson } from "../lib/request";
     });
   }
 
-  Sugar.RichTextArea = function(textarea) {
+  Sugar.RichTextArea = function (textarea) {
     if (textarea.richtext) {
       return this;
     }
     textarea.richtext = true;
 
-    let decorator = () => new MarkdownDecorator;
-    let formatButton = $("<li class=\"formatting\"><a>Markdown</a></li>");
-    let emojiBar = $("<ul class=\"emojiBar clearfix\"></ul>");
+    let decorator = () => new MarkdownDecorator();
+    let formatButton = $('<li class="formatting"><a>Markdown</a></li>');
+    let emojiBar = $('<ul class="emojiBar clearfix"></ul>');
     let icons = Sugar.Configuration.emoticons;
 
     var formats = ["markdown"];
     var format = undefined;
 
-    $("<ul class=\"richTextToolbar clearfix\"></ul>")
+    $('<ul class="richTextToolbar clearfix"></ul>')
       .append(formatButton)
       .insertBefore(textarea);
     emojiBar.insertBefore(textarea);
@@ -160,10 +170,10 @@ import { csrfToken, putJson } from "../lib/request";
     }
 
     if ($(textarea).data("format-binding")) {
-      format = $(textarea).closest("form")
-                          .find($(textarea)
-                          .data("format-binding"))
-                          .val();
+      format = $(textarea)
+        .closest("form")
+        .find($(textarea).data("format-binding"))
+        .val();
     }
     if ($(textarea).data("remember-format")) {
       if (Sugar.Configuration.preferredFormat) {
@@ -178,24 +188,25 @@ import { csrfToken, putJson } from "../lib/request";
 
       if (format === "markdown") {
         label = "Markdown";
-        decorator = () => new MarkdownDecorator;
+        decorator = () => new MarkdownDecorator();
       } else if (format === "html") {
         label = "HTML";
-        decorator = () => new HtmlDecorator;
+        decorator = () => new HtmlDecorator();
       }
 
       formatButton.find("a").html(label);
       if ($(textarea).data("format-binding")) {
-        $(textarea).closest("form")
-                   .find($(textarea)
-                   .data("format-binding"))
-                   .val(format);
+        $(textarea)
+          .closest("form")
+          .find($(textarea).data("format-binding"))
+          .val(format);
       }
 
       if ($(textarea).data("remember-format") && !skipUpdate) {
         if (Sugar.Configuration.currentUserId) {
-          putJson(`/users/${Sugar.Configuration.currentUserId}.json`,
-                  { user: { preferred_format: newFormat }});
+          putJson(`/users/${Sugar.Configuration.currentUserId}.json`, {
+            user: { preferred_format: newFormat }
+          });
         }
       }
     }
@@ -219,10 +230,10 @@ import { csrfToken, putJson } from "../lib/request";
     function addButton(name, className, callback) {
       let link = $(
         `<a title="${name}" class="${className}">` +
-        `<i class="fa-solid fa-${className}"></i></a>`
+          `<i class="fa-solid fa-${className}"></i></a>`
       );
       link.click(() => performAction(callback));
-      $("<li class=\"button\"></li>").append(link).insertBefore(formatButton);
+      $('<li class="button"></li>').append(link).insertBefore(formatButton);
     }
 
     function addHotkey(hotkey, callback) {
@@ -293,7 +304,7 @@ import { csrfToken, putJson } from "../lib/request";
     addHotkey("k", link);
     addHotkey("enter", submit);
 
-    $(Sugar).on("quote", function(event, data) {
+    $(Sugar).on("quote", function (event, data) {
       let [prefix, replacement, postfix] = decorator().quote(
         data.text,
         undoEmbeds(data.html),
@@ -307,12 +318,12 @@ import { csrfToken, putJson } from "../lib/request";
     function addEmojiButton(name, image) {
       let link = $(
         `<a title="${name}"><img alt="${name}" class="emoji" ` +
-        `src="${image}" width="16" height="16"></a>`
+          `src="${image}" width="16" height="16"></a>`
       );
-      link.click(function() {
+      link.click(function () {
         replaceSelection(textarea, "", ":" + name + ": ", "");
       });
-      $("<li class=\"button\"></li>").append(link).appendTo(emojiBar);
+      $('<li class="button"></li>').append(link).appendTo(emojiBar);
     }
 
     for (var j = 0; j < icons.length; j++) {
@@ -324,8 +335,8 @@ import { csrfToken, putJson } from "../lib/request";
     }
   };
 
-  $(Sugar).bind("ready modified", function() {
-    $("textarea.rich").each(function() {
+  $(Sugar).bind("ready modified", function () {
+    $("textarea.rich").each(function () {
       new Sugar.RichTextArea(this);
     });
   });

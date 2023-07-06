@@ -3,17 +3,19 @@ import Sugar from "../sugar";
 
 require("../vendor/jquery.hotkeys");
 
-(function() {
+(function () {
   var currentTarget = null;
   var keySequence = "";
   var keySequences = [];
 
-  let indexOf = [].indexOf || function(item) {
-    for (var i = 0, l = this.length; i < l; i++) {
-      if (i in this && this[i] === item) return i;
-    }
-    return -1;
-  };
+  let indexOf =
+    [].indexOf ||
+    function (item) {
+      for (var i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) return i;
+      }
+      return -1;
+    };
 
   let specialKeys = [
     8, 9, 13, 19, 20, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 96, 97,
@@ -21,17 +23,18 @@ require("../vendor/jquery.hotkeys");
     114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
   ];
 
-  let bindRawKey = (hotkey, fn) =>
-    $(document).bind("keydown", hotkey, fn);
+  let bindRawKey = (hotkey, fn) => $(document).bind("keydown", hotkey, fn);
 
   let bindKey = (hotkey, fn) =>
-    bindRawKey(hotkey, event => { if (!event.metaKey) { return fn(event); } });
+    bindRawKey(hotkey, (event) => {
+      if (!event.metaKey) {
+        return fn(event);
+      }
+    });
 
-  let bindKeySequence = (expression, fn) =>
-    keySequences.push([expression, fn]);
+  let bindKeySequence = (expression, fn) => keySequences.push([expression, fn]);
 
-  let exchangeId = (target) =>
-    $(target).closest("tr").data("exchange-id");
+  let exchangeId = (target) => $(target).closest("tr").data("exchange-id");
 
   let clearNewPostsFromDiscussion = (target) => {
     $(".discussion" + exchangeId(target)).removeClass("new_posts");
@@ -39,8 +42,10 @@ require("../vendor/jquery.hotkeys");
   };
 
   let defaultTarget = () => {
-    if (document.location.hash &&
-        document.location.hash.match(/^#post-([\d]+)$/)) {
+    if (
+      document.location.hash &&
+      document.location.hash.match(/^#post-([\d]+)$/)
+    ) {
       let postId = document.location.hash.match(/^#post-([\d]+)$/)[1];
       return $(".post[data-post_id=" + postId + "]").get(0);
     }
@@ -51,7 +56,7 @@ require("../vendor/jquery.hotkeys");
     let elemBottom = elemTop + $(elem).height();
     let top = $(window).scrollTop();
     let bottom = top + $(window).height();
-    return (elemTop < top) || (elemBottom > bottom);
+    return elemTop < top || elemBottom > bottom;
   };
 
   let focusElement = (event, selector) => {
@@ -59,12 +64,11 @@ require("../vendor/jquery.hotkeys");
     return event.preventDefault();
   };
 
-  let isDiscussion = (target) =>
-    $(target).closest("tr").hasClass("discussion");
+  let isDiscussion = (target) => $(target).closest("tr").hasClass("discussion");
 
   let keypressToCharacter = (event) => {
     var ref;
-    if (ref = event.which, indexOf.call(specialKeys, ref) >= 0) {
+    if (((ref = event.which), indexOf.call(specialKeys, ref) >= 0)) {
       return;
     }
     if (event.shiftKey && event.which >= 65 && event.which <= 90) {
@@ -77,35 +81,38 @@ require("../vendor/jquery.hotkeys");
   let markAsRead = (target) => {
     if (isDiscussion(target)) {
       let path = "/discussions/" + exchangeId(target) + "/mark_as_read";
-      $.get(path, {}, function() {
+      $.get(path, {}, function () {
         clearNewPostsFromDiscussion(target);
       });
     }
   };
 
-  let scrollToTarget = (target) =>
-    target.scrollIntoView();
+  let scrollToTarget = (target) => target.scrollIntoView();
 
-  let targetUrl = (target) =>
-    target.href;
+  let targetUrl = (target) => target.href;
 
-  let isExchangesView = () =>
-    $("table.discussions").length > 0;
+  let isExchangesView = () => $("table.discussions").length > 0;
 
-  let isPostsView = () =>
-    $(".posts .post").length > 0;
+  let isPostsView = () => $(".posts .post").length > 0;
 
-  let onlyExchanges = (fn) =>
-    { if (isExchangesView()) { return fn(); } };
+  let onlyExchanges = (fn) => {
+    if (isExchangesView()) {
+      return fn();
+    }
+  };
 
-  let onlyPosts = (fn) =>
-    { if (isPostsView()) { return fn(); } };
+  let onlyPosts = (fn) => {
+    if (isPostsView()) {
+      return fn();
+    }
+  };
 
-  let visitPath = (path) =>
-    document.location = path;
+  let visitPath = (path) => (document.location = path);
 
   let visitLink = (selector) => {
-    if ($(selector).length > 0) { return visitPath($(selector).get(0).href); }
+    if ($(selector).length > 0) {
+      return visitPath($(selector).get(0).href);
+    }
   };
 
   let trackKeySequence = (event) => {
@@ -145,44 +152,49 @@ require("../vendor/jquery.hotkeys");
     }
   };
 
-  let withTarget = (fn) =>
-    { if (currentTarget) { return fn(currentTarget); } };
+  let withTarget = (fn) => {
+    if (currentTarget) {
+      return fn(currentTarget);
+    }
+  };
 
-  let ifTargets = (fn) =>
-    { if (targets().length > 0) { return fn(); } };
+  let ifTargets = (fn) => {
+    if (targets().length > 0) {
+      return fn();
+    }
+  };
 
-  let first = (collection) =>
-    collection[0];
+  let first = (collection) => collection[0];
 
-  let last = (collection) =>
-    collection.slice(-1);
+  let last = (collection) => collection.slice(-1);
 
   let getRelative = (collection, item, offset) =>
-    collection[(
-      collection.indexOf(item) + offset + collection.length
-    ) % collection.length];
+    collection[
+      (collection.indexOf(item) + offset + collection.length) %
+        collection.length
+    ];
 
   let nextTarget = () =>
     getRelative(
-      targets(), currentTarget || defaultTarget() || last(targets()), 1
+      targets(),
+      currentTarget || defaultTarget() || last(targets()),
+      1
     );
 
   let previousTarget = () =>
     getRelative(
-      targets(), currentTarget || defaultTarget() || first(targets()), -1
+      targets(),
+      currentTarget || defaultTarget() || first(targets()),
+      -1
     );
 
-  let setTarget = (target) =>
-    markTarget(currentTarget = target);
+  let setTarget = (target) => markTarget((currentTarget = target));
 
-  let resetTarget = () =>
-    currentTarget = null;
+  let resetTarget = () => (currentTarget = null);
 
-  let openTarget = (target) =>
-    visitPath(targetUrl(target));
+  let openTarget = (target) => visitPath(targetUrl(target));
 
-  let openTargetNewTab = (target) =>
-    window.open(targetUrl(target));
+  let openTargetNewTab = (target) => window.open(targetUrl(target));
 
   $(document).bind("keydown", trackKeySequence);
 
@@ -196,7 +208,7 @@ require("../vendor/jquery.hotkeys");
   bindKey("shift+p", () => visitLink(".prev_page_link"));
   bindKey("shift+k", () => visitLink(".prev_page_link"));
   bindKey("shift+n", () => visitLink(".next_page_link"));
-  bindKey("u",       () => visitLink("#back_link"));
+  bindKey("u", () => visitLink("#back_link"));
   bindKey("shift+j", () => visitLink(".next_page_link"));
 
   bindKey("/", (event) => focusElement(event, "#q"));
@@ -209,14 +221,16 @@ require("../vendor/jquery.hotkeys");
   bindKey("r", () => onlyPosts(() => Sugar.loadNewPosts()));
   bindKey("q", () => onlyPosts(() => withTarget((t) => Sugar.quotePost(t))));
 
-  bindKey("o", () =>
-    onlyExchanges(() => withTarget((t) => openTarget(t))));
+  bindKey("o", () => onlyExchanges(() => withTarget((t) => openTarget(t))));
   bindKey("shift+o", () =>
-    onlyExchanges(() => withTarget((t) => openTargetNewTab(t))));
+    onlyExchanges(() => withTarget((t) => openTargetNewTab(t)))
+  );
   bindKey("Return", () =>
-    onlyExchanges(() => withTarget((t) => openTarget(t))));
+    onlyExchanges(() => withTarget((t) => openTarget(t)))
+  );
   bindKey("shift+Return", () =>
-    onlyExchanges(() => withTarget((t) => openTargetNewTab(t))));
+    onlyExchanges(() => withTarget((t) => openTargetNewTab(t)))
+  );
 
   bindKey("y", () => onlyExchanges(() => withTarget((t) => markAsRead(t))));
   bindKey("m", () => onlyExchanges(() => withTarget((t) => markAsRead(t))));

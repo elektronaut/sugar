@@ -1,9 +1,9 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
 
-$(Sugar).bind("ready", function() {
-  $(".edit_user_profile").each(function() {
-    const checkAdmin = function() {
+$(Sugar).bind("ready", function () {
+  $(".edit_user_profile").each(function () {
+    const checkAdmin = function () {
       if ($("#user_admin:checked").val()) {
         $("#user_moderator").attr("checked", true).attr("disabled", true);
         $("#user_user_admin").attr("checked", true).attr("disabled", true);

@@ -19,7 +19,8 @@
     padding: 0;
   }
 
-  .button, .formatting {
+  .button,
+  .formatting {
     a {
       height: 30px;
       line-height: 30px;
@@ -46,8 +47,9 @@
       border-right: 1px solid #d7d7d7;
       color: #555;
       font-size: 14px;
-      background-color: #F6F6F6;
-      &:focus, &:hover {
+      background-color: #f6f6f6;
+      &:focus,
+      &:hover {
         color: #000;
         background: #fdfdfd;
       }

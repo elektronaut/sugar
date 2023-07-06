@@ -4,18 +4,19 @@ th {
 
 table.list {
   border-collapse: collapse;
-  border-top: 1px solid #E2DCBF;
+  border-top: 1px solid #e2dcbf;
   width: 100%;
 
-  td, th {
+  td,
+  th {
     padding: 7px 20px 7px 0;
-    border-bottom: 1px solid #E2DCBF;
+    border-bottom: 1px solid #e2dcbf;
     white-space: nowrap;
   }
 
   th {
     color: #321;
-    background: #F5F1E0;
+    background: #f5f1e0;
   }
 
   td {

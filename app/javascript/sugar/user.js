@@ -4,9 +4,9 @@ import Sugar from "../sugar";
 Sugar.extend({
   _currentUser: false,
 
-  loggedIn: () => this.getCurrentUser() ? true : false,
+  loggedIn: () => (this.getCurrentUser() ? true : false),
 
-  getCurrentUser: function() {
+  getCurrentUser: function () {
     if (this.Configuration.currentUser && !this._currentUser) {
       this._currentUser = new User(this.Configuration.currentUser);
     }

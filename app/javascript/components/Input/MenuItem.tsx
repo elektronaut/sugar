@@ -1,11 +1,11 @@
 import React from "react";
 
 interface MenuItemProps {
-  item: string,
-  index: number,
-  isActive: boolean,
-  isSelected: boolean,
-  children: JSX.Element
+  item: string;
+  index: number;
+  isActive: boolean;
+  isSelected: boolean;
+  children: JSX.Element;
 }
 
 export default function MenuItem(props: MenuItemProps) {
@@ -18,8 +18,7 @@ export default function MenuItem(props: MenuItemProps) {
   }
 
   return (
-    <li className={classNames.join(" ")}
-        {...props}>
+    <li className={classNames.join(" ")} {...props}>
       {props.children}
     </li>
   );

@@ -16,8 +16,8 @@
   display: inline-block;
 }
 
-
-a, a:visited {
+a,
+a:visited {
   text-decoration: none;
   color: #763047;
 }
@@ -25,17 +25,19 @@ a:hover {
   color: #025;
 }
 
-b, strong {
+b,
+strong {
   font-weight: bold;
 }
-em, i {
+em,
+i {
   font-style: italic;
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
-  background: #FFFFFF;
+  background: #ffffff;
   color: #000000;
   overflow-x: hidden;
   -webkit-user-select: none;
@@ -50,7 +52,7 @@ body[orient="landscape"] {
 }
 
 #header {
-  background: #111 url('b3s/mobile/header.png');
+  background: #111 url("b3s/mobile/header.png");
   height: 45px;
 }
 #header #navigationToggle {
@@ -63,7 +65,7 @@ body[orient="landscape"] {
   width: 67px;
   height: 44px;
   background-size: 134px 44px;
-  background-image: url('b3s/mobile/header_menu.png');
+  background-image: url("b3s/mobile/header_menu.png");
   background-position: 0px 0px;
 }
 #header #navigationToggle a.new {
@@ -85,17 +87,19 @@ body[orient="landscape"] {
   font-weight: normal;
   text-shadow: rgba(0, 0, 0, 0.4) 0px -1px 0;
   white-space: nowrap;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 body[orient="landscape"] #header h1.page_title {
-    width: 420px;
+  width: 420px;
 }
-#header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
+#header h1.page_title .site_name,
+#header h1.page_title .site_name a,
+#header h1.page_title .site_name a:visited {
   position: absolute;
   display: block;
   top: 0;
   left: 0;
-  background: transparent url('b3s/mobile/b3slogo.png');
+  background: transparent url("b3s/mobile/b3slogo.png");
   height: 45px;
   width: 49px;
   text-indent: -9000px;
@@ -109,7 +113,7 @@ body[orient="landscape"] #header h1.page_title {
   overflow: auto;
   /*border-top: 1px solid #aaa;*/
   background: #ddd;
-  background: #f2f2f2 url('b3s/mobile/navigation_bg.gif') no-repeat;
+  background: #f2f2f2 url("b3s/mobile/navigation_bg.gif") no-repeat;
   padding-top: 2px;
   border-bottom: 1px solid #ddd;
   /*-webkit-box-shadow: #888 0px 4px 4px;*/
@@ -121,7 +125,7 @@ body[orient="landscape"] #header h1.page_title {
   display: block;
 }
 #navigation .search {
-  border-top: 1px solid #D0BBBB;
+  border-top: 1px solid #d0bbbb;
   margin-top: 10px;
   padding-top: 10px;
   padding-left: 6px;
@@ -151,7 +155,7 @@ body[orient="landscape"] #navigation .search .query {
 #navigation li a {
   width: 125px;
   color: #6c1619;
-  border: 1px solid #D0BBBB;
+  border: 1px solid #d0bbbb;
   background: #fff;
   display: block;
 
@@ -192,7 +196,7 @@ body[orient="landscape"] #navigation .search .query {
 .login_box label {
   font-weight: normal;
   font-size: 18px;
-  color: #555 ;
+  color: #555;
 }
 
 #login-functions {
@@ -208,10 +212,10 @@ body[orient="landscape"] #login-functions .separator {
   display: none;
 }
 
-input, textarea {
+input,
+textarea {
   font-size: 16px;
 }
-
 
 label {
   display: block;
@@ -225,10 +229,10 @@ label {
 }
 
 .content {
-  background: #fff url('b3s/mobile/contentbg.gif') repeat-x;
+  background: #fff url("b3s/mobile/contentbg.gif") repeat-x;
   padding-bottom: 10px;
   min-height: 285px;
-    -webkit-user-select: auto;
+  -webkit-user-select: auto;
 }
 
 .page_content {
@@ -241,7 +245,6 @@ label {
 body[orient="landscape"] .page_content textarea {
   width: 435px;
 }
-
 
 .pagination {
   padding: 15px 10px;
@@ -257,13 +260,14 @@ body[orient="landscape"] .page_content textarea {
   }
 }
 
-.discussion, .conversation {
+.discussion,
+.conversation {
   padding: 8px 10px 5px 10px;
   border-bottom: 1px solid #ddd;
   color: #555;
 }
 .discussions .discussion {
-  background: #fff url('b3s/mobile/contentbg_light.gif') bottom left repeat-x;
+  background: #fff url("b3s/mobile/contentbg_light.gif") bottom left repeat-x;
 }
 
 .discussion .new_posts_count {
@@ -273,22 +277,24 @@ body[orient="landscape"] .page_content textarea {
   letter-spacing: -0.05em;
   padding-top: 3px;
 }
-.discussion h2, .conversation h2 {
+.discussion h2,
+.conversation h2 {
   font-weight: normal;
   font-size: 16px;
-    width: 255px;
+  width: 255px;
   line-height: 1.2;
   margin-bottom: 1px;
 }
-.discussion h2 a, .conversation h2 a {
+.discussion h2 a,
+.conversation h2 a {
   color: #000;
 }
 
 .conversation h2 {
-    width: 200px;
+  width: 200px;
 }
 body[orient="landscape"] .discussion h2 {
-    width: 415px;
+  width: 415px;
 }
 body[orient="landscape"] .conversation h2 {
   width: 360px;
@@ -298,25 +304,29 @@ body[orient="landscape"] .conversation h2 {
   font-size: 11px;
   letter-spacing: -0.05em;
 }
-.discussion p, .conversation p {
+.discussion p,
+.conversation p {
   font-size: 10px;
-    overflow: hidden;
-    width: 290px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  overflow: hidden;
+  width: 290px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0;
 }
 .conversation p {
   font-size: 12px;
 }
-body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p {
-    width: 450px;
+body[orient="landscape"] .discussion p,
+body[orient="landscape"] .conversation p {
+  width: 450px;
 }
 
-.discussions .new_posts, .conversations .new_posts {
+.discussions .new_posts,
+.conversations .new_posts {
   background: #fffde8;
-  background: #fffde8 url('b3s/mobile/contentbg_light_new_posts.gif') bottom left repeat-x;
-  border-bottom: 1px solid #E4DDB5;
+  background: #fffde8 url("b3s/mobile/contentbg_light_new_posts.gif") bottom
+    left repeat-x;
+  border-bottom: 1px solid #e4ddb5;
 }
 
 .conversation .last_message_date {
@@ -328,7 +338,6 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .posts .discussion {
   background: #eee;
 }
-
 
 .posts .post {
   padding: 5px 10px;
@@ -349,10 +358,13 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
       color: #888;
       font-size: 0.9em;
       padding: 5px 0px;
-      &, a, a:visited {
+      &,
+      a,
+      a:visited {
         color: #888;
       }
-      a, a:visited {
+      a,
+      a:visited {
         text-decoration: underline;
         cursor: pointer;
       }
@@ -391,7 +403,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 }
 .posts .post .post_info {
   float: left;
-  &, .permalink {
+  &,
+  .permalink {
     color: #555;
   }
 }
@@ -408,7 +421,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   padding-top: 5px;
   color: #ddd;
 }
-.post .functions a, .post .functions a:visited {
+.post .functions a,
+.post .functions a:visited {
   color: #aaa;
 }
 
@@ -467,7 +481,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .body small {
   font-size: 12px;
 }
-.post .body ul, .post .body ol {
+.post .body ul,
+.post .body ol {
   &,
   &:before,
   &:after {
@@ -494,7 +509,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
 .post .body ol ol {
   margin-bottom: 0px;
 }
-.post .body code, .post .body pre.highlight {
+.post .body code,
+.post .body pre.highlight {
   font-family: Courier, monospace;
   font-size: 12px;
 }
@@ -521,7 +537,8 @@ body[orient="landscape"] .discussion p, body[orient="landscape"] .conversation p
   width: 100%;
 }
 
-.posts .post .body a, .posts .post .body a:visited {
+.posts .post .body a,
+.posts .post .body a:visited {
   color: #364077;
   text-decoration: underline;
 }
@@ -532,14 +549,14 @@ table.userinfo {
   border-top: 1px solid #ddd;
   width: 100%;
 }
-table.userinfo th, table.userinfo td {
+table.userinfo th,
+table.userinfo td {
   border-bottom: 1px solid #ddd;
   padding: 3px 0;
 }
 table.userinfo th {
   padding-right: 15px;
 }
-
 
 .avatar-image {
   width: 48px;
@@ -566,7 +583,8 @@ table.userinfo th {
     font-weight: bold;
     color: #888;
   }
-  th, td {
+  th,
+  td {
     border-bottom: 1px solid #ddd;
     padding: 3px 0px 3px 15px;
   }
@@ -577,25 +595,23 @@ table.userinfo th {
   }
 }
 
-
 blockquote {
   margin: 0;
   padding: 5px 10px;
-  background: #F3F1E9;
-  color: #3C392C;
-  border: 1px solid #DEDCD4;
-  border-left: 2px solid #CCC9BC;
+  background: #f3f1e9;
+  color: #3c392c;
+  border: 1px solid #dedcd4;
+  border-left: 2px solid #ccc9bc;
   font-size: 13px;
   font-style: italic;
 }
 /* Posted by.. inside blockquotes */
 blockquote cite {
   display: block;
-  color: #7E7B70;
-  border-bottom: 1px solid #CCC9BC;
+  color: #7e7b70;
+  border-bottom: 1px solid #ccc9bc;
   margin-bottom: 5px;
 }
-
 
 /* -----------------------------------------------------------------------
    SPOILERS
@@ -616,14 +632,14 @@ blockquote cite {
   -moz-transform: rotate(0deg);
 }
 
-
 /* -----------------------------------------------------------------------
    RICH TEXT EDITOR
    ----------------------------------------------------------------------- */
 
 .reply {
   padding: 15px 10px 5px 10px;
-  &, * {
+  &,
+  * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -679,7 +695,7 @@ textarea.rich {
     border-right: 1px solid #d7d7d7;
     color: #555;
     font-size: 12px;
-    background-color: #F6F6F6;
+    background-color: #f6f6f6;
   }
   .formatting a {
     font-size: 11px;
@@ -710,23 +726,28 @@ section.login {
 /* Retina display overrides */
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
   #header {
-    background: #111 url('b3s/mobile/header_x2.png');
+    background: #111 url("b3s/mobile/header_x2.png");
     background-size: 480px 45px;
   }
-  #header h1.page_title .site_name, #header h1.page_title .site_name a, #header h1.page_title .site_name a:visited {
-    background: transparent url('b3s/mobile/b3slogo_x2.png');
+  #header h1.page_title .site_name,
+  #header h1.page_title .site_name a,
+  #header h1.page_title .site_name a:visited {
+    background: transparent url("b3s/mobile/b3slogo_x2.png");
     background-size: 49px 45px;
   }
   .content {
-    background: #fff url('b3s/mobile/contentbg_x2.png') repeat-x;
+    background: #fff url("b3s/mobile/contentbg_x2.png") repeat-x;
     background-size: 23px 24px;
   }
   .discussions .discussion {
-    background: #fff url('b3s/mobile/contentbg_light_x2.png') bottom left repeat-x;
+    background: #fff url("b3s/mobile/contentbg_light_x2.png") bottom left
+      repeat-x;
     background-size: 23px 12px;
   }
-  .discussions .new_posts, .conversations .new_posts {
-    background: #fffde8 url('b3s/mobile/contentbg_light_new_posts_x2.png') bottom left repeat-x;
+  .discussions .new_posts,
+  .conversations .new_posts {
+    background: #fffde8 url("b3s/mobile/contentbg_light_new_posts_x2.png")
+      bottom left repeat-x;
     background-size: 240px 12px;
   }
 }

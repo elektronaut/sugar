@@ -1,12 +1,12 @@
 table.discussions {
   border-collapse: collapse;
-  border-top: 1px solid #E2DCBF;
+  border-top: 1px solid #e2dcbf;
   width: 100%;
   margin-bottom: 20px;
 
   td {
     padding: 3px 20px 7px 0;
-    border-bottom: 1px solid #E2DCBF;
+    border-bottom: 1px solid #e2dcbf;
     white-space: nowrap;
     color: #6f5a43;
 
@@ -40,10 +40,12 @@ table.discussions {
     }
     &.closed {
       .name {
-        a, a:visited {
+        a,
+        a:visited {
           color: #666;
         }
-        a:hover, a:focus {
+        a:hover,
+        a:focus {
           color: #333;
         }
       }
@@ -56,29 +58,32 @@ table.discussions {
       color: #012;
     }
     &.nsfw {
-      opacity: 1.0;
+      opacity: 1;
     }
   }
 }
 
-.new_discussion input.text, .edit_discussion input.text {
+.new_discussion input.text,
+.edit_discussion input.text {
   width: 100%;
   max-width: 800px;
 }
 
-#new_discussion input.title, #edit_discussion input.title {
+#new_discussion input.title,
+#edit_discussion input.title {
   font-size: 1.2em;
 }
 
 #new_discussion {
   .title_search {
-    border: 1px solid #E2DCBF;
+    border: 1px solid #e2dcbf;
     padding: 2px 8px;
     width: 100%;
     max-width: 588px;
     margin-top: 2px;
     &.loading {
-      background: transparent url('default/ajax_spinner_small.gif') 0 2px no-repeat;
+      background: transparent url("default/ajax_spinner_small.gif") 0 2px
+        no-repeat;
       padding: 2px 24px;
       border: 0;
       color: #84806d;
@@ -93,7 +98,7 @@ table.discussions {
 
     a,
     a:visited {
-      border-top: 1px solid #E2DCBF;
+      border-top: 1px solid #e2dcbf;
       padding: 4px 0;
       font-size: 1.2em;
       display: block;

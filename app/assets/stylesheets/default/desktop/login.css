@@ -1,8 +1,8 @@
 body.login #login {
   font-size: 1.2em;
 
-  input[type=text],
-  input[type=password] {
+  input[type="text"],
+  input[type="password"] {
     font-size: 1.2em;
     margin-bottom: 10px;
     width: 250px;

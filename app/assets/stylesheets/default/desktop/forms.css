@@ -1,11 +1,12 @@
-input, textarea {
+input,
+textarea {
   font-size: 1.2em;
 }
 
 #content {
-  input[type=text],
-  input[type=email],
-  input[type=password] {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     border-radius: 3px;
     padding: 8px 10px;
     border: 1px solid #d7d7d7;
@@ -36,7 +37,7 @@ label .description {
 
 .typeahead-input {
   display: flex;
-  #content & input[type=text] {
+  #content & input[type="text"] {
     padding-right: 40px;
   }
   button {
@@ -83,7 +84,6 @@ div.errors {
   }
 }
 
-
 .field_with_errors {
   display: block;
   label {
@@ -105,7 +105,7 @@ div.fieldWithErrors {
 fieldset {
   margin-bottom: 20px;
   h2 {
-    border-bottom: 1px solid #E2DCBF;
+    border-bottom: 1px solid #e2dcbf;
     margin-top: 20px;
     padding-bottom: 7px;
     margin-bottom: 7px;
@@ -116,8 +116,13 @@ fieldset {
   }
 }
 
-
 textarea.code {
   width: 100%;
-  font-family: Menlo, Monaco, Consolas, Courier New, Courier, monospace;
+  font-family:
+    Menlo,
+    Monaco,
+    Consolas,
+    Courier New,
+    Courier,
+    monospace;
 }

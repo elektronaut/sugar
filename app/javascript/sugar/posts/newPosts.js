@@ -10,27 +10,24 @@ Sugar.PostDetector = {
   total_posts: null,
   read_posts: null,
 
-  refresh: function() {
+  refresh: function () {
     if (!this.paused) {
       let detector = this;
-      $.getJSON(this.model.postsCountUrl({timestamp: true}), function(json) {
+      $.getJSON(this.model.postsCountUrl({ timestamp: true }), function (json) {
         var new_posts = json.posts_count - detector.total_posts;
         if (new_posts > 0) {
           detector.total_posts = json.posts_count;
-          return $(Sugar).trigger(
-            "newposts",
-            [
-              detector.total_posts,
-              new_posts,
-              (detector.total_posts - detector.read_posts)
-            ]
-          );
+          return $(Sugar).trigger("newposts", [
+            detector.total_posts,
+            new_posts,
+            detector.total_posts - detector.read_posts
+          ]);
         }
       });
     }
   },
 
-  start: function(container) {
+  start: function (container) {
     this.paused = false;
 
     var modelClass = Discussion;
@@ -52,27 +49,27 @@ Sugar.PostDetector = {
     }
 
     if (!this.interval) {
-      this.interval = setInterval((function() {
+      this.interval = setInterval(function () {
         Sugar.PostDetector.refresh();
-      }), 5000);
+      }, 5000);
     }
   },
 
-  stop: function() {
+  stop: function () {
     this.paused = true;
     clearInterval(this.interval);
     this.interval = null;
   },
 
-  pause: function() {
+  pause: function () {
     this.paused = true;
   },
 
-  resume: function() {
+  resume: function () {
     this.paused = false;
   },
 
-  mark_posts_read: function(count) {
+  mark_posts_read: function (count) {
     this.read_posts += count;
     if (this.total_posts < this.read_posts) {
       this.total_posts = this.read_posts;
@@ -80,7 +77,7 @@ Sugar.PostDetector = {
   }
 };
 
-Sugar.loadNewPosts = function() {
+Sugar.loadNewPosts = function () {
   if ($("#discussionLink").length > 0) {
     Sugar.PostDetector.pause();
     $(Sugar).trigger("postsloading");
@@ -93,13 +90,14 @@ Sugar.loadNewPosts = function() {
       /\/\/[\w\d.:]+\/(discussions|conversations)\/([\d]+)/
     )[2];
 
-    var endpoint = `/${exchangeType}/${exchangeId}/posts` +
-                   `/since/${Sugar.PostDetector.read_posts}`;
+    var endpoint =
+      `/${exchangeType}/${exchangeId}/posts` +
+      `/since/${Sugar.PostDetector.read_posts}`;
 
-    return $.get(endpoint, function(data) {
+    return $.get(endpoint, function (data) {
       // Create the container if necessary
       if ($(".posts #ajaxPosts").length < 1) {
-        $(".posts").append("<div id=\"ajaxPosts\"></div>");
+        $(".posts").append('<div id="ajaxPosts"></div>');
       }
 
       // Insert the content
@@ -118,12 +116,13 @@ Sugar.loadNewPosts = function() {
   }
 };
 
-
-$(Sugar).bind("ready", function() {
+$(Sugar).bind("ready", function () {
   // Start the post detector
-  if ($("#discussion").length > 0 &&
-      $("#newPosts").length > 0 &&
-      $("body.last_page").length > 0) {
+  if (
+    $("#discussion").length > 0 &&
+    $("#newPosts").length > 0 &&
+    $("body.last_page").length > 0
+  ) {
     Sugar.PostDetector.start($("#discussion").get(0));
   }
 
@@ -132,41 +131,42 @@ $(Sugar).bind("ready", function() {
   var originalTitle = document.title;
 
   // Update the window title on new posts
-  $(Sugar).bind("newposts", function(event, total, newPosts, unread) {
-      document.title = `(${unread}) ${originalTitle}`;
-    }
-  );
+  $(Sugar).bind("newposts", function (event, total, newPosts, unread) {
+    document.title = `(${unread}) ${originalTitle}`;
+  });
 
   // Reset the document title when posts are loaded
-  $(Sugar).bind("postsloaded", function() {
+  $(Sugar).bind("postsloaded", function () {
     document.title = originalTitle;
   });
 
   // -- Paginator --
 
   // Update the total posts count on the paginator
-  $(Sugar).bind("newposts", function(event, total) {
+  $(Sugar).bind("newposts", function (event, total) {
     $(".total_items_count").text(total);
   });
 
   // Update the number of shown posts
-  $(Sugar).bind("postsloaded", function() {
+  $(Sugar).bind("postsloaded", function () {
     $(".shown_items_count").text(Sugar.PostDetector.read_posts);
   });
 
   // -- Notification --
 
   // Show the notification on new posts
-  $(Sugar).bind("newposts", function(event, total, newPosts, unread) {
+  $(Sugar).bind("newposts", function (event, total, newPosts, unread) {
     var notification_string = "A new post has been made";
     if (unread > 1) {
       notification_string = `${unread} new posts have been made`;
     }
 
-    notification_string += ", <a href=\"" + $("#discussionLink").get()[0].href +
-                           "\">click here to load</a>.";
+    notification_string +=
+      ', <a href="' +
+      $("#discussionLink").get()[0].href +
+      '">click here to load</a>.';
     $("#newPosts").html(`<p>${notification_string}</p>`);
-    $("#newPosts a").click(function() {
+    $("#newPosts a").click(function () {
       Sugar.loadNewPosts();
       return false;
     });
@@ -178,12 +178,12 @@ $(Sugar).bind("ready", function() {
   });
 
   // Show loading status
-  $(Sugar).bind("postsloading", function() {
+  $(Sugar).bind("postsloading", function () {
     $("#newPosts").addClass("new_posts_since_refresh").html("Loading&hellip;");
   });
 
   // Hide when posts are loaded
-  $(Sugar).bind("postsloaded", function() {
+  $(Sugar).bind("postsloaded", function () {
     $("#newPosts").removeClass("new_posts_since_refresh").html("").hide();
   });
 });

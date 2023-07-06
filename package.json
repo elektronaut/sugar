@@ -37,15 +37,19 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.0.0",
     "typescript": "^5.0.4"
   },
   "scripts": {
     "lint": "eslint 'app/javascript'",
     "build": "run build-dev --minify",
     "build-dev": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12",
-    "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css"
+    "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css",
+    "prettier": "prettier app/javascript app/assets/stylesheets --check",
+    "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
   },
   "packageManager": "yarn@3.2.3"
 }

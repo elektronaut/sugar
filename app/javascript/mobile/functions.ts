@@ -8,12 +8,12 @@ function toggleNavigation() {
 // Amazon Associates referral code
 function addReferralIds() {
   const referralId = Sugar.Configuration.amazonAssociatesId as string;
-  const ptrn = /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
+  const ptrn =
+    /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
 
   const needsReferral = function (link: HTMLLinkElement): boolean {
     return (
-      !$.data(link, "amazon_associates_referral_id") &&
-      link.href.match(ptrn)
+      !$.data(link, "amazon_associates_referral_id") && link.href.match(ptrn)
     );
   };
 
@@ -34,11 +34,13 @@ function addReferralIds() {
 }
 
 function wrapEmbeds() {
-  const selectors: string[] = [ "iframe[src*=\"bandcamp.com\"]",
-                    "iframe[src*=\"player.vimeo.com\"]",
-                    "iframe[src*=\"youtube.com\"]",
-                    "iframe[src*=\"youtube-nocookie.com\"]",
-                    "iframe[src*=\"kickstarter.com\"][src*=\"video.html\"]" ];
+  const selectors: string[] = [
+    'iframe[src*="bandcamp.com"]',
+    'iframe[src*="player.vimeo.com"]',
+    'iframe[src*="youtube.com"]',
+    'iframe[src*="youtube-nocookie.com"]',
+    'iframe[src*="kickstarter.com"][src*="video.html"]'
+  ];
 
   const embeds = [...document.querySelectorAll(selectors.join(","))];
 
@@ -75,7 +77,7 @@ function wrapEmbeds() {
 
 $(document).ready(function () {
   const updateLayout = function () {
-    if ((window.orientation != null)) {
+    if (window.orientation != null) {
       if (window.orientation === 90 || window.orientation === -90) {
         document.body.setAttribute("orient", "landscape");
       } else {
@@ -110,12 +112,14 @@ $(document).ready(function () {
   }
 
   // Search mode
-  document.querySelectorAll("#search_mode").forEach((elem: HTMLSelectElement) => {
-    const parent = elem.parentNode as HTMLFormElement;
-    elem.addEventListener("change", () => {
-      parent.action = elem.value;
+  document
+    .querySelectorAll("#search_mode")
+    .forEach((elem: HTMLSelectElement) => {
+      const parent = elem.parentNode as HTMLFormElement;
+      elem.addEventListener("change", () => {
+        parent.action = elem.value;
+      });
     });
-  });
 
   // Post quoting
   $(".post .functions a.quote_post").click(function () {
@@ -125,15 +129,20 @@ $(document).ready(function () {
 
     const post = $(this).closest(".post");
     const username = post.find(".post_info .username a").text();
-    const permalinkElem = post.find(".post_info .permalink").get()[0] as HTMLLinkElement;
-    const permalink = permalinkElem.href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
+    const permalinkElem = post
+      .find(".post_info .permalink")
+      .get()[0] as HTMLLinkElement;
+    const permalink = permalinkElem.href.replace(
+      /^https?:\/\/([\w\d.:-]*)/,
+      ""
+    );
 
     let text = stripWhitespace(post.find(".body").text());
     let html = stripWhitespace(post.find(".body").html());
 
     // Hide spoilers
-    text = text.replace(/class="spoiler revealed"/g, "class=\"spoiler\"");
-    html = html.replace(/class="spoiler revealed"/g, "class=\"spoiler\"");
+    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"');
+    html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
 
     $(Sugar).trigger("quote", {
       username: username,

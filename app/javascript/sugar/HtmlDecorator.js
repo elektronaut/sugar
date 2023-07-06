@@ -16,11 +16,11 @@ export default class HtmlDecorator {
   }
 
   image(url) {
-    return ["<img src=\"", url, "\">"];
+    return ['<img src="', url, '">'];
   }
 
   link(url, name) {
-    return ["<a href=\"" + url + "\">", name, "</a>"];
+    return ['<a href="' + url + '">', name, "</a>"];
   }
 
   quote(text, html, username, permalink) {
@@ -30,14 +30,18 @@ export default class HtmlDecorator {
       cite = `Posted by <a href="${permalink}">${username}</a>:`;
     }
     return [
-      "<blockquote><cite>" + cite + "</cite> " + content + "</blockquote>" +
-      "\n\n",
+      "<blockquote><cite>" +
+        cite +
+        "</cite> " +
+        content +
+        "</blockquote>" +
+        "\n\n",
       "",
       ""
     ];
   }
 
   spoiler(str) {
-    return ["<div class=\"spoiler\">", str, "</div>"];
+    return ['<div class="spoiler">', str, "</div>"];
   }
 }

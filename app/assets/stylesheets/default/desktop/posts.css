@@ -1,10 +1,10 @@
 .posts {
-  border-top: 1px solid #E2DCBF;
+  border-top: 1px solid #e2dcbf;
   margin-bottom: 20px;
   width: 100%;
 
   .context {
-    border-bottom: 3px solid #E2DCBF;
+    border-bottom: 3px solid #e2dcbf;
     .post {
       &,
       blockquote,
@@ -23,7 +23,7 @@
 
   /* Small block between posts that say "2 days later..." */
   .post_distance {
-    border-bottom: 1px solid #E2DCBF;
+    border-bottom: 1px solid #e2dcbf;
     padding: 2px 0 2px 45px;
     background: #f8f7f1;
     color: #84806d;
@@ -31,21 +31,22 @@
 }
 
 /* Container for posts loaded via AJAX */
-#ajaxPosts .post:first-child, #previewPost {
-  border-top: 3px solid #E2DCBF;
+#ajaxPosts .post:first-child,
+#previewPost {
+  border-top: 3px solid #e2dcbf;
 }
-
 
 .post {
   padding-top: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #E2DCBF;
+  border-bottom: 1px solid #e2dcbf;
   .anchor {
     position: absolute;
     margin-top: -20px;
   }
   .title {
-    background: transparent url('default/discussion_title_bg.png') 0px 14px no-repeat;
+    background: transparent url("default/discussion_title_bg.png") 0px 14px
+      no-repeat;
     font-size: 1.3em;
     font-weight: bold;
     padding: 7px 0 7px 19px;
@@ -103,17 +104,21 @@
     .muted-notice {
       display: block;
       margin-left: 45px;
-      &, a, a:visited {
+      &,
+      a,
+      a:visited {
         color: #888;
       }
-      a, a:visited {
+      a,
+      a:visited {
         text-decoration: underline;
         cursor: pointer;
       }
     }
   }
 }
-.body, .post .edit {
+.body,
+.post .edit {
   clear: both;
   font-size: 15px;
   line-height: 1.5;
@@ -124,7 +129,8 @@
   max-width: 100%;
   height: auto;
 }
-.post .body ul, .post .body ol {
+.post .body ul,
+.post .body ol {
   margin-left: 17px;
 }
 .post .body ul {
@@ -167,7 +173,8 @@
   font-size: 0.9em;
   font-weight: normal;
 }
-.me_post .body a.poster, .me_post .body a.poster:visited {
+.me_post .body a.poster,
+.me_post .body a.poster:visited {
   text-decoration: none;
   color: #05506d;
 }
@@ -189,7 +196,7 @@
   margin: 15px 0px;
 }
 .post .body p {
-  margin: 1.0em 0px;
+  margin: 1em 0px;
 }
 /* Ugly, but works for now */
 .post .body p:first-child {
@@ -212,7 +219,8 @@
   color: #001d32;
 }
 
-.post a.permalink, .post a.permalink:visited {
+.post a.permalink,
+.post a.permalink:visited {
   color: #888;
   text-decoration: none;
 }
@@ -220,18 +228,17 @@
   color: #333;
 }
 
-
 /* Targeted post (Keyboard navigation) */
 .posts .targeted {
-  border-top: 1px solid #3B89C7;
-  border-bottom: 1px solid #3B89C7;
+  border-top: 1px solid #3b89c7;
+  border-bottom: 1px solid #3b89c7;
   background: #f0f5f8;
   margin-top: -1px;
 }
 
 .new_posts_since_refresh {
   font-size: 1.3em;
-  border-bottom: 1px solid #E2DCBF;
+  border-bottom: 1px solid #e2dcbf;
   padding: 5px 0 5px 45px;
   background: #f8f7f1;
   color: #484030;

@@ -15,7 +15,7 @@ export default Backbone.Model.extend({
     return "/discussions";
   },
 
-  editUrl: function() {
+  editUrl: function () {
     return this.url() + "/edit";
   },
 

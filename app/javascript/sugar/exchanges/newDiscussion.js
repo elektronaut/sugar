@@ -5,56 +5,64 @@ $(Sugar).bind("ready", function () {
   // Suggest similar discussions
   $("#new_discussion").each(function () {
     var title = $(this).find(".title").get(0);
-    $(title).after("<div class=\"title_search\"></div>");
+    $(title).after('<div class="title_search"></div>');
     var searchResults = $(this).find(".title_search").get(0);
     $(searchResults).hide();
 
-    $(title).keydown(function() {
-      var searchDiscussions = function() {
+    $(title).keydown(function () {
+      var searchDiscussions = function () {
         if ($(title).val() && title.previousValue !== $(title).val()) {
           title.previousValue = $(title).val();
 
-          $(searchResults).addClass("loading")
-                          .html("Searching for similar discussions...")
-                          .show();
+          $(searchResults)
+            .addClass("loading")
+            .html("Searching for similar discussions...")
+            .show();
 
           if (title.keypressInterval) {
             clearInterval(title.keypressInterval);
           }
 
-          var keypressFunction = function() {
+          var keypressFunction = function () {
             var words = $(title).val().toLowerCase().split(/\s+/);
 
-            words = $.grep(words, function(word) {
+            words = $.grep(words, function (word) {
               return $.inArray(word, Sugar.stopwords) < 0;
             });
 
-            words = $.map(words, function(word) {
+            words = $.map(words, function (word) {
               return word.replace(/[!~^=$*[]{}]/, "");
             });
 
             let query = words.join(" | ");
             let searchUrl = "/discussions/search.json";
 
-            $.getJSON(searchUrl, { query: query }, function(discussions) {
+            $.getJSON(searchUrl, { query: query }, function (discussions) {
               $(searchResults).removeClass("loading");
 
               if (discussions.length > 0) {
-                var output = "<h4>Similar discussions found. Maybe you " +
-                             "should check them out before posting?</h4>";
+                var output =
+                  "<h4>Similar discussions found. Maybe you " +
+                  "should check them out before posting?</h4>";
 
                 var iterable = discussions.slice(0, 10);
                 for (var i = 0, discussion; i < iterable.length; i++) {
                   discussion = iterable[i];
-                  output += "<a href=\"/discussions/" + discussion.id +
-                            "\" class=\"discussion\">" + discussion.title +
-                            " <span class=\"posts_count\">" +
-                            discussion.posts_count + " posts</span></a>";
+                  output +=
+                    '<a href="/discussions/' +
+                    discussion.id +
+                    '" class="discussion">' +
+                    discussion.title +
+                    ' <span class="posts_count">' +
+                    discussion.posts_count +
+                    " posts</span></a>";
                 }
 
                 if (discussions.length > 10) {
-                  output += "<a href=\"/search?q=" + encodeURIComponent(query) +
-                            "\">Show all results</a>";
+                  output +=
+                    '<a href="/search?q=' +
+                    encodeURIComponent(query) +
+                    '">Show all results</a>';
                 }
                 $(searchResults).html(output).hide().slideDown("fast");
               } else {

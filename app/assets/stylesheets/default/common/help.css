@@ -11,7 +11,13 @@
     padding: 40px 20px;
   }
 
-  h1, h2, h3, p, ul, ol, figure {
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  ol,
+  figure {
     margin: 0px 0px 30px 0px;
     &:last-child {
       margin-bottom: 0px;
@@ -19,9 +25,9 @@
   }
 
   .box {
-    background: #F3F1E9;
+    background: #f3f1e9;
     margin: 60px -30px;
-    border: 1px solid #DEDCD4;
+    border: 1px solid #dedcd4;
     padding: 30px;
 
     @mixin mobile {
@@ -58,7 +64,8 @@
     font-size: 18px;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     margin-top: 60px;
     &:first-child {
       margin-top: 0px;

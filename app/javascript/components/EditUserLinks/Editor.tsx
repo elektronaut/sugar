@@ -3,10 +3,10 @@ import React, { useState, ChangeEvent } from "react";
 import TypeaheadTextField from "../Input/TypeaheadTextField";
 
 interface EditorProps {
-  dispatch: (action: UserLink.Action) => void,
-  labels: string[],
-  newLink: boolean,
-  userLink: UserLink.Link
+  dispatch: (action: UserLink.Action) => void;
+  labels: string[];
+  newLink: boolean;
+  userLink: UserLink.Link;
 }
 
 function preventSubmit(evt: Event) {
@@ -24,9 +24,10 @@ export default function Editor(props: EditorProps) {
     setUserLink({ ...userLink, [attr]: value });
   };
 
-  const handleChange = (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
-    updateAttribute(attr)(evt.target.value);
-  };
+  const handleChange =
+    (attr: string) => (evt: ChangeEvent<HTMLInputElement>) => {
+      updateAttribute(attr)(evt.target.value);
+    };
 
   const handleCancel = (evt: Event) => {
     evt.preventDefault();
@@ -56,7 +57,8 @@ export default function Editor(props: EditorProps) {
         onKeyDown={preventSubmit}
         options={props.labels}
         size={40}
-        value={userLink.label} />
+        value={userLink.label}
+      />
       <div className="field">
         <label htmlFor="name">
           Name
@@ -64,28 +66,28 @@ export default function Editor(props: EditorProps) {
             E.g. Link text, username, code or similar
           </div>
         </label>
-        <input type="text"
-               name="name"
-               size={50}
-               onChange={handleChange("name")}
-               onKeyDown={preventSubmit}
-               value={userLink.name} />
+        <input
+          type="text"
+          name="name"
+          size={50}
+          onChange={handleChange("name")}
+          onKeyDown={preventSubmit}
+          value={userLink.name}
+        />
       </div>
       <div className="field">
-        <label htmlFor="url">
-          URL
-        </label>
-        <input type="text"
-               name="url"
-               size={50}
-               onChange={handleChange("url")}
-               onKeyDown={preventSubmit}
-               value={userLink.url} />
+        <label htmlFor="url">URL</label>
+        <input
+          type="text"
+          name="url"
+          size={50}
+          onChange={handleChange("url")}
+          onKeyDown={preventSubmit}
+          value={userLink.url}
+        />
       </div>
       <div className="buttons">
-        <button type="button"
-                onClick={handleSave}
-                disabled={!validUserLink()}>
+        <button type="button" onClick={handleSave} disabled={!validUserLink()}>
           {newLink ? "Add" : "Update"}
         </button>
         <button type="button" onClick={handleCancel}>

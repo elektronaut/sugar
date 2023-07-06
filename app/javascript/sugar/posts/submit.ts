@@ -48,7 +48,7 @@ $(Sugar).bind("ready", function () {
   }
 
   // Form event handler
-  $("#replyText form").submit(function() {
+  $("#replyText form").submit(function () {
     const composeBody = $(this).find("#compose-body").val() as string;
     if (!(composeBody.replace(/\s+/, "") === "")) {
       submitPost(this);

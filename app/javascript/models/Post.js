@@ -21,8 +21,13 @@ export default Backbone.Model.extend({
 
   urlRoot: function () {
     if (this.get("exchange_id") && this.get("exchange_type")) {
-      return "/" + this.get("exchange_type").toLowerCase() +
-             "s/" + this.get("exchange_id") + "/posts";
+      return (
+        "/" +
+        this.get("exchange_type").toLowerCase() +
+        "s/" +
+        this.get("exchange_id") +
+        "/posts"
+      );
     } else {
       return "/posts";
     }

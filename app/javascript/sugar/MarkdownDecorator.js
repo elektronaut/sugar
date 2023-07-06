@@ -1,6 +1,13 @@
 export default class MarkdownDecorator {
   blockquote(str) {
-    return ["", str.split("\n").map(l => `> ${l}`).join("\n"), ""];
+    return [
+      "",
+      str
+        .split("\n")
+        .map((l) => `> ${l}`)
+        .join("\n"),
+      ""
+    ];
   }
 
   bold(str) {
@@ -25,7 +32,10 @@ export default class MarkdownDecorator {
 
   quote(text, html, username, permalink) {
     let wrapInBlockquote = (str) =>
-      str.split("\n").map(l => `> ${l}`).join("\n");
+      str
+        .split("\n")
+        .map((l) => `> ${l}`)
+        .join("\n");
     let cite = `Posted by ${username}:`;
     if (permalink) {
       cite = `Posted by [${username}](${permalink}):`;
@@ -38,6 +48,6 @@ export default class MarkdownDecorator {
   }
 
   spoiler(str) {
-    return ["<div class=\"spoiler\">", str, "</div>"];
+    return ['<div class="spoiler">', str, "</div>"];
   }
 }

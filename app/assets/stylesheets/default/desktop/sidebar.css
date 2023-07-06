@@ -14,7 +14,8 @@ body.with_sidebar #content {
     margin: 15px 0;
   }
 
-  button, a.button {
+  button,
+  a.button {
     display: block;
   }
 
@@ -47,7 +48,7 @@ body.with_sidebar #content {
       margin-top: -10px;
     }
     li {
-      border-bottom: 1px solid #E2DCBF;
+      border-bottom: 1px solid #e2dcbf;
       padding: 4px 0;
       font-size: 1.1em;
       display: block;

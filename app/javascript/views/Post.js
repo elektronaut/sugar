@@ -37,14 +37,14 @@ export default Backbone.View.extend({
 
   render: function () {
     let view = this;
-    this.$(".post_functions").each(function() {
+    this.$(".post_functions").each(function () {
       let currentUser = Sugar.getCurrentUser();
       var links = [];
       if (currentUser) {
         if (view.model.editableBy(currentUser)) {
-          links.push("<a href=\"#\" class=\"edit_post\">Edit</a>");
+          links.push('<a href="#" class="edit_post">Edit</a>');
         }
-        links.push("<a href=\"#\" class=\"quote_post\">Quote</a>");
+        links.push('<a href="#" class="quote_post">Quote</a>');
       }
       return $(this).html(links.join(" | "));
     });
@@ -61,11 +61,14 @@ export default Backbone.View.extend({
     if (!this.editing) {
       this.$(".body").hide();
       $(this.el).append(
-        "<div class=\"edit\"><span class=\"ticker\">Loading...</span></div>"
+        '<div class="edit"><span class="ticker">Loading...</span></div>'
       );
-      this.$(".edit").load(this.model.editUrl({ timestamp: true }), function() {
-        $(Sugar).trigger("modified");
-      });
+      this.$(".edit").load(
+        this.model.editUrl({ timestamp: true }),
+        function () {
+          $(Sugar).trigger("modified");
+        }
+      );
       this.editing = true;
     }
   },
@@ -74,13 +77,15 @@ export default Backbone.View.extend({
     event.preventDefault();
     var html, permalink, text, username;
 
-    if ((window.getSelection != null) &&
-      window.getSelection().containsNode(this.el, true)) {
-        text = window.getSelection().toString();
-        html = text.replace(/\n/g, "<br>");
-      }
+    if (
+      window.getSelection != null &&
+      window.getSelection().containsNode(this.el, true)
+    ) {
+      text = window.getSelection().toString();
+      html = text.replace(/\n/g, "<br>");
+    }
 
-    if ((text == null) || text.trim() === "") {
+    if (text == null || text.trim() === "") {
       text = this.stripWhitespace(this.$(".body .content").text());
       html = this.stripWhitespace(this.$(".body .content").html());
     }
@@ -90,20 +95,24 @@ export default Backbone.View.extend({
       permalink = null;
     } else {
       username = $(this.el).find(".post_info .username a").text();
-      permalink = $(this.el).find(".post_info .permalink")
-                            .get()[0]
-                            .href
-                             .replace(/^https?:\/\/([\w\d.:-]*)/, "");
+      permalink = $(this.el)
+        .find(".post_info .permalink")
+        .get()[0]
+        .href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
     }
 
-    text = text.replace(/class="spoiler revealed"/g, "class=\"spoiler\"");
-    html = html.replace(/class="spoiler revealed"/g, "class=\"spoiler\"");
-    text = text.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g,
-                        ":$1:");
-    html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g,
-                        ":$1:");
-    html = html.replace(/<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g, "https://twitter.com/statuses/$2");
-    text = text.replace(/<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g, "https://twitter.com/statuses/$2");
+    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"');
+    html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
+    text = text.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:");
+    html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:");
+    html = html.replace(
+      /<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g,
+      "https://twitter.com/statuses/$2"
+    );
+    text = text.replace(
+      /<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g,
+      "https://twitter.com/statuses/$2"
+    );
 
     $(Sugar).trigger("quote", {
       username: username,
@@ -114,8 +123,11 @@ export default Backbone.View.extend({
   },
 
   applySpoiler: function () {
-    return $(this.el).find(".spoiler")
-                     .click(function () { $(this).toggleClass("revealed"); });
+    return $(this.el)
+      .find(".spoiler")
+      .click(function () {
+        $(this).toggleClass("revealed");
+      });
   },
 
   applyAmazonReferralCode: function () {
@@ -123,25 +135,30 @@ export default Backbone.View.extend({
     let exp = /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
 
     if (referralId) {
-      $(this.el).find(".body a").each(function() {
-        let link = this;
-        if (!$.data(link, "amazon_associates_referral_id") &&
-            link.href.match(exp)) {
-          $.data(link, "amazon_associates_referral_id", referralId);
-          if (link.href.match(/(\?|&)tag=/)) {
-            return;
+      $(this.el)
+        .find(".body a")
+        .each(function () {
+          let link = this;
+          if (
+            !$.data(link, "amazon_associates_referral_id") &&
+            link.href.match(exp)
+          ) {
+            $.data(link, "amazon_associates_referral_id", referralId);
+            if (link.href.match(/(\?|&)tag=/)) {
+              return;
+            }
+            link.href += link.href.match(/\?/) ? "&" : "?";
+            link.href += "tag=" + referralId;
           }
-          link.href += link.href.match(/\?/) ? "&" : "?";
-          link.href += "tag=" + referralId;
-        }
-      });
+        });
     }
   },
 
   applyMuted: function () {
-    if (window.mutedUsers &&
-        window.mutedUsers.indexOf(this.model.attributes.user_id) !== -1) {
-
+    if (
+      window.mutedUsers &&
+      window.mutedUsers.indexOf(this.model.attributes.user_id) !== -1
+    ) {
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
       let username = null;
@@ -167,35 +184,39 @@ export default Backbone.View.extend({
   },
 
   embedGifvVideos: function () {
-    let testElem = window.videoTestElement ||
-                   (window.videoTestElement = document.createElement("video"));
+    let testElem =
+      window.videoTestElement ||
+      (window.videoTestElement = document.createElement("video"));
 
-    let canPlay = (type) =>
-      testElem.canPlayType && testElem.canPlayType(type);
+    let canPlay = (type) => testElem.canPlayType && testElem.canPlayType(type);
 
     if (canPlay("video/webm") || canPlay("video/mp4")) {
-      $(this.el).find("img").each(function() {
-        if (this.src.match(/imgur\.com\/.*\.(gif)$/i)) {
-          this.src += "v";
-        }
-        if (this.src.match(/\.gifv$/)) {
-          let baseUrl = this.src.replace(/\.gifv$/, "");
-          $(this).replaceWith(
-            `<a href="${baseUrl}.gif"><video autoplay loop muted>` +
-            `<source type="video/webm" src="${baseUrl}.webm">` +
-            `<source type="video/mp4" src="${baseUrl}.mp4"></video></a>`
-          );
-        }
-      });
+      $(this.el)
+        .find("img")
+        .each(function () {
+          if (this.src.match(/imgur\.com\/.*\.(gif)$/i)) {
+            this.src += "v";
+          }
+          if (this.src.match(/\.gifv$/)) {
+            let baseUrl = this.src.replace(/\.gifv$/, "");
+            $(this).replaceWith(
+              `<a href="${baseUrl}.gif"><video autoplay loop muted>` +
+                `<source type="video/webm" src="${baseUrl}.webm">` +
+                `<source type="video/mp4" src="${baseUrl}.mp4"></video></a>`
+            );
+          }
+        });
     }
   },
 
   wrapEmbeds: function () {
-    let selectors = [ "iframe[src*=\"bandcamp.com\"]",
-                      "iframe[src*=\"player.vimeo.com\"]",
-                      "iframe[src*=\"youtube.com\"]",
-                      "iframe[src*=\"youtube-nocookie.com\"]",
-                      "iframe[src*=\"kickstarter.com\"][src*=\"video.html\"]" ];
+    let selectors = [
+      'iframe[src*="bandcamp.com"]',
+      'iframe[src*="player.vimeo.com"]',
+      'iframe[src*="youtube.com"]',
+      'iframe[src*="youtube-nocookie.com"]',
+      'iframe[src*="kickstarter.com"][src*="video.html"]'
+    ];
 
     let embeds = Array.prototype.slice.call(
       this.el.querySelectorAll(selectors.join(","))
@@ -208,23 +229,24 @@ export default Backbone.View.extend({
       return wrapper;
     }
 
-    embeds.filter(e => !e.parentNode.classList.contains("responsive-embed"))
-          .forEach(function (embed) {
-            let width = embed.offsetWidth;
-            let height = embed.offsetHeight;
-            let ratio = height / width;
-            let wrapper = wrapEmbed(embed);
+    embeds
+      .filter((e) => !e.parentNode.classList.contains("responsive-embed"))
+      .forEach(function (embed) {
+        let width = embed.offsetWidth;
+        let height = embed.offsetHeight;
+        let ratio = height / width;
+        let wrapper = wrapEmbed(embed);
 
-            wrapper.classList.add("responsive-embed");
-            wrapper.style.position = "relative";
-            wrapper.style.width = "100%";
-            wrapper.style.paddingBottom = (ratio * 100) + "%";
+        wrapper.classList.add("responsive-embed");
+        wrapper.style.position = "relative";
+        wrapper.style.width = "100%";
+        wrapper.style.paddingBottom = ratio * 100 + "%";
 
-            embed.style.position = "absolute";
-            embed.style.width = "100%";
-            embed.style.height = "100%";
-            embed.style.top = "0";
-            embed.style.left = "0";
-          });
+        embed.style.position = "absolute";
+        embed.style.width = "100%";
+        embed.style.height = "100%";
+        embed.style.top = "0";
+        embed.style.left = "0";
+      });
   }
 });

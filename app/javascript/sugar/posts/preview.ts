@@ -3,13 +3,15 @@ import Sugar from "../../sugar";
 
 $(Sugar).bind("ready", function () {
   function previewPost() {
-    const postBody   = $("#compose-body").val();
-    const format     = $("#compose-body").closest("form").find(".format").val();
-    const previewUrl = $("#compose-body").closest("form").data("preview-url") as string;
+    const postBody = $("#compose-body").val();
+    const format = $("#compose-body").closest("form").find(".format").val();
+    const previewUrl = $("#compose-body")
+      .closest("form")
+      .data("preview-url") as string;
 
     $(Sugar).trigger("posting-status", ["Loading preview&hellip;"]);
 
-    $(".posts #previewPost").animate({opacity: 0.1}, "fast");
+    $(".posts #previewPost").animate({ opacity: 0.1 }, "fast");
     void $.ajax({
       url: previewUrl,
       type: "POST",
@@ -23,27 +25,26 @@ $(Sugar).bind("ready", function () {
         // Inject the #ajaxPosts container so new posts
         // will be loaded above the prewview
         if ($(".posts #ajaxPosts").length < 1) {
-          $(".posts").append("<div id=\"ajaxPosts\"></div>");
+          $(".posts").append('<div id="ajaxPosts"></div>');
         }
 
         // Create the container
         if ($(".posts #previewPost").length < 1) {
-          $(".posts").append("<div id=\"previewPost\"></div>");
+          $(".posts").append('<div id="previewPost"></div>');
         }
 
         $(".posts #previewPost").html(previewPost);
 
         // Animation
         if ($(".posts #previewPost").hasClass("shown")) {
-          $(".posts #previewPost").animate({opacity: 1.0}, "fast");
+          $(".posts #previewPost").animate({ opacity: 1.0 }, "fast");
         } else {
           $(".posts #previewPost").addClass("shown").hide().fadeIn();
         }
 
-        $(Sugar).trigger(
-          "postsloaded",
-          [$(".posts #previewPost").find(".post")]
-        );
+        $(Sugar).trigger("postsloaded", [
+          $(".posts #previewPost").find(".post")
+        ]);
       },
 
       error: function (xhr) {
@@ -56,7 +57,7 @@ $(Sugar).bind("ready", function () {
     });
   }
 
-  $("#replyText .preview").click(function() {
+  $("#replyText .preview").click(function () {
     previewPost();
   });
 });

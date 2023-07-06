@@ -8,9 +8,13 @@ export function csrfToken(): string {
 }
 
 function jsonFetchOptions() {
-  return({ method: "POST",
-           headers: { "Content-Type": "application/json; charset=utf-8",
-                      "X-CSRF-Token": csrfToken() } });
+  return {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-CSRF-Token": csrfToken()
+    }
+  };
 }
 
 export async function postJson(url: string, data: Record<string, string>) {

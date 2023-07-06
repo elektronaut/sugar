@@ -5,19 +5,20 @@ Sugar.Facebook = {
   appId: false,
   apiReady: false,
 
-  init: function() {
+  init: function () {
     this.appId = Sugar.Configuration.facebookAppId;
     if ($(".fb_button").length > 0) {
-      $(".fb_button").addClass("fb_button_large")
-                     .wrapInner("<span class=\"fb_button_text\" />");
+      $(".fb_button")
+        .addClass("fb_button_large")
+        .wrapInner('<span class="fb_button_text" />');
     }
     this.loadAsync();
-    $(Sugar).bind("postsloaded", function(event, posts) {
+    $(Sugar).bind("postsloaded", function (event, posts) {
       Sugar.Facebook.parsePosts(posts);
     });
   },
 
-  withAPI: function(callback) {
+  withAPI: function (callback) {
     let facebook = this;
     if (this.apiReady) {
       callback();
@@ -31,7 +32,7 @@ Sugar.Facebook = {
     }
   },
 
-  loadAsync: function() {
+  loadAsync: function () {
     let facebook = this;
 
     window.fbAsyncInit = function () {
@@ -45,7 +46,7 @@ Sugar.Facebook = {
       facebook.apiReady = true;
     };
 
-    $("body").append("<div id=\"fb-root\" />");
+    $("body").append('<div id="fb-root" />');
 
     let script = document.createElement("script");
     script.id = "facebook-scriptsdk";
@@ -65,7 +66,7 @@ Sugar.Facebook = {
   }
 };
 
-$(Sugar).bind("ready", function() {
+$(Sugar).bind("ready", function () {
   if (this.Configuration.facebookAppId) {
     this.Facebook.init();
   }

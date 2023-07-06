@@ -3,26 +3,25 @@ import Sugar from "../../sugar";
 import handleMastodonEmbeds from "./handleMastodonEmbeds";
 
 interface PostCache {
-  height: number,
-  order: number
+  height: number;
+  order: number;
 }
 
 interface Cache {
-  posts: Record<number, PostCache>,
-  anchorPostId: number,
-  anchorPostOrder: number,
-  scrollY: number
+  posts: Record<number, PostCache>;
+  anchorPostId: number;
+  anchorPostOrder: number;
+  scrollY: number;
 }
 
 interface Twitter {
-  widgets: { load: (elem: HTMLElement) => void }
+  widgets: { load: (elem: HTMLElement) => void };
 }
 
 /**
  * Handlers for scripted embed (social) quirks
  */
-$(Sugar).bind("ready", function(){
-
+$(Sugar).bind("ready", function () {
   // Fix for misbehaving or missing scroll anchoring
   const postsPage = document.querySelector(".posts");
   if (postsPage) {
