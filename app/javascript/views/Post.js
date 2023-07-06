@@ -75,10 +75,10 @@ export default Backbone.View.extend({
     var html, permalink, text, username;
 
     if ((window.getSelection != null) &&
-        window.getSelection().containsNode(this.el, true)) {
-      text = window.getSelection().toString();
-      html = text;
-    }
+      window.getSelection().containsNode(this.el, true)) {
+        text = window.getSelection().toString();
+        html = text.replace(/\n/g, "<br>");
+      }
 
     if ((text == null) || text.trim() === "") {
       text = this.stripWhitespace(this.$(".body .content").text());
