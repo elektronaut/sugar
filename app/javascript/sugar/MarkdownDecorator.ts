@@ -1,5 +1,5 @@
 export default class MarkdownDecorator {
-  blockquote(str) {
+  blockquote(str: string) {
     return [
       "",
       str
@@ -10,28 +10,28 @@ export default class MarkdownDecorator {
     ];
   }
 
-  bold(str) {
+  bold(str: string) {
     return ["**", str, "**"];
   }
 
-  code(str, language) {
+  code(str: string, language: string) {
     return ["```" + language + "\n", str, "\n```"];
   }
 
-  emphasis(str) {
+  emphasis(str: string) {
     return ["_", str, "_"];
   }
 
-  image(url) {
+  image(url: string) {
     return ["![](", url, ")"];
   }
 
-  link(url, name) {
+  link(url: string, name: string) {
     return ["[", name, "](" + url + ")"];
   }
 
-  quote(text, html, username, permalink) {
-    let wrapInBlockquote = (str) =>
+  quote(text: string, html: string, username: string, permalink: string) {
+    const wrapInBlockquote = (str: string) =>
       str
         .split("\n")
         .map((l) => `> ${l}`)
@@ -47,7 +47,7 @@ export default class MarkdownDecorator {
     ];
   }
 
-  spoiler(str) {
+  spoiler(str: string) {
     return ['<div class="spoiler">', str, "</div>"];
   }
 }

@@ -1,31 +1,31 @@
 export default class HtmlDecorator {
-  blockquote(str) {
+  blockquote(str: string) {
     return ["<blockquote>", str, "</blockquote>"];
   }
 
-  bold(str) {
+  bold(str: string) {
     return ["<b>", str, "</b>"];
   }
 
-  code(str, language) {
+  code(str: string, language: string) {
     return ["```" + language + "\n", str, "\n```"];
   }
 
-  emphasis(str) {
+  emphasis(str: string) {
     return ["<i>", str, "</i>"];
   }
 
-  image(url) {
+  image(url: string) {
     return ['<img src="', url, '">'];
   }
 
-  link(url, name) {
+  link(url: string, name: string) {
     return ['<a href="' + url + '">', name, "</a>"];
   }
 
-  quote(text, html, username, permalink) {
-    let content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
-    var cite = `Posted by ${username}:`;
+  quote(text: string, html: string, username: string, permalink: string) {
+    const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
+    let cite = `Posted by ${username}:`;
     if (permalink) {
       cite = `Posted by <a href="${permalink}">${username}</a>:`;
     }
@@ -41,7 +41,7 @@ export default class HtmlDecorator {
     ];
   }
 
-  spoiler(str) {
+  spoiler(str: string) {
     return ['<div class="spoiler">', str, "</div>"];
   }
 }

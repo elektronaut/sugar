@@ -27,8 +27,13 @@ import "./sugar/user";
 import "./sugar/users/editProfile";
 
 // React
+import { FC } from "react";
 import * as Components from "./components";
 import ReactRailsUJS from "react_ujs";
-ReactRailsUJS.getConstructor = (className) => Components[className];
+declare class ReactRailsUJS {
+  getConstructor: (name: string) => FC;
+}
+ReactRailsUJS.getConstructor = (className: string) =>
+  Components[className] as FC;
 
 $(() => Sugar.init());
