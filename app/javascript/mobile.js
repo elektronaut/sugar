@@ -7,15 +7,15 @@ Rails.start();
 import Sugar from "./sugar";
 window.Sugar = Sugar;
 
-require("./sugar/facebook");
-require("./sugar/posts/embeds");
-require("./sugar/richText");
-require("./sugar/timestamps");
-require("./sugar/user");
+import "./sugar/facebook";
+import "./sugar/posts/embeds";
+import "./sugar/richText";
+import "./sugar/timestamps";
+import "./sugar/user";
 
-require("./mobile/functions");
+import "./mobile/functions";
 
 // React
 import * as Components from "./components";
-const ReactRailsUJS = require("react_ujs");
+import ReactRailsUJS from "react_ujs";
 ReactRailsUJS.getConstructor = (className) => Components[className];

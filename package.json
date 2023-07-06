@@ -46,7 +46,7 @@
   "scripts": {
     "lint": "eslint 'app/javascript'",
     "build": "run build-dev --minify",
-    "build-dev": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --sourcemap --outdir=app/assets/builds --target=es2020,chrome58,firefox57,safari11,edge18,node12",
+    "build-dev": "esbuild app/javascript/application.js app/javascript/mobile.js --bundle --sourcemap --outdir=app/assets/builds --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css",
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"

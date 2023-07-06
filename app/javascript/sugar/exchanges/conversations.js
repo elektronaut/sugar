@@ -1,7 +1,7 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
 
-require("../../vendor/jquery.autocomplete");
+import "../../vendor/jquery.autocomplete";
 
 $(Sugar).bind("ready", function () {
   $("#invite_participant_form").each(function () {

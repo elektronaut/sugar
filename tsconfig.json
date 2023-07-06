@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "baseUrl": "./",
-    "sourceMap": true,
-    "module": "esnext",
-    "target": "esnext",
-    "jsx": "react",
-    "allowJs": true,
-    "noEmit": true,
     "noImplicitThis": true,
-    "lib": ["es6", "dom"],
-  }
+    "target": "es5",
+    "lib": ["es2022", "dom"],
+    "outDir": "dist",
+    "allowJs": true
+  },
+  "include": ["./app/javascript/**/*"]
 }

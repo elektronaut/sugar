@@ -9,26 +9,26 @@ import $ from "jquery";
 import Sugar from "./sugar";
 window.Sugar = Sugar;
 
-require("./sugar/exchanges/conversations");
-require("./sugar/exchanges/newDiscussion");
-require("./sugar/facebook");
-require("./sugar/hotkeys");
-require("./sugar/posts/buttons");
-require("./sugar/posts/embeds");
-require("./sugar/posts/newPosts");
-require("./sugar/posts/preview");
-require("./sugar/posts/submit");
-require("./sugar/richText");
-require("./sugar/search");
-require("./sugar/style");
-require("./sugar/tabs");
-require("./sugar/timestamps");
-require("./sugar/user");
-require("./sugar/users/editProfile");
+import "./sugar/exchanges/conversations";
+import "./sugar/exchanges/newDiscussion";
+import "./sugar/facebook";
+import "./sugar/hotkeys";
+import "./sugar/posts/buttons";
+import "./sugar/posts/embeds";
+import "./sugar/posts/newPosts";
+import "./sugar/posts/preview";
+import "./sugar/posts/submit";
+import "./sugar/richText";
+import "./sugar/search";
+import "./sugar/style";
+import "./sugar/tabs";
+import "./sugar/timestamps";
+import "./sugar/user";
+import "./sugar/users/editProfile";
 
 // React
 import * as Components from "./components";
-const ReactRailsUJS = require("react_ujs");
+import ReactRailsUJS from "react_ujs";
 ReactRailsUJS.getConstructor = (className) => Components[className];
 
 $(() => Sugar.init());

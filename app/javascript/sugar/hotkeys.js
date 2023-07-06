@@ -1,7 +1,7 @@
 import $ from "jquery";
 import Sugar from "../sugar";
 
-require("../vendor/jquery.hotkeys");
+import "../vendor/jquery.hotkeys";
 
 (function () {
   var currentTarget = null;

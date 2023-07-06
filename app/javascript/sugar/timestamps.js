@@ -1,7 +1,7 @@
 import $ from "jquery";
 import Sugar from "../sugar";
 
-require("timeago");
+import "timeago";
 
 function formatDate(date) {
   let months = [
