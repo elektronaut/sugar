@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Sugar from "../sugar";
+import readyHandler from "../lib/readyHandler";
 
 function toggleNavigation() {
   $("#navigation").toggleClass("active");
@@ -75,7 +76,7 @@ function wrapEmbeds() {
   });
 }
 
-$(document).ready(function () {
+readyHandler.start(function () {
   const updateLayout = function () {
     if (window.orientation != null) {
       if (window.orientation === 90 || window.orientation === -90) {
@@ -208,5 +209,4 @@ $(document).ready(function () {
 
   addReferralIds();
   wrapEmbeds();
-  Sugar.init();
 });

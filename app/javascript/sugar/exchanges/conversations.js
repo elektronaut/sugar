@@ -1,9 +1,10 @@
 import $ from "jquery";
+import readyHandler from "../../lib/readyHandler";
 import Sugar from "../../sugar";
 
 import "../../vendor/jquery.autocomplete";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   $("#invite_participant_form").each(function () {
     var $inputField = $(this).find(".username");
 

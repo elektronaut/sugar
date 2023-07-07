@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 import handleMastodonEmbeds from "./handleMastodonEmbeds";
 
 interface PostCache {
@@ -21,7 +22,7 @@ interface Twitter {
 /**
  * Handlers for scripted embed (social) quirks
  */
-$(Sugar).bind("ready", function () {
+readyHandler.ready(function () {
   // Fix for misbehaving or missing scroll anchoring
   const postsPage = document.querySelector(".posts");
   if (postsPage) {

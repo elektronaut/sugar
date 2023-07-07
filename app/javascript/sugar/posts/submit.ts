@@ -1,7 +1,8 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   // Submit post via AJAX
   function submitPost(form: HTMLFormElement) {
     $(Sugar).trigger("posting-status", ["Posting, please wait&hellip;"]);

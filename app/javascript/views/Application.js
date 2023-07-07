@@ -1,6 +1,5 @@
 import Backbone from "backbone";
 import $ from "jquery";
-import Sugar from "../sugar";
 import Posts from "./Posts";
 
 export default Backbone.View.extend({
@@ -16,6 +15,5 @@ export default Backbone.View.extend({
         el: this
       });
     });
-    $(Sugar).trigger("ready");
   }
 });

@@ -1,15 +1,27 @@
 import $ from "jquery";
+import readyHandler from "../lib/readyHandler";
 import Sugar from "../sugar";
+import { setupTabs } from "./tabs";
 
-$(Sugar).bind("ready modified", function () {
+function wrapButtons() {
   $("a.button, button").each(function () {
     if ($(this).find("span").length === 0) {
       $(this).wrapInner("<span />");
     }
   });
-});
+}
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
+  wrapButtons();
+  const observer = new MutationObserver(() => {
+    wrapButtons();
+  });
+  observer.observe(document.body, {
+    attributes: true,
+    childList: true,
+    subtree: true
+  });
+
   $("table.discussions").each(function () {
     $("#content").css("min-width", $(this).outerWidth() + "px");
   });
@@ -20,26 +32,26 @@ $(Sugar).bind("ready", function () {
   });
 
   $("#reply-tabs").each(function () {
-    window.replyTabs = new Sugar.Tabs(this, { showFirstTab: false });
+    const replyTabs = setupTabs(this, { showFirstTab: false });
 
     if ($("body.last_page").length > 0) {
-      window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
+      replyTabs.controls.showTab(replyTabs.tabs[0]);
     }
 
     $("#replyText textarea").on("focus", function () {
-      window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
+      replyTabs.controls.showTab(replyTabs.tabs[0]);
     });
 
     $(Sugar).on("quote", function () {
-      window.replyTabs.controls.showTab(window.replyTabs.tabs[0]);
+      replyTabs.controls.showTab(replyTabs.tabs[0]);
     });
   });
 
   $("#signup-tabs").each(function () {
-    new Sugar.Tabs(this, { showFirstTab: true });
+    setupTabs(this, { showFirstTab: true });
   });
 
   $(".admin.configuration .tabs").each(function () {
-    new Sugar.Tabs(this, { showFirstTab: true });
+    setupTabs(this, { showFirstTab: true });
   });
 });

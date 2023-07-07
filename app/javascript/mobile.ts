@@ -7,13 +7,19 @@ Rails.start();
 import Sugar from "./sugar";
 window.Sugar = Sugar;
 
+import readyHandler from "./lib/readyHandler";
+import { applyRichTextArea } from "./sugar/richTextArea";
+
 import "./sugar/facebook";
 import "./sugar/posts/embeds";
-import "./sugar/richText";
 import "./sugar/timestamps";
-import "./sugar/user";
 
 import "./mobile/functions";
+
+readyHandler.start(() => {
+  Sugar.init();
+  applyRichTextArea();
+});
 
 // React
 import { FC } from "react";

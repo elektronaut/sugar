@@ -1,7 +1,44 @@
 import $ from "jquery";
-import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+const stopwords = [
+  "i",
+  "a",
+  "about",
+  "an",
+  "and",
+  "are",
+  "as",
+  "at",
+  "by",
+  "for",
+  "from",
+  "has",
+  "have",
+  "how",
+  "in",
+  "is",
+  "it",
+  "la",
+  "my",
+  "of",
+  "on",
+  "or",
+  "that",
+  "the",
+  "this",
+  "to",
+  "was",
+  "what",
+  "when",
+  "where",
+  "who",
+  "will",
+  "with",
+  "the"
+];
+
+readyHandler.ready(() => {
   // Suggest similar discussions
   $("#new_discussion").each(function () {
     var title = $(this).find(".title").get(0);
@@ -27,7 +64,7 @@ $(Sugar).bind("ready", function () {
             var words = $(title).val().toLowerCase().split(/\s+/);
 
             words = $.grep(words, function (word) {
-              return $.inArray(word, Sugar.stopwords) < 0;
+              return $.inArray(word, stopwords) < 0;
             });
 
             words = $.map(words, function (word) {

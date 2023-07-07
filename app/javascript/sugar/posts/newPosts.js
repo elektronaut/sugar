@@ -1,9 +1,10 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 import Conversation from "../../models/Conversation";
 import Discussion from "../../models/Discussion";
 
-Sugar.PostDetector = {
+const PostDetector = {
   paused: false,
   model: null,
   interval: null,
@@ -50,7 +51,7 @@ Sugar.PostDetector = {
 
     if (!this.interval) {
       this.interval = setInterval(function () {
-        Sugar.PostDetector.refresh();
+        PostDetector.refresh();
       }, 5000);
     }
   },
@@ -79,7 +80,7 @@ Sugar.PostDetector = {
 
 Sugar.loadNewPosts = function () {
   if ($("#discussionLink").length > 0) {
-    Sugar.PostDetector.pause();
+    PostDetector.pause();
     $(Sugar).trigger("postsloading");
 
     var exchangeUrl = $("#discussionLink").get()[0].href;
@@ -92,7 +93,7 @@ Sugar.loadNewPosts = function () {
 
     var endpoint =
       `/${exchangeType}/${exchangeId}/posts` +
-      `/since/${Sugar.PostDetector.read_posts}`;
+      `/since/${PostDetector.read_posts}`;
 
     return $.get(endpoint, function (data) {
       // Create the container if necessary
@@ -108,22 +109,22 @@ Sugar.loadNewPosts = function () {
       new_posts.hide().slideDown().addClass("shown");
 
       // Update read posts count
-      Sugar.PostDetector.mark_posts_read(new_posts.length);
+      PostDetector.mark_posts_read(new_posts.length);
 
-      Sugar.PostDetector.resume();
+      PostDetector.resume();
       $(Sugar).trigger("postsloaded", [new_posts]);
     });
   }
 };
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   // Start the post detector
   if (
     $("#discussion").length > 0 &&
     $("#newPosts").length > 0 &&
     $("body.last_page").length > 0
   ) {
-    Sugar.PostDetector.start($("#discussion").get(0));
+    PostDetector.start($("#discussion").get(0));
   }
 
   // -- Window title --
@@ -149,7 +150,7 @@ $(Sugar).bind("ready", function () {
 
   // Update the number of shown posts
   $(Sugar).bind("postsloaded", function () {
-    $(".shown_items_count").text(Sugar.PostDetector.read_posts);
+    $(".shown_items_count").text(PostDetector.read_posts);
   });
 
   // -- Notification --

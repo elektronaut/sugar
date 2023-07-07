@@ -1,7 +1,8 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   const $buttons = $("#button-container");
 
   function showStatus(message: string) {

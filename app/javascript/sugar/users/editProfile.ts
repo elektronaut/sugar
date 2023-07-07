@@ -1,7 +1,7 @@
 import $ from "jquery";
-import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   $(".edit_user_profile").each(function () {
     const checkAdmin = function () {
       if ($("#user_admin:checked").val()) {

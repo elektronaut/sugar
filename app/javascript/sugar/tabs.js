@@ -1,7 +1,6 @@
 import $ from "jquery";
-import Sugar from "../sugar";
 
-Sugar.Tabs = function (controls, options) {
+export function setupTabs(controls, options) {
   controls.tabs = [];
 
   let settings = $.extend(
@@ -63,4 +62,4 @@ Sugar.Tabs = function (controls, options) {
   this.controls = controls;
   this.tabs = this.controls.tabs;
   return this;
-};
+}

@@ -1,7 +1,8 @@
 import $ from "jquery";
 import Sugar from "../sugar";
+import readyHandler from "../lib/readyHandler";
 
-Sugar.Facebook = {
+const Facebook = {
   appId: false,
   apiReady: false,
 
@@ -14,7 +15,7 @@ Sugar.Facebook = {
     }
     this.loadAsync();
     $(Sugar).bind("postsloaded", function (event, posts) {
-      Sugar.Facebook.parsePosts(posts);
+      Facebook.parsePosts(posts);
     });
   },
 
@@ -38,7 +39,7 @@ Sugar.Facebook = {
     window.fbAsyncInit = function () {
       window.FB.init({
         version: "v16.0",
-        appId: Sugar.Facebook.appId,
+        appId: Facebook.appId,
         status: true,
         cookie: true,
         xfbml: true
@@ -66,8 +67,8 @@ Sugar.Facebook = {
   }
 };
 
-$(Sugar).bind("ready", function () {
-  if (this.Configuration.facebookAppId) {
-    this.Facebook.init();
+readyHandler.ready(() => {
+  if (Sugar.Configuration.facebookAppId) {
+    Facebook.init();
   }
 });

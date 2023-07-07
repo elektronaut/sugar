@@ -1,8 +1,10 @@
 import Backbone from "backbone";
 import $ from "jquery";
+import { applyRichTextArea } from "../sugar/richTextArea";
 
 import Sugar from "../sugar";
 import Post from "../models/Post";
+import { currentUser } from "../sugar/user";
 
 export default Backbone.View.extend({
   el: $("div.post"),
@@ -38,10 +40,9 @@ export default Backbone.View.extend({
   render: function () {
     let view = this;
     this.$(".post_functions").each(function () {
-      let currentUser = Sugar.getCurrentUser();
       var links = [];
-      if (currentUser) {
-        if (view.model.editableBy(currentUser)) {
+      if (currentUser()) {
+        if (view.model.editableBy(currentUser())) {
           links.push('<a href="#" class="edit_post">Edit</a>');
         }
         links.push('<a href="#" class="quote_post">Quote</a>');
@@ -66,7 +67,7 @@ export default Backbone.View.extend({
       this.$(".edit").load(
         this.model.editUrl({ timestamp: true }),
         function () {
-          $(Sugar).trigger("modified");
+          applyRichTextArea();
         }
       );
       this.editing = true;

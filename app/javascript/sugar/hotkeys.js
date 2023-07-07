@@ -1,5 +1,6 @@
 import $ from "jquery";
 import Sugar from "../sugar";
+import readyHandler from "../lib/readyHandler";
 
 import "../vendor/jquery.hotkeys";
 
@@ -240,5 +241,5 @@ import "../vendor/jquery.hotkeys";
     onlyPosts(() => focusElement(event, "#compose-body"));
   });
 
-  $(Sugar).bind("ready", () => resetTarget());
+  readyHandler.ready(resetTarget);
 }).call(this);

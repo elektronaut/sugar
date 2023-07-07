@@ -1,7 +1,8 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
+import readyHandler from "../../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   function previewPost() {
     const postBody = $("#compose-body").val();
     const format = $("#compose-body").closest("form").find(".format").val();

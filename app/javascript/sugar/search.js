@@ -1,7 +1,7 @@
 import $ from "jquery";
-import Sugar from "../sugar";
+import readyHandler from "../lib/readyHandler";
 
-$(Sugar).bind("ready", function () {
+readyHandler.ready(() => {
   $("#search form").each(function () {
     let form = this;
     $(form)
