@@ -138,11 +138,9 @@ readyHandler.start(function () {
       ""
     );
 
-    let text = stripWhitespace(post.find(".body").text());
     let html = stripWhitespace(post.find(".body").html());
 
     // Hide spoilers
-    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"');
     html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
 
     document.dispatchEvent(
@@ -150,7 +148,6 @@ readyHandler.start(function () {
         detail: {
           username: username,
           permalink: permalink,
-          text: text,
           html: html
         }
       })

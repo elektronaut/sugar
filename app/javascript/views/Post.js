@@ -76,18 +76,16 @@ export default Backbone.View.extend({
 
   quote: function (event) {
     event.preventDefault();
-    var html, permalink, text, username;
+    var html, permalink, username;
 
     if (
       window.getSelection != null &&
       window.getSelection().containsNode(this.el, true)
     ) {
-      text = window.getSelection().toString();
-      html = text.replace(/\n/g, "<br>");
+      html = window.getSelection().toString().trim().replace(/\n/g, "<br>");
     }
 
-    if (text == null || text.trim() === "") {
-      text = this.stripWhitespace(this.$(".body .content").text());
+    if (html == null || html === "") {
       html = this.stripWhitespace(this.$(".body .content").html());
     }
 
@@ -102,15 +100,9 @@ export default Backbone.View.extend({
         .href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
     }
 
-    text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"');
     html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
-    text = text.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:");
     html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:");
     html = html.replace(
-      /<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g,
-      "https://twitter.com/statuses/$2"
-    );
-    text = text.replace(
       /<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g,
       "https://twitter.com/statuses/$2"
     );
@@ -120,7 +112,6 @@ export default Backbone.View.extend({
         detail: {
           username: username,
           permalink: permalink,
-          text: text,
           html: html
         }
       })

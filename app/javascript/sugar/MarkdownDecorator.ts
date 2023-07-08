@@ -30,7 +30,7 @@ export default class MarkdownDecorator {
     return ["[", name, "](" + url + ")"];
   }
 
-  quote(text: string, html: string, username: string, permalink: string) {
+  quote(html: string, username: string, permalink: string) {
     const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
     const wrapInBlockquote = (str: string) =>
       str

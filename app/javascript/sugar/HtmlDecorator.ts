@@ -23,7 +23,7 @@ export default class HtmlDecorator {
     return ['<a href="' + url + '">', name, "</a>"];
   }
 
-  quote(text: string, html: string, username: string, permalink: string) {
+  quote(html: string, username: string, permalink: string) {
     const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
     let cite = `Posted by ${username}:`;
     if (permalink) {

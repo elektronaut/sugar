@@ -304,7 +304,6 @@ export default function richTextArea(textarea) {
 
   document.addEventListener("quote", (event) => {
     let [prefix, replacement, postfix] = decorator().quote(
-      event.detail.text,
       undoEmbeds(event.detail.html),
       event.detail.username,
       event.detail.permalink
