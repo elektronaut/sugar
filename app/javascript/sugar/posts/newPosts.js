@@ -18,11 +18,15 @@ const PostDetector = {
         var new_posts = json.posts_count - detector.total_posts;
         if (new_posts > 0) {
           detector.total_posts = json.posts_count;
-          return $(Sugar).trigger("newposts", [
-            detector.total_posts,
-            new_posts,
-            detector.total_posts - detector.read_posts
-          ]);
+          document.dispatchEvent(
+            new CustomEvent("newposts", {
+              detail: {
+                total: detector.total_posts,
+                newPosts: new_posts,
+                unread: detector.total_posts - detector.read_posts
+              }
+            })
+          );
         }
       });
     }
@@ -81,7 +85,7 @@ const PostDetector = {
 Sugar.loadNewPosts = function () {
   if ($("#discussionLink").length > 0) {
     PostDetector.pause();
-    $(Sugar).trigger("postsloading");
+    document.dispatchEvent(new Event("postsloading"));
 
     var exchangeUrl = $("#discussionLink").get()[0].href;
     var exchangeType = exchangeUrl.match(
@@ -112,7 +116,11 @@ Sugar.loadNewPosts = function () {
       PostDetector.mark_posts_read(new_posts.length);
 
       PostDetector.resume();
-      $(Sugar).trigger("postsloaded", [new_posts]);
+      document.dispatchEvent(
+        new CustomEvent("postsloaded", {
+          detail: new_posts
+        })
+      );
     });
   }
 };
@@ -132,34 +140,34 @@ readyHandler.ready(() => {
   var originalTitle = document.title;
 
   // Update the window title on new posts
-  $(Sugar).bind("newposts", function (event, total, newPosts, unread) {
-    document.title = `(${unread}) ${originalTitle}`;
+  document.addEventListener("newposts", (event) => {
+    document.title = `(${event.detail.unread}) ${originalTitle}`;
   });
 
   // Reset the document title when posts are loaded
-  $(Sugar).bind("postsloaded", function () {
+  document.addEventListener("postsloaded", () => {
     document.title = originalTitle;
   });
 
   // -- Paginator --
 
   // Update the total posts count on the paginator
-  $(Sugar).bind("newposts", function (event, total) {
-    $(".total_items_count").text(total);
+  document.addEventListener("newposts", (event) => {
+    $(".total_items_count").text(event.detail.total);
   });
 
   // Update the number of shown posts
-  $(Sugar).bind("postsloaded", function () {
+  document.addEventListener("postsloaded", () => {
     $(".shown_items_count").text(PostDetector.read_posts);
   });
 
   // -- Notification --
 
   // Show the notification on new posts
-  $(Sugar).bind("newposts", function (event, total, newPosts, unread) {
+  document.addEventListener("newposts", (event) => {
     var notification_string = "A new post has been made";
-    if (unread > 1) {
-      notification_string = `${unread} new posts have been made`;
+    if (event.detail.unread > 1) {
+      notification_string = `${event.detail.unread} new posts have been made`;
     }
 
     notification_string +=
@@ -179,12 +187,12 @@ readyHandler.ready(() => {
   });
 
   // Show loading status
-  $(Sugar).bind("postsloading", function () {
+  document.addEventListener("postsloading", () => {
     $("#newPosts").addClass("new_posts_since_refresh").html("Loading&hellip;");
   });
 
   // Hide when posts are loaded
-  $(Sugar).bind("postsloaded", function () {
+  document.addEventListener("postsloaded", () => {
     $("#newPosts").removeClass("new_posts_since_refresh").html("").hide();
   });
 });

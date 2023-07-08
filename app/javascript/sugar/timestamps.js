@@ -1,6 +1,5 @@
 import $ from "jquery";
 import readyHandler from "../lib/readyHandler";
-import Sugar from "../sugar";
 
 import "timeago";
 
@@ -41,4 +40,4 @@ function applyTimestamps() {
 
 applyTimestamps();
 readyHandler.ready(applyTimestamps);
-$(Sugar).bind("postsloaded", applyTimestamps);
+document.addEventListener("postsloaded", applyTimestamps);

@@ -1,5 +1,3 @@
-import $ from "jquery";
-import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
 import handleMastodonEmbeds from "./handleMastodonEmbeds";
 
@@ -131,7 +129,8 @@ readyHandler.ready(function () {
     });
   }
 
-  $(Sugar).bind("postsloaded", function (event: Event, posts: HTMLElement[]) {
+  document.addEventListener("postsloaded", (event: PostsLoadedEvent) => {
+    const posts = event.detail;
     // Initialize twitter embeds when new posts load or previewed
     if (posts.length && window.twttr) {
       const twitter = window.twttr as Twitter;

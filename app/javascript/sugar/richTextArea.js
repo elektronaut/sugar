@@ -302,12 +302,12 @@ export default function richTextArea(textarea) {
   addHotkey("k", link);
   addHotkey("enter", submit);
 
-  $(Sugar).on("quote", function (event, data) {
+  document.addEventListener("quote", (event) => {
     let [prefix, replacement, postfix] = decorator().quote(
-      data.text,
-      undoEmbeds(data.html),
-      data.username,
-      data.permalink
+      event.detail.text,
+      undoEmbeds(event.detail.html),
+      event.detail.username,
+      event.detail.permalink
     );
     replaceSelection(textarea, prefix, replacement, postfix);
     textarea.scrollTop = textarea.scrollHeight;

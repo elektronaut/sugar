@@ -1,6 +1,5 @@
 import $ from "jquery";
 import readyHandler from "../lib/readyHandler";
-import Sugar from "../sugar";
 import { setupTabs } from "./tabs";
 
 function wrapButtons() {
@@ -42,7 +41,7 @@ readyHandler.ready(() => {
       replyTabs.controls.showTab(replyTabs.tabs[0]);
     });
 
-    $(Sugar).on("quote", function () {
+    document.addEventListener("quote", () => {
       replyTabs.controls.showTab(replyTabs.tabs[0]);
     });
   });

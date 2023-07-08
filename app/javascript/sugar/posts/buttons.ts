@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
 
 readyHandler.ready(() => {
@@ -22,11 +21,11 @@ readyHandler.ready(() => {
     }
   }
 
-  $(Sugar).bind("posting-status", function (_, message: string) {
-    showStatus(message);
+  document.addEventListener("posting-status", (event: PostingStatusEvent) => {
+    showStatus(event.detail);
   });
 
-  $(Sugar).bind("posting-complete", function () {
+  document.addEventListener("posting-complete", () => {
     clearStatus();
   });
 });

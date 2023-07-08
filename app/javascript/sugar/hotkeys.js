@@ -197,7 +197,7 @@ import "../vendor/jquery.hotkeys";
 
   let openTargetNewTab = (target) => window.open(targetUrl(target));
 
-  $(document).bind("keydown", trackKeySequence);
+  document.addEventListener("keydown", trackKeySequence);
 
   bindKeySequence(/gd$/, () => visitPath("/discussions"));
   bindKeySequence(/gf$/, () => visitPath("/discussions/following"));

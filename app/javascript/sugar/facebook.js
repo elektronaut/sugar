@@ -14,8 +14,8 @@ const Facebook = {
         .wrapInner('<span class="fb_button_text" />');
     }
     this.loadAsync();
-    $(Sugar).bind("postsloaded", function (event, posts) {
-      Facebook.parsePosts(posts);
+    document.addEventListener("postsloaded", (event) => {
+      Facebook.parsePosts(event.detail);
     });
   },
 
@@ -60,7 +60,7 @@ const Facebook = {
 
   parsePosts: function (posts) {
     this.withAPI(function () {
-      posts.each(function () {
+      $(posts).each(function () {
         window.FB.XFBML.parse(this);
       });
     });

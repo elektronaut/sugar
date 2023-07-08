@@ -10,7 +10,11 @@ readyHandler.ready(() => {
       .closest("form")
       .data("preview-url") as string;
 
-    $(Sugar).trigger("posting-status", ["Loading preview&hellip;"]);
+    document.dispatchEvent(
+      new CustomEvent("posting-status", {
+        detail: "Loading preview&hellip;"
+      })
+    );
 
     $(".posts #previewPost").animate({ opacity: 0.1 }, "fast");
     void $.ajax({
@@ -43,9 +47,11 @@ readyHandler.ready(() => {
           $(".posts #previewPost").addClass("shown").hide().fadeIn();
         }
 
-        $(Sugar).trigger("postsloaded", [
-          $(".posts #previewPost").find(".post")
-        ]);
+        document.dispatchEvent(
+          new CustomEvent("postsloaded", {
+            detail: $(".posts #previewPost").find(".post")
+          })
+        );
       },
 
       error: function (xhr) {
@@ -53,7 +59,7 @@ readyHandler.ready(() => {
       },
 
       complete: function () {
-        $(Sugar).trigger("posting-complete");
+        document.dispatchEvent(new Event("posting-complete"));
       }
     });
   }

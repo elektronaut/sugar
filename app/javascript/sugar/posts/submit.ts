@@ -5,7 +5,11 @@ import readyHandler from "../../lib/readyHandler";
 readyHandler.ready(() => {
   // Submit post via AJAX
   function submitPost(form: HTMLFormElement) {
-    $(Sugar).trigger("posting-status", ["Posting, please wait&hellip;"]);
+    document.dispatchEvent(
+      new CustomEvent("posting-status", {
+        detail: "Posting, please wait&hellip;"
+      })
+    );
 
     if ($(form).hasClass("livePost")) {
       const body = $("#compose-body").val();
@@ -40,7 +44,7 @@ readyHandler.ready(() => {
         },
 
         complete: function () {
-          $(Sugar).trigger("posting-complete");
+          document.dispatchEvent(new Event("posting-complete"));
         }
       });
     } else {

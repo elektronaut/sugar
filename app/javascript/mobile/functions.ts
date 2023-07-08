@@ -87,8 +87,8 @@ readyHandler.start(function () {
     }
   };
 
-  $(window).bind("orientationchange", updateLayout);
-  $(window).bind("resize", updateLayout);
+  window.addEventListener("orientationchange", updateLayout);
+  window.addEventListener("resize", updateLayout);
   updateLayout();
 
   $(".toggle-navigation").click(function () {
@@ -145,12 +145,16 @@ readyHandler.start(function () {
     text = text.replace(/class="spoiler revealed"/g, 'class="spoiler"');
     html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
 
-    $(Sugar).trigger("quote", {
-      username: username,
-      permalink: permalink,
-      text: text,
-      html: html
-    });
+    document.dispatchEvent(
+      new CustomEvent("quote", {
+        detail: {
+          username: username,
+          permalink: permalink,
+          text: text,
+          html: html
+        }
+      })
+    );
 
     return false;
   });

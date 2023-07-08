@@ -115,12 +115,16 @@ export default Backbone.View.extend({
       "https://twitter.com/statuses/$2"
     );
 
-    $(Sugar).trigger("quote", {
-      username: username,
-      permalink: permalink,
-      text: text,
-      html: html
-    });
+    document.dispatchEvent(
+      new CustomEvent("quote", {
+        detail: {
+          username: username,
+          permalink: permalink,
+          text: text,
+          html: html
+        }
+      })
+    );
   },
 
   applySpoiler: function () {
