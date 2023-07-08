@@ -49,7 +49,7 @@ readyHandler.ready(() => {
 
         document.dispatchEvent(
           new CustomEvent("postsloaded", {
-            detail: $(".posts #previewPost").find(".post")
+            detail: $(".posts #previewPost").find(".post").get()
           })
         );
       },

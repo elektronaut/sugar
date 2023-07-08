@@ -1,37 +1,8 @@
 import $ from "jquery";
-import Sugar from "../sugar";
 import readyHandler from "../lib/readyHandler";
 
 function toggleNavigation() {
   $("#navigation").toggleClass("active");
-}
-
-// Amazon Associates referral code
-function addReferralIds() {
-  const referralId = Sugar.Configuration.amazonAssociatesId as string;
-  const ptrn =
-    /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
-
-  const needsReferral = function (link: HTMLLinkElement): boolean {
-    return (
-      !$.data(link, "amazon_associates_referral_id") && link.href.match(ptrn)
-    );
-  };
-
-  const applyReferral = (_, link: HTMLLinkElement) => {
-    if (needsReferral(link)) {
-      $.data(link, "amazon_associates_referral_id", referralId);
-      if (link.href.match(/(\?|&)tag=/)) {
-        return;
-      }
-      link.href += link.href.match(/\?/) ? "&" : "?";
-      link.href += "tag=" + referralId;
-    }
-  };
-
-  if (referralId) {
-    $(".post .body a").each(applyReferral);
-  }
 }
 
 function wrapEmbeds() {
@@ -208,6 +179,5 @@ readyHandler.start(function () {
     );
   });
 
-  addReferralIds();
   wrapEmbeds();
 });

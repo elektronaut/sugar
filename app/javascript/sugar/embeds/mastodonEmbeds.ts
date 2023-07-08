@@ -3,7 +3,7 @@ interface EventData {
   height: number;
 }
 
-export default function handleMastodonEmbeds() {
+export default function mastodonEmbeds() {
   const iframes = new Map<string, HTMLIFrameElement>();
 
   const iframeId = () => {

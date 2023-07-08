@@ -1,16 +1,15 @@
-import Backbone from "backbone";
-
-import Application from "./views/Application";
+import { startPosts } from "./sugar/post";
 
 interface SugarConfiguration {
   authToken: string;
+  currentUser?: UserAttributes;
 }
 
 const Sugar = {
   Configuration: {} as SugarConfiguration,
 
   init() {
-    this.Application = new (Application as Backbone.View)() as Backbone.View;
+    startPosts();
   },
 
   authToken(): string {

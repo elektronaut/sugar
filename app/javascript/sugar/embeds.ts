@@ -1,5 +1,7 @@
-import readyHandler from "../../lib/readyHandler";
-import handleMastodonEmbeds from "./handleMastodonEmbeds";
+import readyHandler from "../lib/readyHandler";
+import gifvVideos from "./embeds/gifvVideos";
+import mastodonEmbeds from "./embeds/mastodonEmbeds";
+import responsiveEmbeds from "./embeds/responsiveEmbeds";
 
 interface PostCache {
   height: number;
@@ -15,6 +17,12 @@ interface Cache {
 
 interface Twitter {
   widgets: { load: (elem: HTMLElement) => void };
+}
+
+function setupEmbeds() {
+  gifvVideos();
+  mastodonEmbeds();
+  responsiveEmbeds();
 }
 
 /**
@@ -136,9 +144,8 @@ readyHandler.ready(function () {
       const twitter = window.twttr as Twitter;
       twitter.widgets.load(posts[0].parentNode);
     }
-
-    handleMastodonEmbeds();
+    setupEmbeds();
   });
 
-  handleMastodonEmbeds();
+  setupEmbeds();
 });

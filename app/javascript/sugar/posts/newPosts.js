@@ -1,20 +1,19 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
-import Conversation from "../../models/Conversation";
-import Discussion from "../../models/Discussion";
 
 const PostDetector = {
+  id: null,
   paused: false,
-  model: null,
   interval: null,
   total_posts: null,
   read_posts: null,
+  type: "Discussion",
 
   refresh: function () {
     if (!this.paused) {
       let detector = this;
-      $.getJSON(this.model.postsCountUrl({ timestamp: true }), function (json) {
+      $.getJSON(this.postsCountUrl(), function (json) {
         var new_posts = json.posts_count - detector.total_posts;
         if (new_posts > 0) {
           detector.total_posts = json.posts_count;
@@ -32,21 +31,23 @@ const PostDetector = {
     }
   },
 
+  postsCountUrl: function () {
+    const baseUrl =
+      this.type === "Conversation" ? "/conversations" : "/discussions";
+    return `${baseUrl}/${this.id}/posts/count.json?` + new Date().getTime();
+  },
+
   start: function (container) {
     this.paused = false;
 
-    var modelClass = Discussion;
     if ($(container).data("type") === "Conversation") {
-      modelClass = Conversation;
+      this.type = "Conversation";
     }
 
-    this.model = new modelClass({
-      id: $(container).data("id"),
-      posts_count: $(container).data("posts-count")
-    });
+    this.id = $(container).data("id");
 
     if (!this.read_posts) {
-      this.read_posts = this.model.get("posts_count");
+      this.read_posts = $(container).data("posts-count");
     }
 
     if (!this.total_posts) {
@@ -118,7 +119,7 @@ Sugar.loadNewPosts = function () {
       PostDetector.resume();
       document.dispatchEvent(
         new CustomEvent("postsloaded", {
-          detail: new_posts
+          detail: new_posts.get()
         })
       );
     });
