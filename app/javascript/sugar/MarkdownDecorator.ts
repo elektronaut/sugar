@@ -31,6 +31,7 @@ export default class MarkdownDecorator {
   }
 
   quote(text: string, html: string, username: string, permalink: string) {
+    const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
     const wrapInBlockquote = (str: string) =>
       str
         .split("\n")
@@ -41,7 +42,7 @@ export default class MarkdownDecorator {
       cite = `Posted by [${username}](${permalink}):`;
     }
     return [
-      wrapInBlockquote("<cite>" + cite + "</cite>\n\n" + html) + "\n\n",
+      wrapInBlockquote("<cite>" + cite + "</cite>\n\n" + content) + "\n\n",
       "",
       ""
     ];
