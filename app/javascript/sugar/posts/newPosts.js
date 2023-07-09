@@ -1,5 +1,4 @@
 import $ from "jquery";
-import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
 
 const PostDetector = {
@@ -83,7 +82,7 @@ const PostDetector = {
   }
 };
 
-Sugar.loadNewPosts = function () {
+export function loadNewPosts() {
   if ($("#discussionLink").length > 0) {
     PostDetector.pause();
     document.dispatchEvent(new Event("postsloading"));
@@ -124,7 +123,7 @@ Sugar.loadNewPosts = function () {
       );
     });
   }
-};
+}
 
 readyHandler.ready(() => {
   // Start the post detector
@@ -177,7 +176,7 @@ readyHandler.ready(() => {
       '">click here to load</a>.';
     $("#newPosts").html(`<p>${notification_string}</p>`);
     $("#newPosts a").click(function () {
-      Sugar.loadNewPosts();
+      loadNewPosts();
       return false;
     });
 

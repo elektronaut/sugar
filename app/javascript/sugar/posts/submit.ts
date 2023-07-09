@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
+import { loadNewPosts } from "./newPosts";
 
 readyHandler.ready(() => {
   // Submit post via AJAX
@@ -28,9 +29,7 @@ readyHandler.ready(() => {
         success: function () {
           $("#compose-body").val("");
           $(".posts #previewPost").remove();
-          if ("loadNewPosts" in Sugar) {
-            Sugar.loadNewPosts();
-          }
+          void loadNewPosts();
         },
 
         error: function (xhr, text_status) {

@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Sugar from "../sugar";
 import readyHandler from "../lib/readyHandler";
+import { loadNewPosts } from "./posts/newPosts";
 
 import "../vendor/jquery.hotkeys";
 
@@ -219,7 +220,7 @@ import "../vendor/jquery.hotkeys";
   bindKey("n", () => ifTargets(() => setTarget(nextTarget())));
   bindKey("j", () => ifTargets(() => setTarget(nextTarget())));
 
-  bindKey("r", () => onlyPosts(() => Sugar.loadNewPosts()));
+  bindKey("r", () => onlyPosts(() => loadNewPosts()));
   bindKey("q", () => onlyPosts(() => withTarget((t) => Sugar.quotePost(t))));
 
   bindKey("o", () => onlyExchanges(() => withTarget((t) => openTarget(t))));

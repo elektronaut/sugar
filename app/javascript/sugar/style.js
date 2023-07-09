@@ -31,18 +31,18 @@ readyHandler.ready(() => {
   });
 
   $("#reply-tabs").each(function () {
-    const replyTabs = setupTabs(this, { showFirstTab: false });
+    const [tabs, showTab] = setupTabs(this, { showFirstTab: false });
 
     if ($("body.last_page").length > 0) {
-      replyTabs.controls.showTab(replyTabs.tabs[0]);
+      showTab(tabs[0]);
     }
 
     $("#replyText textarea").on("focus", function () {
-      replyTabs.controls.showTab(replyTabs.tabs[0]);
+      showTab(tabs[0]);
     });
 
     document.addEventListener("quote", () => {
-      replyTabs.controls.showTab(replyTabs.tabs[0]);
+      showTab(tabs[0]);
     });
   });
 
