@@ -1,32 +1,12 @@
 import $ from "jquery";
-import Dropzone from "dropzone";
 import Sugar from "../sugar";
-import HtmlDecorator from "./HtmlDecorator";
-import MarkdownDecorator from "./MarkdownDecorator";
 
-import { csrfToken, putJson } from "../lib/request";
+import HtmlDecorator from "./richTextArea/HtmlDecorator";
+import MarkdownDecorator from "./richTextArea/MarkdownDecorator";
+import { getSelection, replaceSelection } from "./richTextArea/selection";
+import { bindUploads, uploadImage } from "./richTextArea/upload";
 
-function getSelection(elem) {
-  let { selectionStart, selectionEnd, value } = elem;
-  return value.substr(selectionStart, selectionEnd - selectionStart);
-}
-
-function replaceSelection(textarea, prefix, replacement, postfix) {
-  let { selectionStart, selectionEnd, value } = textarea;
-
-  textarea.value =
-    value.substr(0, selectionStart) +
-    prefix +
-    replacement +
-    postfix +
-    value.substr(selectionEnd, value.length);
-
-  textarea.focus({ preventScroll: true });
-  textarea.setSelectionRange(
-    selectionStart + prefix.length,
-    selectionStart + prefix.length + replacement.length
-  );
-}
+import { putJson } from "../lib/request";
 
 function undoEmbeds(html) {
   let elem = document.createElement("div");
@@ -41,106 +21,6 @@ function undoEmbeds(html) {
       embed.parentNode.removeChild(embed);
     });
   return elem.innerHTML;
-}
-
-function uploadBanner(file) {
-  return '[Uploading "' + file.name + '"...]';
-}
-
-function startUpload(elem, file) {
-  replaceSelection(elem, uploadBanner(file) + "\n", "", "");
-}
-
-function uploadError(response) {
-  if (typeof response === "object" && response.error) {
-    alert("There was an error uploading the image: " + response.error);
-  }
-}
-
-function finishUpload(elem, file, response) {
-  uploadError(response);
-  if (response && response.embed) {
-    $(elem).val(
-      $(elem)
-        .val()
-        .replace(uploadBanner(file) + "\n", response.embed)
-    );
-  }
-}
-
-function failedUpload(elem, file, response) {
-  uploadError(response);
-  $(elem).val($(elem).val().replace(uploadBanner(file), ""));
-}
-
-function uploadImageFile(textarea, file, callback) {
-  let reader = new FileReader();
-  reader.onload = function () {
-    startUpload(textarea, file);
-    var formData = new FormData();
-    formData.append("upload[file]", file);
-    $.ajax({
-      url: "/uploads.json",
-      type: "POST",
-      headers: { "X-CSRF-Token": csrfToken() },
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: (json) => finishUpload(textarea, file, json),
-      error: (r) => failedUpload(textarea, file, r.responseJSON)
-    });
-    if (callback) {
-      callback();
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-function uploadImage(textarea) {
-  let fileInput = $(
-    '<input type="file" name="file" ' +
-      'accept="image/gif, image/png, image/jpeg, image/webp" ' +
-      'style="display: none;"/>'
-  );
-  fileInput.insertBefore(textarea);
-  fileInput.get(0).addEventListener(
-    "change",
-    function () {
-      let file = fileInput.get(0).files[0];
-      uploadImageFile(textarea, file, () => {
-        fileInput.remove();
-      });
-    },
-    false
-  );
-  fileInput.click();
-}
-
-function bindUploads(elem) {
-  const dropzone = new Dropzone(elem, {
-    url: "/uploads.json",
-    paramName: "upload[file]",
-    headers: { "X-CSRF-Token": csrfToken() },
-    acceptedFiles: "image/jpeg,image/png,image/gif,image/tiff,image/webp",
-    clickable: false,
-    createImageThumbnails: false
-  });
-
-  dropzone.on("addedfile", (file) => startUpload(elem, file));
-  dropzone.on("success", (file) =>
-    finishUpload(elem, file, JSON.parse(file.xhr.responseText))
-  );
-  dropzone.on("error", (file, message) => failedUpload(elem, file, message));
-
-  elem.addEventListener("paste", (evt) => {
-    const items = (evt.clipboardData || evt.originalEvent.clipboardData).items;
-    for (var i in items) {
-      const item = items[i];
-      if (item.kind == "file" && item.type.match(/^image\//)) {
-        uploadImageFile(elem, item.getAsFile());
-      }
-    }
-  });
 }
 
 export default function richTextArea(textarea) {

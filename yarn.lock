@@ -366,7 +366,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jquery@npm:^3.5.16":
+"@types/dropzone@npm:^5.7.4":
+  version: 5.7.4
+  resolution: "@types/dropzone@npm:5.7.4"
+  dependencies:
+    "@types/jquery": "*"
+  checksum: ec7e5efa24e20ea686b24b52241e980225d7d3d59fc36f6f3080d673a692c8a5ce5b00c19a4443005bb17faffc47a5e1a3cafa90ddede60dfdbdf795fbdb1ddd
+  languageName: node
+  linkType: hard
+
+"@types/jquery@npm:*, @types/jquery@npm:^3.5.16":
   version: 3.5.16
   resolution: "@types/jquery@npm:3.5.16"
   dependencies:
@@ -657,6 +666,7 @@ __metadata:
     "@dnd-kit/sortable": ^7.0.1
     "@fortawesome/fontawesome-free": ^6.2.1
     "@rails/ujs": ^7.0.3-1
+    "@types/dropzone": ^5.7.4
     "@types/jquery": ^3.5.16
     "@types/rails__ujs": ^6.0.1
     "@types/react": ^18.0.37
