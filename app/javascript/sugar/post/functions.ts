@@ -41,9 +41,9 @@ function postAttributes(elem: HTMLDivElement): PostAttributes {
     return {};
   }
   return {
-    id: elem.dataset.post_id,
-    user_id: elem.dataset.user_id,
-    exchange_id: elem.dataset.exchange_id,
+    id: parseInt(elem.dataset.post_id, 10),
+    user_id: parseInt(elem.dataset.user_id, 10),
+    exchange_id: parseInt(elem.dataset.exchange_id),
     exchange_type: elem.dataset.exchange_type
   };
 }
