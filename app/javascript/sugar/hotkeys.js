@@ -3,7 +3,7 @@ import Sugar from "../sugar";
 import readyHandler from "../lib/readyHandler";
 import { loadNewPosts } from "./posts/newPosts";
 
-import "../vendor/jquery.hotkeys";
+import bindKey from "./hotkeys/bindKey";
 
 (function () {
   var currentTarget = null;
@@ -24,15 +24,6 @@ import "../vendor/jquery.hotkeys";
     98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 109, 110, 111, 112, 113,
     114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
   ];
-
-  let bindRawKey = (hotkey, fn) => $(document).bind("keydown", hotkey, fn);
-
-  let bindKey = (hotkey, fn) =>
-    bindRawKey(hotkey, (event) => {
-      if (!event.metaKey) {
-        return fn(event);
-      }
-    });
 
   let bindKeySequence = (expression, fn) => keySequences.push([expression, fn]);
 
@@ -212,8 +203,6 @@ import "../vendor/jquery.hotkeys";
   bindKey("shift+n", () => visitLink(".next_page_link"));
   bindKey("u", () => visitLink("#back_link"));
   bindKey("shift+j", () => visitLink(".next_page_link"));
-
-  bindKey("/", (event) => focusElement(event, "#q"));
 
   bindKey("p", () => ifTargets(() => setTarget(previousTarget())));
   bindKey("k", () => ifTargets(() => setTarget(previousTarget())));
