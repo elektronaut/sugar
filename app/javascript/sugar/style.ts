@@ -22,12 +22,12 @@ readyHandler.ready(() => {
   });
 
   $("table.discussions").each(function () {
-    $("#content").css("min-width", $(this).outerWidth() + "px");
+    $("#content").css("min-width", `${$(this).outerWidth()}px`);
   });
 
   $("#sidebar").each(function () {
     const minWidth = $("#content").outerWidth() + $("#sidebar").outerWidth();
-    $("#wrapper").css("min-width", minWidth + "px");
+    $("#wrapper").css("min-width", `${minWidth}px`);
   });
 
   $("#reply-tabs").each(function () {

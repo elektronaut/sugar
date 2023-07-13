@@ -3,17 +3,16 @@ import readyHandler from "../lib/readyHandler";
 
 readyHandler.ready(() => {
   $("#search form").each(function () {
-    let form = this;
-    $(form)
+    $(this)
       .find("#search_mode")
       .change(function () {
-        this.parentNode.action = this.value;
+        this.parentNode.action = this.value as string;
       });
-    $(form).submit(function () {
-      let query = encodeURIComponent($(form).find(".query").val());
-      var action = form.action;
+    $(this).submit(() => {
+      const query = encodeURIComponent($(this).find(".query").val());
+      let action = this.action as string;
       if (!action.match(/^https?:\/\//)) {
-        let baseDomain = document.location
+        const baseDomain = document.location
           .toString()
           .match(/^(https?:\/\/[\w\d\-.]+)/)[1];
         action = baseDomain + action;
