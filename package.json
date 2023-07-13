@@ -23,7 +23,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react_ujs": "^2.6.2",
-    "timeago": "^1.6.7",
     "underscore": "^1.13.6",
     "uuid": "^9.0.0"
   },
@@ -32,6 +31,7 @@
     "@types/jquery": "^3.5.16",
     "@types/rails__ujs": "^6.0.1",
     "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.2.7",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
