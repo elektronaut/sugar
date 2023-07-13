@@ -4,26 +4,12 @@ import readyHandler from "../lib/readyHandler";
 import { loadNewPosts } from "./posts/newPosts";
 
 import bindKey from "./hotkeys/bindKey";
+import specialKeys from "./hotkeys/specialKeys";
 
 (function () {
   var currentTarget = null;
   var keySequence = "";
   var keySequences = [];
-
-  let indexOf =
-    [].indexOf ||
-    function (item) {
-      for (var i = 0, l = this.length; i < l; i++) {
-        if (i in this && this[i] === item) return i;
-      }
-      return -1;
-    };
-
-  let specialKeys = [
-    8, 9, 13, 19, 20, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 96, 97,
-    98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 109, 110, 111, 112, 113,
-    114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 145, 191
-  ];
 
   let bindKeySequence = (expression, fn) => keySequences.push([expression, fn]);
 
@@ -60,8 +46,7 @@ import bindKey from "./hotkeys/bindKey";
   let isDiscussion = (target) => $(target).closest("tr").hasClass("discussion");
 
   let keypressToCharacter = (event) => {
-    var ref;
-    if (((ref = event.which), indexOf.call(specialKeys, ref) >= 0)) {
+    if (event.which in specialKeys) {
       return;
     }
     if (event.shiftKey && event.which >= 65 && event.which <= 90) {
