@@ -10,7 +10,6 @@ window.Sugar = Sugar;
 import readyHandler from "./lib/readyHandler";
 import { applyRichTextArea } from "./sugar/richTextArea";
 
-import "./sugar/exchanges/conversations";
 import "./sugar/exchanges/newDiscussion";
 import "./sugar/facebook";
 import "./sugar/hotkeys";

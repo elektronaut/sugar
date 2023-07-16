@@ -44,11 +44,7 @@ class ConversationsController < ApplicationController
     if params[:username]
       add_participants(@exchange, params[:username].split(/\s*,\s*/))
     end
-    if request.xhr?
-      render template: "conversations/participants", layout: false
-    else
-      redirect_to @exchange
-    end
+    redirect_to @exchange
   end
 
   def remove_participant

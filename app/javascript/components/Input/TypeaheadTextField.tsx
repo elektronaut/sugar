@@ -10,10 +10,11 @@ interface TypeaheadTextFieldProps {
   label: string;
   name: string;
   onChange: (value: string) => void;
-  onKeyDown: (evt: KeyboardEvent) => void;
+  onKeyDown: (evt: KeyboardEvent) => void | Promise;
   options: string[];
   size: number;
   value: string;
+  onFocus?: (evt: FocusEvent) => void | Promise;
 }
 
 export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
@@ -52,7 +53,6 @@ export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
           <label {...getLabelProps()}>{label}</label>
           <div
             className={"typeahead-input " + (isOpen ? "open" : "")}
-            style={{ display: "inline-block" }}
             {...getRootProps({}, { suppressRefError: true })}>
             <input
               autoFocus={props.autoFocus}
@@ -61,6 +61,7 @@ export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
               size={size}
               {...getInputProps({
                 isOpen,
+                onFocus: props.onFocus,
                 onKeyDown: handleKeyDown
               })}
             />

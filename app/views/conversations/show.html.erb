@@ -18,14 +18,11 @@
                  participants: @exchange.participants
                }) %>
   </div>
-  <div class="invite">
-    <h2>Invite someone</h2>
-    <%= form_for([:invite_participant, @exchange],
-                 html: { id: "invite_participant_form" }) do |f| %>
-      <%= text_field_tag "username", "", class: :username %>
-      <%= submit_tag "Invite" %>
-    <% end %>
-  </div>
+  <%= react_component(
+    "InviteParticipant", {
+      url: invite_participant_conversation_path(@exchange)
+    }
+  ) %>
 <% end %>
 
 <a name="top" class="anchor"></a>
