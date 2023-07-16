@@ -1,11 +1,11 @@
 import Sugar from "../sugar";
 
-interface User {
+interface IUser {
   id: number;
   attributes: UserAttributes;
 }
 
-export default class User implements User {
+export default class User implements IUser {
   id: number;
   attributes: UserAttributes;
 

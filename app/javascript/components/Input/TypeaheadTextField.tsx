@@ -10,11 +10,11 @@ interface TypeaheadTextFieldProps {
   label: string;
   name: string;
   onChange: (value: string) => void;
-  onKeyDown: (evt: KeyboardEvent) => void | Promise;
+  onKeyDown: (evt: KeyboardEvent) => void | Promise<void>;
   options: string[];
   size: number;
   value: string;
-  onFocus?: (evt: FocusEvent) => void | Promise;
+  onFocus?: (evt: FocusEvent) => void | Promise<void>;
 }
 
 export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
@@ -22,7 +22,7 @@ export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
 
   const handleKeyDown = (evt: KeyboardEvent) => {
     if (props.onKeyDown) {
-      props.onKeyDown(evt);
+      void props.onKeyDown(evt);
     }
   };
 
