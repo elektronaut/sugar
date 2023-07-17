@@ -19,3 +19,11 @@ interface PostingStatusEvent extends CustomEvent {
 interface PostsLoadedEvent extends CustomEvent {
   detail: HTMLElement[];
 }
+
+interface QuoteEvent extends CustomEvent {
+  detail: {
+    username: string;
+    permalink: string;
+    html: string;
+  };
+}

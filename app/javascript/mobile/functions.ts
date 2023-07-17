@@ -1,8 +1,29 @@
-import $ from "jquery";
 import readyHandler from "../lib/readyHandler";
 
 function toggleNavigation() {
-  $("#navigation").toggleClass("active");
+  const nav = document.getElementById("navigation");
+  if (nav) {
+    nav.classList.toggle("active");
+  }
+}
+
+function permalink(post: HTMLDivElement) {
+  const link: HTMLLinkElement = post.querySelector(".post_info .permalink");
+  if (link && "href" in link) {
+    return link.href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
+  }
+}
+
+function hide(elem: HTMLElement) {
+  if (elem && "style" in elem) {
+    elem.style.display = "none";
+  }
+}
+
+function show(elem: HTMLElement) {
+  if (elem && "style" in elem) {
+    elem.style.display = "block";
+  }
 }
 
 function wrapEmbeds() {
@@ -62,21 +83,27 @@ readyHandler.start(function () {
   window.addEventListener("resize", updateLayout);
   updateLayout();
 
-  $(".toggle-navigation").click(function () {
-    toggleNavigation();
+  document.querySelectorAll(".toggle-navigation").forEach((a) => {
+    a.addEventListener("click", toggleNavigation);
   });
 
   // Open images when clicked
-  $(".post .body img").click(function (_, img: HTMLImageElement) {
-    document.location = img.src;
-  });
+  document
+    .querySelectorAll(".post .body img")
+    .forEach((img: HTMLImageElement) => {
+      img.addEventListener("click", () => {
+        document.location = img.src;
+      });
+    });
 
   // Larger click targets on discussion overview
-  $(".discussions .discussion h2 a").each(function (_, link: HTMLLinkElement) {
-    $(this.parentNode.parentNode).click(function () {
-      document.location = link.href;
+  document
+    .querySelectorAll(".discussions .discussion h2 a")
+    .forEach((link: HTMLLinkElement) => {
+      link.parentNode.parentNode.addEventListener("click", () => {
+        document.location = link.href;
+      });
     });
-  });
 
   // Scroll past the Safari chrome
   if (!document.location.toString().match(/#/)) {
@@ -94,89 +121,85 @@ readyHandler.start(function () {
     });
 
   // Post quoting
-  $(".post .functions a.quote_post").click(function () {
-    const stripWhitespace = function (str: string) {
-      return str.replace(/^[\s]*/, "").replace(/[\s]*$/, "");
-    };
-
-    const post = $(this).closest(".post");
-    const username = post.find(".post_info .username a").text();
-    const permalinkElem = post
-      .find(".post_info .permalink")
-      .get()[0] as HTMLLinkElement;
-    const permalink = permalinkElem.href.replace(
-      /^https?:\/\/([\w\d.:-]*)/,
-      ""
-    );
-
-    let html = stripWhitespace(post.find(".body").html());
-
-    // Hide spoilers
-    html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
-
-    document.dispatchEvent(
-      new CustomEvent("quote", {
-        detail: {
-          username: username,
-          permalink: permalink,
-          html: html
-        }
-      })
-    );
-
-    return false;
+  document.querySelectorAll(".post").forEach((post: HTMLDivElement) => {
+    const quoteLink = post.querySelector(".functions a.quote_post");
+    if (quoteLink) {
+      quoteLink.addEventListener("click", (evt) => {
+        evt.preventDefault("");
+        const username = post.querySelector(
+          ".post_info .username a"
+        ).textContent;
+        const html = post
+          .querySelector(".body")
+          .innerHTML.trim()
+          .replace(/class="spoiler revealed"/g, 'class="spoiler"');
+        document.dispatchEvent(
+          new CustomEvent("quote", {
+            detail: {
+              username: username,
+              permalink: permalink(post),
+              html: html
+            }
+          })
+        );
+      });
+    }
   });
 
   // Muted posts
-  $(".post").each(function () {
-    const userId = $(this).data("user_id") as string;
+  document.querySelectorAll(".post").forEach((post: HTMLDivElement) => {
+    const userId = post.dataset.user_id;
     const mutedUsers = window.mutedUsers as number[] | null;
     if (mutedUsers && mutedUsers.indexOf(userId) !== -1) {
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
-      const username = this.querySelector(".username a").textContent;
+      const username = post.querySelector(".username a").textContent;
 
       showLink.innerHTML = "Show";
       showLink.addEventListener("click", (evt) => {
         evt.preventDefault();
-        this.classList.remove("muted");
+        post.classList.remove("muted");
       });
 
       notice.classList.add("muted-notice");
       notice.innerHTML = `This post by <strong>${username}</strong> has been muted. `;
       notice.appendChild(showLink);
 
-      this.classList.add("muted");
-      this.appendChild(notice);
+      post.classList.add("muted");
+      post.appendChild(notice);
     }
-  });
-
-  // Posting
-  $("form.new_post").submit(function () {
-    // let body = $(this).find("#compose-body");
-    return true;
   });
 
   // Spoiler tags
-  $(".spoiler").click(function () {
-    $(this).toggleClass("revealed");
+  document.querySelectorAll(".spoiler").forEach((spoiler) => {
+    spoiler.addEventListener("click", () => {
+      spoiler.classList.toggle("revealed");
+    });
   });
 
   // Login
-  $("section.login").each(function () {
-    function forgotPassword() {
-      $("#login").toggle();
-      $("#password-reminder").toggle();
-    }
-    $("#password-reminder").hide();
-    $(".forgot-password").click(forgotPassword);
-  });
+  document
+    .querySelectorAll("section.login")
+    .forEach((section: HTMLDivElement) => {
+      hide(section.querySelector("#password-reminder"));
+      document
+        .querySelector("a.forgot-password")
+        .addEventListener("click", (evt) => {
+          evt.preventDefault();
+          hide(section.querySelector("#login"));
+          show(section.querySelector("#password-reminder"));
+        });
+    });
 
   // Confirm regular site
-  $("a.regular_site").click(function () {
-    return confirm(
-      "Are you sure you want to navigate away from the mobile version?"
-    );
+  document.querySelector("a.regular_site").addEventListener("click", (evt) => {
+    if (
+      !confirm(
+        "Are you sure you want to navigate away from the mobile version?"
+      )
+    ) {
+      evt.preventDefault();
+    }
   });
 
   wrapEmbeds();

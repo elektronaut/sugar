@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Sugar from "../sugar";
 import readyHandler from "../lib/readyHandler";
 
@@ -8,11 +7,6 @@ const Facebook = {
 
   init: function () {
     this.appId = Sugar.Configuration.facebookAppId;
-    if ($(".fb_button").length > 0) {
-      $(".fb_button")
-        .addClass("fb_button_large")
-        .wrapInner('<span class="fb_button_text" />');
-    }
     this.loadAsync();
     document.addEventListener("postsloaded", (event) => {
       Facebook.parsePosts(event.detail);
@@ -20,7 +14,7 @@ const Facebook = {
   },
 
   withAPI: function (callback) {
-    let facebook = this;
+    const facebook = this;
     if (this.apiReady) {
       callback();
     } else {
@@ -34,7 +28,7 @@ const Facebook = {
   },
 
   loadAsync: function () {
-    let facebook = this;
+    const facebook = this;
 
     window.fbAsyncInit = function () {
       window.FB.init({
@@ -47,9 +41,11 @@ const Facebook = {
       facebook.apiReady = true;
     };
 
-    $("body").append('<div id="fb-root" />');
+    const fbRoot = document.createElement("div");
+    fbRoot.id = "fb-root";
+    document.body.appendChild(fbRoot);
 
-    let script = document.createElement("script");
+    const script = document.createElement("script");
     script.id = "facebook-scriptsdk";
     script.src = "//connect.facebook.net/en_US/sdk.js";
     script.crossorigin = "anonymous";
@@ -60,8 +56,8 @@ const Facebook = {
 
   parsePosts: function (posts) {
     this.withAPI(function () {
-      $(posts).each(function () {
-        window.FB.XFBML.parse(this);
+      posts.forEach((post) => {
+        window.FB.XFBML.parse(post);
       });
     });
   }

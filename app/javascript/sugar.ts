@@ -1,8 +1,15 @@
 import { startPosts } from "./sugar/post";
 
+interface Icon {
+  name: string;
+  image: string;
+}
+
 interface SugarConfiguration {
   authToken: string;
+  emoticons: Icon[];
   currentUser?: UserAttributes;
+  preferredFormat?: string;
 }
 
 const Sugar = {

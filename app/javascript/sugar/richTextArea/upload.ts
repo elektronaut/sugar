@@ -1,4 +1,3 @@
-import $ from "jquery";
 import Dropzone from "dropzone";
 
 import { csrfToken } from "../../lib/request";
@@ -49,21 +48,20 @@ function uploadImageFile(
   callback: () => void
 ) {
   const reader = new FileReader();
-  reader.onload = function () {
+  reader.onload = async function () {
     startUpload(textarea, file);
     const formData = new FormData();
     formData.append("upload[file]", file);
-    void $.ajax({
-      url: "/uploads.json",
-      type: "POST",
-      headers: { "X-CSRF-Token": csrfToken() },
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: (json: UploadResponse) => finishUpload(textarea, file, json),
-      error: (r) =>
-        failedUpload(textarea, file, r.responseJSON as UploadResponse)
-    });
+
+    await fetch("/uploads.json", {
+      method: "post",
+      body: formData,
+      headers: {
+        "X-CSRF-Token": csrfToken()
+      }
+    })
+      .then((response) => response.json())
+      .then((json: UploadResponse) => finishUpload(textarea, file, json));
     if (callback) {
       callback();
     }
@@ -72,17 +70,16 @@ function uploadImageFile(
 }
 
 export function uploadImage(textarea: HTMLTextAreaElement) {
-  const fileInput = $(
-    '<input type="file" name="file" ' +
-      'accept="image/gif, image/png, image/jpeg, image/webp" ' +
-      'style="display: none;"/>'
-  );
-  fileInput.insertBefore(textarea);
-  const input = fileInput.get(0) as HTMLInputElement;
-  input.addEventListener(
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/gif, image/png, image/jpeg, image/webp";
+  fileInput.style.display = "none";
+
+  textarea.parentNode.insertBefore(fileInput, textarea);
+  fileInput.addEventListener(
     "change",
     function () {
-      const file = input.files[0];
+      const file = fileInput.files[0];
       uploadImageFile(textarea, file, () => {
         fileInput.remove();
       });
