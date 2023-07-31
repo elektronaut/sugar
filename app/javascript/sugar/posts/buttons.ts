@@ -1,23 +1,30 @@
-import $ from "jquery";
 import readyHandler from "../../lib/readyHandler";
 
 readyHandler.ready(() => {
-  const $buttons = $("#button-container");
+  const buttonContainer = document.querySelector("#button-container");
 
   function showStatus(message: string) {
-    $buttons.find(".status").html(message);
-    $buttons.find("button").hide();
-    return $buttons.addClass("posting");
+    buttonContainer.querySelector(".status").innerHTML = message;
+
+    buttonContainer.querySelectorAll("button").forEach((button) => {
+      button.style.display = "none";
+    });
+
+    buttonContainer.classList.add("posting");
   }
 
   function clearStatus() {
-    $buttons.find(".status").html("");
-    $buttons.find("button").fadeIn("fast");
-    $buttons.removeClass("posting");
-    if ($(".posts #previewPost").length > 0) {
-      $buttons.find(".preview span").html("Update Preview");
+    buttonContainer.querySelector(".status").innerHTML = "";
+    buttonContainer.querySelectorAll("button").forEach((button) => {
+      button.style.display = "inline-block";
+    });
+    buttonContainer.classList.remove("posting");
+
+    if (document.querySelector(".posts #previewPost")) {
+      buttonContainer.querySelector(".preview span").innerHTML =
+        "Update Preview";
     } else {
-      $buttons.find(".preview span").html("Preview");
+      buttonContainer.querySelector(".preview span").innerHTML = "Preview";
     }
   }
 

@@ -34,6 +34,10 @@
 #ajaxPosts .post:first-child,
 #previewPost {
   border-top: 3px solid #e2dcbf;
+  transition: opacity 300ms ease-out;
+  &.loading {
+    opacity: 0.1;
+  }
 }
 
 .post {

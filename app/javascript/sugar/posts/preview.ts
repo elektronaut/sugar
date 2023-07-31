@@ -1,14 +1,43 @@
-import $ from "jquery";
-import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
+import { csrfToken } from "../../lib/request";
+
+function updatePreview(html: string) {
+  const posts = document.querySelector(".posts");
+  let container: HTMLDivElement = document.querySelector(".posts #container");
+
+  // Inject the #ajaxPosts container so new posts
+  // will be loaded above the preview
+  if (!posts.querySelector("#ajaxPosts")) {
+    const ajaxPosts = document.createElement("div");
+    ajaxPosts.id = "ajaxPosts";
+    posts.appendChild(ajaxPosts);
+  }
+
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "container";
+    posts.appendChild(container);
+  }
+
+  container.innerHTML = html;
+  container.classList.remove("loading");
+
+  document.dispatchEvent(
+    new CustomEvent("postsloaded", {
+      detail: [container.querySelector(".post")]
+    })
+  );
+}
 
 readyHandler.ready(() => {
-  function previewPost() {
-    const postBody = $("#compose-body").val();
-    const format = $("#compose-body").closest("form").find(".format").val();
-    const previewUrl = $("#compose-body")
-      .closest("form")
-      .data("preview-url") as string;
+  async function previewPost() {
+    const textarea: HTMLTextAreaElement =
+      document.querySelector("#compose-body");
+    const form = textarea.closest("form");
+
+    const postBody = textarea.value;
+    const format = form.querySelector(".format").value as string;
+    const previewUrl = form.dataset.previewUrl;
 
     document.dispatchEvent(
       new CustomEvent("posting-status", {
@@ -16,55 +45,41 @@ readyHandler.ready(() => {
       })
     );
 
-    $(".posts #previewPost").animate({ opacity: 0.1 }, "fast");
-    void $.ajax({
-      url: previewUrl,
-      type: "POST",
-      data: {
-        "post[body]": postBody,
-        "post[format]": format,
-        authenticity_token: Sugar.authToken()
+    const previewPost = document.querySelector(".posts #previewPost");
+    if (previewPost) {
+      previewPost.classList.add("loading");
+    }
+
+    await fetch(previewUrl, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRF-Token": csrfToken(),
+        "X-Requested-With": "XMLHttpRequest"
       },
-
-      success: function (previewPost: string) {
-        // Inject the #ajaxPosts container so new posts
-        // will be loaded above the prewview
-        if ($(".posts #ajaxPosts").length < 1) {
-          $(".posts").append('<div id="ajaxPosts"></div>');
+      body: JSON.stringify({
+        post: { body: postBody, format: format }
+      })
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
         }
+        return response.text().then((t) => {
+          throw new Error(t);
+        });
+      })
+      .then((body) => updatePreview(body))
+      .catch((error) => alert(error));
 
-        // Create the container
-        if ($(".posts #previewPost").length < 1) {
-          $(".posts").append('<div id="previewPost"></div>');
-        }
-
-        $(".posts #previewPost").html(previewPost);
-
-        // Animation
-        if ($(".posts #previewPost").hasClass("shown")) {
-          $(".posts #previewPost").animate({ opacity: 1.0 }, "fast");
-        } else {
-          $(".posts #previewPost").addClass("shown").hide().fadeIn();
-        }
-
-        document.dispatchEvent(
-          new CustomEvent("postsloaded", {
-            detail: $(".posts #previewPost").find(".post").get()
-          })
-        );
-      },
-
-      error: function (xhr) {
-        alert("Error: " + xhr.responseText);
-      },
-
-      complete: function () {
-        document.dispatchEvent(new Event("posting-complete"));
-      }
-    });
+    document.dispatchEvent(new Event("posting-complete"));
   }
 
-  $("#replyText .preview").click(function () {
-    previewPost();
-  });
+  const previewButton = document.querySelector("#replyText .preview");
+  if (previewButton) {
+    previewButton.addEventListener("click", (evt) => {
+      evt.preventDefault();
+      void previewPost();
+    });
+  }
 });

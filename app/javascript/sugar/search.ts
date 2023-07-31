@@ -1,16 +1,17 @@
-import $ from "jquery";
 import readyHandler from "../lib/readyHandler";
 
 readyHandler.ready(() => {
-  $("#search form").each(function () {
-    $(this)
-      .find("#search_mode")
-      .change(function () {
-        this.parentNode.action = this.value as string;
-      });
-    $(this).submit(() => {
-      const query = encodeURIComponent($(this).find(".query").val());
-      let action = this.action as string;
+  document.querySelectorAll("#search form").forEach((form) => {
+    const searchMode: HTMLSelectElement = form.querySelector("#search_mode");
+    searchMode.addEventListener("change", () => {
+      form.action = searchMode.value;
+    });
+
+    form.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      const queryInput: HTMLInputElement = form.querySelector(".query");
+      const query = encodeURIComponent(queryInput.value);
+      let action = form.action as string;
       if (!action.match(/^https?:\/\//)) {
         const baseDomain = document.location
           .toString()
@@ -18,7 +19,6 @@ readyHandler.ready(() => {
         action = baseDomain + action;
       }
       document.location = action + "?q=" + query;
-      return false;
     });
   });
 });

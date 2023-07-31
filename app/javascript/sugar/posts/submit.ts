@@ -1,62 +1,65 @@
-import $ from "jquery";
-import Sugar from "../../sugar";
 import readyHandler from "../../lib/readyHandler";
+import { csrfToken } from "../../lib/request";
 import { loadNewPosts } from "./newPosts";
 
 readyHandler.ready(() => {
+  const textarea: HTMLTextAreaElement = document.querySelector("#compose-body");
+
+  function completePost() {
+    textarea.value = "";
+    const preview = document.querySelector(".posts #previewPost");
+    if (preview) {
+      preview.remove();
+    }
+    void loadNewPosts();
+  }
+
   // Submit post via AJAX
-  function submitPost(form: HTMLFormElement) {
+  async function submitPost(form: HTMLFormElement) {
     document.dispatchEvent(
       new CustomEvent("posting-status", {
         detail: "Posting, please wait&hellip;"
       })
     );
 
-    if ($(form).hasClass("livePost")) {
-      const body = $("#compose-body").val();
-      const format = $("#compose-body").closest("form").find(".format").val();
+    const body = textarea.value;
+    const format = form.querySelector(".format").value as string;
 
-      void $.ajax({
-        url: form.action,
-        type: "POST",
-        data: {
-          "post[body]": body,
-          "post[format]": format,
-          authenticity_token: Sugar.authToken(),
-          format: "json"
-        },
-
-        success: function () {
-          $("#compose-body").val("");
-          $(".posts #previewPost").remove();
-          void loadNewPosts();
-        },
-
-        error: function (xhr, text_status) {
-          if (body === "") {
-            alert("Your post is empty!");
-          } else if (text_status === "timeout") {
-            alert("Error: The request timed out.");
-          } else {
-            alert(xhr.responseText);
-          }
-        },
-
-        complete: function () {
-          document.dispatchEvent(new Event("posting-complete"));
+    await fetch(form.action, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRF-Token": csrfToken(),
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({
+        post: { body: body, format: format },
+        format: "json"
+      })
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
         }
-      });
-    } else {
-      form.submit();
-    }
+        return response.text().then((t) => {
+          throw new Error(t);
+        });
+      })
+      .then(() => completePost())
+      .catch((error) => alert(error));
+
+    document.dispatchEvent(new Event("posting-complete"));
   }
 
   // Form event handler
-  $("#replyText form").submit(function () {
-    const composeBody = $(this).find("#compose-body").val() as string;
-    if (!(composeBody.replace(/\s+/, "") === "")) {
-      submitPost(this);
+  document.querySelectorAll("#replyText form").forEach((form) => {
+    if (form.classList.contains("livePost")) {
+      form.addEventListener("submit", (evt) => {
+        evt.preventDefault();
+        if (textarea.value.trim() !== "") {
+          void submitPost(form);
+        }
+      });
     }
-    return false;
   });
 });

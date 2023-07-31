@@ -2,7 +2,7 @@ import $ from "jquery";
 import readyHandler from "../../lib/readyHandler";
 
 readyHandler.ready(() => {
-  $(".edit_user_profile").each(function () {
+  if (document.querySelector(".edit_user_profile")) {
     const checkAdmin = function () {
       if ($("#user_admin:checked").val()) {
         $("#user_moderator").attr("checked", true).attr("disabled", true);
@@ -22,5 +22,5 @@ readyHandler.ready(() => {
     $("#user_status").change(checkUserStatus);
     checkAdmin();
     checkUserStatus();
-  });
+  }
 });

@@ -39,14 +39,14 @@ const PostDetector = {
   start: function (container) {
     this.paused = false;
 
-    if ($(container).data("type") === "Conversation") {
+    if (container.dataset.type === "Conversation") {
       this.type = "Conversation";
     }
 
-    this.id = $(container).data("id");
+    this.id = container.dataset.id;
 
     if (!this.read_posts) {
-      this.read_posts = $(container).data("posts-count");
+      this.read_posts = container.dataset.postsCount;
     }
 
     if (!this.total_posts) {
