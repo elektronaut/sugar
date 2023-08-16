@@ -41,14 +41,6 @@ gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
 
-# Deploy with Capistrano
-group :development do
-  gem "capistrano"
-  gem "capistrano-bundler"
-  gem "capistrano-rails"
-  gem "capistrano-rbenv"
-end
-
 # To use debugger
 # gem 'ruby-debug'
 
@@ -70,6 +62,12 @@ gem "ruby-filemagic", require: "filemagic"
 gem "non-stupid-digest-assets"
 
 group :development do
+  # Deploy with Capistrano
+  gem "capistrano"
+  gem "capistrano-bundler"
+  gem "capistrano-rails"
+  gem "capistrano-rbenv"
+
   gem "web-console"
   gem "yui-compressor", require: "yui/compressor"
 end
