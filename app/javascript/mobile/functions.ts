@@ -148,8 +148,9 @@ readyHandler.start(function () {
 
   // Muted posts
   document.querySelectorAll(".post").forEach((post: HTMLDivElement) => {
-    const userId = post.dataset.user_id;
+    const userId = parseInt(post.dataset.user_id);
     const mutedUsers = window.mutedUsers as number[] | null;
+
     if (mutedUsers && mutedUsers.indexOf(userId) !== -1) {
       const notice = document.createElement("div");
       const showLink = document.createElement("a");
