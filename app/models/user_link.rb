@@ -20,7 +20,11 @@ class UserLink < ApplicationRecord
     end
 
     def labels
-      active.pluck(:label).uniq.sort
+      active.pluck(:label).sort.uniq(&:downcase)
+    end
+
+    def with_label(label)
+      where("lower(label) LIKE lower(?)", label)
     end
   end
 

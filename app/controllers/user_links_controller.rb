@@ -12,7 +12,7 @@ class UserLinksController < ApplicationController
     @label = params[:type]
     @users = User.active_and_memorialized.by_username
                  .joins(:user_links)
-                 .where(user_links: { label: @label })
+                 .where("lower(user_links.label) LIKE lower(?)", @label)
                  .group("users.id")
   end
 

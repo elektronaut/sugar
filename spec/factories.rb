@@ -118,6 +118,12 @@ FactoryBot.define do
     end
   end
 
+  factory :user_link do
+    user
+    sequence(:label) { |n| "Service #{n}" }
+    sequence(:name) { |n| "username#{n}" }
+  end
+
   sequence :email do |n|
     "person#{n}@example.com"
   end
