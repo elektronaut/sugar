@@ -46,7 +46,7 @@ const PostDetector = {
     this.id = container.dataset.id;
 
     if (!this.read_posts) {
-      this.read_posts = container.dataset.postsCount;
+      this.read_posts = parseInt(container.dataset.postsCount);
     }
 
     if (!this.total_posts) {
