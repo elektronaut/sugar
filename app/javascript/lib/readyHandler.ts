@@ -2,11 +2,16 @@ type ReadyHandlerFn = () => void;
 
 const readyHandlers: ReadyHandlerFn[] = [];
 
+const runHandlers = () => {
+  while (readyHandlers.length > 0) {
+    readyHandlers.shift()();
+  }
+};
+
 const handleState = () => {
   if (["interactive", "complete"].indexOf(document.readyState) > -1) {
-    while (readyHandlers.length > 0) {
-      readyHandlers.shift()();
-    }
+    window.setTimeout(runHandlers);
+    document.removeEventListener("DOMContentLoaded", handleState);
   }
 };
 
@@ -15,7 +20,7 @@ class ReadyHandler {
     if (handler) {
       this.ready(handler);
     }
-    document.onreadystatechange = handleState;
+    document.addEventListener("DOMContentLoaded", handleState);
   }
 
   ready(handler: ReadyHandlerFn) {
