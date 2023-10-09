@@ -10,7 +10,7 @@ class ConvertTrustedDiscussionsToConversations < ActiveRecord::Migration[5.2]
       true
     )
 
-    Discussion.where(trusted: true).each do |d|
+    Discussion.where(trusted: true).find_each do |d|
       raise Discussion::InvalidExchange unless d.valid?
 
       d.update(type: "Conversation")
@@ -26,7 +26,7 @@ class ConvertTrustedDiscussionsToConversations < ActiveRecord::Migration[5.2]
   end
 
   def down
-    Conversation.where(trusted: true).each do |c|
+    Conversation.where(trusted: true).find_each do |c|
       raise Discussion::InvalidExchange unless c.valid?
 
       c.update(type: "Discussion")

@@ -95,7 +95,7 @@ RSpec.configure do |config|
   config.before { reset_email }
 
   # Clean the Redis database and reload the configuration
-  config.around(:each, redis: true) do |example|
+  config.around(:each, :redis) do |example|
     with_clean_redis do
       Sugar.config.reset!
       example.run
@@ -119,7 +119,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before :each, solr: true do
+  config.before :each, :solr do
     Sunspot.session = original_sunspot_session
     Sunspot.remove_all!
   end

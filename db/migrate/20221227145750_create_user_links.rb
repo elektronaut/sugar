@@ -38,7 +38,7 @@ class CreateUserLinks < ActiveRecord::Migration[7.0]
       t.index :label
     end
 
-    User.all.each do |user|
+    User.find_each do |user|
       services.each do |attr, service|
         name = user.send(attr)
         next if name.blank?

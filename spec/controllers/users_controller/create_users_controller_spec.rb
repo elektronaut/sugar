@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe UsersController, redis: true do
+describe UsersController, :redis do
   let(:invite) { create(:invite) }
 
   describe "#new" do

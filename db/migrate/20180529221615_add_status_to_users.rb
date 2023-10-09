@@ -4,9 +4,13 @@ class AddStatusToUsers < ActiveRecord::Migration[5.2]
   def up
     add_column :users, :status, :integer, null: false, default: 0
 
-    User.where.not(banned_until: nil).each { |u| u.update(status: :hiatus) }
-    User.where(banned: true).each { |u| u.update(status: :banned) }
-    User.where(memorialized: true).each { |u| u.update(status: :memorialized) }
+    User.where.not(banned_until: nil).find_each do |u|
+      u.update(status: :hiatus)
+    end
+    User.where(banned: true).find_each { |u| u.update(status: :banned) }
+    User.where(memorialized: true).find_each do |u|
+      u.update(status: :memorialized)
+    end
 
     change_table(:users, bulk: true) do |t|
       t.remove :memorialized
@@ -21,7 +25,7 @@ class AddStatusToUsers < ActiveRecord::Migration[5.2]
     end
     User.reset_column_information
 
-    User.all.each do |user|
+    User.find_each do |user|
       case user.status
       when :memorialized
         user.update(memorialized: true)

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe SearchableExchange, solr: true do
+describe SearchableExchange, :solr do
   around do |each|
     perform_enqueued_jobs do
       each.run

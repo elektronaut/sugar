@@ -27,7 +27,7 @@ describe ConversationNotifier do
     it "does not deliver to muted participants" do
       ConversationRelationship
         .where(conversation: conversation)
-        .each { |cr| cr.update(notifications: false) }
+        .find_each { |cr| cr.update(notifications: false) }
       expect { notifier.deliver_now }.not_to(change(email_deliveries, :length))
     end
   end

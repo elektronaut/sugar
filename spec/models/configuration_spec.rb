@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Configuration, redis: true do
+describe Configuration, :redis do
   let(:configuration) { described_class.new }
 
   describe ".settings" do

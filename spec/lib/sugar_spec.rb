@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Sugar, redis: true do
+describe Sugar, :redis do
   # Reload config before each run
   before { described_class.config.load }
 
