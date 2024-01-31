@@ -21,10 +21,10 @@ describe AvatarsHelper do
     subject { helper.avatar_image_tag(user) }
 
     context "when user has an avatar uploaded" do
-      let(:user) { create(:user_with_avatar, username: "foo") }
+      let(:user) { create(:user, :with_avatar, username: "foo") }
       let(:expression) do
         Regexp.new('<img alt="foo" class="avatar-image" ' \
-                   'src="\/avatars\/(.+)\/16x16\/1-([\d])+\.png" ' \
+                   'src="\/avatars\/(.+)\/16x16\/([\d])+-([\d])+\.png" ' \
                    'width="16" height="16" \/>')
       end
 

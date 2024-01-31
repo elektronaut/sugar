@@ -78,7 +78,6 @@ group :test do
 
   # RSpec
   gem "capybara"
-  gem "database_cleaner"
   gem "json_spec"
   gem "rspec-rails"
   gem "selenium-webdriver"

@@ -109,7 +109,7 @@ FactoryBot.define do
       status { :banned }
     end
 
-    factory :user_with_avatar do
+    trait :with_avatar do
       avatar
     end
   end
