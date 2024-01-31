@@ -58,7 +58,8 @@ FactoryBot.define do
   factory :invite do
     email
     user
-    factory :expired_invite do
+
+    trait :expired do
       expires_at { 2.days.ago }
     end
   end
@@ -79,12 +80,13 @@ FactoryBot.define do
   end
 
   factory :user do
-    sequence(:username) { |n| "lonelygirl#{n}" }
-    sequence(:realname) { |n| "Sugar User #{n}" }
+    sequence(:username)   { |n| "lonelygirl#{n}" }
+    sequence(:realname)   { |n| "Sugar User #{n}" }
     email
-    hashed_password     { FactoryBot.generate(:sha1hash) }
-    description         { "Hi, I'm #{realname}!" }
-    sequence(:location) { |n| "Location #{n}" }
+    password              { "Correct Horse Battery Staple" }
+    password_confirmation { "Correct Horse Battery Staple" }
+    description           { "Hi, I'm #{realname}!" }
+    sequence(:location)   { |n| "Location #{n}" }
 
     admin { false }
     user_admin { false }
@@ -97,12 +99,6 @@ FactoryBot.define do
 
     factory :moderator do
       moderator { true }
-    end
-
-    factory :new_user do
-      password { "foobar" }
-      confirm_password { "foobar" }
-      hashed_password { nil }
     end
 
     factory :user_admin do
@@ -126,9 +122,5 @@ FactoryBot.define do
 
   sequence :email do |n|
     "person#{n}@example.com"
-  end
-
-  sequence :sha1hash do |n|
-    Digest::SHA1.hexdigest(n.to_s)
   end
 end

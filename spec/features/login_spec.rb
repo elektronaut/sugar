@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Logging in" do
-  let(:user) { create(:new_user) }
+  let(:user) { create(:user) }
 
   it "User logs in" do
     login_with(user.email, user.password)

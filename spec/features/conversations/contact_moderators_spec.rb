@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Contact moderators" do
   let!(:admin) { create(:admin) }
-  let!(:user) { create(:new_user) }
+  let!(:user) { create(:user) }
 
   before do
     login_with(user.email, user.password)

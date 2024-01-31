@@ -23,7 +23,7 @@ zh-CN:
         admin: 管理员
         email: Email 地址
         password: 密码
-        confirm_password: 确认密码
+        password_confirmation: 确认密码
         stylesheet_url: 自定义样式表网址
         mobile_stylesheet_url: 自定义手机样式表网址
         banned_until: 直到此日期前禁用我

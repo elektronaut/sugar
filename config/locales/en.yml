@@ -22,7 +22,7 @@ en:
         admin: Administrator
         email: Email address
         password: Password
-        confirm_password: Confirm password
+        password_confirmation: Confirm password
         stylesheet_url: Custom stylesheet URL
         mobile_stylesheet_url: Custom mobile stylesheet URL
         banned_until: Banned until
@@ -30,6 +30,10 @@ en:
         memorialized: Memorialized
     errors:
       models:
+        invite:
+          attributes:
+            email:
+              taken: has already been invited
         user:
           attributes:
             email:

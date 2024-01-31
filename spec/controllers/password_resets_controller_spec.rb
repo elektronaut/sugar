@@ -107,7 +107,7 @@ describe PasswordResetsController do
             params: {
               token: token,
               user: { password: "new password",
-                      confirm_password: "new password" }
+                      password_confirmation: "new password" }
             }
       end
 
@@ -127,7 +127,7 @@ describe PasswordResetsController do
               token: token,
               user: {
                 password: "new password",
-                confirm_password: "wrong password"
+                password_confirmation: "wrong password"
               }
             }
       end
@@ -142,7 +142,7 @@ describe PasswordResetsController do
         put :update,
             params: {
               user: { password: "new password",
-                      confirm_password: "new password" }
+                      password_confirmation: "new password" }
             }
       end
 
@@ -161,7 +161,7 @@ describe PasswordResetsController do
             params: {
               token: token,
               user: { password: "new password",
-                      confirm_password: "new password" }
+                      password_confirmation: "new password" }
             }
       end
 

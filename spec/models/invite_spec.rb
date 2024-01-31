@@ -14,6 +14,8 @@ describe Invite do
   describe "email validation" do
     subject(:invite) { build(:invite, email: email, user: User.first) }
 
+    let(:email_errors) { invite.errors[:email] }
+
     before { invite.valid? }
 
     context "when not registered" do
@@ -26,14 +28,14 @@ describe Invite do
       let(:email) { create(:user).email }
 
       it { is_expected.not_to be_valid }
-      specify { expect(invite.errors[:email].length).to eq(1) }
+      specify { expect(email_errors).to include("has already been invited") }
     end
 
     context "when already invited" do
       let(:email) { create(:invite).email }
 
       it { is_expected.not_to be_valid }
-      specify { expect(invite.errors[:email].length).to eq(1) }
+      specify { expect(email_errors).to include("has already been invited") }
     end
   end
 
@@ -92,23 +94,13 @@ describe Invite do
 
     let!(:invite) { create(:invite) }
 
-    before { create(:expired_invite) }
+    before { create(:invite, :expired) }
 
     it { is_expected.to eq([invite]) }
   end
 
-  describe ".expired" do
-    subject { described_class.expired }
-
-    let!(:expired_invite) { create(:expired_invite) }
-
-    before { create(:invite) }
-
-    it { is_expected.to eq([expired_invite]) }
-  end
-
   describe ".destroy_expired!" do
-    before { create(:expired_invite) }
+    before { create(:invite, :expired) }
 
     it "destroys all expired invites" do
       expect do
@@ -127,14 +119,14 @@ describe Invite do
     end
 
     context "when invite is expired" do
-      let(:invite) { create(:expired_invite) }
+      let(:invite) { create(:invite, :expired) }
 
       it { is_expected.to be(true) }
     end
   end
 
   describe "#expire!" do
-    before { create(:expired_invite) }
+    before { create(:invite, :expired) }
 
     it "destroys the invite" do
       expect { described_class.destroy_expired! }.to(

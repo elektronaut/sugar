@@ -3,13 +3,15 @@
 require "digest/sha1"
 
 class Invite < ApplicationRecord
+  include Emailable
+
   belongs_to :user
-  validates :email, presence: true
 
   attr_accessor :used
 
   DEFAULT_EXPIRATION = 14.days
 
+  before_validation -> { Invite.destroy_expired! }
   validate :validate_email_registered
 
   before_create :set_token
@@ -65,11 +67,6 @@ class Invite < ApplicationRecord
   end
 
   def validate_email_registered
-    errors.add(:email, "is already registered!") if User.exists?(email: email)
-    return unless Invite.active.any? do |i|
-      i != self && i.email == email
-    end
-
-    errors.add(:email, "has already been invited!")
+    errors.add(:email, :taken) if User.exists?(email: email)
   end
 end

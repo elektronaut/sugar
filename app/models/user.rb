@@ -9,6 +9,7 @@ class User < ApplicationRecord
   include ActiveModel::ForbiddenAttributesProtection
   include Authenticable
   include Inviter
+  include Emailable
   include ExchangeParticipant
   include HasMutedUsers
   include UserScopes
@@ -28,11 +29,6 @@ class User < ApplicationRecord
             presence: true,
             uniqueness: { case_sensitive: false },
             format: { with: /\A[^?]+\Z/ }
-
-  validates :email,
-            email: true,
-            presence: true,
-            uniqueness: { case_sensitive: false }
 
   validates :stylesheet_url, url: { allow_blank: true }
   validates :mobile_stylesheet_url, url: { allow_blank: true }

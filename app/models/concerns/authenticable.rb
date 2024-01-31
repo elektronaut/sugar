@@ -3,11 +3,9 @@
 module Authenticable
   extend ActiveSupport::Concern
 
-  # Virtual attributes for clear text passwords
-  attr_accessor :password, :confirm_password
-
   included do
-    before_validation :encrypt_new_password
+    has_secure_password
+
     before_validation :go_on_hiatus
     before_validation :clear_banned_until
 
@@ -16,68 +14,27 @@ module Authenticable
     enum status: { active: 0, inactive: 1, hiatus: 2, time_out: 3, banned: 4,
                    memorialized: 5 }
 
-    validate do |user|
-      if user.new_password? && !user.new_password_confirmed?
-        user.errors.add(:password, :confirmation)
-      end
-    end
-
-    validates :hashed_password,
-              presence: true
-
     validate :verify_banned_until
+    validates(
+      :password,
+      length: {
+        minimum: 8,
+        maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED,
+        allow_blank: true
+      }
+    )
 
     before_save :update_persistence_token
   end
 
   module ClassMethods
-    def generate_token
-      SecureRandom.hex(20)
-    end
-
-    def encrypt_password(password)
-      BCrypt::Password.create(password)
-    end
-
     def find_and_authenticate_with_password(email, password)
-      return nil if email.blank?
-      return nil if password.blank?
-
-      user = User.find_by("LOWER(email) = ?", email.downcase.strip)
-      return unless user&.valid_password?(password)
-
-      user.hash_password!(password) if user.password_needs_rehash?
-      user
+      User.find_by(email: email).try(:authenticate, password)
     end
   end
 
   def deactivated?
     !active?
-  end
-
-  def valid_password?(pass)
-    if hashed_password.length <= 40
-      # Legacy SHA1
-      Digest::SHA1.hexdigest(pass) == hashed_password
-    else
-      BCrypt::Password.new(hashed_password) == pass
-    end
-  end
-
-  def hash_password!(password)
-    update(hashed_password: User.encrypt_password(password))
-  end
-
-  def new_password?
-    password.present?
-  end
-
-  def new_password_confirmed?
-    new_password? && password == confirm_password
-  end
-
-  def password_needs_rehash?
-    hashed_password.length <= 40
   end
 
   def temporary_banned?
@@ -92,12 +49,6 @@ module Authenticable
   end
 
   protected
-
-  def encrypt_new_password
-    return unless new_password? && new_password_confirmed?
-
-    self.hashed_password = User.encrypt_password(password)
-  end
 
   def clear_banned_until
     self.banned_until = nil if banned_until? && banned_until <= Time.now.utc
@@ -118,8 +69,8 @@ module Authenticable
   end
 
   def update_persistence_token
-    return unless !persistence_token || hashed_password_changed?
+    return unless !persistence_token || password_digest_changed?
 
-    self.persistence_token = self.class.generate_token
+    self.persistence_token = SecureRandom.hex(32)
   end
 end

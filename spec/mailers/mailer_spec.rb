@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Mailer do
-  let(:user)      { create(:new_user) }
+  let(:user)      { create(:user) }
   let(:invite)    { create(:invite) }
   let(:login_url) { "http://example.com/login" }
 

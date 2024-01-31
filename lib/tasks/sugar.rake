@@ -29,7 +29,7 @@ namespace :sugar do
     PasswordResetToken.delete_all
 
     User.all.reject { |u| keep_users.include?(u.id) }.each do |u|
-      u.update(hashed_password: "", persistence_token: "")
+      u.update(password_digest: "", persistence_token: "")
     end
   end
 end

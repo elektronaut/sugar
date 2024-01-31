@@ -38,7 +38,7 @@ describe UsersController, :redis do
         username: attributes[:username],
         email: attributes[:email],
         password: "randompassword",
-        confirm_password: "randompassword",
+        password_confirmation: "randompassword",
         realname: attributes[:realname]
       }
     end
