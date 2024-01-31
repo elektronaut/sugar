@@ -51,7 +51,7 @@ class SanitizeFilter < Filter
 
   def strip_ujs_attributes(parser)
     parser.search("*").each do |elem|
-      elem.attributes.each do |name, _|
+      elem.attributes.each_key do |name|
         if jquery_ujs_attributes.include?(name.downcase)
           elem.remove_attribute(name)
         end
@@ -80,7 +80,7 @@ class SanitizeFilter < Filter
   # Changes allowScriptAccess to sameDomain on element if the attribute
   # is present.
   def change_allowscriptaccess_attribute_on(element)
-    element.attributes.each do |name, _value|
+    element.attributes.each_key do |name|
       if name.downcase.match?(/^allowscriptaccess/)
         element.set_attribute name, "sameDomain"
       end

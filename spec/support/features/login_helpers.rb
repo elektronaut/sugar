@@ -10,7 +10,7 @@ module Features
     visit login_users_path
     fill_in "email", with: email
     fill_in "password", with: password
-    click_button "Sign in"
+    click_on "Sign in"
   end
 
   def user_is_logged_in
@@ -18,6 +18,6 @@ module Features
   end
 
   def user_is_logged_out
-    expect(page).not_to(have_text("Sign out"))
+    expect(page).to(have_no_text("Sign out"))
   end
 end

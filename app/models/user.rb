@@ -46,11 +46,11 @@ class User < ApplicationRecord
   end
 
   def user_admin?
-    (self[:user_admin] || admin?)
+    self[:user_admin] || admin?
   end
 
   def moderator?
-    (self[:moderator] || admin?)
+    self[:moderator] || admin?
   end
 
   def previous_usernames

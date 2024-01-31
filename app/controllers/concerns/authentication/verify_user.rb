@@ -84,7 +84,7 @@ module Authentication
 
     def verify_current_user_flags(options = {})
       %i[admin moderator user_admin].each do |flag|
-        return true if options[flag] && current_user.send("#{flag}?".to_sym)
+        return true if options[flag] && current_user.send(:"#{flag}?")
       end
       false
     end

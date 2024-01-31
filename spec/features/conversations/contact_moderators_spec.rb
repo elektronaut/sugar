@@ -12,10 +12,10 @@ RSpec.describe "Contact moderators" do
   end
 
   it "User contacts moderators" do
-    click_link "Contact moderators"
+    click_on "Contact moderators"
     fill_in "conversation[title]", with: "Title"
     fill_in "conversation[body]", with: "Body"
-    click_button "Create conversation"
+    click_on "Create conversation"
     expect(page).to have_link(admin.username)
   end
 end

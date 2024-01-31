@@ -96,7 +96,7 @@ class Theme
   def configure_options(options = {})
     options.symbolize_keys!
     options.each do |key, value|
-      send("#{key}=".to_sym, value) if respond_to?("#{key}=".to_sym)
+      send(:"#{key}=", value) if respond_to?(:"#{key}=")
     end
   end
 end

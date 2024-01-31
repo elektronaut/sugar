@@ -5,7 +5,7 @@ class VanillaController < ApplicationController
   # /vanilla/?page=2
   def discussions
     headers["Status"] = "301 Moved Permanently"
-    redirect_to paged_discussions_path(page: (params[:page] || 1))
+    redirect_to paged_discussions_path(page: params[:page] || 1)
   end
 
   # /vanilla/comments.php?DiscussionID=13892&page=6

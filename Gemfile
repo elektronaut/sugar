@@ -79,7 +79,6 @@ group :test do
   # RSpec
   gem "capybara"
   gem "database_cleaner"
-  gem "fuubar"
   gem "json_spec"
   gem "rspec-rails"
   gem "shoulda-matchers", [">= 4.3.0", "!= 4.4.0"]

@@ -41,7 +41,7 @@ module LayoutHelper
       classes << "current"
     end
 
-    tag.li(link_to(name, url, id: (options[:id] || "#{section}_link")),
+    tag.li(link_to(name, url, id: options[:id] || "#{section}_link"),
            class: classes)
   end
 
