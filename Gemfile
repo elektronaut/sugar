@@ -81,6 +81,7 @@ group :test do
   gem "database_cleaner"
   gem "json_spec"
   gem "rspec-rails"
+  gem "selenium-webdriver"
   gem "shoulda-matchers", [">= 4.3.0", "!= 4.4.0"]
   gem "webmock", require: false
 end

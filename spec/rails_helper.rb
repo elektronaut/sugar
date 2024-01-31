@@ -85,12 +85,12 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.include ActiveJob::TestHelper
-  config.include Features, type: :feature
   config.include RedisHelper, redis: true
   config.include JsonSpec::Helpers
   config.include LoginMacros, type: :controller
   config.include MailerMacros
   config.include ConfigurationMacros
+  config.include SystemHelpers, type: :system
 
   config.before { reset_email }
 
@@ -122,6 +122,14 @@ RSpec.configure do |config|
   config.before :each, :solr do
     Sunspot.session = original_sunspot_session
     Sunspot.remove_all!
+  end
+
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, :js) do
+    driven_by :selenium_chrome_headless
   end
 end
 

@@ -392,6 +392,12 @@ GEM
     ruby-oembed (0.16.1)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
+    selenium-webdriver (4.17.0)
+      base64 (~> 0.2)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sentry-rails (5.16.1)
       railties (>= 5.0)
       sentry-ruby (~> 5.16.1)
@@ -455,6 +461,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.1)
+    websocket (1.2.10)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -510,6 +517,7 @@ DEPENDENCIES
   rubocop-rspec
   ruby-filemagic
   ruby-oembed
+  selenium-webdriver
   sentry-rails
   sentry-ruby
   sentry-sidekiq
