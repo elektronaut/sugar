@@ -109,7 +109,11 @@ describe Discussion do
     specify { expect(discussion.editable_by?(discussion.poster)).to be(true) }
     specify { expect(discussion.editable_by?(create(:user))).to be(false) }
     specify { expect(discussion.editable_by?(exchange_moderator)).to be(true) }
-    specify { expect(discussion.editable_by?(create(:user, :admin))).to be(true) }
+
+    specify do
+      expect(discussion.editable_by?(create(:user, :admin))).to be(true)
+    end
+
     specify { expect(discussion.editable_by?(user_admin)).to be(false) }
     specify { expect(discussion.editable_by?(nil)).to be(false) }
 
