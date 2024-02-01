@@ -4,14 +4,14 @@ require "rails_helper"
 
 describe UserScopes do
   # Create the first admin user
-  let!(:first_user) { create(:banned_user) }
+  let!(:first_user) { create(:user, :banned) }
 
   describe "active" do
     subject { User.active }
 
     let!(:active) { create(:user) }
 
-    before { create(:banned_user) }
+    before { create(:user, :banned) }
 
     it { is_expected.to eq([active]) }
   end
@@ -35,7 +35,7 @@ describe UserScopes do
       create(:user)
     end
 
-    let!(:banned) { create(:banned_user) }
+    let!(:banned) { create(:user, :banned) }
     let!(:hiatus) do
       create(:user, banned_until: (Time.now.utc + 2.days), status: :hiatus)
     end
@@ -56,9 +56,9 @@ describe UserScopes do
   describe "admins" do
     subject { User.admins }
 
-    let!(:admin) { create(:admin) }
-    let!(:moderator) { create(:moderator) }
-    let!(:user_admin) { create(:user_admin) }
+    let!(:admin) { create(:user, :admin) }
+    let!(:moderator) { create(:user, :moderator) }
+    let!(:user_admin) { create(:user, :user_admin) }
 
     before { create(:user) }
 

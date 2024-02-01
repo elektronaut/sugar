@@ -93,19 +93,19 @@ FactoryBot.define do
     moderator { false }
     status { :active }
 
-    factory :admin do
+    trait :admin do
       admin { true }
     end
 
-    factory :moderator do
+    trait :moderator do
       moderator { true }
     end
 
-    factory :user_admin do
+    trait :user_admin do
       user_admin { true }
     end
 
-    factory :banned_user do
+    trait :banned do
       status { :banned }
     end
 

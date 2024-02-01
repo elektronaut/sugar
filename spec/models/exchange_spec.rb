@@ -10,8 +10,8 @@ describe Exchange do
     create(:exchange, title: "This is my Discussion", body: "First post!")
   end
   let(:user) { create(:user) }
-  let(:moderator) { create(:moderator) }
-  let(:admin) { create(:admin) }
+  let(:moderator) { create(:user, :moderator) }
+  let(:admin) { create(:user, :admin) }
 
   it { is_expected.to belong_to(:poster).class_name("User") }
   it { is_expected.to belong_to(:closer).class_name("User").optional }

@@ -39,7 +39,7 @@ describe UsersController do
   describe "#deactivated" do
     before do
       login
-      @user = create(:banned_user)
+      @user = create(:user, :banned)
       get :deactivated
     end
 
@@ -51,7 +51,7 @@ describe UsersController do
   describe "#deactivated.json" do
     before do
       login
-      @user = create(:banned_user)
+      @user = create(:user, :banned)
       get :deactivated, format: :json
     end
 
@@ -62,7 +62,7 @@ describe UsersController do
   end
 
   describe "#grant_invite" do
-    let(:admin) { create(:user_admin) }
+    let(:admin) { create(:user, :user_admin) }
 
     before do
       login admin
@@ -79,7 +79,7 @@ describe UsersController do
   end
 
   describe "#revoke_invites" do
-    let(:admin) { create(:user_admin) }
+    let(:admin) { create(:user, :user_admin) }
     let(:user) { create(:user, available_invites: 1) }
 
     before do
@@ -133,7 +133,7 @@ describe UsersController do
 
     context "when banning a user" do
       let!(:target_user) { create(:user) }
-      let(:user) { create(:user_admin) }
+      let(:user) { create(:user, :user_admin) }
 
       before do
         put :update, params: { id: target_user.id,

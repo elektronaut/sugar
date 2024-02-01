@@ -216,11 +216,14 @@ describe Post do
 
   describe "#editable_by?" do
     specify { expect(post.editable_by?(post.user)).to be(true) }
-    specify { expect(post.editable_by?(create(:moderator))).to be(true) }
-    specify { expect(post.editable_by?(create(:admin))).to be(true) }
+    specify { expect(post.editable_by?(create(:user, :moderator))).to be(true) }
+    specify { expect(post.editable_by?(create(:user, :admin))).to be(true) }
     specify { expect(post.editable_by?(user)).to be(false) }
-    specify { expect(post.editable_by?(create(:user_admin))).to be(false) }
     specify { expect(post.editable_by?(nil)).to be(false) }
+
+    specify do
+      expect(post.editable_by?(create(:user, :user_admin))).to be(false)
+    end
   end
 
   describe "#viewable_by?" do

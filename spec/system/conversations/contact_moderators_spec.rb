@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Contact moderators" do
-  let!(:admin) { create(:admin) }
+  let!(:admin) { create(:user, :admin) }
   let!(:user) { create(:user) }
 
   before do

@@ -40,7 +40,7 @@ describe ConversationsController do
   end
 
   describe "DELETE remove_participant" do
-    let(:remover) { create(:moderator) }
+    let(:remover) { create(:user, :moderator) }
 
     before do
       conversation_with_user.add_participant(remover)

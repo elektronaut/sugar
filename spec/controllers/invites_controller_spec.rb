@@ -52,7 +52,7 @@ describe InvitesController do
     end
 
     context "when user is user admin" do
-      let(:user) { create(:user_admin) }
+      let(:user) { create(:user, :user_admin) }
 
       it { is_expected.to respond_with(:success) }
       specify { expect(flash[:notice]).to be_nil }
@@ -81,7 +81,7 @@ describe InvitesController do
   end
 
   describe "GET all" do
-    let(:user) { create(:user_admin) }
+    let(:user) { create(:user, :user_admin) }
     let!(:invites) { [create(:invite, user: user), create(:invite)] }
 
     before do

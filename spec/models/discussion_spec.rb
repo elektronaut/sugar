@@ -104,15 +104,18 @@ describe Discussion do
     let(:exchange_moderator) do
       create(:exchange_moderator, exchange: discussion).user
     end
-    let(:user_admin) { create(:user_admin) }
+    let(:user_admin) { create(:user, :user_admin) }
 
     specify { expect(discussion.editable_by?(discussion.poster)).to be(true) }
     specify { expect(discussion.editable_by?(create(:user))).to be(false) }
-    specify { expect(discussion.editable_by?(create(:moderator))).to be(true) }
     specify { expect(discussion.editable_by?(exchange_moderator)).to be(true) }
-    specify { expect(discussion.editable_by?(create(:admin))).to be(true) }
+    specify { expect(discussion.editable_by?(create(:user, :admin))).to be(true) }
     specify { expect(discussion.editable_by?(user_admin)).to be(false) }
     specify { expect(discussion.editable_by?(nil)).to be(false) }
+
+    specify do
+      expect(discussion.editable_by?(create(:user, :moderator))).to be(true)
+    end
   end
 
   describe "#postable_by?" do
@@ -135,10 +138,12 @@ describe Discussion do
       end
 
       specify do
-        expect(discussion.postable_by?(create(:moderator))).to be(true)
+        expect(discussion.postable_by?(create(:user, :moderator))).to be(true)
       end
 
-      specify { expect(discussion.postable_by?(create(:admin))).to be(true) }
+      specify do
+        expect(discussion.postable_by?(create(:user, :admin))).to be(true)
+      end
     end
   end
 end

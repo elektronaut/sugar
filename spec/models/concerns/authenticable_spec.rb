@@ -5,7 +5,7 @@ require "rails_helper"
 describe Authenticable do
   subject(:user) { create(:user) }
 
-  let(:banned_user) { create(:banned_user) }
+  let(:banned_user) { create(:user, :banned) }
 
   # Create the first admin user
   before { create(:user) }

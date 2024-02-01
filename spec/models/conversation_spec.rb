@@ -100,7 +100,7 @@ describe Conversation do
     end
 
     context "when remover is a moderator" do
-      let(:remover) { create(:moderator) }
+      let(:remover) { create(:user, :moderator) }
 
       it { is_expected.to be(true) }
     end

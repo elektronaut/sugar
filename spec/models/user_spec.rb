@@ -6,9 +6,9 @@ require "rails_helper"
 describe User do
   subject(:user) { build(:user) }
 
-  let(:admin) { build(:admin) }
-  let(:moderator) { build(:moderator) }
-  let(:user_admin) { build(:user_admin) }
+  let(:admin) { build(:user, :admin) }
+  let(:moderator) { build(:user, :moderator) }
+  let(:user_admin) { build(:user, :user_admin) }
   let(:public_attributes) do
     %w[admin banned_until created_at description id inviter_id last_active
        latitude location longitude moderator realname user_admin username

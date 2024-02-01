@@ -6,7 +6,7 @@ describe Inviter do
   # Create the first admin user
   subject { user }
 
-  before { create(:admin) }
+  before { create(:user, :admin) }
 
   let(:user) { create(:user) }
 
@@ -73,7 +73,7 @@ describe Inviter do
 
   describe "#available_invites?" do
     specify { expect(create(:user).available_invites?).to be(false) }
-    specify { expect(create(:user_admin).available_invites?).to be(true) }
+    specify { expect(create(:user, :user_admin).available_invites?).to be(true) }
 
     specify do
       expect(create(:user, available_invites: 2).available_invites?).to be(true)
@@ -90,12 +90,12 @@ describe Inviter do
     end
 
     specify do
-      expect(create(:user_admin).available_invites).to eq(1)
+      expect(create(:user, :user_admin).available_invites).to eq(1)
     end
 
     specify do
       expect(
-        create(:user_admin, available_invites: 99).available_invites
+        create(:user, :user_admin, available_invites: 99).available_invites
       ).to eq(1)
     end
   end
@@ -104,7 +104,7 @@ describe Inviter do
     subject { user.revoke_invite! }
 
     context "when user is user admin" do
-      let(:user) { create(:user_admin) }
+      let(:user) { create(:user, :user_admin) }
 
       it "does not revoke any invites" do
         user.revoke_invite!(:all)
@@ -153,7 +153,7 @@ describe Inviter do
     end
 
     context "when user is user admin" do
-      let(:user) { create(:user_admin, available_invites: 10) }
+      let(:user) { create(:user, :user_admin, available_invites: 10) }
 
       it "does not grant any invites" do
         user.grant_invite!(10)
