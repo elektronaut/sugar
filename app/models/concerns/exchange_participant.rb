@@ -78,7 +78,7 @@ module ExchangeParticipant
 
   def muted_conversation?(conversation)
     conversation_relationships
-      .where(notifications: true, conversation: conversation)
+      .where(notifications: true, conversation:)
       .none?
   end
 

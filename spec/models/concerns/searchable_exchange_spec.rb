@@ -28,7 +28,7 @@ describe SearchableExchange, :solr do
 
     context "when logged in as a regular user" do
       subject do
-        Discussion.search_results("testing", user: user, page: 1).results
+        Discussion.search_results("testing", user:, page: 1).results
       end
 
       it { is_expected.to contain_exactly(discussion) }

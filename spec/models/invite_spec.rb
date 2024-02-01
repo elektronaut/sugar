@@ -12,7 +12,7 @@ describe Invite do
   it { is_expected.to validate_presence_of(:email) }
 
   describe "email validation" do
-    subject(:invite) { build(:invite, email: email, user: User.first) }
+    subject(:invite) { build(:invite, email:, user: User.first) }
 
     let(:email_errors) { invite.errors[:email] }
 

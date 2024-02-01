@@ -28,7 +28,7 @@ class Conversation < Exchange
     return unless user.is_a?(User) && participants.exclude?(user)
 
     ConversationRelationship.create(
-      user: user,
+      user:,
       conversation: self,
       new_posts: options[:new_posts]
     )

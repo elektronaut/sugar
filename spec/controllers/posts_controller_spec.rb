@@ -8,7 +8,7 @@ describe PostsController do
 
   let(:user)          { create(:user) }
   let(:discussion)    { create(:discussion) }
-  let(:existing_post) { create(:post, exchange: discussion, user: user) }
+  let(:existing_post) { create(:post, exchange: discussion, user:) }
 
   describe "Valid POST" do
     before { login(user) }

@@ -32,7 +32,7 @@ module ExchangesHelper
   def muted_user_ids(exchange)
     return [] unless current_user?
 
-    current_user.muted_user_ids(exchange: exchange)
+    current_user.muted_user_ids(exchange:)
   end
 
   def post_page(post, posts = nil)

@@ -10,7 +10,7 @@ module IconsHelper
   private
 
   def favicon_tag(path, type)
-    tag(:link, rel: "icon", href: image_path(path), type: type)
+    tag(:link, rel: "icon", href: image_path(path), type:)
   end
 
   def regular_icon_tags

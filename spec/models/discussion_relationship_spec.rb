@@ -98,7 +98,7 @@ describe DiscussionRelationship do
   describe "#update_user_caches!" do
     it "updates caches when created" do
       expect do
-        create(:discussion_relationship, user: user, favorite: true)
+        create(:discussion_relationship, user:, favorite: true)
       end.to change(user, :favorites_count).by(1)
     end
 

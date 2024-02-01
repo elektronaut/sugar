@@ -8,7 +8,7 @@ describe PasswordResetsController do
 
   let(:token) do
     Rails.application.message_verifier(:password_reset)
-         .generate({ id: user.id, valid_until: valid_until })
+         .generate({ id: user.id, valid_until: })
   end
 
   describe "GET new" do
@@ -55,7 +55,7 @@ describe PasswordResetsController do
   describe "GET show" do
     context "with a valid token" do
       before do
-        get(:show, params: { token: token })
+        get(:show, params: { token: })
       end
 
       it { is_expected.to respond_with(:success) }
@@ -77,7 +77,7 @@ describe PasswordResetsController do
       let(:valid_until) { 2.days.ago }
 
       before do
-        get :show, params: { token: token }
+        get :show, params: { token: }
       end
 
       it { is_expected.to redirect_to(login_users_url) }
@@ -105,7 +105,7 @@ describe PasswordResetsController do
       before do
         put :update,
             params: {
-              token: token,
+              token:,
               user: { password: "new password",
                       password_confirmation: "new password" }
             }
@@ -124,7 +124,7 @@ describe PasswordResetsController do
       before do
         put :update,
             params: {
-              token: token,
+              token:,
               user: {
                 password: "new password",
                 password_confirmation: "wrong password"
@@ -159,7 +159,7 @@ describe PasswordResetsController do
       before do
         put :update,
             params: {
-              token: token,
+              token:,
               user: { password: "new password",
                       password_confirmation: "new password" }
             }

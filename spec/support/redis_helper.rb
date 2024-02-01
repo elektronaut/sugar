@@ -7,8 +7,8 @@ module RedisHelper
     @redis ||= ::Redis.new(CONFIG)
   end
 
-  def with_watch(redis, *args)
-    redis.watch(*args)
+  def with_watch(redis, *)
+    redis.watch(*)
     begin
       yield
     ensure
@@ -16,7 +16,7 @@ module RedisHelper
     end
   end
 
-  def with_clean_redis(&_block)
+  def with_clean_redis(&)
     redis.flushdb
     begin
       yield

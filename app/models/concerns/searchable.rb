@@ -15,6 +15,6 @@ module Searchable
   end
 
   def queue_remove_index
-    RemoveIndexJob.perform_later(record_class: self.class.to_s, id: id)
+    RemoveIndexJob.perform_later(record_class: self.class.to_s, id:)
   end
 end

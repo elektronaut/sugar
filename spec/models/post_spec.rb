@@ -17,7 +17,7 @@ describe Post do
   it { is_expected.to have_many(:exchange_views) }
 
   describe "after_create" do
-    let(:post) { create(:post, exchange: exchange) }
+    let(:post) { create(:post, exchange:) }
 
     specify do
       expect(post.user.participated_discussions).to include(exchange)
@@ -32,7 +32,7 @@ describe Post do
 
     describe "updating posts count" do
       let!(:exchange) { create(:discussion) }
-      let(:post) { create(:post, user: user, exchange: exchange) }
+      let(:post) { create(:post, user:, exchange:) }
 
       it "increments public_posts_count on user" do
         expect { post }.to change(user, :public_posts_count).by(1)
@@ -55,7 +55,7 @@ describe Post do
       end
 
       it "deletes the file" do
-        create(:post, exchange: exchange)
+        create(:post, exchange:)
         expect(FileUtils).to have_received(:rm_f).with(cache_path).once
       end
     end
@@ -63,7 +63,7 @@ describe Post do
 
   describe "after_destroy" do
     describe "updating posts count" do
-      let!(:post) { create(:post, user: user, exchange: exchange) }
+      let!(:post) { create(:post, user:, exchange:) }
 
       it "decrements public_posts_count on user" do
         expect { post.destroy }.to change(user, :public_posts_count).by(-1)
@@ -79,7 +79,7 @@ describe Post do
     end
 
     context "when count cache file exists" do
-      let!(:post) { create(:post, exchange: exchange) }
+      let!(:post) { create(:post, exchange:) }
 
       it "deletes the file" do
         allow(FileUtils).to receive(:rm_f)
@@ -113,7 +113,7 @@ describe Post do
 
   describe "#post_number" do
     specify { expect(exchange.posts.first.post_number).to eq(1) }
-    specify { expect(create(:post, exchange: exchange).post_number).to eq(2) }
+    specify { expect(create(:post, exchange:).post_number).to eq(2) }
   end
 
   describe "#page" do
@@ -149,12 +149,12 @@ describe Post do
   describe "#body_html" do
     subject { post.body_html }
 
-    let!(:post) { create(:post, exchange: exchange) }
+    let!(:post) { create(:post, exchange:) }
 
     it { is_expected.to eq(Renderer.render(post.body)) }
 
     context "when not saved" do
-      let!(:post) { build(:post, exchange: exchange) }
+      let!(:post) { build(:post, exchange:) }
 
       before { allow(Renderer).to receive(:render) }
 
@@ -166,7 +166,7 @@ describe Post do
 
     context "when body_html has been set" do
       let!(:post) do
-        create(:post, exchange: exchange, body_html: "<p>Test</p>")
+        create(:post, exchange:, body_html: "<p>Test</p>")
       end
 
       before { allow(Renderer).to receive(:render) }
@@ -301,7 +301,7 @@ describe Post do
     context "when skip_html is false" do
       it "parses the post" do
         allow(Renderer).to receive(:render)
-        create(:post, exchange: exchange)
+        create(:post, exchange:)
         expect(Renderer).to have_received(:render).once
       end
     end
@@ -309,7 +309,7 @@ describe Post do
     context "when skip_html is true" do
       it "parses the post" do
         allow(Renderer).to receive(:render)
-        create(:post, skip_html: true, exchange: exchange)
+        create(:post, skip_html: true, exchange:)
         expect(Renderer).not_to have_received(:render)
       end
     end
@@ -339,7 +339,7 @@ describe Post do
 
       it "defines a relationship between the discussion and the poster" do
         allow(DiscussionRelationship).to receive(:define)
-        create(:post, user: user, exchange: exchange)
+        create(:post, user:, exchange:)
         expect(DiscussionRelationship).to(
           have_received(:define).once.with(user, exchange, participated: true)
         )
@@ -351,7 +351,7 @@ describe Post do
 
       it "does not define a relationship" do
         allow(DiscussionRelationship).to receive(:define)
-        create(:post, exchange: exchange)
+        create(:post, exchange:)
         expect(DiscussionRelationship).not_to have_received(:define)
       end
     end

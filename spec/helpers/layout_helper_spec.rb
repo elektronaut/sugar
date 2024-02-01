@@ -29,7 +29,7 @@ describe LayoutHelper do
     let(:default_emoticons) do
       %w[smiley laughing blush heart_eyes kissing_heart flushed worried
          grimacing cry angry heart star +1 -1].map do |name|
-        { name: name,
+        { name:,
           image: helper.image_path(
             "emoji/#{Emoji.find_by_alias(name).image_filename}",
             skip_pipeline: true

@@ -36,7 +36,7 @@ describe Exchange do
 
   describe "#last_page" do
     before do
-      create_list(:post, 3, exchange: exchange)
+      create_list(:post, 3, exchange:)
       exchange.reload
     end
 
@@ -111,7 +111,7 @@ describe Exchange do
     end
 
     context "with moderators" do
-      before { create(:exchange_moderator, exchange: exchange) }
+      before { create(:exchange_moderator, exchange:) }
 
       it { is_expected.to be(true) }
     end
@@ -125,7 +125,7 @@ describe Exchange do
 
   describe "#closeable_by?" do
     let(:exchange_moderator) do
-      create(:exchange_moderator, exchange: exchange).user
+      create(:exchange_moderator, exchange:).user
     end
 
     specify { expect(exchange.closeable_by?(user)).to be(false) }

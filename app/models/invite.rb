@@ -26,7 +26,7 @@ class Invite < ApplicationRecord
     # Makes a unique random token.
     def unique_token
       token = nil
-      token = SecureRandom.hex(20) until token && !exists?(token: token)
+      token = SecureRandom.hex(20) until token && !exists?(token:)
       token
     end
 
@@ -67,6 +67,6 @@ class Invite < ApplicationRecord
   end
 
   def validate_email_registered
-    errors.add(:email, :taken) if User.exists?(email: email)
+    errors.add(:email, :taken) if User.exists?(email:)
   end
 end

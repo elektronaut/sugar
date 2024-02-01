@@ -18,7 +18,7 @@ module VirtualBody
 
     attributes = {
       user: poster,
-      body: body
+      body:
     }
     attributes[:format] = format if format.present?
     posts.create(attributes)
@@ -27,13 +27,13 @@ module VirtualBody
   def format_options
     return {} if format.blank?
 
-    { format: format }
+    { format: }
   end
 
   def post_attributes
     {
       edited_at: Time.now.utc,
-      body: body
+      body:
     }.merge(format_options)
   end
 

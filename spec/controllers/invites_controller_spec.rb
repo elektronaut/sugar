@@ -67,7 +67,7 @@ describe InvitesController do
   end
 
   describe "GET index" do
-    let!(:invites) { [create(:invite, user: user), create(:invite)] }
+    let!(:invites) { [create(:invite, user:), create(:invite)] }
 
     before do
       login(user)
@@ -82,7 +82,7 @@ describe InvitesController do
 
   describe "GET all" do
     let(:user) { create(:user, :user_admin) }
-    let!(:invites) { [create(:invite, user: user), create(:invite)] }
+    let!(:invites) { [create(:invite, user:), create(:invite)] }
 
     before do
       login(user)

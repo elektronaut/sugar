@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def paginated_json_path(page)
-    page && url_for(page: page, only_path: true, format: :json)
+    page && url_for(page:, only_path: true, format: :json)
   end
 
   # Renders an error

@@ -29,7 +29,7 @@ module Authenticable
 
   module ClassMethods
     def find_and_authenticate_with_password(email, password)
-      User.find_by(email: email).try(:authenticate, password)
+      User.find_by(email:).try(:authenticate, password)
     end
   end
 

@@ -26,7 +26,7 @@ describe SearchablePost, :solr do
     end
 
     describe "searching all posts when logged in as a regular user" do
-      subject { Post.search_results("testing", user: user, page: 1) }
+      subject { Post.search_results("testing", user:, page: 1) }
 
       it { is_expected.to contain_exactly(post, exchange_post) }
     end
@@ -34,7 +34,7 @@ describe SearchablePost, :solr do
     describe "searching in a discussion when logged in as nobody" do
       subject do
         Post.search_results(
-          "testing", user: nil, page: 1, exchange: exchange
+          "testing", user: nil, page: 1, exchange:
         )
       end
 
@@ -44,7 +44,7 @@ describe SearchablePost, :solr do
     describe "searching in a discussion when logged in as a regular user" do
       subject do
         Post.search_results(
-          "testing", user: user, page: 1, exchange: exchange
+          "testing", user:, page: 1, exchange:
         )
       end
 
@@ -54,7 +54,7 @@ describe SearchablePost, :solr do
     describe "searching in a conversation" do
       subject do
         Post.search_results(
-          "testing", user: user, page: 1, exchange: exchange
+          "testing", user:, page: 1, exchange:
         )
       end
 

@@ -20,7 +20,7 @@ class UploadsController < ApplicationController
   private
 
   def find_or_create_post_image(file)
-    post_image = PostImage.new(file: file)
+    post_image = PostImage.new(file:)
     if post_image.valid?
       hash = Dis::Storage.file_digest(file)
       if PostImage.where(content_hash: hash).any?
@@ -43,7 +43,7 @@ class UploadsController < ApplicationController
   end
 
   def upload_error(error)
-    response = { error: error }
+    response = { error: }
     respond_to do |format|
       format.json { render json: response, status: :internal_server_error }
     end

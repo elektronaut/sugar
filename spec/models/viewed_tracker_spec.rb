@@ -9,7 +9,7 @@ describe ViewedTracker do
   let(:read_discussion) do
     discussion = create(:discussion)
     ExchangeView.create(
-      user: user,
+      user:,
       exchange: discussion,
       post_index: 1,
       post: discussion.posts.last
@@ -19,7 +19,7 @@ describe ViewedTracker do
   let(:partially_read_discussion) do
     discussion = create(:discussion)
     ExchangeView.create(
-      user: user, exchange: discussion, post_index: 64,
+      user:, exchange: discussion, post_index: 64,
       post: discussion.posts.last
     )
     allow(discussion).to receive(:posts_count).and_return(105)

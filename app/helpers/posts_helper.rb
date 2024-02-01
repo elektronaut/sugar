@@ -16,7 +16,7 @@ module PostsHelper
 
   def emoji_tag(emoji, alt:)
     tag(:img,
-        alt: alt,
+        alt:,
         class: "emoji",
         src: emoji_path(emoji),
         style: "vertical-align:middle",

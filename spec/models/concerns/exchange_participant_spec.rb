@@ -58,7 +58,7 @@ describe ExchangeParticipant do
 
     context "with existing exchange view" do
       before do
-        create(:exchange_view, user: user, exchange: discussion)
+        create(:exchange_view, user:, exchange: discussion)
       end
 
       it "does not create a new view" do
@@ -123,7 +123,7 @@ describe ExchangeParticipant do
     let(:user) { create(:user, created_at: 3.days.ago) }
 
     before do
-      create(:post, user: user)
+      create(:post, user:)
       user.reload
     end
 
@@ -141,7 +141,7 @@ describe ExchangeParticipant do
       before do
         create(
           :conversation_relationship,
-          user: user,
+          user:,
           new_posts: true
         )
       end
@@ -161,7 +161,7 @@ describe ExchangeParticipant do
       before do
         create(
           :conversation_relationship,
-          user: user,
+          user:,
           new_posts: true
         )
       end

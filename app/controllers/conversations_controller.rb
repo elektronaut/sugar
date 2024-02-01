@@ -75,7 +75,7 @@ class ConversationsController < ApplicationController
 
   def add_participants(exchange, usernames)
     usernames.each do |username|
-      user = User.find_by(username: username)
+      user = User.find_by(username:)
       exchange.add_participant(user) if user
     end
   end

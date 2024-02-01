@@ -44,7 +44,7 @@ class CreateUserLinks < ActiveRecord::Migration[7.0]
         next if name.blank?
 
         url = service[:pattern].gsub("%username%", name) if service[:pattern]
-        user.user_links.create(label: service[:name], name: name, url: url)
+        user.user_links.create(label: service[:name], name:, url:)
       end
     end
 

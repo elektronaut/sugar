@@ -47,11 +47,9 @@ class Post < ApplicationRecord
 
   def body_html
     if new_record? || Rails.env.development?
-      Renderer.render(body, format: format)
+      Renderer.render(body, format:)
     else
-      if super.blank?
-        update_column(:body_html, Renderer.render(body, format: format))
-      end
+      update_column(:body_html, Renderer.render(body, format:)) if super.blank?
       self[:body_html]
     end
   end
@@ -101,7 +99,7 @@ class Post < ApplicationRecord
   end
 
   def render_html
-    self.body_html = Renderer.render(body, format: format) unless skip_html
+    self.body_html = Renderer.render(body, format:) unless skip_html
   end
 
   def set_edit_timestamp

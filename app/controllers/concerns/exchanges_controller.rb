@@ -20,7 +20,7 @@ module ExchangesController
 
   def show
     @page = params[:page] || 1
-    @posts = @exchange.posts.page(@page, context: context).for_view
+    @posts = @exchange.posts.page(@page, context:).for_view
 
     mark_as_viewed!(@exchange, @posts.last,
                     (@posts.offset_value + @posts.count))
@@ -78,7 +78,7 @@ module ExchangesController
       format.html
       format.json do
         redirect_to(polymorphic_path([exchange, :posts],
-                                     page: page, format: :json))
+                                     page:, format: :json))
       end
     end
   end

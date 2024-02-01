@@ -32,7 +32,7 @@ describe Renderer do
   end
 
   describe ".render" do
-    let(:rendered) { described_class.render(input, format: format) }
+    let(:rendered) { described_class.render(input, format:) }
 
     context "when format is markdown" do
       let(:format) { "markdown" }

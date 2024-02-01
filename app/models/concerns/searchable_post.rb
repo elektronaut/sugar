@@ -24,7 +24,7 @@ module SearchablePost
         query,
         options[:page],
         options[:exchange],
-        user: user
+        user:
       ).results
     end
 
@@ -52,7 +52,7 @@ module SearchablePost
         with(:conversation, false) unless exchange
         with(:user_id, user.id) if user
         order_by(:created_at, :desc)
-        paginate(page: page, per_page: Post.per_page)
+        paginate(page:, per_page: Post.per_page)
       end
     end
   end

@@ -19,7 +19,7 @@ module Sugar
       errors_on(attribute).first
     end
 
-    def label(method, text = nil, options = {}, &_block)
+    def label(method, text = nil, options = {}, &)
       output = [text || human_attribute_name(method)]
       if errors_on?(method)
         output << tag.span(" #{first_error(method)}", class: "error")

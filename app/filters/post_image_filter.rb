@@ -18,8 +18,8 @@ class PostImageFilter < Filter
 
   def embed_image(id, content_hash)
     image = PostImage.where(
-      id: id,
-      content_hash: content_hash
+      id:,
+      content_hash:
     ).first
     return nil unless image
 

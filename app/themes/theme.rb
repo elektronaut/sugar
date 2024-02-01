@@ -41,7 +41,7 @@ class Theme
       theme_file = theme_dir.join("theme.yml")
       raise "Theme not found" unless File.exist?(theme_file)
 
-      Theme.new(YAML.load_file(theme_file).merge(id: id))
+      Theme.new(YAML.load_file(theme_file).merge(id:))
     end
   end
 
@@ -84,7 +84,7 @@ class Theme
     (method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)) || super
   end
 
-  def method_missing(method, *args, &block)
+  def method_missing(method, *args, &)
     base_method = method.to_s.gsub(/\?$/, "").to_sym
     if method.to_s =~ /\?$/ && ATTRIBUTES.include?(base_method)
       send(base_method).present?

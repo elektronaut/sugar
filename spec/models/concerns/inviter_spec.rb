@@ -16,8 +16,8 @@ describe Inviter do
 
   describe "active scope on invites" do
     it "returns only the user's active invites" do
-      active_invite = create(:invite, user: user)
-      create(:invite, user: user, expires_at: 2.days.ago)
+      active_invite = create(:invite, user:)
+      create(:invite, user:, expires_at: 2.days.ago)
       create(:invite)
       expect(user.invites.active).to contain_exactly(active_invite)
     end
@@ -31,7 +31,7 @@ describe Inviter do
     end
 
     context "when user has invites" do
-      before { create(:invite, user: user) }
+      before { create(:invite, user:) }
 
       it { is_expected.to be(true) }
     end
@@ -59,7 +59,7 @@ describe Inviter do
     end
 
     context "when user has invites" do
-      before { create(:invite, user: user) }
+      before { create(:invite, user:) }
 
       it { is_expected.to be(true) }
     end

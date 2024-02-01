@@ -33,7 +33,7 @@ describe AvatarsHelper do
 
     context "when user has email set" do
       let(:user) do
-        build(:user, email: email, username: "foo")
+        build(:user, email:, username: "foo")
       end
       let(:output) do
         '<img alt="foo" class="avatar-image" ' \
