@@ -12,15 +12,15 @@ on:
       - develop
   pull_request:
 jobs:
-  eslint-test:
+  eslint:
     name: ESLint
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Node modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -38,9 +38,9 @@ jobs:
     timeout-minutes: 10
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Node modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 10
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -72,9 +72,9 @@ jobs:
           bundle config path vendor/bundle
           bundle install
       - name: Check code
-        run: bundle exec rubocop
+        run: bundle exec rubocop --format github
 
-  rspec-test:
+  rspec:
     name: RSpec
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -104,30 +104,18 @@ jobs:
           # Maps port 6379 on service container to the host
           - 6379:6379
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
       - name: Start Solr
         run: /usr/bin/docker run -d -v ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/ -p 8983:8983 --name solr solr:8
-      - name: Ruby gem cache
-        uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
       - name: Install system dependencies
         run: |
           sudo apt-get install -y libvips42
-      - name: Install Ruby gems
-        run: |
-          gem install bundler
-          bundle config path vendor/bundle
-          bundle install
       - name: Node modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -161,7 +149,7 @@ jobs:
           SOLR_PORT: 8983
         run: bundle exec rspec
       - name: Send results to Code Climate
-        uses: paambaati/codeclimate-action@v2.6.0
+        uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
