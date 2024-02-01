@@ -38,12 +38,6 @@ Sugar is deployed like a regular Rails app, see the
 [official Rails site](http://rubyonrails.org/deploy). A sample Capistrano
 recipe is provided `config/deploy.rb.dist`.
 
-For production use, you'll want a full grown Solr setup. See the
-[Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how
-to get up and running.
-
-[Heroku](https://www.heroku.com/) is currently not supported.
-
 ## <a id="configuration"></a> Configuring Sugar
 
 Most of Sugar is configured with a web interface. However, a few details must

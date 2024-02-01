@@ -35,10 +35,8 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
-  allow: ["codeclimate.com", "solr"]
+  allow: ["codeclimate.com"]
 )
-
-original_sunspot_session = Sunspot.session
 
 Sugar.redis = Redis.new(RedisHelper::CONFIG)
 
@@ -100,17 +98,6 @@ RSpec.configure do |config|
       Sugar.config.reset!
       example.run
     end
-  end
-
-  # Stub Sunspot
-  config.before do
-    Sunspot.session =
-      Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
-  end
-
-  config.before :each, :solr do
-    Sunspot.session = original_sunspot_session
-    Sunspot.remove_all!
   end
 
   config.before(:each, type: :system) do
