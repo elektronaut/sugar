@@ -96,6 +96,7 @@ group :test, :development do
   gem "factory_bot_rails"
 
   gem "rubocop", require: false
+  gem "rubocop-capybara", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
 end

@@ -509,6 +509,7 @@ DEPENDENCIES
   rouge
   rspec-rails
   rubocop
+  rubocop-capybara
   rubocop-rails
   rubocop-rspec
   ruby-filemagic
