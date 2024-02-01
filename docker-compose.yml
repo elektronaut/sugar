@@ -5,11 +5,11 @@ x-app: &app
     context: .dockerdev
     dockerfile: Dockerfile
     args:
-      RUBY_VERSION: '3.1.2'
+      RUBY_VERSION: '3.3.0'
       PG_MAJOR: '14'
       NODE_MAJOR: '16'
-      RUBYGEMS_VERSION: '3.3.22'
-      BUNDLER_VERSION: '2.3.22'
+      RUBYGEMS_VERSION: '3.5.3'
+      BUNDLER_VERSION: '2.5.3'
   environment: &env
     NODE_ENV: development
     # RAILS_ENV: ${RAILS_ENV:-development}
