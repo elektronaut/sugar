@@ -141,8 +141,7 @@ describe Authenticable do
 
     context "when password is changed" do
       before do
-        user.password = user.password_confirmation = "new password"
-        user.save
+        user.update(password: "new password")
       end
 
       it { is_expected.not_to eq(previous_token) }

@@ -24,12 +24,20 @@ module Authenticable
       }
     )
 
-    before_save :update_persistence_token
+    after_initialize do |u|
+      u.persistence_token ||= u.class.random_persistence_token
+    end
+
+    before_validation :update_persistence_token
   end
 
   module ClassMethods
     def find_and_authenticate_with_password(email, password)
       User.find_by(email:).try(:authenticate, password)
+    end
+
+    def random_persistence_token
+      SecureRandom.hex(32)
     end
   end
 
@@ -69,8 +77,8 @@ module Authenticable
   end
 
   def update_persistence_token
-    return unless !persistence_token || password_digest_changed?
+    return unless password_digest_changed?
 
-    self.persistence_token = SecureRandom.hex(32)
+    self.persistence_token = self.class.random_persistence_token
   end
 end
