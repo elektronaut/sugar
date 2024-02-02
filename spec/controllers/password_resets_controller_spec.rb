@@ -4,11 +4,11 @@ require "rails_helper"
 
 describe PasswordResetsController do
   let(:user) { create(:user) }
-  let(:valid_until) { 24.hours.from_now }
+  let(:expires_at) { 24.hours.from_now }
 
   let(:token) do
     Rails.application.message_verifier(:password_reset)
-         .generate({ id: user.id, valid_until: })
+         .generate(user.id, expires_at:)
   end
 
   describe "GET new" do
@@ -74,7 +74,7 @@ describe PasswordResetsController do
     end
 
     context "with an expired token" do
-      let(:valid_until) { 2.days.ago }
+      let(:expires_at) { 2.days.ago }
 
       before do
         get :show, params: { token: }
@@ -83,9 +83,7 @@ describe PasswordResetsController do
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash[:notice]).to match(
-          /Sorry, this link has expired/
-        )
+        expect(flash.now[:notice]).to match(/Not a valid URL/)
       end
     end
 
@@ -154,7 +152,7 @@ describe PasswordResetsController do
     end
 
     context "with an expired token" do
-      let(:valid_until) { 2.days.ago }
+      let(:expires_at) { 2.days.ago }
 
       before do
         put :update,
@@ -168,9 +166,7 @@ describe PasswordResetsController do
       it { is_expected.to redirect_to(login_users_url) }
 
       specify do
-        expect(flash.now[:notice]).to match(
-          /Sorry, this link has expired/
-        )
+        expect(flash.now[:notice]).to match(/Not a valid URL/)
       end
     end
   end

@@ -40,10 +40,7 @@ class PasswordResetsController < ApplicationController
 
   def find_by_token
     @token = params[:token]
-    @user = validate_token(@token)
-    return if @user
-
-    fail_reset(t("password_reset.expired"))
+    @user = User.find(reset_message_verifier.verify(@token))
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     fail_reset(t("password_reset.invalid"))
   end
@@ -57,19 +54,10 @@ class PasswordResetsController < ApplicationController
   end
 
   def recovery_token(user)
-    reset_message_verifier.generate(
-      { id: user.id, valid_until: 24.hours.from_now }
-    )
+    reset_message_verifier.generate(user.id, expires_in: 24.hours)
   end
 
   def recovery_url(user)
     password_reset_url(token: recovery_token(user))
-  end
-
-  def validate_token(token)
-    message = reset_message_verifier.verify(token)
-    return unless message[:valid_until] >= Time.zone.now
-
-    User.find(message[:id])
   end
 end
