@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Admin::ConfigurationsController, :redis do
+describe Admin::ConfigurationsController do
   let(:admin) { create(:user, :admin) }
 
   it_requires_admin_for %w[show edit update]

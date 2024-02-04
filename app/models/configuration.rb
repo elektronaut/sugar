@@ -5,71 +5,62 @@ class Configuration
 
   include ActiveModel::Model
 
-  Setting = Struct.new(:type, :default)
+  Parameter = Struct.new(:type, :default)
 
   class << self
-    def settings
-      @settings ||= {}
+    def parameters
+      @parameters ||= {}
     end
 
-    def setting(key, type, default = nil)
-      settings[key] = Setting.new(type, default)
-      define_reader_method(key)
-      define_boolean_reader_method(key)
-      define_writer_method(key)
+    def parameter(key, type, default = nil)
+      define_accessors(key)
+      parameters[key] = Parameter.new(type, default)
     end
 
     private
 
-    def define_reader_method(key)
-      define_method key do |*args|
-        args.any? ? set(key, *args) : get(key)
+    def define_accessors(key)
+      define_method key do
+        get(key)
       end
-    end
-
-    def define_boolean_reader_method(key)
       define_method "#{key}?" do
         get(key) ? true : false
       end
-    end
-
-    def define_writer_method(key)
       define_method "#{key}=" do |value|
         set(key, value)
       end
     end
   end
 
-  include CustomizationSettings
-  include IntegrationSettings
-  include ThemeSettings
+  include Parameters
 
   def get(key)
-    validate_setting(key)
+    validate_parameter(key)
     if configuration.key?(key)
       configuration[key]
     else
-      self.class.settings[key].default
+      self.class.parameters[key].default
     end
   end
 
   def set(key, value)
     key = key.to_sym if key.is_a?(String)
-    validate_setting(key)
+    validate_parameter(key)
     validate_type(key, value)
     value = parse_value(key, value)
     configuration[key] = value
   end
 
   def load
-    saved_config = Sugar.redis.get("configuration")
-    return unless saved_config
-
-    @configuration = JSON.parse(saved_config).symbolize_keys
+    @configuration = Setting.all.each_with_object({}) do |setting, conf|
+      conf[setting.name.to_sym] = setting.value
+    end
   end
 
   def save
-    Sugar.redis.set("configuration", @configuration.to_json)
+    @configuration.each do |name, value|
+      Setting.find_or_initialize_by(name:).update(value:)
+    end
   end
 
   def update(attributes = {})
@@ -87,12 +78,12 @@ class Configuration
     @configuration ||= {}
   end
 
-  def setting?(key)
-    self.class.settings.key?(key)
+  def parameter?(key)
+    self.class.parameters.key?(key)
   end
 
   def type_for(key)
-    self.class.settings[key].type
+    self.class.parameters[key].type
   end
 
   def valid_type?(key, value)
@@ -105,8 +96,8 @@ class Configuration
     end
   end
 
-  def validate_setting(key)
-    return if setting?(key)
+  def validate_parameter(key)
+    return if parameter?(key)
 
     raise(InvalidConfigurationKey, ":#{key} is not a valid option")
   end
@@ -114,7 +105,7 @@ class Configuration
   def validate_type(key, value)
     return if valid_type?(key, parse_value(key, value))
 
-    raise(ArgumentError, "expected #{self.class.settings[key].type}, " \
+    raise(ArgumentError, "expected #{self.class.parameters[key].type}, " \
                          "got #{value.class} (#{value.inspect})")
   end
 

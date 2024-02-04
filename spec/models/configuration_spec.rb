@@ -2,19 +2,19 @@
 
 require "rails_helper"
 
-describe Configuration, :redis do
+describe Configuration do
   let(:configuration) { described_class.new }
 
-  describe ".settings" do
-    subject { described_class.settings }
+  describe ".parameters" do
+    subject { described_class.parameters }
 
     it { is_expected.to be_a(Hash) }
   end
 
-  describe ".setting" do
+  describe ".parameter" do
     before do
       described_class.class_eval do
-        setting :foo, :string
+        parameter :foo, :string
       end
     end
 
@@ -23,28 +23,23 @@ describe Configuration, :redis do
     end
 
     it "defines a reader" do
-      configuration.foo("baz")
+      configuration.foo = "baz"
       expect(configuration.foo).to eq("baz")
     end
 
     it "defines a boolean reader" do
       expect(configuration.foo?).to be(false)
     end
-
-    it "defines a writer" do
-      configuration.foo = "bar"
-      expect(configuration.foo).to eq("bar")
-    end
   end
 
   describe "#get" do
-    subject { configuration.get(setting) }
+    subject { configuration.get(parameter) }
 
-    let(:setting) { :forum_name }
+    let(:parameter) { :forum_name }
 
     it { is_expected.to eq("Sugar") }
 
-    it "raises an error when setting doesn't exist" do
+    it "raises an error when parameter doesn't exist" do
       expect { configuration.get(:inexistant) }.to(
         raise_error(Configuration::InvalidConfigurationKey)
       )
@@ -79,7 +74,7 @@ describe Configuration, :redis do
       other_configuration.update(forum_name: "Test")
     end
 
-    it "loads the configuration from Redis" do
+    it "loads the configuration" do
       expect { configuration.load }.to(
         change(configuration, :forum_name).from("Sugar").to("Test")
       )
@@ -94,7 +89,7 @@ describe Configuration, :redis do
       configuration.save
     end
 
-    it "saves the configuration to Redis" do
+    it "saves the configuration" do
       expect { other_configuration.load }.to(
         change(other_configuration, :forum_name).from("Sugar").to("Save test")
       )

@@ -40,8 +40,6 @@ WebMock.disable_net_connect!(
 
 original_sunspot_session = Sunspot.session
 
-Sugar.redis = Redis.new(RedisHelper::CONFIG)
-
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 # Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| load f }
@@ -85,7 +83,6 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.include ActiveJob::TestHelper
-  config.include RedisHelper, redis: true
   config.include JsonSpec::Helpers
   config.include LoginMacros, type: :controller
   config.include MailerMacros
@@ -93,14 +90,6 @@ RSpec.configure do |config|
   config.include SystemHelpers, type: :system
 
   config.before { reset_email }
-
-  # Clean the Redis database and reload the configuration
-  config.around(:each, :redis) do |example|
-    with_clean_redis do
-      Sugar.config.reset!
-      example.run
-    end
-  end
 
   # Stub Sunspot
   config.before do
