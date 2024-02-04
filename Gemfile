@@ -36,6 +36,7 @@ gem "ruby-oembed", require: "oembed"
 
 gem "dynamic_image", "~> 2.1"
 gem "fog-aws"
+gem "solid_queue"
 
 gem "sentry-rails"
 gem "sentry-ruby"

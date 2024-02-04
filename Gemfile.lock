@@ -414,6 +414,8 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    solid_queue (0.2.1)
+      rails (~> 7.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -520,6 +522,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers (>= 4.3.0, != 4.4.0)
   sidekiq
+  solid_queue
   sprockets-rails
   sunspot_rails (~> 2.6.0)
   sunspot_solr
