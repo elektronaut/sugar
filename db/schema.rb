@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_31_190941) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_03_220916) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -223,6 +223,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_31_190941) do
     t.index ["user_id", "conversation"], name: "index_posts_on_user_id_and_conversation"
     t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "name"
+    t.jsonb "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_settings_on_name", unique: true
   end
 
   create_table "user_links", force: :cascade do |t|

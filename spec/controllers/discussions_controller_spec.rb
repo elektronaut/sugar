@@ -5,9 +5,6 @@ require "rails_helper"
 describe DiscussionsController do
   let(:user) { create(:user) }
 
-  # Create the first admin user
-  before { create(:user) }
-
   describe "with public browsing off" do
     before { Sugar.config.update(public_browsing: false) }
 
@@ -40,6 +37,7 @@ describe DiscussionsController do
 
   describe "GET index" do
     before do
+      login
       get :index
     end
 
@@ -50,6 +48,7 @@ describe DiscussionsController do
 
   describe "GET show" do
     before do
+      login
       discussion = create(:discussion)
       get :show, params: { id: discussion }
     end

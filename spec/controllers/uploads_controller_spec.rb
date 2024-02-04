@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe UploadsController, :redis do
+describe UploadsController do
   let(:user) { create(:user) }
   let(:png_file) do
     Rack::Test::UploadedFile.new(
