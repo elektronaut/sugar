@@ -31,7 +31,6 @@ x-backend: &backend
     - .dockerdev/.bashrc:/root/.bashrc:ro
   environment:
     <<: *env
-    REDIS_URL: redis://redis:6379/
     BOOTSNAP_CACHE_DIR: /usr/local/bundle/_bootsnap
     WEBPACKER_DEV_SERVER_HOST: webpacker
     WEB_CONCURRENCY: 1
@@ -46,8 +45,6 @@ x-backend: &backend
     SUGAR_DB_HOST: postgres
   depends_on:
     postgres:
-      condition: service_healthy
-    redis:
       condition: service_healthy
     solr:
       condition: service_started
@@ -67,9 +64,9 @@ services:
       - '3000:3000'
       - '3002:3002'
 
-  sidekiq:
+  solid_queue:
     <<: *backend
-    command: bundle exec sidekiq -C config/sidekiq.yml
+    command: bundle exec solid_queue:start
 
   postgres:
     image: postgres:14
@@ -86,18 +83,6 @@ services:
     healthcheck:
       test: pg_isready -U postgres -h 127.0.0.1
       interval: 5s
-
-  redis:
-    image: redis:6.0-alpine
-    volumes:
-      - redis:/data
-    ports:
-      - 6379
-    healthcheck:
-      test: redis-cli ping
-      interval: 1s
-      timeout: 3s
-      retries: 30
 
   solr:
     image: solr:8
@@ -130,7 +115,6 @@ services:
 
 volumes:
   postgres:
-  redis:
   bundle:
   node_modules:
   rails_cache:
