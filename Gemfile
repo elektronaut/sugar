@@ -58,13 +58,13 @@ group :development, :test do
   gem "pry"
 
   gem "capybara"
-  gem "codeclimate-test-reporter", require: false
   gem "factory_bot_rails"
   gem "json_spec"
   gem "rails-controller-testing"
   gem "rspec-rails"
   gem "selenium-webdriver"
   gem "shoulda-matchers", [">= 4.3.0", "!= 4.4.0"]
+  gem "simplecov"
   gem "sunspot_solr"
   gem "webmock", require: false
 

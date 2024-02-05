@@ -1,6 +1,4 @@
 [![Build](https://github.com/elektronaut/sugar/workflows/Build/badge.svg)](https://github.com/elektronaut/sugar/actions)
-[![Code Climate](https://codeclimate.com/github/elektronaut/sugar/badges/gpa.svg)](https://codeclimate.com/github/elektronaut/sugar)
-[![Test Coverage](https://codeclimate.com/github/elektronaut/sugar/badges/coverage.svg)](https://codeclimate.com/github/elektronaut/sugar)
 
 # Sugar
 
