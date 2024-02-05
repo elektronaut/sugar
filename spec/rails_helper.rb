@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 require "simplecov"
-SimpleCov.start
+SimpleCov.start do
+  add_filter %w[spec]
+
+  add_group "Controllers", "app/controllers"
+  add_group "Models", %w[app/models app/validators]
+  add_group "Helpers", %w[app/helpers app/form_builders]
+  add_group "Mailers", "app/mailers"
+  add_group "Filters", "app/filters"
+  add_group "Resources", "app/resources"
+  add_group "Jobs", "app/jobs"
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= "test"
