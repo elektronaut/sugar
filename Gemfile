@@ -39,17 +39,10 @@ gem "terser"
 # Used to generate non-digested assets for inclusion in third-party themes.
 gem "non-stupid-digest-assets"
 
-# Redis/Sidekiq
-gem "dalli"
-gem "hiredis"
-gem "redis", "~> 4.1"
-gem "sidekiq"
-
 # 3rd party monitoring
 gem "newrelic_rpm", group: "newrelic"
 gem "sentry-rails"
 gem "sentry-ruby"
-gem "sentry-sidekiq"
 
 group :development do
   gem "capistrano"

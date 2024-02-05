@@ -53,14 +53,15 @@ namespace :deploy do
     end
   end
 
-  task :restart_sidekiq do
+  desc "Restart Solid Queue"
+  task :restart_solid_queue do
     on roles(:app), in: :sequence, wait: 5 do
-      execute :sudo, :systemctl, "restart sidekiq-#{fetch(:application)}.service"
+      execute :sudo, :systemctl, "restart solid_queue-#{fetch(:application)}.service"
     end
   end
 
   after :publishing, :restart
-  after :publishing, :restart_sidekiq
+  after :publishing, :restart_solid_queue
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do

@@ -11,7 +11,6 @@ written in Ruby on Rails.
 
 * [Ruby 2.0+](https://www.ruby-lang.org/en/)
 * [Bundler](http://bundler.io/)
-* [Redis](http://redis.io/)
 * [Java](http://www.java.com/en/download/index.jsp)
 * libmagic
 * [PostgreSQL](http://www.postgresql.org/)
