@@ -1,20 +1,20 @@
 defaults: &default
-  adapter:  postgresql
+  adapter: postgresql
   encoding: unicode
-  host:     <%= ENV.fetch("SUGAR_DB_HOST",     "localhost") %>
+  host: <%= ENV.fetch("SUGAR_DB_HOST", "localhost") %>
   username: <%= ENV.fetch("SUGAR_DB_USERNAME", "rails") %>
   password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
-  pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
-  timeout:   5000
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>
   <<: *default
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>
 
 test:
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_test") %>
   <<: *default
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_test") %>
 
 production:
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_production") %>
   <<: *default
+  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_production") %>
+  prepared_statements: false
