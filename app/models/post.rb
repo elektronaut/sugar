@@ -38,7 +38,7 @@ class Post < ApplicationRecord
   end
 
   def post_number
-    @post_number ||= exchange.posts.where("id < ?", id).count + 1
+    @post_number ||= exchange.posts.where(id: ...id).count + 1
   end
 
   def page(options = {})

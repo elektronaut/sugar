@@ -19,8 +19,8 @@ class Invite < ApplicationRecord
   after_create :revoke_invite
   before_destroy :grant_invite
 
-  scope :active, -> { where("expires_at >= ?", Time.now.utc).includes(:user) }
-  scope :expired, -> { where("expires_at < ?", Time.now.utc) }
+  scope :active, -> { where(expires_at: Time.now.utc..).includes(:user) }
+  scope :expired, -> { where(expires_at: ...Time.now.utc) }
 
   class << self
     # Makes a unique random token.
