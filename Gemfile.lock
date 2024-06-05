@@ -135,6 +135,7 @@ GEM
     cssbundling-rails (1.4.0)
       railties (>= 6.0.0)
     csv (3.3.0)
+    dalli (3.2.8)
     date (3.3.4)
     diff-lcs (1.5.1)
     dis (1.1.14)
@@ -487,6 +488,7 @@ DEPENDENCIES
   capistrano-rbenv
   capybara
   cssbundling-rails
+  dalli
   dotenv-rails
   dynamic_image (~> 2.1)
   factory_bot_rails
