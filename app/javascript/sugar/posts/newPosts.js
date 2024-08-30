@@ -11,17 +11,16 @@ const PostDetector = {
 
   refresh: function () {
     if (!this.paused) {
-      let detector = this;
-      $.getJSON(this.postsCountUrl(), function (json) {
-        var new_posts = json.posts_count - detector.total_posts;
+      $.getJSON(this.postsCountUrl(), (json) => {
+        var new_posts = json.posts_count - this.total_posts;
         if (new_posts > 0) {
-          detector.total_posts = json.posts_count;
+          this.total_posts = json.posts_count;
           document.dispatchEvent(
             new CustomEvent("newposts", {
               detail: {
-                total: detector.total_posts,
+                total: this.total_posts,
                 newPosts: new_posts,
-                unread: detector.total_posts - detector.read_posts
+                unread: this.total_posts - this.read_posts
               }
             })
           );

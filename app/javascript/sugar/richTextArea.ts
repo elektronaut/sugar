@@ -65,7 +65,7 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
       format = Sugar.Configuration.preferredFormat;
     }
   }
-  format || (format = formats[0]);
+  format = format || formats[0];
 
   function setFormat(newFormat: string, skipUpdate: boolean) {
     let label: string;

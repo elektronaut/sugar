@@ -30,11 +30,7 @@ readyHandler.start(() => {
 });
 
 // React
-import { FC } from "react";
 import * as Components from "./components";
 import ReactRailsUJS from "react_ujs";
-declare class ReactRailsUJS {
-  getConstructor: (name: string) => FC;
-}
 ReactRailsUJS.getConstructor = (className: string) =>
-  Components[className] as FC;
+  Components[className] as React.FC;

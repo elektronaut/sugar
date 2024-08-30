@@ -11,7 +11,7 @@ function applyTimestamps() {
     if (date && !elem.dataset.react) {
       const root = createRoot(elem);
       root.render(createElement(RelativeTime, { time: date }, null));
-      elem.dataset.react = true;
+      elem.dataset.react = "true";
     }
   });
 }

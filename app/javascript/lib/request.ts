@@ -1,10 +1,13 @@
 export function csrfToken(): string {
-  const elem = document.querySelector("[name=csrf-token]");
-  if ("content" in elem) {
-    return elem.content;
-  } else {
-    return null;
+  const elem =
+    typeof document !== "undefined" &&
+    document.querySelector("[name=csrf-token]");
+
+  if (!elem) {
+    return "";
   }
+
+  return elem.getAttribute("content") || "";
 }
 
 function jsonFetchOptions() {

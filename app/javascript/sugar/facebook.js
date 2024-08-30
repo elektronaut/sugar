@@ -14,12 +14,11 @@ const Facebook = {
   },
 
   withAPI: function (callback) {
-    const facebook = this;
     if (this.apiReady) {
       callback();
     } else {
-      var interval = setInterval(function () {
-        if (facebook.apiReady) {
+      var interval = setInterval(() => {
+        if (this.apiReady) {
           clearInterval(interval);
           callback();
         }
@@ -28,9 +27,7 @@ const Facebook = {
   },
 
   loadAsync: function () {
-    const facebook = this;
-
-    window.fbAsyncInit = function () {
+    window.fbAsyncInit = () => {
       window.FB.init({
         version: "v16.0",
         appId: Facebook.appId,
@@ -38,7 +35,7 @@ const Facebook = {
         cookie: true,
         xfbml: true
       });
-      facebook.apiReady = true;
+      this.apiReady = true;
     };
 
     const fbRoot = document.createElement("div");

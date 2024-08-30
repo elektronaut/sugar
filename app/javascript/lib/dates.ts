@@ -21,7 +21,7 @@ const zeroPad = (num: number | string) => {
   return s;
 };
 
-export function formatDate(arg: string) {
+export function formatDate(arg: Date | string) {
   const date = new Date(arg);
 
   return `${
@@ -29,11 +29,11 @@ export function formatDate(arg: string) {
   } ${date.getDate()},  ${date.getFullYear()}`;
 }
 
-export function formatTime(arg: string) {
+export function formatTime(arg: Date | string) {
   const date = new Date(arg);
   return [zeroPad(date.getHours()), zeroPad(date.getMinutes())].join(":");
 }
 
-export function formatDateTime(arg: string) {
+export function formatDateTime(arg: Date | string) {
   return `${formatDate(arg)}, ${formatTime(arg)}`;
 }
