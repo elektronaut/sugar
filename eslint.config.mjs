@@ -17,7 +17,8 @@ export default [
     },
     rules: {
       ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules
+      ...react.configs["jsx-runtime"].rules,
+      ...reactHooks.configs.recommended.rules,
     },
     settings: {
       react: {
