@@ -1,6 +1,7 @@
 require:
   - rubocop-capybara
   - rubocop-factory_bot
+  - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
@@ -12,10 +13,10 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
   Exclude:
-    - 'bin/**/*'
-    - 'db/schema.rb'
-    - 'node_modules/**/*'
-    - 'vendor/**/*'
+    - "bin/**/*"
+    - "db/schema.rb"
+    - "node_modules/**/*"
+    - "vendor/**/*"
 
 Layout/LineLength:
   AutoCorrect: true
@@ -55,16 +56,16 @@ Style/Encoding:
 
 Rails/ContentTag:
   Exclude:
-    - 'app/form_builders/sugar/form_builder.rb'
-    - 'app/helpers/icons_helper.rb'
-    - 'app/helpers/posts_helper.rb'
-    - 'config/puma.rb'
+    - "app/form_builders/sugar/form_builder.rb"
+    - "app/helpers/icons_helper.rb"
+    - "app/helpers/posts_helper.rb"
+    - "config/puma.rb"
 
 Rails/CreateTableWithTimestamps:
   Exclude:
-    - 'db/migrate/20080701172614_create_exchange_views.rb'
-    - 'db/migrate/20090404154958_create_discussion_relationships.rb'
-    - 'db/migrate/20210511201335_create_active_storage_variant_records.active_storage.rb'
+    - "db/migrate/20080701172614_create_exchange_views.rb"
+    - "db/migrate/20090404154958_create_discussion_relationships.rb"
+    - "db/migrate/20210511201335_create_active_storage_variant_records.active_storage.rb"
 
 Rails/DynamicFindBy:
   AllowedReceivers:

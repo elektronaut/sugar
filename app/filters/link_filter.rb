@@ -84,7 +84,7 @@ class LinkFilter < Filter
 
   def rewrite_for_https?(src)
     matches_https_whitelist?(src) ||
-      (src =~ %r{\Ahttp://} && https_url_exists?(src))
+      (src.start_with?("http://") && https_url_exists?(src))
   end
 
   def rewrite_for_https_support!

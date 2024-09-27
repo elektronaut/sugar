@@ -44,7 +44,7 @@ class SanitizeFilter < Filter
           elem.remove_attribute(name)
         end
         # Strip out event handlers
-        elem.remove_attribute(name) if name.downcase =~ /^on/
+        elem.remove_attribute(name) if /^on/.match?(name.downcase)
       end
     end
   end

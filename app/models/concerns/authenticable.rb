@@ -11,8 +11,8 @@ module Authenticable
 
     attribute :hiatus_until, :datetime
 
-    enum status: { active: 0, inactive: 1, hiatus: 2, time_out: 3, banned: 4,
-                   memorialized: 5 }
+    enum :status, { active: 0, inactive: 1, hiatus: 2, time_out: 3, banned: 4,
+                    memorialized: 5 }
 
     validate :verify_banned_until
     validates(

@@ -23,10 +23,10 @@ class Configuration
       define_method key do
         get(key)
       end
-      define_method "#{key}?" do
+      define_method :"#{key}?" do
         get(key) ? true : false
       end
-      define_method "#{key}=" do |value|
+      define_method :"#{key}=" do |value|
         set(key, value)
       end
     end

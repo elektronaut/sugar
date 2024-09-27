@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 require "rails_helper"
@@ -101,13 +100,13 @@ describe Post do
     context "when post starts with /me and contains a line break" do
       let(:post) { create(:post, body: "/me shuffles\noh yeah") }
 
-      it { is_expected.to be(false) }
+      it { is_expected.to be_falsey }
     end
 
     context "when post doesn't start with /me" do
       let(:post) { create(:post, body: "Start with /me") }
 
-      it { is_expected.to be(false) }
+      it { is_expected.to be_falsey }
     end
   end
 

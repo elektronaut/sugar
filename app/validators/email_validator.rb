@@ -7,7 +7,7 @@ class EmailValidator < ActiveModel::EachValidator
     begin
       email = Mail::Address.new(value)
       valid = email.domain && email.address == value
-      valid &&= email.domain =~ /\./
+      valid &&= email.domain.include?(".")
     rescue StandardError
       valid = false
     end

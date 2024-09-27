@@ -48,9 +48,9 @@ module LayoutHelper
   private
 
   def enabled_emoticons
-    Sugar.config.emoticons.split(/\s+/).map do |name|
+    Sugar.config.emoticons.split(/\s+/).filter_map do |name|
       emoji = Emoji.find_by_alias(name)
       { name:, image: emoji_path(emoji) } if emoji
-    end.compact
+    end
   end
 end

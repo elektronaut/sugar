@@ -129,7 +129,7 @@ class UsersController < ApplicationController
 
   def respond_with_user(user, &block)
     respond_to do |format|
-      format.html { block.call }
+      format.html(&block)
       format.json { render json: UserResource.new(user) }
     end
   end

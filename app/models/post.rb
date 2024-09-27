@@ -34,7 +34,7 @@ class Post < ApplicationRecord
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
 
   def me_post?
-    @me_post ||= body.strip =~ %r{^/me} && body !~ /\n/ ? true : false
+    body.strip =~ %r{^/me} && body.exclude?("\n")
   end
 
   def post_number

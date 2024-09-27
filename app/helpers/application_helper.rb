@@ -17,8 +17,8 @@ module ApplicationHelper
   end
 
   def pretty_link(url)
-    url = "http://#{url}" unless url =~ %r{^(f|ht)tps?://}
-    url = url.gsub(%r{/$}, "") if url =~ %r{^(f|ht)tps?://[\w\d\-.]*/$}
+    url = "http://#{url}" unless %r{^(f|ht)tps?://}.match?(url)
+    url = url.gsub(%r{/$}, "") if %r{^(f|ht)tps?://[\w\d\-.]*/$}.match?(url)
     link_to url.gsub(%r{^(f|ht)tps?://}, ""), url
   end
 
