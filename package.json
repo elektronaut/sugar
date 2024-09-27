@@ -35,18 +35,19 @@
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-hooks": "5.1.0-rc-67fee58b-20240926",
+    "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "lint": "eslint 'app/javascript'",
-    "build": "run build-dev --minify",
+    "build": "pnpm run build-dev --minify",
     "build-dev": "esbuild app/javascript/application.ts app/javascript/mobile.ts --bundle --sourcemap --outdir=app/assets/builds --target=es2020,chrome64,edge79,firefox62,safari11.1",
     "build:css": "postcss ./app/assets/stylesheets/**/*.postcss --base ./app/assets/stylesheets --dir ./app/assets/builds --ext css",
     "prettier": "prettier app/javascript app/assets/stylesheets --check",
     "prettier:fix": "prettier app/javascript app/assets/stylesheets --write"
-  },
-  "packageManager": "yarn@4.4.1"
+  }
 }

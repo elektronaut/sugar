@@ -19,18 +19,12 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v4
-      - name: Node modules cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install Node modules
-        run: |
-          yarn install
+          version: 9
+          run_install: true
       - name: Check code
-        run: yarn lint
+        run: pnpm lint
 
   prettier:
     name: Prettier
@@ -39,18 +33,12 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v4
-      - name: Node modules cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install Node modules
-        run: |
-          yarn install
+          version: 9
+          run_install: true
       - name: Check code
-        run: yarn prettier
+        run: pnpm prettier
 
   rubocop-test:
     name: Rubocop
@@ -105,6 +93,10 @@ jobs:
           - 6379:6379
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -114,20 +106,10 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get install -y libvips42
-      - name: Node modules cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install Node modules
-        run: |
-          yarn install
       - name: Build frontend
         run: |
-          yarn build
-          yarn build:css
+          pnpm build
+          pnpm build:css
       - name: Create database
         env:
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}

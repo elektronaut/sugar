@@ -1,4 +1,4 @@
 web: bin/rails server -p 3000
-js: yarn build-dev --watch
+js: pnpm build-dev --watch
 solr: bin/sunspot-solr run
-css: yarn build:css --watch
+css: pnpm build:css --watch
