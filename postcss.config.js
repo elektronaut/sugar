@@ -7,7 +7,8 @@ module.exports = {
         filter: /webfonts\/fa-/,
         url: "copy",
         basePath: "../../../node_modules/@fortawesome/fontawesome-free/css",
-        assetsPath: "app/assets/builds"
+        assetsPath: "./fonts",
+        useHash: true
       }
     ]),
     require("postcss-mixins"),
