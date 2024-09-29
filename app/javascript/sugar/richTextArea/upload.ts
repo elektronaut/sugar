@@ -3,10 +3,7 @@ import Dropzone from "dropzone";
 import { csrfToken } from "../../lib/request";
 import { replaceSelection } from "./selection";
 
-interface UploadResponse {
-  error?: string;
-  embed?: string;
-}
+type UploadResponse = { error: string } | { embed: string };
 
 function uploadBanner(file: File) {
   return '[Uploading "' + file.name + '"...]';
@@ -17,7 +14,7 @@ function startUpload(elem: HTMLTextAreaElement, file: File) {
 }
 
 function uploadError(response: UploadResponse) {
-  if (typeof response === "object" && response.error) {
+  if (typeof response === "object" && "error" in response && response.error) {
     alert("There was an error uploading the image: " + response.error);
   }
 }
@@ -28,7 +25,7 @@ function finishUpload(
   response: UploadResponse
 ) {
   uploadError(response);
-  if (response && response.embed) {
+  if (response && "embed" in response && response.embed) {
     elem.value = elem.value.replace(uploadBanner(file) + "\n", response.embed);
   }
 }
@@ -45,7 +42,7 @@ function failedUpload(
 function uploadImageFile(
   textarea: HTMLTextAreaElement,
   file: File,
-  callback: () => void
+  callback?: () => void
 ) {
   const reader = new FileReader();
   reader.onload = async function () {
@@ -107,7 +104,9 @@ export function bindUploads(elem: HTMLTextAreaElement) {
       JSON.parse(file.xhr.responseText) as UploadResponse
     )
   );
-  dropzone.on("error", (file, message) => failedUpload(elem, file, message));
+  dropzone.on("error", (file, message: UploadResponse) =>
+    failedUpload(elem, file, message)
+  );
 
   elem.addEventListener("paste", (evt: ClipboardEvent) => {
     const items = evt.clipboardData.items;

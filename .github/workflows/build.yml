@@ -40,7 +40,7 @@ jobs:
       - name: Check code
         run: pnpm prettier
 
-  rubocop-test:
+  rubocop:
     name: Rubocop
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -130,3 +130,17 @@ jobs:
           SOLR_HOST: localhost
           SOLR_PORT: 8983
         run: bundle exec rspec
+
+  typescript:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Check code
+        run: pnpm tsc --noEmit

@@ -19,6 +19,10 @@ interface Twitter {
   widgets: { load: (elem: HTMLElement) => void };
 }
 
+declare const window: Window & {
+  twttr?: Twitter;
+};
+
 function setupEmbeds() {
   gifvVideos();
   mastodonEmbeds();
@@ -35,8 +39,6 @@ readyHandler.ready(function () {
     /**
      * Retrieved a post ID from a string which may
      * include a "post-" prefix.
-     * @param {string} idString
-     * @returns {number}
      */
     const parsePostIdString = (idString: string): number => {
       const idNum = idString.match(/(post-)?(\d+)/i);
@@ -49,8 +51,6 @@ readyHandler.ready(function () {
     /**
      * Retrieve a post ID from its node, handling mobile
      * template and potential changes
-     * @param {Element} post
-     * @returns {number}
      */
     const getPostId = (post: HTMLElement) => {
       let postId = 0;
@@ -78,8 +78,9 @@ readyHandler.ready(function () {
     };
 
     const resizeObserver = new ResizeObserver((posts) => {
-      posts.forEach((post) => {
-        const postId = getPostId(post.target);
+      posts.forEach((entry) => {
+        const post = entry.target as HTMLDivElement;
+        const postId = getPostId(post);
         const pCache = cache.posts[postId];
 
         // Do not act on posts after or including our anchor
@@ -88,16 +89,16 @@ readyHandler.ready(function () {
         }
 
         // Prevent editing from triggering scroll
-        const pBody = post.target.querySelector(".body");
+        const pBody = post.querySelector(".body") as HTMLDivElement;
         if (!pBody || pBody.offsetHeight < 1) {
           return;
         }
 
         let boxSize = pCache.height;
-        if (post.borderBoxSize && post.borderBoxSize.length) {
-          boxSize = post.borderBoxSize[0].blockSize;
+        if (entry.borderBoxSize && entry.borderBoxSize.length) {
+          boxSize = entry.borderBoxSize[0].blockSize;
         } else {
-          boxSize = post.contentRect.height;
+          boxSize = entry.contentRect.height;
         }
 
         const offset = boxSize - pCache.height;
@@ -120,7 +121,7 @@ readyHandler.ready(function () {
      * initial height and order in the cache, and attach
      * the resize observer.
      */
-    postsPage.querySelectorAll(".post").forEach((post, i) => {
+    postsPage.querySelectorAll(".post").forEach((post: HTMLDivElement, i) => {
       const postId = getPostId(post);
       // We only need posts before our anchor
       if (cache.anchorPostOrder && i >= cache.anchorPostOrder) {
@@ -141,7 +142,7 @@ readyHandler.ready(function () {
     const posts = event.detail;
     // Initialize twitter embeds when new posts load or previewed
     if (posts.length && window.twttr) {
-      const twitter = window.twttr as Twitter;
+      const twitter = window.twttr;
       twitter.widgets.load(posts[0].parentNode);
     }
     setupEmbeds();

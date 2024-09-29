@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function Menu(props: { children: JSX.Element }) {
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function Menu(props: Props) {
   return (
     <ul className="dropdown-menu" {...props}>
       {props.children}

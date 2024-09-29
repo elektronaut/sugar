@@ -26,7 +26,7 @@ export default function Param(props: ParamProps) {
     return (
       <React.Fragment>
         <input name={name("id")} type="hidden" value={userLink.id} />
-        <input name={name("_destroy")} type="hidden" value={true} />
+        <input name={name("_destroy")} type="hidden" value={"true"} />
       </React.Fragment>
     );
   }

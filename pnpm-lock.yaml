@@ -14,6 +14,9 @@ importers:
       '@dnd-kit/sortable':
         specifier: ^8.0.0
         version: 8.0.0(@dnd-kit/core@6.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities':
+        specifier: ^3.2.2
+        version: 3.2.2(react@18.3.1)
       '@fortawesome/fontawesome-free':
         specifier: ^6.6.0
         version: 6.6.0
@@ -93,6 +96,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
+      '@types/react_ujs':
+        specifier: ^2.6.4
+        version: 2.6.4
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -555,6 +561,9 @@ packages:
 
   '@types/react@18.3.9':
     resolution: {integrity: sha512-+BpAVyTpJkNWWSSnaLBk6ePpHLOGJKnEQNbINNovPWzvEUyAe3e+/d494QdEh71RekM/qV7lw6jzf1HGrJyAtQ==}
+
+  '@types/react_ujs@2.6.4':
+    resolution: {integrity: sha512-GhhZb04nKwvi/qj+LbASKIS6zjGasiKSGlUQxtawLTjakpg2zWhP1/jq66Y5E9RJdS2ajmYNjw2jG2/EDVYdsw==}
 
   '@types/sizzle@2.3.8':
     resolution: {integrity: sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==}
@@ -2828,6 +2837,11 @@ snapshots:
     dependencies:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
+
+  '@types/react_ujs@2.6.4':
+    dependencies:
+      '@types/jquery': 3.5.31
+      '@types/react': 18.3.9
 
   '@types/sizzle@2.3.8': {}
 

@@ -3,7 +3,7 @@ export default function quote(elem: HTMLDivElement) {
   let username: string;
   let url: string | null;
 
-  const permalink: HTMLLinkElement = elem.querySelector(
+  const permalink: HTMLAnchorElement = elem.querySelector(
     ".post_info .permalink"
   );
   if (permalink && "href" in permalink) {

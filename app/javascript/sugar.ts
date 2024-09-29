@@ -1,16 +1,19 @@
 import { startPosts } from "./sugar/post";
 
-interface Icon {
+type Icon = {
   name: string;
   image: string;
-}
+};
 
-interface SugarConfiguration {
+type SugarConfiguration = {
   authToken: string;
   emoticons: Icon[];
+  amazonAssociatesId?: string;
   currentUser?: UserAttributes;
+  currentUserId?: number;
   preferredFormat?: string;
-}
+  uploads?: boolean;
+};
 
 const Sugar = {
   Configuration: {} as SugarConfiguration,

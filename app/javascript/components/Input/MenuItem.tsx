@@ -1,14 +1,10 @@
-import React from "react";
-
-interface MenuItemProps {
-  item: string;
-  index: number;
+interface Props {
   isActive: boolean;
   isSelected: boolean;
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
-export default function MenuItem(props: MenuItemProps) {
+export default function MenuItem(props: Props) {
   const classNames = [];
   if (props.isActive) {
     classNames.push("active");

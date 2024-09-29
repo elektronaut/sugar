@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 
 import TypeaheadTextField from "../Input/TypeaheadTextField";
 
@@ -9,7 +9,7 @@ interface EditorProps {
   userLink: UserLink.Link;
 }
 
-function preventSubmit(evt: Event) {
+function preventSubmit(evt: React.KeyboardEvent) {
   if (evt.key === "Enter") {
     evt.preventDefault();
   }
@@ -29,12 +29,12 @@ export default function Editor(props: EditorProps) {
       updateAttribute(attr)(evt.target.value);
     };
 
-  const handleCancel = (evt: Event) => {
+  const handleCancel = (evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch({ type: "cancel" });
   };
 
-  const handleSave = (evt: Event) => {
+  const handleSave = (evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch({ type: "save", payload: userLink });
   };

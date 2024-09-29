@@ -22,13 +22,13 @@ function undoEmbeds(html: string) {
   return elem.innerHTML;
 }
 
-export default function richTextArea(textarea: HTMLTextAreaElement) {
+export default function richTextArea(textarea: RichText.Element) {
   if (textarea.richtext) {
     return;
   }
   textarea.richtext = true;
 
-  let decorator = () => new MarkdownDecorator();
+  let decorator: RichText.Decorator = new MarkdownDecorator();
   let formats = ["markdown"];
   let format = "markdown";
 
@@ -53,7 +53,7 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
   }
 
   if (textarea.dataset.formatBinding) {
-    const formatElem = textarea
+    const formatElem: HTMLInputElement = textarea
       .closest("form")
       .querySelector(textarea.dataset.formatBinding);
     if (formatElem && "value" in formatElem) {
@@ -67,24 +67,25 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
   }
   format = format || formats[0];
 
-  function setFormat(newFormat: string, skipUpdate: boolean) {
+  function setFormat(newFormat: string, skipUpdate?: boolean) {
     let label: string;
     format = newFormat;
 
     if (format === "markdown") {
       label = "Markdown";
-      decorator = () => new MarkdownDecorator();
+      decorator = new MarkdownDecorator();
     } else if (format === "html") {
       label = "HTML";
-      decorator = () => new HtmlDecorator();
+      decorator = new HtmlDecorator();
     }
 
     formatButton.querySelector("a").innerHTML = label;
 
     if (textarea.dataset.formatBinding) {
-      textarea
+      const formatElem: HTMLInputElement = textarea
         .closest("form")
-        .querySelector(textarea.dataset.formatBinding).value = format;
+        .querySelector(textarea.dataset.formatBinding);
+      formatElem.value = format;
     }
 
     if (textarea.dataset.rememberFormat && !skipUpdate) {
@@ -107,7 +108,7 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
     nextFormat();
   });
 
-  function performAction(callback: (string) => [string, string, string]) {
+  function performAction(callback: RichText.Action) {
     const result = callback(getSelection(textarea));
     if (result) {
       const [prefix, replacement, postfix] = result;
@@ -118,7 +119,7 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
   function addButton(
     name: string,
     className: string,
-    callback: (string) => [string, string, string]
+    callback: RichText.Action
   ) {
     const li = document.createElement("li");
     li.className = "button";
@@ -136,11 +137,8 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
     toolbar.insertBefore(li, formatButton);
   }
 
-  function addHotkey(
-    hotkey: string,
-    callback: (string) => [string, string, string]
-  ) {
-    textarea.addEventListener("keydown", (evt) => {
+  function addHotkey(hotkey: string, callback: RichText.Action) {
+    textarea.addEventListener("keydown", (evt: KeyboardEvent) => {
       let key;
       if (evt.which >= 65 && evt.which <= 90) {
         key = String.fromCharCode(evt.keyCode).toLowerCase();
@@ -155,22 +153,22 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
     });
   }
 
-  const bold = (s: string) => decorator().bold(s);
-  const italic = (s: string) => decorator().emphasis(s);
-  const blockquote = (s: string) => decorator().blockquote(s);
-  const spoiler = (s: string) => decorator().spoiler(s);
+  const bold = (s: string) => decorator.bold(s);
+  const italic = (s: string) => decorator.emphasis(s);
+  const blockquote = (s: string) => decorator.blockquote(s);
+  const spoiler = (s: string) => decorator.spoiler(s);
 
   const link = (s: string) => {
     const name = s.length > 0 ? s : "Link text";
     let url = prompt("Enter link URL", "");
     url = url.length > 0 ? url : "http://example.com/";
     url = url.replace(/^(?!(f|ht)tps?:\/\/)/, "http://");
-    return decorator().link(url, name);
+    return decorator.link(url, name);
   };
 
   const imageTag = (s: string) => {
     const url = s.length > 0 ? s : prompt("Enter image URL", "");
-    return url ? decorator().image(url) : false;
+    return url ? decorator.image(url) : null;
   };
 
   const uploadImageAction = () => uploadImage(textarea);
@@ -180,10 +178,10 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
       "Enter language (leave blank for no syntax highlighting)",
       ""
     );
-    return decorator().code(selection, lang);
+    return decorator.code(selection, lang);
   };
 
-  const showEmojiBar = (selection: string) => {
+  const showEmojiBar = (selection: string): RichText.Replacement => {
     if (emojiBar.style.display == "none") {
       emojiBar.style.display = "block";
     } else {
@@ -212,7 +210,7 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
   addHotkey("enter", submit);
 
   document.addEventListener("quote", (event: QuoteEvent) => {
-    const [prefix, replacement, postfix] = decorator().quote(
+    const [prefix, replacement, postfix] = decorator.quote(
       undoEmbeds(event.detail.html),
       event.detail.username,
       event.detail.permalink
@@ -249,12 +247,14 @@ export default function richTextArea(textarea: HTMLTextAreaElement) {
   }
 
   if (Sugar.Configuration.uploads) {
-    bindUploads(textarea, decorator);
+    bindUploads(textarea);
   }
 }
 
 export function applyRichTextArea() {
-  document.querySelectorAll("textarea.rich").forEach((textarea) => {
-    richTextArea(textarea);
-  });
+  document
+    .querySelectorAll("textarea.rich")
+    .forEach((textarea: RichText.Element) => {
+      richTextArea(textarea);
+    });
 }

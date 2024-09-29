@@ -23,7 +23,8 @@ readyHandler.ready(() => {
     );
 
     const body = textarea.value;
-    const format = form.querySelector(".format").value as string;
+    const formatElement: HTMLInputElement = form.querySelector(".format");
+    const format = formatElement.value;
 
     await fetch(form.action, {
       method: "post",
@@ -52,14 +53,16 @@ readyHandler.ready(() => {
   }
 
   // Form event handler
-  document.querySelectorAll("#replyText form").forEach((form) => {
-    if (form.classList.contains("livePost")) {
-      form.addEventListener("submit", (evt) => {
-        evt.preventDefault();
-        if (textarea.value.trim() !== "") {
-          void submitPost(form);
-        }
-      });
-    }
-  });
+  document
+    .querySelectorAll("#replyText form")
+    .forEach((form: HTMLFormElement) => {
+      if (form.classList.contains("livePost")) {
+        form.addEventListener("submit", (evt) => {
+          evt.preventDefault();
+          if (textarea.value.trim() !== "") {
+            void submitPost(form);
+          }
+        });
+      }
+    });
 });

@@ -1,5 +1,9 @@
 import readyHandler from "../lib/readyHandler";
 
+declare const window: Window & {
+  mutedUsers?: number[];
+};
+
 function toggleNavigation() {
   const nav = document.getElementById("navigation");
   if (nav) {
@@ -8,7 +12,7 @@ function toggleNavigation() {
 }
 
 function permalink(post: HTMLDivElement) {
-  const link: HTMLLinkElement = post.querySelector(".post_info .permalink");
+  const link: HTMLAnchorElement = post.querySelector(".post_info .permalink");
   if (link && "href" in link) {
     return link.href.replace(/^https?:\/\/([\w\d.:-]*)/, "");
   }
@@ -99,7 +103,7 @@ readyHandler.start(function () {
   // Larger click targets on discussion overview
   document
     .querySelectorAll(".discussions .discussion h2 a")
-    .forEach((link: HTMLLinkElement) => {
+    .forEach((link: HTMLAnchorElement) => {
       link.parentNode.parentNode.addEventListener("click", () => {
         document.location = link.href;
       });
@@ -125,7 +129,7 @@ readyHandler.start(function () {
     const quoteLink = post.querySelector(".functions a.quote_post");
     if (quoteLink) {
       quoteLink.addEventListener("click", (evt) => {
-        evt.preventDefault("");
+        evt.preventDefault();
         const username = post.querySelector(
           ".post_info .username a"
         ).textContent;

@@ -1,13 +1,13 @@
-import functions from "./post/functions.ts";
-import mute from "./post/mute.ts";
-import spoiler from "./post/spoiler.ts";
+import functions from "./post/functions";
+import mute from "./post/mute";
+import spoiler from "./post/spoiler";
 
 const postsSelector =
   "body.discussion div.posts, " +
   "body.search div.posts, " +
   "body.user_profile div.posts";
 
-function renderPost(elem: HTMLElement) {
+function renderPost(elem: HTMLDivElement) {
   functions(elem);
   mute(elem);
   spoiler(elem);

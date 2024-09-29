@@ -1,19 +1,17 @@
-import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-interface UserLinkProps {
+type Props = {
   dispatch: (action: UserLink.Action) => void;
-  labels: string[];
   position: number;
   userLink: UserLink.Link;
-}
+};
 
 function label(userLink: UserLink.Link) {
   return userLink.name || userLink.url.replace(/^(f|ht)tps?:\/\//, "");
 }
 
-export default function UserLink(props: UserLinkProps) {
+export default function UserLink(props: Props) {
   const { dispatch, userLink } = props;
 
   const {
@@ -27,12 +25,12 @@ export default function UserLink(props: UserLinkProps) {
 
   const style = { transform: CSS.Transform.toString(transform), transition };
 
-  const handleEdit = (evt: Event) => {
+  const handleEdit = (evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch({ type: "edit", payload: userLink });
   };
 
-  const handleDelete = (evt: Event) => {
+  const handleDelete = (evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch({ type: "delete", payload: userLink });
   };

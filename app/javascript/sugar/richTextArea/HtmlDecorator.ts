@@ -1,29 +1,33 @@
-export default class HtmlDecorator {
-  blockquote(str: string) {
+export default class HtmlDecorator implements RichText.Decorator {
+  blockquote(str: string): RichText.Replacement {
     return ["<blockquote>", str, "</blockquote>"];
   }
 
-  bold(str: string) {
+  bold(str: string): RichText.Replacement {
     return ["<b>", str, "</b>"];
   }
 
-  code(str: string, language: string) {
+  code(str: string, language: string): RichText.Replacement {
     return ["```" + language + "\n", str, "\n```"];
   }
 
-  emphasis(str: string) {
+  emphasis(str: string): RichText.Replacement {
     return ["<i>", str, "</i>"];
   }
 
-  image(url: string) {
+  image(url: string): RichText.Replacement {
     return ['<img src="', url, '">'];
   }
 
-  link(url: string, name: string) {
+  link(url: string, name: string): RichText.Replacement {
     return ['<a href="' + url + '">', name, "</a>"];
   }
 
-  quote(html: string, username: string, permalink: string) {
+  quote(
+    html: string,
+    username: string,
+    permalink: string
+  ): RichText.Replacement {
     const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
     let cite = `Posted by ${username}:`;
     if (permalink) {
@@ -41,7 +45,7 @@ export default class HtmlDecorator {
     ];
   }
 
-  spoiler(str: string) {
+  spoiler(str: string): RichText.Replacement {
     return ['<div class="spoiler">', str, "</div>"];
   }
 }

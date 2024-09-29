@@ -1,4 +1,4 @@
-import React from "react";
+import { Fragment } from "react";
 
 import useUserLinks from "./EditUserLinks/useUserLinks";
 import Editor from "./EditUserLinks/Editor";
@@ -15,7 +15,7 @@ export default function EditUserLinks(props: EditUserLinksProps) {
 
   const enabledLinks = state.userLinks.filter((ul) => !ul.deleted);
 
-  const handleAdd = (evt: Event) => {
+  const handleAdd = (evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch({ type: "add" });
   };
@@ -31,14 +31,14 @@ export default function EditUserLinks(props: EditUserLinksProps) {
         />
       )}
       {!state.editing && (
-        <React.Fragment>
+        <Fragment>
           <List dispatch={dispatch} userLinks={enabledLinks} />
           <div className="buttons">
             <button type="button" onClick={handleAdd}>
               Add link
             </button>
           </div>
-        </React.Fragment>
+        </Fragment>
       )}
       {state.userLinks.map((ul, i) => (
         <Param key={ul.handle} userLink={ul} position={i + 1} />

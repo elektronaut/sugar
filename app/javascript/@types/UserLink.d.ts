@@ -1,24 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-namespace UserLink {
-  interface Link {
+declare namespace UserLink {
+  type Link = {
     id: number | null;
     label: string;
     name: string;
     url: string;
     deleted: boolean;
     handle: string;
-  }
+  };
 
-  interface State {
-    editing: boolean;
+  type State = {
+    editing: Link | null;
     userLinks: Link[];
-  }
+  };
 
-  interface Action {
-    type: string;
-    payload?: Link[] | Link;
-  }
+  type Action =
+    | { type: "add" | "cancel" }
+    | { type: "delete" | "edit" | "save" | "update"; payload: Link }
+    | { type: "reorder"; payload: Link[] };
 }
-
-/* eslint-enable @typescript-eslint/no-unused-vars */

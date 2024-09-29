@@ -1,7 +1,12 @@
-interface EventData {
+type EventData = {
   id: string;
   height: number;
-}
+  type: string;
+};
+
+type ResizeEvent = Event & {
+  data?: EventData;
+};
 
 export default function mastodonEmbeds() {
   const iframes = new Map<string, HTMLIFrameElement>();
@@ -9,20 +14,16 @@ export default function mastodonEmbeds() {
   const iframeId = () => {
     const idBuffer = new Uint32Array(1);
     let id = 0;
-    while (id === 0 || iframes.has(id)) {
+    while (id === 0 || iframes.has(`${id}`)) {
       id = crypto.getRandomValues(idBuffer)[0];
     }
-    return id;
+    return `${id}`;
   };
 
-  const receiveMessage = (evt: Event) => {
-    const data = (evt.data || {}) as EventData;
+  const receiveMessage = (evt: ResizeEvent) => {
+    const data = evt.data;
 
-    if (
-      typeof data !== "object" ||
-      data.type !== "setHeight" ||
-      !iframes.has(data.id)
-    ) {
+    if (!data || data.type !== "setHeight" || !iframes.has(data.id)) {
       return;
     }
 
@@ -32,7 +33,7 @@ export default function mastodonEmbeds() {
       return;
     }
 
-    iframe.height = data.height;
+    iframe.height = `${data.height}`;
   };
 
   window.addEventListener("message", receiveMessage);
@@ -57,6 +58,6 @@ export default function mastodonEmbeds() {
         );
       };
 
-      iframe.onload();
+      iframe.onload(null);
     });
 }

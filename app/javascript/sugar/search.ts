@@ -1,7 +1,7 @@
 import readyHandler from "../lib/readyHandler";
 
 readyHandler.ready(() => {
-  document.querySelectorAll("#search form").forEach((form) => {
+  document.querySelectorAll("#search form").forEach((form: HTMLFormElement) => {
     const searchMode: HTMLSelectElement = form.querySelector("#search_mode");
     searchMode.addEventListener("change", () => {
       form.action = searchMode.value;

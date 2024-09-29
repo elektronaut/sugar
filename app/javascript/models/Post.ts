@@ -5,9 +5,9 @@ const defaultAttributes = {
 };
 
 export default class Post {
-  attributes: PostAttributes;
+  attributes: Partial<PostAttributes>;
 
-  constructor(attrs: PostAttributes) {
+  constructor(attrs: Partial<PostAttributes>) {
     this.attributes = { ...defaultAttributes, ...attrs };
   }
 

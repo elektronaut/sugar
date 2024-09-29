@@ -36,7 +36,7 @@ function saveUserLink(state: UserLink.State, userLink: UserLink.Link) {
       }
     });
   } else {
-    userLinks = userLinks.concat({ ...userLink, new: false });
+    userLinks = userLinks.concat({ ...userLink });
   }
   return { ...state, userLinks: userLinks, editing: null };
 }
@@ -69,8 +69,6 @@ function reducer(
       return saveUserLink(state, action.payload);
     case "update":
       return updateLink(state, action.payload);
-    default:
-      return state;
   }
 }
 

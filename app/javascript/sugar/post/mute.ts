@@ -1,5 +1,9 @@
+declare const window: Window & {
+  mutedUsers?: number[];
+};
+
 export default function mute(post: HTMLElement) {
-  const mutedUsers = window.mutedUsers as number[];
+  const mutedUsers = window.mutedUsers;
   const userId = parseInt(post.dataset.user_id, 10);
 
   if (mutedUsers && mutedUsers.indexOf(userId) !== -1) {

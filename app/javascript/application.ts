@@ -5,6 +5,9 @@ import Rails from "@rails/ujs";
 Rails.start();
 
 import Sugar from "./sugar";
+declare const window: Window & {
+  Sugar: typeof Sugar;
+};
 window.Sugar = Sugar;
 
 import readyHandler from "./lib/readyHandler";

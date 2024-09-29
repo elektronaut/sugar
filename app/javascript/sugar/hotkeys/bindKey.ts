@@ -32,10 +32,11 @@ export default function bindKey(
   fn: (evt: KeyboardEvent) => void
 ) {
   document.addEventListener("keydown", (evt: KeyboardEvent) => {
+    const elem = evt.target as HTMLElement;
+
     if (
       matchKey(hotkey, evt) &&
-      "tagName" in evt.target &&
-      ["INPUT", "TEXTAREA", "SELECT"].indexOf(evt.target.tagName) === -1
+      ["INPUT", "TEXTAREA", "SELECT"].indexOf(elem.tagName) === -1
     ) {
       fn(evt);
     }

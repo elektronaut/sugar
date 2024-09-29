@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DndContext,
   closestCenter,
@@ -30,8 +29,8 @@ export default function List(props: ListProps) {
 
     if (active.id !== over.id) {
       const ids = userLinks.map((o) => o.handle);
-      const oldIndex = ids.indexOf(active.id);
-      const newIndex = ids.indexOf(over.id);
+      const oldIndex = ids.indexOf(active.id as string);
+      const newIndex = ids.indexOf(over.id as string);
       props.dispatch({
         type: "reorder",
         payload: arrayMove(userLinks, oldIndex, newIndex)

@@ -36,7 +36,8 @@ readyHandler.ready(() => {
     const form = textarea.closest("form");
 
     const postBody = textarea.value;
-    const format = form.querySelector(".format").value as string;
+    const formatElement: HTMLInputElement = form.querySelector(".format");
+    const format = formatElement.value;
     const previewUrl = form.dataset.previewUrl;
 
     document.dispatchEvent(

@@ -1,6 +1,10 @@
-interface TabOptions {
+type TabOptions = {
   showFirstTab: boolean;
-}
+};
+
+type TabLink = HTMLAnchorElement & {
+  tabId: string;
+};
 
 function setDisplay(elem: HTMLDivElement | null, style: string) {
   if (elem) {
@@ -8,16 +12,19 @@ function setDisplay(elem: HTMLDivElement | null, style: string) {
   }
 }
 
-export function setupTabs(controls: HTMLElement, options: TabOptions) {
-  const tabs: HTMLLinkElement[] = [];
+export function setupTabs(
+  controls: HTMLElement,
+  options: TabOptions
+): [TabLink[], (tab: TabLink) => void] {
+  const tabs: TabLink[] = [];
 
   const settings = { showFirstTab: true, ...options };
 
-  let anchorTab = false;
+  let anchorTab = null;
   let tabShown = false;
 
   const hideAllTabs = () => {
-    tabs.forEach((tab: HTMLElement) => {
+    tabs.forEach((tab: TabLink) => {
       setDisplay(document.querySelector(tab.tabId) as HTMLDivElement, "none");
       if (tab.parentNode) {
         (tab.parentNode as HTMLElement).classList.remove("active");
@@ -25,7 +32,7 @@ export function setupTabs(controls: HTMLElement, options: TabOptions) {
     });
   };
 
-  const showTab = (tab: HTMLLinkElement) => {
+  const showTab = (tab: TabLink) => {
     hideAllTabs();
     setDisplay(document.querySelector(tab.tabId) as HTMLDivElement, "block");
     if (tab.parentNode) {
@@ -33,7 +40,7 @@ export function setupTabs(controls: HTMLElement, options: TabOptions) {
     }
   };
 
-  controls.querySelectorAll("a").forEach((link: HTMLLinkElement) => {
+  controls.querySelectorAll("a").forEach((link: TabLink) => {
     link.tabId = link.href.match(/(#[\w\d\-_]+)$/)[1];
     tabs.push(link);
     link.addEventListener("click", (evt) => {

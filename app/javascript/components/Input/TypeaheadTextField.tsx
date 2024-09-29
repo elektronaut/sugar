@@ -1,32 +1,31 @@
-import React from "react";
-import Downshift, { DownshiftState } from "downshift";
+import Downshift, { StateChangeOptions } from "downshift";
 import { matchSorter } from "match-sorter";
 
 import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 
-interface TypeaheadTextFieldProps {
-  autoFocus: boolean;
+interface Props {
   label: string;
   name: string;
   onChange: (value: string) => void;
-  onKeyDown: (evt: KeyboardEvent) => void | Promise<void>;
+  onKeyDown: (evt: React.KeyboardEvent) => void | Promise<void>;
   options: string[];
-  size: number;
   value: string;
-  onFocus?: (evt: FocusEvent) => void | Promise<void>;
+  size?: number;
+  autoFocus?: boolean;
+  onFocus?: (evt: React.FocusEvent) => void | Promise<void>;
 }
 
-export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
+export default function TypeaheadTextField(props: Props) {
   const { label, name, onChange, options, size, value } = props;
 
-  const handleKeyDown = (evt: KeyboardEvent) => {
+  const handleKeyDown = (evt: React.KeyboardEvent) => {
     if (props.onKeyDown) {
       void props.onKeyDown(evt);
     }
   };
 
-  const handleStateChange = (changes: DownshiftState<string>) => {
+  const handleStateChange = (changes: StateChangeOptions<string>) => {
     if ("selectedItem" in changes) {
       onChange(changes.selectedItem);
     } else if (changes.inputValue) {
@@ -58,7 +57,7 @@ export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
               autoFocus={props.autoFocus}
               type="text"
               name={name}
-              size={size}
+              size={size || 20}
               {...getInputProps({
                 isOpen,
                 onFocus: props.onFocus,
@@ -66,7 +65,7 @@ export default function TypeaheadTextField(props: TypeaheadTextFieldProps) {
               })}
             />
             {selectedItem ? (
-              <button onClick={clearSelection}>
+              <button onClick={() => clearSelection()}>
                 <i className="fa-solid fa-xmark" />
               </button>
             ) : (

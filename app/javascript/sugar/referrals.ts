@@ -4,14 +4,14 @@ import Sugar from "../sugar";
 const urlPattern =
   /https?:\/\/([\w\d\-.])*(amazon|junglee)(\.com?)*\.([\w]{2,3})\//;
 
-function needsReferral(link: HTMLLinkElement) {
+function needsReferral(link: HTMLAnchorElement) {
   return !link.dataset.amazonReferralId && link.href.match(urlPattern)
     ? true
     : false;
 }
 
-function applyReferral(link: HTMLLinkElement) {
-  const referralId = Sugar.Configuration.amazonAssociatesId as string;
+function applyReferral(link: HTMLAnchorElement) {
+  const referralId = Sugar.Configuration.amazonAssociatesId;
 
   if (referralId && needsReferral(link)) {
     link.dataset.amazonReferralId = referralId;

@@ -1,3 +1,9 @@
+type FetchOptions = {
+  method: string;
+  headers: Record<string, string>;
+  body?: string;
+};
+
 export function csrfToken(): string {
   const elem =
     typeof document !== "undefined" &&
@@ -10,7 +16,7 @@ export function csrfToken(): string {
   return elem.getAttribute("content") || "";
 }
 
-function jsonFetchOptions() {
+function jsonFetchOptions(): FetchOptions {
   return {
     method: "POST",
     headers: {
@@ -20,7 +26,7 @@ function jsonFetchOptions() {
   };
 }
 
-export async function postJson(url: string, data: Record<string, string>) {
+export async function postJson(url: string, data: unknown) {
   const options = { ...jsonFetchOptions(), method: "POST" };
   if (data) {
     options.body = JSON.stringify(data);
@@ -29,20 +35,11 @@ export async function postJson(url: string, data: Record<string, string>) {
   return response.json();
 }
 
-export async function putJson(url: string, data: Record<string, string>) {
+export async function putJson(url: string, data: unknown) {
   const options = { ...jsonFetchOptions(), method: "PUT" };
   if (data) {
     options.body = JSON.stringify(data);
   }
   const response = await fetch(url, options);
-  return response.json();
-}
-
-export async function post(url: string, data: Record<string, string>) {
-  const response = await fetch(url, {
-    method: "POST",
-    body: data,
-    headers: { "X-CSRF-Token": csrfToken() }
-  });
   return response.json();
 }

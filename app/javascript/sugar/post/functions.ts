@@ -16,10 +16,8 @@ function createLink(label: string, className: string, callback: () => void) {
 }
 
 function editPost(post: Post, elem: HTMLDivElement) {
-  const body = elem.querySelector(".body");
-  if ("style" in body) {
-    body.style.display = "none";
-  }
+  const body: HTMLBodyElement = elem.querySelector(".body");
+  body.style.display = "none";
 
   const editor = document.createElement("div");
   editor.classList.add("edit");
@@ -36,7 +34,7 @@ function editPost(post: Post, elem: HTMLDivElement) {
     .then(() => applyRichTextArea());
 }
 
-function postAttributes(elem: HTMLDivElement): PostAttributes {
+function postAttributes(elem: HTMLDivElement): Partial<PostAttributes> {
   if (!elem.dataset.post_id) {
     return {};
   }

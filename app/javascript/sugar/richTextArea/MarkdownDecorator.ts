@@ -1,5 +1,5 @@
-export default class MarkdownDecorator {
-  blockquote(str: string) {
+export default class MarkdownDecorator implements RichText.Decorator {
+  blockquote(str: string): RichText.Replacement {
     return [
       "",
       str
@@ -10,27 +10,31 @@ export default class MarkdownDecorator {
     ];
   }
 
-  bold(str: string) {
+  bold(str: string): RichText.Replacement {
     return ["**", str, "**"];
   }
 
-  code(str: string, language: string) {
+  code(str: string, language: string): RichText.Replacement {
     return ["```" + language + "\n", str, "\n```"];
   }
 
-  emphasis(str: string) {
+  emphasis(str: string): RichText.Replacement {
     return ["_", str, "_"];
   }
 
-  image(url: string) {
+  image(url: string): RichText.Replacement {
     return ["![](", url, ")"];
   }
 
-  link(url: string, name: string) {
+  link(url: string, name: string): RichText.Replacement {
     return ["[", name, "](" + url + ")"];
   }
 
-  quote(html: string, username: string, permalink: string) {
+  quote(
+    html: string,
+    username: string,
+    permalink: string
+  ): RichText.Replacement {
     const content = html.replace(/\n/g, "").replace(/<br[\s/]*>/g, "\n");
     const wrapInBlockquote = (str: string) =>
       str
@@ -48,7 +52,7 @@ export default class MarkdownDecorator {
     ];
   }
 
-  spoiler(str: string) {
+  spoiler(str: string): RichText.Replacement {
     return ['<div class="spoiler">', str, "</div>"];
   }
 }

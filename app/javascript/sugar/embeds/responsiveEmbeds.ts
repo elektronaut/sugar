@@ -47,7 +47,7 @@ function applyEmbed(embed: HTMLElement) {
   wrapper.classList.add("responsive-embed");
   wrapper.style.position = "relative";
   wrapper.style.width = "100%";
-  wrapper.style.paddingTop = 0;
+  wrapper.style.paddingTop = "0";
   wrapper.style.paddingBottom = `${ratio * 100}%`;
 
   embed.style.position = "absolute";
