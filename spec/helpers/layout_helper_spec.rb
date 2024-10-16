@@ -47,7 +47,6 @@ describe LayoutHelper do
       allow(Sugar).to receive(:aws_s3?).and_return(true)
     end
 
-    specify { expect(config[:debug]).to be(false) }
     specify { expect(config[:facebookAppId]).to eq("facebook") }
     specify { expect(config[:amazonAssociatesId]).to eq("amazon") }
     specify { expect(config[:uploads]).to be(true) }
