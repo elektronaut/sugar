@@ -6,7 +6,6 @@ type Icon = {
 };
 
 type SugarConfiguration = {
-  authToken: string;
   emoticons: Icon[];
   amazonAssociatesId?: string;
   currentUser?: UserAttributes;
@@ -20,10 +19,6 @@ const Sugar = {
 
   init() {
     startPosts();
-  },
-
-  authToken(): string {
-    return this.Configuration.authToken;
   }
 };
 

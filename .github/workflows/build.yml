@@ -69,7 +69,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     services:
       postgres:
-        image: postgres:14
+        image: postgres:latest
         ports:
           - 5432:5432
         env:
