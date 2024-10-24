@@ -22,9 +22,11 @@ gem "redcarpet", "~> 3.5"
 gem "rouge"
 gem "ruby-filemagic", require: "filemagic"
 gem "ruby-oembed", require: "oembed"
-gem "solid_queue"
 gem "sunspot_rails", "~> 2.6.0"
 gem "validate_url"
+
+gem "mission_control-jobs"
+gem "solid_queue"
 
 # Frontend
 gem "b3s_emoticons",

@@ -192,6 +192,8 @@ Rails.application.routes.draw do
     get "/vanilla/account.php" => :user
   end
 
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+
   # Root
   root to: "discussions#index"
 end

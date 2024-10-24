@@ -5,7 +5,7 @@ module Authentication
     protected
 
     def default_verify_user_options(options = {})
-      options[:redirect] ||= discussions_url
+      options[:redirect] ||= "/"
       options[:notice] ||= "You don't have permission to do that!"
       options[:api_notice] ||= options[:notice]
       options
