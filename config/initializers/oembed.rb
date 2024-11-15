@@ -34,3 +34,9 @@ MASTODON_PROVIDERS.each do |host|
     OEmbed::Providers.register(provider)
   end
 end
+
+OEmbed::Provider.new("https://embed.bsky.app/oembed").tap do |provider|
+  provider << "http://*.bsky.app/*"
+  provider << "https://*.bsky.app/*"
+  OEmbed::Providers.register(provider)
+end
