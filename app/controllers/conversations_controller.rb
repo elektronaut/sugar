@@ -7,9 +7,9 @@ class ConversationsController < ApplicationController
   requires_user
 
   before_action :find_exchange, except: %i[index new create]
-  before_action :verify_editable, only: %i[edit update destroy]
+  before_action :verify_editable, only: %i[edit update]
   before_action :find_recipient, only: [:create]
-  before_action :require_and_set_search_query, only: %i[search search_posts]
+  before_action :require_and_set_search_query, only: %i[search_posts]
   before_action :find_remove_user, only: [:remove_participant]
 
   def index

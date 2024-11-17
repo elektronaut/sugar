@@ -10,7 +10,7 @@ class DiscussionsController < ApplicationController
   before_action :find_exchange, except: %i[
     index new create popular search favorites following hidden
   ]
-  before_action :verify_editable, only: %i[edit update destroy]
+  before_action :verify_editable, only: %i[edit update]
   before_action :require_and_set_search_query, only: %i[search search_posts]
 
   def index
