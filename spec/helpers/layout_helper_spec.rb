@@ -39,15 +39,11 @@ describe LayoutHelper do
 
     before do
       Sugar.config.reset!
-      Sugar.config.update(
-        facebook_app_id: "facebook",
-        amazon_associates_id: "amazon"
-      )
+      Sugar.config.update(amazon_associates_id: "amazon")
       allow(helper).to receive(:current_user).and_return(user)
       allow(Sugar).to receive(:aws_s3?).and_return(true)
     end
 
-    specify { expect(config[:facebookAppId]).to eq("facebook") }
     specify { expect(config[:amazonAssociatesId]).to eq("amazon") }
     specify { expect(config[:uploads]).to be(true) }
     specify { expect(config[:emoticons]).to eq(default_emoticons) }

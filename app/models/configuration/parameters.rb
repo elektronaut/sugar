@@ -28,8 +28,6 @@ class Configuration
       # Integration
       parameter :google_analytics, :string
       parameter :amazon_associates_id, :string
-      parameter :facebook_app_id, :string
-      parameter :facebook_api_secret, :string
 
       # Theme
       parameter :default_theme, :string, "default"

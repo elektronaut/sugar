@@ -79,11 +79,6 @@ en:
     google_analytics: Google Analytics
     google_analytics_description: Enter to enable tracking
     emoticons: Emoticons
-    facebook: Facebook
-    facebook_description: >-
-      To enable this feature, set up an %{link} and enter your App ID
-      and secret here.
-    facebook_apps_link: application on Facebook
     amazon_aws: Amazon AWS
     amazon_aws_description: >-
       To enable image uploads, %{link} and enter your access key and

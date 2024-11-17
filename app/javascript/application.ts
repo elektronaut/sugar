@@ -14,7 +14,6 @@ import readyHandler from "./lib/readyHandler";
 import { applyRichTextArea } from "./sugar/richTextArea";
 
 import "./sugar/exchanges/newDiscussion";
-import "./sugar/facebook";
 import "./sugar/hotkeys";
 import "./sugar/embeds";
 import "./sugar/posts/buttons";

@@ -123,18 +123,6 @@
     </fieldset>
     <fieldset>
       <h2>
-        <%= t("configuration.facebook") %>
-      </h2>
-      <p class="info">
-        <%= t("configuration.facebook_description",
-              link: link_to(t("configuration.facebook_apps_link"),
-                            "http://www.facebook.com/developers")).html_safe %>
-      </p>
-      <%= f.labelled_text_field :facebook_app_id, size: 48 %>
-      <%= f.labelled_text_field :facebook_api_secret, size: 48 %>
-    </fieldset>
-    <fieldset>
-      <h2>
         <%= t("configuration.amazon_associates") %>
       </h2>
       <%= f.labelled_text_field(

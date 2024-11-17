@@ -13,7 +13,6 @@ module LayoutHelper
 
   def frontend_configuration
     { emoticons: enabled_emoticons,
-      facebookAppId: Sugar.config.facebook_app_id,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
       uploads: Sugar.aws_s3?,
       currentUserId: current_user&.id,
