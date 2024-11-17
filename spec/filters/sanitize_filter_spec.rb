@@ -13,7 +13,7 @@ describe SanitizeFilter do
     end
   end
 
-  context "when input contains jQuery UJS attributes" do
+  context "when input contains UJS attributes" do
     let(:input) { '<a href="/" data-method="post">foo</a>' }
 
     it "strips the tag" do

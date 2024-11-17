@@ -35,9 +35,6 @@ importers:
       esbuild:
         specifier: ^0.24.0
         version: 0.24.0
-      jquery:
-        specifier: ^3.7.1
-        version: 3.7.1
       match-sorter:
         specifier: ^6.3.4
         version: 6.3.4
@@ -84,9 +81,6 @@ importers:
       '@types/dropzone':
         specifier: ^5.7.8
         version: 5.7.8
-      '@types/jquery':
-        specifier: ^3.5.31
-        version: 3.5.31
       '@types/rails__ujs':
         specifier: ^6.0.4
         version: 6.0.4
@@ -1502,9 +1496,6 @@ packages:
   jest-worker@29.7.0:
     resolution: {integrity: sha512-eIz2msL/EzL9UFTFFx7jBTkeZfku0yUAyZZZmJ93H2TYEiroIx2PQjEXcwYtYl8zXCxb+PAmA2hLIt/6ZEkPHw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-
-  jquery@3.7.1:
-    resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -3990,8 +3981,6 @@ snapshots:
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
-
-  jquery@3.7.1: {}
 
   js-tokens@4.0.0: {}
 

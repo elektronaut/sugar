@@ -12,6 +12,14 @@ type UserAttributes = {
   moderator: boolean;
 };
 
+type NewPostsEvent = CustomEvent & {
+  detail: {
+    total: number;
+    newPosts: number;
+    unread: number;
+  };
+};
+
 type PostingStatusEvent = CustomEvent & {
   detail: string;
 };

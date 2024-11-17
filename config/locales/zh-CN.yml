@@ -64,7 +64,7 @@ zh-CN:
     custom_javascript: 定制 Javascript
     custom_header_description: '在 <body> 之后包含'
     custom_footer_description: '在 <body> 之前包含'
-    custom_javascript_html: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾, 并且 jQuery 被激活。记得把你的代码添加到这里 <span class="example">$(document).ready(function(){ /* 添加你的代码到这里 */ });</span> 。'
+    custom_javascript_html: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾,。'
   user:
     edit:
       tabs:

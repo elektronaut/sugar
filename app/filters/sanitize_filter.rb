@@ -23,7 +23,7 @@ class SanitizeFilter < Filter
     end
   end
 
-  def jquery_ujs_attributes
+  def ujs_attributes
     %w[
       data-confirm
       data-disable-with
@@ -52,9 +52,7 @@ class SanitizeFilter < Filter
   def strip_ujs_attributes(parser)
     parser.search("*").each do |elem|
       elem.attributes.each_key do |name|
-        if jquery_ujs_attributes.include?(name.downcase)
-          elem.remove_attribute(name)
-        end
+        elem.remove_attribute(name) if ujs_attributes.include?(name.downcase)
       end
     end
   end
