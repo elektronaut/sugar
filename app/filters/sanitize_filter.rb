@@ -17,30 +17,40 @@ class SanitizeFilter < Filter
 
   private
 
+  def script_whitelist
+    [
+      "platform.twitter.com/widgets.js",
+      "www.instagram.com/embed.js",
+      "secure.assets.tumblr.com/post.js",
+      "embed.bsky.app/static/embed.js"
+    ] + MASTODON_PROVIDERS.map { |host| "#{host}/embed.js" }
+  end
+
   def remove_unsafe_tags(parser)
-    %w[applet base meta link script form].each do |tag_name|
+    %w[applet base meta link form].each do |tag_name|
       parser.search(tag_name).remove
+    end
+    parser.search("script").each do |elem|
+      src = elem.attributes["src"]&.value&.gsub(%r{\A(https?:)?//}, "")
+      elem.remove unless script_whitelist.include?(src)
     end
   end
 
   def ujs_attributes
-    %w[
-      data-confirm
-      data-disable-with
-      data-method
-      data-params
-      data-remote
-      data-type
-      data-url
-    ]
+    %w[data-confirm
+       data-disable-with
+       data-method
+       data-params
+       data-remote
+       data-type
+       data-url]
   end
 
   def strip_event_handlers(parser)
     parser.search("*").each do |elem|
-      elem.attributes.each do |name, attr|
+      elem.attributes.each do |name, a|
         # XSS fix
-        if attr.value &&
-           attr.value.downcase.gsub(/\\*/, "") =~ /^\s*javascript:/
+        if a.value && a.value.downcase.gsub(/\\*/, "") =~ /^\s*javascript:/
           elem.remove_attribute(name)
         end
         # Strip out event handlers
@@ -59,20 +69,17 @@ class SanitizeFilter < Filter
 
   # Enforces allowScriptAccess = sameDomain on iframes and other embeds.
   def enforce_allowscriptaccess(parser)
-    parser.search("*")
-          .each { |e| change_allowscriptaccess_attribute_on(e) }
+    parser.search("*").each { |e| change_allowscriptaccess_attribute_on(e) }
 
     parser.search("embed")
           .each { |e| enforce_allowscriptaccess_attribute_on(e) }
 
     # Change allowScriptAccess in param tags
-    parser.search("param")
-          .each { |e| change_allowscriptaccess_for_param(e) }
+    parser.search("param").each { |e| change_allowscriptaccess_for_param(e) }
 
     # Make sure there's a <param name="allowScriptAccess" value="sameDomain">
     # in object tags
-    parser.search("object")
-          .each { |e| enforce_allowscriptaccess_param_in(e) }
+    parser.search("object").each { |e| enforce_allowscriptaccess_param_in(e) }
   end
 
   # Changes allowScriptAccess to sameDomain on element if the attribute

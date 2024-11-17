@@ -17,8 +17,6 @@ class AutolinkFilter < Filter
   def autolink(url)
     if url.match?(/.(jpg|jpeg|gif|png|gifv)$/i)
       "<img src=\"#{url.gsub(/\.gifv$/, '.gif')}\">"
-    elsif url.match?(twitter_expression)
-      oembed(normalize_twitter_url(url))
     elsif oembeddable?(url)
       oembed(url)
     else
@@ -40,20 +38,5 @@ class AutolinkFilter < Filter
   rescue StandardError => e
     logger.error "Unexpected connection error #{e.inspect}"
     link(url)
-  end
-
-  def twitter_expression
-    %r{^https?://(mobile\.)?twitter\.com/(([\w\d_]+)/)?status(es)?/(\d+)}
-  end
-
-  def normalize_twitter_url(url)
-    url = url.gsub(%r{/photo/\d+}, "") # Ignore photo path
-             .gsub(%r{/mediaViewer\?(.*)\b}, "")
-
-    return url if url.match?(%r{^https?://twitter\.com/([\w\d_]+)/status/(\d+)})
-    return url unless url.match?(%r{/(\d+)$})
-
-    id = url.match(%r{/(\d+)$})[1]
-    "https://twitter.com/twitter/status/#{id}"
   end
 end

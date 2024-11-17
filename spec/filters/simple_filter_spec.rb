@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe SimpleFilter do
+  let(:filter) { described_class.new(input) }
+
   it "strips surrounding whitespace" do
     expect(described_class.new("  \n\n  foo  \n\n  ").to_html).to eq("foo")
   end
@@ -33,5 +35,14 @@ describe SimpleFilter do
     output = '<iframe src="//www.youtube.com/embed/Sq7XY_QRtzo" ' \
              "allowfullscreen></iframe><br>\nfoo"
     expect(described_class.new(input).to_html).to eq(output)
+  end
+
+  context "when input contains a Markdown fenced code blocks" do
+    let(:input) { "```ruby\nputs hello world\n```" }
+    let(:parsed) { MarkdownFilter.new(input).to_html.strip }
+
+    it "filters and base64 serialize the block" do
+      expect(filter.to_html).to eq(parsed)
+    end
   end
 end

@@ -16,17 +16,13 @@ describe Renderer do
 
     context "when format is markdown" do
       it { is_expected.to include(MarkdownFilter) }
-      it { is_expected.not_to include(MarkdownCodeFilter) }
       it { is_expected.not_to include(SimpleFilter) }
-      it { is_expected.not_to include(UnserializeFilter) }
     end
 
     context "when format is html" do
       let(:format) { "html" }
 
-      it { is_expected.to include(MarkdownCodeFilter) }
       it { is_expected.to include(SimpleFilter) }
-      it { is_expected.to include(UnserializeFilter) }
       it { is_expected.not_to include(MarkdownFilter) }
     end
   end

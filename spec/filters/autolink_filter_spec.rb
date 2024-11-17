@@ -101,36 +101,5 @@ describe AutolinkFilter do
            "#{twitter_json['html']}</div>")
       )
     end
-
-    context "with a photo direct link" do
-      let(:input) { "#{status_url}/photo/1" }
-
-      it "converts it to an embed" do
-        expect(filter.to_html).to(
-          eq("<div class=\"embed\" data-oembed-url=\"#{status_url}\">" \
-             "#{twitter_json['html']}</div>")
-        )
-      end
-    end
-  end
-
-  context "when URL is a Twitter status without username" do
-    let(:input) { "https://twitter.com/statuses/463440424141459456" }
-    let(:oembed_url) { "https://twitter.com/twitter/status/463440424141459456" }
-
-    before do
-      stub_request(
-        :get,
-        "https://publish.twitter.com/oembed?format=json&" \
-        "url=https://twitter.com/twitter/status/463440424141459456"
-      ).to_return(status: 200, body: twitter_embed)
-    end
-
-    it "converts it to an embed" do
-      expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{oembed_url}\">" \
-           "#{twitter_json['html']}</div>")
-      )
-    end
   end
 end
