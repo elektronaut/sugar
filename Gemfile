@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 7.1.3"
+gem "rails", "~> 8.0.0"
 
 gem "actionpack-page_caching"
 gem "acts_as_list"
