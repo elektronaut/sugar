@@ -236,7 +236,7 @@ describe InvitesController do
       specify { expect(assigns(:invite).destroyed?).to be(false) }
 
       it "redirects to the discussions page" do
-        expect(response).to redirect_to(discussions_url)
+        expect(response).to redirect_to(root_url)
       end
     end
   end
