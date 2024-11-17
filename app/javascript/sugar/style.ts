@@ -1,56 +1,69 @@
-import $ from "jquery";
 import readyHandler from "../lib/readyHandler";
 import { setupTabs } from "./tabs";
 
 function wrapButtons() {
-  $("a.button, button").each(function () {
-    if ($(this).find("span").length === 0) {
-      $(this).wrapInner("<span />");
+  document.querySelectorAll("a.button, button").forEach((button) => {
+    if (!button.querySelector("span")) {
+      const span = document.createElement("span");
+      span.innerHTML = button.innerHTML;
+      button.innerHTML = "";
+      button.appendChild(span);
     }
   });
 }
 
 readyHandler.ready(() => {
   wrapButtons();
-  const observer = new MutationObserver(() => {
-    wrapButtons();
-  });
+  const observer = new MutationObserver(wrapButtons);
   observer.observe(document.body, {
     attributes: true,
     childList: true,
     subtree: true
   });
 
-  $("table.discussions").each(function () {
-    $("#content").css("min-width", `${$(this).outerWidth()}px`);
-  });
+  const discussionTable = document.querySelector(
+    "table.discussions"
+  ) as HTMLTableElement;
+  if (discussionTable) {
+    const content = document.getElementById("content");
+    if (content) {
+      content.style.minWidth = `${discussionTable.offsetWidth}px`;
+    }
+  }
 
-  $("#sidebar").each(function () {
-    const minWidth = $("#content").outerWidth() + $("#sidebar").outerWidth();
-    $("#wrapper").css("min-width", `${minWidth}px`);
-  });
+  const sidebar = document.getElementById("sidebar");
+  const content = document.getElementById("content");
+  const wrapper = document.getElementById("wrapper");
+  if (sidebar && content && wrapper) {
+    const minWidth = content.offsetWidth + sidebar.offsetWidth;
+    wrapper.style.minWidth = `${minWidth}px`;
+  }
 
-  $("#reply-tabs").each(function () {
-    const [tabs, showTab] = setupTabs(this, { showFirstTab: false });
+  const replyTabs = document.getElementById("reply-tabs");
+  if (replyTabs) {
+    const [tabs, showTab] = setupTabs(replyTabs, { showFirstTab: false });
 
-    if ($("body.last_page").length > 0) {
+    if (document.body.classList.contains("last_page")) {
       showTab(tabs[0]);
     }
 
-    $("#replyText textarea").on("focus", function () {
-      showTab(tabs[0]);
-    });
+    const textarea = document.querySelector("#replyText textarea");
+    if (textarea) {
+      textarea.addEventListener("focus", () => showTab(tabs[0]));
+    }
 
-    document.addEventListener("quote", () => {
-      showTab(tabs[0]);
-    });
-  });
+    document.addEventListener("quote", () => showTab(tabs[0]));
+  }
 
-  $("#signup-tabs").each(function () {
-    setupTabs(this, { showFirstTab: true });
-  });
+  const signupTabs = document.getElementById("signup-tabs");
+  if (signupTabs) {
+    setupTabs(signupTabs, { showFirstTab: true });
+  }
 
-  $(".admin.configuration .tabs").each(function () {
-    setupTabs(this, { showFirstTab: true });
-  });
+  const configTabs = document.querySelector(
+    ".admin.configuration .tabs"
+  ) as HTMLElement;
+  if (configTabs) {
+    setupTabs(configTabs, { showFirstTab: true });
+  }
 });

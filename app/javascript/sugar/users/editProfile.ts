@@ -1,25 +1,47 @@
-import $ from "jquery";
 import readyHandler from "../../lib/readyHandler";
 
 readyHandler.ready(() => {
   if (document.querySelector(".edit_user_profile")) {
-    const checkAdmin = function () {
-      if ($("#user_admin:checked").val()) {
-        $("#user_moderator").prop("checked", true).prop("disabled", true);
-        $("#user_user_admin").prop("checked", true).prop("disabled", true);
+    const checkAdmin = () => {
+      const adminCheckbox =
+        document.querySelector<HTMLInputElement>("#user_admin");
+      const moderatorCheckbox =
+        document.querySelector<HTMLInputElement>("#user_moderator");
+      const userAdminCheckbox =
+        document.querySelector<HTMLInputElement>("#user_user_admin");
+
+      if (adminCheckbox?.checked) {
+        moderatorCheckbox!.checked = true;
+        moderatorCheckbox!.disabled = true;
+        userAdminCheckbox!.checked = true;
+        userAdminCheckbox!.disabled = true;
       } else {
-        $("#user_moderator").prop("disabled", false);
-        $("#user_user_admin").prop("disabled", false);
+        moderatorCheckbox!.disabled = false;
+        userAdminCheckbox!.disabled = false;
       }
     };
 
-    const checkUserStatus = function () {
-      const status = $("#user_status").val();
-      const disabled = !(status == "hiatus" || status == "time_out");
-      $(".banned-until select").prop("disabled", disabled);
+    const checkUserStatus = () => {
+      const statusSelect =
+        document.querySelector<HTMLSelectElement>("#user_status");
+      const bannedUntilSelects = document.querySelectorAll<HTMLSelectElement>(
+        ".banned-until select"
+      );
+      const status = statusSelect?.value;
+      const disabled = !(status === "hiatus" || status === "time_out");
+
+      bannedUntilSelects.forEach((select) => {
+        select.disabled = disabled;
+      });
     };
 
-    $("#user_status").change(checkUserStatus);
+    document
+      .querySelector("#user_admin")
+      ?.addEventListener("change", checkAdmin);
+    document
+      .querySelector("#user_status")
+      ?.addEventListener("change", checkUserStatus);
+
     checkAdmin();
     checkUserStatus();
   }
