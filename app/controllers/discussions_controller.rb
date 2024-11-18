@@ -20,7 +20,7 @@ class DiscussionsController < ApplicationController
   end
 
   def popular
-    @days = params[:days].to_i
+    @days = (params[:days] || 7).to_i
     @days = 180 if @days > 180
     @exchanges = Discussion.popular_in_the_last(@days.days)
                            .viewable_by(current_user).page(params[:page])
