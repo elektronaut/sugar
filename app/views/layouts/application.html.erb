@@ -17,11 +17,6 @@
 </head>
 <body class="<%= body_class %>">
 
-  <%# Custom header %>
-  <% if Sugar.config.custom_header %>
-    <%= raw Sugar.config.custom_header %>
-  <% end %>
-
   <div id="header">
     <h1><%= Sugar.config.forum_title.html_safe %></h1>
 
@@ -118,11 +113,6 @@
     </div>
   </div>
 
-  <%# Custom footer %>
-  <% if Sugar.config.custom_footer %>
-    <%= raw Sugar.config.custom_footer %>
-  <% end %>
-
   <%= javascript_include_tag "application" %>
 
   <%# Sugar configuration %>
@@ -134,13 +124,6 @@
   <script>
     window.mutedUsers = <%= muted_user_ids(@exchange).to_json %>;
   </script>
-
-  <%# Custom javascript %>
-  <% unless Sugar.config.custom_javascript.blank? %>
-    <script>
-      <%= raw Sugar.config.custom_javascript %>
-    </script>
-  <% end %>
 
   <%# Google Analytics %>
   <% if Sugar.config.google_analytics %>
@@ -154,6 +137,5 @@
       gtag('config', '<%= Sugar.config.google_analytics %>', { 'anonymize_ip': true });
     </script>
   <% end %>
-
 </body>
 </html>

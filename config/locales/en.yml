@@ -87,13 +87,6 @@ en:
     amazon_associates: Amazon Associates
     amazon_associates_id_description: Enter to enable referals
     flickr: Flickr
-    custom_html: Custom HTML
-    custom_javascript: Custom Javascript
-    custom_header_description: "Included right after <body>"
-    custom_footer_description: "Included just before <body>"
-    custom_javascript_html: >-
-      Custom JavaScript will be included at the end of the
-      &lt;head&gt; tag.
   conversation:
     invalid: >-
       Could not save your conversation! Please make sure all required

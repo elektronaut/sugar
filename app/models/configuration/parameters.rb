@@ -15,9 +15,6 @@ class Configuration
 
       # Customization
       parameter :code_of_conduct, :string
-      parameter :custom_header, :string
-      parameter :custom_footer, :string
-      parameter :custom_javascript, :string
       parameter(
         :emoticons,
         :string,

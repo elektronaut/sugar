@@ -27,11 +27,6 @@
       <%= t("configuration.documents") %>
     </a>
   </li>
-  <li class="tab">
-    <a href="#customization">
-      <%= t("configuration.customization") %>
-    </a>
-  </li>
 </ul>
 
 
@@ -109,6 +104,12 @@
       <%= f.labelled_select(:default_mobile_theme,
                             Theme.mobile.map { |t| [t.full_name, t.id] }) %>
     </fieldset>
+    <fieldset>
+      <h2>
+        <%= t("configuration.emoticons") %>
+      </h2>
+      <%= f.labelled_text_field :emoticons, size: 48 %>
+    </fieldset>
   </div>
 
   <div id="integration">
@@ -142,43 +143,6 @@
             size: "40x15",
             class: "rich"
       ) %>
-    </fieldset>
-  </div>
-
-  <div id="customization">
-    <fieldset>
-      <h2>
-        <%= t("configuration.emoticons") %>
-      </h2>
-      <%= f.labelled_text_field :emoticons, size: 48 %>
-    </fieldset>
-    <fieldset>
-      <h2>
-        <%= t("configuration.custom_html") %>
-      </h2>
-      <%= f.labelled_text_area(
-            :custom_header,
-            size: "40x15",
-            class: "code",
-            description: t("configuration.custom_header_description")
-      ) %>
-      <%= f.labelled_text_area(
-            :custom_footer,
-            size: "40x15",
-            class: "code",
-            description: t("configuration.custom_footer_description")
-      ) %>
-    </fieldset>
-    <fieldset>
-      <h2>
-        <%= t("configuration.custom_javascript") %>
-      </h2>
-      <p class="info">
-        <%= t("configuration.custom_javascript_html") %>
-      </p>
-      <%= f.labelled_text_area(:custom_javascript,
-                               size: "40x15",
-                               class: "code") %>
     </fieldset>
   </div>
 

@@ -57,11 +57,6 @@ zh-CN:
     amazon_associates: Amazon Associates
     amazon_associates_id_description: 输入以激活推荐链接
     flickr: Flickr
-    custom_html: 定制 HTML
-    custom_javascript: 定制 Javascript
-    custom_header_description: '在 <body> 之后包含'
-    custom_footer_description: '在 <body> 之前包含'
-    custom_javascript_html: '自定义 JavaScript 会被包含在 &lt;head&gt; 标记末尾,。'
   user:
     edit:
       tabs:
