@@ -9,11 +9,6 @@ describe AutolinkFilter do
     OEmbed::Providers.register_all(access_tokens: { facebook: "my-token" })
   end
 
-  let(:twitter_embed) do
-    Rails.root.join("spec/support/requests/twitter_embed.json").read
-  end
-  let(:twitter_json) { JSON.parse(twitter_embed) }
-
   context "when input contains a URL" do
     let(:input) { "http://example.com/foo?bar=1" }
     let(:output) { "<a href=\"#{input}\">#{input}</a>" }
@@ -77,28 +72,6 @@ describe AutolinkFilter do
       expect(filter.to_html).to(
         eq("<div class=\"embed\" data-oembed-url=\"#{input}\">" \
            "#{instagram_json['html']}</div>")
-      )
-    end
-  end
-
-  context "when URL is a Twitter status" do
-    let(:status_url) do
-      "https://twitter.com/Interior/status/463440424141459456"
-    end
-    let(:input) { status_url }
-
-    before do
-      stub_request(
-        :get,
-        "https://publish.twitter.com/oembed?format=json&" \
-        "url=https://twitter.com/Interior/status/463440424141459456"
-      ).to_return(status: 200, body: twitter_embed)
-    end
-
-    it "converts it to an embed" do
-      expect(filter.to_html).to(
-        eq("<div class=\"embed\" data-oembed-url=\"#{status_url}\">" \
-           "#{twitter_json['html']}</div>")
       )
     end
   end

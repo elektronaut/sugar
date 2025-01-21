@@ -29,10 +29,6 @@ export default function quote(elem: HTMLDivElement) {
 
   html = html.replace(/class="spoiler revealed"/g, 'class="spoiler"');
   html = html.replace(/<img alt="([\w+-]+)" class="emoji"([^>]*)>/g, ":$1:");
-  html = html.replace(
-    /<(twitterwidget|iframe).*data-tweet-id="(\d+).*<\/(twitterwidget|iframe)>/g,
-    "https://twitter.com/statuses/$2"
-  );
 
   document.dispatchEvent(
     new CustomEvent("quote", {

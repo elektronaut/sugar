@@ -19,7 +19,6 @@ class SanitizeFilter < Filter
 
   def script_whitelist
     [
-      "platform.twitter.com/widgets.js",
       "www.instagram.com/embed.js",
       "secure.assets.tumblr.com/post.js",
       "embed.bsky.app/static/embed.js"

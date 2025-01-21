@@ -15,14 +15,6 @@ interface Cache {
   scrollY: number;
 }
 
-interface Twitter {
-  widgets: { load: (elem: HTMLElement) => void };
-}
-
-declare const window: Window & {
-  twttr?: Twitter;
-};
-
 function setupEmbeds() {
   gifvVideos();
   mastodonEmbeds();
@@ -138,15 +130,7 @@ readyHandler.ready(function () {
     });
   }
 
-  document.addEventListener("postsloaded", (event: PostsLoadedEvent) => {
-    const posts = event.detail;
-    // Initialize twitter embeds when new posts load or previewed
-    if (posts.length && window.twttr) {
-      const twitter = window.twttr;
-      twitter.widgets.load(posts[0].parentNode);
-    }
-    setupEmbeds();
-  });
+  document.addEventListener("postsloaded", setupEmbeds);
 
   setupEmbeds();
 });

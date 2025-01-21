@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 OEmbed::Providers.register_all
+OEmbed::Providers.unregister(OEmbed::Providers::Twitter)
 
 MASTODON_PROVIDERS = [
   "fosstodon.org",
