@@ -1,0 +1,123 @@
+---
+name: Test
+on:
+  workflow_call:
+    inputs:
+      postgres_db:
+        required: true
+        type: string
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Check code
+        run: pnpm lint
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Check code
+        run: pnpm prettier
+
+  rspec:
+    name: RSpec
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BUNDLE_WITHOUT: development
+      DATABASE_URL: postgres://postgres@localhost:5432/${{ inputs.postgres_db }}
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      RAILS_ENV: test
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ${{ inputs.postgres_db }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y exiftool libvips42 libcurl4-openssl-dev $(cat Aptfile | xargs)
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Build frontend
+        run: |
+          pnpm build
+      - name: Build CSS
+        run: |
+          pnpm build:css
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Start Solr
+        run: /usr/bin/docker run -d -v ${{ github.workspace }}/solr/init:/docker-entrypoint-initdb.d/ -p 8983:8983 --name solr solr:8
+      - name: Create database
+        run: |
+          bin/rails db:migrate
+      - name: Run tests
+        run: bundle exec rspec
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: capybara-screenshots
+          path: tmp/capybara
+
+  rubocop:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BUNDLE_WITHOUT: development
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y exiftool libvips42 libcurl4-openssl-dev $(cat Aptfile | xargs)
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Check code
+        run: bundle exec rubocop --format github
+
+  tsc:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+      - name: Check code
+        run: pnpm tsc --noEmit
