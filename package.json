@@ -9,7 +9,7 @@
     "autoprefixer": "^10.4.20",
     "downshift": "^9.0.8",
     "dropzone": "6.0.0-beta.2",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.25.0",
     "match-sorter": "^8.0.0",
     "postcss": "^8.5.1",
     "postcss-cli": "^11.0.0",
