@@ -45,10 +45,8 @@ Rails.root.glob("spec/support/**/*.rb").each { |f| require f }
 
 WebMock.disable_net_connect!(
   allow_localhost: true,
-  allow: ["solr"]
+  allow: []
 )
-
-original_sunspot_session = Sunspot.session
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -100,17 +98,6 @@ RSpec.configure do |config|
   config.include SystemHelpers, type: :system
 
   config.before { reset_email }
-
-  # Stub Sunspot
-  config.before do
-    Sunspot.session =
-      Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
-  end
-
-  config.before :each, :solr do
-    Sunspot.session = original_sunspot_session
-    Sunspot.remove_all!
-  end
 
   config.before(:each, type: :system) do
     driven_by :rack_test

@@ -18,12 +18,13 @@ gem "httparty", "~> 0.17"
 gem "kamal", require: false
 gem "nokogiri"
 gem "pg"
+gem "pg_search"
 gem "postmark-rails"
+gem "progress_bar"
 gem "puma"
 gem "redcarpet", "~> 3.5"
 gem "rouge"
 gem "ruby-oembed", require: "oembed"
-gem "sunspot_rails", "~> 2.6.0"
 gem "thruster", require: false
 gem "validate_url"
 
@@ -68,7 +69,6 @@ group :development, :test do
   gem "selenium-webdriver"
   gem "shoulda-matchers", [">= 4.3.0", "!= 4.4.0"]
   gem "simplecov"
-  gem "sunspot_solr"
   gem "webmock", require: false
 
   gem "rubocop", require: false

@@ -1,4 +1,3 @@
 web: bin/rails server -p 3000
 js: pnpm build-dev --watch
-solr: bin/sunspot-solr run
 css: pnpm build:css --watch

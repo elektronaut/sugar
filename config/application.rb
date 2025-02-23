@@ -28,6 +28,7 @@ module Sugar
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.eager_load_paths << Rails.root.join("lib")
+    config.active_record.schema_format = :sql
   end
 end
 

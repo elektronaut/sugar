@@ -9,12 +9,9 @@ module ExchangesController
 
   def search_posts
     @search_path = polymorphic_path([:search_posts, @exchange])
-    @posts = Post.search_results(
-      search_query,
-      user: current_user,
-      exchange: @exchange,
-      page: params[:page]
-    )
+    @posts = @exchange.posts
+                      .search_in_exchange(search_query)
+                      .page(params[:page])
     render template: "exchanges/search_posts"
   end
 
