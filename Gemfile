@@ -11,7 +11,7 @@ gem "alba"
 gem "bcrypt", "~> 3.1.12"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "dalli"
-gem "dynamic_image", "~> 2.1"
+gem "dynamic_image"
 gem "fastimage"
 gem "fog-aws"
 gem "httparty", "~> 0.17"
