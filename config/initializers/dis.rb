@@ -9,15 +9,17 @@ Dis::Storage.layers << Dis::Layer.new(
   path: Rails.env
 )
 
-if Sugar.aws_s3? && !Rails.env.test?
-  Dis::Storage.layers << Dis::Layer.new(
-    Fog::Storage.new(
-      provider: "AWS",
-      aws_access_key_id: ENV.fetch("S3_KEY_ID", nil),
-      aws_secret_access_key: ENV.fetch("S3_SECRET", nil)
-    ),
-    path: ENV.fetch("S3_BUCKET", nil),
-    delayed: true,
-    readonly: !Rails.env.production?
-  )
+if Rails.env.production?
+  Rails.application.credentials.tap do |credentials|
+    Dis::Storage.layers << Dis::Layer.new(
+      Fog::Storage.new(
+        provider: "AWS",
+        aws_access_key_id: credentials.dig(:aws, :access_key_id),
+        aws_secret_access_key: credentials.dig(:aws, :secret_access_key)
+      ),
+      path: "b3s",
+      delayed: true,
+      readonly: !Rails.env.production?
+    )
+  end
 end

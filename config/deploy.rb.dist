@@ -1,14 +1,14 @@
 # config valid only for Capistrano 3.1
 lock '3.4.0'
 
-set :application, 'sugar'
-set :repo_url, 'git@github.com:elektronaut/sugar.git'
+set :application, 'b3s'
+set :repo_url, 'git@github.com:b3s/b3s.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-#set :deploy_to, "/var/www/sugar"
+#set :deploy_to, "/var/www/b3s"
 
 # Default value for :scm is :git
 # set :scm, :git

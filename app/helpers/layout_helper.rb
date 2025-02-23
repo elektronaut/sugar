@@ -14,7 +14,7 @@ module LayoutHelper
   def frontend_configuration
     { emoticons: enabled_emoticons,
       amazonAssociatesId: Sugar.config.amazon_associates_id,
-      uploads: Sugar.aws_s3?,
+      uploads: true,
       currentUserId: current_user&.id,
       currentUser: current_user.try(&:as_json),
       preferredFormat: current_user.try(&:preferred_format) }

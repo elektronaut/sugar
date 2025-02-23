@@ -81,13 +81,6 @@ class ApplicationController < ActionController::Base
     session[:mobile_format] == "mobile" && request.format == "text/html"
   end
 
-  def require_s3
-    return if Sugar.aws_s3?
-
-    flash[:notice] = t("s3_required")
-    redirect_to root_url
-  end
-
   def set_sentry_context
     Sentry.set_user(current_user_context)
     Sentry.set_extras(params: params.to_unsafe_h)

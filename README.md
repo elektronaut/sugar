@@ -1,8 +1,8 @@
-[![Build](https://github.com/elektronaut/sugar/workflows/Build/badge.svg)](https://github.com/elektronaut/sugar/actions)
+[![Build](https://github.com/b3s/b3s/workflows/Build/badge.svg)](https://github.com/b3s/b3s/actions)
 
-# Sugar
+# B3S
 
-Sugar is a modern open-source forum optimized for performance and usability,
+B3S is a modern open-source forum optimized for performance and usability,
 written in Ruby on Rails.
 
 ## Dependencies
@@ -13,37 +13,16 @@ written in Ruby on Rails.
 * libmagic
 * [PostgreSQL](http://www.postgresql.org/)
 
-## Deploying Sugar
+## <a id="configuration"></a> Configuring B3S
 
-Sugar is deployed like a regular Rails app, see the
-[official Rails site](http://rubyonrails.org/deploy). A sample Capistrano
-recipe is provided `config/deploy.rb.dist`.
-
-For production use, you'll want a full grown Solr setup. See the
-[Sunspot documentation](https://github.com/sunspot/sunspot) for guides on how
-to get up and running.
-
-[Heroku](https://www.heroku.com/) is currently not supported.
-
-## <a id="configuration"></a> Configuring Sugar
-
-Most of Sugar is configured with a web interface. However, a few details must
-be sorted out before the app starts. The defaults should be fine for
-development, but you need tweak these settings for production use with
-environment variables.
+Most of the application is configured with a web interface. However, a few 
+details must be sorted out before the app starts. The defaults should be 
+fine for development, but you need tweak these settings for production use 
+with environment variables.
 
 Environment variable  | Required | Info
 ----------------------|----------|-----------------------------------------------------------------------
-SUGAR_SECRET_KEY_BASE | Yes      | Set to a long, random string
-SUGAR_SESSION_KEY     | -        | Default: `_sugar_session`
-SUGAR_DB_DATABASE     | -        | Default: `sugar_<%= Rails.env %>`
-SUGAR_DB_HOST         | -        | Default: `localhost`
-SUGAR_DB_USERNAME     | -        | Default: `rails`
-SUGAR_DB_PASSWORD     | -        | Default: ``
-S3_BUCKET             | -        | Default: none, set if you want to use S3
-S3_KEY_ID             | -        | Default: none, set if you want to use S3
-S3_SECRET             | -        | Default: none, set if you want to use S3
-SENTRY_DSN            | -        | Default: none, set if you want to use Sentry
+DATABASE_URL          | -        | URL to Postgres
 
 ## Credits
 

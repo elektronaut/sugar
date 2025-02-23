@@ -1,20 +1,30 @@
 defaults: &default
   adapter: postgresql
   encoding: unicode
-  host: <%= ENV.fetch("SUGAR_DB_HOST", "localhost") %>
-  username: <%= ENV.fetch("SUGAR_DB_USERNAME", "rails") %>
-  password: <%= ENV.fetch("SUGAR_DB_PASSWORD", "") %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "") %>
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_development") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "b3s_development") %>
 
 test:
   <<: *default
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_test") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "b3s_test") %>
 
 production:
   <<: *default
-  database: <%= ENV.fetch("SUGAR_DB_DATABASE", "sugar_production") %>
+  url: <%= ENV.fetch("DATABASE_URL") { Rails.application.credentials.database_url } %>
   prepared_statements: false
+  advisory_locks: false
+
+staging:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL") { Rails.application.credentials.database_url } %>
+  prepared_statements: false
+  advisory_locks: false
