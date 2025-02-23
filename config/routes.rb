@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "up" => "rails/health#show", as: :rails_health_check
+
   image_resources :avatars
   image_resources :post_images
 
