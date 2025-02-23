@@ -11,7 +11,7 @@ if Rails.env.local?
   )
 end
 
-if Rails.application.credentials.aws?
+if Rails.application.credentials.aws
   Rails.application.credentials.tap do |credentials|
     Dis::Storage.layers << Dis::Layer.new(
       Fog::Storage.new(
