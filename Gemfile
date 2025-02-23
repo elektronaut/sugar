@@ -17,6 +17,7 @@ gem "fog-aws"
 gem "httparty", "~> 0.17"
 gem "nokogiri"
 gem "pg"
+gem "postmark-rails"
 gem "puma"
 gem "redcarpet", "~> 3.5"
 gem "rouge"
@@ -42,7 +43,6 @@ gem "terser"
 gem "non-stupid-digest-assets"
 
 # 3rd party monitoring
-gem "newrelic_rpm", group: "newrelic"
 gem "sentry-rails"
 gem "sentry-ruby"
 

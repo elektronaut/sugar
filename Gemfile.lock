@@ -274,7 +274,6 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     net-ssh (7.3.0)
-    newrelic_rpm (9.17.0)
     nio4r (2.7.4)
     nokogiri (1.18.3)
       mini_portile2 (~> 2.8.2)
@@ -290,6 +289,11 @@ GEM
       racc
     pg (1.5.9)
     pmap (1.1.1)
+    postmark (1.25.1)
+      json
+    postmark-rails (0.22.1)
+      actionmailer (>= 3.0.0)
+      postmark (>= 1.21.3, < 2.0)
     pp (0.6.2)
       prettyprint
     pr_geohash (1.0.0)
@@ -540,10 +544,10 @@ DEPENDENCIES
   jsbundling-rails
   json_spec
   mission_control-jobs
-  newrelic_rpm
   nokogiri
   non-stupid-digest-assets
   pg
+  postmark-rails
   pry
   puma
   rails (~> 8.0.0)

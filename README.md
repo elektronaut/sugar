@@ -13,16 +13,14 @@ written in Ruby on Rails.
 * libmagic
 * [PostgreSQL](http://www.postgresql.org/)
 
-## <a id="configuration"></a> Configuring B3S
+## Deployment
 
-Most of the application is configured with a web interface. However, a few 
-details must be sorted out before the app starts. The defaults should be 
-fine for development, but you need tweak these settings for production use 
-with environment variables.
+The following environment variables are required for a production deployment:
 
-Environment variable  | Required | Info
-----------------------|----------|-----------------------------------------------------------------------
-DATABASE_URL          | -        | URL to Postgres
+Environment variable | Info
+---------------------|------------------
+RAILS_MASTER_KEY     | Rails master key
+DATABASE_URL         | URL to Postgres
 
 ## Credits
 
