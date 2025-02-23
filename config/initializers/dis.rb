@@ -4,12 +4,14 @@
 
 require "fog/aws/storage"
 
-Dis::Storage.layers << Dis::Layer.new(
-  Fog::Storage.new(provider: "Local", local_root: Rails.root.join("db/dis")),
-  path: Rails.env
-)
+if Rails.env.local?
+  Dis::Storage.layers << Dis::Layer.new(
+    Fog::Storage.new(provider: "Local", local_root: Rails.root.join("db/dis")),
+    path: Rails.env
+  )
+end
 
-if Rails.env.production?
+if Rails.application.credentials.aws?
   Rails.application.credentials.tap do |credentials|
     Dis::Storage.layers << Dis::Layer.new(
       Fog::Storage.new(
@@ -18,7 +20,7 @@ if Rails.env.production?
         aws_secret_access_key: credentials.dig(:aws, :secret_access_key)
       ),
       path: "b3s",
-      delayed: true,
+      delayed: false,
       readonly: !Rails.env.production?
     )
   end
