@@ -61,6 +61,7 @@ accessories:
         POSTGRES_DB: "b3s"
       secret:
         - POSTGRES_PASSWORD
+    cmd: "postgres -c shared_buffers=512MB"
     directories:
       - data:/var/lib/postgresql/data
   postgres-backups:
