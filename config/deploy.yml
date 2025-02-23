@@ -1,0 +1,84 @@
+---
+service: b3s
+image: ghcr.io/b3s/b3s
+
+ssh:
+  user: app
+
+servers:
+  web:
+    - 157.245.70.154
+  jobs:
+    hosts:
+      - 157.245.70.154
+    cmd: bin/jobs
+
+proxy:
+  ssl: true
+  app_port: 80
+  hosts:
+    - b3s.me
+    - www.b3s.me
+    - butt3rscotch.org
+    - www.butt3rscotch.org
+    - b3s.binky.elektronaut.no
+
+registry:
+  server: ghcr.io
+  username: elektronaut
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    RAILS_ENV: "production"
+  secret:
+    - RAILS_MASTER_KEY
+    - DATABASE_URL
+    - OEMBED_FACEBOOK_TOKEN
+
+# Use a persistent storage volume.
+# volumes:
+#   - "app_storage:/app/storage"
+
+asset_path: /app/public/assets
+
+logging:
+  options:
+    max-size: 300m
+
+accessories:
+  postgres:
+    image: postgres:15
+    roles:
+      - web
+    env:
+      clear:
+        POSTGRES_USER: "b3s"
+        POSTGRES_DB: "b3s"
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+  postgres-backups:
+    image: eeshugerman/postgres-backup-s3:15
+    roles:
+      - web
+    env:
+      clear:
+        SCHEDULE: "@daily"
+        BACKUP_KEEP_DAYS: 14
+        S3_ENDPOINT: https://b3s-backup.ams3.digitaloceanspaces.com
+        S3_BUCKET: b3s-backups
+        S3_PREFIX: postgres
+        S3_REGION: auto
+        POSTGRES_USER: "b3s"
+        POSTGRES_DATABASE: "b3s"
+        POSTGRES_HOST: "b3s-postgres"
+      secret:
+        - POSTGRES_PASSWORD
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY

@@ -15,6 +15,7 @@ gem "dynamic_image", "~> 2.1"
 gem "fastimage"
 gem "fog-aws"
 gem "httparty", "~> 0.17"
+gem "kamal", require: false
 gem "nokogiri"
 gem "pg"
 gem "postmark-rails"
@@ -23,6 +24,7 @@ gem "redcarpet", "~> 3.5"
 gem "rouge"
 gem "ruby-oembed", require: "oembed"
 gem "sunspot_rails", "~> 2.6.0"
+gem "thruster", require: false
 gem "validate_url"
 
 gem "mission_control-jobs"
@@ -56,7 +58,6 @@ group :development do
 end
 
 group :development, :test do
-  gem "dotenv-rails"
   gem "pry"
 
   gem "capybara"

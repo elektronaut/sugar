@@ -1,0 +1,16 @@
+.bundle
+.git
+.yarn-integrity
+config/master.key
+coverage
+db/binary-objects
+db/dis
+log
+node_modules
+public/dynamic_images
+public/packs
+public/packs-test
+storage
+tmp
+yarn-debug.log
+yarn-error.log
