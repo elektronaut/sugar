@@ -35,6 +35,7 @@ builder:
 env:
   clear:
     RAILS_ENV: "production"
+    WEB_CONCURRENCY: 2
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_URL
