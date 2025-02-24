@@ -5,8 +5,6 @@ require "digest/sha1"
 class PostsController < ApplicationController
   include PostingController
 
-  caches_page :count
-
   requires_authentication except: %i[count]
   requires_user except: %i[count since search]
 

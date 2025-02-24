@@ -38,8 +38,6 @@ GEM
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
       useragent (~> 0.16)
-    actionpack-page_caching (1.2.4)
-      actionpack (>= 4.0.0)
     actiontext (8.0.1)
       actionpack (= 8.0.1)
       activerecord (= 8.0.1)
@@ -521,7 +519,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  actionpack-page_caching
   acts_as_list
   alba
   b3s_emoticons!

@@ -89,8 +89,4 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-
-  # Store all page caches in a subfolder of public
-  config.action_controller.page_cache_directory =
-    File.join(File.dirname(__FILE__), "../../public/cache")
 end

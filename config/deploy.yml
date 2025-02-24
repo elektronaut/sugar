@@ -7,10 +7,10 @@ ssh:
 
 servers:
   web:
-    - 157.245.70.154
+    - binky.elektronaut.no
   jobs:
     hosts:
-      - 157.245.70.154
+      - binky.elektronaut.no
     cmd: bin/jobs
 
 proxy:
@@ -73,7 +73,7 @@ accessories:
       clear:
         SCHEDULE: "@daily"
         BACKUP_KEEP_DAYS: 14
-        S3_ENDPOINT: https://b3s-backup.ams3.digitaloceanspaces.com
+        S3_ENDPOINT: https://nyc3.digitaloceanspaces.com
         S3_BUCKET: b3s-backups
         S3_PREFIX: postgres
         S3_REGION: auto

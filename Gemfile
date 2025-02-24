@@ -5,7 +5,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem "rails", "~> 8.0.0"
 
-gem "actionpack-page_caching"
 gem "acts_as_list"
 gem "alba"
 gem "bcrypt", "~> 3.1.12"

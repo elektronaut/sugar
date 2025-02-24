@@ -27,8 +27,6 @@ class Post < ApplicationRecord
 
   after_destroy :update_post_counts
 
-  after_commit :clean_cache, on: %i[create destroy]
-
   scope :sorted,                 -> { order("created_at ASC") }
   scope :for_view,               -> { sorted.includes(user: [:avatar]) }
   scope :for_view_with_exchange, -> { for_view.includes(:exchange) }
@@ -81,14 +79,6 @@ class Post < ApplicationRecord
   end
 
   private
-
-  def clean_cache
-    exchange_type = conversation ? "conversation" : "discussion"
-    cache_file = Rails.root.join(
-      "public/cache/#{exchange_type}s/#{exchange_id}/posts/count.json"
-    )
-    FileUtils.rm_f(cache_file)
-  end
 
   def update_post_counts
     exchange.update(posts_count: exchange.posts.count)
