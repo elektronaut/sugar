@@ -9,7 +9,6 @@ gem "acts_as_list"
 gem "alba"
 gem "bcrypt", "~> 3.1.12"
 gem "bootsnap", ">= 1.1.0", require: false
-gem "dalli"
 gem "dynamic_image"
 gem "fastimage"
 gem "fog-aws"
@@ -49,11 +48,6 @@ gem "sentry-rails"
 gem "sentry-ruby"
 
 group :development do
-  gem "capistrano"
-  gem "capistrano-bundler"
-  gem "capistrano-rails"
-  gem "capistrano-rbenv"
-
   gem "web-console"
 end
 

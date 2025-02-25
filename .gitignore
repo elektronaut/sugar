@@ -45,27 +45,9 @@
 
 /db/dis
 
-# Ignore local Ruby version
-.ruby-version
-
 # Ignore generated documentation
 coverage/*
 doc
-
-# Ignore Sunspot/Solr files
-sunspot-solr.pid
-solr/data
-solr/test/data
-solr/development/data
-solr/default/data
-solr/pids
-
-# Ignore Capistrano configuration
-config/deploy.rb
-config/deploy/*.rb
-
-# Ignore NewRelic configuration
-config/newrelic.yml
 
 # Ignore zipped themes
 public/themes/*.zip
@@ -73,16 +55,4 @@ public/themes/*.zip
 /public/cache
 /public/packs
 /public/packs-test
-
-# Yarn
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-.yarn-integrity
-yarn-debug.log*
-yarn-error.log
 
