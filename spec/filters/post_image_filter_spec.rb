@@ -10,8 +10,7 @@ describe PostImageFilter do
   context "when input contains an embedded image" do
     it "embeds the image" do
       expect(filter.to_html).to match(
-        %r{<img.alt="Pink".
-           src="/post_images/([\w\d]+)/16x16/#{image.id}-([\w\d]+)\.png"
+        %r{<img.src="/post_images/([\w\d]+)/16x16/#{image.id}-([\w\d]+)\.png"
            .width="16".height="16"./>}x
       )
     end

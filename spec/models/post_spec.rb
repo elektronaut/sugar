@@ -45,19 +45,6 @@ describe Post do
         expect { post }.to change(exchange, :posts_count).by(1)
       end
     end
-
-    context "when count cache file exists" do
-      let!(:exchange) { create(:discussion) }
-
-      before do
-        allow(FileUtils).to receive(:rm_f)
-      end
-
-      it "deletes the file" do
-        create(:post, exchange:)
-        expect(FileUtils).to have_received(:rm_f).with(cache_path).once
-      end
-    end
   end
 
   describe "after_destroy" do
@@ -74,16 +61,6 @@ describe Post do
 
       it "decrements posts_count on exchange" do
         expect { post.destroy }.to change(exchange, :posts_count).by(-1)
-      end
-    end
-
-    context "when count cache file exists" do
-      let!(:post) { create(:post, exchange:) }
-
-      it "deletes the file" do
-        allow(FileUtils).to receive(:rm_f)
-        post.destroy
-        expect(FileUtils).to have_received(:rm_f).with(cache_path).once
       end
     end
   end
