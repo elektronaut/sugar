@@ -1,4 +1,4 @@
-[![Build](https://github.com/b3s/b3s/workflows/Build/badge.svg)](https://github.com/b3s/b3s/actions)
+[![Push](https://github.com/b3s/b3s/actions/workflows/push.yml/badge.svg)](https://github.com/b3s/b3s/actions/workflows/push.yml)
 
 # B3S
 
