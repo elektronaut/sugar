@@ -35,8 +35,7 @@ class PostsController < ApplicationController
 
   def search
     @search_path = search_posts_path
-    @posts = Post.search_results(search_query,
-                                 user: current_user, page: params[:page])
+    @posts = Post.search(search_query).page(params[:page])
   end
 
   def edit

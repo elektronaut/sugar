@@ -2,58 +2,36 @@
 
 module SearchablePost
   extend ActiveSupport::Concern
-  include Searchable
+  include PgSearch::Model
 
   included do
-    searchable(auto_index: false,
-               auto_remove: false) do
-      text :body
-      integer :user_id
-      integer :exchange_id
-      time :created_at
-      time :updated_at
-      boolean :conversation
-      boolean :deleted
-    end
+    pg_search_scope(
+      :search_by_body,
+      against: :body,
+      ignoring: :accents,
+      using: {
+        tsearch: {
+          negation: true,
+          dictionary: "english",
+          tsvector_column: "tsv"
+        }
+      }
+    )
   end
 
   module ClassMethods
-    def search_results(str, options = {})
-      query, user = parse_search_query(str)
-      perform_search(
-        query,
-        options[:page],
-        options[:exchange],
-        user:
-      ).results
+    def search(search_query)
+      where(conversation: false, deleted: false)
+        .search_by_body(search_query)
+        .reorder("created_at DESC")
+        .for_view_with_exchange
     end
 
-    private
-
-    def user_search_expr(user)
-      Regexp.new("user:#{Regexp.quote(user.username)}", Regexp::IGNORECASE)
-    end
-
-    def parse_search_query(str)
-      users = User.all.select do |user|
-        str.match?(user_search_expr(user))
-      end
-
-      return [str, nil] unless users.any?
-
-      [str.gsub(user_search_expr(users.first), ""), users.first]
-    end
-
-    def perform_search(query, page, exchange, user: nil)
-      Post.search do
-        fulltext(query)
-        with(:deleted, false)
-        with(:exchange_id, exchange.id) if exchange
-        with(:conversation, false) unless exchange
-        with(:user_id, user.id) if user
-        order_by(:created_at, :desc)
-        paginate(page:, per_page: Post.per_page)
-      end
+    def search_in_exchange(search_query)
+      where(deleted: false)
+        .search_by_body(search_query)
+        .for_view
+        .reorder("created_at DESC")
     end
   end
 end

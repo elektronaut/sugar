@@ -28,7 +28,7 @@ class DiscussionsController < ApplicationController
   end
 
   def search
-    @exchanges = search_results.results
+    @exchanges = Discussion.search(search_query).page(params[:page])
     @search_path = search_path
     respond_with_exchanges(@exchanges)
   end
@@ -91,12 +91,6 @@ class DiscussionsController < ApplicationController
     elsif !@exchange.viewable_by?(current_user)
       render_error 403
     end
-  end
-
-  def search_results
-    @search_results ||= Discussion.search_results(search_query,
-                                                  user: current_user,
-                                                  page: params[:page])
   end
 
   def user_discussions(method)
